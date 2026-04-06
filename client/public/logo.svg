@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E676"/>
+      <stop offset="50%" stop-color="#00C868"/>
+      <stop offset="100%" stop-color="#00A854"/>
+    </linearGradient>
+    <linearGradient id="logoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(0,230,118,0.12)"/>
+      <stop offset="100%" stop-color="rgba(0,168,84,0.06)"/>
+    </linearGradient>
+    <filter id="logoGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="outerGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Outer ring -->
+  <circle cx="40" cy="40" r="38" stroke="rgba(0,230,118,0.08)" stroke-width="0.5" fill="none"/>
+  <circle cx="40" cy="40" r="34" stroke="rgba(0,230,118,0.04)" stroke-width="0.5" fill="none"/>
+  <!-- Inner glass circle -->
+  <circle cx="40" cy="40" r="30" fill="url(#logoBg)" stroke="rgba(0,230,118,0.15)" stroke-width="0.75"/>
+  <!-- XL text -->
+  <text x="40" y="48" text-anchor="middle" font-size="28" font-weight="800" font-family="'JetBrains Mono', monospace" fill="url(#logoGrad)" filter="url(#logoGlow)" letter-spacing="-1">XL</text>
+  <!-- Accent dot -->
+  <circle cx="40" cy="58" r="1.5" fill="#00E676" opacity="0.6" filter="url(#outerGlow)"/>
+</svg>
