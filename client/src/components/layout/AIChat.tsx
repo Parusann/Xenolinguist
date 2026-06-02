@@ -52,7 +52,7 @@ export function AIChat({ onClose }: { onClose: () => void }) {
   }, [messages, scrollToBottom])
 
   const buildSystemPrompt = useCallback((): string => {
-    const parts = [SYSTEM_PROMPTS.patternAnalysis]
+    const parts: string[] = [SYSTEM_PROMPTS.patternAnalysis]
 
     if (profile) {
       if (profile.dictionary.length > 0) {
