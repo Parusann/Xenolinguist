@@ -457,7 +457,7 @@ body {
 .sidebar-mark { display: flex; align-items: center; gap: 10px; padding: 14px 14px; border-bottom: 1px solid var(--border); height: 56px; white-space: nowrap; }
 .sidebar-mark .word { font-family: var(--font-display); font-size: 13px; letter-spacing: -0.01em; opacity: 0; transition: opacity 180ms ease; font-weight: 500; }
 .sidebar.expanded .sidebar-mark .word { opacity: 1; }
-.sidebar-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; margin: 2px 8px; border-radius: var(--r); color: var(--fg-dim); cursor: pointer; position: relative; font-size: 13px; white-space: nowrap; transition: background 120ms ease, color 120ms ease; }
+.sidebar-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; margin: 2px 8px; border-radius: var(--r); color: var(--fg-dim); cursor: pointer; position: relative; font-size: 13px; white-space: nowrap; transition: background 120ms ease, color 120ms ease; appearance: none; background: transparent; border: 0; font-family: inherit; }
 .sidebar-item:hover { background: rgba(255,255,255,0.04); color: var(--fg); }
 .sidebar-item.active { background: rgba(0,230,118,0.10); color: var(--accent); }
 .sidebar-item.active::before { content: ""; position: absolute; left: -8px; top: 9px; bottom: 9px; width: 2px; background: var(--accent); border-radius: 2px; box-shadow: 0 0 8px var(--accent); }
@@ -477,6 +477,8 @@ body {
 .status-bar { height: 28px; border-top: 1px solid var(--border); background: rgba(8, 10, 14, 0.55); display: flex; align-items: center; padding: 0 12px; gap: 16px; font-family: var(--font-mono); font-size: 10.5px; color: var(--fg-mute); letter-spacing: 0.04em; }
 .status-bar .item { display: inline-flex; align-items: center; gap: 6px; }
 .status-bar .sep { color: var(--fg-faint); }
+.status-bar button { appearance: none; background: transparent; border: 0; font: inherit; color: inherit; cursor: pointer; }
+.status-bar button:hover { color: var(--fg-dim); }
 
 /* Redesign motion (uniquely-named to avoid clobbering legacy keyframes) */
 @keyframes xlPhaseEnter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }

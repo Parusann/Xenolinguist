@@ -1,4 +1,6 @@
 import { useProfile } from '@/stores/profile-context'
+import { useOllama } from '@/stores/ollama-context'
+import { getConfidenceCounts, getDecodingProgress } from '@/lib/profileStats'
 
 interface StatusBarProps {
   logOpen: boolean
@@ -7,33 +9,56 @@ interface StatusBarProps {
 }
 
 export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarProps) {
-  const { saving } = useProfile()
+  const { profile, saving } = useProfile()
+  const { connected } = useOllama()
+
+  const counts = profile
+    ? getConfidenceCounts(profile)
+    : { confirmed: 0, probable: 0, unknown: 0, total: 0 }
+  const decode = profile ? getDecodingProgress(profile) : 0
 
   return (
-    <div className="relative z-10 h-6 glass border-t border-border flex items-center px-3 text-[10px] font-mono text-gray-600 gap-4">
+    <div className="status-bar">
+      <span className="item">
+        <span
+          className="dot"
+          style={{ width: 5, height: 5, ...(connected ? {} : { background: 'var(--conf-unknown)', boxShadow: '0 0 8px var(--conf-unknown)' }) }}
+        />
+        <span style={{ color: 'var(--fg-dim)' }}>{connected ? 'Ollama connected' : 'Ollama offline'}</span>
+      </span>
+      <span className="sep">·</span>
+      <span className="item">
+        DECODE <b style={{ color: 'var(--accent)' }}>{decode}%</b>
+      </span>
+      <span className="sep">·</span>
+      <span className="item">
+        CONF · {counts.confirmed} confirmed / {counts.probable} probable / {counts.unknown} unknown
+      </span>
+
       {saving && (
-        <div className="flex items-center gap-1.5">
-          <div className="w-1 h-1 rounded-full bg-accent animate-pulse" />
-          <span className="text-accent/70">Saving</span>
-        </div>
+        <>
+          <span className="sep">·</span>
+          <span className="item" style={{ color: 'var(--accent)' }}>
+            <span className="dot pulse-soft" style={{ width: 4, height: 4 }} /> Saving
+          </span>
+        </>
       )}
+
       <div className="flex-1" />
-      {onShowShortcuts && (
-        <button
-          onClick={onShowShortcuts}
-          className="text-gray-600 hover:text-gray-400 transition-colors flex items-center gap-1"
-        >
-          <kbd className="text-[9px] px-1 py-px rounded border border-white/[0.06] bg-white/[0.03] font-mono text-gray-500">?</kbd>
-          <span>Shortcuts</span>
-        </button>
-      )}
-      <button
-        onClick={onToggleLog}
-        className="text-gray-600 hover:text-gray-400 transition-colors flex items-center gap-1"
-      >
-        <span className={`inline-block w-1 h-1 rounded-full transition-colors ${logOpen ? 'bg-accent/40' : 'bg-gray-600'}`} />
-        {logOpen ? 'Log' : 'Log'}
+
+      <button className="item" onClick={onToggleLog} title="Toggle session log (L)">
+        <span style={{ color: 'var(--fg-faint)' }}>[ L ]</span>
+        <span>{logOpen ? 'Hide log' : 'Session log'}</span>
       </button>
+      {onShowShortcuts && (
+        <>
+          <span className="sep">·</span>
+          <button className="item" onClick={onShowShortcuts} title="Keyboard shortcuts (?)">
+            <span style={{ color: 'var(--fg-faint)' }}>[ ? ]</span>
+            <span>Shortcuts</span>
+          </button>
+        </>
+      )}
     </div>
   )
 }
