@@ -43,3 +43,27 @@ export function getDecodingProgress(profile: LanguageProfile): number {
 
   return Math.round(dictionaryScore + grammarScore + numbersScore + samplesScore + confidenceScore)
 }
+
+/**
+ * Cumulative count of dated items across `points` evenly-spaced buckets — a real
+ * "growth over time" series for sparklines (no fabricated data). Items without a
+ * parseable date are ignored; returns flat [0, 0] when none exist.
+ */
+export function cumulativeTrend(dates: Array<string | undefined | null>, points = 24): number[] {
+  const times = dates
+    .map((d) => (d ? new Date(d).getTime() : NaN))
+    .filter((t) => !Number.isNaN(t))
+    .sort((a, b) => a - b)
+  if (times.length === 0) return [0, 0]
+  const min = times[0]
+  const max = times[times.length - 1]
+  const span = max - min || 1
+  const series: number[] = []
+  for (let i = 0; i < points; i++) {
+    const t = min + (span * i) / (points - 1)
+    let count = 0
+    for (const x of times) if (x <= t) count++
+    series.push(count)
+  }
+  return series
+}
