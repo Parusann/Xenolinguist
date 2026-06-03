@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Sidebar } from './Sidebar'
+import { XenoMark } from '@/components/common/XenoMark'
 import { AIChat } from './AIChat'
 import { CommandPalette } from './CommandPalette'
 import { SessionLog } from './SessionLog'
@@ -142,42 +143,39 @@ export function AppShell() {
       }} />
 
       {/* Top header bar */}
-      <header className="relative z-10 h-10 glass border-b border-border flex items-center px-4 gap-4 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <img src="/logo.svg" alt="XL" className="w-6 h-6 drop-shadow-[0_0_6px_rgba(0,230,118,0.3)]" />
-          <div className="w-px h-3.5 bg-border" />
-          <span className="text-[12px] text-gray-400 font-medium">{profile?.name}</span>
-        </div>
-
-        {/* Phase breadcrumb */}
-        <div className="flex items-center gap-1.5 text-[12px]">
-          <span className="text-gray-700">›</span>
-          <span className="font-mono text-accent/70 text-[11px]">{currentPhase?.icon}</span>
-          <span className="text-gray-300">{currentPhase?.label}</span>
+      <header className="app-header">
+        <div className="crumb">
+          <XenoMark size={18} />
+          <span className="cur">{profile?.name}</span>
+          <span className="sep">/</span>
+          <span style={{ color: 'var(--fg-mute)' }}>{currentPhase?.icon}</span>
+          <span className="cur">{currentPhase?.label}</span>
         </div>
 
         <div className="flex-1" />
 
-        {/* Right side status */}
-        <div className="flex items-center gap-4 text-[11px] font-mono">
-          <button
-            onClick={() => setChatOpen(prev => !prev)}
-            className={`px-1.5 py-0.5 rounded text-[11px] font-mono font-bold transition-colors ${chatOpen ? 'bg-accent/20 text-accent' : 'bg-white/[0.04] text-gray-500 hover:text-accent hover:bg-accent/10'}`}
-            title="Toggle AI chat (Shift+A)"
-          >
-            AI
-          </button>
+        {/* AI Chat toggle */}
+        <button className="btn ghost sm" onClick={() => setChatOpen((prev) => !prev)} title="Toggle AI chat (Shift+A)">
+          <span style={{ width: 6, height: 6, borderRadius: 3, background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
+          <span style={{ color: chatOpen ? 'var(--ai)' : 'var(--fg-1)' }}>AI</span>
+          <span style={{ color: 'var(--fg-mute)', fontFamily: 'var(--font-mono)', fontSize: 11 }}>SHIFT+A</span>
+        </button>
+
+        {/* Status pills */}
+        <div className="flex items-center gap-3" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-mute)' }}>
           <div className="flex items-center gap-1.5" title={connected ? `Primary: ${selectedModel}` : 'Ollama offline'}>
-            <div className={`w-1.5 h-1.5 rounded-full transition-colors ${connected ? 'bg-accent animate-breathe' : 'bg-red-400'}`} />
-            <span className="text-gray-500">{connected ? selectedModel?.split(':')[0] || 'Ollama' : 'Offline'}</span>
+            <span
+              className="dot"
+              style={{ width: 5, height: 5, ...(connected ? {} : { background: 'var(--conf-unknown)', boxShadow: '0 0 8px var(--conf-unknown)' }) }}
+            />
+            <span style={{ color: 'var(--fg-1)' }}>{connected ? selectedModel?.split(':')[0] || 'Ollama' : 'Offline'}</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <span>{profile?.dictionary.length || 0} words</span>
-            <span className="text-gray-800">·</span>
-            <span>{profile?.samples.length || 0} samples</span>
-            <span className="text-gray-800">·</span>
-            <span>{(profile?.audio_clips || []).length} clips</span>
-          </div>
+          <span style={{ color: 'var(--fg-faint)' }}>·</span>
+          <span><b style={{ color: 'var(--fg)' }}>{profile?.dictionary.length || 0}</b> words</span>
+          <span style={{ color: 'var(--fg-faint)' }}>·</span>
+          <span><b style={{ color: 'var(--fg)' }}>{profile?.samples.length || 0}</b> samples</span>
+          <span style={{ color: 'var(--fg-faint)' }}>·</span>
+          <span><b style={{ color: 'var(--fg)' }}>{(profile?.audio_clips || []).length}</b> clips</span>
         </div>
       </header>
 
@@ -187,11 +185,12 @@ export function AppShell() {
           phases={phases}
           activePhase={activePhase}
           onPhaseChange={(id) => setActivePhase(id as PhaseId)}
+          onOpenCommandPalette={() => setCommandPaletteOpen(true)}
         />
 
         {/* Content area — full width, no max-w cap */}
         <main className="flex-1 overflow-y-auto relative">
-          <div className="p-5 animate-fade-in" key={activePhase}>
+          <div className="p-5 phase-enter" key={activePhase}>
             {renderPhase()}
           </div>
         </main>

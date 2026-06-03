@@ -1,13 +1,12 @@
-import { useEffect, useRef } from 'react'
 import { useSessionLog } from '@/stores/session-log-context'
 import type { LogEntryType } from 'shared/types'
 
-const TYPE_STYLES: Record<LogEntryType, string> = {
-  info: 'text-gray-500',
-  ai: 'text-accent',
-  success: 'text-emerald-400',
-  error: 'text-red-400',
-  warning: 'text-amber-400',
+const TYPE_COLOR: Record<LogEntryType, string> = {
+  info: 'var(--fg-mute)',
+  ai: 'var(--ai)',
+  success: 'var(--conf-confirmed)',
+  error: 'var(--conf-unknown)',
+  warning: 'var(--conf-probable)',
 }
 
 const TYPE_ICON: Record<LogEntryType, string> = {
@@ -20,41 +19,57 @@ const TYPE_ICON: Record<LogEntryType, string> = {
 
 export function SessionLog({ onClose }: { onClose: () => void }) {
   const { entries, clearLog } = useSessionLog()
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ left: scrollRef.current.scrollWidth, behavior: 'smooth' })
-  }, [entries])
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-4 py-1.5 border-b border-border flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-accent/30" />
-          <span className="label mb-0">Session Log</span>
-        </div>
-        <div className="flex gap-3">
-          <button onClick={clearLog} className="text-[10px] text-gray-600 hover:text-gray-400 transition-colors">Clear</button>
-          <button onClick={onClose} className="text-[10px] text-gray-600 hover:text-gray-400 transition-colors">×</button>
+      <div
+        className="flex items-center justify-between"
+        style={{ padding: '10px 20px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}
+      >
+        <span className="kicker">Session Log</span>
+        <div className="flex" style={{ gap: 14 }}>
+          <button
+            onClick={clearLog}
+            style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--fg-mute)', background: 'none', border: 0, cursor: 'pointer' }}
+          >
+            Clear
+          </button>
+          <button
+            onClick={onClose}
+            style={{ fontSize: 13, color: 'var(--fg-mute)', background: 'none', border: 0, cursor: 'pointer', lineHeight: 1 }}
+            title="Close (L)"
+          >
+            ✕
+          </button>
         </div>
       </div>
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-2 font-mono text-[11px] leading-[1.6]">
+
+      <div style={{ flex: 1, overflowY: 'auto', padding: '4px 20px 12px' }}>
         {entries.length === 0 && (
-          <p className="text-gray-700 text-xs">No activity yet</p>
+          <p style={{ color: 'var(--fg-faint)', fontSize: 12, fontFamily: 'var(--font-mono)', paddingTop: 8 }}>No activity yet</p>
         )}
-        <div className="grid grid-cols-[auto_auto_1fr] gap-x-3 gap-y-0.5">
-          {entries.map((entry) => (
-            <div key={entry.id} className="contents animate-fade-in">
-              <span className="text-gray-700 tabular-nums">
-                {new Date(entry.timestamp).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+        {entries
+          .slice()
+          .reverse()
+          .map((entry) => (
+            <div
+              key={entry.id}
+              className={`log-entry${entry.type === 'success' || entry.type === 'ai' ? ' kind-milestone' : ''}`}
+            >
+              <span className="ts">
+                {new Date(entry.timestamp).toLocaleTimeString('en-US', {
+                  hour12: false,
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                })}
               </span>
-              <span className={`text-center ${TYPE_STYLES[entry.type]}`}>
+              <span className="kind" style={{ color: TYPE_COLOR[entry.type] }}>
                 {TYPE_ICON[entry.type]}
               </span>
-              <span className="text-gray-400 truncate">{entry.message}</span>
+              <span className="body">{entry.message}</span>
             </div>
           ))}
-        </div>
       </div>
     </div>
   )
