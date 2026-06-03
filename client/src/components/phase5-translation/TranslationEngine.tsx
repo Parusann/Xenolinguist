@@ -1,18 +1,20 @@
-import { useState, useMemo, useRef, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
 import { getConfidenceLevel } from 'shared/constants'
 import { formatDictionaryForPrompt, formatGrammarForPrompt } from 'shared/prompts'
+import type { DictionaryEntry } from 'shared/types'
 
 interface TranslatedWord {
   alien: string
   english: string | null
   confidence: number
-  entryId: string | null
-  partOfSpeech?: string
-  context?: string
+  entry: DictionaryEntry | null
+  punctuation: boolean
 }
+
+const bucketOf = (conf: number) => getConfidenceLevel(conf)
 
 export function TranslationEngine() {
   const { profile, updateDictionaryEntry, addDictionaryEntry } = useProfile()
@@ -23,345 +25,268 @@ export function TranslationEngine() {
   const [reverseMode, setReverseMode] = useState(false)
   const [reverseInput, setReverseInput] = useState('')
   const [reverseOutput, setReverseOutput] = useState('')
-
-  // Popover state
-  const [popover, setPopover] = useState<{ word: TranslatedWord; x: number; y: number } | null>(null)
+  const [showInspector, setShowInspector] = useState(true)
+  const [hover, setHover] = useState<number | null>(null)
+  const [pinned, setPinned] = useState<number | null>(null)
+  const [editing, setEditing] = useState(false)
   const [editMeaning, setEditMeaning] = useState('')
-  const popoverRef = useRef<HTMLDivElement>(null)
 
   const dictionary = profile?.dictionary || []
 
-  // Close popover on click outside
-  useEffect(() => {
-    if (!popover) return
-    const handler = (e: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
-        setPopover(null)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [popover])
-
-  // Simple word-by-word translation using dictionary
   const translatedWords: TranslatedWord[] = useMemo(() => {
     if (!alienInput.trim()) return []
-    const words = alienInput.trim().split(/\s+/)
-    return words.map(word => {
-      const cleanWord = word.toLowerCase().replace(/[^a-zA-Z\u00C0-\u024F'-]/g, '')
-      const entry = dictionary.find(e =>
-        e.alien_word.toLowerCase() === cleanWord
-      )
-      if (entry) {
-        return {
-          alien: word,
-          english: entry.english_meaning,
-          confidence: entry.confidence,
-          entryId: entry.id,
-          partOfSpeech: entry.part_of_speech,
-          context: entry.context,
-        }
+    return alienInput.trim().split(/\s+/).map((word) => {
+      const clean = word.toLowerCase().replace(/[^a-zA-ZÀ-ɏ'-]/g, '')
+      const punctuation = clean.length === 0
+      const entry = dictionary.find((e) => e.alien_word.toLowerCase() === clean) || null
+      return {
+        alien: word,
+        english: entry ? entry.english_meaning : null,
+        confidence: entry ? entry.confidence : 0,
+        entry,
+        punctuation,
       }
-      return { alien: word, english: null, confidence: 0, entryId: null }
     })
   }, [alienInput, dictionary])
+
+  const realTokens = translatedWords.filter((t) => !t.punctuation)
+  const mappedCount = realTokens.filter((t) => t.english).length
+  const avgConf = mappedCount > 0 ? Math.round(realTokens.filter((t) => t.english).reduce((s, t) => s + t.confidence, 0) / mappedCount) : 0
+
+  const activeIdx = pinned ?? hover
+  const active = activeIdx != null ? translatedWords[activeIdx] : null
 
   const handleAITranslate = async () => {
     if (!profile || !alienInput.trim()) return
     const prompt = `Dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nGrammar rules:\n${formatGrammarForPrompt(profile.grammar_rules)}\n\nTranslate this text:\n"${alienInput}"`
-    const result = await runTask('translation', prompt)
-    setAiTranslation(result)
+    setAiTranslation(await runTask('translation', prompt))
   }
 
   const handleReverseTranslate = () => {
     if (!reverseInput.trim()) return
-    const words = reverseInput.trim().split(/\s+/)
-    const translated = words.map(word => {
+    const out = reverseInput.trim().split(/\s+/).map((word) => {
       const clean = word.toLowerCase().replace(/[^a-z'-]/g, '')
-      const entry = dictionary.find(e => e.english_meaning.toLowerCase() === clean)
+      const entry = dictionary.find((e) => e.english_meaning.toLowerCase() === clean)
       return entry ? entry.alien_word : `[${word}]`
     })
-    setReverseOutput(translated.join(' '))
+    setReverseOutput(out.join(' '))
   }
 
-  const handleWordClick = (word: TranslatedWord, e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect()
-    setPopover({ word, x: rect.left, y: rect.bottom + 6 })
-    setEditMeaning(word.english || '')
+  const pinForEdit = () => {
+    if (activeIdx == null || !active) return
+    setPinned(activeIdx)
+    setEditing(true)
+    setEditMeaning(active.english || '')
   }
 
-  const handleSaveCorrection = () => {
-    if (!popover || !editMeaning.trim()) return
-    const { word } = popover
-    if (word.entryId) {
-      // Update existing entry
-      updateDictionaryEntry(word.entryId, { english_meaning: editMeaning.trim() })
+  const saveCorrection = () => {
+    if (!active || !editMeaning.trim()) return
+    if (active.entry) {
+      updateDictionaryEntry(active.entry.id, { english_meaning: editMeaning.trim() })
     } else {
-      // Create new entry for unknown word
       addDictionaryEntry({
-        alien_word: word.alien.toLowerCase().replace(/[^a-zA-Z\u00C0-\u024F'-]/g, ''),
+        alien_word: active.alien.toLowerCase().replace(/[^a-zA-ZÀ-ɏ'-]/g, ''),
         english_meaning: editMeaning.trim(),
         part_of_speech: 'unknown',
         confidence: 60,
-        context: 'Added via translation correction',
+        context: 'Added via translation',
         examples: [],
         notes: '',
       })
     }
-    setPopover(null)
+    setEditing(false)
+    setPinned(null)
   }
 
+  const lockIn = () => {
+    if (active?.entry) updateDictionaryEntry(active.entry.id, { confidence: Math.max(76, active.entry.confidence) })
+  }
+
+  const copyTranslation = () => navigator.clipboard.writeText(translatedWords.map((t) => (t.punctuation ? t.alien : t.english || `[${t.alien}]`)).join(' '))
+
+  const Legend = (
+    <div className="flex" style={{ gap: 12, fontSize: 12 }}>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot confirmed" /><span className="dim">Confirmed</span></span>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot probable" /><span className="dim">Probable</span></span>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot unknown" /><span className="dim">Unknown</span></span>
+    </div>
+  )
+
   return (
-    <div className="space-y-4">
-      {/* Header row */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-6">
-          <div>
-            <h2 className="text-xl font-light mb-0 text-chrome">
-              <span className="font-medium text-chrome-accent">Translation</span> Engine
-            </h2>
-            <p className="text-xs text-gray-500">Live translate using your dictionary and AI inference.</p>
+    <div className="phase-enter" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 16, overflow: 'hidden' }}>
+      <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div>
+          <div className="flex" style={{ alignItems: 'baseline', gap: 12 }}>
+            <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>Translation <em>Engine</em></h1>
+            <span className="kicker">PHASE 05</span>
           </div>
-          <div className="flex gap-4 text-xs text-gray-600">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400/50" />
-              Confirmed
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-400/50" />
-              Probable
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-red-400/50" />
-              Unknown
-            </span>
-          </div>
+          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Live decoding using your dictionary and AI inference. Each word is colored by confidence — hover to inspect.</p>
         </div>
-        <div className="flex glass-inner rounded-lg overflow-hidden border border-white/[0.04] flex-shrink-0">
-          <button
-            onClick={() => setReverseMode(false)}
-            className={`px-3 py-1.5 text-xs transition-all ${!reverseMode ? 'bg-accent/10 text-accent' : 'text-gray-500 hover:text-gray-400'}`}
-          >Alien → English</button>
-          <button
-            onClick={() => setReverseMode(true)}
-            className={`px-3 py-1.5 text-xs transition-all ${reverseMode ? 'bg-accent/10 text-accent' : 'text-gray-500 hover:text-gray-400'}`}
-          >English → Alien</button>
+        <div className="flex" style={{ gap: 12, alignItems: 'center' }}>
+          {Legend}
+          <div className="glass-inner" style={{ padding: 2, display: 'flex' }}>
+            <button className="btn xs ghost" style={{ background: !reverseMode ? 'rgba(0,230,118,0.10)' : 'transparent', color: !reverseMode ? 'var(--accent)' : 'var(--fg-dim)' }} onClick={() => setReverseMode(false)}>Alien → English</button>
+            <button className="btn xs ghost" style={{ background: reverseMode ? 'rgba(0,230,118,0.10)' : 'transparent', color: reverseMode ? 'var(--accent)' : 'var(--fg-dim)' }} onClick={() => setReverseMode(true)}>English → Alien</button>
+          </div>
         </div>
       </div>
 
       {!reverseMode ? (
-        <>
-          {/* Forward translation */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="glass-card rounded-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <label className="label mb-0">Unknown Language</label>
-                <button
-                  onClick={handleAITranslate}
-                  disabled={!connected || loading || !alienInput.trim()}
-                  className="btn-primary text-xs"
-                >
-                  {loading ? 'Translating...' : 'AI Full Translation'}
-                </button>
-              </div>
-              <textarea
-                value={alienInput}
-                onChange={(e) => setAlienInput(e.target.value)}
-                placeholder="Enter text to translate..."
-                rows={8}
-                className="input input-mono w-full resize-none"
-              />
+        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: showInspector ? '1fr 1fr 340px' : '1fr 1fr', gap: 16, overflow: 'hidden' }}>
+          {/* SOURCE */}
+          <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <span className="label" style={{ marginBottom: 0 }}>Source · {profile?.name || 'Unknown'}</span>
             </div>
+            <textarea
+              value={alienInput}
+              onChange={(e) => setAlienInput(e.target.value)}
+              placeholder="Enter unknown language text to translate…"
+              style={{ flex: 1, resize: 'none', background: 'transparent', border: 0, outline: 'none', fontFamily: 'var(--font-mono)', fontSize: 22, lineHeight: 1.7, color: 'var(--fg)', letterSpacing: '-0.005em' }}
+            />
+            <div className="flex" style={{ gap: 8, marginTop: 12, alignItems: 'center' }}>
+              <button className="btn primary" onClick={handleAITranslate} disabled={!connected || loading || !alienInput.trim()}>{loading ? 'Translating…' : '⌖ AI Full Translation'}</button>
+              <div className="flex-1" />
+              <span className="font-mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>{realTokens.length} tokens</span>
+            </div>
+          </div>
 
-            <div className="glass-card rounded-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <label className="label mb-0">Translation</label>
-                {translatedWords.length > 0 && (
-                  <span className="text-[10px] text-gray-600 font-mono">
-                    {translatedWords.filter(w => w.english).length}/{translatedWords.length} mapped
-                  </span>
-                )}
-              </div>
-              <div className="glass-inner rounded-lg px-4 py-3 min-h-[200px] border border-white/[0.03] relative">
-                {translatedWords.length === 0 ? (
-                  <p className="text-sm text-gray-700">Translation will appear here...</p>
-                ) : (
-                  <div className="flex flex-wrap gap-1.5 stagger-children">
-                    {translatedWords.map((tw, i) => {
-                      const level = tw.english ? getConfidenceLevel(tw.confidence) : 'unknown'
-                      const colorMap = {
-                        confirmed: 'text-emerald-400 bg-emerald-400/[0.06] hover:bg-emerald-400/[0.12]',
-                        probable: 'text-amber-400 bg-amber-400/[0.06] hover:bg-amber-400/[0.12]',
-                        unknown: 'text-red-400/70 bg-red-400/[0.04] hover:bg-red-400/[0.08]',
-                      }
-                      return (
-                        <button
-                          key={i}
-                          onClick={(e) => handleWordClick(tw, e)}
-                          className={`inline-block px-1.5 py-0.5 rounded text-sm font-mono cursor-pointer transition-all ${colorMap[level]} hover:shadow-[0_0_8px_rgba(0,230,118,0.1)]`}
-                          title={tw.english
-                            ? `${tw.alien} → ${tw.english} (${tw.confidence}%)`
-                            : `Unknown: ${tw.alien} — click to define`}
-                        >
-                          {tw.english || `?${tw.alien}`}
-                        </button>
-                      )
-                    })}
+          {/* TRANSLATION */}
+          <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <span className="label" style={{ marginBottom: 0 }}>Translation · English</span>
+              {mappedCount > 0 && (
+                <span className="flex" style={{ gap: 8, alignItems: 'center' }}>
+                  <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>avg conf</span>
+                  <span className={'font-mono c-' + bucketOf(avgConf)} style={{ fontSize: 12 }}>{avgConf}%</span>
+                </span>
+              )}
+            </div>
+            <div className="expr-color" style={{ flex: 1, overflow: 'auto', fontSize: 22, lineHeight: 1.9, letterSpacing: '-0.005em' }}>
+              {translatedWords.length === 0 ? (
+                <span style={{ fontSize: 14, color: 'var(--fg-faint)' }}>Translation will appear here…</span>
+              ) : (
+                translatedWords.map((tw, i) => {
+                  if (tw.punctuation) return <span key={i} style={{ color: 'var(--fg-mute)' }}>{tw.alien}{' '}</span>
+                  const c = tw.english ? bucketOf(tw.confidence) : 'unknown'
+                  return (
+                    <span
+                      key={i}
+                      className={'word-token wt-' + c}
+                      onMouseEnter={() => setHover(i)}
+                      onMouseLeave={() => setHover((h) => (h === i ? null : h))}
+                      onClick={() => { setPinned(i); setEditing(false) }}
+                      style={{ background: activeIdx === i ? 'rgba(0,230,118,0.08)' : undefined, outline: activeIdx === i ? '1px solid rgba(0,230,118,0.3)' : undefined }}
+                    >
+                      {tw.english || `?${tw.alien}`}{' '}
+                    </span>
+                  )
+                })
+              )}
+            </div>
+            <div className="flex" style={{ gap: 8, marginTop: 12, alignItems: 'center' }}>
+              <button className="btn sm ghost" onClick={copyTranslation} disabled={!translatedWords.length}>Copy</button>
+              <div className="flex-1" />
+              <button className="btn sm ghost" onClick={() => setShowInspector((v) => !v)} style={{ color: showInspector ? 'var(--accent)' : 'var(--fg-dim)' }}>{showInspector ? 'Hide' : 'Show'} inspector</button>
+            </div>
+          </div>
+
+          {/* INSPECTOR */}
+          {showInspector && (
+            <div className="glass-card" style={{ padding: 18, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+              {active && !active.punctuation ? (
+                <>
+                  <div className="flex" style={{ justifyContent: 'space-between' }}>
+                    <span className="label" style={{ marginBottom: 0 }}>Token Inspector</span>
+                    <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)' }}>tok {String(activeIdx).padStart(2, '0')}</span>
                   </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          {/* Reverse translation */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="glass-card rounded-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <label className="label mb-0">English</label>
-                <button
-                  onClick={handleReverseTranslate}
-                  disabled={!reverseInput.trim()}
-                  className="btn-primary text-xs"
-                >
-                  Translate
-                </button>
-              </div>
-              <textarea
-                value={reverseInput}
-                onChange={(e) => setReverseInput(e.target.value)}
-                placeholder="Type English text..."
-                rows={8}
-                className="input w-full resize-none"
-              />
-            </div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 28, fontWeight: 500, color: `var(--conf-${active.english ? bucketOf(active.confidence) : 'unknown'})`, margin: '12px 0 6px' }}>{active.alien}</div>
 
-            <div className="glass-card rounded-xl p-5">
-              <label className="label mb-2">Alien Output</label>
-              <div className="glass-inner rounded-lg px-4 py-3 min-h-[200px] border border-white/[0.03]">
-                {reverseOutput ? (
-                  <p className="text-sm font-mono text-accent/80 leading-relaxed">{reverseOutput}</p>
-                ) : (
-                  <p className="text-sm text-gray-700">Alien translation will appear here...</p>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+                  <div className="label" style={{ marginTop: 10, marginBottom: 8 }}>Candidates</div>
+                  {active.entry ? (
+                    <div className="glass-inner" style={{ padding: '8px 10px', background: 'rgba(0,230,118,0.04)', borderColor: 'rgba(0,230,118,0.25)' }}>
+                      <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 6 }}>
+                        <span style={{ fontSize: 13, color: 'var(--fg)', fontWeight: 500 }}>{active.entry.english_meaning}</span>
+                        <span className={'font-mono c-' + bucketOf(active.confidence)} style={{ fontSize: 11 }}>{active.confidence}%</span>
+                      </div>
+                      <div className={'cbar ' + bucketOf(active.confidence)}><span style={{ width: active.confidence + '%' }} /></div>
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 12.5, color: 'var(--fg-dim)' }}>Not in dictionary — define it below.</div>
+                  )}
 
-      {/* AI Translation result — full width */}
-      {(loading || aiTranslation) && !reverseMode && (
-        <div className={`glass-card rounded-xl p-5 ${loading ? 'scan-overlay' : ''}`}>
-          <div className="flex items-center gap-2 mb-3">
-            <div className={`w-1.5 h-1.5 rounded-full ${loading ? 'bg-accent animate-pulse' : 'bg-accent/40'}`} />
-            <label className="label mb-0 text-accent">
-              {loading ? 'AI Translating' : 'AI Translation'}
-            </label>
-          </div>
-          {loading && (
-            <div className="relative h-0.5 bg-white/[0.03] rounded overflow-hidden mb-4">
-              <div className="absolute inset-y-0 w-1/3 bg-accent/40 rounded animate-scan" />
+                  {active.entry?.part_of_speech && active.entry.part_of_speech !== 'unknown' && (
+                    <div className="flex" style={{ gap: 8, marginTop: 10 }}><span className="badge">{active.entry.part_of_speech}</span></div>
+                  )}
+
+                  {active.entry?.context && (
+                    <>
+                      <div className="label" style={{ marginTop: 14, marginBottom: 6 }}>Note</div>
+                      <div style={{ fontSize: 12.5, color: 'var(--fg-dim)', lineHeight: 1.5 }}>{active.entry.context}</div>
+                    </>
+                  )}
+
+                  {active.entry && active.entry.examples.length > 0 && (
+                    <>
+                      <div className="label" style={{ marginTop: 14, marginBottom: 6 }}>Evidence</div>
+                      <div className="flex" style={{ gap: 6, flexWrap: 'wrap' }}>
+                        {active.entry.examples.map((ex, i) => <span key={i} className="badge">{ex}</span>)}
+                      </div>
+                    </>
+                  )}
+
+                  {editing ? (
+                    <div style={{ marginTop: 14 }}>
+                      <div className="label" style={{ marginBottom: 6 }}>{active.entry ? 'Correct translation' : 'Define meaning'}</div>
+                      <div className="flex" style={{ gap: 8 }}>
+                        <input className="input" value={editMeaning} autoFocus onChange={(e) => setEditMeaning(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && saveCorrection()} style={{ fontSize: 12 }} />
+                        <button className="btn sm primary" onClick={saveCorrection} disabled={!editMeaning.trim()}>{active.entry ? 'Save' : 'Add'}</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex" style={{ gap: 8, marginTop: 'auto', paddingTop: 12 }}>
+                      <button className="btn sm primary" onClick={lockIn} disabled={!active.entry}>↓ Lock in</button>
+                      <button className="btn sm ghost" onClick={pinForEdit}>{active.entry ? 'Edit' : 'Define'}</button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div style={{ flex: 1, display: 'grid', placeItems: 'center', textAlign: 'center', color: 'var(--fg-mute)' }}>
+                  <div>
+                    <div style={{ fontSize: 36, opacity: 0.3, marginBottom: 8 }}>◌</div>
+                    <div style={{ fontSize: 12.5 }}>Hover or click any word to inspect</div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
-          <pre className="text-[13px] text-gray-400 whitespace-pre-wrap font-mono leading-relaxed">
-            {loading ? streamedText : aiTranslation}
-          </pre>
+        </div>
+      ) : (
+        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, overflow: 'hidden' }}>
+          <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column' }}>
+            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <span className="label" style={{ marginBottom: 0 }}>English</span>
+              <button className="btn primary sm" onClick={handleReverseTranslate} disabled={!reverseInput.trim()}>Translate</button>
+            </div>
+            <textarea value={reverseInput} onChange={(e) => setReverseInput(e.target.value)} placeholder="Type English text…" style={{ flex: 1, resize: 'none', background: 'transparent', border: 0, outline: 'none', fontFamily: 'var(--font-sans)', fontSize: 18, lineHeight: 1.6, color: 'var(--fg)' }} />
+          </div>
+          <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column' }}>
+            <span className="label">Alien Output</span>
+            <div style={{ flex: 1, overflow: 'auto', fontFamily: 'var(--font-mono)', fontSize: 20, lineHeight: 1.7, color: reverseOutput ? 'var(--accent)' : 'var(--fg-faint)' }}>
+              {reverseOutput || 'Alien translation will appear here…'}
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Word Popover */}
-      {popover && (
-        <div
-          ref={popoverRef}
-          className="fixed z-50 animate-fade-in"
-          style={{ left: popover.x, top: popover.y }}
-        >
-          <div className="glass rounded-xl p-4 w-72 shadow-[0_16px_48px_rgba(0,0,0,0.6)] border border-white/[0.08] animate-scale-pop">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-mono text-[15px] text-gray-100">{popover.word.alien}</span>
-              <button
-                onClick={() => setPopover(null)}
-                className="text-xs text-gray-600 hover:text-gray-400 transition-colors"
-              >×</button>
-            </div>
-
-            {popover.word.entryId ? (
-              <>
-                {/* Known word details */}
-                <div className="space-y-2 mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono text-gray-600 w-16">MEANING</span>
-                    <span className="text-sm text-gray-200">{popover.word.english}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono text-gray-600 w-16">CONF.</span>
-                    <span className={`badge badge-${getConfidenceLevel(popover.word.confidence)} text-[10px]`}>
-                      {popover.word.confidence}%
-                    </span>
-                  </div>
-                  {popover.word.partOfSpeech && popover.word.partOfSpeech !== 'unknown' && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-gray-600 w-16">POS</span>
-                      <span className="text-xs text-gray-400">{popover.word.partOfSpeech}</span>
-                    </div>
-                  )}
-                  {popover.word.context && (
-                    <div className="flex items-start gap-2">
-                      <span className="text-[10px] font-mono text-gray-600 w-16 flex-shrink-0">CONTEXT</span>
-                      <span className="text-[11px] text-gray-500">{popover.word.context}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Edit correction */}
-                <div className="separator my-2" />
-                <label className="text-[9px] font-mono text-gray-600 uppercase tracking-wider mb-1.5 block">Correct Translation</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={editMeaning}
-                    onChange={(e) => setEditMeaning(e.target.value)}
-                    className="input text-xs flex-1 py-1.5"
-                    onKeyDown={(e) => e.key === 'Enter' && handleSaveCorrection()}
-                  />
-                  <button
-                    onClick={handleSaveCorrection}
-                    disabled={!editMeaning.trim() || editMeaning.trim() === popover.word.english}
-                    className="btn-primary text-[10px] px-3 py-1.5"
-                  >
-                    Save
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Unknown word — define it */}
-                <p className="text-xs text-gray-500 mb-3">This word isn't in your dictionary yet.</p>
-                <label className="text-[9px] font-mono text-gray-600 uppercase tracking-wider mb-1.5 block">Define Meaning</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={editMeaning}
-                    onChange={(e) => setEditMeaning(e.target.value)}
-                    placeholder="English meaning..."
-                    className="input text-xs flex-1 py-1.5"
-                    autoFocus
-                    onKeyDown={(e) => e.key === 'Enter' && handleSaveCorrection()}
-                  />
-                  <button
-                    onClick={handleSaveCorrection}
-                    disabled={!editMeaning.trim()}
-                    className="btn-primary text-[10px] px-3 py-1.5"
-                  >
-                    Add
-                  </button>
-                </div>
-              </>
-            )}
+      {/* AI full-translation result */}
+      {(loading || aiTranslation) && !reverseMode && (
+        <div className={`glass-card ${loading ? 'scan-overlay' : ''}`} style={{ padding: 16, flexShrink: 0, maxHeight: 200, overflow: 'auto' }}>
+          <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}>
+            <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
+            <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>{loading ? 'AI Translating' : 'AI Translation'}</span>
           </div>
+          <pre style={{ fontSize: 13, color: 'var(--fg-1)', whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)', lineHeight: 1.6, margin: 0 }}>{loading ? streamedText : aiTranslation}</pre>
         </div>
       )}
     </div>
