@@ -8,9 +8,17 @@ import { formatDictionaryForPrompt, formatSamplesForPrompt } from 'shared/prompt
 import type { PartOfSpeech, DictionaryEntry } from 'shared/types'
 import { AudioPlayer } from '@/components/audio/AudioPlayer'
 import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMenu'
+import { ConfRing } from '@/components/common/ConfRing'
+import { getConfidenceCounts } from '@/lib/profileStats'
+
+const BUCKET_COLOR: Record<string, string> = {
+  confirmed: 'var(--conf-confirmed)',
+  probable: 'var(--conf-probable)',
+  unknown: 'var(--conf-unknown)',
+}
 
 export function VocabularyBuilder() {
-  const { profile, addDictionaryEntry, removeDictionaryEntry } = useProfile()
+  const { profile, addDictionaryEntry, removeDictionaryEntry, updateProfile } = useProfile()
   const { runTask, loading, streamedText } = useAI()
   const { connected } = useOllama()
   const { pushAction } = useUndo()
@@ -20,6 +28,9 @@ export function VocabularyBuilder() {
   const [search, setSearch] = useState('')
   const [showAddForm, setShowAddForm] = useState(false)
   const [analysisResult, setAnalysisResult] = useState('')
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState<Partial<DictionaryEntry>>({})
 
   // Add form state
   const [newWord, setNewWord] = useState('')
@@ -29,8 +40,9 @@ export function VocabularyBuilder() {
   const [newContext, setNewContext] = useState('')
 
   const dictionary = profile?.dictionary || []
+  const counts = profile ? getConfidenceCounts(profile) : { confirmed: 0, probable: 0, unknown: 0, total: 0 }
 
-  const filtered = dictionary.filter(entry => {
+  const filtered = dictionary.filter((entry) => {
     if (activeCategory !== 'all' && entry.part_of_speech !== activeCategory) return false
     if (search) {
       const q = search.toLowerCase()
@@ -38,6 +50,8 @@ export function VocabularyBuilder() {
     }
     return true
   })
+
+  const sel = dictionary.find((e) => e.id === selectedId) ?? dictionary[0] ?? null
 
   const handleAdd = () => {
     if (!newWord.trim() || !newMeaning.trim()) return
@@ -65,19 +79,43 @@ export function VocabularyBuilder() {
     setAnalysisResult(result)
   }
 
-  // Build a map of dictionary entry id -> audio clip info (for entries that have segments linked)
+  const updateEntry = (id: string, patch: Partial<DictionaryEntry>) => {
+    updateProfile({ dictionary: dictionary.map((e) => (e.id === id ? { ...e, ...patch } : e)) })
+  }
+
+  const promote = (entry: DictionaryEntry) => {
+    const level = getConfidenceLevel(entry.confidence)
+    const next = level === 'unknown' ? 60 : level === 'probable' ? 88 : Math.min(100, entry.confidence + 5)
+    updateEntry(entry.id, { confidence: next })
+  }
+  const demote = (entry: DictionaryEntry) => {
+    const level = getConfidenceLevel(entry.confidence)
+    const next = level === 'confirmed' ? 60 : level === 'probable' ? 30 : Math.max(0, entry.confidence - 10)
+    updateEntry(entry.id, { confidence: next })
+  }
+
+  const startEdit = () => {
+    if (!sel) return
+    setDraft({
+      english_meaning: sel.english_meaning,
+      part_of_speech: sel.part_of_speech,
+      confidence: sel.confidence,
+      context: sel.context,
+      notes: sel.notes,
+    })
+    setEditing(true)
+  }
+  const saveEdit = () => {
+    if (sel) updateEntry(sel.id, draft)
+    setEditing(false)
+  }
+
   const audioMap = useMemo(() => {
     const map = new Map<string, { clipId: string; peaks: number[]; duration: number; start: number; end: number }>()
-    for (const clip of (profile?.audio_clips || [])) {
+    for (const clip of profile?.audio_clips || []) {
       for (const seg of clip.segments) {
         if (seg.dictionary_entry_id) {
-          map.set(seg.dictionary_entry_id, {
-            clipId: clip.id,
-            peaks: clip.waveform,
-            duration: clip.duration,
-            start: seg.start,
-            end: seg.end,
-          })
+          map.set(seg.dictionary_entry_id, { clipId: clip.id, peaks: clip.waveform, duration: clip.duration, start: seg.start, end: seg.end })
         }
       }
     }
@@ -85,15 +123,9 @@ export function VocabularyBuilder() {
   }, [profile?.audio_clips])
 
   const categoryCounts = VOCABULARY_CATEGORIES.reduce((acc, cat) => {
-    acc[cat] = cat === 'all' ? dictionary.length : dictionary.filter(e => e.part_of_speech === cat).length
+    acc[cat] = cat === 'all' ? dictionary.length : dictionary.filter((e) => e.part_of_speech === cat).length
     return acc
   }, {} as Record<string, number>)
-
-  const handleEntryContextMenu = (e: React.MouseEvent, entry: DictionaryEntry) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setContextMenu({ x: e.clientX, y: e.clientY, entry })
-  }
 
   const handleDeleteWithUndo = (entry: DictionaryEntry) => {
     removeDictionaryEntry(entry.id)
@@ -114,282 +146,292 @@ export function VocabularyBuilder() {
   }
 
   const getContextMenuItems = (entry: DictionaryEntry): ContextMenuItem[] => [
-    {
-      label: 'Copy Alien Word',
-      icon: '\u{1F4CB}',
-      onClick: () => navigator.clipboard.writeText(entry.alien_word),
-    },
-    {
-      label: 'Copy Meaning',
-      icon: '\u{1F4DD}',
-      onClick: () => navigator.clipboard.writeText(entry.english_meaning),
-    },
+    { label: 'Copy Alien Word', icon: '\u{1F4CB}', onClick: () => navigator.clipboard.writeText(entry.alien_word) },
+    { label: 'Copy Meaning', icon: '\u{1F4DD}', onClick: () => navigator.clipboard.writeText(entry.english_meaning) },
     { label: '---', onClick: () => {} },
-    {
-      label: 'Delete Entry',
-      icon: '\u{1F5D1}',
-      danger: true,
-      onClick: () => handleDeleteWithUndo(entry),
-    },
+    { label: 'Delete Entry', icon: '\u{1F5D1}', danger: true, onClick: () => handleDeleteWithUndo(entry) },
   ]
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h2 className="text-xl font-light mb-1 text-chrome">
-            <span className="font-medium text-chrome-accent">Vocabulary</span> Builder
-          </h2>
-          <p className="text-xs text-gray-500">{dictionary.length} words mapped</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={handleAISuggest}
-            disabled={!connected || loading || !profile?.samples.length}
-            className="btn-ghost text-xs"
-          >
-            {loading ? 'Analyzing...' : 'AI Suggest'}
-          </button>
-          <button
-            onClick={() => setShowAddForm(!showAddForm)}
-            className="btn-primary text-xs"
-          >
-            + Add Word
-          </button>
-        </div>
-      </div>
-
-      {/* Category tabs */}
-      <div className="flex gap-1 overflow-x-auto pb-1">
-        {VOCABULARY_CATEGORIES.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
-              activeCategory === cat
-                ? 'bg-accent/10 text-accent border border-accent/20 shadow-[0_0_8px_rgba(0,230,118,0.08)]'
-                : 'text-gray-500 hover:text-gray-300 border border-transparent hover:border-white/[0.04]'
-            }`}
-          >
-            {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
-            {categoryCounts[cat] > 0 && (
-              <span className={`ml-1.5 ${activeCategory === cat ? 'text-accent/50' : 'text-gray-700'}`}>{categoryCounts[cat]}</span>
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* Search + view toggle */}
-      <div className="flex gap-3">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search dictionary..."
-          className="input flex-1"
-        />
-        <div className="flex glass-inner rounded-lg overflow-hidden border border-white/[0.04]">
-          <button
-            onClick={() => setViewMode('cards')}
-            className={`px-3 py-1.5 text-xs transition-all ${viewMode === 'cards' ? 'bg-accent/10 text-accent' : 'text-gray-500 hover:text-gray-400'}`}
-          >Cards</button>
-          <button
-            onClick={() => setViewMode('table')}
-            className={`px-3 py-1.5 text-xs transition-all ${viewMode === 'table' ? 'bg-accent/10 text-accent' : 'text-gray-500 hover:text-gray-400'}`}
-          >Table</button>
-        </div>
-      </div>
-
-      {/* Add form */}
-      {showAddForm && (
-        <div className="glass-card rounded-xl p-5 space-y-4 border border-accent/10">
-          <label className="label text-accent mb-0">New Entry</label>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="label">Alien Word</label>
-              <input
-                type="text"
-                value={newWord}
-                onChange={(e) => setNewWord(e.target.value)}
-                className="input input-mono w-full"
-                autoFocus
-              />
+    <div className="phase-enter" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 20, height: '100%', overflow: 'hidden' }}>
+      {/* LEFT — list */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14, overflow: 'hidden' }}>
+        <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <div className="flex" style={{ alignItems: 'baseline', gap: 12 }}>
+              <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>Vocabulary <em>Builder</em></h1>
+              <span className="kicker">PHASE 03</span>
             </div>
-            <div>
-              <label className="label">English Meaning</label>
-              <input
-                type="text"
-                value={newMeaning}
-                onChange={(e) => setNewMeaning(e.target.value)}
-                className="input w-full"
-              />
-            </div>
+            <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>
+              <span className="font-mono c-confirmed">{counts.confirmed}</span> confirmed ·{' '}
+              <span className="font-mono c-probable">{counts.probable}</span> probable ·{' '}
+              <span className="font-mono c-unknown">{counts.unknown}</span> unknown ·{' '}
+              <span className="font-mono">{counts.total}</span> total
+            </p>
           </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="label">Part of Speech</label>
-              <select
-                value={newPos}
-                onChange={(e) => setNewPos(e.target.value as PartOfSpeech)}
-                className="input w-full"
-              >
-                {PART_OF_SPEECH_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="label">Confidence · {newConfidence}%</label>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={newConfidence}
-                onChange={(e) => setNewConfidence(Number(e.target.value))}
-                className="w-full accent-accent mt-2.5"
-              />
-            </div>
-            <div>
-              <label className="label">Context</label>
-              <input
-                type="text"
-                value={newContext}
-                onChange={(e) => setNewContext(e.target.value)}
-                placeholder="Where first encountered"
-                className="input w-full"
-              />
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={handleAdd}
-              disabled={!newWord.trim() || !newMeaning.trim()}
-              className="btn-primary text-xs"
-            >
-              Add to Dictionary
+          <div className="flex" style={{ gap: 8 }}>
+            <button className="btn sm" onClick={handleAISuggest} disabled={!connected || loading || !profile?.samples.length}>
+              {loading ? 'Analyzing…' : '⌖ AI Suggest'}
             </button>
-            <button
-              onClick={() => setShowAddForm(false)}
-              className="btn-ghost text-xs"
-            >
-              Cancel
-            </button>
+            <button className="btn primary sm" onClick={() => setShowAddForm((v) => !v)}>+ Add Word</button>
           </div>
         </div>
-      )}
 
-      {/* Dictionary display */}
-      {filtered.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-gray-600 text-sm">
-            {dictionary.length === 0
-              ? 'No words mapped yet. Add samples first, then use AI Suggest or add words manually.'
-              : 'No matches found.'}
-          </p>
-        </div>
-      ) : viewMode === 'cards' ? (
-        <div className="grid grid-cols-3 gap-3 stagger-children">
-          {filtered.map(entry => {
-            const level = getConfidenceLevel(entry.confidence)
-            const audio = audioMap.get(entry.id)
+        {/* POS filter pills */}
+        <div className="flex" style={{ gap: 4, flexWrap: 'wrap' }}>
+          {VOCABULARY_CATEGORIES.map((cat) => {
+            const active = activeCategory === cat
             return (
-              <div key={entry.id} className="glass-card rounded-xl p-4 group hover:border-white/[0.06] transition-all animate-card-enter" onContextMenu={(e) => handleEntryContextMenu(e, entry)}>
-                <div className="flex items-start justify-between mb-2.5">
-                  <div className="min-w-0">
-                    <span className="font-mono text-[15px] text-gray-100">{entry.alien_word}</span>
-                    <span className="text-gray-600 mx-2">→</span>
-                    <span className="text-sm text-gray-300">{entry.english_meaning}</span>
-                  </div>
-                  <button
-                    onClick={() => handleDeleteWithUndo(entry)}
-                    className="text-xs text-gray-700 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all ml-3"
-                  >×</button>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className={`badge badge-${level}`}>
-                    {entry.confidence}%
-                  </span>
-                  <span className="text-[10px] text-gray-600 font-mono">{entry.part_of_speech}</span>
-                  {entry.context && <span className="text-[10px] text-gray-700 truncate">{entry.context}</span>}
-                </div>
-                {audio && (
-                  <div className="mt-2.5">
-                    <AudioPlayer
-                      src={`/api/audio/${audio.clipId}`}
-                      peaks={audio.peaks}
-                      duration={audio.duration}
-                      compact
-                    />
-                  </div>
-                )}
-              </div>
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className="btn xs"
+                style={{
+                  background: active ? 'rgba(0,230,118,0.10)' : 'transparent',
+                  borderColor: active ? 'rgba(0,230,118,0.4)' : 'var(--border)',
+                  color: active ? 'var(--accent)' : 'var(--fg-dim)',
+                  fontFamily: 'var(--font-mono)',
+                }}
+              >
+                <span>{cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}</span>
+                {categoryCounts[cat] > 0 && <span style={{ opacity: 0.6 }}>{categoryCounts[cat]}</span>}
+              </button>
             )
           })}
         </div>
-      ) : (
-        <div className="glass-card rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-white/[0.04]">
-                <th className="text-left py-2.5 px-4 text-[10px] font-mono text-gray-600 uppercase tracking-wider">Alien Word</th>
-                <th className="text-left py-2.5 px-4 text-[10px] font-mono text-gray-600 uppercase tracking-wider">English</th>
-                <th className="text-left py-2.5 px-4 text-[10px] font-mono text-gray-600 uppercase tracking-wider">POS</th>
-                <th className="text-left py-2.5 px-4 text-[10px] font-mono text-gray-600 uppercase tracking-wider">Confidence</th>
-                <th className="text-left py-2.5 px-4 text-[10px] font-mono text-gray-600 uppercase tracking-wider">Context</th>
-                <th className="w-8"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(entry => {
+
+        {/* Search + view toggle */}
+        <div className="flex" style={{ gap: 8 }}>
+          <input className="input" placeholder="Search dictionary…" value={search} onChange={(e) => setSearch(e.target.value)} style={{ maxWidth: 360 }} />
+          <div className="flex-1" />
+          <div className="glass-inner" style={{ padding: 2, display: 'flex' }}>
+            <button className="btn xs ghost" style={{ background: viewMode === 'cards' ? 'rgba(0,230,118,0.10)' : 'transparent', color: viewMode === 'cards' ? 'var(--accent)' : 'var(--fg-dim)' }} onClick={() => setViewMode('cards')}>Cards</button>
+            <button className="btn xs ghost" style={{ background: viewMode === 'table' ? 'rgba(0,230,118,0.10)' : 'transparent', color: viewMode === 'table' ? 'var(--accent)' : 'var(--fg-dim)' }} onClick={() => setViewMode('table')}>Table</button>
+          </div>
+        </div>
+
+        {/* Add form */}
+        {showAddForm && (
+          <div className="glass-card" style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <span className="label" style={{ color: 'var(--accent)', marginBottom: 0 }}>New Entry</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div>
+                <label className="label">Alien Word</label>
+                <input value={newWord} onChange={(e) => setNewWord(e.target.value)} className="input" autoFocus />
+              </div>
+              <div>
+                <label className="label">English Meaning</label>
+                <input value={newMeaning} onChange={(e) => setNewMeaning(e.target.value)} className="input" />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+              <div>
+                <label className="label">Part of Speech</label>
+                <select value={newPos} onChange={(e) => setNewPos(e.target.value as PartOfSpeech)} className="input">
+                  {PART_OF_SPEECH_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="label">Confidence · {newConfidence}%</label>
+                <input type="range" min={0} max={100} value={newConfidence} onChange={(e) => setNewConfidence(Number(e.target.value))} style={{ width: '100%', accentColor: 'var(--accent)', marginTop: 10 }} />
+              </div>
+              <div>
+                <label className="label">Context</label>
+                <input value={newContext} onChange={(e) => setNewContext(e.target.value)} placeholder="Where first encountered" className="input" />
+              </div>
+            </div>
+            <div className="flex" style={{ gap: 8 }}>
+              <button className="btn primary sm" onClick={handleAdd} disabled={!newWord.trim() || !newMeaning.trim()}>Add to Dictionary</button>
+              <button className="btn sm ghost" onClick={() => setShowAddForm(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
+
+        {/* List */}
+        {filtered.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--fg-mute)', fontSize: 13 }}>
+            {dictionary.length === 0 ? 'No words mapped yet. Add samples first, then use AI Suggest or add words manually.' : 'No matches found.'}
+          </div>
+        ) : viewMode === 'cards' ? (
+          <div style={{ overflow: 'auto', paddingRight: 4, paddingBottom: 10 }}>
+            <div className="expr-color" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12, alignItems: 'stretch' }}>
+              {filtered.map((entry) => {
                 const level = getConfidenceLevel(entry.confidence)
+                const audio = audioMap.get(entry.id)
+                const isSel = sel?.id === entry.id
                 return (
-                  <tr key={entry.id} className="border-b border-white/[0.02] group hover:bg-white/[0.01] transition-colors" onContextMenu={(e) => handleEntryContextMenu(e, entry)}>
-                    <td className="py-2.5 px-4 font-mono text-gray-200">{entry.alien_word}</td>
-                    <td className="py-2.5 px-4 text-gray-300">{entry.english_meaning}</td>
-                    <td className="py-2.5 px-4 text-gray-600 text-xs">{entry.part_of_speech}</td>
-                    <td className="py-2.5 px-4">
-                      <span className={`badge badge-${level}`}>{entry.confidence}%</span>
-                    </td>
-                    <td className="py-2.5 px-4 text-gray-700 text-xs truncate max-w-40">{entry.context}</td>
-                    <td className="py-2.5 px-1">
-                      <button
-                        onClick={() => handleDeleteWithUndo(entry)}
-                        className="text-xs text-gray-700 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
-                      >×</button>
-                    </td>
-                  </tr>
+                  <div
+                    key={entry.id}
+                    onClick={() => setSelectedId(entry.id)}
+                    onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setContextMenu({ x: e.clientX, y: e.clientY, entry }) }}
+                    className="glass-card"
+                    style={{ padding: 14, cursor: 'pointer', borderColor: isSel ? 'rgba(0,230,118,0.4)' : 'var(--border)', background: isSel ? 'rgba(0,230,118,0.05)' : 'var(--bg-rise)' }}
+                  >
+                    <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
+                      <span className="badge">{entry.part_of_speech}</span>
+                      <ConfRing value={entry.confidence} size={28} stroke={2.5} />
+                    </div>
+                    <div className={'word-token wt-' + level} style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 500, marginBottom: 2, padding: 0 }}>{entry.alien_word}</div>
+                    <div className="dim" style={{ fontSize: 13, marginBottom: 8 }}>{entry.english_meaning || <span style={{ fontStyle: 'italic' }}>unknown meaning</span>}</div>
+                    <div style={{ fontSize: 11.5, color: 'var(--fg-mute)', lineHeight: 1.5, minHeight: 32 }}>{entry.context || <span style={{ color: 'var(--fg-faint)' }}>no context</span>}</div>
+                    {audio && (
+                      <div style={{ marginTop: 10 }}>
+                        <AudioPlayer src={`/api/audio/${audio.clipId}`} peaks={audio.peaks} duration={audio.duration} compact />
+                      </div>
+                    )}
+                  </div>
                 )
               })}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* AI Analysis */}
-      {(loading || analysisResult) && (
-        <div className={`glass-card rounded-xl p-5 ${loading ? 'scan-overlay' : ''}`}>
-          <div className="flex items-center gap-2 mb-3">
-            <div className={`w-1.5 h-1.5 rounded-full ${loading ? 'bg-accent animate-pulse' : 'bg-accent/40'}`} />
-            <label className="label mb-0 text-accent">
-              {loading ? 'Analyzing' : 'AI Suggestions'}
-            </label>
-          </div>
-          {loading && (
-            <div className="relative h-0.5 bg-white/[0.03] rounded overflow-hidden mb-4">
-              <div className="absolute inset-y-0 w-1/3 bg-accent/40 rounded animate-scan" />
             </div>
-          )}
-          <pre className="text-[13px] text-gray-400 whitespace-pre-wrap font-mono leading-relaxed">
-            {loading ? streamedText : analysisResult}
-          </pre>
-        </div>
-      )}
+          </div>
+        ) : (
+          <div style={{ overflow: 'auto', paddingRight: 4, paddingBottom: 10 }}>
+            <table className="glass-card expr-color" style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-mono)', fontSize: 12.5 }}>
+              <thead>
+                <tr style={{ color: 'var(--fg-mute)', textAlign: 'left' }}>
+                  {['WORD', 'MEANING', 'POS', 'CONF', 'CONTEXT'].map((h) => (
+                    <th key={h} style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((entry) => {
+                  const level = getConfidenceLevel(entry.confidence)
+                  return (
+                    <tr key={entry.id} onClick={() => setSelectedId(entry.id)} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setContextMenu({ x: e.clientX, y: e.clientY, entry }) }} style={{ background: sel?.id === entry.id ? 'rgba(0,230,118,0.05)' : 'transparent', cursor: 'pointer' }}>
+                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}><span className={'word-token wt-' + level} style={{ padding: 0, fontSize: 13 }}>{entry.alien_word}</span></td>
+                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--fg-1)', fontFamily: 'var(--font-sans)' }}>{entry.english_meaning}</td>
+                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--fg-mute)' }}>{entry.part_of_speech}</td>
+                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
+                        <div className="flex" style={{ gap: 8 }}>
+                          <div className={'cbar ' + level} style={{ width: 60 }}><span style={{ width: entry.confidence + '%' }} /></div>
+                          <span style={{ fontSize: 11 }}>{entry.confidence}</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--fg-mute)', fontFamily: 'var(--font-sans)', fontSize: 12, maxWidth: 320 }}>{entry.context || '—'}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* AI analysis */}
+        {(loading || analysisResult) && (
+          <div className={`glass-card ${loading ? 'scan-overlay' : ''}`} style={{ padding: 16 }}>
+            <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}>
+              <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
+              <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>{loading ? 'Analyzing' : 'AI Suggestions'}</span>
+            </div>
+            <pre style={{ fontSize: 13, color: 'var(--fg-1)', whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)', lineHeight: 1.6, margin: 0 }}>{loading ? streamedText : analysisResult}</pre>
+          </div>
+        )}
+      </div>
+
+      {/* RIGHT — inspector */}
+      <div className="glass-card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12, overflow: 'auto' }}>
+        {sel ? (
+          <>
+            <div className="flex" style={{ justifyContent: 'space-between' }}>
+              <span className="label" style={{ marginBottom: 0 }}>Inspector</span>
+              {editing ? (
+                <div className="flex" style={{ gap: 8 }}>
+                  <button className="btn xs" onClick={saveEdit}>Save</button>
+                  <button className="btn xs ghost" onClick={() => setEditing(false)}>Cancel</button>
+                </div>
+              ) : (
+                <button className="btn xs ghost" onClick={startEdit}>Edit</button>
+              )}
+            </div>
+
+            <div className="flex" style={{ alignItems: 'flex-start', gap: 14 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 30, fontWeight: 500, color: BUCKET_COLOR[getConfidenceLevel(sel.confidence)], lineHeight: 1 }}>{sel.alien_word}</div>
+              <div className="flex-1" />
+              <ConfRing value={editing ? draft.confidence ?? sel.confidence : sel.confidence} size={52} stroke={3.5} />
+            </div>
+
+            {editing ? (
+              <>
+                <div>
+                  <label className="label">Meaning</label>
+                  <input className="input" value={draft.english_meaning ?? ''} onChange={(e) => setDraft((d) => ({ ...d, english_meaning: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="label">Part of Speech</label>
+                  <select className="input" value={draft.part_of_speech} onChange={(e) => setDraft((d) => ({ ...d, part_of_speech: e.target.value as PartOfSpeech }))}>
+                    {PART_OF_SPEECH_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="label">Confidence · {draft.confidence}%</label>
+                  <input type="range" min={0} max={100} value={draft.confidence ?? 0} onChange={(e) => setDraft((d) => ({ ...d, confidence: Number(e.target.value) }))} style={{ width: '100%', accentColor: 'var(--accent)' }} />
+                </div>
+                <div>
+                  <label className="label">Context</label>
+                  <input className="input" value={draft.context ?? ''} onChange={(e) => setDraft((d) => ({ ...d, context: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="label">Notes</label>
+                  <textarea className="textarea" style={{ minHeight: 60 }} value={draft.notes ?? ''} onChange={(e) => setDraft((d) => ({ ...d, notes: e.target.value }))} />
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 300, color: 'var(--fg)' }}>
+                  {sel.english_meaning || <span className="dim" style={{ fontStyle: 'italic' }}>unknown meaning</span>}
+                </div>
+                <div className="flex" style={{ gap: 8 }}>
+                  <span className="badge">{sel.part_of_speech}</span>
+                  <span className={'badge ' + getConfidenceLevel(sel.confidence)}>{getConfidenceLevel(sel.confidence)}</span>
+                </div>
+                <hr className="hr" style={{ margin: '4px 0' }} />
+                <div>
+                  <div className="label" style={{ marginBottom: 6 }}>Context</div>
+                  <div style={{ fontSize: 13, color: 'var(--fg-1)', lineHeight: 1.5 }}>{sel.context || <span className="dim">No context recorded.</span>}</div>
+                </div>
+                {sel.examples.length > 0 && (
+                  <div>
+                    <div className="label" style={{ marginBottom: 6 }}>Examples</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {sel.examples.map((ex, i) => (
+                        <div key={i} className="glass-inner" style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', fontSize: 12.5 }}>{ex}</div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <div className="label" style={{ marginBottom: 6 }}>Notes</div>
+                  <div style={{ fontSize: 12.5, color: 'var(--fg-dim)', lineHeight: 1.5 }}>{sel.notes || <span className="dim">—</span>}</div>
+                </div>
+                <div className="glass-inner" style={{ padding: 12, marginTop: 6 }}>
+                  <div className="flex" style={{ gap: 8, marginBottom: 6, alignItems: 'center' }}>
+                    <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
+                    <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>AI Suggestion</span>
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--fg-1)', lineHeight: 1.5 }}>
+                    {getConfidenceLevel(sel.confidence) === 'confirmed'
+                      ? 'High confidence — appears consistently across multiple samples with the same gloss.'
+                      : getConfidenceLevel(sel.confidence) === 'probable'
+                      ? 'Probable. Consider eliciting in a controlled context to confirm part-of-speech.'
+                      : 'Insufficient evidence. Try parallel-mode capture with a native speaker present.'}
+                  </div>
+                </div>
+                <div className="flex" style={{ gap: 8, marginTop: 'auto' }}>
+                  <button className="btn sm" onClick={() => promote(sel)}>↑ Promote</button>
+                  <button className="btn sm ghost" onClick={() => demote(sel)}>⌫ Demote</button>
+                  <button className="btn sm ghost" style={{ marginLeft: 'auto', color: 'var(--conf-unknown)' }} onClick={() => handleDeleteWithUndo(sel)}>Delete</button>
+                </div>
+              </>
+            )}
+          </>
+        ) : (
+          <div className="dim">No word selected — add or map a word to inspect it.</div>
+        )}
+      </div>
 
       {contextMenu && (
-        <ContextMenu
-          x={contextMenu.x}
-          y={contextMenu.y}
-          items={getContextMenuItems(contextMenu.entry)}
-          onClose={() => setContextMenu(null)}
-        />
+        <ContextMenu x={contextMenu.x} y={contextMenu.y} items={getContextMenuItems(contextMenu.entry)} onClose={() => setContextMenu(null)} />
       )}
     </div>
   )
