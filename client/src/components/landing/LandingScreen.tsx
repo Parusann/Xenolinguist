@@ -3,6 +3,10 @@ import { useProfile } from '@/stores/profile-context'
 import { useSessionLog } from '@/stores/session-log-context'
 import { useOllama } from '@/stores/ollama-context'
 import { ProfileSetup } from './ProfileSetup'
+import { VantaTopology } from '@/components/common/VantaTopology'
+import { XenoMark } from '@/components/common/XenoMark'
+import { getDecodingProgress } from '@/lib/profileStats'
+import type { LanguageProfile } from 'shared/types'
 
 interface ProfileIndex {
   id: string
@@ -11,7 +15,14 @@ interface ProfileIndex {
   updated_at: string
 }
 
-/* ── Ambient Particle Field ─────────────────────────── */
+/** A saved-profile row enriched with the live word count + decode% the mock shows. */
+interface ProfileRow extends ProfileIndex {
+  words: number
+  decode: number
+  active: boolean
+}
+
+/* ── Ambient Particle Field (signature — kept verbatim) ── */
 function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouse = useRef({ x: -1000, y: -1000 })
@@ -34,7 +45,6 @@ function ParticleField() {
     window.addEventListener('resize', resize)
     window.addEventListener('mousemove', handleMouseMove)
 
-    // Stars (background layer)
     const stars = Array.from({ length: 160 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -44,7 +54,6 @@ function ParticleField() {
       pulse: Math.random() * Math.PI * 2,
     }))
 
-    // Interactive particles (foreground, react to mouse)
     const particles = Array.from({ length: 50 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -52,14 +61,13 @@ function ParticleField() {
       vy: (Math.random() - 0.5) * 0.3,
       size: Math.random() * 2 + 0.8,
       opacity: Math.random() * 0.4 + 0.1,
-      hue: Math.random() > 0.7 ? 150 : 140, // slight hue variation
+      hue: Math.random() > 0.7 ? 150 : 140,
       pulse: Math.random() * Math.PI * 2,
     }))
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Draw stars
       for (const star of stars) {
         star.pulse += 0.006
         const flicker = 0.5 + Math.sin(star.pulse) * 0.5
@@ -72,12 +80,10 @@ function ParticleField() {
         if (star.y < -2) { star.y = canvas.height + 2; star.x = Math.random() * canvas.width }
       }
 
-      // Draw interactive particles
       const mx = mouse.current.x
       const my = mouse.current.y
 
       for (const p of particles) {
-        // Mouse repulsion
         const dx = p.x - mx
         const dy = p.y - my
         const dist = Math.sqrt(dx * dx + dy * dy)
@@ -86,20 +92,13 @@ function ParticleField() {
           p.vx += (dx / dist) * force * 0.15
           p.vy += (dy / dist) * force * 0.15
         }
-
-        // Damping
         p.vx *= 0.985
         p.vy *= 0.985
-
-        // Drift
         p.vx += (Math.random() - 0.5) * 0.02
         p.vy += (Math.random() - 0.5) * 0.02
-
         p.x += p.vx
         p.y += p.vy
         p.pulse += 0.015
-
-        // Wrap
         if (p.x < -10) p.x = canvas.width + 10
         if (p.x > canvas.width + 10) p.x = -10
         if (p.y < -10) p.y = canvas.height + 10
@@ -107,8 +106,6 @@ function ParticleField() {
 
         const glow = 0.6 + Math.sin(p.pulse) * 0.4
         ctx.globalAlpha = p.opacity * glow
-
-        // Glow effect
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4)
         gradient.addColorStop(0, `hsla(${p.hue}, 100%, 65%, 0.6)`)
         gradient.addColorStop(0.5, `hsla(${p.hue}, 100%, 55%, 0.15)`)
@@ -118,7 +115,6 @@ function ParticleField() {
         ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2)
         ctx.fill()
 
-        // Core
         ctx.globalAlpha = p.opacity * glow * 1.5
         ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, 1)`
         ctx.beginPath()
@@ -126,7 +122,6 @@ function ParticleField() {
         ctx.fill()
       }
 
-      // Draw connection lines between nearby particles
       ctx.globalAlpha = 0.06
       ctx.strokeStyle = '#00E676'
       ctx.lineWidth = 0.5
@@ -156,12 +151,12 @@ function ParticleField() {
     }
   }, [handleMouseMove])
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />
+  return <canvas ref={canvasRef} className="stars" style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }} />
 }
 
-/* ── Landing Screen ─────────────────────────── */
+/* ── Landing Screen — mirrors the designer prototype Landing.jsx ── */
 export function LandingScreen() {
-  const [profiles, setProfiles] = useState<ProfileIndex[]>([])
+  const [profiles, setProfiles] = useState<ProfileRow[]>([])
   const [showSetup, setShowSetup] = useState(false)
   const [setupMode, setSetupMode] = useState<'new' | 'sandbox'>('new')
   const [ready, setReady] = useState(false)
@@ -169,127 +164,172 @@ export function LandingScreen() {
   const { addEntry } = useSessionLog()
   const { connected } = useOllama()
 
+  // Fetch the profile index, then hydrate each row with its live word count and
+  // decode% via getDecodingProgress — the same source of truth the dashboard and
+  // status bar use, so the numbers shown here always agree with the workbench.
   useEffect(() => {
-    fetch('/api/profiles').then(r => r.json()).then(setProfiles).catch(() => {})
+    let cancelled = false
+    ;(async () => {
+      try {
+        const index: ProfileIndex[] = await fetch('/api/profiles').then((r) => r.json())
+        const sorted = [...index].sort(
+          (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+        )
+        const rows = await Promise.all(
+          sorted.map(async (p, i): Promise<ProfileRow> => {
+            try {
+              const full: LanguageProfile = await fetch(`/api/profiles/${p.id}`).then((r) => r.json())
+              return { ...p, words: full.dictionary.length, decode: getDecodingProgress(full), active: i === 0 }
+            } catch {
+              return { ...p, words: 0, decode: 0, active: i === 0 }
+            }
+          }),
+        )
+        if (!cancelled) setProfiles(rows)
+      } catch {
+        /* offline or no profiles yet — leave the list empty */
+      }
+    })()
     const t = setTimeout(() => setReady(true), 100)
-    return () => clearTimeout(t)
+    return () => { cancelled = true; clearTimeout(t) }
   }, [])
 
   if (showSetup) {
     return <ProfileSetup mode={setupMode} onBack={() => setShowSetup(false)} />
   }
 
+  const openSetup = (mode: 'new' | 'sandbox') => { setSetupMode(mode); setShowSetup(true) }
+
   return (
-    <div className="h-screen relative overflow-hidden">
+    <div style={{ position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden', background: 'var(--bg-deep)' }}>
+      {/* Vanta topology backdrop — fail-safe; degrades to a plain div if Vanta can't init */}
+      <VantaTopology opacity={0.95} style={{ zIndex: 1, pointerEvents: 'none' }} />
+
       <ParticleField />
 
-      {/* Noise overlay for texture */}
-      <div className="noise-overlay" />
+      {/* Soft vignette + grid only — no opaque base, so the topology shows through */}
+      <div
+        className="app-bg show-grid"
+        style={{
+          zIndex: 2,
+          background:
+            'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 230, 118, 0.04), transparent 60%), radial-gradient(ellipse 60% 50% at 50% 100%, rgba(0, 230, 118, 0.025), transparent 60%)',
+        }}
+      />
 
-      {/* Center content */}
-      <div className={`relative z-10 h-full flex flex-col items-center justify-center transition-all duration-1000 ${ready ? 'opacity-100' : 'opacity-0 translate-y-4'}`}>
-        <div className="max-w-2xl w-full px-8">
-
-          {/* Logo */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl glass-popover border-glow animate-float mb-6 relative">
-              <img src="/logo.svg" alt="XL" className="w-16 h-16 drop-shadow-[0_0_12px_rgba(0,230,118,0.4)]" />
-              {/* Ambient ring pulse */}
-              <div className="absolute inset-0 rounded-2xl border border-accent/20 animate-breathe" />
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          height: '100%',
+          display: 'grid',
+          gridTemplateColumns: '1fr 520px 1fr',
+          gridTemplateRows: '1fr auto 1fr',
+          alignItems: 'center',
+          transition: 'opacity 1s ease, transform 1s ease',
+          opacity: ready ? 1 : 0,
+          transform: ready ? 'none' : 'translateY(16px)',
+        }}
+      >
+        {/* Center column */}
+        <div style={{ gridColumn: '2', gridRow: '2', padding: '40px 0' }}>
+          {/* Logo + wordmark */}
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 32 }}>
+              <XenoMark size={56} />
             </div>
-            <h1 className="text-4xl font-light tracking-tight mb-2 text-chrome">
-              Xeno<span className="font-semibold text-chrome-accent">linguist</span>
+            <h1 className="h-display" style={{ margin: 0, fontSize: 56, letterSpacing: '-0.03em' }}>
+              <span style={{ fontWeight: 200, opacity: 0.85 }}>xeno</span>
+              <em>linguist</em>
             </h1>
-            <p className="text-sm text-gray-500 tracking-widest uppercase font-mono">
-              Language Decoding Workbench
-            </p>
-            <div className="separator mt-6 mx-auto w-48" />
+            <div className="kicker" style={{ marginTop: 14, color: 'var(--fg-dim)' }}>
+              <span>Language</span>{'  ·  '}<span>Decoding</span>{'  ·  '}<span>Workbench</span>
+            </div>
+            <div style={{ marginTop: 18, fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-faint)', letterSpacing: '0.04em' }}>
+              v0.7.2 · LOCAL ONLY · OLLAMA{' '}
+              <span style={{ color: connected ? 'var(--accent)' : 'var(--conf-unknown)' }}>●</span>{' '}
+              {connected ? 'CONNECTED' : 'OFFLINE'}
+            </div>
           </div>
 
-          {/* Action cards */}
-          <div className="grid grid-cols-2 gap-4 mb-10">
+          {/* CTAs */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 36 }}>
             <button
-              onClick={() => { setSetupMode('new'); setShowSetup(true) }}
-              className="glass-card group p-6 rounded-xl text-left relative overflow-hidden hover:border-accent/15 transition-all duration-300"
+              className="glass-card"
+              onClick={() => openSetup('new')}
+              style={{ padding: 22, textAlign: 'left', cursor: 'pointer', color: 'var(--fg)', transition: 'transform 180ms ease, border-color 180ms ease' }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(0,230,118,0.4)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)' }}
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent/5 to-transparent rounded-bl-full" />
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center group-hover:shadow-[0_0_12px_rgba(0,230,118,0.15)] transition-shadow">
-                    <span className="font-mono text-accent text-sm">+</span>
-                  </div>
-                  <h2 className="text-sm font-medium text-gray-200 group-hover:text-white transition-colors">New Language</h2>
-                </div>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Begin decoding an unknown language from scratch. Input samples, map words, decode grammar.
-                </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 10, display: 'grid', placeItems: 'center', background: 'var(--accent-soft)', border: '1px solid rgba(0,230,118,0.35)', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 18 }}>+</div>
+                <span className="kicker">01</span>
+              </div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 500, marginBottom: 6 }}>New Language</div>
+              <div style={{ fontSize: 12.5, color: 'var(--fg-dim)', lineHeight: 1.5 }}>
+                Begin decoding from zero. Capture samples, map numbers, build a dictionary, infer grammar.
               </div>
             </button>
 
             <button
-              onClick={() => { setSetupMode('sandbox'); setShowSetup(true) }}
-              className="glass-card group p-6 rounded-xl text-left relative overflow-hidden hover:border-accent/15 transition-all duration-300"
+              className="glass-card"
+              onClick={() => openSetup('sandbox')}
+              style={{ padding: 22, textAlign: 'left', cursor: 'pointer', color: 'var(--fg)', transition: 'transform 180ms ease, border-color 180ms ease' }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(150,120,255,0.4)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)' }}
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent/5 to-transparent rounded-bl-full" />
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center group-hover:shadow-[0_0_12px_rgba(0,230,118,0.15)] transition-shadow">
-                    <span className="font-mono text-accent text-sm">&#9672;</span>
-                  </div>
-                  <h2 className="text-sm font-medium text-gray-200 group-hover:text-white transition-colors">Sandbox</h2>
-                </div>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  AI generates a language with hidden rules. Practice the decoding workflow step by step.
-                </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 10, display: 'grid', placeItems: 'center', background: 'var(--ai-soft)', border: '1px solid oklch(0.74 0.16 285 / 0.4)', color: 'var(--ai)', fontFamily: 'var(--font-mono)', fontSize: 14 }}>◈</div>
+                <span className="kicker">02</span>
+              </div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 500, marginBottom: 6 }}>Sandbox</div>
+              <div style={{ fontSize: 12.5, color: 'var(--fg-dim)', lineHeight: 1.5 }}>
+                AI generates a language with hidden rules. Practice the decoding workflow with an answer key.
               </div>
             </button>
           </div>
 
           {/* Saved profiles */}
           {profiles.length > 0 && (
-            <div className="animate-fade-in-up" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="separator flex-1" />
-                <span className="label mb-0 flex-shrink-0">Saved Profiles</span>
-                <div className="separator flex-1" />
+            <div>
+              <div className="kicker" style={{ textAlign: 'center', marginBottom: 14, color: 'var(--fg-mute)' }}>
+                ─── Saved Profiles ───
               </div>
-              <div className="space-y-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {profiles.map((p) => (
                   <button
                     key={p.id}
                     onClick={() => { loadProfile(p.id); addEntry('info', `Loading profile: ${p.name}`) }}
-                    className="w-full glass-card rounded-lg px-4 py-3 flex items-center justify-between text-left group hover:border-accent/10 transition-all duration-200"
+                    className="glass-inner"
+                    style={{
+                      padding: '10px 14px',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      background: p.active ? 'rgba(0,230,118,0.06)' : 'var(--bg-inner)',
+                      borderColor: p.active ? 'rgba(0,230,118,0.25)' : 'var(--border)',
+                      color: 'var(--fg)',
+                      display: 'grid',
+                      gridTemplateColumns: '12px 1fr 100px 70px 16px',
+                      alignItems: 'center',
+                      gap: 12,
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 12.5,
+                    }}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-accent/40 group-hover:bg-accent group-hover:shadow-[0_0_8px_rgba(0,230,118,0.4)] transition-all" />
-                      <span className="text-sm text-gray-300 group-hover:text-white transition-colors">{p.name}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-gray-600 font-mono">{new Date(p.updated_at).toLocaleDateString()}</span>
-                      <span className="text-accent/40 group-hover:text-accent text-xs transition-colors">&#8594;</span>
-                    </div>
+                    <span className="dot" style={{ background: p.active ? 'var(--accent)' : 'var(--fg-faint)', boxShadow: p.active ? '0 0 8px var(--accent)' : 'none' }} />
+                    <span style={{ color: p.active ? 'var(--fg)' : 'var(--fg-dim)' }}>{p.name}</span>
+                    <span style={{ color: 'var(--fg-mute)', textAlign: 'right' }}>{p.words} words</span>
+                    <div className="cbar confirmed" title={p.decode + '%'}><span style={{ width: p.decode + '%' }} /></div>
+                    <span style={{ color: 'var(--fg-faint)', textAlign: 'right' }}>→</span>
                   </button>
                 ))}
               </div>
             </div>
           )}
-
-          {/* Status footer */}
-          <div className="mt-10 flex items-center justify-center gap-4 text-xs font-mono">
-            <div className="flex items-center gap-1.5">
-              <div className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-accent animate-breathe' : 'bg-red-400'}`} />
-              <span className={connected ? 'text-gray-500' : 'text-red-400/60'}>
-                {connected ? 'Ollama connected' : 'Ollama offline'}
-              </span>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Founder credit — fixed bottom */}
-      <div className="founder-credit">
-        Created by Parusan Natheeswaran
-      </div>
+      <div className="founder-credit">Created by Parusan Natheeswaran</div>
     </div>
   )
 }
