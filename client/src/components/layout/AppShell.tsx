@@ -213,7 +213,15 @@ export function AppShell() {
 
       <ToastContainer />
 
-      {commandPaletteOpen && <CommandPalette onClose={() => setCommandPaletteOpen(false)} />}
+      {commandPaletteOpen && (
+        <CommandPalette
+          onClose={() => setCommandPaletteOpen(false)}
+          onNavigate={(id) => setActivePhase(id as PhaseId)}
+          onOpenAIChat={() => setChatOpen(true)}
+          onShowShortcuts={() => setShortcutsOpen(true)}
+          onRestartTour={() => { localStorage.removeItem('xenolinguist-tour-completed'); setShowTour(true) }}
+        />
+      )}
 
       {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
     </div>
