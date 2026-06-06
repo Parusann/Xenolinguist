@@ -12,5 +12,5 @@ module.exports = {
   win: { target: ['nsis'] },
   mac: { target: ['dmg'], category: 'public.app-category.education' },
   linux: { target: ['AppImage', 'deb'], category: 'Education' },
-  publish: null, // GitHub Releases is configured in the next task
+  publish: { provider: 'github', owner: 'Parusann', repo: 'Xenolinguist' },
 };
