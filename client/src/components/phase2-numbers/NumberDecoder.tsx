@@ -1,7 +1,28 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
+
+const BASE_CANDIDATES = [5, 6, 7, 8, 10, 12, 16, 20]
+const OPERATORS = ['+', '-', '×', '÷', '=']
+
+const tokensOf = (w: string) => w.toLowerCase().split(/[^a-zà-ɏ']+/i).filter(Boolean)
+
+/** Heuristic base-fit score: for n in (B, 2B], does word(n) reuse a token from
+ *  word(B) or word(n-B)? Real signal derived from the actual mappings. */
+function scoreBase(mappings: Record<number, string>, B: number): number {
+  let checked = 0
+  let hits = 0
+  for (let n = B + 1; n <= 2 * B; n++) {
+    const w = mappings[n]
+    if (!w) continue
+    checked++
+    const wTokens = tokensOf(w)
+    const ref = [mappings[B], mappings[n - B]].filter(Boolean) as string[]
+    if (ref.some((r) => tokensOf(r).some((t) => wTokens.includes(t)))) hits++
+  }
+  return checked ? hits / checked : 0
+}
 
 export function NumberDecoder() {
   const { profile, updateProfile } = useProfile()
@@ -9,181 +30,180 @@ export function NumberDecoder() {
   const { connected } = useOllama()
   const [range, setRange] = useState(20)
   const [analysisResult, setAnalysisResult] = useState('')
+  const [hover, setHover] = useState<number | null>(null)
 
-  const mappings = profile?.number_system.mappings || {}
+  const numberSystem = profile?.number_system || { base: null, mappings: {}, operators: {} }
+  const mappings = numberSystem.mappings as Record<number, string>
+  const operators = numberSystem.operators as Record<string, string>
+  const base = numberSystem.base
+  const mappedCount = Object.keys(mappings).length
+
+  const scores = useMemo(() => BASE_CANDIDATES.map((b) => ({ base: b, score: scoreBase(mappings, b) })), [mappings])
+  const best = useMemo(() => scores.reduce((a, b) => (b.score > a.score ? b : a), scores[0]), [scores])
+  const displayBase = base ?? (best.score > 0 ? best.base : null)
+  const baseConfidence = Math.round((scores.find((s) => s.base === displayBase)?.score ?? 0) * 100)
+
+  const decompose = (n: number): number[] => {
+    const b = displayBase || 6
+    if (n <= 0) return []
+    const out: number[] = []
+    let x = n
+    while (x > 0) { out.unshift(x % b); x = Math.floor(x / b) }
+    return out
+  }
 
   const handleMapping = (num: number, word: string) => {
     if (!profile) return
-    const newMappings = { ...profile.number_system.mappings }
-    if (word.trim()) {
-      newMappings[num] = word.trim()
-    } else {
-      delete newMappings[num]
-    }
-    updateProfile({
-      number_system: { ...profile.number_system, mappings: newMappings },
-    })
+    const m = { ...mappings }
+    if (word.trim()) m[num] = word.trim()
+    else delete m[num]
+    updateProfile({ number_system: { ...numberSystem, mappings: m } })
   }
 
   const handleOperator = (op: string, word: string) => {
     if (!profile) return
-    const newOps = { ...profile.number_system.operators }
-    if (word.trim()) {
-      newOps[op] = word.trim()
-    } else {
-      delete newOps[op]
-    }
-    updateProfile({
-      number_system: { ...profile.number_system, operators: newOps },
-    })
+    const o = { ...operators }
+    if (word.trim()) o[op] = word.trim()
+    else delete o[op]
+    updateProfile({ number_system: { ...numberSystem, operators: o } })
   }
 
-  const handleAnalyze = async () => {
-    const mapped = Object.entries(mappings)
-      .map(([n, w]) => `${n} = "${w}"`)
-      .join('\n')
-    if (!mapped) return
-    const result = await runTask('numberAnalysis', `Number mappings:\n${mapped}`)
-    setAnalysisResult(result)
+  const handleDetectBase = async () => {
+    if (!profile) return
+    if (best.score > 0) updateProfile({ number_system: { ...numberSystem, base: best.base } })
+    const mapped = Object.entries(mappings).map(([n, w]) => `${n} = "${w}"`).join('\n')
+    if (mapped) setAnalysisResult(await runTask('numberAnalysis', `Number mappings:\n${mapped}`))
   }
 
-  const mappedCount = Object.keys(mappings).length
+  const numbers = Array.from({ length: range }, (_, i) => i + 1)
+  const unmapped = numbers.filter((n) => !mappings[n]).length
+  const opsSet = OPERATORS.filter((op) => operators[op]).length
+
+  const notes: { dot: string; text: React.ReactNode }[] = []
+  if (displayBase) notes.push({ dot: 'confirmed', text: <>Base <span className="font-mono c-confirmed">{displayBase}</span> detected — roll-over at <span className="font-mono c-confirmed">{mappings[displayBase] || `#${displayBase}`}</span>.</> })
+  else notes.push({ dot: 'unknown', text: <>Not enough mappings to detect a base — map a contiguous run of numbers.</> })
+  notes.push({ dot: unmapped > 0 ? 'probable' : 'confirmed', text: <>{unmapped > 0 ? <>{unmapped} of 1–{range} still unmapped.</> : <>All numbers 1–{range} are mapped.</>}</> })
+  notes.push({ dot: opsSet > 0 ? 'confirmed' : 'unknown', text: <>{opsSet}/{OPERATORS.length} operators defined{opsSet === 0 ? ' — define + and = to start.' : '.'}</> })
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-light mb-1 text-chrome">
-            Number <span className="font-medium text-chrome-accent">System</span>
-          </h2>
-          <p className="text-xs text-gray-500">Map the unknown language's number words. Always step one in first-contact linguistics.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleAnalyze}
-            disabled={!connected || loading || mappedCount < 3}
-            className="btn-primary text-xs"
-          >
-            {loading ? 'Analyzing...' : 'Detect Base System'}
-          </button>
-          {mappedCount < 3 && (
-            <span className="text-[11px] text-gray-600">Map at least 3 numbers</span>
-          )}
-        </div>
-      </div>
-
-      {/* Two-column: Number grid left, Operators + Number line right */}
-      <div className="grid grid-cols-3 gap-4 items-start">
-        {/* Left: Number grid (takes 2/3 width) */}
-        <div className="col-span-2 glass-card rounded-xl p-5 border-glow">
-          <div className="flex items-center justify-between mb-4">
-            <label className="label mb-0">
-              Number Mappings · {mappedCount}/{range}
-            </label>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-600">Range</span>
-              <select
-                value={range}
-                onChange={(e) => setRange(Number(e.target.value))}
-                className="input text-xs py-1 px-2 w-20"
-              >
-                <option value={10}>1-10</option>
-                <option value={20}>1-20</option>
-                <option value={50}>1-50</option>
-                <option value={100}>1-100</option>
-              </select>
+    <div className="phase-enter" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 20, height: '100%', overflow: 'auto' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
+          <div>
+            <div className="flex" style={{ alignItems: 'baseline', gap: 12 }}>
+              <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>Number <em>System</em></h1>
+              <span className="kicker">PHASE 02</span>
             </div>
+            <p className="dim" style={{ marginTop: 6, fontSize: 13, maxWidth: 580 }}>Numbers are the Rosetta Stone. Map words to integers, detect the base, then everything else gets easier.</p>
           </div>
-
-          <div className="grid grid-cols-5 gap-2 stagger-children">
-            {Array.from({ length: range }, (_, i) => i + 1).map(num => (
-              <div
-                key={num}
-                className={`glass-inner rounded-lg p-2.5 transition-all duration-300 ${
-                  mappings[num]
-                    ? 'border border-accent/20 shadow-[0_0_8px_rgba(0,230,118,0.06)] animate-glow-pulse'
-                    : 'border border-white/[0.03]'
-                }`}
-              >
-                <div className={`text-[10px] font-mono mb-1.5 ${mappings[num] ? 'text-accent/60' : 'text-gray-600'}`}>{num}</div>
-                <input
-                  type="text"
-                  value={mappings[num] || ''}
-                  onChange={(e) => handleMapping(num, e.target.value)}
-                  placeholder="—"
-                  className="w-full bg-transparent text-sm font-mono text-gray-200 placeholder:text-gray-700 focus:outline-none focus:placeholder:text-gray-600"
-                />
-              </div>
-            ))}
+          <div className="flex" style={{ gap: 8, alignItems: 'center' }}>
+            <span className="label" style={{ marginBottom: 0 }}>Range</span>
+            <select className="input" value={range} onChange={(e) => setRange(Number(e.target.value))} style={{ width: 90 }}>
+              <option value={10}>1–10</option>
+              <option value={20}>1–20</option>
+              <option value={50}>1–50</option>
+              <option value={100}>1–100</option>
+            </select>
+            <button className="btn primary sm" onClick={handleDetectBase} disabled={!connected || loading || mappedCount < 3} title={mappedCount < 3 ? 'Map at least 3 numbers' : undefined}>{loading ? 'Detecting…' : '⌖ Detect Base'}</button>
           </div>
         </div>
 
-        {/* Right: Operators + Number line (takes 1/3 width) */}
-        <div className="col-span-1 space-y-4">
-          <div className="glass-card rounded-xl p-5">
-            <label className="label mb-3">Operators</label>
-            <div className="space-y-2">
-              {['+', '-', '×', '÷', '='].map(op => (
-                <div key={op} className="glass-inner rounded-lg p-2.5 border border-white/[0.03] flex items-center gap-3">
-                  <div className="text-sm text-gray-500 font-mono w-5 text-center flex-shrink-0">{op}</div>
-                  <input
-                    type="text"
-                    value={profile?.number_system.operators[op] || ''}
-                    onChange={(e) => handleOperator(op, e.target.value)}
-                    placeholder="—"
-                    className="w-full bg-transparent text-sm font-mono text-gray-200 placeholder:text-gray-700 focus:outline-none"
-                  />
+        {/* Base detection */}
+        <div className="glass-card" style={{ padding: 18 }}>
+          <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+            <span className="label" style={{ marginBottom: 0 }}>Detected Base System</span>
+            {displayBase && <span className={'badge ' + (baseConfidence >= 76 ? 'confirmed' : baseConfidence >= 41 ? 'probable' : 'unknown')}>{baseConfidence >= 76 ? 'confirmed' : 'estimate'} · {baseConfidence}%</span>}
+          </div>
+          <div className="flex" style={{ gap: 24, alignItems: 'flex-end' }}>
+            <div>
+              <div className="text-glow" style={{ fontFamily: 'var(--font-display)', fontSize: 64, fontWeight: 200, lineHeight: 1, letterSpacing: '-0.04em' }}>
+                base<em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>{displayBase ?? '?'}</em>
+              </div>
+              <div className="dim" style={{ fontSize: 12, marginTop: 4 }}>
+                {displayBase ? <>roll-over at <span className="font-mono c-confirmed">{mappings[displayBase] || `#${displayBase}`}</span></> : 'map numbers, then detect'}
+              </div>
+            </div>
+            <div className="flex-1" style={{ display: 'flex', gap: 4, alignItems: 'end', height: 80, paddingLeft: 32, borderLeft: '1px solid var(--border)' }}>
+              {scores.map((b) => (
+                <div key={b.base} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flex: 1 }}>
+                  <div style={{ width: '70%', height: `${Math.max(b.score * 100, 2)}%`, background: b.base === displayBase ? 'linear-gradient(to top, var(--accent-deep), var(--accent))' : 'rgba(255,255,255,0.12)', borderRadius: 2, minHeight: 2 }} />
+                  <span className="font-mono" style={{ fontSize: 10, color: b.base === displayBase ? 'var(--accent)' : 'var(--fg-mute)' }}>{b.base}</span>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Number line visualization */}
-          {mappedCount > 0 && (
-            <div className="glass-card rounded-xl p-5">
-              <label className="label mb-3">Number Line</label>
-              <div className="space-y-1 max-h-[300px] overflow-y-auto pr-1">
-                {Array.from({ length: range }, (_, i) => i + 1).map(num => (
-                  <div
-                    key={num}
-                    className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-colors ${
-                      mappings[num] ? 'bg-accent/[0.06]' : ''
-                    }`}
-                  >
-                    <span className="text-[10px] text-gray-600 font-mono w-6 text-right flex-shrink-0">{num}</span>
-                    <div className={`w-px h-3 ${mappings[num] ? 'bg-accent/40' : 'bg-white/[0.06]'}`} />
-                    <span className={`text-[11px] font-mono truncate ${
-                      mappings[num] ? 'text-accent' : 'text-gray-700'
-                    }`}>
-                      {mappings[num] || '·'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Mappings grid */}
+        <div className="glass-card" style={{ padding: 18 }}>
+          <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 14 }}>
+            <span className="label" style={{ marginBottom: 0 }}>Mappings · {mappedCount}/{range}</span>
+            <span className="font-mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>click to edit · hover for breakdown</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 10 }}>
+            {numbers.map((n) => {
+              const word = mappings[n]
+              const has = !!word
+              const parts = decompose(n)
+              return (
+                <div key={n} onMouseEnter={() => setHover(n)} onMouseLeave={() => setHover(null)} className="glass-inner" style={{ padding: '12px 14px', borderColor: hover === n ? 'rgba(0,230,118,0.4)' : has ? 'var(--border-mid)' : 'var(--border)', background: hover === n ? 'rgba(0,230,118,0.06)' : 'var(--bg-inner)', transition: 'all 120ms ease' }}>
+                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 6 }}>
+                    <span className="font-mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>{n}</span>
+                    <span className="font-mono" style={{ fontSize: 9, color: has ? 'var(--accent)' : 'var(--fg-faint)' }}>{has ? '● mapped' : '—'}</span>
+                  </div>
+                  <input value={word || ''} onChange={(e) => handleMapping(n, e.target.value)} placeholder="—" style={{ width: '100%', background: 'transparent', border: 0, outline: 'none', fontFamily: 'var(--font-mono)', fontSize: has ? 14 : 13, fontWeight: 500, color: has ? 'var(--fg)' : 'var(--fg-faint)' }} />
+                  <div className="flex" style={{ gap: 4, marginTop: 4, height: 4 }}>
+                    {parts.map((p, i) => (
+                      <span key={i} style={{ width: 6, height: 4, borderRadius: 1, background: p ? `rgba(0,230,118,${0.3 + p * 0.12})` : 'rgba(255,255,255,0.05)' }} />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {(loading || analysisResult) && (
+          <div className={`glass-card ${loading ? 'scan-overlay' : ''}`} style={{ padding: 16 }}>
+            <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}>
+              <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
+              <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>{loading ? 'Analyzing' : 'Number System Analysis'}</span>
+            </div>
+            <pre style={{ fontSize: 13, color: 'var(--fg-1)', whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)', lineHeight: 1.6, margin: 0 }}>{loading ? streamedText : analysisResult}</pre>
+          </div>
+        )}
       </div>
 
-      {/* AI Analysis — full width below */}
-      {(loading || analysisResult) && (
-        <div className={`glass-card rounded-xl p-5 ${loading ? 'scan-overlay' : ''}`}>
-          <div className="flex items-center gap-2 mb-3">
-            <div className={`w-1.5 h-1.5 rounded-full ${loading ? 'bg-accent animate-pulse' : 'bg-accent/40'}`} />
-            <label className="label mb-0 text-accent">
-              {loading ? 'Analyzing' : 'Number System Analysis'}
-            </label>
+      {/* RIGHT — operators + notes */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div className="glass-card" style={{ padding: 18 }}>
+          <span className="label">Operators</span>
+          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {OPERATORS.map((op) => {
+              const w = operators[op]
+              return (
+                <div key={op} className="flex" style={{ gap: 12, padding: '8px 12px', borderRadius: 8, background: w ? 'var(--bg-inner)' : 'transparent', border: '1px solid ' + (w ? 'var(--border-mid)' : 'var(--border)') }}>
+                  <div style={{ width: 24, height: 24, borderRadius: 6, display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,0.03)', color: 'var(--fg-dim)', fontFamily: 'var(--font-mono)', fontSize: 14, flexShrink: 0 }}>{op}</div>
+                  <input value={w || ''} onChange={(e) => handleOperator(op, e.target.value)} placeholder="—" style={{ flex: 1, background: 'transparent', border: 0, outline: 'none', fontFamily: 'var(--font-mono)', fontSize: 13, color: w ? 'var(--fg)' : 'var(--fg-faint)' }} />
+                  {w && <span className="badge confirmed" style={{ padding: '2px 6px', fontSize: 9 }}>set</span>}
+                </div>
+              )
+            })}
           </div>
-          {loading && (
-            <div className="relative h-0.5 bg-white/[0.03] rounded overflow-hidden mb-4">
-              <div className="absolute inset-y-0 w-1/3 bg-accent/40 rounded animate-scan" />
-            </div>
-          )}
-          <pre className="text-[13px] text-gray-400 whitespace-pre-wrap font-mono leading-relaxed">
-            {loading ? streamedText : analysisResult}
-          </pre>
         </div>
-      )}
+
+        <div className="glass-card" style={{ padding: 18 }}>
+          <span className="label">Pattern Notes</span>
+          <ul style={{ margin: '12px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12.5, color: 'var(--fg-1)', lineHeight: 1.5 }}>
+            {notes.map((note, i) => (
+              <li key={i} className="flex" style={{ gap: 8, alignItems: 'flex-start' }}>
+                <span className={'dot ' + note.dot} style={{ marginTop: 6, flexShrink: 0 }} />
+                <span>{note.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }

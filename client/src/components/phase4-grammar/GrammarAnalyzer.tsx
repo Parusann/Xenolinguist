@@ -13,21 +13,24 @@ export function GrammarAnalyzer() {
   const [newRule, setNewRule] = useState('')
   const [newEvidence, setNewEvidence] = useState('')
   const [newConfidence, setNewConfidence] = useState(70)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [filter, setFilter] = useState<'all' | 'confirmed' | 'probable'>('all')
 
   const rules = profile?.grammar_rules || []
+  const visible = rules.filter((r) => (filter === 'all' ? true : getConfidenceLevel(r.confidence) === filter))
+  const sel = rules.find((r) => r.id === selectedId) ?? rules[0] ?? null
 
   const handleAnalyze = async () => {
     if (!profile) return
     const prompt = `Dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nExisting grammar rules:\n${formatGrammarForPrompt(profile.grammar_rules)}\n\nSamples:\n${formatSamplesForPrompt(profile.samples)}`
-    const result = await runTask('grammarInference', prompt)
-    setAnalysisResult(result)
+    setAnalysisResult(await runTask('grammarInference', prompt))
   }
 
   const handleAddRule = () => {
     if (!newRule.trim()) return
     addGrammarRule({
       rule: newRule.trim(),
-      evidence: newEvidence.trim() ? newEvidence.split('\n').map(s => s.trim()).filter(Boolean) : [],
+      evidence: newEvidence.trim() ? newEvidence.split('\n').map((s) => s.trim()).filter(Boolean) : [],
       confidence: newConfidence,
     })
     setNewRule('')
@@ -35,159 +38,134 @@ export function GrammarAnalyzer() {
     setNewConfidence(70)
   }
 
+  const confBucket = (c: number) => (c >= 76 ? 'confirmed' : c >= 41 ? 'probable' : 'unknown')
+  const fmtDate = (d: string) => { const dt = new Date(d); return Number.isNaN(dt.getTime()) ? d : dt.toLocaleDateString() }
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <div>
-            <h2 className="text-xl font-light mb-0 text-chrome">
-              Grammar <span className="font-medium text-chrome-accent">Analysis</span>
-            </h2>
-            <p className="text-xs text-gray-500">Identify word order, morphology, and structural patterns.</p>
+    <div className="phase-enter" style={{ display: 'grid', gridTemplateColumns: '440px 1fr 320px', gap: 16, height: '100%', overflow: 'hidden' }}>
+      {/* LEFT — add rule */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14, overflow: 'auto', paddingRight: 4 }}>
+        <div>
+          <div className="flex" style={{ alignItems: 'baseline', gap: 12 }}>
+            <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>Grammar <em>Analysis</em></h1>
+            <span className="kicker">PHASE 04</span>
           </div>
-          {rules.length > 0 && (
-            <div className="flex gap-3 text-xs text-gray-600">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400/50" />
-                {rules.filter(r => getConfidenceLevel(r.confidence) === 'confirmed').length} confirmed
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400/50" />
-                {rules.filter(r => getConfidenceLevel(r.confidence) === 'probable').length} probable
-              </span>
-            </div>
-          )}
+          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Word order, morphology, structural patterns — each rule carries evidence and confidence.</p>
         </div>
-        <button
-          onClick={handleAnalyze}
-          disabled={!connected || loading || !profile?.dictionary.length}
-          className="btn-primary text-xs"
-        >
-          {loading ? 'Analyzing...' : 'Analyze Grammar'}
-        </button>
+
+        <div className="glass-card" style={{ padding: 18 }}>
+          <span className="label">Add Grammar Rule</span>
+          <div style={{ marginTop: 12 }}>
+            <div className="label" style={{ marginBottom: 6 }}>Rule description</div>
+            <textarea className="textarea" value={newRule} onChange={(e) => setNewRule(e.target.value)} placeholder='e.g. "Word order is SOV — verb always appears last"' style={{ minHeight: 70, fontFamily: 'var(--font-sans)', fontSize: 13 }} />
+          </div>
+          <div style={{ marginTop: 12 }}>
+            <div className="label" style={{ marginBottom: 6 }}>Evidence (one per line)</div>
+            <textarea className="textarea" value={newEvidence} onChange={(e) => setNewEvidence(e.target.value)} placeholder="Supporting examples from samples…" style={{ minHeight: 80 }} />
+          </div>
+          <div style={{ marginTop: 14 }}>
+            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 6 }}>
+              <span className="label" style={{ marginBottom: 0 }}>Confidence · <span className={'font-mono c-' + confBucket(newConfidence)}>{newConfidence}%</span></span>
+              <span className={'badge ' + confBucket(newConfidence)}>{confBucket(newConfidence)}</span>
+            </div>
+            <div style={{ position: 'relative', height: 10 }}>
+              <div style={{ position: 'absolute', inset: '3px 0', borderRadius: 3, background: 'rgba(255,255,255,0.06)' }} />
+              <div style={{ position: 'absolute', left: 0, top: 3, height: 4, width: newConfidence + '%', borderRadius: 3, background: newConfidence >= 76 ? 'linear-gradient(90deg, var(--accent-deep), var(--accent))' : newConfidence >= 41 ? 'linear-gradient(90deg, #b07a1f, var(--conf-probable))' : 'linear-gradient(90deg, #803333, var(--conf-unknown))', boxShadow: newConfidence >= 76 ? '0 0 8px var(--accent-soft)' : 'none' }} />
+              <input type="range" min={0} max={100} value={newConfidence} onChange={(e) => setNewConfidence(+e.target.value)} style={{ position: 'absolute', inset: 0, width: '100%', appearance: 'none', background: 'transparent', margin: 0, opacity: 0.001, cursor: 'pointer' }} />
+            </div>
+            <div className="flex" style={{ justifyContent: 'space-between', marginTop: 4 }}>
+              <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)' }}>0 — unknown</span>
+              <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)' }}>40 — probable</span>
+              <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)' }}>76+ — confirmed</span>
+            </div>
+          </div>
+          <div className="flex" style={{ gap: 8, marginTop: 14 }}>
+            <button className="btn primary sm" onClick={handleAddRule} disabled={!newRule.trim()}>+ Add Rule</button>
+            <button className="btn sm ghost" onClick={handleAnalyze} disabled={!connected || loading || !profile?.dictionary.length}>{loading ? 'Analyzing…' : '⌖ AI Analyze'}</button>
+          </div>
+        </div>
       </div>
 
-      {/* Two-column: Add form left, Rules list right */}
-      <div className="grid grid-cols-5 gap-4 items-start">
-        {/* Left column: Add rule form */}
-        <div className="col-span-2 glass-card rounded-xl p-5 space-y-3">
-          <label className="label text-accent mb-0">Add Grammar Rule</label>
-          <div>
-            <label className="label">Rule Description</label>
-            <textarea
-              value={newRule}
-              onChange={(e) => setNewRule(e.target.value)}
-              placeholder='e.g., "Word order is SOV — verb always appears last"'
-              rows={3}
-              className="input w-full resize-none"
-            />
-          </div>
-          <div>
-            <label className="label">Evidence (one per line)</label>
-            <textarea
-              value={newEvidence}
-              onChange={(e) => setNewEvidence(e.target.value)}
-              placeholder="Supporting examples from samples..."
-              rows={3}
-              className="input input-mono w-full resize-none"
-            />
-          </div>
-          <div>
-            <label className="label">Confidence · {newConfidence}%</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={newConfidence}
-                onChange={(e) => setNewConfidence(Number(e.target.value))}
-                className="flex-1 accent-accent"
-              />
-              <span className={`badge badge-${getConfidenceLevel(newConfidence)} text-[10px]`}>
-                {getConfidenceLevel(newConfidence)}
-              </span>
-            </div>
-          </div>
-          <button
-            onClick={handleAddRule}
-            disabled={!newRule.trim()}
-            className="btn-primary text-xs"
-          >
-            Add Rule
-          </button>
+      {/* CENTER — rule list */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, overflow: 'hidden' }}>
+        <div className="flex" style={{ gap: 8, alignItems: 'center' }}>
+          <span className="label" style={{ marginBottom: 0 }}>Active Rules · {rules.length}</span>
+          <div className="flex-1" />
+          {(['all', 'confirmed', 'probable'] as const).map((f) => (
+            <button key={f} className="btn xs ghost" onClick={() => setFilter(f)} style={{ background: filter === f ? 'rgba(0,230,118,0.10)' : 'transparent', color: filter === f ? 'var(--accent)' : 'var(--fg-dim)', textTransform: 'capitalize' }}>{f}</button>
+          ))}
         </div>
-
-        {/* Right column: Confirmed Rules */}
-        <div className="col-span-3">
-          {rules.length > 0 ? (
-            <div>
-              <label className="label mb-2">Confirmed Rules · {rules.length}</label>
-              <div className="space-y-2 max-h-[520px] overflow-y-auto pr-1 stagger-children">
-                {rules.map(rule => {
-                  const level = getConfidenceLevel(rule.confidence)
-                  return (
-                    <div key={rule.id} className="glass-card rounded-lg p-3.5 group">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start gap-3">
-                            <p className="text-sm text-gray-200 leading-relaxed flex-1">{rule.rule}</p>
-                            <div className="flex gap-2 flex-shrink-0 items-center">
-                              <span className={`badge badge-${level}`}>
-                                {rule.confidence}%
-                              </span>
-                              <button
-                                onClick={() => removeGrammarRule(rule.id)}
-                                className="text-xs text-gray-700 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
-                              >×</button>
-                            </div>
-                          </div>
-                          {rule.evidence.length > 0 && (
-                            <div className="mt-2 space-y-1">
-                              {rule.evidence.map((e, i) => (
-                                <p key={i} className="text-[11px] font-mono text-gray-600 flex items-center gap-1.5">
-                                  <span className="text-accent/30">→</span> {e}
-                                </p>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+        {rules.length === 0 ? (
+          <div className="glass-card" style={{ padding: 32, textAlign: 'center', color: 'var(--fg-mute)', fontSize: 13 }}>
+            {profile?.dictionary.length ? 'No rules yet. Add rules manually or use AI Analyze.' : 'Build your vocabulary first to enable grammar analysis.'}
+          </div>
+        ) : (
+          <div style={{ overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 10, paddingRight: 4, paddingBottom: 10 }}>
+            {visible.map((g, i) => {
+              const c = confBucket(g.confidence)
+              return (
+                <div key={g.id} onClick={() => setSelectedId(g.id)} className="glass-card" style={{ padding: 16, cursor: 'pointer', borderColor: sel?.id === g.id ? 'rgba(0,230,118,0.4)' : 'var(--border)', background: sel?.id === g.id ? 'rgba(0,230,118,0.05)' : 'var(--bg-rise)' }}>
+                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
+                    <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>RULE {String(i + 1).padStart(2, '0')}</span>
+                    <span className={'badge ' + c}>{c} · {g.confidence}%</span>
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 400, color: 'var(--fg)', lineHeight: 1.35, marginBottom: 10 }}>{g.rule}</div>
+                  {g.evidence.length > 0 && (
+                    <div className="flex" style={{ gap: 8, flexWrap: 'wrap' }}>
+                      {g.evidence.slice(0, 3).map((e, j) => (
+                        <span key={j} className="font-mono" style={{ fontSize: 11.5, color: 'var(--fg-1)', padding: '4px 8px', borderRadius: 6, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border)' }}>{e}</span>
+                      ))}
+                      {g.evidence.length > 3 && <span className="font-mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>+{g.evidence.length - 3} more</span>}
                     </div>
-                  )
-                })}
-              </div>
+                  )}
+                  <div className="flex" style={{ gap: 8, marginTop: 10, alignItems: 'center' }}>
+                    <div className={'cbar ' + c} style={{ flex: 1 }}><span style={{ width: g.confidence + '%' }} /></div>
+                    <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>{fmtDate(g.created_at)}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* RIGHT — inspector + AI */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, overflow: 'auto' }}>
+        {sel && (
+          <div className="glass-card" style={{ padding: 16 }}>
+            <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+              <span className="label" style={{ marginBottom: 0 }}>Rule Inspector</span>
+              <button className="btn xs ghost" style={{ color: 'var(--conf-unknown)' }} onClick={() => removeGrammarRule(sel.id)}>Delete</button>
             </div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 400, marginTop: 8, lineHeight: 1.4, color: 'var(--fg)' }}>{sel.rule}</div>
+            <div className="flex" style={{ gap: 8, marginTop: 10 }}>
+              <span className={'badge ' + confBucket(sel.confidence)}>{confBucket(sel.confidence)} · {sel.confidence}%</span>
+            </div>
+            {sel.evidence.length > 0 && (
+              <>
+                <div className="label" style={{ marginTop: 14, marginBottom: 6 }}>All Evidence</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {sel.evidence.map((e, i) => (
+                    <div key={i} className="glass-inner" style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{e}</div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        <div className={`glass-card ${loading ? 'scan-overlay' : ''}`} style={{ padding: 16 }}>
+          <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}>
+            <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
+            <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>{loading ? 'Analyzing Grammar' : 'AI Analysis'}</span>
+          </div>
+          {loading || analysisResult ? (
+            <pre style={{ fontSize: 12.5, color: 'var(--fg-1)', whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)', lineHeight: 1.55, margin: 0 }}>{loading ? streamedText : analysisResult}</pre>
           ) : (
-            <div className="glass-card rounded-xl p-8 flex items-center justify-center h-full">
-              <p className="text-sm text-gray-700">
-                {profile?.dictionary.length
-                  ? 'No rules yet. Add rules manually or use AI analysis.'
-                  : 'Build your vocabulary first to enable grammar analysis.'}
-              </p>
-            </div>
+            <div style={{ fontSize: 12.5, color: 'var(--fg-dim)', lineHeight: 1.5 }}>Run <span className="font-mono">⌖ AI Analyze</span> to surface candidate rules from your samples and dictionary.</div>
           )}
         </div>
       </div>
-
-      {/* AI Analysis — full width below */}
-      {(loading || analysisResult) && (
-        <div className={`glass-card rounded-xl p-5 ${loading ? 'scan-overlay' : ''}`}>
-          <div className="flex items-center gap-2 mb-3">
-            <div className={`w-1.5 h-1.5 rounded-full ${loading ? 'bg-accent animate-pulse' : 'bg-accent/40'}`} />
-            <label className="label mb-0 text-accent">
-              {loading ? 'Analyzing Grammar' : 'Grammar Analysis'}
-            </label>
-          </div>
-          {loading && (
-            <div className="relative h-0.5 bg-white/[0.03] rounded overflow-hidden mb-4">
-              <div className="absolute inset-y-0 w-1/3 bg-accent/40 rounded animate-scan" />
-            </div>
-          )}
-          <pre className="text-[13px] text-gray-400 whitespace-pre-wrap font-mono leading-relaxed">
-            {loading ? streamedText : analysisResult}
-          </pre>
-        </div>
-      )}
     </div>
   )
 }

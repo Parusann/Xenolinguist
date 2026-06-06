@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { XenoMark } from '@/components/common/XenoMark'
 
 interface TourStep {
   id: string
@@ -246,7 +247,7 @@ export function OnboardingTour({ onComplete }: OnboardingTourProps) {
         {/* Welcome step logo */}
         {step.id === 'welcome' && (
           <div className="flex items-center justify-center mb-4">
-            <span className="text-accent font-mono font-bold text-4xl text-glow">X</span>
+            <XenoMark size={44} />
           </div>
         )}
 
