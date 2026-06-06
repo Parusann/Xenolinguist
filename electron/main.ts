@@ -1,5 +1,6 @@
 import { app, BrowserWindow, utilityProcess, type UtilityProcess } from 'electron';
 import path from 'path';
+import { isOllamaUp, hasModel, pullDefaultModel } from './ollama.js';
 
 const isDev = !app.isPackaged;
 const DEV_URL = 'http://localhost:5173';
@@ -48,6 +49,17 @@ async function createWindow() {
     const port = await startServerProcess();
     await win.loadURL(`http://127.0.0.1:${port}`);
   }
+
+  void (async () => {
+    if (!win) return;
+    if (await isOllamaUp()) {
+      if (!(await hasModel())) {
+        try { await pullDefaultModel(win); } catch (e) { console.error('[ollama] pull failed', e); }
+      }
+    } else {
+      win.webContents.send('ollama:offline', { url: process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434' });
+    }
+  })();
 
   win.on('closed', () => { win = null; });
 }
