@@ -1,6 +1,7 @@
 import { app, BrowserWindow, utilityProcess, type UtilityProcess } from 'electron';
 import path from 'path';
 import { isOllamaUp, hasModel, pullDefaultModel } from './ollama.js';
+import { autoUpdater } from 'electron-updater';
 
 const isDev = !app.isPackaged;
 const DEV_URL = 'http://localhost:5173';
@@ -48,6 +49,7 @@ async function createWindow() {
   } else {
     const port = await startServerProcess();
     await win.loadURL(`http://127.0.0.1:${port}`);
+    autoUpdater.checkForUpdatesAndNotify().catch((e) => console.error('[update]', e));
   }
 
   void (async () => {

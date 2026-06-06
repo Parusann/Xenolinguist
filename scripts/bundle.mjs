@@ -34,7 +34,7 @@ if (existsSync('electron/main.ts')) {
     entryPoints: ['electron/main.ts', 'electron/preload.ts'],
     outdir: 'electron/dist',
     outExtension: { '.js': '.cjs' },
-    external: ['electron'],
+    external: ['electron', 'electron-updater'],
   });
 }
 
