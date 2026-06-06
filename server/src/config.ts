@@ -4,8 +4,11 @@ import path from 'path';
 export function dataDir(): string {
   const fromEnv = process.env.DATA_DIR;
   if (fromEnv) return path.resolve(fromEnv);
-  // Dev default: <repo>/server/data (this file compiles under server/).
-  return path.resolve(import.meta.dirname, '../data');
+  // Dev default anchored to this source file (<repo>/server/data). In the CJS
+  // bundle `import.meta.dirname` is undefined, but DATA_DIR is always set there
+  // (by the Electron main process), so this fallback only runs in dev/tests.
+  const here = import.meta.dirname;
+  return here ? path.resolve(here, '../data') : path.resolve(process.cwd(), 'data');
 }
 
 /** Default Ollama model for new chats; user-overridable via OLLAMA_MODEL. */

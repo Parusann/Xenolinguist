@@ -19,6 +19,9 @@ const tsResolve = {
 const common = {
   bundle: true, platform: 'node', format: 'cjs', target: 'node20',
   plugins: [tsResolve], logLevel: 'info',
+  // import.meta.dirname is intentionally guarded in config.ts; the bundle never
+  // hits that fallback (DATA_DIR is always set), so silence the cosmetic warning.
+  logOverride: { 'empty-import-meta': 'silent' },
 };
 
 // Server: fully self-contained (cors/express/ollama/uuid/dotenv are pure JS).
