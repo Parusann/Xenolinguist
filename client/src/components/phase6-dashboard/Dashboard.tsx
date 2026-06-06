@@ -2,8 +2,12 @@ import { useRef } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useSessionLog } from '@/stores/session-log-context'
 import { useToast } from '@/stores/toast-context'
-import { getConfidenceLevel } from 'shared/constants'
-import type { LanguageProfile } from 'shared/types'
+import type { LanguageProfile, LogEntryType } from 'shared/types'
+import { getConfidenceCounts, getDecodingProgress, cumulativeTrend } from '@/lib/profileStats'
+import { ConfRing } from '@/components/common/ConfRing'
+import { MiniSpark } from '@/components/common/MiniSpark'
+
+const MILESTONE_TYPES: LogEntryType[] = ['success', 'ai']
 
 export function Dashboard() {
   const { profile, updateProfile } = useProfile()
@@ -13,25 +17,28 @@ export function Dashboard() {
 
   if (!profile) return null
 
-  const dictionary = profile.dictionary
-  const totalWords = dictionary.length
-  const confirmed = dictionary.filter(e => getConfidenceLevel(e.confidence) === 'confirmed').length
-  const probable = dictionary.filter(e => getConfidenceLevel(e.confidence) === 'probable').length
-  const unknown = dictionary.filter(e => getConfidenceLevel(e.confidence) === 'unknown').length
-  const avgConfidence = totalWords > 0
-    ? Math.round(dictionary.reduce((sum, e) => sum + e.confidence, 0) / totalWords)
-    : 0
+  const counts = getConfidenceCounts(profile)
+  const decode = getDecodingProgress(profile)
+  const totalWords = counts.total
+  const avgConfidence =
+    totalWords > 0 ? Math.round(profile.dictionary.reduce((sum, e) => sum + e.confidence, 0) / totalWords) : 0
   const grammarRules = profile.grammar_rules.length
   const totalSamples = profile.samples.length
-  const decodedSamples = profile.samples.filter(s => s.decoded).length
+  const decodedSamples = profile.samples.filter((s) => s.decoded).length
   const numbersMapped = Object.keys(profile.number_system.mappings).length
+  const base = profile.number_system.base
 
-  const dictionaryScore = Math.min(totalWords / 50, 1) * 30
-  const grammarScore = Math.min(grammarRules / 5, 1) * 25
-  const numbersScore = Math.min(numbersMapped / 10, 1) * 15
-  const samplesScore = Math.min(totalSamples / 10, 1) * 15
-  const confidenceScore = (avgConfidence / 100) * 15
-  const progress = Math.round(dictionaryScore + grammarScore + numbersScore + samplesScore + confidenceScore)
+  // Component progress (same weights as getDecodingProgress)
+  const vocabPct = Math.round(Math.min(totalWords / 50, 1) * 100)
+  const grammarPct = Math.round(Math.min(grammarRules / 5, 1) * 100)
+  const numbersPct = Math.round(Math.min(numbersMapped / 10, 1) * 100)
+  const samplesPct = Math.round(Math.min(totalSamples / 10, 1) * 100)
+
+  // Real growth trends from created_at timestamps (not fabricated)
+  const vocabHist = cumulativeTrend(profile.dictionary.map((e) => e.created_at))
+  const sampleHist = cumulativeTrend(profile.samples.map((s) => s.created_at))
+  const lastVocab = vocabHist[vocabHist.length - 1] || 0
+  const decodeHist = lastVocab > 0 ? vocabHist.map((v) => Math.round((v / lastVocab) * decode)) : [0, decode]
 
   const handleExport = () => {
     const blob = new Blob([JSON.stringify(profile, null, 2)], { type: 'application/json' })
@@ -50,7 +57,6 @@ export function Dashboard() {
     reader.onload = () => {
       try {
         const imported = JSON.parse(reader.result as string) as Partial<LanguageProfile>
-        // Merge imported data into current profile
         const updates: Partial<LanguageProfile> = {}
         if (imported.dictionary?.length) updates.dictionary = imported.dictionary
         if (imported.grammar_rules?.length) updates.grammar_rules = imported.grammar_rules
@@ -58,6 +64,7 @@ export function Dashboard() {
         if (imported.number_system) updates.number_system = imported.number_system
         if (imported.audio_clips) updates.audio_clips = imported.audio_clips
         updateProfile(updates)
+        addToast('Profile imported', 'success')
       } catch {
         addToast('Invalid profile JSON file', 'error')
       }
@@ -68,9 +75,9 @@ export function Dashboard() {
 
   const handleExportCSV = () => {
     const header = 'Alien Word,English,Part of Speech,Confidence,Context\n'
-    const rows = dictionary.map(e =>
-      `"${e.alien_word}","${e.english_meaning}","${e.part_of_speech}",${e.confidence},"${e.context}"`
-    ).join('\n')
+    const rows = profile.dictionary
+      .map((e) => `"${e.alien_word}","${e.english_meaning}","${e.part_of_speech}",${e.confidence},"${e.context}"`)
+      .join('\n')
     const blob = new Blob([header + rows], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -80,160 +87,227 @@ export function Dashboard() {
     URL.revokeObjectURL(url)
   }
 
-  const hasTimeline = entries.filter(e => e.type === 'success').length > 0
+  const fmtTime = (ts: string | number | Date) =>
+    new Date(ts).toLocaleString('en-US', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false })
+
+  const milestones = [
+    { goal: '50% decoding', at: decode, target: 50, hint: decode >= 50 ? 'Reached — push toward 75%' : 'Lock in probable words to climb' },
+    { goal: 'All numbers 1–20 mapped', at: numbersMapped, target: 20, hint: numbersMapped >= 20 ? 'Complete' : `${Math.max(0, 20 - numbersMapped)} left to map` },
+    { goal: '10 grammar rules', at: grammarRules, target: 10, hint: grammarRules >= 10 ? 'Complete' : `${Math.max(0, 10 - grammarRules)} more rules to document` },
+  ]
+
+  const fieldNote = [
+    counts.probable > 0
+      ? `${counts.probable} probable word${counts.probable === 1 ? '' : 's'} ${counts.probable === 1 ? 'is' : 'are'} close to promotion — re-elicit in fresh contexts to confirm.`
+      : null,
+    numbersMapped < 20
+      ? `${20 - numbersMapped} numbers remain unmapped${base ? ` (base ${base})` : ''}; extending the count strengthens the system.`
+      : `Number system looks complete${base ? ` (base ${base})` : ''}.`,
+    grammarRules < 5 ? 'Documenting more grammar rules will raise structural confidence.' : 'Grammar coverage is solid — deepen the vocabulary next.',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const trends = [
+    { label: 'Decoding %', val: `${decode}%`, data: decodeHist, color: 'var(--accent)' },
+    { label: 'Vocabulary', val: totalWords, data: vocabHist, color: 'var(--accent)' },
+    { label: 'Samples', val: totalSamples, data: sampleHist, color: 'var(--ai)' },
+  ]
+
+  const statTiles = [
+    { label: 'Words', val: totalWords, sub: `${counts.confirmed} confirmed`, glyph: 'Aa' },
+    { label: 'Grammar', val: grammarRules, sub: 'rules active', glyph: '⟨⟩' },
+    { label: 'Samples', val: totalSamples, sub: `${decodedSamples} decoded`, glyph: '{ }' },
+    { label: 'Numbers', val: numbersMapped, sub: base ? `base ${base} confirmed` : 'base unset', glyph: '#' },
+  ]
+
+  const subBars = [
+    { label: 'Vocab', val: vocabPct, count: `${counts.confirmed}/${totalWords}` },
+    { label: 'Grammar', val: grammarPct, count: `${grammarRules} rules` },
+    { label: 'Numbers', val: numbersPct, count: base ? `base ${base}` : '—' },
+    { label: 'Samples', val: samplesPct, count: `${totalSamples} captured` },
+  ]
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="phase-enter" style={{ height: '100%', overflow: 'auto' }}>
+      {/* Header */}
+      <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 18 }}>
         <div>
-          <h2 className="text-xl font-light mb-1 text-chrome">
-            <span className="font-medium text-chrome-accent">Dashboard</span>
-          </h2>
-          <p className="text-xs text-gray-500">Overview for "{profile.name}"</p>
+          <div className="flex" style={{ alignItems: 'baseline', gap: 12 }}>
+            <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>
+              Field <em>Log</em>
+            </h1>
+            <span className="kicker">PHASE 06 · DASHBOARD</span>
+          </div>
+          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>
+            Overview of decoding progress for <span className="font-mono" style={{ color: 'var(--fg)' }}>{profile.name}</span>
+            <span className="muted"> · started {new Date(profile.created_at).toLocaleDateString()}</span>
+          </p>
         </div>
-        <div className="flex gap-3">
-          <label className="btn-ghost text-xs cursor-pointer">
-            Import
-            <input
-              ref={importRef}
-              type="file"
-              accept=".json"
-              onChange={handleImport}
-              className="hidden"
-            />
+        <div className="flex" style={{ gap: 8 }}>
+          <label className="btn sm" style={{ cursor: 'pointer' }}>
+            ↓ Import
+            <input ref={importRef} type="file" accept=".json" onChange={handleImport} className="hidden" />
           </label>
-          <button onClick={handleExport} className="btn-primary text-xs">
-            Export JSON
-          </button>
-          <button onClick={handleExportCSV} disabled={!totalWords} className="btn-ghost text-xs">
-            Export CSV
-          </button>
+          <button className="btn primary sm" onClick={handleExport}>↑ Export JSON</button>
+          <button className="btn sm ghost" onClick={handleExportCSV} disabled={!totalWords}>↑ CSV</button>
         </div>
       </div>
 
-      {/* Top row: Progress ring + stats + confidence all side by side */}
-      <div className="grid grid-cols-4 gap-4 items-start stagger-children">
-        {/* Progress ring — compact */}
-        <div className="glass-card rounded-xl p-5 border-trace flex flex-col items-center">
-          <div className="relative w-24 h-24 flex-shrink-0">
-            <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="6" />
-              <circle
-                cx="50" cy="50" r="42" fill="none"
-                stroke="url(#progressGrad)" strokeWidth="6"
-                strokeDasharray={`${progress * 2.64} 264`}
-                strokeLinecap="round"
-                className="transition-all duration-1000"
-                style={{ filter: 'drop-shadow(0 0 6px rgba(0,230,118,0.3))' }}
-              />
-              <defs>
-                <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00E676" />
-                  <stop offset="100%" stopColor="#00A854" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-bold text-accent text-glow animate-text-glow-pulse">{progress}</span>
-              <span className="text-[9px] text-gray-500 font-mono">PERCENT</span>
+      {/* Hero row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(440px, 1.4fr) 1fr 1fr', gap: 14, marginBottom: 14 }}>
+        <div className="glass-card" style={{ padding: 24, position: 'relative', overflow: 'hidden' }}>
+          <span className="label">Decoding Progress</span>
+          <div className="flex" style={{ alignItems: 'flex-end', gap: 20, marginTop: 14 }}>
+            <ConfRing value={decode} size={140} stroke={6} />
+            <div style={{ flex: 1, paddingBottom: 12 }}>
+              <div className="text-glow" style={{ fontFamily: 'var(--font-display)', fontSize: 84, fontWeight: 200, lineHeight: 1, letterSpacing: '-0.04em', color: 'var(--accent)' }}>
+                {decode}
+                <span style={{ fontSize: 32, color: 'var(--fg-mute)' }}>%</span>
+              </div>
+              <div className="dim" style={{ marginTop: 6, fontSize: 12.5 }}>
+                {counts.confirmed} confirmed · {counts.probable} probable · avg confidence{' '}
+                <span className="font-mono" style={{ color: 'var(--fg)' }}>{avgConfidence}%</span>
+              </div>
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--border)', display: 'flex', gap: 16 }}>
+                {subBars.map((d) => (
+                  <div key={d.label} style={{ flex: 1 }}>
+                    <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 4 }}>
+                      <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>{d.label.toUpperCase()}</span>
+                      <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-1)' }}>{d.val}%</span>
+                    </div>
+                    <div className="cbar confirmed"><span style={{ width: d.val + '%' }} /></div>
+                    <div className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)', marginTop: 3 }}>{d.count}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="w-full mt-4 space-y-2">
-            <ProgressRow label="Vocab" value={Math.round(dictionaryScore / 30 * 100)} />
-            <ProgressRow label="Grammar" value={Math.round(grammarScore / 25 * 100)} />
-            <ProgressRow label="Numbers" value={Math.round(numbersScore / 15 * 100)} />
-            <ProgressRow label="Samples" value={Math.round(samplesScore / 15 * 100)} />
+        </div>
+
+        {/* Confidence distribution */}
+        <div className="glass-card" style={{ padding: 20 }}>
+          <span className="label">Confidence Distribution</span>
+          <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {([
+              { label: 'Confirmed', val: counts.confirmed, c: 'confirmed' },
+              { label: 'Probable', val: counts.probable, c: 'probable' },
+              { label: 'Unknown', val: counts.unknown, c: 'unknown' },
+            ] as const).map((d) => {
+              const pct = totalWords ? Math.round((d.val / totalWords) * 100) : 0
+              return (
+                <div key={d.label}>
+                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 4 }}>
+                    <span className={'c-' + d.c} style={{ fontSize: 13, fontWeight: 500 }}>{d.label}</span>
+                    <span className="font-mono" style={{ fontSize: 11, color: 'var(--fg-1)' }}>
+                      {d.val} <span className="dim">({pct}%)</span>
+                    </span>
+                  </div>
+                  <div className={'cbar ' + d.c} style={{ height: 6 }}><span style={{ width: pct + '%' }} /></div>
+                </div>
+              )
+            })}
+          </div>
+          <div className="hr" style={{ margin: '16px 0' }} />
+          <div style={{ fontSize: 11.5, color: 'var(--fg-dim)', lineHeight: 1.5 }}>
+            {counts.probable > 0 ? (
+              <>
+                <span className="font-mono c-probable">{counts.probable} probable</span> word{counts.probable === 1 ? '' : 's'} near promotion — fresh contexts could confirm several this week.
+              </>
+            ) : (
+              'No probable words pending — add samples and elicit new vocabulary to grow the dictionary.'
+            )}
           </div>
         </div>
 
-        {/* Stats — 2x2 grid */}
-        <div className="grid grid-cols-2 gap-3">
-          <StatCard label="Words" value={totalWords} sub={`${confirmed} confirmed`} accent />
-          <StatCard label="Grammar" value={grammarRules} sub="rules" />
-          <StatCard label="Samples" value={totalSamples} sub={`${decodedSamples} decoded`} />
-          <StatCard label="Numbers" value={numbersMapped} sub="mapped" />
-        </div>
-
-        {/* Confidence breakdown */}
-        <div className="glass-card rounded-xl p-5">
-          <label className="label mb-3">Confidence</label>
-          <div className="space-y-3">
-            <ConfBar label="Confirmed" count={confirmed} total={totalWords} color="bg-emerald-400" textColor="text-emerald-400" />
-            <ConfBar label="Probable" count={probable} total={totalWords} color="bg-amber-400" textColor="text-amber-400" />
-            <ConfBar label="Unknown" count={unknown} total={totalWords} color="bg-red-400" textColor="text-red-400" />
-          </div>
-          {totalWords > 0 && (
-            <>
-              <div className="separator mt-3 mb-2" />
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600">Average</span>
-                <span className="font-mono text-gray-400">{avgConfidence}%</span>
+        {/* Trends */}
+        <div className="glass-card" style={{ padding: 20 }}>
+          <span className="label">Trends</span>
+          <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {trends.map((d) => (
+              <div key={d.label} className="flex" style={{ justifyContent: 'space-between', gap: 12 }}>
+                <div>
+                  <div className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>{d.label.toUpperCase()}</div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 400, color: 'var(--fg)' }}>{d.val}</div>
+                </div>
+                <MiniSpark values={d.data} color={d.color} w={120} h={28} />
               </div>
-            </>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Stat tiles */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 14 }}>
+        {statTiles.map((t) => (
+          <div key={t.label} className="glass-card" style={{ padding: 18 }}>
+            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 10 }}>
+              <span className="label" style={{ marginBottom: 0 }}>{t.label}</span>
+              <span className="font-mono" style={{ fontSize: 16, color: 'var(--accent)' }}>{t.glyph}</span>
+            </div>
+            <div className="text-glow" style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 300, color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.03em' }}>{t.val}</div>
+            <div className="dim" style={{ fontSize: 11.5, marginTop: 6 }}>{t.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom row */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14 }}>
+        <div className="glass-card" style={{ padding: 20 }}>
+          <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 14 }}>
+            <span className="label" style={{ marginBottom: 0 }}>Discovery Timeline</span>
+            <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>{entries.length} events</span>
+          </div>
+          {entries.length === 0 ? (
+            <p style={{ fontSize: 12, color: 'var(--fg-faint)' }}>No activity yet — capture samples and map words to build the log.</p>
+          ) : (
+            <div style={{ position: 'relative', paddingLeft: 16, maxHeight: 320, overflowY: 'auto' }}>
+              <div style={{ position: 'absolute', left: 6, top: 8, bottom: 8, width: 1, background: 'linear-gradient(to bottom, transparent, var(--border-mid) 8%, var(--border-mid) 92%, transparent)' }} />
+              {entries.slice().reverse().map((e) => {
+                const isMilestone = MILESTONE_TYPES.includes(e.type)
+                return (
+                  <div key={e.id} style={{ position: 'relative', paddingBottom: 14 }}>
+                    <span style={{ position: 'absolute', left: -16, top: 6, width: 11, height: 11, borderRadius: 6, background: isMilestone ? 'var(--accent)' : 'var(--bg-base)', border: '1.5px solid ' + (isMilestone ? 'var(--accent)' : 'var(--border-strong)'), boxShadow: isMilestone ? '0 0 8px var(--accent)' : 'none' }} />
+                    <div className="flex" style={{ alignItems: 'baseline', gap: 12 }}>
+                      <span className="font-mono" style={{ fontSize: 10.5, color: 'var(--fg-faint)', minWidth: 84 }}>{fmtTime(e.timestamp)}</span>
+                      <span className="badge" style={{ fontSize: 9 }}>{e.type}</span>
+                      <span style={{ fontSize: 13, color: isMilestone ? 'var(--accent)' : 'var(--fg-1)', fontWeight: isMilestone ? 500 : 400 }}>{e.message}</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           )}
         </div>
 
-        {/* Discovery timeline */}
-        {hasTimeline ? (
-          <div className="glass-card rounded-xl p-5">
-            <label className="label mb-3">Discovery Timeline</label>
-            <div className="space-y-1.5 max-h-[220px] overflow-y-auto pr-1">
-              {entries.filter(e => e.type === 'success').map(entry => (
-                <div key={entry.id} className="flex gap-2 text-xs py-0.5">
-                  <span className="text-gray-700 font-mono flex-shrink-0 w-12">
-                    {new Date(entry.timestamp).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                  <div className="w-1 h-1 rounded-full bg-accent/40 mt-1.5 flex-shrink-0" />
-                  <span className="text-gray-400">{entry.message}</span>
-                </div>
-              ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="glass-card" style={{ padding: 20 }}>
+            <span className="label">Next Milestones</span>
+            <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {milestones.map((m) => {
+                const pct = Math.min(Math.round((m.at / m.target) * 100), 100)
+                return (
+                  <div key={m.goal} className="glass-inner" style={{ padding: 12 }}>
+                    <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 6 }}>
+                      <span style={{ fontSize: 13, color: 'var(--fg)' }}>{m.goal}</span>
+                      <span className="font-mono" style={{ fontSize: 11, color: 'var(--accent)' }}>{Math.min(m.at, m.target)}/{m.target}</span>
+                    </div>
+                    <div className="cbar confirmed"><span style={{ width: pct + '%' }} /></div>
+                    <div className="dim" style={{ fontSize: 11, marginTop: 6 }}>{m.hint}</div>
+                  </div>
+                )
+              })}
             </div>
           </div>
-        ) : (
-          <div className="glass-card rounded-xl p-5 flex items-center justify-center">
-            <p className="text-xs text-gray-700">No discoveries yet</p>
+
+          <div className="glass-card" style={{ padding: 20 }}>
+            <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}>
+              <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
+              <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>AI Field Notes</span>
+            </div>
+            <div style={{ fontSize: 12.5, color: 'var(--fg-1)', lineHeight: 1.55 }}>{fieldNote}</div>
           </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function StatCard({ label, value, sub, accent }: { label: string; value: number; sub?: string; accent?: boolean }) {
-  return (
-    <div className="glass-card rounded-xl p-4 text-center group">
-      <p className={`text-2xl font-bold font-mono transition-all group-hover:animate-number-pop ${accent ? 'text-accent text-glow' : 'text-gray-200'}`}>{value}</p>
-      <p className="text-[10px] text-gray-500 font-mono uppercase tracking-wider mt-1">{label}</p>
-      {sub && <p className="text-[10px] text-gray-600 mt-0.5">{sub}</p>}
-    </div>
-  )
-}
-
-function ProgressRow({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="flex items-center gap-2">
-      <span className="text-[10px] text-gray-500 w-14">{label}</span>
-      <div className="flex-1 h-1 bg-white/[0.03] rounded-full overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-accent/60 to-accent/30 rounded-full transition-all duration-700 progress-shimmer animate-progress-fill"
-          style={{ width: `${value}%` }}
-        />
-      </div>
-      <span className="text-[10px] font-mono text-gray-600 w-7 text-right">{value}%</span>
-    </div>
-  )
-}
-
-function ConfBar({ label, count, total, color, textColor }: { label: string; count: number; total: number; color: string; textColor: string }) {
-  const pct = total ? Math.round((count / total) * 100) : 0
-  return (
-    <div>
-      <div className="flex items-center justify-between text-xs mb-1">
-        <span className={textColor}>{label}</span>
-        <span className="text-gray-600 font-mono">{count} ({pct}%)</span>
-      </div>
-      <div className="h-1.5 bg-white/[0.03] rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all duration-500 ${color}`} style={{ width: `${pct}%`, opacity: 0.7 }} />
+        </div>
       </div>
     </div>
   )

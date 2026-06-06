@@ -4,15 +4,14 @@
       <stop offset="0%" stop-color="#0a0a10"/>
       <stop offset="100%" stop-color="#050508"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00E676"/>
-      <stop offset="100%" stop-color="#00A854"/>
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="1" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
   </defs>
-  <rect width="32" height="32" rx="6" fill="url(#bg)" stroke="rgba(0,230,118,0.15)" stroke-width="0.5"/>
-  <text x="16" y="22" text-anchor="middle" font-size="16" font-weight="700" font-family="monospace" fill="url(#accent)" filter="url(#glow)">XL</text>
+  <rect width="32" height="32" rx="6" fill="url(#bg)" stroke="rgba(0,230,118,0.18)" stroke-width="0.5"/>
+  <g transform="translate(4 10) scale(0.52)">
+    <circle cx="11" cy="12" r="9" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+    <circle cx="11" cy="12" r="3" stroke="#00E676" stroke-width="1.6" fill="none"/>
+    <line x1="20" y1="12" x2="33" y2="12" stroke="#00E676" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="34.5" cy="12" r="2.6" fill="#00E676"/>
+    <circle cx="38.5" cy="12" r="1.1" fill="#00E676" opacity="0.55"/>
+    <circle cx="41.5" cy="12" r="0.8" fill="#00E676" opacity="0.28"/>
+  </g>
 </svg>

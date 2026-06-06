@@ -16,19 +16,11 @@ interface ChatMessage {
   timestamp: Date
 }
 
-const SUGGESTED_PROMPTS = [
-  'What patterns do you see?',
-  'Suggest meanings for unknown words',
-  'Analyze the grammar',
-]
+const QUICK_ACTIONS = ['Suggest 5 new words', "What's my next move?", 'Find inconsistencies']
 
 let msgId = 0
 function nextId() {
   return `msg-${Date.now()}-${++msgId}`
-}
-
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
 export function AIChat({ onClose }: { onClose: () => void }) {
@@ -38,91 +30,49 @@ export function AIChat({ onClose }: { onClose: () => void }) {
   const [input, setInput] = useState('')
   const [streaming, setStreaming] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const abortRef = useRef(false)
 
   const scrollToBottom = useCallback(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
   }, [])
 
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages, scrollToBottom])
+  useEffect(() => { scrollToBottom() }, [messages, scrollToBottom])
 
   const buildSystemPrompt = useCallback((): string => {
-    const parts = [SYSTEM_PROMPTS.patternAnalysis]
-
+    const parts: string[] = [SYSTEM_PROMPTS.patternAnalysis]
     if (profile) {
-      if (profile.dictionary.length > 0) {
-        parts.push(`\n\nCURRENT DICTIONARY (${profile.dictionary.length} words):\n${formatDictionaryForPrompt(profile.dictionary)}`)
-      }
-      if (profile.grammar_rules.length > 0) {
-        parts.push(`\n\nGRAMMAR RULES (${profile.grammar_rules.length} rules):\n${formatGrammarForPrompt(profile.grammar_rules)}`)
-      }
-      if (profile.samples.length > 0) {
-        parts.push(`\n\nSAMPLES (${profile.samples.length} total):\n${formatSamplesForPrompt(profile.samples)}`)
-      }
+      if (profile.dictionary.length > 0) parts.push(`\n\nCURRENT DICTIONARY (${profile.dictionary.length} words):\n${formatDictionaryForPrompt(profile.dictionary)}`)
+      if (profile.grammar_rules.length > 0) parts.push(`\n\nGRAMMAR RULES (${profile.grammar_rules.length} rules):\n${formatGrammarForPrompt(profile.grammar_rules)}`)
+      if (profile.samples.length > 0) parts.push(`\n\nSAMPLES (${profile.samples.length} total):\n${formatSamplesForPrompt(profile.samples)}`)
     }
-
     return parts.join('')
   }, [profile])
 
   const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || streaming || !connected) return
-
-    const userMsg: ChatMessage = {
-      id: nextId(),
-      role: 'user',
-      content: text.trim(),
-      timestamp: new Date(),
-    }
-
-    const assistantMsg: ChatMessage = {
-      id: nextId(),
-      role: 'assistant',
-      content: '',
-      timestamp: new Date(),
-    }
-
-    setMessages(prev => [...prev, userMsg, assistantMsg])
+    const userMsg: ChatMessage = { id: nextId(), role: 'user', content: text.trim(), timestamp: new Date() }
+    const assistantMsg: ChatMessage = { id: nextId(), role: 'assistant', content: '', timestamp: new Date() }
+    setMessages((prev) => [...prev, userMsg, assistantMsg])
     setInput('')
     setStreaming(true)
     abortRef.current = false
-
-    const allMessages = [...messages, userMsg].map(m => ({
-      role: m.role,
-      content: m.content,
-    }))
-
+    const allMessages = [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }))
     try {
-      await streamAI(
-        allMessages,
-        { system: buildSystemPrompt(), model: selectedModel },
-        (token: string) => {
-          if (abortRef.current) return
-          setMessages(prev => {
-            const updated = [...prev]
-            const last = updated[updated.length - 1]
-            if (last && last.role === 'assistant') {
-              updated[updated.length - 1] = { ...last, content: last.content + token }
-            }
-            return updated
-          })
-        },
-      )
-    } catch (err) {
-      if (!abortRef.current) {
-        setMessages(prev => {
+      await streamAI(allMessages, { system: buildSystemPrompt(), model: selectedModel }, (token: string) => {
+        if (abortRef.current) return
+        setMessages((prev) => {
           const updated = [...prev]
           const last = updated[updated.length - 1]
-          if (last && last.role === 'assistant') {
-            updated[updated.length - 1] = {
-              ...last,
-              content: last.content || `Error: ${err instanceof Error ? err.message : 'Stream failed'}`,
-            }
-          }
+          if (last && last.role === 'assistant') updated[updated.length - 1] = { ...last, content: last.content + token }
+          return updated
+        })
+      })
+    } catch (err) {
+      if (!abortRef.current) {
+        setMessages((prev) => {
+          const updated = [...prev]
+          const last = updated[updated.length - 1]
+          if (last && last.role === 'assistant') updated[updated.length - 1] = { ...last, content: last.content || `Error: ${err instanceof Error ? err.message : 'Stream failed'}` }
           return updated
         })
       }
@@ -132,106 +82,95 @@ export function AIChat({ onClose }: { onClose: () => void }) {
   }, [streaming, connected, messages, buildSystemPrompt, selectedModel])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage(input)
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input) }
   }
 
-  const isEmpty = messages.length === 0
+  const lastMsg = messages[messages.length - 1]
+  const showThinking = streaming && lastMsg?.role === 'assistant' && !lastMsg.content
+  const ctxChips = profile
+    ? [`${profile.dictionary.length} words`, `${profile.grammar_rules.length} rules`, `${profile.samples.length} samples`, ...(profile.number_system.base ? [`base ${profile.number_system.base}`] : [])]
+    : []
 
   return (
-    <div className="fixed right-0 top-10 bottom-6 w-96 glass border-l border-border z-30 flex flex-col animate-slide-in-right">
+    <div className="side-panel">
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-200">AI Assistant</span>
-          {selectedModel && (
-            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/[0.1] text-accent/80">
-              {selectedModel.split(':')[0]}
-            </span>
-          )}
+      <div className="flex" style={{ padding: '14px 18px', borderBottom: '1px solid var(--border)', alignItems: 'center' }}>
+        <div className="flex" style={{ gap: 8, alignItems: 'center' }}>
+          <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 500 }}>Decoder AI</span>
+          <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)', marginLeft: 6 }}>{connected ? `${selectedModel || 'ollama'} · local` : 'offline'}</span>
         </div>
-        <button
-          onClick={onClose}
-          className="btn-ghost text-gray-500 hover:text-gray-300 w-6 h-6 flex items-center justify-center text-sm"
-          title="Close chat"
-        >
-          &times;
-        </button>
+        <div className="flex-1" />
+        <button className="btn xs ghost" onClick={onClose} title="Close (Shift+A)">✕</button>
       </div>
 
-      {/* Message list */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
-        {isEmpty && (
-          <div className="flex flex-col items-center justify-center h-full gap-4 animate-fade-in">
-            <div className="text-gray-600 text-sm text-center">
-              Ask the AI about patterns, vocabulary, or grammar in your language data.
-            </div>
-            <div className="flex flex-col gap-2 w-full">
-              {SUGGESTED_PROMPTS.map(prompt => (
-                <button
-                  key={prompt}
-                  onClick={() => sendMessage(prompt)}
-                  disabled={!connected || streaming}
-                  className="glass-card px-3 py-2 text-left text-accent text-[13px] hover:border-accent/30 transition-colors disabled:opacity-40"
-                >
-                  {prompt}
-                </button>
-              ))}
-            </div>
-            {!connected && (
-              <div className="text-red-400/70 text-[11px] font-mono">
-                Ollama offline — connect to chat
-              </div>
-            )}
+      {/* Context chips */}
+      {ctxChips.length > 0 && (
+        <div className="flex" style={{ gap: 4, padding: '10px 18px', borderBottom: '1px solid var(--border)', flexWrap: 'wrap', alignItems: 'center' }}>
+          <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)', marginRight: 4 }}>CTX</span>
+          {ctxChips.map((c) => <span key={c} className="badge" style={{ fontSize: 9.5 }}>{c}</span>)}
+        </div>
+      )}
+
+      {/* Thread */}
+      <div ref={scrollRef} style={{ flex: 1, overflow: 'auto', padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        {messages.length === 0 && (
+          <div className="dim" style={{ fontSize: 13, lineHeight: 1.55 }}>
+            Ask the decoder about patterns, vocabulary, or grammar in your language data.
+            {!connected && <div style={{ color: 'var(--conf-unknown)', fontFamily: 'var(--font-mono)', fontSize: 11, marginTop: 8 }}>Ollama offline — connect to chat.</div>}
           </div>
         )}
-
-        {messages.map(msg => (
-          <div
-            key={msg.id}
-            className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-fade-in`}
-          >
-            <div
-              className={`rounded-lg px-3 py-2 max-w-[80%] ${
-                msg.role === 'user'
-                  ? 'ml-auto bg-accent/[0.08] text-gray-200 text-[13px]'
-                  : 'mr-auto glass-inner text-gray-300 font-mono text-[13px]'
-              }`}
-            >
-              <span className="whitespace-pre-wrap break-words">{msg.content}</span>
-              {msg.role === 'assistant' && streaming && msg === messages[messages.length - 1] && !msg.content && (
-                <span className="inline-block w-1.5 h-4 bg-accent/60 animate-pulse ml-0.5" />
+        {messages.map((m) => (
+          <div key={m.id} className="slide-up flex" style={{ justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
+            <div style={{
+              maxWidth: '85%',
+              padding: m.role === 'user' ? '10px 14px' : '12px 14px',
+              borderRadius: m.role === 'user' ? '12px 12px 4px 12px' : '12px 12px 12px 4px',
+              background: m.role === 'user' ? 'rgba(0,230,118,0.10)' : 'var(--bg-inner)',
+              border: '1px solid ' + (m.role === 'user' ? 'rgba(0,230,118,0.25)' : 'var(--border)'),
+              fontSize: 13, lineHeight: 1.55, color: 'var(--fg-1)',
+              fontFamily: m.role === 'assistant' ? 'var(--font-mono)' : 'var(--font-sans)',
+              whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+            }}>
+              {m.role === 'assistant' && (
+                <div style={{ marginBottom: 6 }}>
+                  <span className="font-mono" style={{ fontSize: 9, color: 'var(--ai)', letterSpacing: '0.12em' }}>DECODER AI</span>
+                </div>
+              )}
+              {m.content}
+              {m.role === 'assistant' && streaming && m === lastMsg && m.content && (
+                <span style={{ display: 'inline-block', width: 6, height: 14, background: 'var(--accent)', opacity: 0.6, marginLeft: 2, verticalAlign: 'text-bottom' }} className="pulse-soft" />
               )}
             </div>
-            <span className="text-[10px] font-mono text-gray-700 mt-1 px-1">
-              {formatTime(msg.timestamp)}
-            </span>
           </div>
         ))}
+        {showThinking && (
+          <div className="flex fade-in" style={{ gap: 8, paddingLeft: 14, alignItems: 'center' }}>
+            <span className="dot pulse-soft" style={{ background: 'var(--ai)' }} />
+            <span className="shimmer-text" style={{ fontSize: 12, fontFamily: 'var(--font-mono)' }}>thinking…</span>
+          </div>
+        )}
       </div>
 
-      {/* Input area */}
-      <div className="glass-inner border-t border-border px-3 py-2 flex-shrink-0">
-        <div className="flex gap-2">
+      {/* Footer: quick actions + input */}
+      <div style={{ padding: 14, borderTop: '1px solid var(--border)' }}>
+        <div className="flex" style={{ gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+          {QUICK_ACTIONS.map((s) => (
+            <button key={s} className="btn xs ghost" onClick={() => sendMessage(s)} disabled={!connected || streaming} style={{ fontSize: 11 }}>{s}</button>
+          ))}
+        </div>
+        <div className="flex" style={{ gap: 8, alignItems: 'flex-end' }}>
           <textarea
-            ref={textareaRef}
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={connected ? 'Ask about the language...' : 'Ollama offline'}
+            placeholder={connected ? 'Ask the decoder…' : 'Ollama offline'}
             disabled={!connected || streaming}
-            rows={2}
-            className="input flex-1 resize-none text-[13px]"
+            rows={1}
+            className="textarea"
+            style={{ flex: 1, minHeight: 38, maxHeight: 120, resize: 'none' }}
           />
-          <button
-            onClick={() => sendMessage(input)}
-            disabled={!input.trim() || !connected || streaming}
-            className="btn-primary px-3 self-end h-8 text-[12px] flex-shrink-0"
-          >
-            {streaming ? '...' : 'Send'}
-          </button>
+          <button className="btn primary sm" onClick={() => sendMessage(input)} disabled={!input.trim() || !connected || streaming} style={{ alignSelf: 'stretch' }}>{streaming ? '…' : '↵'}</button>
         </div>
       </div>
     </div>
