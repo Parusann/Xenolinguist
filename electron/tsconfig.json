@@ -6,5 +6,6 @@
     "moduleResolution": "bundler",
     "types": ["node"]
   },
-  "include": ["**/*.ts", "../server/src/**/*.ts", "../shared/**/*.ts"]
+  "include": ["**/*.ts", "../server/src/**/*.ts", "../shared/**/*.ts"],
+  "exclude": ["../server/src/__tests__/**", "**/__tests__/**"]
 }
