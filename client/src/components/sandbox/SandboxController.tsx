@@ -651,7 +651,7 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
                             Check
                           </button>
                           <button
-                            onClick={() => handleNumberHint(word)}
+                            onClick={() => (state.hintLevel >= 3 ? handleNumberReveal(word, num) : handleNumberHint(word))}
                             disabled={state.hintLevel >= 3}
                             className="btn-ghost text-xs py-1.5 px-2"
                             title={state.hintLevel === 0 ? 'First hint is free!' : `Hint ${state.hintLevel + 1}/3`}
@@ -765,7 +765,7 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
                             Check
                           </button>
                           <button
-                            onClick={() => handleVocabHint(v.alien)}
+                            onClick={() => (state.hintLevel >= 3 ? handleVocabReveal(v.alien, v.english, v.pos) : handleVocabHint(v.alien))}
                             disabled={state.hintLevel >= 3}
                             className="btn-ghost text-xs py-1.5 px-2"
                           >

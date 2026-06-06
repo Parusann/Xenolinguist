@@ -28,5 +28,29 @@
     "name": "Avatar",
     "created_at": "2026-04-06T08:25:17.995Z",
     "updated_at": "2026-04-06T08:28:20.516Z"
+  },
+  {
+    "id": "563cdd19-7e1d-4f46-a7ed-281b3c8a7f79",
+    "name": "Eridian",
+    "created_at": "2026-04-06T21:16:12.701Z",
+    "updated_at": "2026-04-06T21:16:12.701Z"
+  },
+  {
+    "id": "88cf9e4d-7d4e-46d6-85f6-96abc37a9948",
+    "name": "Eridian",
+    "created_at": "2026-04-06T21:19:01.664Z",
+    "updated_at": "2026-04-06T21:19:01.664Z"
+  },
+  {
+    "id": "02684c24-22b3-4371-b69c-cf9fb16028d9",
+    "name": "eridian",
+    "created_at": "2026-04-06T22:15:42.376Z",
+    "updated_at": "2026-04-06T22:17:42.799Z"
+  },
+  {
+    "id": "18955f39-7842-4c11-9d6c-84ce88dc6cda",
+    "name": "Eridian (demo)",
+    "created_at": "2026-06-03T06:45:52.028Z",
+    "updated_at": "2026-06-03T06:46:39.547Z"
   }
 ]
