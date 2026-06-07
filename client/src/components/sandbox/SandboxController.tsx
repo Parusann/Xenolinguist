@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useProfile } from '@/stores/profile-context'
+import { SpeakButton } from '@/components/audio/SpeakButton'
 import { useSessionLog } from '@/stores/session-log-context'
 import type { ConlangData } from './SandboxSetup'
 
@@ -726,7 +727,10 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2.5">
-                      <span className="font-mono text-sm text-gray-200">{v.alien}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono text-sm text-gray-200">{v.alien}</span>
+                        <SpeakButton text={v.alien} />
+                      </div>
                       {state.status === 'correct' ? (
                         <span className="badge-confirmed text-[9px]">DECODED</span>
                       ) : (
@@ -860,6 +864,9 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
                 }`}>
                   {/* Sentence with word highlighting */}
                   <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <SpeakButton text={s.alien} phonemes={conlang.phoneme_set?.join(' ')} title="Hear sentence" />
+                    </div>
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {words.map((word, wi) => {
                         const known = isWordKnown(word)

@@ -5,6 +5,7 @@ import { useOllama } from '@/stores/ollama-context'
 import { getConfidenceLevel } from 'shared/constants'
 import { formatDictionaryForPrompt, formatGrammarForPrompt } from 'shared/prompts'
 import type { DictionaryEntry } from 'shared/types'
+import { SpeakButton } from '@/components/audio/SpeakButton'
 
 interface TranslatedWord {
   alien: string
@@ -146,6 +147,7 @@ export function TranslationEngine() {
             />
             <div className="flex" style={{ gap: 8, marginTop: 12, alignItems: 'center' }}>
               <button className="btn primary" onClick={handleAITranslate} disabled={!connected || loading || !alienInput.trim()}>{loading ? 'Translating…' : '⌖ AI Full Translation'}</button>
+              <SpeakButton text={alienInput} title="Hear sentence" />
               <div className="flex-1" />
               <span className="font-mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>{realTokens.length} tokens</span>
             </div>
