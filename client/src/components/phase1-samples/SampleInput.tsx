@@ -190,6 +190,30 @@ export function SampleInput() {
                   onSegmentsChange={setPendingSegments}
                 />
               )}
+              {pendingAudio.mode === 'transcription' && pendingSegments.length > 0 && (
+                <div className="glass-inner" style={{ padding: 10, marginTop: 10 }}>
+                  <span className="label" style={{ marginBottom: 6, display: 'block' }}>Link to dictionary</span>
+                  <div className="flex" style={{ gap: 6, flexWrap: 'wrap' }}>
+                    {pendingSegments.map((s) => {
+                      const known = profile?.dictionary.find((d) => d.alien_word.toLowerCase() === s.label.toLowerCase())
+                      return (
+                        <button
+                          key={s.id}
+                          className="btn xs ghost"
+                          title={known ? `Already in dictionary: ${known.english_meaning}` : 'Add to dictionary'}
+                          style={{ color: known ? 'var(--accent)' : undefined }}
+                          onClick={() => {
+                            if (known || !s.label.trim()) return
+                            addDictionaryEntry({ alien_word: s.label, english_meaning: '', part_of_speech: 'unknown', confidence: 50, context: 'From audio transcript', examples: [], notes: '' })
+                          }}
+                        >
+                          {known ? `✓ ${s.label}` : `+ ${s.label}`}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
