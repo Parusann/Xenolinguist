@@ -1,9 +1,10 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { WaveformCanvas, extractPeaks } from './WaveformCanvas'
 import { useLanguageDetection, LanguageBadge } from './LanguageDetector'
+import type { SttSegment } from 'shared/types'
 
 interface AudioRecorderProps {
-  onRecordingComplete: (audioBlob: Blob, peaks: number[], duration: number, detectedLanguage?: string) => void
+  onRecordingComplete: (audioBlob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess') => void
   className?: string
 }
 
@@ -113,10 +114,9 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
 
         audioCtx.close()
 
-        // Run language detection
-        detect(blob)
-
-        onRecordingComplete(blob, peaks, dur, liveLanguage || undefined)
+        // Run language detection (single transcription) and forward its result
+        const det = await detect(blob)
+        onRecordingComplete(blob, peaks, dur, det?.language || liveLanguage || undefined, det?.segments, det?.mode)
       }
 
       recorder.start(100)

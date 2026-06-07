@@ -8,9 +8,10 @@ import { SOURCE_PRESETS } from 'shared/constants'
 import { formatDictionaryForPrompt, formatSamplesForPrompt } from 'shared/prompts'
 import { AudioRecorder } from '@/components/audio/AudioRecorder'
 import { AudioPlayer } from '@/components/audio/AudioPlayer'
+import { AudioSegmenter } from '@/components/audio/AudioSegmenter'
 import { SampleDecodeView } from '@/components/phase1-samples/SampleDecodeView'
 import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMenu'
-import type { Sample } from 'shared/types'
+import type { Sample, SttSegment } from 'shared/types'
 
 export function SampleInput() {
   const { profile, addSample, removeSample, addAudioClip, addDictionaryEntry } = useProfile()
@@ -30,7 +31,8 @@ export function SampleInput() {
   const [showRecorder, setShowRecorder] = useState(false)
   const [filter, setFilter] = useState<'all' | 'decoded' | 'audio'>('all')
   const [search, setSearch] = useState('')
-  const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string } | null>(null)
+  const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string; sttSegments?: SttSegment[]; mode?: 'transcription' | 'phonetic-guess' } | null>(null)
+  const [pendingSegments, setPendingSegments] = useState<{ id: string; start: number; end: number; label: string }[]>([])
 
   const samples = profile?.samples || []
 
@@ -38,7 +40,7 @@ export function SampleInput() {
     if (!alienText.trim() && !pendingAudio) return
     let audioId: string | null = null
     if (pendingAudio) {
-      const clipId = addAudioClip({ filename: '', duration: pendingAudio.duration, waveform: pendingAudio.peaks, segments: [] })
+      const clipId = addAudioClip({ filename: '', duration: pendingAudio.duration, waveform: pendingAudio.peaks, segments: pendingSegments.map((s) => ({ id: s.id, start: s.start, end: s.end, label: s.label, dictionary_entry_id: null })) })
       audioId = clipId
       const arrayBuf = await pendingAudio.blob.arrayBuffer()
       const base64 = btoa(new Uint8Array(arrayBuf).reduce((data, byte) => data + String.fromCharCode(byte), ''))
@@ -53,12 +55,13 @@ export function SampleInput() {
     setTranslation('')
     setPhoneticNotes('')
     setPendingAudio(null)
+    setPendingSegments([])
     setShowRecorder(false)
   }
 
-  const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string) => {
+  const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess') => {
     const blobUrl = URL.createObjectURL(blob)
-    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage })
+    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode })
     setSource('Audio recording')
     if (detectedLanguage) setPhoneticNotes((prev) => prev || `Detected: ${detectedLanguage}`)
   }
@@ -171,6 +174,20 @@ export function SampleInput() {
                 <button onClick={() => { URL.revokeObjectURL(pendingAudio.blobUrl); setPendingAudio(null) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
               </div>
               <AudioPlayer src={pendingAudio.blobUrl} peaks={pendingAudio.peaks} duration={pendingAudio.duration} compact />
+              {pendingAudio.sttSegments && pendingAudio.sttSegments.length > 0 && (
+                <AudioSegmenter
+                  src={pendingAudio.blobUrl}
+                  peaks={pendingAudio.peaks}
+                  duration={pendingAudio.duration}
+                  initialSegments={pendingAudio.sttSegments.map((s, i) => ({
+                    id: `stt-${i}`,
+                    start: s.start / pendingAudio.duration,
+                    end: s.end / pendingAudio.duration,
+                    label: s.text,
+                  }))}
+                  onSegmentsChange={setPendingSegments}
+                />
+              )}
             </div>
           )}
         </div>

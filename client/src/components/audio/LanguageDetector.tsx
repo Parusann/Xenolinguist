@@ -14,17 +14,20 @@ export function useLanguageDetection() {
   const [detecting, setDetecting] = useState(false)
   const [result, setResult] = useState<DetectionResult | null>(null)
 
-  const detect = useCallback(async (blob: Blob) => {
+  const detect = useCallback(async (blob: Blob): Promise<DetectionResult | null> => {
     setDetecting(true)
     setResult(null)
     const stt = await transcribe(blob)
+    let computed: DetectionResult | null = null
     if (stt) {
       const confidence = stt.segments.length
         ? stt.segments.reduce((a, s) => a + s.avgProb, 0) / stt.segments.length
         : stt.languageProb
-      setResult({ language: stt.language || 'unknown', confidence, transcript: stt.text, mode: stt.mode, segments: stt.segments })
+      computed = { language: stt.language || 'unknown', confidence, transcript: stt.text, mode: stt.mode, segments: stt.segments }
+      setResult(computed)
     }
     setDetecting(false)
+    return computed
   }, [])
 
   const reset = useCallback(() => { setResult(null); setDetecting(false) }, [])
