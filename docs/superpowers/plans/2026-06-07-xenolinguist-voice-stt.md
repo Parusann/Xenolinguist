@@ -12,6 +12,8 @@
 
 **Conventions observed:** server tests in `server/src/__tests__/*.test.ts` (vitest + supertest, dynamic `import('../x.js?case=N')` to dodge module caching, env via `process.env`, real tests gated with `(envVar ? it : it.skip)`); client tests use `vi.stubGlobal('fetch', …)` and dynamic `import('../x.ts?case=N')`; ESM imports use `.js` extensions in server source. Commits use Conventional Commits, **no AI attribution** (project rule).
 
+> **Implementation note — confidence heuristic recalibrated (supersedes Tasks 1 & 4 code blocks below).** Verifying with the real `ggml-base-q5_1` binary showed per-token probability is an inverted/unusable signal (clean English ~0.50, confident gibberish ~0.88), while whisper's language-detection probability cleanly separates them (clean ~0.88 vs gibberish ~0.51). The shipped code therefore: (1) drops `avgProb` from `SttSegment` (Task 1) — segments are `{ start, end, text }`; (2) `computeMode` (Task 4) gates **solely on `languageProb ≥ MIN_LANGUAGE_PROB` (0.6)** with `avgProb`/`MIN_AVG_PROB` removed; the service stays on `-oj` (no token data). See spec §6 "Empirical recalibration." Also: the gated real-transcription test (Task 5) is opt-in via `WHISPER_E2E` because vitest's forked worker on Windows can't spawn the multi-DLL `whisper-cli.exe`; the canonical binary check is `node scripts/verify-stt.mjs`. Task 14's docs/fixture steps are reflected in `docs/desktop-release.md` and `scripts/verify-stt.mjs`.
+
 ---
 
 ## Task 0: Prerequisite — land the stack to `main`, branch `whisper/stt`
