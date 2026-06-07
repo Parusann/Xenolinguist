@@ -13,8 +13,11 @@ sttRouter.post('/', async (req, res) => {
   catch { return res.status(400).json({ error: 'invalid base64 audio' }); }
   if (wav.length === 0) return res.status(400).json({ error: 'empty audio' });
 
+  // Guard the language passed to the whisper CLI: only a 2-letter code or 'auto'; else auto-detect.
+  const lang = typeof language === 'string' && /^(auto|[a-z]{2})$/.test(language) ? language : undefined;
+
   try {
-    const result = await transcribe({ wav, language });
+    const result = await transcribe({ wav, language: lang });
     return res.json(result);
   } catch (err) {
     if (err instanceof SttUnavailableError) {
