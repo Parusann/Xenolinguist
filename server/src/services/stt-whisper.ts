@@ -1,4 +1,4 @@
-import type { SttResult, SttSegment } from '../../../shared/types.js';
+import type { SttResult, SttSegment, SttMode } from '../../../shared/types.js';
 
 interface WhisperToken { p?: number }
 interface WhisperSeg { offsets?: { from?: number; to?: number }; text?: string; tokens?: WhisperToken[] }
@@ -20,4 +20,17 @@ export function parseWhisperJson(raw: WhisperJson): Omit<SttResult, 'mode' | 'la
   });
   const text = segs.map((s) => s.text).join(' ').trim();
   return { language, text, segments: segs };
+}
+
+/** Tunable thresholds — ship sensible defaults, refine later (see spec §6). */
+export const MIN_AVG_PROB = 0.6;      // mean token probability across segments
+export const MIN_LANGUAGE_PROB = 0.5; // applied only when languageProb is known (>0)
+
+/** Decide whether whisper output is a confident transcription or a phonetic guess. */
+export function computeMode(input: { languageProb: number; segments: SttSegment[] }): SttMode {
+  const { languageProb, segments } = input;
+  if (segments.length === 0) return 'phonetic-guess';
+  const avg = segments.reduce((a, s) => a + s.avgProb, 0) / segments.length;
+  const languageOk = languageProb <= 0 ? true : languageProb >= MIN_LANGUAGE_PROB;
+  return avg >= MIN_AVG_PROB && languageOk ? 'transcription' : 'phonetic-guess';
 }
