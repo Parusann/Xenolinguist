@@ -11,8 +11,9 @@ describe('tts-espeak.synthesize', () => {
   });
 
   // Real synthesis only runs when an espeak-ng binary is wired up (skipped in CI otherwise).
-  const hasEspeak = !!process.env.ESPEAK_PATH;
-  (hasEspeak ? it : it.skip)('produces non-empty WAV bytes when espeak is available', async () => {
+  const espeakBin = process.env.ESPEAK_PATH;
+  (espeakBin ? it : it.skip)('produces non-empty WAV bytes when espeak is available', async () => {
+    process.env.ESPEAK_PATH = espeakBin; // afterEach clears it before this test runs
     const { synthesize } = await import('../services/tts-espeak.js?t=2');
     const wav = await synthesize({ text: 'hello' });
     expect(wav.length).toBeGreaterThan(44); // WAV header is 44 bytes
