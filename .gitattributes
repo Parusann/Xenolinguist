@@ -4,3 +4,5 @@ vendor/espeak-ng/** binary
 vendor/whisper/win/* binary
 *.dll binary
 *.bin binary
+# Test audio fixtures are binary PCM WAV — keep byte-exact.
+*.wav binary
