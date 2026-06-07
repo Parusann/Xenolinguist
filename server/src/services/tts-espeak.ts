@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import path from 'path';
 import { espeakPath } from '../config.js';
 
 /** Thrown when espeak-ng is unavailable; the route maps this to HTTP 503. */
@@ -25,7 +26,9 @@ export function synthesize(input: TtsInput): Promise<Buffer> {
   // espeak reads inline [[...]] Kirshenbaum phonemes; phoneme-exact IPA is a future enhancement.
   const spoken = input.text ?? (input.phonemes ? `[[${input.phonemes}]]` : '');
   const voice = input.voice ?? 'en';
-  const args = ['-v', voice, '--stdout', spoken];
+  // espeak-ng finds its data via --path (the dir CONTAINING espeak-ng-data), which is
+  // bundled next to the binary; this build won't auto-locate it otherwise.
+  const args = ['--path', path.dirname(bin), '-v', voice, '--stdout', spoken];
 
   return new Promise<Buffer>((resolve, reject) => {
     const proc = spawn(bin, args);
