@@ -123,7 +123,8 @@ async function detectWithAI(transcript: string): Promise<DetectionResult | null>
     })
 
     const data = await res.json()
-    const jsonMatch = data.message?.content?.match(/\{[\s\S]*\}/)
+    // /api/ai/chat responds with { content }, not { message: { content } }.
+    const jsonMatch = data.content?.match(/\{[\s\S]*\}/)
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0])
       return {
