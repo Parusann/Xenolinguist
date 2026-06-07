@@ -79,9 +79,9 @@ export interface SttResult {
 }
 ```
 
-- [ ] **Step 2: Typecheck.**
+- [ ] **Step 2: Verify nothing breaks.**
 
-Run: `npm run build -w server` (compiles shared types via the server tsconfig path) — Expected: PASS (no type errors). If the repo has a root typecheck script, `npm run typecheck` also works.
+Run: `npm test -w server` — Expected: PASS (same as baseline). **NOTE:** `npm run build -w server` is bare `tsc` over `src/**/*`, which includes test files using vitest query-string imports (`../config.js?case=1`) that `tsc` cannot resolve — so it fails on baseline (~17 `TS2307` errors) and is NOT a valid server typecheck gate. Use `npm test -w server` for server tasks. Shared-type correctness gets a real `tsc` check via `npm run build -w client` (`tsc -b && vite build`) in Tasks 9–12, since the client imports `shared/types`.
 
 - [ ] **Step 3: Commit.**
 
