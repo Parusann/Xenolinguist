@@ -5,7 +5,10 @@ module.exports = {
   directories: { output: 'release' },
   // Bundled main/preload/server live in electron/dist; the SPA ships as a resource.
   files: ['electron/dist/**/*', 'package.json'],
-  extraResources: [{ from: 'client/dist', to: 'client/dist' }],
+  extraResources: [
+    { from: 'client/dist', to: 'client/dist' },
+    { from: 'vendor/espeak-ng/win', to: 'espeak-ng' },
+  ],
   asar: true,
   // The forked server bundle must be a real file on disk for utilityProcess.fork.
   asarUnpack: ['electron/dist/server.cjs'],

@@ -1,5 +1,6 @@
 import { app, BrowserWindow, utilityProcess, type UtilityProcess } from 'electron';
 import path from 'path';
+import { existsSync } from 'fs';
 import { isOllamaUp, hasModel, pullDefaultModel } from './ollama.js';
 import { autoUpdater } from 'electron-updater';
 
@@ -16,8 +17,14 @@ function startServerProcess(): Promise<number> {
     const clientDist = path.join(process.resourcesPath, 'client', 'dist');
     const dataDir = path.join(app.getPath('userData'), 'data');
 
+    // Bundled espeak-ng (Windows only for now; elsewhere ESPEAK_PATH stays unset → browser TTS).
+    const espeakBin = process.platform === 'win32'
+      ? path.join(process.resourcesPath, 'espeak-ng', 'espeak-ng.exe')
+      : path.join(process.resourcesPath, 'espeak-ng', 'espeak-ng');
+    const espeakEnv = existsSync(espeakBin) ? { ESPEAK_PATH: espeakBin } : {};
+
     serverProc = utilityProcess.fork(serverPath, [], {
-      env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production' },
+      env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv },
       stdio: 'pipe',
     });
     serverProc.stdout?.on('data', (d) => console.log('[server]', d.toString().trim()));
