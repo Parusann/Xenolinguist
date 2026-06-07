@@ -5,6 +5,7 @@ afterEach(() => {
   delete process.env.DATA_DIR;
   delete process.env.OLLAMA_MODEL;
   delete process.env.CLIENT_DIST;
+  delete process.env.ESPEAK_PATH;
 });
 
 describe('config', () => {
@@ -31,5 +32,12 @@ describe('config', () => {
     expect(clientDist()).toBeNull();
     process.env.CLIENT_DIST = '/app/client/dist';
     expect(clientDist()).toBe(path.resolve('/app/client/dist'));
+  });
+
+  it('espeakPath returns ESPEAK_PATH or null', async () => {
+    const { espeakPath } = await import('../config.js?tts=1');
+    expect(espeakPath()).toBeNull();
+    process.env.ESPEAK_PATH = '/x/espeak-ng';
+    expect(espeakPath()).toBe('/x/espeak-ng');
   });
 });
