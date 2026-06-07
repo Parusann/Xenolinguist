@@ -20,9 +20,7 @@ export function useLanguageDetection() {
     const stt = await transcribe(blob)
     let computed: DetectionResult | null = null
     if (stt) {
-      const confidence = stt.segments.length
-        ? stt.segments.reduce((a, s) => a + s.avgProb, 0) / stt.segments.length
-        : stt.languageProb
+      const confidence = stt.languageProb
       computed = { language: stt.language || 'unknown', confidence, transcript: stt.text, mode: stt.mode, segments: stt.segments }
       setResult(computed)
     }

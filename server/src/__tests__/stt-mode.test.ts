@@ -2,24 +2,19 @@ import { describe, it, expect } from 'vitest';
 import { computeMode } from '../services/stt-whisper.js';
 
 describe('computeMode', () => {
-  it('returns transcription for high-confidence, language-detected audio', () => {
-    expect(computeMode({ languageProb: 0.95, segments: [{ start: 0, end: 1, text: 'hi', avgProb: 0.85 }] }))
+  it('returns transcription when language-detection probability is high', () => {
+    expect(computeMode({ languageProb: 0.88, segments: [{ start: 0, end: 1, text: 'hi' }] }))
       .toBe('transcription');
   });
 
-  it('returns phonetic-guess for low average token probability', () => {
-    expect(computeMode({ languageProb: 0.95, segments: [{ start: 0, end: 1, text: 'xq', avgProb: 0.3 }] }))
+  it('returns phonetic-guess when language probability is low (likely non-language audio)', () => {
+    expect(computeMode({ languageProb: 0.5, segments: [{ start: 0, end: 1, text: 'xq' }] }))
       .toBe('phonetic-guess');
   });
 
-  it('returns phonetic-guess for low language probability', () => {
-    expect(computeMode({ languageProb: 0.2, segments: [{ start: 0, end: 1, text: 'hi', avgProb: 0.85 }] }))
+  it('returns phonetic-guess when language probability is unknown (0)', () => {
+    expect(computeMode({ languageProb: 0, segments: [{ start: 0, end: 1, text: 'hi' }] }))
       .toBe('phonetic-guess');
-  });
-
-  it('treats unknown languageProb (0) as not disqualifying; relies on avgProb', () => {
-    expect(computeMode({ languageProb: 0, segments: [{ start: 0, end: 1, text: 'hi', avgProb: 0.85 }] }))
-      .toBe('transcription');
   });
 
   it('returns phonetic-guess when there are no segments', () => {
