@@ -1,3 +1,6 @@
 # Vendored espeak-ng is a binary toolchain (exe, DLL, compiled phoneme data).
 # Never apply line-ending conversion — it would corrupt the data files on checkout.
 vendor/espeak-ng/** binary
+vendor/whisper/win/* binary
+*.dll binary
+*.bin binary

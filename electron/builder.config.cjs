@@ -8,6 +8,7 @@ module.exports = {
   extraResources: [
     { from: 'client/dist', to: 'client/dist' },
     { from: 'vendor/espeak-ng/win', to: 'espeak-ng' },
+    { from: 'vendor/whisper/win', to: 'whisper' },
   ],
   asar: true,
   // The forked server bundle must be a real file on disk for utilityProcess.fork.
