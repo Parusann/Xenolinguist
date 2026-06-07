@@ -5,39 +5,32 @@ import os from 'os';
 import path from 'path';
 import { whisperBinPath, whisperModelPath } from '../config.js';
 
-interface WhisperToken { p?: number }
-interface WhisperSeg { offsets?: { from?: number; to?: number }; text?: string; tokens?: WhisperToken[] }
+interface WhisperSeg { offsets?: { from?: number; to?: number }; text?: string }
 interface WhisperJson { result?: { language?: string }; transcription?: WhisperSeg[] }
 
 /** Parse whisper.cpp JSON into the language/text/segments fields of an SttResult. */
 export function parseWhisperJson(raw: WhisperJson): Omit<SttResult, 'mode' | 'languageProb'> {
   const language = raw.result?.language ?? '';
-  const segs: SttSegment[] = (raw.transcription ?? []).map((s) => {
-    const tokens = s.tokens ?? [];
-    const probs = tokens.map((t) => t.p).filter((p): p is number => typeof p === 'number');
-    const avgProb = probs.length ? probs.reduce((a, b) => a + b, 0) / probs.length : 0;
-    return {
-      start: (s.offsets?.from ?? 0) / 1000,
-      end: (s.offsets?.to ?? 0) / 1000,
-      text: (s.text ?? '').trim(),
-      avgProb,
-    };
-  });
-  const text = segs.map((s) => s.text).join(' ').trim();
-  return { language, text, segments: segs };
+  const segments: SttSegment[] = (raw.transcription ?? []).map((s) => ({
+    start: (s.offsets?.from ?? 0) / 1000,
+    end: (s.offsets?.to ?? 0) / 1000,
+    text: (s.text ?? '').trim(),
+  }));
+  const text = segments.map((s) => s.text).join(' ').trim();
+  return { language, text, segments };
 }
 
-/** Tunable thresholds — ship sensible defaults, refine later (see spec §6). */
-export const MIN_AVG_PROB = 0.6;      // mean token probability across segments
-export const MIN_LANGUAGE_PROB = 0.5; // applied only when languageProb is known (>0)
+/** Minimum whisper language-detection probability to treat output as a confident
+ *  real-language transcription rather than a phonetic guess. Empirically, language-detection
+ *  probability separates real speech (~0.85+) from non-language/gibberish audio (~0.5),
+ *  whereas per-token probability does NOT (whisper hallucinates confidently). Tunable
+ *  default; see spec §6. */
+export const MIN_LANGUAGE_PROB = 0.6;
 
-/** Decide whether whisper output is a confident transcription or a phonetic guess. */
+/** Decide whether whisper output is a confident real-language transcription or a phonetic guess. */
 export function computeMode(input: { languageProb: number; segments: SttSegment[] }): SttMode {
-  const { languageProb, segments } = input;
-  if (segments.length === 0) return 'phonetic-guess';
-  const avg = segments.reduce((a, s) => a + s.avgProb, 0) / segments.length;
-  const languageOk = languageProb <= 0 ? true : languageProb >= MIN_LANGUAGE_PROB;
-  return avg >= MIN_AVG_PROB && languageOk ? 'transcription' : 'phonetic-guess';
+  if (input.segments.length === 0) return 'phonetic-guess';
+  return input.languageProb >= MIN_LANGUAGE_PROB ? 'transcription' : 'phonetic-guess';
 }
 
 /** Thrown when whisper.cpp is unavailable; the route maps this to HTTP 503. */
