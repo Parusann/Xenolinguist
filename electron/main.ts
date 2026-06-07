@@ -23,8 +23,17 @@ function startServerProcess(): Promise<number> {
       : path.join(process.resourcesPath, 'espeak-ng', 'espeak-ng');
     const espeakEnv = existsSync(espeakBin) ? { ESPEAK_PATH: espeakBin } : {};
 
+    // Bundled whisper.cpp (Windows only for now; elsewhere WHISPER_* stays unset → STT disabled).
+    const whisperBin = process.platform === 'win32'
+      ? path.join(process.resourcesPath, 'whisper', 'whisper-cli.exe')
+      : path.join(process.resourcesPath, 'whisper', 'whisper-cli');
+    const whisperModel = path.join(process.resourcesPath, 'whisper', 'ggml-base-q5_1.bin');
+    const whisperEnv = (existsSync(whisperBin) && existsSync(whisperModel))
+      ? { WHISPER_BIN: whisperBin, WHISPER_MODEL: whisperModel }
+      : {};
+
     serverProc = utilityProcess.fork(serverPath, [], {
-      env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv },
+      env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv, ...whisperEnv },
       stdio: 'pipe',
     });
     serverProc.stdout?.on('data', (d) => console.log('[server]', d.toString().trim()));
