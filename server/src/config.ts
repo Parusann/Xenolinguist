@@ -22,6 +22,11 @@ export function clientDist(): string | null {
   return fromEnv ? path.resolve(fromEnv) : null;
 }
 
+/** Absolute path to the bundled espeak-ng binary, or null (browser TTS only). */
+export function espeakPath(): string | null {
+  return process.env.ESPEAK_PATH || null;
+}
+
 /** Port to bind; 0 lets the OS pick a free port (used by the desktop build). */
 export function port(): number {
   const raw = process.env.PORT;
