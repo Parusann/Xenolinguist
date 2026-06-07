@@ -14,7 +14,7 @@ import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMe
 import type { Sample, SttSegment } from 'shared/types'
 
 export function SampleInput() {
-  const { profile, addSample, removeSample, addAudioClip, addDictionaryEntry } = useProfile()
+  const { profile, addSample, removeSample, addAudioClip, addDictionaryEntry, updateSample } = useProfile()
   const { runTask, loading, streamedText } = useAI()
   const { connected } = useOllama()
   const { suggestForSample } = useAutoSuggest()
@@ -33,6 +33,7 @@ export function SampleInput() {
   const [search, setSearch] = useState('')
   const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string; sttSegments?: SttSegment[]; mode?: 'transcription' | 'phonetic-guess' } | null>(null)
   const [pendingSegments, setPendingSegments] = useState<{ id: string; start: number; end: number; label: string }[]>([])
+  const [reTranscribing, setReTranscribing] = useState<string | null>(null)
 
   const samples = profile?.samples || []
 
@@ -88,6 +89,24 @@ export function SampleInput() {
   }
 
   const getAudioForSample = (audioId: string | null) => (!audioId || !profile ? null : (profile.audio_clips || []).find((c) => c.id === audioId) || null)
+
+  const handleReTranscribe = async (sample: Sample) => {
+    if (!sample.audio_id) return
+    setReTranscribing(sample.id)
+    try {
+      const res = await fetch(`/api/audio/${sample.audio_id}`)
+      if (!res.ok) return
+      const blob = await res.blob()
+      const { transcribe } = await import('@/services/stt')
+      const stt = await transcribe(blob)
+      if (stt) {
+        const label = stt.mode === 'transcription' ? 'Transcript' : 'Phonetic guess'
+        updateSample(sample.id, { phonetic_notes: `${label}: ${stt.text}` })
+      }
+    } finally {
+      setReTranscribing(null)
+    }
+  }
 
   const handleDeleteWithUndo = (sample: Sample) => {
     removeSample(sample.id)
@@ -269,6 +288,15 @@ export function SampleInput() {
                         </div>
                         <div className="flex" style={{ gap: 8, alignItems: 'center' }}>
                           <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>{new Date(sample.created_at).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' })}</span>
+                          {sample.audio_id && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); void handleReTranscribe(sample) }}
+                              title="Re-transcribe audio"
+                              style={{ background: 'none', border: 0, color: 'var(--fg-faint)', cursor: 'pointer', fontSize: 12 }}
+                            >
+                              {reTranscribing === sample.id ? '…' : '↻'}
+                            </button>
+                          )}
                           <button onClick={(e) => { e.stopPropagation(); handleDeleteWithUndo(sample) }} style={{ background: 'none', border: 0, color: 'var(--fg-faint)', cursor: 'pointer', fontSize: 13 }}>×</button>
                         </div>
                       </div>
