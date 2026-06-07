@@ -34,3 +34,13 @@ export function port(): number {
   const n = Number(raw);
   return Number.isFinite(n) ? n : 3001;
 }
+
+/** Absolute path to the bundled whisper.cpp binary, or null (STT disabled). */
+export function whisperBinPath(): string | null {
+  return process.env.WHISPER_BIN || null;
+}
+
+/** Absolute path to the bundled whisper ggml model, or null (STT disabled). */
+export function whisperModelPath(): string | null {
+  return process.env.WHISPER_MODEL || null;
+}

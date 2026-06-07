@@ -6,6 +6,8 @@ afterEach(() => {
   delete process.env.OLLAMA_MODEL;
   delete process.env.CLIENT_DIST;
   delete process.env.ESPEAK_PATH;
+  delete process.env.WHISPER_BIN;
+  delete process.env.WHISPER_MODEL;
 });
 
 describe('config', () => {
@@ -39,5 +41,19 @@ describe('config', () => {
     expect(espeakPath()).toBeNull();
     process.env.ESPEAK_PATH = '/x/espeak-ng';
     expect(espeakPath()).toBe('/x/espeak-ng');
+  });
+
+  it('whisperBinPath returns WHISPER_BIN or null', async () => {
+    const { whisperBinPath } = await import('../config.js?case=whisper-bin');
+    expect(whisperBinPath()).toBeNull();
+    process.env.WHISPER_BIN = '/x/whisper-cli';
+    expect(whisperBinPath()).toBe('/x/whisper-cli');
+  });
+
+  it('whisperModelPath returns WHISPER_MODEL or null', async () => {
+    const { whisperModelPath } = await import('../config.js?case=whisper-model');
+    expect(whisperModelPath()).toBeNull();
+    process.env.WHISPER_MODEL = '/x/ggml-base-q5_1.bin';
+    expect(whisperModelPath()).toBe('/x/ggml-base-q5_1.bin');
   });
 });
