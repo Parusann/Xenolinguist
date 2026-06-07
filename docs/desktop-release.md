@@ -45,3 +45,33 @@ Two fixes (the macOS files are irrelevant to a Windows build):
 Either way the output (`release/Xenolinguist Setup <ver>.exe`) is **unsigned** — it runs
 but shows a SmartScreen "unknown publisher" prompt until real signing certs are configured.
 
+## Vendoring whisper.cpp (Windows) — voice Increment 2 (STT)
+
+The speech-to-text sidecar bundles a prebuilt whisper.cpp CPU binary + a quantized model
+under `vendor/whisper/win/`, shipped to `resources/whisper/` via `extraResources`. The
+Electron main process sets `WHISPER_BIN`/`WHISPER_MODEL` (win32 only, `existsSync`-guarded);
+elsewhere they stay unset and `/api/stt` returns 503 (the UI degrades gracefully).
+
+Vendored files (do **not** add the other tools or `SDL2.dll` — `whisper-cli` only needs these):
+
+- From the **whisper.cpp v1.8.6** GitHub release asset `whisper-bin-x64.zip` (the plain **CPU**
+  build — portable, no CUDA/BLAS deps): `whisper-cli.exe`, `whisper.dll`, `ggml.dll`,
+  `ggml-base.dll`, `ggml-cpu.dll`.
+- Model `ggml-base-q5_1.bin` (~57 MB, multilingual) from
+  `https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin`.
+
+`.gitattributes` marks `vendor/whisper/win/*`, `*.dll`, `*.bin`, `*.wav` as `binary` so the
+exe/DLLs/model and the test WAV fixture aren't corrupted by line-ending conversion.
+
+**Verify the bundled binary transcribes:** `node scripts/verify-stt.mjs` (runs the real
+spawn → JSON → language/mode path against `server/src/__tests__/fixtures/hello-16k.wav`;
+expects `mode: transcription`). This is the canonical check — the vitest gated test
+(`WHISPER_E2E=1`) is unreliable on Windows because vitest's forked worker can't spawn the
+multi-DLL `whisper-cli.exe`.
+
+**To re-vendor / upgrade:** download the matching `whisper-bin-x64.zip` for the new release,
+copy the 5 files above, and re-run `verify-stt.mjs`.
+
+**macOS / Linux:** not yet vendored — STT degrades to browser/none there until those builds
+add their whisper binaries. (Same staged approach as espeak-ng in Increment 1.)
+

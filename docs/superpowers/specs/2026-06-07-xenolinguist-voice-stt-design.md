@@ -136,10 +136,10 @@ STT never hard-fails the capture flow; recording/upload still works without it.
 
 Whisper's value here is being **bundled, offline, deterministic, and multilingual** — far more reliable than the Web-Speech detector for real-language audio. But it cannot transcribe constructed/alien speech; it will *hallucinate*. We surface this honestly via a computed `mode`:
 
-- **transcription** — emitted when whisper's **language-detection probability** is high AND the average segment `avgLogprob` is above a threshold AND `noSpeechProb` is low. Detected language is shown; dictionary-linking is offered.
+- **transcription** — emitted when whisper's **language-detection probability** (`languageProb`, parsed from whisper's stderr `auto-detected language: xx (p = …)`) is at or above `MIN_LANGUAGE_PROB` (default **0.6**) and there is at least one segment. Detected language is shown; dictionary-linking is offered.
 - **phonetic-guess** — otherwise. Clearly labeled "phonetic guess · low confidence," visually de-emphasized, and passed to the AI partner explicitly as an *approximation to reason about*, never as ground truth. Dictionary-linking is suppressed.
 
-Thresholds (language prob, avgLogprob, noSpeechProb) are defined as named constants with documented defaults and are **tunable** — the increment ships with sensible defaults rather than perfect calibration. This mirrors Increment 1's "faithful nuance": ship the honest baseline, refine later.
+> **Empirical recalibration (during implementation).** The original design also gated on per-token probability (`avgLogprob`/`avgProb`). Verification with the real `ggml-base-q5_1` binary showed this signal is **inverted and unusable**: clean English scored ~0.50 average token probability while confidently-hallucinated gibberish scored ~0.88 (whisper is *certain* about wrong tokens). The language-detection probability, by contrast, cleanly separates the two (clean English ≈0.88 vs gibberish ≈0.51). The service therefore uses `-oj` (no token data needed) and gates **solely on `languageProb`**; `avgProb` was removed from `SttSegment`. `MIN_LANGUAGE_PROB` is a named, **tunable** default (0.6) — sensible, not perfectly calibrated, per Increment 1's "ship the honest baseline, refine later."
 
 ## 7. Testing
 
@@ -147,8 +147,8 @@ Thresholds (language prob, avgLogprob, noSpeechProb) are defined as named consta
   - `config.whisperBinPath()` / `whisperModelPath()` return the env value, else null.
   - `POST /api/stt` returns **503** when either getter is null.
   - `POST /api/stt` returns **400** when no/undecodable audio is provided.
-  - Real-transcription test (returns JSON with `text` + `language`, non-empty) **gated on whisper availability** (skipped when binary/model absent, so CI without whisper stays green) — same gating approach as the espeak real-synth test.
-  - `mode` computation unit-tested with fixture logprob/probability inputs (high → transcription, low → phonetic-guess).
+  - Real-transcription test (returns JSON with `text` + `language`, non-empty) **gated behind an explicit `WHISPER_E2E` opt-in** (plus `WHISPER_BIN`/`WHISPER_MODEL`), so CI/normal runs stay green. NOTE: vitest's forked worker on Windows cannot spawn the multi-DLL `whisper-cli.exe` (spawn ENOENT), even though it works in the production Node server; the canonical real-binary check is the standalone `node scripts/verify-stt.mjs` (runs the same spawn → JSON → languageProb→mode path in plain Node).
+  - `computeMode` unit-tested with `languageProb` inputs (≥ `MIN_LANGUAGE_PROB` → transcription, below → phonetic-guess; no segments → phonetic-guess).
 - **Client (vitest + jsdom):**
   - `wav-encode.blobToWav16k` (via an `AudioBuffer` fixture) produces a 16 kHz mono PCM WAV with a valid RIFF header and expected sample count.
   - `stt.transcribe` returns `null` when `fetch('/api/stt')` resolves 503.
