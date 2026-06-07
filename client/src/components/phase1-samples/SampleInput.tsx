@@ -62,6 +62,7 @@ export function SampleInput() {
   const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess') => {
     const blobUrl = URL.createObjectURL(blob)
     setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode })
+    setPendingSegments((segments ?? []).map((s, i) => ({ id: `stt-${i}`, start: s.start, end: s.end, label: s.text })))
     setSource('Audio recording')
     if (detectedLanguage) setPhoneticNotes((prev) => prev || `Detected: ${detectedLanguage}`)
   }
@@ -176,6 +177,7 @@ export function SampleInput() {
               <AudioPlayer src={pendingAudio.blobUrl} peaks={pendingAudio.peaks} duration={pendingAudio.duration} compact />
               {pendingAudio.sttSegments && pendingAudio.sttSegments.length > 0 && (
                 <AudioSegmenter
+                  key={pendingAudio.blobUrl}
                   src={pendingAudio.blobUrl}
                   peaks={pendingAudio.peaks}
                   duration={pendingAudio.duration}
