@@ -5,6 +5,7 @@ import { ollamaRouter } from './routes/ollama.js';
 import { profilesRouter } from './routes/profiles.js';
 import { aiRouter } from './routes/ai.js';
 import audioRouter from './routes/audio.js';
+import { ttsRouter } from './routes/tts.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { clientDist } from './config.js';
 
@@ -23,6 +24,7 @@ export function createApp() {
   app.use('/api/profiles', profilesRouter);
   app.use('/api/ai', aiRouter);
   app.use('/api/audio', audioRouter);
+  app.use('/api/tts', ttsRouter);
 
   // Unknown /api routes get a JSON 404 (never the SPA fallback).
   app.use('/api', (_req, res) => {
