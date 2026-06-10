@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { ProfileStore } from '../services/profile-store.js';
+import { DEMO_LANGUAGE } from '../../../shared/demo-language.js';
 
 export const profilesRouter = Router();
 const store = new ProfileStore();
@@ -7,6 +8,12 @@ const store = new ProfileStore();
 profilesRouter.get('/', async (_req, res) => {
   const profiles = await store.list();
   res.json(profiles);
+});
+
+// Create a pre-seeded demo language ("Eridian") so users can explore the workflow.
+profilesRouter.post('/demo', async (_req, res) => {
+  const profile = await store.create(DEMO_LANGUAGE);
+  res.status(201).json(profile);
 });
 
 profilesRouter.get('/:id', async (req, res) => {
