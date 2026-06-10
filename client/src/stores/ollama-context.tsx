@@ -27,6 +27,9 @@ interface OllamaContextValue {
 const OllamaContext = createContext<OllamaContextValue | null>(null)
 
 function pickDefaultModel(models: string[], preference: 'heavy' | 'light'): string {
+  // gemma4:e4b is the app's bundled/default model (pulled by the desktop installer) — prefer it.
+  const gemma = models.find(m => m.includes('gemma4:e4b')) || models.find(m => m.includes('gemma4'))
+  if (gemma) return gemma
   if (preference === 'heavy') {
     return models.find(m => m.includes('qwen3:32b'))
       || models.find(m => m.includes('qwen3:14b'))
