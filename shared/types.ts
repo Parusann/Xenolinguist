@@ -133,3 +133,16 @@ export interface SttResult {
   segments: SttSegment[];
   mode: SttMode;
 }
+
+/** One phone from the IPA recognizer, time-aligned to the audio via CTC. */
+export interface IpaSegment {
+  phone: string;
+  start: number; // seconds
+  end: number;   // seconds
+}
+
+/** Result of POST /api/ipa: the joined phone string + per-phone timings. */
+export interface IpaResult {
+  ipa: string;
+  segments: IpaSegment[];
+}

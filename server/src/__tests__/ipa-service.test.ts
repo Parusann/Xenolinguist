@@ -1,6 +1,34 @@
 import { describe, it, expect, afterEach } from 'vitest';
+import { decodeCtcPhones } from '../services/ipa-phones.js';
 
 afterEach(() => { delete process.env.IPA_MODEL_DIR; });
+
+describe('decodeCtcPhones', () => {
+  const idToPhone = (id: number) => (['a', 'b', '<pad>'][id] ?? '');
+
+  it('collapses repeats, drops blanks, and times phones by frame', () => {
+    // 4 frames, vocab 3, pad id 2. argmax per frame: a, a, b, blank.
+    const logits = new Float32Array([
+      9, 0, 0, // f0 -> a
+      9, 0, 0, // f1 -> a (collapsed with f0)
+      0, 9, 0, // f2 -> b
+      0, 0, 9, // f3 -> blank (dropped)
+    ]);
+    const r = decodeCtcPhones(logits, 4, 3, 2, idToPhone, 0.02);
+    expect(r.ipa).toBe('a b');
+    expect(r.segments).toEqual([
+      { phone: 'a', start: 0, end: 0.04 },
+      { phone: 'b', start: 0.04, end: 0.06 },
+    ]);
+  });
+
+  it('returns empty when every frame is the blank id', () => {
+    const logits = new Float32Array([0, 0, 9, 0, 0, 9]);
+    const r = decodeCtcPhones(logits, 2, 3, 2, idToPhone, 0.02);
+    expect(r.ipa).toBe('');
+    expect(r.segments).toEqual([]);
+  });
+});
 
 describe('ipa-phones.transcribePhones', () => {
   it('rejects with IpaUnavailableError when the model dir is not configured', async () => {
