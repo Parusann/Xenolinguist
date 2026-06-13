@@ -24,8 +24,17 @@ const common = {
   logOverride: { 'empty-import-meta': 'silent' },
 };
 
-// Server: fully self-contained (cors/express/ollama/uuid/dotenv are pure JS).
-await build({ ...common, entryPoints: ['electron/server-entry.ts'], outfile: 'electron/dist/server.cjs' });
+// Server: self-contained except @huggingface/transformers, which ships native ONNX runtime
+// (.node) files esbuild can't bundle. Mark it external — the IPA service `await import()`s it,
+// so in dev (node_modules present) it loads; in the packaged app it's absent → the service
+// throws IpaUnavailableError → /api/ipa 503 (graceful). Shipping it for packaged IPA is a
+// documented follow-up (see docs/ipa-model-notes.md).
+await build({
+  ...common,
+  entryPoints: ['electron/server-entry.ts'],
+  outfile: 'electron/dist/server.cjs',
+  external: ['@huggingface/transformers', 'onnxruntime-node', 'onnxruntime-web'],
+});
 
 // Electron main/preload: only 'electron' is external (provided by the runtime).
 if (existsSync('electron/main.ts')) {
