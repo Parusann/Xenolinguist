@@ -8,6 +8,7 @@ afterEach(() => {
   delete process.env.ESPEAK_PATH;
   delete process.env.WHISPER_BIN;
   delete process.env.WHISPER_MODEL;
+  delete process.env.IPA_MODEL_DIR;
 });
 
 describe('config', () => {
@@ -55,5 +56,12 @@ describe('config', () => {
     expect(whisperModelPath()).toBeNull();
     process.env.WHISPER_MODEL = '/x/ggml-base-q5_1.bin';
     expect(whisperModelPath()).toBe('/x/ggml-base-q5_1.bin');
+  });
+
+  it('ipaModelDir returns IPA_MODEL_DIR or null', async () => {
+    const { ipaModelDir } = await import('../config.js?case=ipa');
+    expect(ipaModelDir()).toBeNull();
+    process.env.IPA_MODEL_DIR = '/x/ipa-model';
+    expect(ipaModelDir()).toBe('/x/ipa-model');
   });
 });

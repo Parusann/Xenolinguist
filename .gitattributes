@@ -6,3 +6,5 @@ vendor/whisper/win/* binary
 *.bin binary
 # Test audio fixtures are binary PCM WAV — keep byte-exact.
 *.wav binary
+vendor/ipa-model/** binary
+*.onnx binary

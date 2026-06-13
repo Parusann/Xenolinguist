@@ -7,3 +7,9 @@ server/data/profiles/
 Thumbs.db
 electron/dist/
 release/
+vendor/ipa-model-cache/
+_ipa_spike.mjs
+# IPA model weights exceed GitHub's 100MB file limit — regenerated via the quantize step
+# in docs/ipa-model-notes.md (config/tokenizer ARE tracked). Productionize via Git LFS or
+# download-on-first-run if the weights must be in the repo.
+vendor/ipa-model/**/*.onnx
