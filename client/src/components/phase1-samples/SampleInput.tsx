@@ -48,7 +48,7 @@ export function SampleInput() {
       fetch('/api/audio/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: clipId, data: base64, mimeType: pendingAudio.blob.type }) }).catch(console.error)
     }
     const sampleText = alienText.trim() || '[audio sample]'
-    addSample({ alien_text: sampleText, english_translation: parallelMode && translation.trim() ? translation.trim() : null, source: pendingAudio ? 'Audio recording' : source, phonetic_notes: phoneticNotes.trim(), decoded: false, audio_id: audioId })
+    addSample({ alien_text: sampleText, english_translation: parallelMode && translation.trim() ? translation.trim() : null, source: pendingAudio ? 'Audio recording' : source, phonetic_notes: phoneticNotes.trim(), decoded: false, audio_id: audioId, ipa: null })
     if (profile && profile.dictionary.length > 0 && sampleText !== '[audio sample]') {
       suggestForSample(sampleText, profile.dictionary, setAutoSuggestion)
     }
@@ -112,7 +112,7 @@ export function SampleInput() {
     removeSample(sample.id)
     pushAction({
       description: `Removed sample '${sample.alien_text.slice(0, 30)}${sample.alien_text.length > 30 ? '…' : ''}'`,
-      undo: () => addSample({ alien_text: sample.alien_text, english_translation: sample.english_translation, source: sample.source, phonetic_notes: sample.phonetic_notes, decoded: sample.decoded, audio_id: sample.audio_id }),
+      undo: () => addSample({ alien_text: sample.alien_text, english_translation: sample.english_translation, source: sample.source, phonetic_notes: sample.phonetic_notes, decoded: sample.decoded, audio_id: sample.audio_id, ipa: sample.ipa }),
     })
   }
 
