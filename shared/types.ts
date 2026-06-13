@@ -97,7 +97,8 @@ export type AITask =
   | 'translation'
   | 'conlangGeneration'
   | 'quickSuggest'
-  | 'numberAnalysis';
+  | 'numberAnalysis'
+  | 'phoneticAnalysis';
 
 export interface AIRequest {
   task: AITask;
