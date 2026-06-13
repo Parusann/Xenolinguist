@@ -13,9 +13,11 @@ describe('ipa.transcribePhones', () => {
     expect(await mod.transcribePhones(new Blob(['x']))).toBeNull();
   });
 
-  it('returns the IPA string on 200', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, json: async () => ({ ipa: 'h ə l oʊ' }) } as unknown as Response)));
+  it('returns the IPA result with phones + segments on 200', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, json: async () => ({ ipa: 'h ə l oʊ', segments: [{ phone: 'h', start: 0, end: 0.1 }] }) } as unknown as Response)));
     const mod = await import('../ipa.ts?case=2');
-    expect(await mod.transcribePhones(new Blob(['x']))).toBe('h ə l oʊ');
+    const result = await mod.transcribePhones(new Blob(['x']));
+    expect(result?.ipa).toBe('h ə l oʊ');
+    expect(result?.segments.length).toBe(1);
   });
 });
