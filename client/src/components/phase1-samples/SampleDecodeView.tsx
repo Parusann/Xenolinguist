@@ -211,6 +211,12 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
                 <span className="text-xs text-gray-500 italic">{sample.phonetic_notes}</span>
               </div>
             )}
+            {sample.ipa && (
+              <div className="glass-inner" style={{ padding: 10, marginTop: 8 }}>
+                <span className="label" style={{ marginBottom: 4, display: 'block' }}>IPA · phones</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--fg-1)' }}>{sample.ipa}</span>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono text-gray-600 uppercase w-14 shrink-0">Added</span>
               <span className="text-xs text-gray-600 font-mono">

@@ -32,8 +32,16 @@ function startServerProcess(): Promise<number> {
       ? { WHISPER_BIN: whisperBin, WHISPER_MODEL: whisperModel }
       : {};
 
+    const ipaModel = path.join(process.resourcesPath, 'ipa-model');
+    const ipaEnv = existsSync(ipaModel) ? { IPA_MODEL_DIR: ipaModel } : {};
+
+    // IPA runtime deps ship under resources/server-deps (builder.config extraResources); point the
+    // forked server's module resolution there so the external @huggingface/transformers resolves.
+    const serverDeps = path.join(process.resourcesPath, 'server-deps', 'node_modules');
+    const ipaDepsEnv = existsSync(serverDeps) ? { NODE_PATH: serverDeps } : {};
+
     serverProc = utilityProcess.fork(serverPath, [], {
-      env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv, ...whisperEnv },
+      env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv, ...whisperEnv, ...ipaEnv, ...ipaDepsEnv },
       stdio: 'pipe',
     });
     serverProc.stdout?.on('data', (d) => console.log('[server]', d.toString().trim()));

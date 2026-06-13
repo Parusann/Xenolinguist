@@ -49,6 +49,7 @@ export interface Sample {
   phonetic_notes: string;
   decoded: boolean;
   audio_id: string | null;
+  ipa: string | null;
   created_at: string;
 }
 
@@ -96,7 +97,8 @@ export type AITask =
   | 'translation'
   | 'conlangGeneration'
   | 'quickSuggest'
-  | 'numberAnalysis';
+  | 'numberAnalysis'
+  | 'phoneticAnalysis';
 
 export interface AIRequest {
   task: AITask;

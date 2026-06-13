@@ -1,0 +1,82 @@
+{
+  "version": "1.0",
+  "truncation": null,
+  "padding": null,
+  "added_tokens": [],
+  "normalizer": {
+    "type": "Sequence",
+    "normalizers": [
+      { "type": "Lowercase" },
+      { "type": "StripAccents" }
+    ]
+  },
+  "pre_tokenizer": {
+    "type": "Whitespace"
+  },
+  "post_processor": null,
+  "decoder": {
+    "type": "CTC",
+    "pad_token": "[PAD]",
+    "word_delimiter_token": "|"
+  },
+  "model": {
+    "type": "WordLevel",
+    "vocab": {
+      "[PAD]": 53,
+      "[UNK]": 52,
+      "aa": 0,
+      "ae": 1,
+      "ah": 2,
+      "ao": 3,
+      "aw": 4,
+      "ax": 5,
+      "ay": 6,
+      "b": 7,
+      "bcl": 8,
+      "ch": 9,
+      "d": 10,
+      "dcl": 11,
+      "dh": 12,
+      "dx": 13,
+      "eh": 14,
+      "el": 15,
+      "epi": 16,
+      "er": 17,
+      "ey": 18,
+      "f": 19,
+      "g": 20,
+      "gcl": 21,
+      "h#": 22,
+      "hh": 23,
+      "ih": 24,
+      "iy": 25,
+      "jh": 26,
+      "k": 27,
+      "kcl": 28,
+      "l": 29,
+      "m": 30,
+      "n": 31,
+      "ng": 32,
+      "ow": 33,
+      "oy": 34,
+      "p": 35,
+      "pau": 36,
+      "pcl": 37,
+      "q": 38,
+      "r": 39,
+      "s": 40,
+      "sh": 41,
+      "t": 42,
+      "tcl": 43,
+      "th": 44,
+      "uh": 45,
+      "uw": 46,
+      "v": 47,
+      "w": 48,
+      "y": 49,
+      "z": 50,
+      "|": 51
+    },
+    "unk_token": "[UNK]"
+  }
+}

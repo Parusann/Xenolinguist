@@ -325,6 +325,7 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
         phonetic_notes: '',
         decoded: true,
         audio_id: null,
+        ipa: null,
       })
     } else {
       addEntry('warning', `Translation not quite right. Try again or switch to word-by-word mode.`)
@@ -343,6 +344,7 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
       phonetic_notes: '',
       decoded: true,
       audio_id: null,
+      ipa: null,
     })
   }
 

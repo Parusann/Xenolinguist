@@ -44,3 +44,8 @@ export function whisperBinPath(): string | null {
 export function whisperModelPath(): string | null {
   return process.env.WHISPER_MODEL || null;
 }
+
+/** Absolute path to the bundled IPA phoneme model dir, or null (IPA disabled). */
+export function ipaModelDir(): string | null {
+  return process.env.IPA_MODEL_DIR || null;
+}
