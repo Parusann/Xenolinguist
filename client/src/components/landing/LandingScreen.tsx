@@ -6,14 +6,8 @@ import { ProfileSetup } from './ProfileSetup'
 import { VantaTopology } from '@/components/common/VantaTopology'
 import { XenoMark } from '@/components/common/XenoMark'
 import { getDecodingProgress } from '@/lib/profileStats'
-import type { LanguageProfile } from 'shared/types'
-
-interface ProfileIndex {
-  id: string
-  name: string
-  created_at: string
-  updated_at: string
-}
+import { apiFetch } from '@/services/api'
+import type { LanguageProfile, ProfileIndex } from 'shared/types'
 
 /** A saved-profile row enriched with the live word count + decode% the mock shows. */
 interface ProfileRow extends ProfileIndex {
@@ -172,14 +166,14 @@ export function LandingScreen() {
     let cancelled = false
     ;(async () => {
       try {
-        const index: ProfileIndex[] = await fetch('/api/profiles').then((r) => r.json())
+        const index = await apiFetch<ProfileIndex[]>('/profiles')
         const sorted = [...index].sort(
           (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
         )
         const rows = await Promise.all(
           sorted.map(async (p, i): Promise<ProfileRow> => {
             try {
-              const full: LanguageProfile = await fetch(`/api/profiles/${p.id}`).then((r) => r.json())
+              const full = await apiFetch<LanguageProfile>(`/profiles/${p.id}`)
               return { ...p, words: full.dictionary.length, decode: getDecodingProgress(full), active: i === 0 }
             } catch {
               return { ...p, words: 0, decode: 0, active: i === 0 }
@@ -204,7 +198,7 @@ export function LandingScreen() {
   const loadDemo = async () => {
     setLoadingDemo(true)
     try {
-      const created: LanguageProfile = await fetch('/api/profiles/demo', { method: 'POST' }).then((r) => r.json())
+      const created = await apiFetch<LanguageProfile>('/profiles/demo', { method: 'POST' })
       await loadProfile(created.id)
       addEntry('success', `Loaded demo language: ${created.name}`)
     } catch {
@@ -332,7 +326,10 @@ export function LandingScreen() {
                 {profiles.map((p) => (
                   <button
                     key={p.id}
-                    onClick={() => { loadProfile(p.id); addEntry('info', `Loading profile: ${p.name}`) }}
+                    onClick={async () => {
+                      addEntry('info', `Loading profile: ${p.name}`)
+                      try { await loadProfile(p.id) } catch { addEntry('error', `Failed to load ${p.name}`) }
+                    }}
                     className="glass-inner"
                     style={{
                       padding: '10px 14px',

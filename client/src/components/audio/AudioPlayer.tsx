@@ -10,6 +10,9 @@ interface AudioPlayerProps {
   duration: number
   /** Segments to display on waveform */
   segments?: { start: number; end: number; label: string }[]
+  /** Optional playback window (seconds): seek here on play and stop at `end`. */
+  start?: number
+  end?: number
   /** Called when playback position changes */
   onTimeUpdate?: (currentTime: number) => void
   /** Compact mode for inline use */
@@ -22,6 +25,8 @@ export function AudioPlayer({
   peaks,
   duration,
   segments = [],
+  start,
+  end,
   onTimeUpdate,
   compact = false,
   className = '',
@@ -52,12 +57,19 @@ export function AudioPlayer({
   const updateProgress = useCallback(() => {
     const audio = audioRef.current
     if (!audio || audio.paused) return
+    // Stop at the segment end when a playback window is set.
+    if (end != null && audio.currentTime >= end) {
+      audio.pause()
+      cancelAnimationFrame(animRef.current)
+      setPlaying(false)
+      return
+    }
     const p = audio.currentTime / (audio.duration || duration)
     setProgress(p)
     setCurrentTime(audio.currentTime)
     onTimeUpdate?.(audio.currentTime)
     animRef.current = requestAnimationFrame(updateProgress)
-  }, [duration, onTimeUpdate])
+  }, [duration, onTimeUpdate, end])
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current
@@ -68,11 +80,17 @@ export function AudioPlayer({
       cancelAnimationFrame(animRef.current)
       setPlaying(false)
     } else {
+      // If a playback window is set, (re)start from its beginning.
+      if (start != null && (audio.currentTime < start || (end != null && audio.currentTime >= end))) {
+        audio.currentTime = start
+      }
+      // play() rejects if the media can't start (autoplay policy, interrupted load) — only
+      // enter the playing state on a real start, and reset on failure.
       audio.play()
-      setPlaying(true)
-      updateProgress()
+        .then(() => { setPlaying(true); updateProgress() })
+        .catch(() => setPlaying(false))
     }
-  }, [playing, updateProgress])
+  }, [playing, updateProgress, start, end])
 
   const handleSeek = useCallback((pos: number) => {
     const audio = audioRef.current

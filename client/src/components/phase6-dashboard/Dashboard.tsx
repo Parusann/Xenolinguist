@@ -58,11 +58,14 @@ export function Dashboard() {
       try {
         const imported = JSON.parse(reader.result as string) as Partial<LanguageProfile>
         const updates: Partial<LanguageProfile> = {}
-        if (imported.dictionary?.length) updates.dictionary = imported.dictionary
-        if (imported.grammar_rules?.length) updates.grammar_rules = imported.grammar_rules
-        if (imported.samples?.length) updates.samples = imported.samples
-        if (imported.number_system) updates.number_system = imported.number_system
-        if (imported.audio_clips) updates.audio_clips = imported.audio_clips
+        // Validate element shapes (not just presence) so a malformed file can't poison state.
+        const objArray = (v: unknown) => Array.isArray(v) && v.every((x) => x != null && typeof x === 'object')
+        if (objArray(imported.dictionary)) updates.dictionary = imported.dictionary
+        if (objArray(imported.grammar_rules)) updates.grammar_rules = imported.grammar_rules
+        if (objArray(imported.samples)) updates.samples = imported.samples
+        if (imported.number_system && typeof imported.number_system === 'object') updates.number_system = imported.number_system
+        if (objArray(imported.audio_clips)) updates.audio_clips = imported.audio_clips
+        if (Object.keys(updates).length === 0) throw new Error('no recognizable profile sections')
         updateProfile(updates)
         addToast('Profile imported', 'success')
       } catch {
@@ -75,8 +78,9 @@ export function Dashboard() {
 
   const handleExportCSV = () => {
     const header = 'Alien Word,English,Part of Speech,Confidence,Context\n'
+    const q = (s: unknown) => `"${String(s ?? '').replace(/"/g, '""')}"` // RFC 4180: double embedded quotes
     const rows = profile.dictionary
-      .map((e) => `"${e.alien_word}","${e.english_meaning}","${e.part_of_speech}",${e.confidence},"${e.context}"`)
+      .map((e) => [q(e.alien_word), q(e.english_meaning), q(e.part_of_speech), e.confidence, q(e.context)].join(','))
       .join('\n')
     const blob = new Blob([header + rows], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)

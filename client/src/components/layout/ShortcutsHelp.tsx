@@ -39,7 +39,7 @@ export function ShortcutsHelp({ shortcuts, onClose }: ShortcutsHelpProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in" style={{ background: 'rgba(0, 0, 0, 0.6)' }}>
-      <div ref={panelRef} className="glass-card rounded-xl p-6 w-full max-w-md shadow-2xl" style={{ boxShadow: '0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 230, 118, 0.03)' }}>
+      <div ref={panelRef} role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" className="glass-card rounded-xl p-6 w-full max-w-md shadow-2xl" style={{ boxShadow: '0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 230, 118, 0.03)' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2.5">

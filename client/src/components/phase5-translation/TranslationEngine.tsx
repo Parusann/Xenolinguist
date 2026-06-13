@@ -3,7 +3,7 @@ import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
 import { getConfidenceLevel } from 'shared/constants'
-import { formatDictionaryForPrompt, formatGrammarForPrompt } from 'shared/prompts'
+import { formatDictionaryForPrompt, formatGrammarForPrompt, formatSamplesForPrompt } from 'shared/prompts'
 import type { DictionaryEntry } from 'shared/types'
 import { SpeakButton } from '@/components/audio/SpeakButton'
 
@@ -56,19 +56,35 @@ export function TranslationEngine() {
 
   const activeIdx = pinned ?? hover
   const active = activeIdx != null ? translatedWords[activeIdx] : null
+  // Ordinal among real (non-punctuation) tokens, matching what the user actually counts.
+  const tokenOrdinal = activeIdx != null
+    ? translatedWords.slice(0, activeIdx + 1).filter((t) => !t.punctuation).length
+    : 0
 
   const handleAITranslate = async () => {
     if (!profile || !alienInput.trim()) return
-    const prompt = `Dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nGrammar rules:\n${formatGrammarForPrompt(profile.grammar_rules)}\n\nTranslate this text:\n"${alienInput}"`
-    setAiTranslation(await runTask('translation', prompt))
+    const prompt = `Dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nGrammar rules:\n${formatGrammarForPrompt(profile.grammar_rules)}\n\nSamples:\n${formatSamplesForPrompt(profile.samples)}\n\nTranslate this text:\n"${alienInput}"`
+    try {
+      setAiTranslation(await runTask('translation', prompt))
+    } catch {
+      /* useAI surfaces/logs the error */
+    }
   }
 
   const handleReverseTranslate = () => {
     if (!reverseInput.trim()) return
+    // Index every whitespace/slash-separated token of each gloss → alien word, so multi-word
+    // meanings ("to run", "star / light") match on any of their words, not just the whole string.
+    const reverseIndex = new Map<string, string>()
+    for (const e of dictionary) {
+      for (const tok of e.english_meaning.toLowerCase().split(/[\s/]+/)) {
+        const t = tok.replace(/[^a-zà-ɏ'-]/g, '')
+        if (t && !reverseIndex.has(t)) reverseIndex.set(t, e.alien_word)
+      }
+    }
     const out = reverseInput.trim().split(/\s+/).map((word) => {
-      const clean = word.toLowerCase().replace(/[^a-z'-]/g, '')
-      const entry = dictionary.find((e) => e.english_meaning.toLowerCase() === clean)
-      return entry ? entry.alien_word : `[${word}]`
+      const clean = word.toLowerCase().replace(/[^a-zà-ɏ'-]/g, '')
+      return reverseIndex.get(clean) ?? `[${word}]`
     })
     setReverseOutput(out.join(' '))
   }
@@ -200,7 +216,7 @@ export function TranslationEngine() {
                 <>
                   <div className="flex" style={{ justifyContent: 'space-between' }}>
                     <span className="label" style={{ marginBottom: 0 }}>Token Inspector</span>
-                    <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)' }}>tok {String(activeIdx).padStart(2, '0')}</span>
+                    <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)' }}>tok {String(tokenOrdinal).padStart(2, '0')}</span>
                   </div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 28, fontWeight: 500, color: `var(--conf-${active.english ? bucketOf(active.confidence) : 'unknown'})`, margin: '12px 0 6px' }}>{active.alien}</div>
 

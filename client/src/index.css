@@ -440,6 +440,18 @@ body {
 .btn.xs { padding: 3px 8px; font-size: 11px; }
 .btn.icon { padding: 8px; }
 
+/* Speak (TTS) button — small glass icon button used next to alien words/sentences. */
+.tts-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; padding: 0; font-size: 11px; line-height: 1;
+  border-radius: 6px; border: 1px solid var(--border-mid);
+  background: rgba(255,255,255,0.025); color: var(--fg-dim); cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease, transform 80ms ease;
+}
+.tts-btn:hover:not(:disabled) { color: var(--accent); border-color: rgba(0,230,118,0.4); background: rgba(0,230,118,0.06); }
+.tts-btn:active:not(:disabled) { transform: scale(0.92); }
+.tts-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
 /* Inputs (redesign — mono, override legacy .input) */
 .input, .textarea, select.input {
   font-family: var(--font-mono); font-size: 13px; background: var(--bg-inner);

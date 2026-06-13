@@ -8,6 +8,13 @@ ttsRouter.post('/', async (req, res) => {
   if (!text && !phonemes) {
     return res.status(400).json({ error: 'text or phonemes required' });
   }
+  if ((text != null && typeof text !== 'string') || (phonemes != null && typeof phonemes !== 'string')) {
+    return res.status(400).json({ error: 'text and phonemes must be strings' });
+  }
+  // Cap length to stay well under OS argv limits (espeak receives these as CLI args).
+  if ((typeof text === 'string' && text.length > 5000) || (typeof phonemes === 'string' && phonemes.length > 5000)) {
+    return res.status(400).json({ error: 'text too long' });
+  }
   try {
     const wav = await synthesize({ text, phonemes, voice });
     res.setHeader('Content-Type', 'audio/wav');

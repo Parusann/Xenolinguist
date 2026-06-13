@@ -119,7 +119,7 @@ export function AppShell() {
     switch (activePhase) {
       case 'sandbox':
         return conlangData
-          ? <SandboxController conlang={conlangData} />
+          ? <SandboxController conlang={conlangData} onPlayAgain={() => setConlangData(null)} />
           : <SandboxSetup onGenerated={setConlangData} />
       case 'samples': return <SampleInput />
       case 'numbers': return <NumberDecoder />

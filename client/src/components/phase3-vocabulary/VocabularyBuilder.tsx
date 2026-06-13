@@ -19,7 +19,7 @@ const BUCKET_COLOR: Record<string, string> = {
 }
 
 export function VocabularyBuilder() {
-  const { profile, addDictionaryEntry, removeDictionaryEntry, updateProfile } = useProfile()
+  const { profile, addDictionaryEntry, addDictionaryEntryRaw, removeDictionaryEntry, updateProfile } = useProfile()
   const { runTask, loading, streamedText } = useAI()
   const { connected } = useOllama()
   const { pushAction } = useUndo()
@@ -76,8 +76,11 @@ export function VocabularyBuilder() {
   const handleAISuggest = async () => {
     if (!profile) return
     const prompt = `Current dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nSamples:\n${formatSamplesForPrompt(profile.samples)}\n\nAnalyze the samples and suggest word meanings for any unmapped words you can identify.`
-    const result = await runTask('patternAnalysis', prompt)
-    setAnalysisResult(result)
+    try {
+      setAnalysisResult(await runTask('patternAnalysis', prompt))
+    } catch {
+      /* useAI surfaces/logs the error */
+    }
   }
 
   const updateEntry = (id: string, patch: Partial<DictionaryEntry>) => {
@@ -132,17 +135,9 @@ export function VocabularyBuilder() {
     removeDictionaryEntry(entry.id)
     pushAction({
       description: `Removed word '${entry.alien_word}'`,
-      undo: () => {
-        addDictionaryEntry({
-          alien_word: entry.alien_word,
-          english_meaning: entry.english_meaning,
-          part_of_speech: entry.part_of_speech,
-          confidence: entry.confidence,
-          context: entry.context,
-          examples: entry.examples,
-          notes: entry.notes,
-        })
-      },
+      // Re-insert the exact entry (preserving id + created_at) so undo is a true restore,
+      // not a new word — this also keeps any audio-segment links intact.
+      undo: () => addDictionaryEntryRaw(entry),
     })
   }
 
@@ -280,7 +275,7 @@ export function VocabularyBuilder() {
                     <div style={{ fontSize: 11.5, color: 'var(--fg-mute)', lineHeight: 1.5, minHeight: 32 }}>{entry.context || <span style={{ color: 'var(--fg-faint)' }}>no context</span>}</div>
                     {audio && (
                       <div style={{ marginTop: 10 }}>
-                        <AudioPlayer src={`/api/audio/${audio.clipId}`} peaks={audio.peaks} duration={audio.duration} compact />
+                        <AudioPlayer src={`/api/audio/${audio.clipId}`} peaks={audio.peaks} duration={audio.duration} start={audio.start} end={audio.end} segments={[{ start: audio.start, end: audio.end, label: entry.alien_word }]} compact />
                       </div>
                     )}
                   </div>

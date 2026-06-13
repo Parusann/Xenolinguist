@@ -16,6 +16,11 @@ export function defaultModel(): string {
   return process.env.OLLAMA_MODEL || 'gemma4:e4b';
 }
 
+/** Base URL of the local Ollama daemon; overridable via OLLAMA_BASE_URL. */
+export function ollamaBaseUrl(): string {
+  return process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+}
+
 /** Built SPA directory to serve in production, or null in dev (Vite serves). */
 export function clientDist(): string | null {
   const fromEnv = process.env.CLIENT_DIST;
@@ -30,7 +35,7 @@ export function espeakPath(): string | null {
 /** Port to bind; 0 lets the OS pick a free port (used by the desktop build). */
 export function port(): number {
   const raw = process.env.PORT;
-  if (raw === undefined) return 3001;
+  if (!raw?.trim()) return 3001; // unset/blank → default (not a silent OS-assigned 0)
   const n = Number(raw);
   return Number.isFinite(n) ? n : 3001;
 }

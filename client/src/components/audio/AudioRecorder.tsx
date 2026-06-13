@@ -19,6 +19,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
   const chunksRef = useRef<Blob[]>([])
   const startTimeRef = useRef(0)
   const streamRef = useRef<MediaStream | null>(null)
+  const audioCtxRef = useRef<AudioContext | null>(null)
   const { detect, detecting, result: langResult, reset: resetLang } = useLanguageDetection()
 
   // Live speech recognition during recording
@@ -52,6 +53,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
 
       // Set up analyser for live waveform
       const audioCtx = new AudioContext()
+      audioCtxRef.current = audioCtx
       const source = audioCtx.createMediaStreamSource(stream)
       const analyser = audioCtx.createAnalyser()
       analyser.fftSize = 256
@@ -108,16 +110,22 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
         const dur = (Date.now() - startTimeRef.current) / 1000
 
-        // Decode for peaks
-        const arrayBuf = await blob.arrayBuffer()
-        const decoded = await audioCtx.decodeAudioData(arrayBuf)
-        const peaks = extractPeaks(decoded, 200)
+        // Decode for peaks; always release the AudioContext even if decoding throws.
+        let peaks: number[] = []
+        try {
+          const decoded = await audioCtx.decodeAudioData(await blob.arrayBuffer())
+          peaks = extractPeaks(decoded, 200)
+        } catch {
+          /* undecodable audio — proceed with an empty waveform */
+        } finally {
+          if (audioCtx.state !== 'closed') audioCtx.close()
+          audioCtxRef.current = null
+        }
 
-        audioCtx.close()
-
-        // Run language detection and IPA phone recognition in parallel
+        // Run language detection and IPA phone recognition in parallel. Only a real detector
+        // result sets the language — the live browser-locale guess is a UI hint, not detection.
         const [det, ipa] = await Promise.all([detect(blob), transcribeIpa(blob)])
-        onRecordingComplete(blob, peaks, dur, det?.language || liveLanguage || undefined, det?.segments, det?.mode, ipa?.ipa, ipa?.segments)
+        onRecordingComplete(blob, peaks, dur, det?.language || undefined, det?.segments, det?.mode, ipa?.ipa, ipa?.segments)
       }
 
       recorder.start(100)
@@ -149,7 +157,10 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
     } catch (err) {
       console.error('Microphone access denied:', err)
     }
-  }, [onRecordingComplete, detect, resetLang, liveLanguage])
+    // liveLanguage is intentionally NOT a dep: it's a UI-only hint and including it would
+    // re-create this callback on every interim speech result.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onRecordingComplete, detect, resetLang])
 
   useEffect(() => {
     return () => {
@@ -159,6 +170,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
       if (liveRecognitionRef.current) {
         try { liveRecognitionRef.current.stop() } catch {}
       }
+      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') audioCtxRef.current.close()
       cancelAnimationFrame(animFrameRef.current)
     }
   }, [])

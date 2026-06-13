@@ -120,7 +120,7 @@ export function DemoSection() {
           <span className="dot-bar" />
           <span style={{ marginLeft: 8 }}>xenolinguist · live translation · Eridian → English</span>
           <span style={{ flex: 1 }} />
-          <span style={{ color: 'var(--accent)' }}>● llama3.1:70b · local</span>
+          <span style={{ color: 'var(--accent)' }}>● gemma4:e4b · local</span>
         </div>
         <div className="demo-grid">
           <div className="demo-pane">
@@ -256,7 +256,7 @@ export function FinalCTA({ onEnterApp }: { onEnterApp: () => void }) {
           <span>Open workbench</span>
           <span style={{ fontFamily: 'var(--font-mono)' }}>→</span>
         </button>
-        <button className="btn-hero">
+        <button className="btn-hero" onClick={() => window.open('https://github.com/Parusann/Xenolinguist', '_blank', 'noopener,noreferrer')}>
           <span>★ Star on GitHub</span>
         </button>
       </div>
@@ -277,10 +277,10 @@ export function HeroFooter() {
       <span style={{ color: 'var(--fg-faint)' }}>·</span>
       <span>MIT</span>
       <span className="grow" />
-      <a href="#">Docs</a>
-      <a href="#">GitHub</a>
-      <a href="#">Changelog</a>
-      <a href="#">@parusan</a>
+      <a href="https://github.com/Parusann/Xenolinguist#readme" target="_blank" rel="noreferrer">Docs</a>
+      <a href="https://github.com/Parusann/Xenolinguist" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://github.com/Parusann/Xenolinguist/releases" target="_blank" rel="noreferrer">Changelog</a>
+      <a href="https://github.com/Parusann" target="_blank" rel="noreferrer">@parusan</a>
     </footer>
   )
 }
