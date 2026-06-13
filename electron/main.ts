@@ -32,8 +32,11 @@ function startServerProcess(): Promise<number> {
       ? { WHISPER_BIN: whisperBin, WHISPER_MODEL: whisperModel }
       : {};
 
+    const ipaModel = path.join(process.resourcesPath, 'ipa-model');
+    const ipaEnv = existsSync(ipaModel) ? { IPA_MODEL_DIR: ipaModel } : {};
+
     serverProc = utilityProcess.fork(serverPath, [], {
-      env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv, ...whisperEnv },
+      env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv, ...whisperEnv, ...ipaEnv },
       stdio: 'pipe',
     });
     serverProc.stdout?.on('data', (d) => console.log('[server]', d.toString().trim()));
