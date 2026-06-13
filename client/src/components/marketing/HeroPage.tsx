@@ -4,6 +4,8 @@ import { VantaTopology } from '@/components/common/VantaTopology'
 import { HeroMark } from './HeroMark'
 import { DecodeMoment } from './DecodeMoment'
 import { PhasesSection, DemoSection, FeaturesSection, PrivacySection, FinalCTA, HeroFooter } from './sections'
+import { DownloadSection } from './DownloadSection'
+import { isPublicSite } from '@/lib/site'
 import '@/marketing.css'
 
 /** Decorative reticle framing the alien subject in the hero image. */
@@ -31,7 +33,11 @@ function HeroReticle() {
  */
 export function HeroPage() {
   const navigate = useNavigate()
-  const onEnterApp = () => navigate('/app')
+  // Public site has no workbench (static host, needs the local server + Ollama),
+  // so CTAs scroll to the download block instead of opening /app.
+  const onPrimary = isPublicSite
+    ? () => document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' })
+    : () => navigate('/app')
 
   // The workbench locks the viewport; the hero needs to scroll. This class
   // (scoped in marketing.css) unlocks overflow only while the hero is mounted.
@@ -77,7 +83,7 @@ export function HeroPage() {
                 <a href="#privacy">Privacy</a>
                 <a href="#open">Open source</a>
               </div>
-              <button className="btn-hero primary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={onEnterApp}>
+              <button className="btn-hero primary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={onPrimary}>
                 Open workbench →
               </button>
             </nav>
@@ -101,11 +107,11 @@ export function HeroPage() {
               </p>
 
               <div className="hero-cta float-up" style={{ animationDelay: '260ms' }}>
-                <button className="btn-hero primary" onClick={onEnterApp}>
+                <button className="btn-hero primary" onClick={onPrimary}>
                   <span>Start decoding</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>→</span>
                 </button>
-                <button className="btn-hero" onClick={onEnterApp}>
+                <button className="btn-hero" onClick={onPrimary}>
                   <span style={{ width: 14, height: 14, borderRadius: 7, border: '1.5px solid currentColor', display: 'grid', placeItems: 'center' }}>
                     <span style={{ width: 4, height: 4, borderRadius: 2, background: 'currentColor' }} />
                   </span>
@@ -120,7 +126,7 @@ export function HeroPage() {
             <div className="hero-meta">
               <span className="dot-row">
                 <span style={{ width: 5, height: 5, borderRadius: 3, background: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }} />
-                <span>v0.7.2 — Eridian engine</span>
+                <span>v1.0.0 — Eridian engine</span>
               </span>
               <span style={{ color: 'var(--fg-faint)' }}>·</span>
               <span>Built for conlangers, sci-fi worldbuilders, linguistics nerds</span>
@@ -134,7 +140,8 @@ export function HeroPage() {
           <DemoSection />
           <FeaturesSection />
           <PrivacySection />
-          <FinalCTA onEnterApp={onEnterApp} />
+          {isPublicSite && <DownloadSection />}
+          <FinalCTA onEnterApp={onPrimary} />
           <HeroFooter />
         </div>
       </div>
