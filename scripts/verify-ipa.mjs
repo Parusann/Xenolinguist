@@ -48,7 +48,8 @@ for (let f = 0; f <= frames; f++) {
   let id = -2;
   if (f < frames) { let best = 0, bv = -Infinity; for (let v = 0; v < vocab; v++) { const val = data[f * vocab + v]; if (val > bv) { bv = val; best = v; } } id = best; }
   if (id !== prev) {
-    if (prev !== -1 && prev !== pad) { const p = tokenizer.decode([prev]).trim(); if (p) segments.push({ phone: p, start: +(startF * 0.02).toFixed(3), end: +(f * 0.02).toFixed(3) }); }
+    // Skip special tokens (e.g. [UNK]/<unk>) — kept in sync with decodeCtcPhones in ipa-phones.ts.
+    if (prev !== -1 && prev !== pad) { const p = tokenizer.decode([prev]).trim(); if (p && !/^[<[].*[>\]]$/.test(p)) segments.push({ phone: p, start: +(startF * 0.02).toFixed(3), end: +(f * 0.02).toFixed(3) }); }
     prev = id; startF = f;
   }
 }

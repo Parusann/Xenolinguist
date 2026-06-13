@@ -6,6 +6,12 @@ export class IpaUnavailableError extends Error {
   constructor(message: string) { super(message); this.name = 'IpaUnavailableError'; }
 }
 
+/** Thrown when the supplied audio is malformed/unsupported; the route maps this to HTTP 400
+ *  (a client error, distinct from a 503 server-capability error). */
+export class IpaBadInputError extends Error {
+  constructor(message: string) { super(message); this.name = 'IpaBadInputError'; }
+}
+
 // The folder name under the model dir (see docs/ipa-model-notes.md). Keep in sync with
 // scripts/verify-ipa.mjs and the vendored vendor/ipa-model/<MODEL_ID>/ layout.
 const MODEL_ID = 'wav2vec2-phoneme';
@@ -35,17 +41,22 @@ function getModel() {
   return modelPromise;
 }
 
-/** Parse a 16-bit PCM WAV buffer into mono Float32 samples in [-1, 1]. */
+/** Parse a 16-bit PCM WAV buffer into mono Float32 samples in [-1, 1]. The model expects
+ *  16 kHz mono; the fmt chunk is validated so non-16 kHz / multi-channel audio fails loudly
+ *  (acoustically wrong phones) instead of being silently mis-decoded. */
 function wavToFloat32(buf: Buffer): Float32Array {
   const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
-  let off = 12, dataOff = -1, dataLen = 0;
+  let off = 12, dataOff = -1, dataLen = 0, sampleRate = 0, channels = 1;
   while (off + 8 <= buf.length) {
     const id = buf.toString('ascii', off, off + 4);
     const sz = dv.getUint32(off + 4, true);
+    if (id === 'fmt ') { channels = dv.getUint16(off + 10, true); sampleRate = dv.getUint32(off + 12, true); }
     if (id === 'data') { dataOff = off + 8; dataLen = sz; }
     off += 8 + sz + (sz & 1);
   }
-  if (dataOff < 0) throw new IpaUnavailableError('invalid wav: no data chunk');
+  if (dataOff < 0) throw new IpaBadInputError('invalid wav: no data chunk');
+  if (sampleRate && sampleRate !== 16000) throw new IpaBadInputError(`expected 16 kHz wav, got ${sampleRate} Hz`);
+  if (channels > 1) throw new IpaBadInputError(`expected mono wav, got ${channels} channels`);
   const n = Math.floor(dataLen / 2);
   const out = new Float32Array(n);
   for (let i = 0; i < n; i++) out[i] = dv.getInt16(dataOff + i * 2, true) / 32768;
@@ -77,7 +88,12 @@ export function decodeCtcPhones(
     if (id !== prev) {
       if (prev !== -1 && prev !== padId) {
         const phone = idToPhone(prev).trim();
-        if (phone) segments.push({ phone, start: +(startF * stride).toFixed(3), end: +(f * stride).toFixed(3) });
+        // Skip special tokens: a CTC head can win-argmax on class ids beyond the real
+        // phone set, which tokenizer.decode maps to bracketed markers ([UNK], <unk>, <s>…).
+        // Real ARPABET/IPA phones never contain angle/square brackets, so this is safe.
+        if (phone && !/^[<[].*[>\]]$/.test(phone)) {
+          segments.push({ phone, start: +(startF * stride).toFixed(3), end: +(f * stride).toFixed(3) });
+        }
       }
       prev = id; startF = f;
     }
@@ -92,7 +108,10 @@ export async function transcribePhones(input: IpaInput): Promise<IpaResult> {
   const { processor, tokenizer, model } = await getModel();
   let audio: Float32Array;
   try { audio = wavToFloat32(input.wav); }
-  catch (err) { if (err instanceof IpaUnavailableError) throw err; throw new IpaUnavailableError('wav parse failed'); }
+  catch (err) {
+    if (err instanceof IpaBadInputError || err instanceof IpaUnavailableError) throw err;
+    throw new IpaBadInputError('wav parse failed');
+  }
   try {
     const inputs = await processor(audio);
     const out = await model(inputs);

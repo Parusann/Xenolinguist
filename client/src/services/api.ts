@@ -1,3 +1,5 @@
+import type { AIMessage } from 'shared/types'
+
 const BASE = '/api'
 
 export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
@@ -13,15 +15,23 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
 }
 
 export async function streamAI(
-  messages: { role: string; content: string }[],
-  options: { system?: string; model?: string },
+  messages: AIMessage[],
+  options: { system?: string; model?: string; signal?: AbortSignal },
   onToken: (token: string) => void,
 ): Promise<void> {
+  const { signal, ...opts } = options
   const res = await fetch(`${BASE}/ai/stream`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages, ...options }),
+    body: JSON.stringify({ messages, ...opts }),
+    signal,
   })
+
+  // Surface a non-2xx (e.g. a 400 validation error) instead of trying to read an error body as a stream.
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }))
+    throw new Error(err.error || `AI request failed (${res.status})`)
+  }
 
   const reader = res.body?.getReader()
   if (!reader) throw new Error('No response stream')
@@ -42,11 +52,17 @@ export async function streamAI(
       if (!trimmed.startsWith('data: ')) continue
       const data = trimmed.slice(6)
       if (data === '[DONE]') return
+      // Only JSON.parse is allowed to fail silently (partial/malformed frame).
+      // A server-emitted { error } must propagate — keep it OUT of this guard,
+      // otherwise real backend errors (Ollama down, model missing) vanish.
+      let parsed: { error?: string; token?: string }
       try {
-        const parsed = JSON.parse(data)
-        if (parsed.error) throw new Error(parsed.error)
-        if (parsed.token) onToken(parsed.token)
-      } catch { /* skip malformed */ }
+        parsed = JSON.parse(data)
+      } catch {
+        continue
+      }
+      if (parsed.error) throw new Error(parsed.error)
+      if (parsed.token) onToken(parsed.token)
     }
   }
 }

@@ -32,21 +32,29 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
 
   // Split alien text into words and look up each in the dictionary
   const tokens: TokenData[] = sample.alien_text.split(/\s+/).filter(Boolean).map(word => {
-    const entry = dictionary.find(
-      d => d.alien_word.toLowerCase() === word.toLowerCase()
-    ) ?? null
+    // Strip attached punctuation for the lookup (display keeps the original token) so e.g.
+    // "krash." still matches the dictionary entry "krash".
+    const clean = word.toLowerCase().replace(/[^a-zà-ɏ'-]/g, '')
+    const entry = dictionary.find(d => d.alien_word.toLowerCase() === clean) ?? null
     return { word, entry }
   })
 
-  // Close popover on outside click
+  // Close popover on outside click or Escape.
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
         setPopover(null)
       }
     }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setPopover(null)
+    }
     document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('keydown', handleKey)
+    }
   }, [])
 
   const handleTokenClick = (index: number) => {

@@ -63,3 +63,32 @@ export function createDefaultProfile(): Omit<LanguageProfile, 'id' | 'created_at
     audio_clips: [],
   };
 }
+
+/** Whitelist the known LanguageProfile data fields from arbitrary input (a request body or a
+ *  previously-saved file), dropping unknown keys and coercing each field to a safe shape.
+ *  Excludes id/created_at/updated_at, which the store manages. */
+export function pickProfileData(
+  input: Partial<LanguageProfile>,
+): Omit<LanguageProfile, 'id' | 'created_at' | 'updated_at'> {
+  const d = createDefaultProfile();
+  const ns = input.number_system;
+  return {
+    name: typeof input.name === 'string' ? input.name : d.name,
+    description: typeof input.description === 'string' ? input.description : d.description,
+    phonetic_notes: typeof input.phonetic_notes === 'string' ? input.phonetic_notes : d.phonetic_notes,
+    is_sandbox: typeof input.is_sandbox === 'boolean' ? input.is_sandbox : d.is_sandbox,
+    ...(input.sandbox_difficulty ? { sandbox_difficulty: input.sandbox_difficulty } : {}),
+    dictionary: Array.isArray(input.dictionary) ? input.dictionary : d.dictionary,
+    grammar_rules: Array.isArray(input.grammar_rules) ? input.grammar_rules : d.grammar_rules,
+    number_system:
+      ns && typeof ns === 'object'
+        ? {
+            base: typeof ns.base === 'number' ? ns.base : null,
+            mappings: ns.mappings && typeof ns.mappings === 'object' ? ns.mappings : {},
+            operators: ns.operators && typeof ns.operators === 'object' ? ns.operators : {},
+          }
+        : d.number_system,
+    samples: Array.isArray(input.samples) ? input.samples : d.samples,
+    audio_clips: Array.isArray(input.audio_clips) ? input.audio_clips : d.audio_clips,
+  };
+}

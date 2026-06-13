@@ -4,6 +4,7 @@ import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
 import { useAutoSuggest } from '@/hooks/useAutoSuggest'
 import { useUndo } from '@/stores/undo-context'
+import { useSessionLog } from '@/stores/session-log-context'
 import { SOURCE_PRESETS } from 'shared/constants'
 import { formatDictionaryForPrompt, formatSamplesForPrompt } from 'shared/prompts'
 import { AudioRecorder } from '@/components/audio/AudioRecorder'
@@ -14,11 +15,12 @@ import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMe
 import type { Sample, SttSegment, IpaSegment } from 'shared/types'
 
 export function SampleInput() {
-  const { profile, addSample, removeSample, addAudioClip, addDictionaryEntry, updateSample } = useProfile()
+  const { profile, addSample, removeSample, addAudioClip, removeAudioClip, addDictionaryEntry, updateSample } = useProfile()
   const { runTask, loading, streamedText } = useAI()
   const { connected } = useOllama()
   const { suggestForSample } = useAutoSuggest()
   const { pushAction } = useUndo()
+  const { addEntry } = useSessionLog()
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; sample: Sample } | null>(null)
   const [autoSuggestion, setAutoSuggestion] = useState('')
@@ -32,7 +34,7 @@ export function SampleInput() {
   const [filter, setFilter] = useState<'all' | 'decoded' | 'audio'>('all')
   const [search, setSearch] = useState('')
   const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string; sttSegments?: SttSegment[]; mode?: 'transcription' | 'phonetic-guess'; ipa?: string; ipaSegments?: IpaSegment[] } | null>(null)
-  const [pendingSegments, setPendingSegments] = useState<{ id: string; start: number; end: number; label: string }[]>([])
+  const [pendingSegments, setPendingSegments] = useState<{ id: string; start: number; end: number; label: string; dictionary_entry_id?: string | null }[]>([])
   const [reTranscribing, setReTranscribing] = useState<string | null>(null)
 
   const samples = profile?.samples || []
@@ -41,17 +43,26 @@ export function SampleInput() {
     if (!alienText.trim() && !pendingAudio) return
     let audioId: string | null = null
     if (pendingAudio) {
-      const clipId = addAudioClip({ filename: '', duration: pendingAudio.duration, waveform: pendingAudio.peaks, segments: pendingSegments.map((s) => ({ id: s.id, start: s.start, end: s.end, label: s.label, dictionary_entry_id: null })) })
-      audioId = clipId
-      const arrayBuf = await pendingAudio.blob.arrayBuffer()
-      const base64 = btoa(new Uint8Array(arrayBuf).reduce((data, byte) => data + String.fromCharCode(byte), ''))
-      fetch('/api/audio/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: clipId, data: base64, mimeType: pendingAudio.blob.type }) }).catch(console.error)
+      // Optimistically create the clip, then upload. If the upload fails, roll the clip back so
+      // we never persist an audio_clip pointing at a file that was never written.
+      const clipId = addAudioClip({ filename: '', duration: pendingAudio.duration, waveform: pendingAudio.peaks, segments: pendingSegments.map((s) => ({ id: s.id, start: s.start, end: s.end, label: s.label, dictionary_entry_id: s.dictionary_entry_id ?? null })) })
+      try {
+        const arrayBuf = await pendingAudio.blob.arrayBuffer()
+        const base64 = btoa(new Uint8Array(arrayBuf).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+        const res = await fetch('/api/audio/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: clipId, data: base64, mimeType: pendingAudio.blob.type }) })
+        if (!res.ok) throw new Error(`upload ${res.status}`)
+        audioId = clipId
+      } catch {
+        removeAudioClip(clipId)
+        addEntry('error', 'Failed to save audio — sample added without it')
+      }
     }
     const sampleText = alienText.trim() || '[audio sample]'
     addSample({ alien_text: sampleText, english_translation: parallelMode && translation.trim() ? translation.trim() : null, source: pendingAudio ? 'Audio recording' : source, phonetic_notes: phoneticNotes.trim(), decoded: false, audio_id: audioId, ipa: pendingAudio?.ipa ?? null })
     if (profile && profile.dictionary.length > 0 && sampleText !== '[audio sample]') {
       suggestForSample(sampleText, profile.dictionary, setAutoSuggestion)
     }
+    if (pendingAudio) URL.revokeObjectURL(pendingAudio.blobUrl)
     setAlienText('')
     setTranslation('')
     setPhoneticNotes('')
@@ -62,7 +73,7 @@ export function SampleInput() {
 
   const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess', ipa?: string, ipaSegments?: IpaSegment[]) => {
     const blobUrl = URL.createObjectURL(blob)
-    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode, ipa, ipaSegments })
+    setPendingAudio((prev) => { if (prev) URL.revokeObjectURL(prev.blobUrl); return { blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode, ipa, ipaSegments } })
     // Seed segmenter from IPA phone segments when present, else whisper word segments (seconds).
     const seedSource = (ipaSegments?.length
       ? ipaSegments.map((s, i) => ({ id: `ipa-${i}`, start: s.start, end: s.end, label: s.phone }))
@@ -75,15 +86,22 @@ export function SampleInput() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    const arrayBuf = await file.arrayBuffer()
     const audioCtx = new AudioContext()
-    const decoded = await audioCtx.decodeAudioData(arrayBuf)
-    const { extractPeaks } = await import('@/components/audio/WaveformCanvas')
-    const peaks = extractPeaks(decoded, 200)
-    const blob = new Blob([arrayBuf], { type: file.type })
-    setPendingAudio({ blob, peaks, duration: decoded.duration, blobUrl: URL.createObjectURL(blob) })
-    setSource('Audio recording')
-    audioCtx.close()
+    try {
+      const arrayBuf = await file.arrayBuffer()
+      const decoded = await audioCtx.decodeAudioData(arrayBuf)
+      const { extractPeaks } = await import('@/components/audio/WaveformCanvas')
+      const peaks = extractPeaks(decoded, 200)
+      const blob = new Blob([arrayBuf], { type: file.type })
+      const blobUrl = URL.createObjectURL(blob)
+      setPendingAudio((prev) => { if (prev) URL.revokeObjectURL(prev.blobUrl); return { blob, peaks, duration: decoded.duration, blobUrl } })
+      setPendingSegments([]) // an uploaded file has no segments — don't inherit the last recording's
+      setSource('Audio recording')
+    } catch {
+      addEntry('error', 'Could not read that audio file')
+    } finally {
+      audioCtx.close() // always release the AudioContext, even if decoding throws
+    }
   }
 
   const handleAnalyze = async () => {
@@ -105,14 +123,18 @@ export function SampleInput() {
     setReTranscribing(sample.id)
     try {
       const res = await fetch(`/api/audio/${sample.audio_id}`)
-      if (!res.ok) return
+      if (!res.ok) { addEntry('warning', 'Could not load the stored audio to re-transcribe'); return }
       const blob = await res.blob()
       const { transcribe } = await import('@/services/stt')
       const stt = await transcribe(blob)
-      if (stt) {
-        const label = stt.mode === 'transcription' ? 'Transcript' : 'Phonetic guess'
-        updateSample(sample.id, { phonetic_notes: `${label}: ${stt.text}` })
-      }
+      if (!stt) { addEntry('warning', 'Speech-to-text is unavailable on this platform'); return }
+      const label = stt.mode === 'transcription' ? 'Transcript' : 'Phonetic guess'
+      const line = `${label}: ${stt.text}`
+      const prev = sample.phonetic_notes?.trim() ?? ''
+      // Replace a prior auto-generated line, but never clobber notes the user typed — append instead.
+      const isAuto = /^(Transcript|Phonetic guess):/.test(prev)
+      updateSample(sample.id, { phonetic_notes: !prev || isAuto ? line : `${prev}\n${line}` })
+      addEntry('info', `Re-transcribed sample (${stt.mode})`)
     } finally {
       setReTranscribing(null)
     }
@@ -122,7 +144,8 @@ export function SampleInput() {
     removeSample(sample.id)
     pushAction({
       description: `Removed sample '${sample.alien_text.slice(0, 30)}${sample.alien_text.length > 30 ? '…' : ''}'`,
-      undo: () => addSample({ alien_text: sample.alien_text, english_translation: sample.english_translation, source: sample.source, phonetic_notes: sample.phonetic_notes, decoded: sample.decoded, audio_id: sample.audio_id, ipa: sample.ipa }),
+      // The clip + its file are removed with the sample, so undo restores the text without audio.
+      undo: () => addSample({ alien_text: sample.alien_text, english_translation: sample.english_translation, source: sample.source, phonetic_notes: sample.phonetic_notes, decoded: sample.decoded, audio_id: null, ipa: sample.ipa }),
     })
   }
 
@@ -202,7 +225,7 @@ export function SampleInput() {
             <div className="glass-inner" style={{ padding: 12, marginTop: 12 }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
                 <span className="font-mono" style={{ fontSize: 10, color: 'var(--accent)' }}>Recorded · {pendingAudio.duration.toFixed(1)}s{pendingAudio.detectedLanguage ? ` · ${pendingAudio.detectedLanguage}` : ''}</span>
-                <button onClick={() => { URL.revokeObjectURL(pendingAudio.blobUrl); setPendingAudio(null) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
+                <button onClick={() => { URL.revokeObjectURL(pendingAudio.blobUrl); setPendingAudio(null); setPendingSegments([]) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
               </div>
               <AudioPlayer src={pendingAudio.blobUrl} peaks={pendingAudio.peaks} duration={pendingAudio.duration} compact />
               {(() => {
@@ -241,7 +264,9 @@ export function SampleInput() {
                           style={{ color: known ? 'var(--accent)' : undefined }}
                           onClick={() => {
                             if (known || !s.label.trim()) return
-                            addDictionaryEntry({ alien_word: s.label, english_meaning: '', part_of_speech: 'unknown', confidence: 50, context: 'From audio transcript', examples: [], notes: '' })
+                            const entryId = addDictionaryEntry({ alien_word: s.label, english_meaning: '', part_of_speech: 'unknown', confidence: 50, context: 'From audio transcript', examples: [], notes: '' })
+                            // Persist the link onto the saved AudioSegment when the sample is added.
+                            setPendingSegments((prev) => prev.map((seg) => seg.id === s.id ? { ...seg, dictionary_entry_id: entryId } : seg))
                           }}
                         >
                           {known ? `✓ ${s.label}` : `+ ${s.label}`}

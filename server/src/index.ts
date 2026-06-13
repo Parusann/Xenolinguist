@@ -10,7 +10,7 @@ export interface ServerHandle {
 
 export function startServer(): Promise<ServerHandle> {
   const app = createApp();
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const server = app.listen(port(), '127.0.0.1', () => {
       const addr = server.address() as AddressInfo;
       console.log(`[server] Xenolinguist API on http://127.0.0.1:${addr.port}`);
@@ -19,6 +19,8 @@ export function startServer(): Promise<ServerHandle> {
         close: () => new Promise((res) => server.close(() => res())),
       });
     });
+    // Without this, a bind failure (EADDRINUSE etc.) would leave the promise pending forever.
+    server.on('error', reject);
   });
 }
 
