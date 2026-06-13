@@ -95,6 +95,7 @@ Create `client/src/components/marketing/DownloadSection.test.tsx`:
 
 ```tsx
 import { describe, it, expect, afterEach } from 'vitest'
+import React from 'react' // test-file JSX uses the classic runtime here (repo convention)
 import { render, screen, cleanup } from '@testing-library/react'
 import { DownloadSection } from './DownloadSection'
 
