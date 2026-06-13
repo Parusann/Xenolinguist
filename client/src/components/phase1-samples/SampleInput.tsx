@@ -88,6 +88,12 @@ export function SampleInput() {
     setAnalysisResult(await runTask('patternAnalysis', prompt))
   }
 
+  const handlePhoneticAnalysis = async () => {
+    if (!profile) return
+    const prompt = `Samples:\n${formatSamplesForPrompt(profile.samples)}`
+    setAnalysisResult(await runTask('phoneticAnalysis', prompt))
+  }
+
   const getAudioForSample = (audioId: string | null) => (!audioId || !profile ? null : (profile.audio_clips || []).find((c) => c.id === audioId) || null)
 
   const handleReTranscribe = async (sample: Sample) => {
@@ -183,6 +189,7 @@ export function SampleInput() {
             </label>
             <div className="flex-1" />
             <button className="btn sm ghost" onClick={handleAnalyze} disabled={!connected || loading || !samples.length}>{loading ? 'Analyzing…' : '⌖ AI Auto-decode'}</button>
+            <button className="btn sm ghost" onClick={handlePhoneticAnalysis} disabled={!connected || loading || !samples.length}>≈ Phonetic analysis</button>
           </div>
 
           {showRecorder && <div style={{ marginTop: 12 }}><AudioRecorder onRecordingComplete={handleRecordingComplete} /></div>}

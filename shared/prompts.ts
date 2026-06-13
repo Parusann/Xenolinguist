@@ -46,6 +46,14 @@ Format your response with:
 - BASE: Your hypothesis with confidence
 - PATTERNS: Observed patterns in number formation
 - PREDICTIONS: Predicted words for unmapped numbers with confidence`,
+
+  phoneticAnalysis: `You are a phonetician analyzing an unknown language from its IPA phonetic transcriptions. Given the samples (with [ipa: …] phone strings), identify the phoneme inventory, recurring phone clusters and syllable shapes, and propose sound-to-meaning hypotheses where phones recur with consistent context. Be rigorous; separate observation from speculation and rate confidence 0-100.
+
+Format:
+- PHONEME INVENTORY: distinct phones observed
+- CLUSTERS / SYLLABLES: recurring patterns
+- HYPOTHESES: phone-pattern -> possible meaning (confidence%)
+- NOTES: caveats (IPA is an approximation from audio)`,
 } as const;
 
 export function formatDictionaryForPrompt(dictionary: { alien_word: string; english_meaning: string; confidence: number }[]): string {
@@ -62,10 +70,11 @@ export function formatGrammarForPrompt(rules: { rule: string; confidence: number
     .join('\n');
 }
 
-export function formatSamplesForPrompt(samples: { alien_text: string; english_translation: string | null }[]): string {
+export function formatSamplesForPrompt(samples: { alien_text: string; english_translation: string | null; ipa?: string | null }[]): string {
   return samples
-    .map(s => s.english_translation
-      ? `"${s.alien_text}" = "${s.english_translation}"`
-      : `"${s.alien_text}"`)
+    .map(s => {
+      const base = s.english_translation ? `"${s.alien_text}" = "${s.english_translation}"` : `"${s.alien_text}"`;
+      return s.ipa ? `${base} [ipa: ${s.ipa}]` : base;
+    })
     .join('\n');
 }

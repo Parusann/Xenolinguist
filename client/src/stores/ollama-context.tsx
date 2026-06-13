@@ -10,6 +10,7 @@ const TASK_WEIGHTS: Record<AITask, ModelWeight> = {
   translation: 'heavy',
   conlangGeneration: 'heavy',
   numberAnalysis: 'heavy',
+  phoneticAnalysis: 'heavy',
   quickSuggest: 'light',
 }
 
