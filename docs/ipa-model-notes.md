@@ -60,13 +60,17 @@ build (`npm run bundle`) succeeds — in dev the service loads it from `node_mod
 app it's absent → `/api/ipa` returns 503 and IPA degrades gracefully. The **engine is proven**:
 `node scripts/verify-ipa.mjs` (against the cached model) transcribes the fixture to phones.
 
-**Remaining (to make IPA actually run in the PACKAGED app — a deliberate follow-up):**
-1. **Vendor the model:** quantize the 1.2 GB fp32 `model.onnx` to int8 (~300 MB) per the command
-   above, copy config/tokenizer/preprocessor into `vendor/ipa-model/wav2vec2-phoneme/`, and commit
-   (it's `binary` in `.gitattributes`). Repo-size tradeoff — consider download-on-first-run instead.
-2. **Ship the runtime deps:** because `@huggingface/transformers` (+ `onnxruntime-node` `.node`
-   files) is external, the packaged app must include those `node_modules` and `asarUnpack` the
-   native files (electron-builder `files`/`asarUnpack`), or switch Transformers.js to the WASM
-   backend (`onnxruntime-web`) and ship the `.wasm`. Verify with a packaged `--dir` build + a POST
-   of a 16 kHz WAV to `/api/ipa`.
-Until both land, packaged IPA is 503 (graceful). Everything else is functional in dev.
+**Packaged IPA — DONE + verified.**
+1. **Model vendored:** the int8-quantized `model.onnx` (303 MB) + config/tokenizer live in
+   `vendor/ipa-model/wav2vec2-phoneme/`. The config/tokenizer files ARE committed; the 303 MB
+   `model.onnx` is **gitignored** (exceeds GitHub's 100 MB file limit) and regenerated locally via
+   the quantize command above (a build artifact). To put the weights in the repo, use **Git LFS**
+   (`git lfs track 'vendor/ipa-model/**/*.onnx'`; ~303 MB fits the free 1 GB tier) or
+   download-on-first-run. The local + packaged builds already have it on disk.
+2. **Runtime deps shipped:** `@huggingface/transformers` (+ `@huggingface/jinja`,
+   `@huggingface/tokenizers`, `onnxruntime-node`, `onnxruntime-common`, `onnxruntime-web`) are
+   copied to `resources/server-deps/node_modules` via `extraResources` (plain files, outside the
+   asar so the native `.node` loads). `electron/main.ts` sets `NODE_PATH` to that dir for the
+   forked server, so the external `@huggingface/transformers` resolves.
+3. **Verified:** a packaged `--dir` build + `POST /api/ipa` (16 kHz WAV) returns phones — confirmed
+   end-to-end in the running app (server port discovered via the listening socket).

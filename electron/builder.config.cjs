@@ -10,6 +10,15 @@ module.exports = {
     { from: 'vendor/espeak-ng/win', to: 'espeak-ng' },
     { from: 'vendor/whisper/win', to: 'whisper' },
     { from: 'vendor/ipa-model', to: 'ipa-model' },
+    // Runtime deps for the IPA phoneme service (external in the server bundle). Shipped as
+    // plain files (not in the asar) so the forked server can require them + load native .node;
+    // main.ts points NODE_PATH at server-deps/node_modules.
+    { from: 'node_modules/@huggingface/transformers', to: 'server-deps/node_modules/@huggingface/transformers' },
+    { from: 'node_modules/@huggingface/jinja', to: 'server-deps/node_modules/@huggingface/jinja' },
+    { from: 'node_modules/@huggingface/tokenizers', to: 'server-deps/node_modules/@huggingface/tokenizers' },
+    { from: 'node_modules/onnxruntime-node', to: 'server-deps/node_modules/onnxruntime-node' },
+    { from: 'node_modules/onnxruntime-common', to: 'server-deps/node_modules/onnxruntime-common' },
+    { from: 'node_modules/onnxruntime-web', to: 'server-deps/node_modules/onnxruntime-web' },
   ],
   asar: true,
   // The forked server bundle must be a real file on disk for utilityProcess.fork.
