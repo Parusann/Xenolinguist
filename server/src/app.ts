@@ -7,6 +7,7 @@ import { aiRouter } from './routes/ai.js';
 import audioRouter from './routes/audio.js';
 import { ttsRouter } from './routes/tts.js';
 import { sttRouter } from './routes/stt.js';
+import { ipaRouter } from './routes/ipa.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { clientDist } from './config.js';
 
@@ -27,6 +28,7 @@ export function createApp() {
   app.use('/api/audio', audioRouter);
   app.use('/api/tts', ttsRouter);
   app.use('/api/stt', sttRouter);
+  app.use('/api/ipa', ipaRouter);
 
   // Unknown /api routes get a JSON 404 (never the SPA fallback).
   app.use('/api', (_req, res) => {
