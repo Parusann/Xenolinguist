@@ -29,12 +29,31 @@ if (!existsSync(path.join(MODEL_DIR, MODEL_ID))) {
   console.error('MISSING model dir:', path.join(MODEL_DIR, MODEL_ID));
   process.exit(1);
 }
-const { pipeline, env } = await import('@huggingface/transformers');
-env.allowRemoteModels = false;
-env.localModelPath = MODEL_DIR;
-const pipe = await pipeline('automatic-speech-recognition', MODEL_ID);
-const out = await pipe(wavToFloat32(readFileSync(WAV)));
-const phones = (out?.text ?? '').trim();
+// Mirror the service: model-level CTC so we also get per-phone timings (the pipeline omits them
+// for this delimiter-less phoneme model).
+const tf = await import('@huggingface/transformers');
+tf.env.allowRemoteModels = false;
+tf.env.localModelPath = MODEL_DIR;
+const processor = await tf.AutoProcessor.from_pretrained(MODEL_ID);
+const tokenizer = await tf.AutoTokenizer.from_pretrained(MODEL_ID);
+const model = await tf.AutoModelForCTC.from_pretrained(MODEL_ID);
+const inputs = await processor(wavToFloat32(readFileSync(WAV)));
+const out = await model(inputs);
+const [, frames, vocab] = out.logits.dims;
+const data = out.logits.data;
+const pad = tokenizer.pad_token_id ?? 0;
+const segments = [];
+let prev = -1, startF = 0;
+for (let f = 0; f <= frames; f++) {
+  let id = -2;
+  if (f < frames) { let best = 0, bv = -Infinity; for (let v = 0; v < vocab; v++) { const val = data[f * vocab + v]; if (val > bv) { bv = val; best = v; } } id = best; }
+  if (id !== prev) {
+    if (prev !== -1 && prev !== pad) { const p = tokenizer.decode([prev]).trim(); if (p) segments.push({ phone: p, start: +(startF * 0.02).toFixed(3), end: +(f * 0.02).toFixed(3) }); }
+    prev = id; startF = f;
+  }
+}
+const phones = segments.map((s) => s.phone).join(' ');
 console.log('phones:', phones);
+console.log('segments:', segments.length, '| first 8:', JSON.stringify(segments.slice(0, 8)));
 if (!phones) { console.error('FAIL: empty phonetic output'); process.exit(1); }
-console.log('OK: bundled phoneme model produced a phonetic transcription.');
+console.log('OK: bundled phoneme model produced a time-aligned phonetic transcription.');
