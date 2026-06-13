@@ -46,4 +46,27 @@ The service (`server/src/services/ipa-phones.ts`), `scripts/verify-ipa.mjs`, and
 
 ## Verify
 `node scripts/verify-ipa.mjs` (uses `vendor/ipa-model/wav2vec2-phoneme`). For local testing against
-the un-quantized cache: `IPA_MODEL_DIR=vendor/ipa-model-cache node -e "..."` with the full HF id.
+the un-quantized cache:
+`IPA_MODEL_DIR=vendor/ipa-model-cache IPA_MODEL_ID=aidankmcl/wav2vec2-large-lv60_phoneme-timit_english_timit-4k_simplified node scripts/verify-ipa.mjs`
+
+## Status (what's done vs. remaining)
+
+**Done + merged-ready (branch `phonetic/ipa`):** the full pipeline — `ipaModelDir` config, the
+`ipa-phones` Transformers.js service + `IpaUnavailableError`, `POST /api/ipa`, the client `ipa`
+service, parallel capture wiring + IPA chip, AI feeding (`formatSamplesForPrompt` + `phoneticAnalysis`
+task + button), decode-view display, `Sample.ipa`, Electron `IPA_MODEL_DIR` env + `extraResources` +
+`.gitattributes`. `scripts/bundle.mjs` marks `@huggingface/transformers` **external** so the desktop
+build (`npm run bundle`) succeeds — in dev the service loads it from `node_modules`; in the packaged
+app it's absent → `/api/ipa` returns 503 and IPA degrades gracefully. The **engine is proven**:
+`node scripts/verify-ipa.mjs` (against the cached model) transcribes the fixture to phones.
+
+**Remaining (to make IPA actually run in the PACKAGED app — a deliberate follow-up):**
+1. **Vendor the model:** quantize the 1.2 GB fp32 `model.onnx` to int8 (~300 MB) per the command
+   above, copy config/tokenizer/preprocessor into `vendor/ipa-model/wav2vec2-phoneme/`, and commit
+   (it's `binary` in `.gitattributes`). Repo-size tradeoff — consider download-on-first-run instead.
+2. **Ship the runtime deps:** because `@huggingface/transformers` (+ `onnxruntime-node` `.node`
+   files) is external, the packaged app must include those `node_modules` and `asarUnpack` the
+   native files (electron-builder `files`/`asarUnpack`), or switch Transformers.js to the WASM
+   backend (`onnxruntime-web`) and ship the `.wasm`. Verify with a packaged `--dir` build + a POST
+   of a 16 kHz WAV to `/api/ipa`.
+Until both land, packaged IPA is 503 (graceful). Everything else is functional in dev.
