@@ -7,3 +7,5 @@ server/data/profiles/
 Thumbs.db
 electron/dist/
 release/
+vendor/ipa-model-cache/
+_ipa_spike.mjs
