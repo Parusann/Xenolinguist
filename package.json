@@ -2,12 +2,28 @@
   "name": "xenolinguist",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["client", "server", "shared"],
+  "main": "electron/dist/main.cjs",
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
   "scripts": {
     "dev": "concurrently -n client,server -c cyan,green \"npm run dev -w client\" \"npm run dev -w server\"",
-    "build": "npm run build -w client && npm run build -w server"
+    "build": "npm run build -w client && npm run build -w server",
+    "bundle": "node scripts/bundle.mjs",
+    "build:desktop": "npm run build -w client && npm run bundle",
+    "electron:dev": "concurrently -k -n vite,server,electron -c cyan,green,magenta \"npm run dev -w client\" \"npm run dev -w server\" \"node scripts/wait-and-launch.mjs\"",
+    "dist": "npm run build:desktop && electron-builder --config electron/builder.config.cjs"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "concurrently": "^9.1.0",
+    "electron": "^42.3.3",
+    "electron-builder": "^26.8.1",
+    "esbuild": "^0.28.0"
+  },
+  "dependencies": {
+    "electron-ollama": "^0.1.25",
+    "electron-updater": "^6.8.3"
   }
 }

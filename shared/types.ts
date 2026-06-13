@@ -115,3 +115,19 @@ export interface OllamaStatus {
   connected: boolean;
   models: string[];
 }
+
+export interface SttSegment {
+  start: number;   // seconds
+  end: number;     // seconds
+  text: string;
+}
+
+export type SttMode = 'transcription' | 'phonetic-guess';
+
+export interface SttResult {
+  language: string;     // ISO code from whisper, e.g. "en"
+  languageProb: number; // 0-1; 0 when unknown (not emitted)
+  text: string;
+  segments: SttSegment[];
+  mode: SttMode;
+}
