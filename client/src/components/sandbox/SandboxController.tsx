@@ -3,9 +3,25 @@ import { useProfile } from '@/stores/profile-context'
 import { SpeakButton } from '@/components/audio/SpeakButton'
 import { useSessionLog } from '@/stores/session-log-context'
 import type { ConlangData } from './SandboxSetup'
+import type { PartOfSpeech } from 'shared/types'
+
+/** Map the model's free-form part-of-speech tag onto the PartOfSpeech enum (it emits things
+ *  like "adj"/"pron"/"conj"); unknown tags fall back to 'unknown' rather than being cast through. */
+function normalizePos(pos: string): PartOfSpeech {
+  const map: Record<string, PartOfSpeech> = {
+    noun: 'noun', n: 'noun', verb: 'verb', v: 'verb',
+    adjective: 'adjective', adj: 'adjective', pronoun: 'pronoun', pron: 'pronoun',
+    number: 'number', num: 'number', numeral: 'number',
+    connector: 'connector', conn: 'connector', conjunction: 'connector', conj: 'connector',
+    particle: 'particle', part: 'particle',
+  }
+  return map[pos.toLowerCase().trim()] ?? 'unknown'
+}
 
 interface SandboxControllerProps {
   conlang: ConlangData
+  /** Return to setup to generate a fresh language (used by "Play Again"). */
+  onPlayAgain?: () => void
 }
 
 type TutorialStep = 1 | 2 | 3 | 4
@@ -30,8 +46,8 @@ interface Stats {
   hintsUsed: number
 }
 
-export function SandboxController({ conlang }: SandboxControllerProps) {
-  const { addDictionaryEntry, addSample, addGrammarRule } = useProfile()
+export function SandboxController({ conlang, onPlayAgain }: SandboxControllerProps) {
+  const { profile, updateProfile, addDictionaryEntry, addSample, addGrammarRule } = useProfile()
   const { addEntry } = useSessionLog()
 
   // ---- Tutorial step ----
@@ -110,18 +126,32 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
   const canProceedToStep2 = correctNumbers >= 3
   const canProceedToStep3 = correctVocab >= 3
   const canProceedToStep4 = decodedSentences >= 1
-  const canFinish = totalRulesRevealed === conlang.rules.length
+  const canFinish = conlang.rules.length > 0 && totalRulesRevealed === conlang.rules.length
 
   // ---- Auto-add to dictionary ----
   const handleAddToDict = (alien: string, english: string, pos: string) => {
     addDictionaryEntry({
       alien_word: alien,
       english_meaning: english,
-      part_of_speech: pos as any,
+      part_of_speech: normalizePos(pos),
       confidence: 100,
       context: 'Sandbox mode',
       examples: [],
       notes: 'Decoded in sandbox',
+    })
+  }
+
+  /** Also record a decoded number in the profile's number system so the Dashboard's Numbers
+   *  metric reflects sandbox progress (mappings are number → alien word). */
+  const addNumberMapping = (word: string, num: string) => {
+    const n = Number(num)
+    if (!profile || !Number.isFinite(n)) return
+    updateProfile({
+      number_system: {
+        ...profile.number_system,
+        base: profile.number_system.base ?? conlang.number_base,
+        mappings: { ...profile.number_system.mappings, [n]: word },
+      },
     })
   }
 
@@ -192,6 +222,7 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
       }))
       addEntry('success', `Correct! "${word}" = ${correctNum}`)
       handleAddToDict(word, correctNum, 'number')
+      addNumberMapping(word, correctNum)
     } else {
       setNumberStates(prev => ({
         ...prev,
@@ -229,6 +260,7 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
     }))
     addEntry('info', `Revealed: "${word}" = ${num}`)
     handleAddToDict(word, num, 'number')
+    addNumberMapping(word, num)
   }
 
   // ---- Vocab handlers ----
@@ -383,6 +415,11 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
           ...prev,
           [key]: { ...prev[key], status: isCorrect ? 'correct' : 'wrong' },
         }))
+      } else {
+        // Word isn't in the decoded dictionary, vocab, or numbers yet — give feedback rather than
+        // silently ignoring the guess.
+        setSentenceWordStates(prev => ({ ...prev, [key]: { ...prev[key], status: 'wrong' } }))
+        addEntry('warning', `"${alienWord}" hasn't been decoded yet — map it first.`)
       }
     }
   }
@@ -422,7 +459,9 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
   }
 
   const handlePlayAgain = () => {
-    window.location.reload()
+    // Prefer an in-app reset (back to setup); fall back to a reload only if no handler is wired.
+    if (onPlayAgain) onPlayAgain()
+    else window.location.reload()
   }
 
   // Tokenize sentence into words
@@ -879,7 +918,7 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
                   {/* Sentence with word highlighting */}
                   <div className="mb-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <SpeakButton text={s.alien} phonemes={conlang.phoneme_set?.join(' ')} title="Hear sentence" />
+                      <SpeakButton text={s.alien} title="Hear sentence" />
                     </div>
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {words.map((word, wi) => {

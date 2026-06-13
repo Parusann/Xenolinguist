@@ -69,6 +69,10 @@ export interface LanguageProfile {
   audio_clips: AudioClip[];
 }
 
+/** Lightweight profile listing entry: the profiles.json index rows and the
+ *  GET /api/profiles response shape. */
+export type ProfileIndex = Pick<LanguageProfile, 'id' | 'name' | 'created_at' | 'updated_at'>;
+
 export interface SessionLogEntry {
   id: string;
   timestamp: string;
@@ -99,14 +103,6 @@ export type AITask =
   | 'quickSuggest'
   | 'numberAnalysis'
   | 'phoneticAnalysis';
-
-export interface AIRequest {
-  task: AITask;
-  messages: AIMessage[];
-  system?: string;
-  model?: string;
-  stream?: boolean;
-}
 
 export interface AIMessage {
   role: 'user' | 'assistant' | 'system';

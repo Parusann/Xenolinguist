@@ -30,13 +30,16 @@ export function AIChat({ onClose }: { onClose: () => void }) {
   const [input, setInput] = useState('')
   const [streaming, setStreaming] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const abortRef = useRef(false)
+  const abortRef = useRef<AbortController | null>(null)
 
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
   }, [])
 
   useEffect(() => { scrollToBottom() }, [messages, scrollToBottom])
+
+  // Abort any in-flight stream when the panel closes/unmounts so it doesn't keep running server-side.
+  useEffect(() => () => abortRef.current?.abort(), [])
 
   const buildSystemPrompt = useCallback((): string => {
     const parts: string[] = [SYSTEM_PROMPTS.patternAnalysis]
@@ -55,11 +58,12 @@ export function AIChat({ onClose }: { onClose: () => void }) {
     setMessages((prev) => [...prev, userMsg, assistantMsg])
     setInput('')
     setStreaming(true)
-    abortRef.current = false
+    const controller = new AbortController()
+    abortRef.current = controller
     const allMessages = [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }))
     try {
-      await streamAI(allMessages, { system: buildSystemPrompt(), model: selectedModel }, (token: string) => {
-        if (abortRef.current) return
+      await streamAI(allMessages, { system: buildSystemPrompt(), model: selectedModel, signal: controller.signal }, (token: string) => {
+        if (controller.signal.aborted) return
         setMessages((prev) => {
           const updated = [...prev]
           const last = updated[updated.length - 1]
@@ -68,7 +72,7 @@ export function AIChat({ onClose }: { onClose: () => void }) {
         })
       })
     } catch (err) {
-      if (!abortRef.current) {
+      if (!controller.signal.aborted) {
         setMessages((prev) => {
           const updated = [...prev]
           const last = updated[updated.length - 1]
@@ -78,6 +82,7 @@ export function AIChat({ onClose }: { onClose: () => void }) {
       }
     } finally {
       setStreaming(false)
+      if (abortRef.current === controller) abortRef.current = null
     }
   }, [streaming, connected, messages, buildSystemPrompt, selectedModel])
 

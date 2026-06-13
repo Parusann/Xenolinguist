@@ -7,8 +7,13 @@ import { autoUpdater } from 'electron-updater';
 const isDev = !app.isPackaged;
 const DEV_URL = 'http://localhost:5173';
 
+// Last-resort logging so a stray rejection/throw in the main process is recorded.
+process.on('unhandledRejection', (reason) => console.error('[main] unhandledRejection', reason));
+process.on('uncaughtException', (err) => console.error('[main] uncaughtException', err));
+
 let win: BrowserWindow | null = null;
 let serverProc: UtilityProcess | null = null;
+let serverPort: number | null = null;
 
 /** In production, fork the bundled server and resolve once it reports its port. */
 function startServerProcess(): Promise<number> {
@@ -47,11 +52,28 @@ function startServerProcess(): Promise<number> {
     serverProc.stdout?.on('data', (d) => console.log('[server]', d.toString().trim()));
     serverProc.stderr?.on('data', (d) => console.error('[server]', d.toString().trim()));
 
+    // Guarantee this promise always settles: a hung server (never posts ready/error,
+    // never exits) would otherwise leave createWindow awaiting forever → blank window.
+    let settled = false;
+    const settle = (fn: (v: unknown) => void, arg: unknown) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      fn(arg);
+    };
+    const timer = setTimeout(
+      () => settle(reject as (v: unknown) => void, new Error('server startup timed out after 30s')),
+      30_000,
+    );
+
     serverProc.on('message', (msg: { type?: string; port?: number; message?: string }) => {
-      if (msg?.type === 'server-ready' && msg.port) resolve(msg.port);
-      else if (msg?.type === 'server-error') reject(new Error(msg.message));
+      if (msg?.type === 'server-ready' && msg.port) settle(resolve as (v: unknown) => void, msg.port);
+      else if (msg?.type === 'server-error') settle(reject as (v: unknown) => void, new Error(msg.message));
     });
-    serverProc.on('exit', (code) => { if (code !== 0) reject(new Error(`server exited ${code}`)); });
+    // Any exit before 'server-ready' is a failure, even code 0 (clean exit pre-ready).
+    serverProc.on('exit', (code) =>
+      settle(reject as (v: unknown) => void, new Error(`server exited (${code ?? 'unknown'}) before ready`)),
+    );
   });
 }
 
@@ -71,9 +93,24 @@ async function createWindow() {
     await win.loadURL(DEV_URL);
     win.webContents.openDevTools({ mode: 'detach' });
   } else {
-    const port = await startServerProcess();
-    await win.loadURL(`http://127.0.0.1:${port}`);
-    autoUpdater.checkForUpdatesAndNotify().catch((e) => console.error('[update]', e));
+    try {
+      // Reuse the already-forked server on macOS re-activate instead of forking a second one.
+      const port = serverPort ?? await startServerProcess();
+      serverPort = port;
+      await win.loadURL(`http://127.0.0.1:${port}`);
+      autoUpdater.checkForUpdatesAndNotify().catch((e) => console.error('[update]', e));
+    } catch (err) {
+      // Surface startup failure instead of leaving the window blank forever.
+      console.error('[server] failed to start:', err);
+      await win.loadURL(
+        'data:text/html,' +
+          encodeURIComponent(
+            '<body style="background:#0a0a0a;color:#e0e0e0;font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center">' +
+              '<div><h2 style="font-weight:400">Xenolinguist failed to start</h2>' +
+              '<p style="color:#888">The local server did not start. Please restart the app.</p></div></body>',
+          ),
+      );
+    }
   }
 
   void (async () => {

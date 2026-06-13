@@ -75,6 +75,24 @@ export function OllamaProvider({ children }: { children: ReactNode }) {
     return () => clearInterval(interval)
   }, [refresh])
 
+  // In the packaged app, the Electron main process emits ollama lifecycle events via the
+  // preload bridge. Reflect them here (faster than waiting for the 30s poll).
+  useEffect(() => {
+    const xeno = (window as unknown as {
+      xeno?: {
+        onOllamaOffline?: (cb: () => void) => () => void
+        onOllamaPullProgress?: (cb: (d: unknown) => void) => () => void
+      }
+    }).xeno
+    if (!xeno) return
+    const offOffline = xeno.onOllamaOffline?.(() => setStatus({ connected: false, models: [] }))
+    const offPull = xeno.onOllamaPullProgress?.((d) => {
+      const s = (d as { status?: string } | null)?.status
+      if (s && /success|complete/i.test(s)) refresh() // model finished downloading → re-check
+    })
+    return () => { offOffline?.(); offPull?.() }
+  }, [refresh])
+
   const getModelForTask = useCallback((task: AITask): string => {
     const weight = TASK_WEIGHTS[task]
     if (weight === 'light' && lightModel && lightModel !== selectedModel) {

@@ -23,7 +23,6 @@
     "esbuild": "^0.28.0"
   },
   "dependencies": {
-    "electron-ollama": "^0.1.25",
     "electron-updater": "^6.8.3"
   }
 }

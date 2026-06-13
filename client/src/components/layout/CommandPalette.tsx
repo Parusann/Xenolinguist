@@ -44,6 +44,8 @@ export function CommandPalette({ onClose, onNavigate, onOpenAIChat, onShowShortc
   const go = (phaseId: string) => { onNavigate?.(phaseId); onClose() }
 
   const commands: Item[] = useMemo(() => [
+    // Sandbox profiles have a dedicated first phase with no number-key/breadcrumb entry.
+    ...(profile?.is_sandbox ? [{ id: 'c-sandbox', kind: 'nav' as Kind, label: 'Go to Sandbox', run: () => go('sandbox') }] : []),
     { id: 'c-samples', kind: 'nav', label: 'Go to Samples', hint: '1', run: () => go('samples') },
     { id: 'c-numbers', kind: 'nav', label: 'Go to Numbers', hint: '2', run: () => go('numbers') },
     { id: 'c-vocabulary', kind: 'nav', label: 'Go to Vocabulary', hint: '3', run: () => go('vocabulary') },
@@ -54,7 +56,7 @@ export function CommandPalette({ onClose, onNavigate, onOpenAIChat, onShowShortc
     { id: 'c-tour', kind: 'help', label: 'Restart onboarding tour', run: () => { onRestartTour?.(); onClose() } },
     { id: 'c-shortcuts', kind: 'help', label: 'Show keyboard shortcuts', hint: '?', run: () => { onShowShortcuts?.(); onClose() } },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [onNavigate, onOpenAIChat, onShowShortcuts, onRestartTour])
+  ], [profile, onNavigate, onOpenAIChat, onShowShortcuts, onRestartTour])
 
   const dataItems: Item[] = useMemo(() => {
     if (!profile) return []
@@ -95,10 +97,10 @@ export function CommandPalette({ onClose, onNavigate, onOpenAIChat, onShowShortc
 
   return (
     <div className="cmd-overlay" onClick={onClose}>
-      <div className="popover cmd-box" onClick={(e) => e.stopPropagation()}>
+      <div className="popover cmd-box" role="dialog" aria-modal="true" aria-label="Command palette" onClick={(e) => e.stopPropagation()}>
         <div className="flex" style={{ gap: 10, padding: '14px 16px', borderBottom: '1px solid var(--border)', alignItems: 'center' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: 'var(--accent)' }}>⌘</span>
-          <input ref={inputRef} value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={handleKeyDown} placeholder="Search commands, words, samples…" style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'var(--font-sans)', color: 'var(--fg)' }} />
+          <input ref={inputRef} value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={handleKeyDown} placeholder="Search commands, words, samples…" aria-label="Search commands, words, samples" style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'var(--font-sans)', color: 'var(--fg)' }} />
           <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)' }}>ESC</span>
         </div>
 

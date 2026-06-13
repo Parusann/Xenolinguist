@@ -13,17 +13,25 @@ export function ProfileSetup({ mode, onBack }: ProfileSetupProps) {
   const [description, setDescription] = useState('')
   const [phoneticNotes, setPhoneticNotes] = useState('')
   const [creating, setCreating] = useState(false)
+  const [error, setError] = useState('')
   const { createProfile } = useProfile()
 
   const handleCreate = async () => {
-    if (!name.trim()) return
+    if (!name.trim() || creating) return
+    setError('')
     setCreating(true)
-    await createProfile({
-      name: name.trim(),
-      description: description.trim(),
-      phonetic_notes: phoneticNotes.trim(),
-      is_sandbox: mode === 'sandbox',
-    })
+    try {
+      await createProfile({
+        name: name.trim(),
+        description: description.trim(),
+        phonetic_notes: phoneticNotes.trim(),
+        is_sandbox: mode === 'sandbox',
+      })
+      // On success the workbench swaps to the AppShell and unmounts this form.
+    } catch {
+      setError('Could not create the profile. Is the local server running?')
+      setCreating(false)
+    }
   }
 
   const isSandbox = mode === 'sandbox'
@@ -123,6 +131,10 @@ export function ProfileSetup({ mode, onBack }: ProfileSetupProps) {
             >
               {creating ? 'Creating…' : isSandbox ? 'Generate & Start' : 'Begin Decoding'}
             </button>
+
+            {error && (
+              <p style={{ color: '#f87171', fontSize: 12, margin: 0, textAlign: 'center' }}>{error}</p>
+            )}
           </div>
         </div>
       </div>

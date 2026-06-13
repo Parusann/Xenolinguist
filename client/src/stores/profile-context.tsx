@@ -7,7 +7,10 @@ interface ProfileContextValue {
   loadProfile: (id: string) => Promise<void>
   createProfile: (data: { name: string; description: string; phonetic_notes: string; is_sandbox?: boolean }) => Promise<LanguageProfile>
   updateProfile: (updates: Partial<LanguageProfile>) => void
-  addDictionaryEntry: (entry: Omit<DictionaryEntry, 'id' | 'created_at'>) => void
+  /** Add a new entry; returns the generated id so callers can link it (e.g. an audio segment). */
+  addDictionaryEntry: (entry: Omit<DictionaryEntry, 'id' | 'created_at'>) => string
+  /** Re-insert a full entry verbatim (preserves id/created_at) — used to undo a delete. */
+  addDictionaryEntryRaw: (entry: DictionaryEntry) => void
   updateDictionaryEntry: (id: string, updates: Partial<DictionaryEntry>) => void
   removeDictionaryEntry: (id: string) => void
   addSample: (sample: Omit<Sample, 'id' | 'created_at'>) => void
@@ -76,6 +79,7 @@ export function ProfileProvider({
 
   const loadProfile = useCallback(async (id: string) => {
     const res = await fetch(`/api/profiles/${id}`)
+    if (!res.ok) throw new Error(`Failed to load profile (${res.status})`)
     const data = await res.json()
     setProfile(data)
     addEntry('info', `Loaded profile: ${data.name}`)
@@ -87,6 +91,7 @@ export function ProfileProvider({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
+    if (!res.ok) throw new Error(`Failed to create profile (${res.status})`)
     const created: LanguageProfile = await res.json()
     setProfile(created)
     addEntry('success', `Created new profile: ${created.name}`)
@@ -97,11 +102,17 @@ export function ProfileProvider({
     updateAndSave(prev => ({ ...prev, ...updates }))
   }, [updateAndSave])
 
-  const addDictionaryEntry = useCallback((entry: Omit<DictionaryEntry, 'id' | 'created_at'>) => {
-    const newEntry: DictionaryEntry = { ...entry, id: genId('word'), created_at: new Date().toISOString() }
+  const addDictionaryEntry = useCallback((entry: Omit<DictionaryEntry, 'id' | 'created_at'>): string => {
+    const id = genId('word')
+    const newEntry: DictionaryEntry = { ...entry, id, created_at: new Date().toISOString() }
     updateAndSave(prev => ({ ...prev, dictionary: [...prev.dictionary, newEntry] }))
     addEntry('success', `Mapped: "${entry.alien_word}" → "${entry.english_meaning}"`)
+    return id
   }, [updateAndSave, addEntry])
+
+  const addDictionaryEntryRaw = useCallback((entry: DictionaryEntry) => {
+    updateAndSave(prev => ({ ...prev, dictionary: [...prev.dictionary, entry] }))
+  }, [updateAndSave])
 
   const updateDictionaryEntry = useCallback((id: string, updates: Partial<DictionaryEntry>) => {
     updateAndSave(prev => ({
@@ -131,10 +142,15 @@ export function ProfileProvider({
   }, [updateAndSave])
 
   const removeSample = useCallback((id: string) => {
+    // If the sample owns an audio clip, drop the clip too and delete its blob server-side,
+    // so removing a sample doesn't orphan audio files/records.
+    const audioId = profileRef.current?.samples.find(s => s.id === id)?.audio_id ?? null
     updateAndSave(prev => ({
       ...prev,
       samples: prev.samples.filter(s => s.id !== id),
+      audio_clips: audioId ? (prev.audio_clips || []).filter(c => c.id !== audioId) : (prev.audio_clips || []),
     }))
+    if (audioId) fetch(`/api/audio/${audioId}`, { method: 'DELETE' }).catch(() => {})
   }, [updateAndSave])
 
   const addGrammarRule = useCallback((rule: Omit<GrammarRule, 'id' | 'created_at'>) => {
@@ -196,6 +212,7 @@ export function ProfileProvider({
       createProfile,
       updateProfile,
       addDictionaryEntry,
+      addDictionaryEntryRaw,
       updateDictionaryEntry,
       removeDictionaryEntry,
       addSample,

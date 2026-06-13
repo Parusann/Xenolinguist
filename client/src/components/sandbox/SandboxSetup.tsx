@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
 import { useSessionLog } from '@/stores/session-log-context'
+import { useProfile } from '@/stores/profile-context'
 import type { SandboxDifficulty } from 'shared/types'
 
 const DIFFICULTIES: { value: SandboxDifficulty; label: string; desc: string }[] = [
@@ -31,6 +32,7 @@ export function SandboxSetup({ onGenerated }: SandboxSetupProps) {
   const { runTask } = useAI()
   const { connected } = useOllama()
   const { addEntry } = useSessionLog()
+  const { updateProfile } = useProfile()
 
   const handleGenerate = async () => {
     setGenerating(true)
@@ -65,8 +67,26 @@ IMPORTANT: Respond ONLY with valid JSON matching this exact format, no other tex
       // Extract JSON from the response (handle markdown code blocks)
       const jsonMatch = result.match(/\{[\s\S]*\}/)
       if (!jsonMatch) throw new Error('No JSON found in response')
-      const conlang: ConlangData = JSON.parse(jsonMatch[0])
+      const parsed = JSON.parse(jsonMatch[0]) as Partial<ConlangData>
+      // The model sometimes omits or mistypes fields. SandboxController iterates
+      // these at render time (Object.entries(number_words), vocabulary.forEach,
+      // sample_sentences/rules), so normalize every field to a safe shape here —
+      // otherwise a malformed response crashes the controller on mount.
+      if (typeof parsed.language_name !== 'string' || !Array.isArray(parsed.vocabulary)) {
+        throw new Error('Incomplete conlang data in response')
+      }
+      const conlang: ConlangData = {
+        language_name: parsed.language_name,
+        phoneme_set: Array.isArray(parsed.phoneme_set) ? parsed.phoneme_set : [],
+        number_base: typeof parsed.number_base === 'number' ? parsed.number_base : 10,
+        word_order: typeof parsed.word_order === 'string' ? parsed.word_order : '',
+        rules: Array.isArray(parsed.rules) ? parsed.rules : [],
+        vocabulary: parsed.vocabulary,
+        number_words: parsed.number_words && typeof parsed.number_words === 'object' ? parsed.number_words : {},
+        sample_sentences: Array.isArray(parsed.sample_sentences) ? parsed.sample_sentences : [],
+      }
       addEntry('success', `Generated conlang: ${conlang.language_name}`)
+      updateProfile({ sandbox_difficulty: difficulty })
       onGenerated(conlang)
     } catch (err) {
       addEntry('error', `Failed to generate conlang: ${(err as Error).message}`)

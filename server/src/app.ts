@@ -14,21 +14,28 @@ import { clientDist } from './config.js';
 export function createApp() {
   const app = express();
 
-  // Single origin in the desktop build; dev keeps the Vite origin.
-  app.use(cors({ origin: 'http://localhost:5173' }));
-  app.use(express.json({ limit: '50mb' }));
+  // CORS only matters in dev (Vite at :5173 → API at :3001). The packaged app serves the
+  // SPA and API from the same loopback origin (http://127.0.0.1:<port>), so CORS is moot there.
+  if (process.env.NODE_ENV !== 'production') {
+    app.use(cors({ origin: 'http://localhost:5173' }));
+  }
+
+  // Per-route JSON limits: only the base64-audio routes need a large body; everything else
+  // gets a small limit to shrink the memory-amplification (DoS) surface.
+  const small = express.json({ limit: '2mb' });
+  const audioJson = express.json({ limit: '50mb' });
 
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  app.use('/api/ollama', ollamaRouter);
-  app.use('/api/profiles', profilesRouter);
-  app.use('/api/ai', aiRouter);
-  app.use('/api/audio', audioRouter);
-  app.use('/api/tts', ttsRouter);
-  app.use('/api/stt', sttRouter);
-  app.use('/api/ipa', ipaRouter);
+  app.use('/api/ollama', small, ollamaRouter);
+  app.use('/api/profiles', express.json({ limit: '10mb' }), profilesRouter);
+  app.use('/api/ai', small, aiRouter);
+  app.use('/api/audio', audioJson, audioRouter);
+  app.use('/api/tts', small, ttsRouter);
+  app.use('/api/stt', audioJson, sttRouter);
+  app.use('/api/ipa', audioJson, ipaRouter);
 
   // Unknown /api routes get a JSON 404 (never the SPA fallback).
   app.use('/api', (_req, res) => {
@@ -47,6 +54,3 @@ export function createApp() {
   app.use(errorHandler);
   return app;
 }
-
-// Back-compat for existing imports/tests that use a ready-made app.
-export const app = createApp();

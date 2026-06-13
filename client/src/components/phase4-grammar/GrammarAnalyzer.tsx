@@ -23,7 +23,11 @@ export function GrammarAnalyzer() {
   const handleAnalyze = async () => {
     if (!profile) return
     const prompt = `Dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nExisting grammar rules:\n${formatGrammarForPrompt(profile.grammar_rules)}\n\nSamples:\n${formatSamplesForPrompt(profile.samples)}`
-    setAnalysisResult(await runTask('grammarInference', prompt))
+    try {
+      setAnalysisResult(await runTask('grammarInference', prompt))
+    } catch {
+      /* useAI already surfaces the error (and logs it); avoid an unhandled rejection */
+    }
   }
 
   const handleAddRule = () => {

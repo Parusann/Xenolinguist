@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
+import { getConfidenceLevel } from 'shared/constants'
 
 const BASE_CANDIDATES = [5, 6, 7, 8, 10, 12, 16, 20]
 const OPERATORS = ['+', '-', '×', '÷', '=']
@@ -44,8 +45,8 @@ export function NumberDecoder() {
   const baseConfidence = Math.round((scores.find((s) => s.base === displayBase)?.score ?? 0) * 100)
 
   const decompose = (n: number): number[] => {
-    const b = displayBase || 6
-    if (n <= 0) return []
+    const b = displayBase
+    if (!b || n <= 0) return [] // no detected base yet → no (misleading) positional breakdown
     const out: number[] = []
     let x = n
     while (x > 0) { out.unshift(x % b); x = Math.floor(x / b) }
@@ -72,7 +73,10 @@ export function NumberDecoder() {
     if (!profile) return
     if (best.score > 0) updateProfile({ number_system: { ...numberSystem, base: best.base } })
     const mapped = Object.entries(mappings).map(([n, w]) => `${n} = "${w}"`).join('\n')
-    if (mapped) setAnalysisResult(await runTask('numberAnalysis', `Number mappings:\n${mapped}`))
+    if (mapped) {
+      try { setAnalysisResult(await runTask('numberAnalysis', `Number mappings:\n${mapped}`)) }
+      catch { /* useAI surfaces/logs the error */ }
+    }
   }
 
   const numbers = Array.from({ length: range }, (_, i) => i + 1)
@@ -112,7 +116,7 @@ export function NumberDecoder() {
         <div className="glass-card" style={{ padding: 18 }}>
           <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
             <span className="label" style={{ marginBottom: 0 }}>Detected Base System</span>
-            {displayBase && <span className={'badge ' + (baseConfidence >= 76 ? 'confirmed' : baseConfidence >= 41 ? 'probable' : 'unknown')}>{baseConfidence >= 76 ? 'confirmed' : 'estimate'} · {baseConfidence}%</span>}
+            {displayBase && <span className={'badge ' + getConfidenceLevel(baseConfidence)}>{getConfidenceLevel(baseConfidence) === 'confirmed' ? 'confirmed' : 'estimate'} · {baseConfidence}%</span>}
           </div>
           <div className="flex" style={{ gap: 24, alignItems: 'flex-end' }}>
             <div>

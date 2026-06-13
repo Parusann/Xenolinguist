@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 
 export interface ContextMenuItem {
   label: string
@@ -19,9 +19,10 @@ export interface ContextMenuProps {
 export function ContextMenu({ x, y, items, onClose }: ContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
 
-  // Adjust position if near screen edge
+  // Adjust position if near screen edge. useLayoutEffect so the clamp happens before the
+  // browser paints — otherwise the menu flashes at the unadjusted position for one frame.
   const adjustedPos = useRef({ x, y })
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = menuRef.current
     if (!el) return
     const rect = el.getBoundingClientRect()
