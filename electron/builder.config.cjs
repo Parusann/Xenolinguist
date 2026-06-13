@@ -9,6 +9,7 @@ module.exports = {
     { from: 'client/dist', to: 'client/dist' },
     { from: 'vendor/espeak-ng/win', to: 'espeak-ng' },
     { from: 'vendor/whisper/win', to: 'whisper' },
+    { from: 'vendor/ipa-model', to: 'ipa-model' },
   ],
   asar: true,
   // The forked server bundle must be a real file on disk for utilityProcess.fork.
