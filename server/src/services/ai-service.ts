@@ -1,14 +1,16 @@
 import { Ollama } from 'ollama';
 import type { AIMessage } from '../../../shared/types.ts';
+import { defaultModel } from '../config.js';
 
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
 
 export class AIService {
   private ollama: Ollama;
-  private defaultModel = 'qwen3:14b';
+  public readonly model: string;
 
   constructor() {
     this.ollama = new Ollama({ host: OLLAMA_BASE_URL });
+    this.model = defaultModel();
   }
 
   async chat(
@@ -20,7 +22,7 @@ export class AIService {
       : messages;
 
     const response = await this.ollama.chat({
-      model: options.model || this.defaultModel,
+      model: options.model || this.model,
       messages: allMessages,
       stream: false,
     });
@@ -38,7 +40,7 @@ export class AIService {
       : messages;
 
     const response = await this.ollama.chat({
-      model: options.model || this.defaultModel,
+      model: options.model || this.model,
       messages: allMessages,
       stream: true,
     });

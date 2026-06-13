@@ -8,12 +8,13 @@ import { SOURCE_PRESETS } from 'shared/constants'
 import { formatDictionaryForPrompt, formatSamplesForPrompt } from 'shared/prompts'
 import { AudioRecorder } from '@/components/audio/AudioRecorder'
 import { AudioPlayer } from '@/components/audio/AudioPlayer'
+import { AudioSegmenter } from '@/components/audio/AudioSegmenter'
 import { SampleDecodeView } from '@/components/phase1-samples/SampleDecodeView'
 import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMenu'
-import type { Sample } from 'shared/types'
+import type { Sample, SttSegment } from 'shared/types'
 
 export function SampleInput() {
-  const { profile, addSample, removeSample, addAudioClip, addDictionaryEntry } = useProfile()
+  const { profile, addSample, removeSample, addAudioClip, addDictionaryEntry, updateSample } = useProfile()
   const { runTask, loading, streamedText } = useAI()
   const { connected } = useOllama()
   const { suggestForSample } = useAutoSuggest()
@@ -30,7 +31,9 @@ export function SampleInput() {
   const [showRecorder, setShowRecorder] = useState(false)
   const [filter, setFilter] = useState<'all' | 'decoded' | 'audio'>('all')
   const [search, setSearch] = useState('')
-  const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string } | null>(null)
+  const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string; sttSegments?: SttSegment[]; mode?: 'transcription' | 'phonetic-guess' } | null>(null)
+  const [pendingSegments, setPendingSegments] = useState<{ id: string; start: number; end: number; label: string }[]>([])
+  const [reTranscribing, setReTranscribing] = useState<string | null>(null)
 
   const samples = profile?.samples || []
 
@@ -38,7 +41,7 @@ export function SampleInput() {
     if (!alienText.trim() && !pendingAudio) return
     let audioId: string | null = null
     if (pendingAudio) {
-      const clipId = addAudioClip({ filename: '', duration: pendingAudio.duration, waveform: pendingAudio.peaks, segments: [] })
+      const clipId = addAudioClip({ filename: '', duration: pendingAudio.duration, waveform: pendingAudio.peaks, segments: pendingSegments.map((s) => ({ id: s.id, start: s.start, end: s.end, label: s.label, dictionary_entry_id: null })) })
       audioId = clipId
       const arrayBuf = await pendingAudio.blob.arrayBuffer()
       const base64 = btoa(new Uint8Array(arrayBuf).reduce((data, byte) => data + String.fromCharCode(byte), ''))
@@ -53,12 +56,14 @@ export function SampleInput() {
     setTranslation('')
     setPhoneticNotes('')
     setPendingAudio(null)
+    setPendingSegments([])
     setShowRecorder(false)
   }
 
-  const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string) => {
+  const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess') => {
     const blobUrl = URL.createObjectURL(blob)
-    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage })
+    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode })
+    setPendingSegments((segments ?? []).map((s, i) => ({ id: `stt-${i}`, start: s.start, end: s.end, label: s.text })))
     setSource('Audio recording')
     if (detectedLanguage) setPhoneticNotes((prev) => prev || `Detected: ${detectedLanguage}`)
   }
@@ -84,6 +89,24 @@ export function SampleInput() {
   }
 
   const getAudioForSample = (audioId: string | null) => (!audioId || !profile ? null : (profile.audio_clips || []).find((c) => c.id === audioId) || null)
+
+  const handleReTranscribe = async (sample: Sample) => {
+    if (!sample.audio_id) return
+    setReTranscribing(sample.id)
+    try {
+      const res = await fetch(`/api/audio/${sample.audio_id}`)
+      if (!res.ok) return
+      const blob = await res.blob()
+      const { transcribe } = await import('@/services/stt')
+      const stt = await transcribe(blob)
+      if (stt) {
+        const label = stt.mode === 'transcription' ? 'Transcript' : 'Phonetic guess'
+        updateSample(sample.id, { phonetic_notes: `${label}: ${stt.text}` })
+      }
+    } finally {
+      setReTranscribing(null)
+    }
+  }
 
   const handleDeleteWithUndo = (sample: Sample) => {
     removeSample(sample.id)
@@ -171,6 +194,45 @@ export function SampleInput() {
                 <button onClick={() => { URL.revokeObjectURL(pendingAudio.blobUrl); setPendingAudio(null) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
               </div>
               <AudioPlayer src={pendingAudio.blobUrl} peaks={pendingAudio.peaks} duration={pendingAudio.duration} compact />
+              {pendingAudio.sttSegments && pendingAudio.sttSegments.length > 0 && (
+                <AudioSegmenter
+                  key={pendingAudio.blobUrl}
+                  src={pendingAudio.blobUrl}
+                  peaks={pendingAudio.peaks}
+                  duration={pendingAudio.duration}
+                  initialSegments={pendingAudio.sttSegments.map((s, i) => ({
+                    id: `stt-${i}`,
+                    start: s.start / pendingAudio.duration,
+                    end: s.end / pendingAudio.duration,
+                    label: s.text,
+                  }))}
+                  onSegmentsChange={setPendingSegments}
+                />
+              )}
+              {pendingAudio.mode === 'transcription' && pendingSegments.length > 0 && (
+                <div className="glass-inner" style={{ padding: 10, marginTop: 10 }}>
+                  <span className="label" style={{ marginBottom: 6, display: 'block' }}>Link to dictionary</span>
+                  <div className="flex" style={{ gap: 6, flexWrap: 'wrap' }}>
+                    {pendingSegments.map((s) => {
+                      const known = profile?.dictionary.find((d) => d.alien_word.toLowerCase() === s.label.toLowerCase())
+                      return (
+                        <button
+                          key={s.id}
+                          className="btn xs ghost"
+                          title={known ? `Already in dictionary: ${known.english_meaning}` : 'Add to dictionary'}
+                          style={{ color: known ? 'var(--accent)' : undefined }}
+                          onClick={() => {
+                            if (known || !s.label.trim()) return
+                            addDictionaryEntry({ alien_word: s.label, english_meaning: '', part_of_speech: 'unknown', confidence: 50, context: 'From audio transcript', examples: [], notes: '' })
+                          }}
+                        >
+                          {known ? `✓ ${s.label}` : `+ ${s.label}`}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -226,6 +288,15 @@ export function SampleInput() {
                         </div>
                         <div className="flex" style={{ gap: 8, alignItems: 'center' }}>
                           <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>{new Date(sample.created_at).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' })}</span>
+                          {sample.audio_id && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); void handleReTranscribe(sample) }}
+                              title="Re-transcribe audio"
+                              style={{ background: 'none', border: 0, color: 'var(--fg-faint)', cursor: 'pointer', fontSize: 12 }}
+                            >
+                              {reTranscribing === sample.id ? '…' : '↻'}
+                            </button>
+                          )}
                           <button onClick={(e) => { e.stopPropagation(); handleDeleteWithUndo(sample) }} style={{ background: 'none', border: 0, color: 'var(--fg-faint)', cursor: 'pointer', fontSize: 13 }}>×</button>
                         </div>
                       </div>

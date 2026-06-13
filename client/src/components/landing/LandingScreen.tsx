@@ -160,6 +160,7 @@ export function LandingScreen() {
   const [showSetup, setShowSetup] = useState(false)
   const [setupMode, setSetupMode] = useState<'new' | 'sandbox'>('new')
   const [ready, setReady] = useState(false)
+  const [loadingDemo, setLoadingDemo] = useState(false)
   const { loadProfile } = useProfile()
   const { addEntry } = useSessionLog()
   const { connected } = useOllama()
@@ -199,6 +200,17 @@ export function LandingScreen() {
   }
 
   const openSetup = (mode: 'new' | 'sandbox') => { setSetupMode(mode); setShowSetup(true) }
+
+  const loadDemo = async () => {
+    setLoadingDemo(true)
+    try {
+      const created: LanguageProfile = await fetch('/api/profiles/demo', { method: 'POST' }).then((r) => r.json())
+      await loadProfile(created.id)
+      addEntry('success', `Loaded demo language: ${created.name}`)
+    } catch {
+      setLoadingDemo(false)
+    }
+  }
 
   return (
     <div style={{ position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden', background: 'var(--bg-deep)' }}>
@@ -286,6 +298,27 @@ export function LandingScreen() {
               <div style={{ fontSize: 12.5, color: 'var(--fg-dim)', lineHeight: 1.5 }}>
                 AI generates a language with hidden rules. Practice the decoding workflow with an answer key.
               </div>
+            </button>
+          </div>
+
+          {/* Load demo language — pre-seeded "Eridian" to explore the workflow */}
+          <div style={{ textAlign: 'center', marginBottom: 36 }}>
+            <button
+              onClick={loadDemo}
+              disabled={loadingDemo}
+              className="glass-inner"
+              style={{
+                padding: '10px 18px',
+                cursor: loadingDemo ? 'default' : 'pointer',
+                color: 'var(--accent)',
+                borderColor: 'rgba(0,230,118,0.25)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: 12.5,
+                opacity: loadingDemo ? 0.6 : 1,
+              }}
+              title="Create a pre-seeded demo language (Eridian) to explore the decoding workflow"
+            >
+              {loadingDemo ? 'Loading demo…' : '◇ Load demo language · Eridian'}
             </button>
           </div>
 

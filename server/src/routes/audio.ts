@@ -2,14 +2,15 @@ import { Router } from 'express'
 import { writeFile, readFile, mkdir, unlink } from 'fs/promises'
 import { existsSync } from 'fs'
 import { join } from 'path'
+import { dataDir } from '../config.js'
 
 const router = Router()
-const AUDIO_DIR = join(import.meta.dirname, '../../data/audio')
+function audioDir() { return join(dataDir(), 'audio') }
 
 // Ensure audio directory exists
 async function ensureDir() {
-  if (!existsSync(AUDIO_DIR)) {
-    await mkdir(AUDIO_DIR, { recursive: true })
+  if (!existsSync(audioDir())) {
+    await mkdir(audioDir(), { recursive: true })
   }
 }
 
@@ -27,7 +28,7 @@ router.post('/upload', async (req, res) => {
     const buffer = Buffer.from(data, 'base64')
     const ext = mimeType?.includes('wav') ? 'wav' : 'webm'
     const filename = `${id}.${ext}`
-    const filepath = join(AUDIO_DIR, filename)
+    const filepath = join(audioDir(), filename)
 
     await writeFile(filepath, buffer)
 
@@ -45,7 +46,7 @@ router.get('/:id', async (req, res) => {
 
     // Try webm first, then wav
     for (const ext of ['webm', 'wav']) {
-      const filepath = join(AUDIO_DIR, `${id}.${ext}`)
+      const filepath = join(audioDir(), `${id}.${ext}`)
       if (existsSync(filepath)) {
         const data = await readFile(filepath)
         const mimeType = ext === 'wav' ? 'audio/wav' : 'audio/webm'
@@ -68,7 +69,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params
 
     for (const ext of ['webm', 'wav']) {
-      const filepath = join(AUDIO_DIR, `${id}.${ext}`)
+      const filepath = join(audioDir(), `${id}.${ext}`)
       if (existsSync(filepath)) {
         await unlink(filepath)
         return res.json({ deleted: true })

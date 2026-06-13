@@ -7,6 +7,7 @@ import { VOCABULARY_CATEGORIES, PART_OF_SPEECH_OPTIONS, getConfidenceLevel } fro
 import { formatDictionaryForPrompt, formatSamplesForPrompt } from 'shared/prompts'
 import type { PartOfSpeech, DictionaryEntry } from 'shared/types'
 import { AudioPlayer } from '@/components/audio/AudioPlayer'
+import { SpeakButton } from '@/components/audio/SpeakButton'
 import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMenu'
 import { ConfRing } from '@/components/common/ConfRing'
 import { getConfidenceCounts } from '@/lib/profileStats'
@@ -271,7 +272,10 @@ export function VocabularyBuilder() {
                       <span className="badge">{entry.part_of_speech}</span>
                       <ConfRing value={entry.confidence} size={28} stroke={2.5} />
                     </div>
-                    <div className={'word-token wt-' + level} style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 500, marginBottom: 2, padding: 0 }}>{entry.alien_word}</div>
+                    <div className="flex" style={{ alignItems: 'center', gap: 6 }}>
+                      <div className={'word-token wt-' + level} style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 500, marginBottom: 2, padding: 0 }}>{entry.alien_word}</div>
+                      <SpeakButton text={entry.alien_word} />
+                    </div>
                     <div className="dim" style={{ fontSize: 13, marginBottom: 8 }}>{entry.english_meaning || <span style={{ fontStyle: 'italic' }}>unknown meaning</span>}</div>
                     <div style={{ fontSize: 11.5, color: 'var(--fg-mute)', lineHeight: 1.5, minHeight: 32 }}>{entry.context || <span style={{ color: 'var(--fg-faint)' }}>no context</span>}</div>
                     {audio && (
@@ -299,7 +303,12 @@ export function VocabularyBuilder() {
                   const level = getConfidenceLevel(entry.confidence)
                   return (
                     <tr key={entry.id} onClick={() => setSelectedId(entry.id)} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setContextMenu({ x: e.clientX, y: e.clientY, entry }) }} style={{ background: sel?.id === entry.id ? 'rgba(0,230,118,0.05)' : 'transparent', cursor: 'pointer' }}>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}><span className={'word-token wt-' + level} style={{ padding: 0, fontSize: 13 }}>{entry.alien_word}</span></td>
+                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
+                        <span className="flex" style={{ alignItems: 'center', gap: 6 }}>
+                          <span className={'word-token wt-' + level} style={{ padding: 0, fontSize: 13 }}>{entry.alien_word}</span>
+                          <SpeakButton text={entry.alien_word} />
+                        </span>
+                      </td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--fg-1)', fontFamily: 'var(--font-sans)' }}>{entry.english_meaning}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--fg-mute)' }}>{entry.part_of_speech}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
