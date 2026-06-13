@@ -8,7 +8,7 @@ import { UndoProvider } from './stores/undo-context'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ToastProvider>
         <UndoProvider>
           <App />

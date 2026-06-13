@@ -252,7 +252,7 @@ export function LandingScreen() {
               <span>Language</span>{'  ·  '}<span>Decoding</span>{'  ·  '}<span>Workbench</span>
             </div>
             <div style={{ marginTop: 18, fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-faint)', letterSpacing: '0.04em' }}>
-              v0.7.2 · LOCAL ONLY · OLLAMA{' '}
+              v1.0.0 · LOCAL ONLY · OLLAMA{' '}
               <span style={{ color: connected ? 'var(--accent)' : 'var(--conf-unknown)' }}>●</span>{' '}
               {connected ? 'CONNECTED' : 'OFFLINE'}
             </div>

@@ -273,7 +273,7 @@ export function HeroFooter() {
         <span className="word" style={{ fontSize: 13 }}><span className="light">xeno</span>linguist</span>
       </span>
       <span style={{ color: 'var(--fg-faint)' }}>·</span>
-      <span>v0.7.2</span>
+      <span>v1.0.0</span>
       <span style={{ color: 'var(--fg-faint)' }}>·</span>
       <span>MIT</span>
       <span className="grow" />
