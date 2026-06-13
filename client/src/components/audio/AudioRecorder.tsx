@@ -2,10 +2,10 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { WaveformCanvas, extractPeaks } from './WaveformCanvas'
 import { useLanguageDetection, LanguageBadge } from './LanguageDetector'
 import { transcribePhones as transcribeIpa } from '@/services/ipa'
-import type { SttSegment } from 'shared/types'
+import type { SttSegment, IpaSegment } from 'shared/types'
 
 interface AudioRecorderProps {
-  onRecordingComplete: (audioBlob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess', ipa?: string) => void
+  onRecordingComplete: (audioBlob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess', ipa?: string, ipaSegments?: IpaSegment[]) => void
   className?: string
 }
 
@@ -117,7 +117,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
 
         // Run language detection and IPA phone recognition in parallel
         const [det, ipa] = await Promise.all([detect(blob), transcribeIpa(blob)])
-        onRecordingComplete(blob, peaks, dur, det?.language || liveLanguage || undefined, det?.segments, det?.mode, ipa ?? undefined)
+        onRecordingComplete(blob, peaks, dur, det?.language || liveLanguage || undefined, det?.segments, det?.mode, ipa?.ipa, ipa?.segments)
       }
 
       recorder.start(100)

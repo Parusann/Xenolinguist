@@ -11,7 +11,7 @@ import { AudioPlayer } from '@/components/audio/AudioPlayer'
 import { AudioSegmenter } from '@/components/audio/AudioSegmenter'
 import { SampleDecodeView } from '@/components/phase1-samples/SampleDecodeView'
 import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMenu'
-import type { Sample, SttSegment } from 'shared/types'
+import type { Sample, SttSegment, IpaSegment } from 'shared/types'
 
 export function SampleInput() {
   const { profile, addSample, removeSample, addAudioClip, addDictionaryEntry, updateSample } = useProfile()
@@ -31,7 +31,7 @@ export function SampleInput() {
   const [showRecorder, setShowRecorder] = useState(false)
   const [filter, setFilter] = useState<'all' | 'decoded' | 'audio'>('all')
   const [search, setSearch] = useState('')
-  const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string; sttSegments?: SttSegment[]; mode?: 'transcription' | 'phonetic-guess'; ipa?: string } | null>(null)
+  const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string; sttSegments?: SttSegment[]; mode?: 'transcription' | 'phonetic-guess'; ipa?: string; ipaSegments?: IpaSegment[] } | null>(null)
   const [pendingSegments, setPendingSegments] = useState<{ id: string; start: number; end: number; label: string }[]>([])
   const [reTranscribing, setReTranscribing] = useState<string | null>(null)
 
@@ -60,10 +60,14 @@ export function SampleInput() {
     setShowRecorder(false)
   }
 
-  const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess', ipa?: string) => {
+  const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess', ipa?: string, ipaSegments?: IpaSegment[]) => {
     const blobUrl = URL.createObjectURL(blob)
-    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode, ipa })
-    setPendingSegments((segments ?? []).map((s, i) => ({ id: `stt-${i}`, start: s.start, end: s.end, label: s.text })))
+    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode, ipa, ipaSegments })
+    // Seed segmenter from IPA phone segments when present, else whisper word segments (seconds).
+    const seedSource = (ipaSegments?.length
+      ? ipaSegments.map((s, i) => ({ id: `ipa-${i}`, start: s.start, end: s.end, label: s.phone }))
+      : (segments ?? []).map((s, i) => ({ id: `stt-${i}`, start: s.start, end: s.end, label: s.text })))
+    setPendingSegments(seedSource)
     setSource('Audio recording')
     if (detectedLanguage) setPhoneticNotes((prev) => prev || `Detected: ${detectedLanguage}`)
   }
@@ -201,21 +205,28 @@ export function SampleInput() {
                 <button onClick={() => { URL.revokeObjectURL(pendingAudio.blobUrl); setPendingAudio(null) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
               </div>
               <AudioPlayer src={pendingAudio.blobUrl} peaks={pendingAudio.peaks} duration={pendingAudio.duration} compact />
-              {pendingAudio.sttSegments && pendingAudio.sttSegments.length > 0 && (
-                <AudioSegmenter
-                  key={pendingAudio.blobUrl}
-                  src={pendingAudio.blobUrl}
-                  peaks={pendingAudio.peaks}
-                  duration={pendingAudio.duration}
-                  initialSegments={pendingAudio.sttSegments.map((s, i) => ({
-                    id: `stt-${i}`,
-                    start: s.start / pendingAudio.duration,
-                    end: s.end / pendingAudio.duration,
-                    label: s.text,
-                  }))}
-                  onSegmentsChange={setPendingSegments}
-                />
-              )}
+              {(() => {
+                // IPA phone segments take precedence over whisper word segments for the segmenter.
+                const seedSource = (pendingAudio.ipaSegments?.length
+                  ? pendingAudio.ipaSegments.map((s, i) => ({ id: `ipa-${i}`, start: s.start, end: s.end, label: s.phone }))
+                  : (pendingAudio.sttSegments ?? []).map((s, i) => ({ id: `stt-${i}`, start: s.start, end: s.end, label: s.text })))
+                if (seedSource.length === 0) return null
+                return (
+                  <AudioSegmenter
+                    key={pendingAudio.blobUrl}
+                    src={pendingAudio.blobUrl}
+                    peaks={pendingAudio.peaks}
+                    duration={pendingAudio.duration}
+                    initialSegments={seedSource.map((s) => ({
+                      id: s.id,
+                      start: s.start / pendingAudio.duration,
+                      end: s.end / pendingAudio.duration,
+                      label: s.label,
+                    }))}
+                    onSegmentsChange={setPendingSegments}
+                  />
+                )
+              })()}
               {pendingAudio.mode === 'transcription' && pendingSegments.length > 0 && (
                 <div className="glass-inner" style={{ padding: 10, marginTop: 10 }}>
                   <span className="label" style={{ marginBottom: 6, display: 'block' }}>Link to dictionary</span>

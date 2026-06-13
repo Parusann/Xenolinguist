@@ -517,6 +517,18 @@ export function SandboxController({ conlang }: SandboxControllerProps) {
           <p className="text-xs text-gray-500">
             {conlang.word_order} word order &middot; base-{conlang.number_base} numbers
           </p>
+          {(conlang.phoneme_set?.length ?? 0) > 0 && (
+            <div className="mt-2 space-y-1">
+              <span className="text-[10px] text-gray-600 uppercase tracking-wider">
+                Phonemes &middot; {conlang.phoneme_set!.length}
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {conlang.phoneme_set!.map((p, i) => (
+                  <span key={i} className="badge font-mono text-[10px]">{p}</span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <div className="text-right">
           <div className="text-[10px] text-gray-600 uppercase tracking-wider mb-1">
