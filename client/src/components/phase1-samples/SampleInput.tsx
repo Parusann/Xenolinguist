@@ -31,7 +31,7 @@ export function SampleInput() {
   const [showRecorder, setShowRecorder] = useState(false)
   const [filter, setFilter] = useState<'all' | 'decoded' | 'audio'>('all')
   const [search, setSearch] = useState('')
-  const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string; sttSegments?: SttSegment[]; mode?: 'transcription' | 'phonetic-guess' } | null>(null)
+  const [pendingAudio, setPendingAudio] = useState<{ blob: Blob; peaks: number[]; duration: number; blobUrl: string; detectedLanguage?: string; sttSegments?: SttSegment[]; mode?: 'transcription' | 'phonetic-guess'; ipa?: string } | null>(null)
   const [pendingSegments, setPendingSegments] = useState<{ id: string; start: number; end: number; label: string }[]>([])
   const [reTranscribing, setReTranscribing] = useState<string | null>(null)
 
@@ -48,7 +48,7 @@ export function SampleInput() {
       fetch('/api/audio/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: clipId, data: base64, mimeType: pendingAudio.blob.type }) }).catch(console.error)
     }
     const sampleText = alienText.trim() || '[audio sample]'
-    addSample({ alien_text: sampleText, english_translation: parallelMode && translation.trim() ? translation.trim() : null, source: pendingAudio ? 'Audio recording' : source, phonetic_notes: phoneticNotes.trim(), decoded: false, audio_id: audioId, ipa: null })
+    addSample({ alien_text: sampleText, english_translation: parallelMode && translation.trim() ? translation.trim() : null, source: pendingAudio ? 'Audio recording' : source, phonetic_notes: phoneticNotes.trim(), decoded: false, audio_id: audioId, ipa: pendingAudio?.ipa ?? null })
     if (profile && profile.dictionary.length > 0 && sampleText !== '[audio sample]') {
       suggestForSample(sampleText, profile.dictionary, setAutoSuggestion)
     }
@@ -60,9 +60,9 @@ export function SampleInput() {
     setShowRecorder(false)
   }
 
-  const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess') => {
+  const handleRecordingComplete = (blob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess', ipa?: string) => {
     const blobUrl = URL.createObjectURL(blob)
-    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode })
+    setPendingAudio({ blob, peaks, duration, blobUrl, detectedLanguage, sttSegments: segments, mode, ipa })
     setPendingSegments((segments ?? []).map((s, i) => ({ id: `stt-${i}`, start: s.start, end: s.end, label: s.text })))
     setSource('Audio recording')
     if (detectedLanguage) setPhoneticNotes((prev) => prev || `Detected: ${detectedLanguage}`)
@@ -231,6 +231,12 @@ export function SampleInput() {
                       )
                     })}
                   </div>
+                </div>
+              )}
+              {pendingAudio?.ipa && (
+                <div className="glass-inner" style={{ padding: 10, marginTop: 10 }}>
+                  <span className="label" style={{ marginBottom: 4, display: 'block' }}>IPA · phones</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--fg-1)' }}>{pendingAudio.ipa}</span>
                 </div>
               )}
             </div>
