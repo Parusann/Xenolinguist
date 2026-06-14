@@ -5,6 +5,7 @@ server/data/profiles/
 *.log
 .DS_Store
 Thumbs.db
+.claude/
 electron/dist/
 release/
 vendor/ipa-model-cache/
