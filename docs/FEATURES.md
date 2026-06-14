@@ -228,9 +228,27 @@ A fully-local phone recognizer (`services/ipa-phones.ts`):
 
 ---
 
-## 12. Marketing / Landing Page (`components/marketing/`)
+## 12. Marketing / Landing Page & Public Download Site (`components/marketing/`)
 
-The `/` route renders a fully-static, no-network cinematic landing page: a Vanta topology backdrop, an animated "Decode the unknown" headline, a live word-by-word decoding animation (`DecodeMoment`), an interactive mini-decoder, and below-fold method/proof/privacy/CTA sections (`sections.tsx`). All copy and the demo dictionary are hardcoded.
+### 12.1 The page
+The `/` route renders a fully-static, no-network cinematic landing page: a Vanta topology backdrop, an animated "Decode the unknown" headline, a live word-by-word decoding animation (`DecodeMoment`), an interactive mini-decoder, and below-fold method/proof/privacy/CTA sections (`sections.tsx`). All copy and the demo dictionary are hardcoded — a 1:1 port of the designer prototype.
+
+### 12.2 One codebase, two builds (in-app vs public download site)
+The same React app powers both the in-app marketing route and a **public website hosted on GitHub Pages** (`https://parusann.github.io/Xenolinguist/`). A single build-time flag distinguishes them (`lib/site.ts`):
+
+- `isPublicSite` ← `import.meta.env.VITE_PUBLIC_SITE === 'true'` (set only by the Pages build).
+- `DOWNLOAD_URL` ← `import.meta.env.VITE_DOWNLOAD_URL` (the latest release's installer URL, injected by CI) **or** a `https://github.com/Parusann/Xenolinguist/releases/latest` fallback.
+
+**Desktop / in-app build** (flag unset): `HeroPage` renders exactly as the locked prototype; the hero and final CTAs call `navigate('/app')` to open the workbench.
+
+**Public Pages build** (`VITE_PUBLIC_SITE=true`): `HeroPage` additionally renders a **`DownloadSection`** (`id="download"`, slotted before the final CTA), and the hero/final CTAs **scroll to `#download`** instead of opening `/app` (which can't run on a static host without the local server + Ollama). Only the click target changes — the pixels stay identical, so the locked prototype is preserved in the app.
+
+The **`DownloadSection`** (`components/marketing/DownloadSection.tsx`) is built from the existing marketing CSS vocabulary (so it reads as part of the locked design) and contains: a "Download for Windows" button → `DOWNLOAD_URL`, an honest **SmartScreen** note (unsigned build → "More info → Run anyway"), the **Ollama-needed-for-AI** caveat, a "what you get" list, and links to all releases / source. It is static (no network on render).
+
+**Subpath hosting.** GitHub Pages serves the project site under `/Xenolinguist/`, so the Pages build passes `--base=/Xenolinguist/` and `BrowserRouter` uses `basename={import.meta.env.BASE_URL}` (`main.tsx`); a `404.html` copy of `index.html` is generated at deploy time as the SPA fallback. The desktop build keeps `base: '/'` (the forked server serves the SPA from root), so neither `vite.config.ts` nor the desktop bundle is affected.
+
+### 12.3 Public-site deploy (`.github/workflows/pages.yml`)
+On every push to `main`, a GitHub Actions workflow resolves the latest GitHub Release's `.exe` `browser_download_url` (injecting `VITE_DOWNLOAD_URL`), builds the client with `VITE_PUBLIC_SITE=true --base=/Xenolinguist/`, writes the `404.html` fallback, and deploys via `actions/deploy-pages`. Pages is enabled with the "GitHub Actions" source. The `DownloadSection` is covered by `DownloadSection.test.tsx` (render + URL + honest-copy assertions).
 
 ---
 
@@ -243,7 +261,7 @@ The `/` route renders a fully-static, no-network cinematic landing page: a Vanta
 | **Hardened window + preload** | `contextIsolation:true`, `nodeIntegration:false`, no `ipcRenderer.invoke`/`send` surface; preload exposes read-only `window.xeno` metadata plus **receive-only** subscriptions to the `ollama:offline` / `ollama:pull-progress` channels. |
 | **Ollama liveness + auto-pull** | Probes Ollama on launch; pulls the default model with streamed progress if missing; emits `ollama:offline` otherwise. Both events are now received by the renderer (see `OllamaProvider`). |
 | **esbuild bundling** | `scripts/bundle.mjs` produces self-contained CJS for the forked server and the Electron main/preload. |
-| **electron-builder packaging** | Packages for Win/macOS/Linux; ships the SPA and vendored voice binaries via `extraResources`; GitHub-based publish/auto-update. |
+| **electron-builder packaging** | Packages for Win/macOS/Linux; ships the SPA and vendored voice binaries via `extraResources`; GitHub-based publish/auto-update. The Windows NSIS installer uses a URL-friendly `artifactName` (`Xenolinguist-Setup-${version}.${ext}`). The first public build, **v1.0.0**, is published as a GitHub Release (unsigned ~421 MB installer + `latest.yml` for electron-updater); the public download page (§12) links to that asset. Only Windows is built/voice-supported today, matching §16. |
 | **Single-instance lock** | One instance; a second launch focuses the existing window. |
 | **Dev orchestration** | `scripts/wait-and-launch.mjs` waits for Vite, bundles, then launches Electron at the dev URL. |
 | **Verification scripts** | `scripts/verify-stt.mjs` and `scripts/verify-ipa.mjs` exercise the vendored Whisper/IPA assets offline (used in place of vitest tests the native runtimes can't host on Windows). |
