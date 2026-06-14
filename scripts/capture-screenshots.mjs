@@ -12,6 +12,10 @@
 //
 //   node scripts/capture-screenshots.mjs
 //
+// Env knobs:
+//   ONLY=marketing|workbench|both   (default both)
+//   HEADLESS=1                       (default headed; workbench is more stable headless)
+//
 import { chromium } from 'playwright'
 import { mkdir } from 'node:fs/promises'
 
@@ -19,6 +23,8 @@ const OUT = 'docs/screenshots'
 const MARKETING = process.env.MARKETING_URL || 'http://localhost:4173/'
 const WB = process.env.WB_URL || 'http://localhost:5173'
 const API = process.env.API_URL || 'http://localhost:3001'
+const ONLY = process.env.ONLY || 'both'
+const HEADLESS = process.env.HEADLESS === '1'
 const VW = { width: 1440, height: 900 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -58,66 +64,70 @@ async function captureMarketing(browser) {
 
 async function captureWorkbench(browser) {
   const ctx = await browser.newContext({ viewport: VW, deviceScaleFactor: 2 })
-  // Seed the Eridian demo profile (idempotent enough for a fresh dev data dir).
-  await tryShot('seed-demo', async () => {
-    const r = await ctx.request.post(`${API}/api/profiles/demo`)
-    if (!r.ok()) throw new Error(`seed HTTP ${r.status()}`)
-  })
+  // Suppress the first-run onboarding tour so it doesn't overlay the captures.
+  await ctx.addInitScript(() => { try { localStorage.setItem('xenolinguist-tour-completed', 'true') } catch (e) {} })
+  if (process.env.SKIP_SEED !== '1') {
+    await tryShot('seed-demo', async () => {
+      const r = await ctx.request.post(`${API}/api/profiles/demo`)
+      console.log('    seed-demo HTTP', r.status())
+    })
+  }
   const page = await ctx.newPage()
-  await page.goto(`${WB}/app`, { waitUntil: 'networkidle' })
-  await sleep(2000)
+  const toLanding = async () => { await page.goto(`${WB}/app`, { waitUntil: 'domcontentloaded' }); await sleep(2200) }
 
-  // Profile selector (now lists Eridian)
-  await tryShot('landing', async () => { await shot(page, 'landing') })
+  await tryShot('landing', async () => { await toLanding(); await shot(page, 'landing') })
 
-  // New profile setup form, then back
   await tryShot('new-profile', async () => {
+    await toLanding()
     await page.getByText('New Language', { exact: false }).first().click()
-    await sleep(900)
+    await sleep(1000)
     await shot(page, 'new-profile')
-    await page.keyboard.press('Escape')
-    await sleep(500)
   })
 
-  // Sandbox difficulty screen, then back to landing
   await tryShot('sandbox', async () => {
+    await toLanding()
     await page.getByText('Sandbox', { exact: false }).first().click()
-    await sleep(900)
+    await sleep(1000)
     await shot(page, 'sandbox')
-    await page.keyboard.press('Escape')
-    await sleep(500)
   })
 
-  // Enter the Eridian workbench
-  await page.goto(`${WB}/app`, { waitUntil: 'networkidle' })
-  await sleep(1200)
-  await page.getByText('Eridian', { exact: false }).first().click()
-  await sleep(1500)
+  // Enter the Eridian workbench, then capture phases + overlays.
+  let entered = false
+  await tryShot('enter-eridian', async () => {
+    await toLanding()
+    await page.getByText('Eridian', { exact: false }).first().click()
+    await sleep(1800)
+    entered = true
+  })
+  if (!entered) { await ctx.close(); return }
 
-  // Phases 1-6 via number keys
   const phases = ['phase1-samples', 'phase2-numbers', 'phase3-vocabulary', 'phase4-grammar', 'phase5-translation', 'phase6-dashboard']
   for (let i = 0; i < 6; i++) {
     await tryShot(phases[i], async () => {
       await page.keyboard.press(String(i + 1))
-      await sleep(1200)
+      await sleep(1300)
+      if (i === 4) {
+        // Phase 5: type a known Eridian sentence so the live word-by-word
+        // translation (colored by confidence) renders instead of the empty state.
+        await page.getByPlaceholder(/unknown language text/i).first().fill('ka nesh lor, vel tor krash')
+        await sleep(1800)
+      }
       await shot(page, phases[i])
     })
   }
 
-  // Command palette
   await tryShot('command-palette', async () => {
     await page.keyboard.press('Control+k')
-    await sleep(700)
+    await sleep(800)
     await shot(page, 'command-palette')
     await page.keyboard.press('Escape')
     await sleep(400)
   })
 
-  // AI chat (connected) -- open, ask, wait for a streamed answer
   await tryShot('ai-chat', async () => {
     await page.keyboard.press('Shift+A')
-    await sleep(800)
-    const input = page.locator('textarea, input[type=text]').last()
+    await sleep(900)
+    const input = page.locator('textarea, input[type="text"]').last()
     await input.fill('What base is the Eridian number system, and how confident are you?')
     await page.keyboard.press('Enter')
     await sleep(9000) // let the local model stream a reply
@@ -128,9 +138,12 @@ async function captureWorkbench(browser) {
 }
 
 await mkdir(OUT, { recursive: true })
-const browser = await chromium.launch({ headless: false })
-await captureMarketing(browser)
-await captureWorkbench(browser)
+const browser = await chromium.launch({
+  headless: HEADLESS,
+  args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
+})
+if (ONLY !== 'workbench') await captureMarketing(browser)
+if (ONLY !== 'marketing') await captureWorkbench(browser)
 await browser.close()
-console.log(`\nDONE ${done.length} shots:`, done.join(', '))
+console.log(`\nDONE ${done.length}:`, done.join(', '))
 if (skipped.length) console.log(`SKIPPED ${skipped.length}:`, skipped.join(' | '))
