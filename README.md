@@ -1,288 +1,208 @@
 <p align="center">
-  <img src="client/public/logo.svg" alt="Xenolinguist" width="80" />
+  <img src="client/public/logo.svg" alt="Xenolinguist" width="84" />
 </p>
 
 <h1 align="center">Xenolinguist</h1>
 
 <p align="center">
-  <strong>AI-Powered Language Decoding Workbench</strong><br/>
-  <em>Decode unknown languages from scratch — with AI as your research partner.</em>
+  <strong>A local-first desktop workbench for decoding unknown languages</strong><br/>
+  <em>From the first sample to the first sentence — everything runs offline on your machine.</em>
 </p>
 
 <p align="center">
+  <a href="https://github.com/Parusann/Xenolinguist/releases/latest"><img src="https://img.shields.io/github/v/release/Parusann/Xenolinguist?label=download&color=00e676" alt="Latest release" /></a>
+  <img src="https://img.shields.io/badge/platform-Windows-0078D6?logo=windows&logoColor=white" alt="Windows" />
+  <img src="https://img.shields.io/badge/Electron-42-47848F?logo=electron&logoColor=white" alt="Electron" />
   <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React 19" />
-  <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white" alt="Vite 8" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
-  <img src="https://img.shields.io/badge/Ollama-Local_AI-000?logo=ollama&logoColor=white" alt="Ollama" />
+  <img src="https://img.shields.io/badge/AI-Local%20Ollama-000?logo=ollama&logoColor=white" alt="Local Ollama" />
+  <img src="https://img.shields.io/badge/license-Proprietary-lightgrey" alt="Proprietary" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/hero.png" alt="Xenolinguist" width="860" />
+</p>
+
+Xenolinguist is a desktop app for **decoding a language you have no key to** — alien,
+constructed, or obscure. It turns the methodology of first-contact linguistics into a
+tool: capture raw samples, crack the number system, build a dictionary, infer grammar,
+and translate — with a **local LLM, audio playback, speech-to-text, and phonetic
+transcription** assisting the whole way. Nothing leaves your machine: all AI runs through
+a local **Ollama** model and all voice processing uses bundled binaries. No account, no cloud.
+
+---
+
+## ⬇ Download
+
+> **[Download for Windows (v1.0.0)](https://github.com/Parusann/Xenolinguist/releases/latest/download/Xenolinguist-Setup-1.0.0.exe)**  ·  Try the landing page live at **[parusann.github.io/Xenolinguist](https://parusann.github.io/Xenolinguist/)**
+
+- **Windows 10 / 11, 64-bit.** Download, run the installer, and you're decoding.
+- **Unsigned build** — Windows SmartScreen will warn "unknown publisher." Click
+  **More info → Run anyway.** It's [open source for inspection](https://github.com/Parusann/Xenolinguist).
+- **AI features** (translation, field notes, suggestions) use a free, local
+  [Ollama](https://ollama.com) model — install it and the rest of the workbench works offline without it.
+
+<p align="center">
+  <img src="docs/screenshots/download.png" alt="Download" width="820" />
 </p>
 
 ---
 
-## Overview
+## The six-phase decoding workflow
 
-Xenolinguist is a full-stack web application inspired by the first-contact language decoding scenes in *Project Hail Mary*. It provides a structured, six-phase workflow for systematically decoding an unknown language — whether it's a constructed language, an obscure real language, or a completely alien one.
+Every unknown language is cracked the same way. Xenolinguist turns that loop into six
+phases (jump between them with keys **1–6**), each building on the last.
 
-The app simulates the experience of encountering a language with zero shared reference points and working through it methodically: starting with number systems, moving to vocabulary, then grammar, and eventually full translation — with a locally-hosted AI acting as your research partner throughout the entire process.
+| # | Phase | What you do |
+|---|-------|-------------|
+| 1 | **Samples** | Capture raw alien text; tag the source, add phonetic notes, attach & transcribe audio. |
+| 2 | **Numbers** | Map number words to integers and **detect the base** — the Rosetta Stone of any new language. |
+| 3 | **Vocabulary** | Build a living dictionary; every entry carries a 0–100 confidence, part of speech, context, and examples. |
+| 4 | **Grammar** | Document word-order, morphology, and structural rules — each backed by evidence. |
+| 5 | **Translation** | Live word-by-word decoding, every token colored by confidence, with inline correction. |
+| 6 | **Dashboard** | A "Field Log": decoding %, milestones, discovery timeline, AI notes, and JSON/CSV import-export. |
 
-<p align="center">
-  <img src="docs/screenshots/landing.png" alt="Landing Screen" width="700" />
-  <br/><em>Landing screen with ambient particle field and frosted glass UI</em>
-</p>
+<p align="center"><img src="docs/screenshots/phase1-samples.png" alt="Phase 1 — Samples" width="780" /><br/><em>Phase 1 · Samples — capture raw text & audio, auto-decode against the dictionary</em></p>
+<p align="center"><img src="docs/screenshots/phase2-numbers.png" alt="Phase 2 — Numbers" width="780" /><br/><em>Phase 2 · Numbers — map number words and auto-detect the base (Eridian is base-8)</em></p>
+<p align="center"><img src="docs/screenshots/phase3-vocabulary.png" alt="Phase 3 — Vocabulary" width="780" /><br/><em>Phase 3 · Vocabulary — a confidence-bucketed dictionary with a per-word inspector</em></p>
+<p align="center"><img src="docs/screenshots/phase4-grammar.png" alt="Phase 4 — Grammar" width="780" /><br/><em>Phase 4 · Grammar — evidence-backed structural rules with confidence scores</em></p>
+<p align="center"><img src="docs/screenshots/phase5-translation.png" alt="Phase 5 — Translation" width="780" /><br/><em>Phase 5 · Translation — live word-by-word decoding, each token colored by confidence</em></p>
+<p align="center"><img src="docs/screenshots/phase6-dashboard.png" alt="Phase 6 — Dashboard" width="780" /><br/><em>Phase 6 · Dashboard — decoding progress, confidence distribution, milestones, field notes</em></p>
 
 ---
 
 ## Features
 
-### Six-Phase Decoding Workflow
+### 🎙 Voice subsystem — fully local
+Drop in field recordings and decode them by ear and eye:
+- **Text-to-speech** — hear any word or sentence rendered by bundled **espeak-ng** (browser-speech fallback when unavailable).
+- **Speech-to-text** — bundled **whisper.cpp** transcribes recordings, with **honesty gating**: results are labeled *transcription* vs *phonetic-guess* so hallucinated text on alien audio is never presented as fact.
+- **Phonetic / IPA recognition** — an in-process **wav2vec2 CTC** model emits time-aligned phones that seed the audio segmenter and feed the LLM.
 
-Each phase builds on the previous, guiding you through the linguistics methodology used in real first-contact scenarios.
+### 🤖 Local AI (Ollama)
+All inference is local and private. Streaming responses (SSE), automatic **heavy/light
+model routing** per task, an AI chat panel primed with your dictionary/grammar/samples,
+and background pattern suggestions as you work.
 
-| Phase | Name | Description |
-|-------|------|-------------|
-| 1 | **Samples** | Input and collect raw language samples with source tagging, audio recording, and parallel text mode |
-| 2 | **Numbers** | Map the unknown number system — always the first step in first-contact linguistics |
-| 3 | **Vocabulary** | Build a living dictionary with AI-assisted word suggestions, confidence tracking, and part-of-speech tagging |
-| 4 | **Grammar** | Analyze word order, morphology, and structural patterns with confidence-scored rules |
-| 5 | **Translation** | Live translation engine with word-by-word confidence highlighting and inline corrections |
-| 6 | **Dashboard** | Track overall decoding progress with visual stats, import/export profiles, and discovery timeline |
+### 🧪 Sandbox mode
+Not ready for a real language? The AI generates a synthetic conlang with **hidden rules**,
+then walks you through decoding it — Number Discovery → Word Mapping → Sentence Decoding →
+Grammar Revelation — across Easy / Medium / Hard difficulties.
 
-<p align="center">
-  <img src="docs/screenshots/New Profile.png" alt="New Profile Setup" width="700" />
-  <br/><em>Profile setup — Name and configure your language before decoding</em>
-</p>
+### 🎛 Confidence everywhere
+Every word, rule, and translation carries a **0–100 score** (≥76 confirmed · ≥41 probable ·
+below that unknown), surfaced through color and weight so you always know how solid the decode is.
 
-<p align="center">
-  <img src="docs/screenshots/Samples.png" alt="Samples Phase" width="700" />
-  <br/><em>Phase 1 — Language sample collection with audio recording support</em>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/numbers.png" alt="Number System" width="700" />
-  <br/><em>Phase 2 — Number system decoder with operator mapping</em>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/vocabulary.png" alt="Vocabulary Builder" width="700" />
-  <br/><em>Phase 3 — Vocabulary builder with AI suggestions and category filtering</em>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/Grammar.png" alt="Grammar Analyzer" width="700" />
-  <br/><em>Phase 4 — Grammar analysis with confidence-scored rule tracking</em>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/translation.png" alt="Translation Engine" width="700" />
-  <br/><em>Phase 5 — Live translation with confidence-coded word highlighting</em>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/dashboard.png" alt="Dashboard" width="700" />
-  <br/><em>Phase 6 — Progress dashboard with animated stats and export options</em>
-</p>
+<p align="center"><img src="docs/screenshots/ai-chat.png" alt="AI chat" width="780" /><br/><em>The Decoder AI panel — a local model reasoning over your corpus, in context</em></p>
+<p align="center"><img src="docs/screenshots/sandbox.png" alt="Sandbox" width="780" /><br/><em>Sandbox — generate a hidden-rule language and practice decoding from scratch</em></p>
+<p align="center"><img src="docs/screenshots/command-palette.png" alt="Command palette" width="780" /><br/><em>Command palette (Ctrl/Cmd+K) — jump to any phase, tool, word, or sample</em></p>
 
 ---
 
-### AI Integration
+## How it works
 
-Xenolinguist uses **Ollama** for fully local, private AI processing — your language data never leaves your machine.
+```
+samples ──▶ numbers ──▶ vocabulary ──▶ grammar ──▶ translation ──▶ dashboard
+  │ raw text   │ crack       │ build the    │ infer      │ decode        │ review &
+  │ + audio    │ the base    │ dictionary   │ the rules  │ live          │ export
+```
 
-- **Multi-model routing** — Automatically selects the optimal model per task (heavy models for deep analysis, light models for quick suggestions)
-- **AI Chat Panel** — Streaming conversation panel with full context awareness of your dictionary, grammar rules, and samples
-- **Auto-suggestions** — AI analyzes new samples in the background and suggests patterns as you work
-- **Pattern analysis** — Deep grammar inference, vocabulary suggestions, number system detection, and full translation
+A profile (one decoded language) is one JSON file. Pick up where you left off, or
+import/export the whole thing. Start from zero, load the seeded **Eridian** demo, or
+let the Sandbox generate a fresh challenge.
 
-### Sandbox Mode
-
-Not ready to decode a real language? The **Sandbox** generates an AI-created constructed language with hidden rules, then guides you through decoding it step by step:
-
-- Three difficulty levels (Easy, Medium, Hard)
-- Four-step guided progression: Number Discovery, Word Mapping, Sentence Decoding, Grammar Revelation
-- Three-tier hint system per challenge (category hint, context hint, full reveal)
-- Accuracy tracking and completion stats
-
-### Apple-Style Frosted Glass UI
-
-The entire interface is built with a custom four-layer frosted glass design system inspired by Apple's latest OS aesthetics:
-
-- **Depth-layered blur** — Four distinct glass levels (40px/24px/12px/48px) creating natural visual hierarchy
-- **Light refraction borders** — Brighter top borders simulate real glass light behavior
-- **Noise texture overlay** — Subtle fractal noise on all glass panels for material authenticity
-- **Chrome text effects** — Metallic gradient text on headings with green accent highlights
-- **Ambient particle field** — Interactive particles on the landing screen that react to mouse movement with connection lines between nearby particles
-
-### Power User Features
-
-- **Command Palette** (`Ctrl+K`) — Global search across your dictionary, samples, grammar rules, and number mappings
-- **Keyboard Shortcuts** — Number keys 1-6 for phase navigation, `L` for session log, `Shift+A` for AI chat, `Ctrl+Z` for undo
-- **Right-Click Context Menus** — Quick actions on samples and dictionary entries (copy, decode, delete)
-- **Undo System** — Full undo support for deletions with data restoration
-- **Toast Notifications** — Non-intrusive feedback with auto-dismiss and progress indicators
-- **Onboarding Tour** — Nine-step guided walkthrough for first-time users
-- **Session Log** — Complete activity history with timestamped entries
-- **Audio Support** — Record and upload audio clips via Web Audio API and Web Speech API
+<p align="center"><img src="docs/screenshots/landing.png" alt="Profile selector" width="780" /><br/><em>Profile selector — your saved languages, plus New / Sandbox / Load-demo</em></p>
 
 ---
 
-## Tech Stack
+## Tech stack
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | React 19, TypeScript 5.8, Vite 8 |
-| **Styling** | Tailwind CSS v4 with `@tailwindcss/vite` plugin |
-| **State** | React Context with custom hooks |
-| **Backend** | Node.js, Express, TypeScript |
-| **AI Engine** | Ollama (local LLM inference) |
-| **Storage** | File-based JSON profiles (server-side) |
-| **Audio** | Web Audio API, Web Speech API |
-| **Monorepo** | npm workspaces (`client/`, `server/`, `shared/`) |
+| **Desktop shell** | Electron 42, electron-builder (NSIS installer + auto-update) |
+| **Frontend** | React 19, TypeScript, Vite 8, Tailwind CSS 4 |
+| **Backend** | Node.js + Express (forked by Electron onto a loopback port) |
+| **AI** | Local **Ollama** (streaming chat, per-task model routing) |
+| **Voice** | espeak-ng (TTS) · whisper.cpp (STT) · Transformers.js wav2vec2 (IPA phones) |
+| **Storage** | File-based JSON profiles (local) |
+| **Repo** | npm-workspace monorepo — `client` / `server` / `shared` / `electron` |
 
 ---
 
-## Project Structure
+## Build from source
+
+> For end users, the [installer](#-download) is all you need. This section is for developers.
+
+**Prerequisites:** Node.js 20+, and [Ollama](https://ollama.com) running with a chat model pulled.
+
+```bash
+git clone https://github.com/Parusann/Xenolinguist.git
+cd Xenolinguist
+npm install
+
+# Pull a model for AI features (default is gemma4:e4b; any chat model works)
+ollama pull llama3.1:8b
+
+# Run the web app (client :5173 + API :3001)
+npm run dev
+
+# …or run the full desktop app
+npm run electron:dev
+
+# …or build the distributable installer (output in release/)
+npm run dist
+```
+
+<p align="center"><img src="docs/screenshots/new-profile.png" alt="New profile" width="780" /><br/><em>Creating a new language profile</em></p>
+
+### Configuration
+
+All optional — sensible defaults are baked in (see `.env.example`).
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `DATA_DIR` | `server/data` (dev) | Where profiles + audio are stored (Electron sets this in prod) |
+| `OLLAMA_MODEL` | `gemma4:e4b` | Default model for new chats |
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama endpoint |
+| `OLLAMA_TIMEOUT_MS` | `120000` | Per-request / per-token Ollama watchdog |
+| `WHISPER_TIMEOUT_MS` | `120000` | Max wall-clock for one whisper run |
+| `TTS_TIMEOUT_MS` | `30000` | Max wall-clock for one espeak run |
+| `PORT` | `3001` | API port (`0` = OS-assigned, used in prod) |
+| `ESPEAK_PATH` / `WHISPER_BIN` / `WHISPER_MODEL` / `IPA_MODEL_DIR` | bundled (Windows) | Voice binary / model paths |
+
+**Full HTTP API reference:** see [`docs/FEATURES.md`](docs/FEATURES.md) §14. The complete
+feature reference for the whole app lives in [`docs/FEATURES.md`](docs/FEATURES.md).
+
+---
+
+## Project structure
 
 ```
 Xenolinguist/
-├── client/                    # React frontend
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── landing/       # Landing screen, profile setup
-│   │   │   ├── layout/        # AppShell, Sidebar, StatusBar, CommandPalette,
-│   │   │   │                  # AIChat, ContextMenu, OnboardingTour, ToastContainer
-│   │   │   ├── phase1-samples/
-│   │   │   ├── phase2-numbers/
-│   │   │   ├── phase3-vocabulary/
-│   │   │   ├── phase4-grammar/
-│   │   │   ├── phase5-translation/
-│   │   │   ├── phase6-dashboard/
-│   │   │   └── sandbox/       # AI-generated language challenge mode
-│   │   ├── hooks/             # useAI, useAutoSuggest, useKeyboardShortcuts, useUndoRedo
-│   │   ├── stores/            # React contexts (profile, ollama, session-log, toast, undo)
-│   │   └── index.css          # Complete design system (glass, animations, chrome text)
-│   └── public/
-│       ├── favicon.svg
-│       └── logo.svg
-├── server/                    # Express backend
-│   └── src/
-│       ├── routes/            # API routes (profiles, ollama proxy)
-│       └── services/          # Profile storage, AI service abstraction
-├── shared/                    # Shared types, constants, prompt templates
-│   ├── types.ts
-│   ├── constants.ts
-│   └── prompts.ts
-├── package.json               # Workspace root
-└── tsconfig.base.json         # Shared TypeScript config
+├── client/            # React SPA (Vite)
+│   └── src/components/
+│       ├── marketing/        # the public landing / download page
+│       ├── landing/          # profile selector + setup
+│       ├── layout/           # shell, sidebar, command palette, AI chat, tour
+│       ├── phase1-samples … phase6-dashboard/
+│       ├── sandbox/          # AI-generated practice language
+│       └── audio/            # recorder, player, waveform, segmenter
+├── server/            # Express API (profiles, ollama, ai, audio, tts, stt, ipa)
+├── shared/            # types, constants, AI prompts
+├── electron/          # main / preload / builder config
+├── vendor/            # bundled voice binaries + IPA model
+├── scripts/           # build, bundle, capture-screenshots, verify-*
+└── docs/              # FEATURES.md, screenshots, design specs
 ```
 
 ---
 
-## Getting Started
+## A look at the landing site
 
-### Prerequisites
-
-- **Node.js** 18+ and **npm** 9+
-- **Ollama** installed and running locally ([ollama.com](https://ollama.com))
-- At least one language model pulled (recommended: `llama3.1:8b` or `qwen3:32b`)
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/Parusann/Xenolinguist.git
-cd Xenolinguist
-
-# Install dependencies
-npm install
-
-# Pull a recommended Ollama model
-ollama pull llama3.1:8b
-
-# Start the development servers (client + server concurrently)
-npm run dev
-```
-
-The app will be available at **http://localhost:5173** with the API server on **http://localhost:3001**.
-
-### Environment Variables
-
-Copy the example environment file and configure as needed:
-
-```bash
-cp .env.example .env
-```
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | `3001` | API server port |
-| `OLLAMA_URL` | `http://localhost:11434` | Ollama API endpoint |
-
----
-
-## Usage
-
-### Creating a New Language Profile
-
-1. Click **New Language** on the landing screen
-2. Name your language and optionally add a description and phonetic notes
-3. Click **Begin Decoding** to enter the six-phase workflow
-
-### Decoding Workflow
-
-1. **Collect Samples** — Paste, type, or record unknown language text. Tag each sample with its source.
-2. **Map Numbers** — The number system is always decoded first. Map number words 1-20+ and detect the base system.
-3. **Build Vocabulary** — Manually add words or let AI suggest mappings. Each word tracks confidence, part of speech, and context.
-4. **Analyze Grammar** — Document word order rules, morphology patterns, and structural observations with evidence.
-5. **Translate** — Enter text for live word-by-word translation. Click any word to inspect or correct it. Use AI for full-sentence translation.
-6. **Review Progress** — Track your decoding percentage, export your profile, or import previous work.
-
-### Sandbox Mode
-
-1. Click **Sandbox** on the landing screen
-2. Choose a difficulty level (Easy / Medium / Hard)
-3. The AI generates a complete constructed language with hidden rules
-4. Work through four guided steps to decode it, using hints when stuck
-
----
-
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `1` - `6` | Navigate to phases |
-| `Ctrl+K` | Open command palette |
-| `Shift+A` | Toggle AI chat panel |
-| `L` | Toggle session log |
-| `Ctrl+Z` | Undo last action |
-| `Shift+?` | Show all shortcuts |
-| `Esc` | Close open panel |
-
----
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/profiles` | List all saved profiles |
-| `POST` | `/api/profiles` | Create a new profile |
-| `GET` | `/api/profiles/:id` | Get a specific profile |
-| `PUT` | `/api/profiles/:id` | Update a profile |
-| `DELETE` | `/api/profiles/:id` | Delete a profile |
-| `POST` | `/api/ai/generate` | Send a prompt to Ollama |
-| `POST` | `/api/ai/stream` | Stream a response from Ollama |
-| `GET` | `/api/ai/models` | List available Ollama models |
-
----
-
-## Building for Production
-
-```bash
-# Build both client and server
-npm run build
-
-# Client output: client/dist/
-# Server output: server/dist/
-```
+<p align="center"><img src="docs/screenshots/method.png" alt="Method" width="760" /></p>
+<p align="center"><img src="docs/screenshots/demo.png" alt="Interactive demo" width="760" /></p>
+<p align="center"><img src="docs/screenshots/features.png" alt="Features" width="760" /></p>
+<p align="center"><img src="docs/screenshots/privacy.png" alt="Privacy" width="760" /></p>
 
 ---
 
