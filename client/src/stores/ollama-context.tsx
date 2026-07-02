@@ -51,23 +51,21 @@ export function OllamaProvider({ children }: { children: ReactNode }) {
   const [selectedModel, setSelectedModel] = useState('')
   const [lightModel, setLightModel] = useState('')
 
-  const refresh = useCallback(async () => {
-    try {
-      const res = await fetch('/api/ollama/status')
-      const data: OllamaStatus = await res.json()
-      setStatus(data)
-      if (data.connected && data.models.length > 0) {
-        if (!selectedModel) setSelectedModel(pickDefaultModel(data.models, 'heavy'))
-        if (!lightModel) {
+  const refresh = useCallback(() => {
+    return fetch('/api/ollama/status')
+      .then(res => res.json())
+      .then((data: OllamaStatus) => {
+        setStatus(data)
+        if (data.connected && data.models.length > 0) {
+          setSelectedModel(prev => prev || pickDefaultModel(data.models, 'heavy'))
           // Only set light model if there are 2+ models available
-          const light = pickDefaultModel(data.models, 'light')
-          setLightModel(light)
+          setLightModel(prev => prev || pickDefaultModel(data.models, 'light'))
         }
-      }
-    } catch {
-      setStatus({ connected: false, models: [] })
-    }
-  }, [selectedModel, lightModel])
+      })
+      .catch(() => {
+        setStatus({ connected: false, models: [] })
+      })
+  }, [])
 
   useEffect(() => {
     refresh()

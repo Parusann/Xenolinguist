@@ -1,8 +1,35 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { WaveformCanvas, extractPeaks } from './WaveformCanvas'
-import { useLanguageDetection, LanguageBadge } from './LanguageDetector'
+import { WaveformCanvas } from './WaveformCanvas'
+import { LanguageBadge } from './LanguageDetector'
+import { extractPeaks } from '@/lib/audio'
+import { useLanguageDetection } from '@/hooks/useLanguageDetection'
 import { transcribePhones as transcribeIpa } from '@/services/ipa'
 import type { SttSegment, IpaSegment } from 'shared/types'
+
+// Minimal Web Speech API surface used here; TS's DOM lib only ships the
+// result types (SpeechRecognitionResultList etc.), not the recognizer itself.
+interface SpeechRecognitionResultEvent {
+  results: SpeechRecognitionResultList
+}
+
+interface SpeechRecognitionInstance {
+  continuous: boolean
+  interimResults: boolean
+  maxAlternatives: number
+  onresult: ((event: SpeechRecognitionResultEvent) => void) | null
+  onerror: (() => void) | null
+  start(): void
+  stop(): void
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance
+
+declare global {
+  interface Window {
+    SpeechRecognition?: SpeechRecognitionConstructor
+    webkitSpeechRecognition?: SpeechRecognitionConstructor
+  }
+}
 
 interface AudioRecorderProps {
   onRecordingComplete: (audioBlob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess', ipa?: string, ipaSegments?: IpaSegment[]) => void
@@ -23,7 +50,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
   const { detect, detecting, result: langResult, reset: resetLang } = useLanguageDetection()
 
   // Live speech recognition during recording
-  const liveRecognitionRef = useRef<any>(null)
+  const liveRecognitionRef = useRef<SpeechRecognitionInstance | null>(null)
   const [liveTranscript, setLiveTranscript] = useState('')
   const [liveLanguage, setLiveLanguage] = useState<string | null>(null)
 
@@ -36,7 +63,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
       streamRef.current = null
     }
     if (liveRecognitionRef.current) {
-      try { liveRecognitionRef.current.stop() } catch {}
+      try { liveRecognitionRef.current.stop() } catch { /* recognition may already be inactive */ }
       liveRecognitionRef.current = null
     }
     cancelAnimationFrame(animFrameRef.current)
@@ -61,14 +88,14 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
       analyserRef.current = analyser
 
       // Start live speech recognition for real-time language detection
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition()
         recognition.continuous = true
         recognition.interimResults = true
         recognition.maxAlternatives = 1
 
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event) => {
           let transcript = ''
           for (let i = 0; i < event.results.length; i++) {
             transcript += event.results[i][0].transcript
@@ -95,7 +122,9 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
         try {
           recognition.start()
           liveRecognitionRef.current = recognition
-        } catch {}
+        } catch {
+          /* start() throws if recognition is already active — live transcript is optional */
+        }
       }
 
       // Set up MediaRecorder
@@ -157,9 +186,6 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
     } catch (err) {
       console.error('Microphone access denied:', err)
     }
-    // liveLanguage is intentionally NOT a dep: it's a UI-only hint and including it would
-    // re-create this callback on every interim speech result.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onRecordingComplete, detect, resetLang])
 
   useEffect(() => {
@@ -168,7 +194,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
         streamRef.current.getTracks().forEach(t => t.stop())
       }
       if (liveRecognitionRef.current) {
-        try { liveRecognitionRef.current.stop() } catch {}
+        try { liveRecognitionRef.current.stop() } catch { /* recognition may already be inactive */ }
       }
       if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') audioCtxRef.current.close()
       cancelAnimationFrame(animFrameRef.current)

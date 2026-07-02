@@ -32,7 +32,7 @@ export function TranslationEngine() {
   const [editing, setEditing] = useState(false)
   const [editMeaning, setEditMeaning] = useState('')
 
-  const dictionary = profile?.dictionary || []
+  const dictionary = useMemo(() => profile?.dictionary || [], [profile?.dictionary])
 
   const translatedWords: TranslatedWord[] = useMemo(() => {
     if (!alienInput.trim()) return []

@@ -90,7 +90,7 @@ export function SampleInput() {
     try {
       const arrayBuf = await file.arrayBuffer()
       const decoded = await audioCtx.decodeAudioData(arrayBuf)
-      const { extractPeaks } = await import('@/components/audio/WaveformCanvas')
+      const { extractPeaks } = await import('@/lib/audio')
       const peaks = extractPeaks(decoded, 200)
       const blob = new Blob([arrayBuf], { type: file.type })
       const blobUrl = URL.createObjectURL(blob)

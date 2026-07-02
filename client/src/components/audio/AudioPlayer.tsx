@@ -54,7 +54,7 @@ export function AudioPlayer({
     }
   }, [src])
 
-  const updateProgress = useCallback(() => {
+  const updateProgress = useCallback(function tick() {
     const audio = audioRef.current
     if (!audio || audio.paused) return
     // Stop at the segment end when a playback window is set.
@@ -68,7 +68,7 @@ export function AudioPlayer({
     setProgress(p)
     setCurrentTime(audio.currentTime)
     onTimeUpdate?.(audio.currentTime)
-    animRef.current = requestAnimationFrame(updateProgress)
+    animRef.current = requestAnimationFrame(tick)
   }, [duration, onTimeUpdate, end])
 
   const togglePlay = useCallback(() => {

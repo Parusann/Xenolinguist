@@ -68,9 +68,15 @@ const TOUR_STEPS: TourStep[] = [
 
 const STORAGE_KEY = 'xenolinguist-tour-completed'
 
+function measureRect(selector?: string): DOMRect | null {
+  if (!selector) return null
+  const el = document.querySelector(selector)
+  return el ? el.getBoundingClientRect() : null
+}
+
 export function OnboardingTour({ onComplete }: OnboardingTourProps) {
   const [currentStep, setCurrentStep] = useState(0)
-  const [targetRect, setTargetRect] = useState<DOMRect | null>(null)
+  const [targetRect, setTargetRect] = useState<DOMRect | null>(() => measureRect(TOUR_STEPS[0].selector))
   const [animating, setAnimating] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
@@ -79,29 +85,17 @@ export function OnboardingTour({ onComplete }: OnboardingTourProps) {
   const isFirst = currentStep === 0
   const isLast = currentStep === totalSteps - 1
 
-  const measureTarget = useCallback(() => {
-    if (!step.selector) {
-      setTargetRect(null)
-      return
-    }
-    const el = document.querySelector(step.selector)
-    if (el) {
-      setTargetRect(el.getBoundingClientRect())
-    } else {
-      setTargetRect(null)
-    }
-  }, [step.selector])
-
   useEffect(() => {
-    measureTarget()
-    window.addEventListener('resize', measureTarget)
-    return () => window.removeEventListener('resize', measureTarget)
-  }, [measureTarget])
+    const onResize = () => setTargetRect(measureRect(step.selector))
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [step.selector])
 
   const transition = useCallback((next: number) => {
     setAnimating(true)
     setTimeout(() => {
       setCurrentStep(next)
+      setTargetRect(measureRect(TOUR_STEPS[next].selector))
       setAnimating(false)
     }, 150)
   }, [])

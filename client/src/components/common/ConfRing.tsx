@@ -1,6 +1,5 @@
-/** Confidence bucket → color, matching the design's thresholds. */
-export type ConfBucket = 'confirmed' | 'probable' | 'unknown'
-export const confBucket = (v: number): ConfBucket => (v >= 76 ? 'confirmed' : v >= 41 ? 'probable' : 'unknown')
+import { confBucket, type ConfBucket } from '@/lib/confidence'
+
 const COLOR: Record<ConfBucket, string> = {
   confirmed: 'var(--conf-confirmed)',
   probable: 'var(--conf-probable)',

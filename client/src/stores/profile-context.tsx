@@ -45,7 +45,10 @@ export function ProfileProvider({
   const { addEntry } = useSessionLog()
   const saveTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const profileRef = useRef(profile)
-  profileRef.current = profile
+
+  useEffect(() => {
+    profileRef.current = profile
+  }, [profile])
 
   useEffect(() => {
     onProfileChange?.(profile)

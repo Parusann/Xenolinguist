@@ -20,4 +20,12 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    // Context modules pair a Provider component with its consumer hook by
+    // design; splitting them only to enable Fast Refresh isn't worth it.
+    files: ['src/stores/**/*.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])

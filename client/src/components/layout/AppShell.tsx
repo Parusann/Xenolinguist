@@ -20,19 +20,9 @@ import { useProfile } from '@/stores/profile-context'
 import { useOllama } from '@/stores/ollama-context'
 import { useUndo } from '@/stores/undo-context'
 import { useKeyboardShortcuts, type ShortcutDefinition } from '@/hooks/useKeyboardShortcuts'
-
-export const PHASES = [
-  { id: 'samples', label: 'Samples', icon: '{}', desc: 'Input & collect language samples' },
-  { id: 'numbers', label: 'Numbers', icon: '#', desc: 'Decode the number system' },
-  { id: 'vocabulary', label: 'Vocabulary', icon: 'Aa', desc: 'Map words to meanings' },
-  { id: 'grammar', label: 'Grammar', icon: '⟨⟩', desc: 'Analyze structure & rules' },
-  { id: 'translation', label: 'Translation', icon: '⇄', desc: 'Live translation engine' },
-  { id: 'dashboard', label: 'Dashboard', icon: '◈', desc: 'Progress & export' },
-] as const
+import { PHASES, type PhaseId } from '@/lib/phases'
 
 const SANDBOX_PHASE = { id: 'sandbox', label: 'Sandbox', icon: '◈', desc: 'AI-generated language challenge' } as const
-
-export type PhaseId = 'sandbox' | 'samples' | 'numbers' | 'vocabulary' | 'grammar' | 'translation' | 'dashboard'
 
 export function AppShell() {
   const { profile } = useProfile()
@@ -54,7 +44,7 @@ export function AppShell() {
     setShortcutsOpen(false)
     setLogOpen(false)
     setChatOpen(false)
-  }, [])
+  }, [setShortcutsOpen, setLogOpen, setChatOpen])
 
   const shortcuts = useMemo<ShortcutDefinition[]>(
     () => [
@@ -108,7 +98,7 @@ export function AppShell() {
         category: 'Other' as const,
       },
     ],
-    [phaseIds, closeAll, undo],
+    [phaseIds, closeAll, undo, setActivePhase, setLogOpen, setCommandPaletteOpen, setChatOpen, setShortcutsOpen],
   )
 
   const registered = useKeyboardShortcuts(shortcuts)
