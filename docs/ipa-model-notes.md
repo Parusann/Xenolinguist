@@ -56,9 +56,12 @@ the un-quantized cache:
 service, parallel capture wiring + IPA chip, AI feeding (`formatSamplesForPrompt` + `phoneticAnalysis`
 task + button), decode-view display, `Sample.ipa`, Electron `IPA_MODEL_DIR` env + `extraResources` +
 `.gitattributes`. `scripts/bundle.mjs` marks `@huggingface/transformers` **external** so the desktop
-build (`npm run bundle`) succeeds — in dev the service loads it from `node_modules`; in the packaged
-app it's absent → `/api/ipa` returns 503 and IPA degrades gracefully. The **engine is proven**:
-`node scripts/verify-ipa.mjs` (against the cached model) transcribes the fixture to phones.
+build (`npm run bundle`) succeeds — in dev the service loads it from `node_modules`. (At the time this
+section was first written the dep was absent from the packaged app, so `/api/ipa` returned 503 and IPA
+degraded gracefully; that has **since been resolved** — the runtime deps now ship via
+`resources/server-deps` + `NODE_PATH`, see the "Packaged IPA — DONE + verified" section below.) The
+**engine is proven**: `node scripts/verify-ipa.mjs` (against the cached model) transcribes the fixture
+to phones.
 
 **Packaged IPA — DONE + verified.**
 1. **Model vendored:** the int8-quantized `model.onnx` (303 MB) + config/tokenizer live in

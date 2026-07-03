@@ -10,11 +10,14 @@
 1. Bump `version` in `package.json`.
 2. `npm run dist` locally to smoke-test the installer (unsigned is fine for local testing).
 3. With the env vars above set: `npx electron-builder --config electron/builder.config.cjs --publish always`.
-4. electron-builder uploads signed artifacts + `latest.yml` to a GitHub Release;
+4. electron-builder uploads the built artifacts + `latest.yml` to a GitHub Release;
    installed apps auto-update on next launch via `electron-updater`.
 
-Unsigned builds run locally but show OS "unidentified developer" warnings; signing is
-required before public distribution.
+Unsigned builds run but show OS "unidentified developer" / SmartScreen warnings. v1.0.0
+shipped publicly unsigned by decision — the free+local rule rules out paid certs, and the
+download page documents the SmartScreen bypass. If the project ever adopts a cert (e.g.
+Azure Trusted Signing or an Apple Developer ID), the prerequisites above apply and
+signing slots back into the release flow.
 
 ## Windows: building without admin (winCodeSign symlink workaround)
 

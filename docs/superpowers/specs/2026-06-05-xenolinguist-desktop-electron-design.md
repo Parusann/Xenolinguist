@@ -1,7 +1,7 @@
 # Xenolinguist Desktop (Electron) — Design Spec
 
 - **Date:** 2026-06-05
-- **Status:** Approved design, ready for implementation plan
+- **Status:** Shipped (June 2026)
 - **Packaging:** Electron (downloadable, fully-local desktop app)
 - **Supersedes:** `2026-06-05-xenolinguist-web-deploy-design.md` (the Fly.io + Cloudflare-tunnel web-hosting approach). That spec is retained for reference on the `deploy/web-fly` branch but is no longer the direction. Its reusable ideas — Express serving the SPA, the `DATA_DIR` storage refactor, and the AI provider abstraction — are carried forward here.
 
@@ -97,7 +97,7 @@ user → BrowserWindow (React) → fetch /api/* → localhost Express (in app)
 
 ## 7. Out of scope (next spec)
 
-Voice/phonetics — local phonetic/IPA recognition (Allosaurus), browser + espeak-ng TTS, and system-wide hotkey dictation — is a **follow-on spec**. The main-process design here intentionally leaves a clean seam for managing those sidecars (espeak-ng binary, a Python phonetic model). Also deferred: making Claude a first-class optional provider (minor), and any model-management UI beyond a basic picker.
+Voice/phonetics — local phonetic/IPA recognition (Allosaurus), browser + espeak-ng TTS, and system-wide hotkey dictation — is a **follow-on spec**. The main-process design here intentionally leaves a clean seam for managing those sidecars (espeak-ng binary, a Python phonetic model). Also deferred: making Claude a first-class optional provider (minor), and any model-management UI beyond a basic picker. *(Update 2026-07-02: the voice increments shipped — espeak-ng TTS, whisper.cpp STT, and phonetic/IPA via in-process Transformers.js wav2vec2 rather than an Allosaurus/Python sidecar, see docs/ipa-model-notes.md; hotkey dictation, the Claude provider, and a model picker remain unshipped.)*
 
 ## 8. Testing / verification
 

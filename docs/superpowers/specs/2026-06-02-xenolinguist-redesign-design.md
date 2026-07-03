@@ -1,6 +1,6 @@
 # Xenolinguist Redesign — Integration Spec
 
-**Date:** 2026-06-02 · **Owner:** Parusan · **Status:** Approved (strategy), pending spec review
+**Date:** 2026-06-02 · **Owner:** Parusan · **Status:** Shipped (early June 2026)
 
 ## Goal
 

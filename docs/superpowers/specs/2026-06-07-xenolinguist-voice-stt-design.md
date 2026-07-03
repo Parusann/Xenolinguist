@@ -1,7 +1,7 @@
 # Xenolinguist Voice — Increment 2: Local Speech-to-Text (Whisper)
 
 - **Date:** 2026-06-07
-- **Status:** Approved design, ready for implementation plan
+- **Status:** Shipped (June 2026)
 - **Branch:** `whisper/stt` (off `main`, after the prerequisite merges below)
 - **Cost constraint:** everything free + fully local (no paid APIs, no cloud, no paid signing). Engine: **whisper.cpp** (open source, bundled binary) + a bundled quantized multilingual model. Browser Web-Speech is retained only as an optional soft fallback for the live transcript.
 
@@ -11,7 +11,7 @@ The voice subsystem ships as three independent increments, all free/local:
 
 1. **Increment 1 — TTS ("Hear the language").** ✅ Shipped. Browser `speechSynthesis` + a bundled espeak-ng sidecar at `POST /api/tts`. Established the **Electron sidecar-binary bundling pattern** this increment reuses.
 2. **Increment 2 — Real STT (Whisper)** ← *this spec*. A bundled `whisper.cpp` sidecar at `POST /api/stt`: replaces the flaky Web-Speech language detector, transcribes recorded/uploaded samples, detects language, auto-segments via timestamps, and links transcripts to the dictionary. Honest about its limits on non-human audio.
-3. **Increment 3 — Phonetic / IPA (the signature).** Allosaurus (or ONNX) for language-independent IPA transcription, fed to the AI partner. The true answer for genuinely alien/constructed audio. *(Future spec.)*
+3. **Increment 3 — Phonetic / IPA (the signature).** Allosaurus (or ONNX) for language-independent IPA transcription, fed to the AI partner. The true answer for genuinely alien/constructed audio. *(Future spec — since shipped via Transformers.js wav2vec2, not Allosaurus; see docs/ipa-model-notes.md.)*
 
 ### 0.1 Prerequisite (branch topology)
 
@@ -159,7 +159,7 @@ Whisper's value here is being **bundled, offline, deterministic, and multilingua
 
 **In:** client WAV conversion (`wav-encode`), client `stt` service, `whisperBinPath`/`whisperModelPath` config, `stt-whisper` service + `SttUnavailableError`, `POST /api/stt` route + `app.ts` wiring, replacing the flaky `useLanguageDetection` internals (hook API preserved), confidence→mode labeling, auto-segment wiring (surfacing `AudioSegmenter`, seeding from timestamps), dictionary linking (transcription mode only), re-transcribe saved samples, Windows whisper.cpp vendoring (binary + DLLs + `ggml-base-q5_1` model), Electron env wiring + `extraResources` + `.gitattributes`, the tests above, and the prerequisite branch merges (§0.1).
 
-**Out (later):** macOS/Linux whisper vendoring (added at those builds; graceful 503 meanwhile); streaming/live whisper transcription; word-level (vs segment-level) timestamp refinement; threshold re-calibration UI; Increment 3 (Allosaurus phonetic/IPA — the real alien-audio answer).
+**Out (later):** macOS/Linux whisper vendoring (added at those builds; graceful 503 meanwhile); streaming/live whisper transcription; word-level (vs segment-level) timestamp refinement; threshold re-calibration UI; Increment 3 (phonetic/IPA — the real alien-audio answer; shipped via Transformers.js wav2vec2 rather than Allosaurus, see docs/ipa-model-notes.md).
 
 ## 9. Decisions (locked)
 

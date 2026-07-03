@@ -121,14 +121,14 @@ IPA never hard-fails capture; recording + whisper STT continue regardless.
 
 **In:** the feasibility spike (§5), `ipaModelDir` config, `ipa-phones` service + `IpaUnavailableError`, `POST /api/ipa` + `app.ts` wiring, `Sample.ipa` type, client `ipa` service, parallel auto-capture wiring, IPA badge, AI feeding (`formatSamplesForPrompt` + `phoneticAnalysis` task), `SampleDecodeView` IPA display, Windows model vendoring + Electron env + `extraResources` + `.gitattributes`, `scripts/verify-ipa.mjs`, the tests above, and the prerequisite merge (§0.1).
 
-**Out (later):** per-phone segmentation (deriving phone timings from CTC to auto-seed the segmenter — deferred stretch); IPA surfacing in the Sandbox (generated conlangs aren't recorded audio); IPA→dictionary linking; macOS/Linux model vendoring (graceful 503 meanwhile).
+**Out (later):** per-phone segmentation (deriving phone timings from CTC to auto-seed the segmenter — deferred stretch; *update 2026-07-02: shipped — see FEATURES.md §9.3*); IPA surfacing in the Sandbox (generated conlangs aren't recorded audio); IPA→dictionary linking; macOS/Linux model vendoring (graceful 503 meanwhile).
 
 ## 9. Decisions (locked)
 
 - **Engine:** ONNX **in-process in Node** via **Transformers.js** + a bundled wav2vec2 eSpeak-phoneme model (decided over Allosaurus, which would drag in Python/PyTorch and break the clean single-artifact bundling, and over hand-rolled `onnxruntime-node` + manual CTC). Free/local; no Python; signing remains deferred.
 - **Capture:** runs **automatically on every recording, in parallel with whisper** (decided over on-demand-only and auto+re-run).
 - **Output:** an IPA/phone **string** stored on `Sample.ipa`; audio sent as base64 WAV over `POST /api/ipa`; results JSON.
-- **Extras:** dedicated `phoneticAnalysis` AI task **in**; IPA shown in `SampleDecodeView` **in**; per-phone segmentation **deferred**.
+- **Extras:** dedicated `phoneticAnalysis` AI task **in**; IPA shown in `SampleDecodeView` **in**; per-phone segmentation **deferred** *(update 2026-07-02: shipped — per-phone CTC timings now seed the segmenter; FEATURES.md §9.3)*.
 - **Fallback:** graceful 503 → IPA features degrade (no crash).
 - **Backend (native vs WASM):** decided by the spike (§5); default lean WASM.
 - **Branch:** `phonetic/ipa` off `main` after PR #4 merges.

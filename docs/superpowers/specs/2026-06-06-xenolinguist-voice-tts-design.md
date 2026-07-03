@@ -1,7 +1,7 @@
 # Xenolinguist Voice — Increment 1: Local Text-to-Speech ("Hear the language")
 
 - **Date:** 2026-06-06
-- **Status:** Approved design, ready for implementation plan
+- **Status:** Shipped (June 2026)
 - **Branch:** `voice/tts` (off `desktop/electron`)
 - **Cost constraint:** everything free + fully local (no paid APIs, no cloud). Engines: browser `speechSynthesis` (built-in) + **espeak-ng** (open source, bundled binary).
 
@@ -11,7 +11,7 @@ The full voice subsystem is split into three independently-shippable increments,
 
 1. **Increment 1 — "Hear the language" (TTS)** ← *this spec*. Browser `speechSynthesis` + a bundled espeak-ng sidecar. Establishes the Electron **sidecar-binary bundling pattern** the next increments reuse.
 2. **Increment 2 — Real STT (Whisper).** Bundled `whisper.cpp`; replaces the flaky Web-Speech detector, transcribes recorded samples, auto-segments. *(Future spec.)*
-3. **Increment 3 — Phonetic / IPA (the signature).** Allosaurus (or ONNX) for language-independent IPA transcription, fed to the AI partner. *(Future spec.)*
+3. **Increment 3 — Phonetic / IPA (the signature).** Allosaurus (or ONNX) for language-independent IPA transcription, fed to the AI partner. *(Future spec — since shipped via Transformers.js wav2vec2, not Allosaurus; see docs/ipa-model-notes.md.)*
 
 ## 1. Goal
 
