@@ -55,6 +55,9 @@ html.marketing-active #root { height: auto !important; min-height: 100vh; }
   font-size: 10.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  /* Never let flex squeeze wrap the label — a tall 999px-radius pill reads
+     as a broken blob. */
+  white-space: nowrap;
 }
 
 /* Hero stage */
@@ -62,6 +65,10 @@ html.marketing-active #root { height: auto !important; min-height: 100vh; }
   min-height: 100vh;
   position: relative;
   display: grid;
+  /* minmax(0, 1fr): the implicit auto column would otherwise grow to the
+     widest child's max-content (headline span, meta row) and clip at narrow
+     viewports instead of letting children wrap. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto;
   padding: 88px 48px 48px;
   overflow: hidden;
@@ -656,6 +663,12 @@ html.marketing-active #root { height: auto !important; min-height: 100vh; }
   .phases-ribbon { grid-template-columns: repeat(3, 1fr); }
   .features { grid-template-columns: repeat(2, 1fr); }
 }
+@media (max-width: 960px) {
+  /* The anchor links can't share a row with the mark, chip and CTA. The page
+     is one scroll anyway — hide them (same pattern as .hero-caption). */
+  .hero-nav .links { display: none; }
+  .hero-nav .btn-hero { margin-left: auto; }
+}
 @media (max-width: 720px) {
   .hero-stage, .section { padding: 88px 24px 48px; }
   .phases-ribbon { grid-template-columns: 1fr 1fr; }
@@ -665,6 +678,21 @@ html.marketing-active #root { height: auto !important; min-height: 100vh; }
   .track-line { display: none; }
   .privacy-block { padding: 48px 28px; }
   .hero-nav { padding: 14px 24px; }
+  .hero-meta { flex-wrap: wrap; row-gap: 6px; }
+  /* Title + model chip wrap inside the fixed-height bar and overlap the
+     traffic dots — let the bar grow instead. */
+  .demo-bar { height: auto; min-height: 36px; padding: 8px 14px; flex-wrap: wrap; row-gap: 4px; }
+}
+@media (max-width: 560px) {
+  /* "Ollama · Local-only" is restated in the hero meta and Privacy section;
+     at phone width the row only fits the mark + workbench CTA. */
+  .hero-nav .privacy-chip { display: none; }
+  /* The second headline line ("the" + "unknown.") is an unwrappable
+     inline-flex pair; scale the type to the viewport so it fits. */
+  .hero-headline { font-size: clamp(38px, 12.5vw, 56px); }
+  /* Let the alien sample drop below the SRC tag instead of being squeezed
+     into a skinny multi-line column beside it. */
+  .hero-source { flex-wrap: wrap; }
 }
 
 /* Download / welcome block (public-site only) */
