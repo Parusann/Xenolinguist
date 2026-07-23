@@ -140,8 +140,8 @@ git clone https://github.com/Parusann/Xenolinguist.git
 cd Xenolinguist
 npm install
 
-# Pull a model for AI features (default is gemma4:e4b; any chat model works)
-ollama pull llama3.1:8b
+# Pull the default model for AI features (any chat model works — set OLLAMA_MODEL to override)
+ollama pull gemma4:e4b
 
 # Run the web app (client :5173 + API :3001)
 npm run dev
@@ -151,6 +151,10 @@ npm run electron:dev
 
 # …or build the distributable installer (output in release/)
 npm run dist
+
+# Run the test suites (Vitest — 51 server + 12 client cases)
+npm test -w server
+npm test -w client
 ```
 
 <p align="center"><img src="docs/screenshots/new-profile.png" alt="New profile" width="780" /><br/><em>Creating a new language profile</em></p>
