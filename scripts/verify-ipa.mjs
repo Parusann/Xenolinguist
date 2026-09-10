@@ -6,6 +6,7 @@
 import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { sourceIdentity, hashFile, inventory, saveRecord } from './verification-record.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MODEL_DIR = process.env.IPA_MODEL_DIR || path.join(ROOT, 'vendor', 'ipa-model');
@@ -25,6 +26,7 @@ function wavToFloat32(buf) {
   return out;
 }
 
+async function verify() {
 if (!existsSync(path.join(MODEL_DIR, MODEL_ID))) {
   console.error('MISSING model dir:', path.join(MODEL_DIR, MODEL_ID));
   process.exit(1);
@@ -56,5 +58,12 @@ for (let f = 0; f <= frames; f++) {
 const phones = segments.map((s) => s.phone).join(' ');
 console.log('phones:', phones);
 console.log('segments:', segments.length, '| first 8:', JSON.stringify(segments.slice(0, 8)));
-if (!phones) { console.error('FAIL: empty phonetic output'); process.exit(1); }
+if (!phones) throw new Error('Empty phonetic output');
 console.log('OK: bundled phoneme model produced a time-aligned phonetic transcription.');
+
+return { phones, segments };
+}
+const record = { source: sourceIdentity(), fixture: await hashFile(WAV), modelFiles: await inventory(MODEL_DIR) };
+try { record.result = await verify(); record.passed = true; }
+catch (error) { record.passed = false; record.failure = { code: error.code, message: error.message }; process.exitCode = 1; }
+finally { await saveRecord(path.join(ROOT, 'test-results/ipa-node.json'), record); }

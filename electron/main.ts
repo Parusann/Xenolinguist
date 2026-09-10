@@ -3,6 +3,10 @@ import path from 'path';
 import { existsSync } from 'fs';
 import { isOllamaUp, hasModel, pullDefaultModel } from './ollama.js';
 import { autoUpdater } from 'electron-updater';
+import { testUserData } from './test-launch.js';
+
+const acceptanceUserData = testUserData();
+if (acceptanceUserData) app.setPath('userData', acceptanceUserData);
 
 const isDev = !app.isPackaged;
 const DEV_URL = 'http://localhost:5173';
@@ -79,6 +83,7 @@ function startServerProcess(): Promise<number> {
 
 async function createWindow() {
   win = new BrowserWindow({
+    show: !acceptanceUserData,
     width: 1280,
     height: 860,
     backgroundColor: '#0a0a0a',
@@ -98,7 +103,7 @@ async function createWindow() {
       const port = serverPort ?? await startServerProcess();
       serverPort = port;
       await win.loadURL(`http://127.0.0.1:${port}`);
-      autoUpdater.checkForUpdatesAndNotify().catch((e) => console.error('[update]', e));
+      if (!acceptanceUserData) autoUpdater.checkForUpdatesAndNotify().catch((e) => console.error('[update]', e));
     } catch (err) {
       // Surface startup failure instead of leaving the window blank forever.
       console.error('[server] failed to start:', err);
@@ -114,7 +119,7 @@ async function createWindow() {
   }
 
   void (async () => {
-    if (!win) return;
+    if (!win || acceptanceUserData) return;
     if (await isOllamaUp()) {
       if (!(await hasModel())) {
         try { await pullDefaultModel(win); } catch (e) { console.error('[ollama] pull failed', e); }

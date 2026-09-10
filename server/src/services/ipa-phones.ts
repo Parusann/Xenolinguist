@@ -36,7 +36,16 @@ function getModel() {
         tf.AutoModelForCTC.from_pretrained(MODEL_ID),
       ]);
       return { processor, tokenizer, model };
-    })().catch((err) => { modelPromise = null; throw new IpaUnavailableError(`ipa model load failed: ${err?.message ?? err}`); });
+    })().catch((err) => {
+      modelPromise = null;
+      // Retain the actual loader exception locally; the public route still returns a safe 503.
+      console.error('[ipa:model-load]', JSON.stringify({
+        code: err?.code ?? 'IPA_MODEL_LOAD_FAILED', name: err?.name ?? 'Error',
+        message: err?.message ?? String(err), modelId: MODEL_ID,
+        node: process.versions.node, electron: process.versions.electron ?? null,
+      }));
+      throw new IpaUnavailableError(`ipa model load failed: ${err?.message ?? err}`);
+    });
   }
   return modelPromise;
 }
