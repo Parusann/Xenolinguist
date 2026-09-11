@@ -43,6 +43,22 @@ test('F04 concurrent partial writes retain each HTTP outcome', async ({ page, se
   test.info().annotations.push({ type: 'baseline', description: `${trials.filter(t => !t.retainedBoth).length}/10 failed to retain both writes; W03 acceptance remains open` });
 });
 
+test('W02 invalid nested import never reaches live profile state', async ({ page, server }) => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles/demo`)).json();
+  await openProfile(page, server.url, profile.name);
+  await page.locator('[data-tour="dashboard"]').click();
+  const writes: string[] = [];
+  page.on('request', request => { if (request.method() === 'PUT') writes.push(request.url()); });
+  await page.locator('input[type="file"]').setInputFiles({ name: 'invalid.json', mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify({ ...profile, number_system: { base: 1, mappings: {}, operators: {} } })) });
+  await expect(page.getByText('Invalid profile JSON file', { exact: true })).toBeVisible();
+  expect(writes).toEqual([]);
+  await server.restart();
+  const saved = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
+  expect(saved.number_system.base).toBe(8);
+  expect(saved.dictionary).toEqual(profile.dictionary);
+});
+
 test('F03 a one-letter vocabulary answer must not receive credit', async ({ page, server }) => {
   const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Grading probe', is_sandbox: true } })).json();
   await openProfile(page, server.url, profile.name);

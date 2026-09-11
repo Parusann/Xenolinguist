@@ -128,6 +128,8 @@ export function ProfileProvider({
     updateAndSave(prev => ({
       ...prev,
       dictionary: prev.dictionary.filter(e => e.id !== id),
+      audio_clips: prev.audio_clips.map(clip => ({ ...clip, segments: clip.segments.map(segment =>
+        segment.dictionary_entry_id === id ? { ...segment, dictionary_entry_id: null } : segment) })),
     }))
   }, [updateAndSave])
 

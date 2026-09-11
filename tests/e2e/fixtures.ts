@@ -78,7 +78,7 @@ export async function preparePage(page: Page) {
 
 export async function openProfile(page: Page, url: string, name: string) {
   await page.goto(`${url}/app`);
-  await page.getByRole('button', { name: new RegExp(name) }).click();
+  await page.getByRole('button').filter({ has: page.getByText(name, { exact: true }) }).click();
 }
 
 export async function attachJson(name: string, value: unknown) {

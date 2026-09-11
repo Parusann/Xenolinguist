@@ -3,6 +3,7 @@ import { useProfile } from '@/stores/profile-context'
 import { useSessionLog } from '@/stores/session-log-context'
 import { useToast } from '@/stores/toast-context'
 import type { LanguageProfile, LogEntryType } from 'shared/types'
+import { migrateProfile, parseProfile } from 'shared/schemas/profile'
 import { getConfidenceCounts, getDecodingProgress, cumulativeTrend } from '@/lib/profileStats'
 import { ConfRing } from '@/components/common/ConfRing'
 import { MiniSpark } from '@/components/common/MiniSpark'
@@ -56,16 +57,13 @@ export function Dashboard() {
     const reader = new FileReader()
     reader.onload = () => {
       try {
-        const imported = JSON.parse(reader.result as string) as Partial<LanguageProfile>
-        const updates: Partial<LanguageProfile> = {}
-        // Validate element shapes (not just presence) so a malformed file can't poison state.
-        const objArray = (v: unknown) => Array.isArray(v) && v.every((x) => x != null && typeof x === 'object')
-        if (objArray(imported.dictionary)) updates.dictionary = imported.dictionary
-        if (objArray(imported.grammar_rules)) updates.grammar_rules = imported.grammar_rules
-        if (objArray(imported.samples)) updates.samples = imported.samples
-        if (imported.number_system && typeof imported.number_system === 'object') updates.number_system = imported.number_system
-        if (objArray(imported.audio_clips)) updates.audio_clips = imported.audio_clips
-        if (Object.keys(updates).length === 0) throw new Error('no recognizable profile sections')
+        const imported = migrateProfile(JSON.parse(reader.result as string))
+        const updates: Partial<LanguageProfile> = {
+          dictionary: imported.dictionary, grammar_rules: imported.grammar_rules,
+          samples: imported.samples, number_system: imported.number_system, audio_clips: imported.audio_clips,
+        }
+        // Validate the complete prospective state, including clip/word references, before touching React state.
+        parseProfile({ ...profile, ...updates })
         updateProfile(updates)
         addToast('Profile imported', 'success')
       } catch {

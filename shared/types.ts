@@ -1,76 +1,13 @@
-export interface DictionaryEntry {
-  id: string;
-  alien_word: string;
-  english_meaning: string;
-  part_of_speech: PartOfSpeech;
-  confidence: number; // 0-100
-  context: string;
-  examples: string[];
-  notes: string;
-  created_at: string;
-}
+import type { z } from 'zod';
+import type { dictionaryEntrySchema, grammarRuleSchema, numberSystemSchema, audioClipSchema, audioSegmentSchema, sampleSchema, profileSchema } from './schemas/profile';
 
-export interface GrammarRule {
-  id: string;
-  rule: string;
-  evidence: string[];
-  confidence: number; // 0-100
-  created_at: string;
-}
-
-export interface NumberSystem {
-  base: number | null;
-  mappings: Record<number, string>;
-  operators: Record<string, string>;
-}
-
-export interface AudioClip {
-  id: string;
-  filename: string;
-  duration: number; // seconds
-  waveform: number[]; // normalized peak values for visualization
-  segments: AudioSegment[];
-  created_at: string;
-}
-
-export interface AudioSegment {
-  id: string;
-  start: number; // seconds
-  end: number; // seconds
-  label: string; // word or phoneme label
-  dictionary_entry_id: string | null;
-}
-
-export interface Sample {
-  id: string;
-  alien_text: string;
-  english_translation: string | null;
-  source: string;
-  phonetic_notes: string;
-  decoded: boolean;
-  audio_id: string | null;
-  ipa: string | null;
-  created_at: string;
-}
-
-export interface LanguageProfile {
-  id: string;
-  name: string;
-  description: string;
-  phonetic_notes: string;
-  created_at: string;
-  updated_at: string;
-  is_sandbox: boolean;
-  sandbox_difficulty?: SandboxDifficulty;
-  dictionary: DictionaryEntry[];
-  grammar_rules: GrammarRule[];
-  number_system: NumberSystem;
-  samples: Sample[];
-  audio_clips: AudioClip[];
-}
-
-/** Lightweight profile listing entry: the profiles.json index rows and the
- *  GET /api/profiles response shape. */
+export type DictionaryEntry = z.infer<typeof dictionaryEntrySchema>;
+export type GrammarRule = z.infer<typeof grammarRuleSchema>;
+export type NumberSystem = z.infer<typeof numberSystemSchema>;
+export type AudioClip = z.infer<typeof audioClipSchema>;
+export type AudioSegment = z.infer<typeof audioSegmentSchema>;
+export type Sample = z.infer<typeof sampleSchema>;
+export type LanguageProfile = z.infer<typeof profileSchema>;
 export type ProfileIndex = Pick<LanguageProfile, 'id' | 'name' | 'created_at' | 'updated_at'>;
 
 export interface SessionLogEntry {

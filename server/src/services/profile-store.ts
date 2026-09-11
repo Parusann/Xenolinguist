@@ -2,7 +2,10 @@ import fs from 'fs/promises';
 import path from 'path';
 import { v4 as uuid } from 'uuid';
 import type { LanguageProfile, ProfileIndex } from '../../../shared/types.js';
-import { createDefaultProfile, pickProfileData } from '../../../shared/constants.js';
+import { pickProfileData } from '../../../shared/constants.js';
+import { parseProfile, parseProfilePatch } from '../../../shared/schemas/profile.js';
+import { readProfileFile, preserveLegacyBackup } from './profile-migrations.js';
+import { ProfileError } from '../../../shared/schemas/errors.js';
 import { dataDir } from '../config.js';
 
 function profilesDir() { return path.join(dataDir(), 'profiles'); }
@@ -73,24 +76,20 @@ export class ProfileStore {
   async get(id: string): Promise<LanguageProfile | null> {
     await this.init();
     if (!SAFE_ID.test(id)) return null;
-    try {
-      const parsed = JSON.parse(await fs.readFile(path.join(profilesDir(), `${id}.json`), 'utf-8'));
-      // Backfill any fields missing from older on-disk profiles so callers get a complete object.
-      return { ...createDefaultProfile(), ...parsed } as LanguageProfile;
-    } catch {
-      return null;
-    }
+    const result = await readProfileFile(path.join(profilesDir(), `${id}.json`));
+    if (result && result.profile.id !== id) throw new ProfileError('PROFILE_ID_MISMATCH', 'Profile identity does not match its file; the original has been preserved', 422);
+    return result?.profile ?? null;
   }
 
-  async create(input: Partial<LanguageProfile>): Promise<LanguageProfile> {
+  async create(input: unknown): Promise<LanguageProfile> {
     await this.init();
     const now = new Date().toISOString();
-    const profile: LanguageProfile = {
+    const profile = parseProfile({
       ...pickProfileData(input),
       id: uuid(),
       created_at: now,
       updated_at: now,
-    };
+    });
 
     await atomicWrite(path.join(profilesDir(), `${profile.id}.json`), JSON.stringify(profile, null, 2));
 
@@ -103,17 +102,20 @@ export class ProfileStore {
     return profile;
   }
 
-  async update(id: string, updates: Partial<LanguageProfile>): Promise<LanguageProfile | null> {
+  async update(id: string, updates: unknown): Promise<LanguageProfile | null> {
+    const patch = parseProfilePatch(updates);
     const existing = await this.get(id);
     if (!existing) return null;
 
-    const updated: LanguageProfile = {
-      ...pickProfileData({ ...existing, ...updates }),
+    const updated = parseProfile({
+      ...existing, ...patch,
+      revision: existing.revision + 1,
       id,
       created_at: existing.created_at,
       updated_at: new Date().toISOString(),
-    };
+    });
 
+    await preserveLegacyBackup(path.join(profilesDir(), `${id}.json`));
     await atomicWrite(path.join(profilesDir(), `${id}.json`), JSON.stringify(updated, null, 2));
 
     await withIndexLock(async () => {

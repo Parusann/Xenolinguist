@@ -12,6 +12,8 @@ import type { LanguageProfile } from './types';
 const T = '2026-06-07T00:00:00.000Z';
 
 export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated_at'> = {
+  schema_version: 2,
+  revision: 0,
   name: 'Eridian',
   description:
     'A partially-decoded demo language for exploring the decoding workflow. Base-8 number system, Subject-Object-Verb word order, and a mix of confirmed and unconfirmed vocabulary.',
