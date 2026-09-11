@@ -19,7 +19,9 @@
     "test": "npm test -w server && npm test -w client",
     "test:e2e": "npm run build:desktop && playwright test",
     "test:e2e:run": "playwright test",
-    "verify:release": "node scripts/verify-release.mjs"
+    "verify:release": "node scripts/verify-release.mjs",
+    "provision:models": "node scripts/provision-models.mjs",
+    "stage:runtime": "node scripts/stage-runtime.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

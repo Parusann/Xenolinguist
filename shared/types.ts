@@ -78,4 +78,5 @@ export interface IpaSegment {
 export interface IpaResult {
   ipa: string;
   segments: IpaSegment[];
+  identity?: { modelId: string; modelSha256: string; alphabet: 'TIMIT ARPABET'; transformers: string; backend: string; node: string };
 }

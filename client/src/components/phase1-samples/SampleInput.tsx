@@ -279,7 +279,7 @@ export function SampleInput() {
               )}
               {pendingAudio?.ipa && (
                 <div className="glass-inner" style={{ padding: 10, marginTop: 10 }}>
-                  <span className="label" style={{ marginBottom: 4, display: 'block' }}>IPA · phones</span>
+                  <span className="label" style={{ marginBottom: 4, display: 'block' }}>ARPABET phones · English-trained model</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--fg-1)' }}>{pendingAudio.ipa}</span>
                 </div>
               )}

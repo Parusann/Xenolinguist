@@ -7,6 +7,13 @@ vi.mock('../../components/audio/wav-encode', () => ({
 afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('ipa.transcribePhones', () => {
+  it('reports an actionable model error without discarding the recording', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 503, json: async () => ({ code: 'IPA_MODEL_MISSING' }) } as Response)));
+    const { transcribePhones } = await import('../ipa');
+    const notice = vi.fn();
+    expect(await transcribePhones(new Blob(['retained audio']), notice)).toBeNull();
+    expect(notice).toHaveBeenCalledWith('Phone model is missing. Restore the bundled model files and try again.');
+  });
   it('returns null when /api/ipa responds 503', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 503 } as Response)));
     const mod = await import('../ipa.ts?case=1');

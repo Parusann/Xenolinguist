@@ -1,0 +1,76 @@
+name: Packaged Windows phones
+on:
+  workflow_dispatch:
+  push:
+    branches: [implementation/reliability]
+    paths:
+      - '.github/workflows/packaged-phones.yml'
+      - 'server/src/services/*phone*'
+      - 'server/src/services/model-*.ts'
+      - 'electron/**'
+      - 'scripts/*runtime*'
+      - 'scripts/*models*'
+      - 'scripts/verify-clean-phones.mjs'
+      - 'vendor/model-manifest.json'
+      - 'package-lock.json'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run provision:models -- --download
+      - run: npm run build:desktop
+      - name: Build unpacked Windows application
+        run: npx electron-builder --config electron/builder.config.cjs --win --dir --publish never --config.directories.output="$env:RUNNER_TEMP/xeno-acceptance-ci-build"
+      - name: Prepare independent verification harness
+        run: |
+          New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/phone-harness"
+          Copy-Item scripts/verify-clean-phones.mjs "$env:RUNNER_TEMP/phone-harness/"
+          Copy-Item server/src/__tests__/fixtures/hello-16k.wav "$env:RUNNER_TEMP/phone-harness/"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-phone-app
+          path: ${{ runner.temp }}/xeno-acceptance-ci-build/win-unpacked
+          retention-days: 3
+          compression-level: 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phone-harness
+          path: ${{ runner.temp }}/phone-harness
+          retention-days: 3
+  verify-clean:
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      # No checkout and no source dependency tree in this job.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-phone-app
+          path: ${{ runner.temp }}/xeno-acceptance-ci-app
+      - uses: actions/download-artifact@v4
+        with:
+          name: phone-harness
+          path: ${{ runner.temp }}/phone-harness
+      - name: Install only browser automation
+        run: npm install --prefix "$env:RUNNER_TEMP/phone-harness" --ignore-scripts playwright@1.63.0
+      - name: Verify real packaged phoneme inference
+        working-directory: ${{ runner.temp }}/phone-harness
+        run: node verify-clean-phones.mjs "$env:RUNNER_TEMP/xeno-acceptance-ci-app/Xenolinguist.exe" hello-16k.wav clean-phones.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: clean-phone-result
+          path: ${{ runner.temp }}/phone-harness/clean-phones.json
+          retention-days: 14

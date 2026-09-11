@@ -1,7 +1,7 @@
 // Run an unpacked release outside the source tree, in an isolated desktop data directory.
 import { _electron as electron } from 'playwright';
 import { expect } from '@playwright/test';
-import { mkdtemp, mkdir, writeFile, readFile, realpath } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, realpath, rename } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
@@ -24,8 +24,10 @@ const record = { source: sourceIdentity(), executable: await hashFile(resolved),
   lockfile: await hashFile(path.join(root, 'package-lock.json')),
   modelFiles: await inventory(path.join(resources, 'ipa-model')),
   whisperFiles: await inventory(path.join(resources, 'whisper')),
+  runtimeFiles: await inventory(path.join(resources, 'server-deps')),
   isolatedUserData: dir, checks: {}, console: [] };
 let app;
+let hiddenModel;
 try {
   // These paired credentials opt into isolation; normal launches ignore DATA_DIR.
   const launchEnv = { ...process.env, XENO_TEST_MODE: '1', XENO_TEST_TOKEN: token,
@@ -49,6 +51,12 @@ try {
   const wav = await readFile(path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav'));
   record.fixture = await hashFile(path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav'));
   record.checks.ipa = await request('/api/ipa', { audio: wav.toString('base64') });
+  if (record.checks.ipa.status === 200) {
+    expect(record.checks.ipa.body.ipa.length).toBeGreaterThan(0);
+    expect(record.checks.ipa.body.segments.length).toBeGreaterThan(0);
+    expect(record.checks.ipa.body.identity.alphabet).toBe('TIMIT ARPABET');
+    expect(record.checks.ipa.body.identity.modelSha256).toBe(record.modelFiles.find(file => file.file.endsWith('.onnx')).sha256);
+  }
   record.checks.stt = await request('/api/stt', { audio: wav.toString('base64') });
   record.checks.wavUpload = await request('/api/audio/upload', { id: 'release-fixture', data: wav.toString('base64') });
   const profile = await request('/api/profiles', { name: 'Release smoke' });
@@ -96,6 +104,27 @@ try {
   record.checks.pendingSaveRecovered = afterRestart.samples.filter(sample => sample.alien_text === 'Recovered after desktop close').length === 1;
   record.checks.desktopDraftRecovered = true;
   record.restart = { firstOrigin: origin, secondOrigin: newOrigin, revision: afterRestart.revision };
+  if (args.includes('--negative-model')) {
+    // Only an explicitly requested, isolated temporary acceptance build may be modified.
+    const temporaryRelative = path.relative(await realpath(os.tmpdir()), resolved);
+    if (!/^xeno-acceptance-[^\\/]+[\\/]/.test(temporaryRelative)) throw new Error('Negative model test requires an xeno-acceptance-* build under the system temp directory');
+    await app.close(); app = undefined;
+    await expect.poll(async () => { try { await fetch(`${newOrigin}/api/health`, { signal: AbortSignal.timeout(500) }); return false; } catch { return true; } }).toBe(true);
+    const model = path.join(resources, 'ipa-model/wav2vec2-phoneme/onnx/model.onnx');
+    const hidden = `${model}.${token}.negative-test`;
+    await rename(model, hidden);
+    hiddenModel = { model, hidden };
+    app = await electron.launch({ executablePath: resolved, cwd: dir, args: [`--xeno-test-user-data=${dir}`], env: launchEnv, timeout: 40_000 });
+    const negativePage = await app.firstWindow();
+    await negativePage.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
+    const negativeOrigin = new URL(negativePage.url()).origin;
+    const negative = await negativePage.request.post(`${negativeOrigin}/api/ipa`, { data: { audio: wav.toString('base64') } });
+    record.checks.missingModel = { status: negative.status(), body: await negative.json() };
+    expect(record.checks.missingModel.status).toBe(503);
+    expect(record.checks.missingModel.body.code).toBe('IPA_MODEL_MISSING');
+    await app.close(); app = undefined;
+    await rename(hiddenModel.hidden, model); hiddenModel = undefined;
+  }
   record.acceptancePassed = record.checks.ipa.status === 200 && record.checks.stt.status === 200
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
@@ -106,6 +135,9 @@ try {
   record.acceptancePassed = false;
   process.exitCode = 1;
 } finally {
-  await app?.close();
-  await saveRecord(reportFile, record);
+  try { await app?.close(); }
+  finally {
+    try { if (hiddenModel) await rename(hiddenModel.hidden, hiddenModel.model); }
+    finally { await saveRecord(reportFile, record); }
+  }
 }

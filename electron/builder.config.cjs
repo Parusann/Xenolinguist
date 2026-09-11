@@ -3,6 +3,14 @@ module.exports = {
   appId: 'sh.xenolinguist.app',
   productName: 'Xenolinguist',
   directories: { output: 'release' },
+  beforePack: async context => {
+    if (context.electronPlatformName !== 'win32' || context.arch !== 1) throw new Error('Native asset manifest currently supports Windows x64 only');
+    await (await import('../scripts/provision-models.mjs')).verifyAssets();
+    await (await import('../scripts/stage-runtime.mjs')).stageRuntime();
+  },
+  afterPack: async context => {
+    await (await import('../scripts/stage-runtime.mjs')).verifyPackagedRuntime(require('node:path').join(context.appOutDir, 'resources/server-deps'));
+  },
   // Bundled main/preload/server live in electron/dist; the SPA ships as a resource.
   files: ['electron/dist/**/*', 'package.json'],
   extraResources: [
@@ -10,15 +18,11 @@ module.exports = {
     { from: 'vendor/espeak-ng/win', to: 'espeak-ng' },
     { from: 'vendor/whisper/win', to: 'whisper' },
     { from: 'vendor/ipa-model', to: 'ipa-model' },
-    // Runtime deps for the IPA phoneme service (external in the server bundle). Shipped as
-    // plain files (not in the asar) so the forked server can require them + load native .node;
-    // main.ts points NODE_PATH at server-deps/node_modules.
-    { from: 'node_modules/@huggingface/transformers', to: 'server-deps/node_modules/@huggingface/transformers' },
-    { from: 'node_modules/@huggingface/jinja', to: 'server-deps/node_modules/@huggingface/jinja' },
-    { from: 'node_modules/@huggingface/tokenizers', to: 'server-deps/node_modules/@huggingface/tokenizers' },
-    { from: 'node_modules/onnxruntime-node', to: 'server-deps/node_modules/onnxruntime-node' },
-    { from: 'node_modules/onnxruntime-common', to: 'server-deps/node_modules/onnxruntime-common' },
-    { from: 'node_modules/onnxruntime-web', to: 'server-deps/node_modules/onnxruntime-web' },
+    { from: 'electron/runtime', to: 'server-deps' },
+    // electron-builder excludes a source root's node_modules; copy that root explicitly.
+    { from: 'electron/runtime/node_modules', to: 'server-deps/node_modules' },
+    { from: 'vendor/model-manifest.json', to: 'model-manifest.json' },
+    { from: 'vendor/THIRD_PARTY.md', to: 'THIRD_PARTY.md' },
   ],
   asar: true,
   // The forked server bundle must be a real file on disk for utilityProcess.fork.

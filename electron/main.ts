@@ -64,12 +64,10 @@ function startServerProcess(): Promise<number> {
       : {};
 
     const ipaModel = path.join(process.resourcesPath, 'ipa-model');
-    const ipaEnv = existsSync(ipaModel) ? { IPA_MODEL_DIR: ipaModel } : {};
+    const ipaEnv = { IPA_MODEL_DIR: ipaModel };
 
-    // IPA runtime deps ship under resources/server-deps (builder.config extraResources); point the
-    // forked server's module resolution there so the external @huggingface/transformers resolves.
-    const serverDeps = path.join(process.resourcesPath, 'server-deps', 'node_modules');
-    const ipaDepsEnv = existsSync(serverDeps) ? { NODE_PATH: serverDeps } : {};
+    // Resolve the supported Node export from the staged production dependency closure.
+    const ipaDepsEnv = { XENO_RUNTIME_ROOT: path.join(process.resourcesPath, 'server-deps') };
 
     serverProc = utilityProcess.fork(serverPath, [], {
       env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv, ...whisperEnv, ...ipaEnv, ...ipaDepsEnv },

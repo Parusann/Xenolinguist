@@ -1,5 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import request from 'supertest';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 
 afterEach(() => { delete process.env.IPA_MODEL_DIR; });
 
@@ -31,8 +33,17 @@ describe('POST /api/ipa', () => {
   it('returns 503 when the model is unavailable', async () => {
     delete process.env.IPA_MODEL_DIR;
     const { createApp } = await import('../app.js?ipa=2');
-    const res = await request(createApp()).post('/api/ipa').send({ audio: minimalWavBase64() });
+    const res = await request(createApp()).post('/api/ipa').send({ audio: readFileSync(path.join(__dirname, 'fixtures/hello-16k.wav')).toString('base64') });
     expect(res.status).toBe(503);
     expect(res.body.error).toBe('ipa-unavailable');
+    expect(res.body.code).toBe('IPA_MODEL_MISSING');
+    expect(typeof res.body.requestId).toBe('string');
+  });
+
+  it('rejects an empty unsupported WAV before attempting model initialization', async () => {
+    const { createApp } = await import('../app.js');
+    const res = await request(createApp()).post('/api/ipa').send({ audio: minimalWavBase64() });
+    expect(res.status).toBe(400);
+    expect(res.body.code).toBe('IPA_UNSUPPORTED_INPUT');
   });
 });

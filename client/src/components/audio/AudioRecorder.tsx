@@ -37,6 +37,7 @@ interface AudioRecorderProps {
 }
 
 export function AudioRecorder({ onRecordingComplete, className = '' }: AudioRecorderProps) {
+  const [phoneError, setPhoneError] = useState('')
   const [recording, setRecording] = useState(false)
   const [livePeaks, setLivePeaks] = useState<number[]>([])
   const [duration, setDuration] = useState(0)
@@ -153,7 +154,8 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
 
         // Run language detection and IPA phone recognition in parallel. Only a real detector
         // result sets the language — the live browser-locale guess is a UI hint, not detection.
-        const [det, ipa] = await Promise.all([detect(blob), transcribeIpa(blob)])
+        setPhoneError('')
+        const [det, ipa] = await Promise.all([detect(blob), transcribeIpa(blob, setPhoneError)])
         onRecordingComplete(blob, peaks, dur, det?.language || undefined, det?.segments, det?.mode, ipa?.ipa, ipa?.segments)
       }
 
@@ -261,6 +263,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
 
       {/* Language detection result */}
       <LanguageBadge result={langResult} detecting={detecting} />
+      {phoneError && <p role="status" className="text-xs text-amber-300">{phoneError}</p>}
     </div>
   )
 }
