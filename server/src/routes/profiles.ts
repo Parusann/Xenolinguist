@@ -34,9 +34,15 @@ profilesRouter.post('/', asyncHandler(async (req, res) => {
 }));
 
 profilesRouter.put('/:id', asyncHandler(async (req, res) => {
-  const profile = await store.update(String(req.params.id), req.body);
+  const profile = await store.update(String(req.params.id), req.body, req.body?.revision);
   if (!profile) { res.status(404).json({ error: 'Profile not found' }); return; }
   res.json(profile);
+}));
+
+profilesRouter.post('/:id/mutations', asyncHandler(async (req, res) => {
+  const result = await store.mutate(String(req.params.id), req.body);
+  if (!result) { res.status(404).json({ error: 'Profile not found' }); return; }
+  res.json(result);
 }));
 
 profilesRouter.delete('/:id', asyncHandler(async (req, res) => {

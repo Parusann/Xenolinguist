@@ -21,6 +21,7 @@ import { useOllama } from '@/stores/ollama-context'
 import { useUndo } from '@/stores/undo-context'
 import { useKeyboardShortcuts, type ShortcutDefinition } from '@/hooks/useKeyboardShortcuts'
 import { PHASES, type PhaseId } from '@/lib/phases'
+import { useProfileDraft } from '@/hooks/useProfileDraft'
 
 const SANDBOX_PHASE = { id: 'sandbox', label: 'Sandbox', icon: '◈', desc: 'AI-generated language challenge' } as const
 
@@ -30,7 +31,8 @@ export function AppShell() {
   const { undo } = useUndo()
   const isSandbox = profile?.is_sandbox
   const phases = isSandbox ? [SANDBOX_PHASE, ...PHASES] : PHASES
-  const [activePhase, setActivePhase] = useState<PhaseId>(isSandbox ? 'sandbox' : 'samples')
+  const [storedPhase, setActivePhase] = useProfileDraft<PhaseId>('activePhase', isSandbox ? 'sandbox' : 'samples')
+  const activePhase = phases.some(phase => phase.id === storedPhase) ? storedPhase : isSandbox ? 'sandbox' : 'samples'
   const [logOpen, setLogOpen] = useState(false)
   const [conlangData, setConlangData] = useState<ConlangData | null>(null)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
@@ -124,6 +126,7 @@ export function AppShell() {
     <div className="h-screen flex flex-col overflow-hidden relative">
       {/* Grid background */}
       <div className="fixed inset-0 z-0" style={{
+        pointerEvents: 'none',
         backgroundImage: `
           linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
           linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)

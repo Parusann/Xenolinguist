@@ -8,7 +8,7 @@ export type AudioClip = z.infer<typeof audioClipSchema>;
 export type AudioSegment = z.infer<typeof audioSegmentSchema>;
 export type Sample = z.infer<typeof sampleSchema>;
 export type LanguageProfile = z.infer<typeof profileSchema>;
-export type ProfileIndex = Pick<LanguageProfile, 'id' | 'name' | 'created_at' | 'updated_at'>;
+export type ProfileIndex = Pick<LanguageProfile, 'id' | 'name' | 'created_at' | 'updated_at'> & { recovery_error?: string };
 
 export interface SessionLogEntry {
   id: string;

@@ -16,7 +16,7 @@ node scripts/verify-stt.mjs
 
 `test:e2e` rebuilds the client, server, and Electron bundles first. `test:e2e:run` reuses those bundles for test-authoring iterations. Do not use stale bundles to certify a source change. Reports, screenshots, traces, and native runtime/model hashes are written beneath the ignored `test-results/` directory. Browser and native scripts preserve their synthetic temporary data for diagnosis; they do not accept the normal user profile directory.
 
-The current browser suite contains a passing text-save/restart check, a status-aware concurrency characterization, and four expected failures: one-letter sandbox grading, sandbox navigation state, Unicode translation, and WAV attachment. Expected failures execute their setup before declaring the known failing assertion. An unexpected pass fails the run so its annotation must be removed when repaired. A green characterization run does **not** mean these product defects are fixed. W03 must replace the concurrency characterization with revision/conflict and durability acceptance assertions.
+The current browser suite contains six passing acceptance checks: text-save/restart, concurrent mutation conflict/retry/restart, invalid nested import rejection, failed-save reload/retry, independent saves while switching profiles, and profile-specific translation drafts with phase restoration. Four additional tests remain expected failures: one-letter sandbox grading, sandbox navigation state, Unicode translation, and WAV attachment. Expected failures execute their setup before declaring the known failing assertion. An unexpected pass fails the run so its annotation must be removed when repaired. Playwright reports all ten tests as passed when these expectations hold; that means **six repaired acceptance checks and four reproduced defects**, not ten working product flows.
 
 ## Packaged Windows application
 
@@ -32,7 +32,7 @@ This requires the existing native vendor assets, including `vendor/ipa-model/wav
 
 The release verifier launches the real Electron executable and utility process with a fresh system-temp user-data directory. Isolation requires the explicit `--xeno-test-user-data` argument, `XENO_TEST_MODE=1`, and a matching random ownership token in that directory. Normal launches do not honor a desktop test data override. Acceptance launches suppress updater checks and automatic model pulls and keep the window hidden; they still run the actual backend, renderer, and native endpoints.
 
-The script records executable/archive hashes, fixture/model/runtime hashes, runtime versions, current source revision and changed-file hashes, safe endpoint responses, and local loader diagnostics. It checks actual profile writes and the workbench through the native window. It exits nonzero if any required native capability fails. The initial phoneme failure therefore intentionally returns exit code 1; do not suppress that result in release CI.
+The script records executable/archive hashes, fixture/model/runtime hashes, runtime versions, current source revision and changed-file hashes, safe endpoint responses, and local loader diagnostics. It checks actual profile writes and the workbench through the native window. It then injects a failed mutation, persists a translation draft, drives the real window-close handshake, and restarts the same isolated user-data directory on a new local port. Only the test instance's native dialog response is controlled to choose Close anyway. Recovery must apply the pending sample exactly once and restore the draft across origins. It exits nonzero if any required native capability fails. The phoneme failure still intentionally returns exit code 1; do not suppress that result in release CI.
 
 ## Initial measured findings
 
@@ -42,7 +42,7 @@ The packaged Electron 42.3.3 utility process used Node 24.15.0 and returned IPA 
 
 The WAV browser probe identified the exact chain: `decodeAudioData` received 110,286 bytes and detached the buffer, leaving zero bytes. The importer built its Blob from that detached buffer, sent empty base64, received HTTP 400 (`Missing id or data`), and saved a sample with `audio_id: null`. Uploading the untouched fixture bytes directly returned HTTP 200. The defect is in client buffer ownership, not WAV format rejection.
 
-Concurrency records include both HTTP responses and final disk-backed state for each of ten trials. A non-2xx write is classified separately from a lost edit following two acknowledged writes. See `testing-baseline.json` for the observed counts and artifact identifiers; fresh runs may change their distribution because this is a race.
+The initial concurrency records include both HTTP responses and final disk-backed state for each of ten trials. A non-2xx write is classified separately from a lost edit following two acknowledged writes. See `testing-baseline.json` for the historical observations. The W03 acceptance test now requires one HTTP 200 and one HTTP 409 per trial, retries the conflicting request at the next revision, and verifies both independent fields after a real backend restart in all ten trials.
 
 ## Before each implementation commit
 

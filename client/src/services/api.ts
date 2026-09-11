@@ -2,16 +2,25 @@ import type { AIMessage } from 'shared/types'
 
 const BASE = '/api'
 
+export class ApiError extends Error {
+  status: number
+  code?: string
+  currentRevision?: number
+  constructor(message: string, status: number, code?: string, currentRevision?: number) {
+    super(message); this.status = status; this.code = code; this.currentRevision = currentRevision
+  }
+}
+
 export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options,
-  })
+  const headers = new Headers({ 'Content-Type': 'application/json' })
+  new Headers(options?.headers).forEach((value, key) => headers.set(key, value))
+  const res = await fetch(`${BASE}${path}`, { ...options, headers,
+    signal: options?.signal ?? AbortSignal.timeout(15_000) })
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }))
-    throw new Error(err.error || 'API request failed')
+    throw new ApiError(typeof err.error === 'string' ? err.error : err.message || 'API request failed', res.status, err.code, err.currentRevision)
   }
-  return res.json()
+  return res.status === 204 ? undefined as T : res.json()
 }
 
 export async function streamAI(

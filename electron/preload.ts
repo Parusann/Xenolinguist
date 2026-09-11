@@ -1,7 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-// Receive-only subscription to a single named main→renderer channel. Returns an unsubscribe.
-// This keeps the bridge minimal: no ipcRenderer.invoke/send is exposed to the renderer.
+// Named subscriptions and narrow validated operations; raw IPC is never exposed.
 const subscribe = (channel: string) => (cb: (data: unknown) => void) => {
   const handler = (_e: unknown, data: unknown) => cb(data);
   ipcRenderer.on(channel, handler as never);
@@ -16,4 +15,9 @@ contextBridge.exposeInMainWorld('xeno', {
   },
   onOllamaOffline: subscribe('ollama:offline'),
   onOllamaPullProgress: subscribe('ollama:pull-progress'),
+  readSaveQueue: () => ipcRenderer.invoke('drafts:read'),
+  writeSaveQueue: (record: unknown) => ipcRenderer.invoke('drafts:write', record),
+  onFlushRequest: subscribe('app:flush-request'),
+  onCloseCancelled: subscribe('app:close-cancelled'),
+  reportFlushResult: (result: { requestId: string; saved: boolean }) => ipcRenderer.invoke('app:flush-result', result),
 });

@@ -1,26 +1,29 @@
 import 'dotenv/config';
 import type { AddressInfo } from 'net';
 import { createApp } from './app.js';
-import { port } from './config.js';
+import { port, dataDir } from './config.js';
+import { acquireDataOwner } from './services/data-owner.js';
 
 export interface ServerHandle {
   port: number;
   close: () => Promise<void>;
 }
 
-export function startServer(): Promise<ServerHandle> {
-  const app = createApp();
+export async function startServer(): Promise<ServerHandle> {
+  const releaseOwner = await acquireDataOwner(dataDir());
+  let app;
+  try { app = createApp(); } catch (error) { await releaseOwner(); throw error; }
   return new Promise((resolve, reject) => {
     const server = app.listen(port(), '127.0.0.1', () => {
       const addr = server.address() as AddressInfo;
       console.log(`[server] Xenolinguist API on http://127.0.0.1:${addr.port}`);
       resolve({
         port: addr.port,
-        close: () => new Promise((res) => server.close(() => res())),
+        close: () => new Promise<void>((res, rej) => server.close(() => { void releaseOwner().then(res, rej); })),
       });
     });
     // Without this, a bind failure (EADDRINUSE etc.) would leave the promise pending forever.
-    server.on('error', reject);
+    server.on('error', error => { void releaseOwner().then(() => reject(error), reject); });
   });
 }
 

@@ -75,10 +75,10 @@ describe('versioned profile boundary', () => {
     const store = new ProfileStore();
     expect((await store.get('legacy-test'))?.schema_version).toBe(2);
     expect(await fs.readFile(file)).toEqual(original); // Reading alone never rewrites the original.
-    const updated = await store.update('legacy-test', { description: 'New notes' });
+    const updated = await store.update('legacy-test', { description: 'New notes' }, 0);
     expect(updated?.revision).toBe(1);
     expect(await fs.readFile(file + '.v1.bak')).toEqual(original);
-    await store.update('legacy-test', { description: 'Later notes' });
+    await store.update('legacy-test', { description: 'Later notes' }, 1);
     expect(await fs.readFile(file + '.v1.bak')).toEqual(original);
     expect(JSON.parse(await fs.readFile(file, 'utf8')).description).toBe('Later notes');
   });
@@ -101,7 +101,7 @@ describe('versioned profile boundary', () => {
     const bytes = JSON.stringify(legacy());
     await fs.writeFile(file, bytes);
     await fs.writeFile(file + '.v1.bak', 'different original');
-    await expect(new ProfileStore().update('legacy-test', { name: 'New name' })).rejects.toMatchObject({ code: 'MIGRATION_BACKUP_CONFLICT' });
+    await expect(new ProfileStore().update('legacy-test', { name: 'New name' }, 0)).rejects.toMatchObject({ code: 'MIGRATION_BACKUP_CONFLICT' });
     expect(await fs.readFile(file, 'utf8')).toBe(bytes);
     expect(await fs.readFile(file + '.v1.bak', 'utf8')).toBe('different original');
   });
@@ -114,7 +114,7 @@ describe('versioned profile boundary', () => {
     expect(await fs.readdir(path.join(dir, 'profiles'))).toEqual([]);
     const created = await request(app).post('/api/profiles/demo');
     expect(created.status).toBe(201);
-    const changed = await request(app).put(`/api/profiles/${created.body.id}`).send({ name: 'Renamed', id: 'spoof', revision: 100 });
+    const changed = await request(app).put(`/api/profiles/${created.body.id}`).send({ name: 'Renamed', id: 'spoof', revision: 0 });
     expect(changed.status).toBe(200);
     expect(changed.body).toMatchObject({ id: created.body.id, created_at: created.body.created_at, schema_version: 2, revision: 1, name: 'Renamed' });
   });

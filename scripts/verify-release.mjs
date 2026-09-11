@@ -1,5 +1,6 @@
 // Run an unpacked release outside the source tree, in an isolated desktop data directory.
 import { _electron as electron } from 'playwright';
+import { expect } from '@playwright/test';
 import { mkdtemp, mkdir, writeFile, readFile, realpath } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import os from 'node:os';
@@ -56,7 +57,7 @@ try {
   await page.goto(`${origin}/app`);
   await page.getByRole('button', { name: /Release smoke/ }).click();
   await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Packaged sample');
-  const save = page.waitForResponse(response => response.request().method() === 'PUT' && response.url().endsWith(profile.body.id));
+  const save = page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith(profile.body.id + '/mutations'));
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
   record.checks.sampleSave = { status: (await save).status() };
   const persisted = JSON.parse(await readFile(path.join(dir, 'data/profiles', `${profile.body.id}.json`), 'utf8'));
@@ -65,9 +66,40 @@ try {
     (await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));
   if (screenshot) await writeFile(reportFile.replace(/\.json$/, '') + '.png', Buffer.from(screenshot, 'base64'));
   record.checks.loadedWorkbench = await page.getByText('Packaged sample', { exact: true }).isVisible();
+  // Exercise the real close handshake with a recoverable failed save, then restart on a new port.
+  await page.route('**/api/profiles/*/mutations', route => route.fulfill({ status: 500, json: { error: 'Injected offline save', code: 'TEST_FAILURE' } }));
+  await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Recovered after desktop close');
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
+  await page.locator('[data-tour="translation"]').click();
+  await page.getByPlaceholder('Enter unknown language text to translate…').fill('Draft across desktop origins');
+  await expect.poll(async () => {
+    const local = JSON.parse(await readFile(path.join(dir, 'pending-saves', `${profile.body.id}.json`), 'utf8'));
+    return local.batches.length > 0 && local.drafts['translation.alien'] === 'Draft across desktop origins';
+  }).toBe(true);
+  // Simulate the explicit "Close anyway" choice only in this isolated acceptance app.
+  await app.evaluate(({ dialog }) => { dialog.showMessageBox = async () => ({ response: 1, checkboxChecked: false }); });
+  const closed = app.waitForEvent('close');
+  await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].close());
+  await closed;
+  app = undefined;
+  await expect.poll(async () => { try { await fetch(`${origin}/api/health`, { signal: AbortSignal.timeout(500) }); return false; } catch { return true; } }).toBe(true);
+  app = await electron.launch({ executablePath: resolved, cwd: dir, args: [`--xeno-test-user-data=${dir}`], env: launchEnv, timeout: 40_000 });
+  const reopened = await app.firstWindow();
+  await reopened.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
+  const newOrigin = new URL(reopened.url()).origin;
+  await reopened.goto(`${newOrigin}/app`);
+  await reopened.getByRole('button').filter({ has: reopened.getByText('Release smoke', { exact: true }) }).click();
+  await expect(reopened.getByPlaceholder('Enter unknown language text to translate…')).toHaveValue('Draft across desktop origins');
+  await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
+  const afterRestart = await (await reopened.request.get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
+  record.checks.pendingSaveRecovered = afterRestart.samples.filter(sample => sample.alien_text === 'Recovered after desktop close').length === 1;
+  record.checks.desktopDraftRecovered = true;
+  record.restart = { firstOrigin: origin, secondOrigin: newOrigin, revision: afterRestart.revision };
   record.acceptancePassed = record.checks.ipa.status === 200 && record.checks.stt.status === 200
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
-    && record.checks.sampleOnDisk && record.checks.loadedWorkbench;
+    && record.checks.sampleOnDisk && record.checks.loadedWorkbench
+    && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered;
   if (!record.acceptancePassed) process.exitCode = 1;
 } catch (error) {
   record.failure = { message: error.message, stack: error.stack };

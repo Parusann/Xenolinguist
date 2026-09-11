@@ -1,157 +1,124 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { v4 as uuid } from 'uuid';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { randomUUID, createHash } from 'node:crypto';
 import type { LanguageProfile, ProfileIndex } from '../../../shared/types.js';
 import { pickProfileData } from '../../../shared/constants.js';
 import { parseProfile, parseProfilePatch } from '../../../shared/schemas/profile.js';
-import { readProfileFile, preserveLegacyBackup } from './profile-migrations.js';
+import { mutationSchema } from '../../../shared/schemas/mutations.js';
+import { applyOperations } from '../../../shared/profile-operations.js';
 import { ProfileError } from '../../../shared/schemas/errors.js';
+import { preserveLegacyBackup } from './profile-migrations.js';
+import { readRecoverableProfile } from './storage-recovery.js';
+import { withProfileLock } from './profile-locks.js';
+import { atomicWrite } from './atomic-file.js';
 import { dataDir } from '../config.js';
 
-function profilesDir() { return path.join(dataDir(), 'profiles'); }
-function audioDir() { return path.join(dataDir(), 'audio'); }
-function indexFile() { return path.join(dataDir(), 'profiles.json'); }
-
-// Profile ids reach get/update/remove straight from req.params.id and are
-// interpolated into `${id}.json` paths. Constrain to a safe charset (UUIDs and
-// the seeded demo id both match) so a crafted id cannot escape profilesDir()
-// via path separators or `..` (arbitrary JSON read/overwrite/delete).
-const SAFE_ID = /^[A-Za-z0-9_-]+$/;
-
-/** Write to a temp sibling then rename — atomic on the same volume, so a crash or
- *  concurrent reader can never observe a truncated/corrupt JSON file. */
-async function atomicWrite(file: string, contents: string): Promise<void> {
-  const tmp = `${file}.${uuid()}.tmp`;
-  await fs.writeFile(tmp, contents, 'utf-8');
-  await fs.rename(tmp, file);
-}
-
-// Serialize all index read-modify-write sequences (module-level: every ProfileStore
-// instance in this process shares the same profiles.json), so concurrent create/update/
-// remove cannot interleave between readIndex and writeIndex and lose an update.
-let indexChain: Promise<unknown> = Promise.resolve();
-function withIndexLock<T>(fn: () => Promise<T>): Promise<T> {
-  const run = indexChain.then(fn, fn);
-  indexChain = run.catch(() => undefined);
-  return run;
-}
-
-function toIndexEntry(p: LanguageProfile): ProfileIndex {
-  return { id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at };
-}
+const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
+const toIndex = (p: LanguageProfile): ProfileIndex => ({ id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at });
 
 export class ProfileStore {
-  private initialized = false;
-
-  private async init() {
-    if (this.initialized) return;
-    await fs.mkdir(profilesDir(), { recursive: true });
-    try {
-      await fs.access(indexFile());
-    } catch {
-      await atomicWrite(indexFile(), '[]');
-    }
-    this.initialized = true;
-  }
-
-  private async readIndex(): Promise<ProfileIndex[]> {
-    await this.init();
-    try {
-      const parsed = JSON.parse(await fs.readFile(indexFile(), 'utf-8'));
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      // Missing/corrupt index → treat as empty; the next write will rebuild it.
-      return [];
-    }
-  }
-
-  private async writeIndex(index: ProfileIndex[]) {
-    await atomicWrite(indexFile(), JSON.stringify(index, null, 2));
-  }
+  constructor(private readonly write = atomicWrite) {}
+  private directory() { return path.join(dataDir(), 'profiles'); }
+  private file(id: string) { return path.join(this.directory(), `${id}.json`); }
+  private async init() { await fs.mkdir(this.directory(), { recursive: true }); }
+  private locked<T>(id: string, action: () => Promise<T>) { return withProfileLock(this.file(id), action); }
 
   async list(): Promise<ProfileIndex[]> {
-    return this.readIndex();
+    await this.init();
+    return withProfileLock(path.join(dataDir(), 'profiles.json'), async () => {
+      const entries: ProfileIndex[] = [];
+      // Files, not the index, are authoritative. Include missing primaries with a previous snapshot.
+      const names = await fs.readdir(this.directory());
+      const ids = new Set(names.filter(name => /\.json(?:\.prev)?$/.test(name)).map(name => name.replace(/\.json(?:\.prev)?$/, '')).filter(id => SAFE_ID.test(id)));
+      for (const id of ids) {
+        try { const profile = await this.get(id); if (profile) entries.push(toIndex(profile)); }
+        catch (error) {
+          // A damaged file remains visible alongside usable profiles, without inventing recovered content.
+          const epoch = '1970-01-01T00:00:00.000Z';
+          entries.push({ id, name: `Recovery required: ${id}`, created_at: epoch, updated_at: epoch,
+            recovery_error: error instanceof ProfileError ? error.code : 'PROFILE_UNREADABLE' });
+        }
+      }
+      entries.sort((a, b) => a.id.localeCompare(b.id));
+      try { await this.write(path.join(dataDir(), 'profiles.json'), JSON.stringify(entries, null, 2)); }
+      catch (error) { console.error('[profiles:index-refresh]', (error as Error).message); }
+      return entries;
+    });
   }
 
   async get(id: string): Promise<LanguageProfile | null> {
     await this.init();
     if (!SAFE_ID.test(id)) return null;
-    const result = await readProfileFile(path.join(profilesDir(), `${id}.json`));
+    const result = await readRecoverableProfile(this.file(id));
     if (result && result.profile.id !== id) throw new ProfileError('PROFILE_ID_MISMATCH', 'Profile identity does not match its file; the original has been preserved', 422);
     return result?.profile ?? null;
+  }
+
+  private async save(profile: LanguageProfile) {
+    await withProfileLock(`recovery:${this.file(profile.id)}`, async () => {
+      await preserveLegacyBackup(this.file(profile.id));
+      await this.write(this.file(profile.id), JSON.stringify(profile, null, 2), { previous: true });
+    });
+    // Lock order is profile -> index. Rebuilding the index only reads profiles and never takes their write locks.
+    try { await this.list(); } catch (error) { console.error('[profiles:index-refresh]', (error as Error).message); }
+    return profile;
   }
 
   async create(input: unknown): Promise<LanguageProfile> {
     await this.init();
     const now = new Date().toISOString();
-    const profile = parseProfile({
-      ...pickProfileData(input),
-      id: uuid(),
-      created_at: now,
-      updated_at: now,
-    });
-
-    await atomicWrite(path.join(profilesDir(), `${profile.id}.json`), JSON.stringify(profile, null, 2));
-
-    await withIndexLock(async () => {
-      const index = await this.readIndex();
-      index.push(toIndexEntry(profile));
-      await this.writeIndex(index);
-    });
-
-    return profile;
+    const profile = parseProfile({ ...pickProfileData(input), id: randomUUID(), created_at: now, updated_at: now });
+    return this.locked(profile.id, () => this.save(profile));
   }
 
-  async update(id: string, updates: unknown): Promise<LanguageProfile | null> {
+  async update(id: string, updates: unknown, expectedRevision: number): Promise<LanguageProfile | null> {
     const patch = parseProfilePatch(updates);
-    const existing = await this.get(id);
-    if (!existing) return null;
-
-    const updated = parseProfile({
-      ...existing, ...patch,
-      revision: existing.revision + 1,
-      id,
-      created_at: existing.created_at,
-      updated_at: new Date().toISOString(),
+    if (!SAFE_ID.test(id)) return null;
+    return this.locked(id, async () => {
+      const existing = await this.get(id);
+      if (!existing) return null;
+      this.checkRevision(existing, expectedRevision);
+      return this.save(parseProfile({ ...existing, ...patch, revision: existing.revision + 1, updated_at: new Date().toISOString() }));
     });
+  }
 
-    await preserveLegacyBackup(path.join(profilesDir(), `${id}.json`));
-    await atomicWrite(path.join(profilesDir(), `${id}.json`), JSON.stringify(updated, null, 2));
+  private checkRevision(existing: LanguageProfile, expected: number) {
+    if (!Number.isSafeInteger(expected) || expected < 0) throw new ProfileError('REVISION_REQUIRED', 'An expected profile revision is required', 428);
+    if (existing.revision !== expected) throw new ProfileError('REVISION_CONFLICT', 'This profile changed since the edit began', 409, [], false, existing.revision);
+  }
 
-    await withIndexLock(async () => {
-      const index = await this.readIndex();
-      const entry = index.find((e) => e.id === id);
-      if (entry) {
-        entry.name = updated.name;
-        entry.updated_at = updated.updated_at;
-      } else {
-        // Self-heal: the profile file exists but its index row was lost — re-add it.
-        index.push(toIndexEntry(updated));
+  async mutate(id: string, input: unknown) {
+    const mutation = mutationSchema.parse(input);
+    if (!SAFE_ID.test(id)) return null;
+    const digest = createHash('sha256').update(JSON.stringify(mutation.operations)).digest('hex');
+    return this.locked(id, async () => {
+      const existing = await this.get(id);
+      if (!existing) return null;
+      const previous = existing.recent_mutations.find(entry => entry.id === mutation.mutationId);
+      if (previous) {
+        if (previous.digest !== digest) throw new ProfileError('MUTATION_ID_REUSED', 'A mutation identifier cannot be reused for different operations', 409);
+        return { profile: existing, appliedRevision: previous.revision, mutationId: mutation.mutationId, duplicate: true };
       }
-      await this.writeIndex(index);
+      this.checkRevision(existing, mutation.expectedRevision);
+      const revision = existing.revision + 1;
+      const profile = parseProfile({ ...applyOperations(existing, mutation.operations), revision, updated_at: new Date().toISOString(),
+        recent_mutations: [...existing.recent_mutations, { id: mutation.mutationId, digest, revision }].slice(-128) });
+      await this.save(profile);
+      return { profile, appliedRevision: revision, mutationId: mutation.mutationId, duplicate: false };
     });
-
-    return updated;
   }
 
   async remove(id: string): Promise<void> {
     await this.init();
     if (!SAFE_ID.test(id)) return;
-
-    // Clean up the profile's audio blobs so deleting a profile doesn't orphan files on disk.
-    const existing = await this.get(id);
-    for (const clip of existing?.audio_clips ?? []) {
-      if (clip?.id && SAFE_ID.test(clip.id)) {
-        await fs.rm(path.join(audioDir(), `${clip.id}.webm`), { force: true });
-        await fs.rm(path.join(audioDir(), `${clip.id}.wav`), { force: true });
-      }
-    }
-
-    await fs.rm(path.join(profilesDir(), `${id}.json`), { force: true });
-
-    await withIndexLock(async () => {
-      const index = await this.readIndex();
-      await this.writeIndex(index.filter((e) => e.id !== id));
+    await this.locked(id, async () => {
+      // Share the recovery lock: an already-read snapshot must not restore a deleted profile.
+      await withProfileLock(`recovery:${this.file(id)}`, async () => {
+        await fs.rm(`${this.file(id)}.prev`, { force: true });
+        await fs.rm(this.file(id), { force: true });
+      });
+      await this.list();
+      // Audio and migration backups are retained for later explicit archive/garbage-collection work.
     });
   }
 }

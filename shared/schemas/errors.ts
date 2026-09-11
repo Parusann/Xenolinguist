@@ -11,8 +11,9 @@ export class ProfileError extends Error {
   readonly status: number;
   readonly issues: FieldIssue[];
   readonly retryable: boolean;
-  constructor(code: string, message: string, status = 400, issues: FieldIssue[] = [], retryable = false) {
-    super(message); this.code = code; this.status = status; this.issues = issues; this.retryable = retryable;
+  readonly currentRevision?: number;
+  constructor(code: string, message: string, status = 400, issues: FieldIssue[] = [], retryable = false, currentRevision?: number) {
+    super(message); this.code = code; this.status = status; this.issues = issues; this.retryable = retryable; this.currentRevision = currentRevision;
   }
 }
 export function validationError(error: z.ZodError, code = 'PROFILE_INVALID') {

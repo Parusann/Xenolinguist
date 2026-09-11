@@ -317,6 +317,7 @@ export function LandingScreen() {
           </div>
 
           {/* Saved profiles */}
+          <SaveStatus />
           {profiles.length > 0 && (
             <div>
               <div className="kicker" style={{ textAlign: 'center', marginBottom: 14, color: 'var(--fg-mute)' }}>
@@ -363,3 +364,4 @@ export function LandingScreen() {
     </div>
   )
 }
+import { SaveStatus } from '@/components/layout/SaveStatus'

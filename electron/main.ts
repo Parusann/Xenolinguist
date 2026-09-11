@@ -1,9 +1,11 @@
-import { app, BrowserWindow, utilityProcess, type UtilityProcess } from 'electron';
+import { app, BrowserWindow, utilityProcess, ipcMain, dialog, type IpcMainInvokeEvent, type UtilityProcess } from 'electron';
 import path from 'path';
 import { existsSync } from 'fs';
 import { isOllamaUp, hasModel, pullDefaultModel } from './ollama.js';
 import { autoUpdater } from 'electron-updater';
 import { testUserData } from './test-launch.js';
+import { DesktopDraftStore } from './drafts.js';
+import { randomUUID } from 'node:crypto';
 
 const acceptanceUserData = testUserData();
 if (acceptanceUserData) app.setPath('userData', acceptanceUserData);
@@ -18,6 +20,26 @@ process.on('uncaughtException', (err) => console.error('[main] uncaughtException
 let win: BrowserWindow | null = null;
 let serverProc: UtilityProcess | null = null;
 let serverPort: number | null = null;
+let closeAllowed = false;
+let closeRequest: { id: string; resolve: (saved: boolean) => void } | null = null;
+const drafts = new DesktopDraftStore(path.join(app.getPath('userData'), 'pending-saves'));
+
+function trustedRenderer(event: IpcMainInvokeEvent) {
+  if (!win || event.sender !== win.webContents || event.senderFrame !== win.webContents.mainFrame)
+    throw new Error('Untrusted draft request');
+  const expected = isDev ? DEV_URL : `http://127.0.0.1:${serverPort}`;
+  if (new URL(event.senderFrame.url).origin !== new URL(expected).origin) throw new Error('Untrusted draft origin');
+}
+ipcMain.handle('drafts:read', event => { trustedRenderer(event); return drafts.list(); });
+ipcMain.handle('drafts:write', (event, record: unknown) => { trustedRenderer(event); return drafts.put(record); });
+ipcMain.handle('app:flush-result', (event, result: unknown) => {
+  trustedRenderer(event);
+  if (!result || typeof result !== 'object') throw new Error('Invalid flush result');
+  const value = result as { requestId?: unknown; saved?: unknown };
+  if (typeof value.requestId !== 'string' || typeof value.saved !== 'boolean' || value.requestId !== closeRequest?.id)
+    throw new Error('Invalid flush result');
+  closeRequest.resolve(value.saved);
+});
 
 /** In production, fork the bundled server and resolve once it reports its port. */
 function startServerProcess(): Promise<number> {
@@ -82,6 +104,7 @@ function startServerProcess(): Promise<number> {
 }
 
 async function createWindow() {
+  closeAllowed = false;
   win = new BrowserWindow({
     show: !acceptanceUserData,
     width: 1280,
@@ -130,6 +153,32 @@ async function createWindow() {
   })();
 
   win.on('closed', () => { win = null; });
+  win.on('close', event => {
+    if (closeAllowed) return;
+    if (win?.webContents.getURL().startsWith('data:')) return; // Startup error page has no editable workspace.
+    event.preventDefault();
+    if (closeRequest) return;
+    void (async () => {
+      const currentWindow = win;
+      if (!currentWindow) return;
+      const saved = await new Promise<boolean>(resolve => {
+        const id = randomUUID();
+        const timer = setTimeout(() => resolve(false), 20_000);
+        closeRequest = { id, resolve: value => { clearTimeout(timer); resolve(value); } };
+        currentWindow.webContents.send('app:flush-request', { requestId: id });
+      });
+      let close = saved;
+      if (!saved) {
+        const choice = await dialog.showMessageBox(currentWindow, { type: 'warning', title: 'Unsaved changes',
+          message: 'Some changes could not be saved. Keep the window open to retry, or close and recover any stored drafts next time.',
+          buttons: ['Keep open', 'Close anyway'], defaultId: 0, cancelId: 0, noLink: true });
+        close = choice.response === 1;
+      }
+      closeRequest = null;
+      if (close) { closeAllowed = true; currentWindow.close(); }
+      else currentWindow.webContents.send('app:close-cancelled');
+    })().catch(error => { closeRequest = null; console.error('[close]', error); win?.webContents.send('app:close-cancelled'); });
+  });
 }
 
 const gotLock = app.requestSingleInstanceLock();

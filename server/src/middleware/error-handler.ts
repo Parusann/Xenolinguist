@@ -10,8 +10,8 @@ export function errorHandler(err: Error, _req: Request, res: Response, next: Nex
   if (res.headersSent) return next(err);
   const structured = err instanceof ZodError ? validationError(err) : err;
   if (structured instanceof ProfileError) {
-    const { code, message, issues, retryable, status } = structured;
-    return res.status(status).json({ error: message, code, message, issues, retryable, requestId: randomUUID() });
+    const { code, message, issues, retryable, status, currentRevision } = structured;
+    return res.status(status).json({ error: message, code, message, issues, retryable, currentRevision, requestId: randomUUID() });
   }
   // err.message can embed absolute paths / internal detail (fs, ollama client).
   // Log it server-side but return a generic message to clients in production.

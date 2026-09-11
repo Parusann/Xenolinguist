@@ -6,6 +6,7 @@ import { getConfidenceLevel } from 'shared/constants'
 import { formatDictionaryForPrompt, formatGrammarForPrompt, formatSamplesForPrompt } from 'shared/prompts'
 import type { DictionaryEntry } from 'shared/types'
 import { SpeakButton } from '@/components/audio/SpeakButton'
+import { useProfileDraft } from '@/hooks/useProfileDraft'
 
 interface TranslatedWord {
   alien: string
@@ -21,10 +22,10 @@ export function TranslationEngine() {
   const { profile, updateDictionaryEntry, addDictionaryEntry } = useProfile()
   const { runTask, loading, streamedText } = useAI()
   const { connected } = useOllama()
-  const [alienInput, setAlienInput] = useState('')
+  const [alienInput, setAlienInput] = useProfileDraft<string>('translation.alien', '')
   const [aiTranslation, setAiTranslation] = useState('')
-  const [reverseMode, setReverseMode] = useState(false)
-  const [reverseInput, setReverseInput] = useState('')
+  const [reverseMode, setReverseMode] = useProfileDraft<boolean>('translation.reverseMode', false)
+  const [reverseInput, setReverseInput] = useProfileDraft<string>('translation.reverse', '')
   const [reverseOutput, setReverseOutput] = useState('')
   const [showInspector, setShowInspector] = useState(true)
   const [hover, setHover] = useState<number | null>(null)

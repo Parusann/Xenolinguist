@@ -10,7 +10,7 @@ test('text sample survives an actual backend restart', async ({ page, server }) 
   const created = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Persistence smoke' } })).json();
   await openProfile(page, server.url, created.name);
   await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Smoke sample');
-  const saved = page.waitForResponse(r => r.request().method() === 'PUT' && r.url().endsWith(created.id));
+  const saved = page.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith(created.id + '/mutations'));
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
   expect((await saved).status()).toBe(200);
   await server.restart();
@@ -22,25 +22,28 @@ test('text sample survives an actual backend restart', async ({ page, server }) 
   expect(errors).toEqual([]);
 });
 
-test('F04 concurrent partial writes retain each HTTP outcome', async ({ page, server }) => {
+test('W03 concurrent operations conflict visibly and both survive retry and restart', async ({ page, server }) => {
   const trials = [];
   for (let i = 0; i < 10; i++) {
     const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: `Concurrent ${i}` } })).json();
-    const responses = await Promise.all([
-      page.request.put(`${server.url}/api/profiles/${profile.id}`, { data: { description: `left-${i}` } }),
-      page.request.put(`${server.url}/api/profiles/${profile.id}`, { data: { phonetic_notes: `right-${i}` } }),
-    ]);
+    const requests = [
+      { expectedRevision: 0, mutationId: `left-${i}`, operations: [{ type: 'set-fields', fields: { description: `left-${i}` } }] },
+      { expectedRevision: 0, mutationId: `right-${i}`, operations: [{ type: 'set-fields', fields: { phonetic_notes: `right-${i}` } }] },
+    ];
+    const responses = await Promise.all(requests.map(data => page.request.post(`${server.url}/api/profiles/${profile.id}/mutations`, { data })));
     const outcomes = await Promise.all(responses.map(async r => ({ status: r.status(), body: await r.json() })));
+    expect(outcomes.map(r => r.status).sort()).toEqual([200, 409]);
+    const conflict = outcomes.findIndex(r => r.status === 409);
+    const retried = await page.request.post(`${server.url}/api/profiles/${profile.id}/mutations`, { data: { ...requests[conflict], expectedRevision: 1 } });
+    expect(retried.status()).toBe(200);
+    await server.restart();
     const stored = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
     const retainedBoth = stored.description === `left-${i}` && stored.phonetic_notes === `right-${i}`;
-    trials.push({ outcomes, stored, retainedBoth, classification: outcomes.some(r => r.status >= 400)
-      ? 'explicit-request-failure' : retainedBoth ? 'both-retained' : 'acknowledged-edit-lost' });
+    trials.push({ outcomes, retry: { status: retried.status(), body: await retried.json() }, stored, retainedBoth });
+    expect(retainedBoth).toBe(true);
   }
   await attachJson('concurrency.json', trials);
-  // Characterization, not a release acceptance gate. Do not confuse a 500 with silent loss.
   expect(trials).toHaveLength(10);
-  for (const t of trials) for (const r of t.outcomes) expect([200, 409, 500]).toContain(r.status);
-  test.info().annotations.push({ type: 'baseline', description: `${trials.filter(t => !t.retainedBoth).length}/10 failed to retain both writes; W03 acceptance remains open` });
 });
 
 test('W02 invalid nested import never reaches live profile state', async ({ page, server }) => {
@@ -48,7 +51,7 @@ test('W02 invalid nested import never reaches live profile state', async ({ page
   await openProfile(page, server.url, profile.name);
   await page.locator('[data-tour="dashboard"]').click();
   const writes: string[] = [];
-  page.on('request', request => { if (request.method() === 'PUT') writes.push(request.url()); });
+  page.on('request', request => { if (request.method() === 'PUT' || request.url().endsWith('/mutations')) writes.push(request.url()); });
   await page.locator('input[type="file"]').setInputFiles({ name: 'invalid.json', mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify({ ...profile, number_system: { base: 1, mappings: {}, operators: {} } })) });
   await expect(page.getByText('Invalid profile JSON file', { exact: true })).toBeVisible();
@@ -57,6 +60,59 @@ test('W02 invalid nested import never reaches live profile state', async ({ page
   const saved = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
   expect(saved.number_system.base).toBe(8);
   expect(saved.dictionary).toEqual(profile.dictionary);
+});
+
+test('W04 failed saves survive reload and retry exactly once', async ({ page, server }) => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Retry flow' } })).json();
+  await page.route('**/api/profiles/*/mutations', route => route.fulfill({ status: 500, json: { error: 'Injected save failure', code: 'TEST_FAILURE' } }));
+  await openProfile(page, server.url, profile.name);
+  await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Retry this sample');
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath('save-failed.png') });
+  await openProfile(page, server.url, profile.name); // Real page reload, same browser storage origin.
+  await expect(page.getByText('Retry this sample', { exact: true })).toBeVisible();
+  await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
+  await page.unroute('**/api/profiles/*/mutations');
+  await page.getByRole('button', { name: 'Retry save for Retry flow' }).click();
+  await expect(page.getByText('Saved', { exact: true })).toBeVisible();
+  const stored = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
+  expect(stored.samples.filter((sample: { alien_text: string }) => sample.alien_text === 'Retry this sample')).toHaveLength(1);
+  await openProfile(page, server.url, profile.name);
+  await expect(page.getByText('Retry this sample', { exact: true })).toBeVisible();
+});
+
+test('W04 switching profiles preserves both pending saves', async ({ page, server }) => {
+  const a = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'First queue' } })).json();
+  const b = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Second queue' } })).json();
+  await openProfile(page, server.url, a.name);
+  await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('First pending');
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await page.getByTitle('Back to profiles').click();
+  await page.getByRole('button').filter({ has: page.getByText(b.name, { exact: true }) }).click();
+  await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Second pending');
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  for (const [profile, expected] of [[a, 'First pending'], [b, 'Second pending']] as const) {
+    await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).samples.map((sample: { alien_text: string }) => sample.alien_text)).toContain(expected);
+  }
+  await server.restart();
+  expect((await (await page.request.get(`${server.url}/api/profiles/${a.id}`)).json()).samples).toHaveLength(1);
+  expect((await (await page.request.get(`${server.url}/api/profiles/${b.id}`)).json()).samples).toHaveLength(1);
+});
+
+test('W04 translation drafts and active phase survive reload without leaking across profiles', async ({ page, server }) => {
+  const a = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Draft owner' } })).json();
+  const b = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Other draft owner' } })).json();
+  await openProfile(page, server.url, a.name);
+  await page.locator('[data-tour="translation"]').click();
+  await page.getByPlaceholder('Enter unknown language text to translate…').fill('Unfinished translation');
+  await expect(page.getByText('Saved', { exact: true })).toBeVisible();
+  await openProfile(page, server.url, a.name);
+  await expect(page.getByPlaceholder('Enter unknown language text to translate…')).toHaveValue('Unfinished translation');
+  await page.getByTitle('Back to profiles').click();
+  await page.getByRole('button').filter({ has: page.getByText(b.name, { exact: true }) }).click();
+  await page.locator('[data-tour="translation"]').click();
+  await expect(page.getByPlaceholder('Enter unknown language text to translate…')).toHaveValue('');
 });
 
 test('F03 a one-letter vocabulary answer must not receive credit', async ({ page, server }) => {
@@ -131,7 +187,7 @@ test('F02 WAV import records decode, upload, save and restart boundaries', async
   await openProfile(page, server.url, profile.name);
   await page.locator('input[type="file"]').setInputFiles(wavFixture);
   await expect(page.getByText(/Recorded ·/)).toBeVisible();
-  const saved = page.waitForResponse(r => r.request().method() === 'PUT' && r.url().endsWith(profile.id));
+  const saved = page.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith(profile.id + '/mutations'));
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
   expect((await saved).status()).toBe(200);
   await Promise.all(pending);

@@ -10,13 +10,13 @@ import { HeroPage } from '@/components/marketing/HeroPage'
 /** The workbench app: profile selector → shell. Providers scoped here so the
  *  marketing route ("/") stays a lightweight static page. */
 function Workbench() {
-  const [hasProfile, setHasProfile] = useState(false)
+  const [activeProfileId, setActiveProfileId] = useState<string | null>(null)
 
   return (
     <SessionLogProvider>
       <OllamaProvider>
-        <ProfileProvider onProfileChange={(p) => setHasProfile(!!p)}>
-          {hasProfile ? <AppShell /> : <LandingScreen />}
+        <ProfileProvider onProfileChange={(p) => setActiveProfileId(p?.id ?? null)}>
+          {activeProfileId ? <AppShell key={activeProfileId} /> : <LandingScreen />}
         </ProfileProvider>
       </OllamaProvider>
     </SessionLogProvider>

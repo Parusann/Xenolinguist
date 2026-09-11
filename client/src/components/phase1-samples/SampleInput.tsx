@@ -13,6 +13,7 @@ import { AudioSegmenter } from '@/components/audio/AudioSegmenter'
 import { SampleDecodeView } from '@/components/phase1-samples/SampleDecodeView'
 import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMenu'
 import type { Sample, SttSegment, IpaSegment } from 'shared/types'
+import { useProfileDraft } from '@/hooks/useProfileDraft'
 
 export function SampleInput() {
   const { profile, addSample, removeSample, addAudioClip, removeAudioClip, addDictionaryEntry, updateSample } = useProfile()
@@ -24,11 +25,11 @@ export function SampleInput() {
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; sample: Sample } | null>(null)
   const [autoSuggestion, setAutoSuggestion] = useState('')
-  const [alienText, setAlienText] = useState('')
-  const [translation, setTranslation] = useState('')
+  const [alienText, setAlienText] = useProfileDraft<string>('sample.alien', '')
+  const [translation, setTranslation] = useProfileDraft<string>('sample.translation', '')
   const [source, setSource] = useState<string>(SOURCE_PRESETS[0])
-  const [phoneticNotes, setPhoneticNotes] = useState('')
-  const [parallelMode, setParallelMode] = useState(false)
+  const [phoneticNotes, setPhoneticNotes] = useProfileDraft<string>('sample.notes', '')
+  const [parallelMode, setParallelMode] = useProfileDraft<boolean>('sample.parallel', false)
   const [analysisResult, setAnalysisResult] = useState('')
   const [showRecorder, setShowRecorder] = useState(false)
   const [filter, setFilter] = useState<'all' | 'decoded' | 'audio'>('all')

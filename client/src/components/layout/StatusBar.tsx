@@ -1,6 +1,7 @@
 import { useProfile } from '@/stores/profile-context'
 import { useOllama } from '@/stores/ollama-context'
 import { getConfidenceCounts, getDecodingProgress } from '@/lib/profileStats'
+import { SaveStatus } from './SaveStatus'
 
 interface StatusBarProps {
   logOpen: boolean
@@ -9,7 +10,7 @@ interface StatusBarProps {
 }
 
 export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarProps) {
-  const { profile, saving } = useProfile()
+  const { profile } = useProfile()
   const { connected } = useOllama()
 
   const counts = profile
@@ -35,14 +36,8 @@ export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarPr
         CONF · {counts.confirmed} confirmed / {counts.probable} probable / {counts.unknown} unknown
       </span>
 
-      {saving && (
-        <>
-          <span className="sep">·</span>
-          <span className="item" style={{ color: 'var(--accent)' }}>
-            <span className="dot pulse-soft" style={{ width: 4, height: 4 }} /> Saving
-          </span>
-        </>
-      )}
+      <span className="sep">·</span>
+      <SaveStatus />
 
       <div className="flex-1" />
 

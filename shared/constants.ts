@@ -55,6 +55,7 @@ export function createDefaultProfile(): Omit<LanguageProfile, 'id' | 'created_at
   return {
     schema_version: 2,
     revision: 0,
+    recent_mutations: [],
     name: '',
     description: '',
     phonetic_notes: '',
@@ -69,6 +70,6 @@ export function createDefaultProfile(): Omit<LanguageProfile, 'id' | 'created_at
 
 /** Validate known editable data; identity and revision remain server-owned. */
 export function pickProfileData(input: unknown): Omit<LanguageProfile, 'id' | 'created_at' | 'updated_at'> {
-  const { schema_version, revision, ...defaults } = createDefaultProfile();
-  return { ...profileDataSchema.parse({ ...defaults, ...parseProfilePatch(input) }), schema_version, revision };
+  const { schema_version, revision, recent_mutations, ...defaults } = createDefaultProfile();
+  return { ...profileDataSchema.parse({ ...defaults, ...parseProfilePatch(input) }), schema_version, revision, recent_mutations };
 }
