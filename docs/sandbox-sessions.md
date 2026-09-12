@@ -12,7 +12,7 @@ The session format and grader each have version 1. A session records the selecte
 - Each submission, hint and reveal has a stable event ID. Duplicate submissions of the same answer and events for already resolved challenges do not create extra attempts or entries. Repeating a session does not duplicate an existing identical word/meaning or grammar rule.
 - First-attempt unaided matches, retries, hints and reveals are shown separately. The first-attempt denominator is attempted number, vocabulary and sentence challenges; total available challenges and resolved challenges are also shown. Word-by-word checks do not add separate accuracy credit. Revealing an answer never counts as an unaided match, and related token assistance remains assistance when returning to vocabulary.
 
-Workspace entries use stable IDs derived from the session and challenge, with notes identifying matched or revealed generated answers. They are not automatically assigned 100% confidence. The existing manual-confidence UI remains subject to the W08 redesign.
+Workspace entries use stable IDs derived from the session and challenge, with notes identifying matched or revealed generated answers. New rewards are unrated assertions. Existing historical ratings remain intact; see [workspace evidence](workspace-evidence.md) for the W08 belief labels and metric definitions.
 
 ## Generation validation and recovery
 

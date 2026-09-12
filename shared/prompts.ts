@@ -1,5 +1,5 @@
 export const SYSTEM_PROMPTS = {
-  patternAnalysis: `You are a xenolinguist analyzing an unknown language. Given these samples and the current dictionary of confirmed word mappings, identify patterns, suggest possible word boundaries, and hypothesize meanings for unmapped words. Be rigorous — clearly separate confirmed knowledge from speculation. Rate your confidence for each suggestion on a scale of 0-100.
+  patternAnalysis: `You are a xenolinguist analyzing an unknown language. Given these samples and the current dictionary of user-asserted word mappings, identify patterns, suggest possible word boundaries, and hypothesize meanings for unmapped words. Be rigorous — clearly separate confirmed knowledge from speculation. Rate your confidence for each suggestion on a scale of 0-100.
 
 Format your response as structured analysis with clear sections:
 - PATTERNS FOUND: List recurring patterns
@@ -56,17 +56,17 @@ Format:
 - NOTES: caveats (IPA is an approximation from audio)`,
 } as const;
 
-export function formatDictionaryForPrompt(dictionary: { alien_word: string; english_meaning: string; confidence: number }[]): string {
+export function formatDictionaryForPrompt(dictionary: { alien_word: string; english_meaning: string; confidence: number | null }[]): string {
   if (dictionary.length === 0) return 'No words mapped yet.';
   return dictionary
-    .map(e => `${e.alien_word} = ${e.english_meaning} (${e.confidence}%)`)
+    .map(e => `${e.alien_word} = ${e.english_meaning} (${e.confidence == null ? 'unrated assertion' : `user belief ${e.confidence}/100`})`)
     .join('\n');
 }
 
-export function formatGrammarForPrompt(rules: { rule: string; confidence: number }[]): string {
+export function formatGrammarForPrompt(rules: { rule: string; confidence: number | null }[]): string {
   if (rules.length === 0) return 'No grammar rules identified yet.';
   return rules
-    .map(r => `- ${r.rule} (${r.confidence}% confident)`)
+    .map(r => `- ${r.rule} (${r.confidence == null ? 'unrated assertion' : `user belief ${r.confidence}/100`})`)
     .join('\n');
 }
 

@@ -3,8 +3,9 @@ import { entityIdSchema as id, timestampSchema as timestamp, confidenceSchema, n
 import { ProfileError, validationError } from './errors.js';
 import { audioAssetsSchema } from './audio.js';
 import { sandboxSessionSchema } from './sandbox.js';
+import { metricSnapshotsSchema } from './metrics.js';
 
-const manualConfidence = { confidence: confidenceSchema, user_asserted_confidence: confidenceSchema.optional() };
+const manualConfidence = { confidence: confidenceSchema.nullable().default(null), user_asserted_confidence: confidenceSchema.nullable().optional() };
 export const dictionaryEntrySchema = z.strictObject({
   id, alien_word: text, english_meaning: text,
   part_of_speech: z.enum(['noun', 'verb', 'adjective', 'pronoun', 'number', 'connector', 'particle', 'unknown']),
@@ -35,7 +36,7 @@ export const profileDataSchema = z.strictObject({
   dictionary: z.array(dictionaryEntrySchema), grammar_rules: z.array(grammarRuleSchema),
   number_system: numberSystemSchema, samples: z.array(sampleSchema), audio_clips: z.array(audioClipSchema),
 });
-const metadataSchema = { id, created_at: timestamp, updated_at: timestamp,
+const metadataSchema = { metric_snapshots: metricSnapshotsSchema.optional(), id, created_at: timestamp, updated_at: timestamp,
   schema_version: z.literal(2), revision: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
   recent_mutations: z.array(z.strictObject({ id, digest: z.string().regex(/^[a-f0-9]{64}$/), revision: z.number().int().nonnegative() })).max(128).default([]) };
 export const profileObjectSchema = profileDataSchema.extend(metadataSchema);
@@ -69,13 +70,13 @@ export function parseProfilePatch(input: unknown): Partial<z.infer<typeof profil
   const parsed = inputSchema.safeParse(input);
   if (!parsed.success) throw validationError(parsed.error);
   // Accept validated legacy-client metadata, but never let it change server-owned identity.
-  const { id: _id, created_at: _created, updated_at: _updated, schema_version: _version, revision: _revision, recent_mutations: _ledger, ...data } = parsed.data;
+  const { id: _id, created_at: _created, updated_at: _updated, schema_version: _version, revision: _revision, recent_mutations: _ledger, metric_snapshots: _snapshots, ...data } = parsed.data;
   return data;
 }
 export function parseProfile(input: unknown): z.infer<typeof profileSchema> {
   const parsed = profileSchema.safeParse(input);
   if (!parsed.success) throw validationError(parsed.error);
-  // Existing clients edit confidence. Keep its explicitly manual name in sync until W08 removes the alias.
+  // Retain the legacy writable alias for saved drafts and older clients. Both fields represent optional user belief only.
   return { ...parsed.data,
     dictionary: parsed.data.dictionary.map(entry => ({ ...entry, user_asserted_confidence: entry.confidence })),
     grammar_rules: parsed.data.grammar_rules.map(rule => ({ ...rule, user_asserted_confidence: rule.confidence })),

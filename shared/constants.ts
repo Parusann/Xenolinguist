@@ -45,10 +45,15 @@ export const SOURCE_PRESETS = [
   'Other',
 ] as const;
 
-export function getConfidenceLevel(confidence: number): 'confirmed' | 'probable' | 'unknown' {
+export function getConfidenceLevel(confidence: number | null | undefined): 'confirmed' | 'probable' | 'unknown' {
+  if (confidence == null) return 'unknown';
   if (confidence >= CONFIDENCE_THRESHOLDS.CONFIRMED) return 'confirmed';
   if (confidence >= CONFIDENCE_THRESHOLDS.PROBABLE) return 'probable';
   return 'unknown';
+}
+
+export function beliefLabel(value: number | null | undefined): string {
+  return value == null ? 'Asserted · unrated' : `User belief ${value}/100`;
 }
 
 export function createDefaultProfile(): Omit<LanguageProfile, 'id' | 'created_at' | 'updated_at'> {

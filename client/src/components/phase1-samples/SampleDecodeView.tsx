@@ -1,3 +1,4 @@
+import { EvidenceStatus, BeliefInput } from '@/components/common/EvidenceStatus'
 import { useState, useRef, useEffect } from 'react'
 import type { Sample, DictionaryEntry, PartOfSpeech } from 'shared/types'
 import { getConfidenceLevel, PART_OF_SPEECH_OPTIONS } from 'shared/constants'
@@ -21,10 +22,10 @@ interface PopoverState {
 
 export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: SampleDecodeViewProps) {
   const [popover, setPopover] = useState<PopoverState | null>(null)
-  const [defineForm, setDefineForm] = useState({
+  const [defineForm, setDefineForm] = useState<DefineFormState>({
     english_meaning: '',
     part_of_speech: 'unknown' as PartOfSpeech,
-    confidence: 50,
+    confidence: null,
     context: '',
   })
   const popoverRef = useRef<HTMLDivElement>(null)
@@ -69,7 +70,7 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
       setDefineForm({
         english_meaning: '',
         part_of_speech: 'unknown',
-        confidence: 50,
+        confidence: null,
         context: sample.alien_text,
       })
       setPopover({ tokenIndex: index, mode: 'define' })
@@ -127,15 +128,15 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
           <div>
             <h3 className="text-sm font-medium text-white">Decode View</h3>
             <p className="text-[10px] text-gray-600 font-mono mt-0.5">
-              {knownCount}/{totalCount} words mapped &middot; {decodePercent}% decoded
+              {knownCount}/{totalCount} words mapped &middot; {decodePercent}% dictionary coverage
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-[10px] font-mono">
-            <span className="inline-block w-2 h-2 rounded-sm bg-emerald-400/30" /> Confirmed
-            <span className="inline-block w-2 h-2 rounded-sm bg-amber-400/30 ml-2" /> Probable
-            <span className="inline-block w-2 h-2 rounded-sm bg-red-400/30 ml-2" /> Unknown
+            <span className="inline-block w-2 h-2 rounded-sm bg-emerald-400/30" /> High user belief
+            <span className="inline-block w-2 h-2 rounded-sm bg-amber-400/30 ml-2" /> Moderate user belief
+            <span className="inline-block w-2 h-2 rounded-sm bg-red-400/30 ml-2" /> Low / unrated / unmapped
           </div>
         </div>
       </div>
@@ -240,7 +241,7 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
 
 /* ─── Sub-components ─────────────────────────────── */
 
-function WordPopover({ entry, badgeClass }: { entry: DictionaryEntry; badgeClass: string }) {
+function WordPopover({ entry }: { entry: DictionaryEntry; badgeClass: string }) {
   return (
     <div className="glass rounded-xl p-4 w-72 shadow-xl shadow-black/40 border border-white/[0.06]">
       <div className="flex items-start justify-between mb-3">
@@ -248,7 +249,7 @@ function WordPopover({ entry, badgeClass }: { entry: DictionaryEntry; badgeClass
           <p className="font-mono text-sm text-white">{entry.alien_word}</p>
           <p className="text-xs text-accent/70 mt-0.5">{entry.english_meaning}</p>
         </div>
-        <span className={badgeClass}>{entry.confidence}%</span>
+        <EvidenceStatus value={entry.confidence} />
       </div>
       <div className="separator mb-3" />
       <div className="space-y-2 text-[11px]">
@@ -284,7 +285,7 @@ function WordPopover({ entry, badgeClass }: { entry: DictionaryEntry; badgeClass
 interface DefineFormState {
   english_meaning: string
   part_of_speech: PartOfSpeech
-  confidence: number
+  confidence: number | null
   context: string
 }
 
@@ -345,20 +346,7 @@ function DefinePopover({
             </select>
           </div>
           <div>
-            <label className="label">Confidence</label>
-            <div className="flex items-center gap-2">
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={form.confidence}
-                onChange={(e) => onChange({ ...form, confidence: Number(e.target.value) })}
-                className="flex-1 accent-accent h-1"
-              />
-              <span className="text-[10px] font-mono text-gray-500 w-8 text-right">
-                {form.confidence}%
-              </span>
-            </div>
+            <BeliefInput value={form.confidence} onChange={value => onChange({ ...form, confidence: value })} />
           </div>
         </div>
 

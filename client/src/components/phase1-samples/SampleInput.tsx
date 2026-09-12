@@ -281,7 +281,7 @@ export function SampleInput() {
                           style={{ color: known ? 'var(--accent)' : undefined }}
                           onClick={() => {
                             if (known || !s.label.trim()) return
-                            const entryId = addDictionaryEntry({ alien_word: s.label, english_meaning: '', part_of_speech: 'unknown', confidence: 50, context: 'From audio transcript', examples: [], notes: '' })
+                            const entryId = addDictionaryEntry({ alien_word: s.label, english_meaning: '', part_of_speech: 'unknown', confidence: null, context: 'From audio transcript', examples: [], notes: '' })
                             // Persist the link onto the saved AudioSegment when the sample is added.
                             setPendingSegments((prev) => prev.map((seg) => seg.id === s.id ? { ...seg, dictionary_entry_id: entryId } : seg))
                           }}

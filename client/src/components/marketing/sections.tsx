@@ -5,10 +5,10 @@ import { HeroMark } from './HeroMark'
 const PHASE_DEFS = [
   { num: '01', glyph: '{ }', name: 'Samples', desc: 'Capture raw alien text. Tag the source, add phonetic notes, attach audio.', stamp: 'FOUNDATION' },
   { num: '02', glyph: '#', name: 'Numbers', desc: 'Map number words. Detect the base. The Rosetta Stone of any new language.', stamp: 'FIRST WIN' },
-  { num: '03', glyph: 'Aa', name: 'Vocabulary', desc: 'Build the dictionary. Each word carries confidence, context, examples, alternates.', stamp: 'GROWING' },
+  { num: '03', glyph: 'Aa', name: 'Vocabulary', desc: 'Build the dictionary. Each word carries user belief, context, examples, alternates.', stamp: 'GROWING' },
   { num: '04', glyph: '⟨⟩', name: 'Grammar', desc: 'Document rules — word order, morphology, structure. Each rule needs evidence.', stamp: 'STRUCTURE' },
-  { num: '05', glyph: '⇄', name: 'Translation', desc: 'Live word-by-word. Hover any token for candidates, confidence, source samples.', stamp: 'MOMENT' },
-  { num: '06', glyph: '◈', name: 'Dashboard', desc: 'Field log. Decoding %, milestone timeline, AI field notes, import / export.', stamp: 'RECEIPT' },
+  { num: '05', glyph: '⇄', name: 'Translation', desc: 'Live word-by-word. Hover any token for candidates, user belief, source samples.', stamp: 'MOMENT' },
+  { num: '06', glyph: '◈', name: 'Dashboard', desc: 'Field log. Distinct evidence counts, saved metric history, guidance, import / export.', stamp: 'RECEIPT' },
 ]
 
 export function PhasesSection() {
@@ -110,7 +110,7 @@ export function DemoSection() {
         Watch it <em>decode.</em>
       </h2>
       <p className="section-sub">
-        A 16-word Eridian fragment is loaded below. Edit the source on the left — the right side updates token-by-token, each word colored by the confidence it lives at in the dictionary.
+        A 16-word Eridian fragment is loaded below. Edit the source on the left — the right side updates token-by-token, each word colored by its illustrative user belief rating in this demo dictionary.
       </p>
 
       <div className="demo-frame">
@@ -145,8 +145,8 @@ export function DemoSection() {
             <div style={rowStyle}>
               <span>{words} tokens</span>
               <span style={{ color: 'var(--fg-faint)' }}>·</span>
-              <span className="c-confirmed">{confirmed} confirmed</span>
-              <span className="c-probable">{probable} probable</span>
+              <span className="c-confirmed">{confirmed} high belief</span>
+              <span className="c-probable">{probable} moderate belief</span>
               <span className="c-unknown">{unknown} unknown</span>
             </div>
           </div>
@@ -162,14 +162,14 @@ export function DemoSection() {
                 const cls = 'wt-' + d.bucket
                 const color = d.bucket === 'confirmed' ? 'var(--conf-confirmed)' : d.bucket === 'probable' ? 'var(--conf-probable)' : 'var(--conf-unknown)'
                 return (
-                  <span key={i} className={'word-token ' + cls} title={`${d.tok} → ${d.en} · ${d.conf}%`} style={{ color }}>
+                  <span key={i} className={'word-token ' + cls} title={`${d.tok} → ${d.en} · illustrative user belief ${d.conf}/100`} style={{ color }}>
                     {d.en}{' '}
                   </span>
                 )
               })}
             </div>
             <div style={rowStyle}>
-              <span>avg conf <span style={{ color: 'var(--fg)' }}>{words ? Math.round(decoded.filter((d) => d.conf).reduce((s, d) => s + (d.conf || 0), 0) / words) : 0}%</span></span>
+              <span>{confirmed + probable}/{words} tokens matched in this illustrative dictionary</span>
               <span style={{ flex: 1 }} />
               <span>↑ try typing your own</span>
             </div>

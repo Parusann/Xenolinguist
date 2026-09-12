@@ -5,14 +5,14 @@ import { useOllama } from '@/stores/ollama-context'
 import { ProfileSetup } from './ProfileSetup'
 import { VantaTopology } from '@/components/common/VantaTopology'
 import { XenoMark } from '@/components/common/XenoMark'
-import { getDecodingProgress } from '@/lib/profileStats'
+import { workspaceMetrics } from 'shared/metrics/workspace-metrics'
 import { apiFetch } from '@/services/api'
 import type { LanguageProfile, ProfileIndex } from 'shared/types'
 
-/** A saved-profile row enriched with the live word count + decode% the mock shows. */
+/** Saved profiles with current distinct content counts; unavailable counts stay unknown. */
 interface ProfileRow extends ProfileIndex {
-  words: number
-  decode: number
+  words: number | null
+  observations: number | null
   active: boolean
 }
 
@@ -159,9 +159,7 @@ export function LandingScreen() {
   const { addEntry } = useSessionLog()
   const { connected } = useOllama()
 
-  // Fetch the profile index, then hydrate each row with its live word count and
-  // decode% via getDecodingProgress — the same source of truth the dashboard and
-  // status bar use, so the numbers shown here always agree with the workbench.
+  // Hydrate current counts from each saved profile.
   useEffect(() => {
     let cancelled = false
     ;(async () => {
@@ -174,9 +172,9 @@ export function LandingScreen() {
           sorted.map(async (p, i): Promise<ProfileRow> => {
             try {
               const full = await apiFetch<LanguageProfile>(`/profiles/${p.id}`)
-              return { ...p, words: full.dictionary.length, decode: getDecodingProgress(full), active: i === 0 }
+              return { ...p, words: workspaceMetrics(full).assertedEntries, observations: workspaceMetrics(full).observations, active: i === 0 }
             } catch {
-              return { ...p, words: 0, decode: 0, active: i === 0 }
+              return { ...p, words: null, observations: null, active: i === 0 }
             }
           }),
         )
@@ -349,8 +347,8 @@ export function LandingScreen() {
                   >
                     <span className="dot" style={{ background: p.active ? 'var(--accent)' : 'var(--fg-faint)', boxShadow: p.active ? '0 0 8px var(--accent)' : 'none' }} />
                     <span style={{ color: p.active ? 'var(--fg)' : 'var(--fg-dim)' }}>{p.name}</span>
-                    <span style={{ color: 'var(--fg-mute)', textAlign: 'right' }}>{p.words} words</span>
-                    <div className="cbar confirmed" title={p.decode + '%'}><span style={{ width: p.decode + '%' }} /></div>
+                    <span style={{ color: 'var(--fg-mute)', textAlign: 'right' }}>{p.words ?? '—'} assertions</span>
+                    <span className="dim">{p.observations ?? '—'} observations</span>
                     <span style={{ color: 'var(--fg-faint)', textAlign: 'right' }}>→</span>
                   </button>
                 ))}

@@ -13,6 +13,7 @@ import { withProfileLock } from './profile-locks.js';
 import { atomicWrite } from './atomic-file.js';
 import { dataDir } from '../config.js';
 import { AudioStore } from './audio-store.js';
+import { recordMetricSnapshot } from '../../../shared/metrics/workspace-metrics.js';
 
 const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
 const toIndex = (p: LanguageProfile): ProfileIndex => ({ id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at });
@@ -56,6 +57,7 @@ export class ProfileStore {
   }
 
   private async save(profile: LanguageProfile) {
+    profile = parseProfile(recordMetricSnapshot(profile));
     await withProfileLock(`recovery:${this.file(profile.id)}`, async () => {
       await preserveLegacyBackup(this.file(profile.id));
       await this.write(this.file(profile.id), JSON.stringify(profile, null, 2), { previous: true });
@@ -108,8 +110,8 @@ export class ProfileStore {
       const profile = parseProfile({ ...applyOperations(existing, mutation.operations), revision, updated_at: new Date().toISOString(),
         recent_mutations: [...existing.recent_mutations, { id: mutation.mutationId, digest, revision }].slice(-128) });
       await new AudioStore().verifyProfile(profile, existing);
-      await this.save(profile);
-      return { profile, appliedRevision: revision, mutationId: mutation.mutationId, duplicate: false };
+      const saved = await this.save(profile);
+      return { profile: saved, appliedRevision: revision, mutationId: mutation.mutationId, duplicate: false };
     });
   }
 

@@ -10,14 +10,14 @@ const COLOR: Record<ConfBucket, string> = {
  * ConfRing — circular confidence indicator (SVG progress ring + center number).
  * Used across Vocabulary cards/inspector and the Dashboard hero tile.
  */
-export function ConfRing({ value, size = 36, stroke = 3 }: { value: number; size?: number; stroke?: number }) {
-  const clamped = Math.max(0, Math.min(100, value))
+export function ConfRing({ value, size = 36, stroke = 3 }: { value: number | null; size?: number; stroke?: number }) {
+  const clamped = Math.max(0, Math.min(100, value ?? 0))
   const r = (size - stroke) / 2
   const circumference = 2 * Math.PI * r
   const offset = circumference * (1 - clamped / 100)
   const color = COLOR[confBucket(clamped)]
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ filter: `drop-shadow(0 0 4px ${color})` }}>
+    <svg role="img" aria-label={value == null ? "User belief unrated" : `User belief ${value}/100`} width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ filter: `drop-shadow(0 0 4px ${color})` }}>
       <circle className="cring-track" cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} />
       <circle
         className="cring-bar"
@@ -38,7 +38,7 @@ export function ConfRing({ value, size = 36, stroke = 3 }: { value: number; size
         fontSize={size * 0.3}
         fill={color}
       >
-        {Math.round(clamped)}
+        {value == null ? '–' : Math.round(clamped)}
       </text>
     </svg>
   )

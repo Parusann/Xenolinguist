@@ -165,6 +165,12 @@ try {
   record.checks.desktopSandboxRecovered = { sameSession: sandboxRestored.sandbox_session.id === sandboxBeforeClose.id,
     restoredEvents: sandboxRestored.sandbox_session.events.length, afterRetryEvents: sandboxSaved.sandbox_session.events.length,
     dictionaryEntries: sandboxSaved.dictionary.length, fixtureGeneration: true };
+  expect(sandboxSaved.dictionary[0]).toMatchObject({ confidence: null, user_asserted_confidence: null });
+  expect(sandboxSaved.metric_snapshots.at(-1).counts).toMatchObject({ assertedEntries: 1, ratedEntries: 0, mappings1To20: 1 });
+  await reopened.locator('[data-tour="dashboard"]').click();
+  await expect(reopened.getByText('Saved metric history', { exact: true })).toBeVisible();
+  await expect(reopened.getByText('Tested linguistic hypotheses: unavailable')).toBeVisible();
+  record.checks.desktopEvidenceMetrics = { unratedAssertion: true, historyVisible: true, latestSnapshot: sandboxSaved.metric_snapshots.at(-1) };
   record.restart = { firstOrigin: origin, secondOrigin: newOrigin, revision: afterRestart.revision };
   if (args.includes('--negative-model')) {
     // Only an explicitly requested, isolated temporary acceptance build may be modified.
@@ -191,7 +197,7 @@ try {
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered
-    && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
+    && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
   if (!record.acceptancePassed) process.exitCode = 1;
 } catch (error) {
   record.failure = { message: error.message, stack: error.stack };

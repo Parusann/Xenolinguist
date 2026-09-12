@@ -97,14 +97,14 @@ export function applySandboxAction(profile: LanguageProfile, sessionId: string, 
       const existing = profile.dictionary.some(entry => normalizeAnswer(entry.alien_word) === normalizeAnswer(challenge.prompt) && normalizeAnswer(entry.english_meaning) === normalizeAnswer(challenge.accepted[0]));
       if (!existing) next.dictionary = [...profile.dictionary, { id, created_at: at, alien_word: challenge.prompt, english_meaning: challenge.accepted[0],
         part_of_speech: challenge.kind === 'number' ? 'number' : pos(session.conlang.vocabulary.find(v => v.alien === challenge.prompt)!.pos),
-        confidence: 50, context: 'Generated sandbox practice', examples: [], notes }];
+        confidence: null, context: 'Generated sandbox practice', examples: [], notes }];
       if (challenge.kind === 'number') next.number_system = { ...profile.number_system, base: profile.number_system.base ?? session.conlang.number_base,
         mappings: { ...profile.number_system.mappings, [challenge.accepted[0]]: challenge.prompt } };
     } else if (challenge.kind === 'sentence') {
       if (!profile.samples.some(sample => sample.id === id)) next.samples = [...profile.samples, { id, created_at: at, alien_text: challenge.prompt,
         english_translation: challenge.accepted[0], source: 'Sandbox practice', phonetic_notes: notes, decoded: true, audio_id: null, ipa: null }];
     } else if (challenge.kind === 'grammar' && !profile.grammar_rules.some(rule => normalizeAnswer(rule.rule) === normalizeAnswer(challenge.accepted[0]))) {
-      next.grammar_rules = [...profile.grammar_rules, { id, created_at: at, rule: challenge.accepted[0], evidence: ['Generated practice rule, revealed from the answer key'], confidence: 50 }];
+      next.grammar_rules = [...profile.grammar_rules, { id, created_at: at, rule: challenge.accepted[0], evidence: ['Generated practice rule, revealed from the answer key'], confidence: null }];
     }
   }
   return next;

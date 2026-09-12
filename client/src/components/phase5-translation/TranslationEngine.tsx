@@ -1,3 +1,4 @@
+import { EvidenceStatus } from '@/components/common/EvidenceStatus'
 import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
@@ -11,12 +12,12 @@ import { useProfileDraft } from '@/hooks/useProfileDraft'
 interface TranslatedWord {
   alien: string
   english: string | null
-  confidence: number
+  confidence: number | null
   entry: DictionaryEntry | null
   punctuation: boolean
 }
 
-const bucketOf = (conf: number) => getConfidenceLevel(conf)
+const bucketOf = (conf: number | null) => getConfidenceLevel(conf)
 
 export function TranslationEngine() {
   const { profile, updateDictionaryEntry, addDictionaryEntry } = useProfile()
@@ -53,7 +54,7 @@ export function TranslationEngine() {
 
   const realTokens = translatedWords.filter((t) => !t.punctuation)
   const mappedCount = realTokens.filter((t) => t.english).length
-  const avgConf = mappedCount > 0 ? Math.round(realTokens.filter((t) => t.english).reduce((s, t) => s + t.confidence, 0) / mappedCount) : 0
+
 
   const activeIdx = pinned ?? hover
   const active = activeIdx != null ? translatedWords[activeIdx] : null
@@ -106,7 +107,7 @@ export function TranslationEngine() {
         alien_word: active.alien.toLowerCase().replace(/[^a-zA-ZÀ-ɏ'-]/g, ''),
         english_meaning: editMeaning.trim(),
         part_of_speech: 'unknown',
-        confidence: 60,
+        confidence: null,
         context: 'Added via translation',
         examples: [],
         notes: '',
@@ -116,17 +117,13 @@ export function TranslationEngine() {
     setPinned(null)
   }
 
-  const lockIn = () => {
-    if (active?.entry) updateDictionaryEntry(active.entry.id, { confidence: Math.max(76, active.entry.confidence) })
-  }
-
   const copyTranslation = () => navigator.clipboard.writeText(translatedWords.map((t) => (t.punctuation ? t.alien : t.english || `[${t.alien}]`)).join(' '))
 
   const Legend = (
     <div className="flex" style={{ gap: 12, fontSize: 12 }}>
-      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot confirmed" /><span className="dim">Confirmed</span></span>
-      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot probable" /><span className="dim">Probable</span></span>
-      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot unknown" /><span className="dim">Unknown</span></span>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot confirmed" /><span className="dim">High user belief</span></span>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot probable" /><span className="dim">Moderate user belief</span></span>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot unknown" /><span className="dim">Low / unrated / unmapped</span></span>
     </div>
   )
 
@@ -138,7 +135,7 @@ export function TranslationEngine() {
             <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>Translation <em>Engine</em></h1>
             <span className="kicker">PHASE 05</span>
           </div>
-          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Live decoding using your dictionary and AI inference. Each word is colored by confidence — hover to inspect.</p>
+          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Dictionary substitution using asserted meanings. Colors show user belief only. Run AI Full Translation separately for model output.</p>
         </div>
         <div className="flex" style={{ gap: 12, alignItems: 'center' }}>
           {Legend}
@@ -174,12 +171,7 @@ export function TranslationEngine() {
           <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
               <span className="label" style={{ marginBottom: 0 }}>Translation · English</span>
-              {mappedCount > 0 && (
-                <span className="flex" style={{ gap: 8, alignItems: 'center' }}>
-                  <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>avg conf</span>
-                  <span className={'font-mono c-' + bucketOf(avgConf)} style={{ fontSize: 12 }}>{avgConf}%</span>
-                </span>
-              )}
+              <span className="dim">{mappedCount}/{realTokens.length} tokens have dictionary meanings</span>
             </div>
             <div className="expr-color" style={{ flex: 1, overflow: 'auto', fontSize: 22, lineHeight: 1.9, letterSpacing: '-0.005em' }}>
               {translatedWords.length === 0 ? (
@@ -226,9 +218,8 @@ export function TranslationEngine() {
                     <div className="glass-inner" style={{ padding: '8px 10px', background: 'rgba(0,230,118,0.04)', borderColor: 'rgba(0,230,118,0.25)' }}>
                       <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 6 }}>
                         <span style={{ fontSize: 13, color: 'var(--fg)', fontWeight: 500 }}>{active.entry.english_meaning}</span>
-                        <span className={'font-mono c-' + bucketOf(active.confidence)} style={{ fontSize: 11 }}>{active.confidence}%</span>
+                        <EvidenceStatus value={active.confidence} />
                       </div>
-                      <div className={'cbar ' + bucketOf(active.confidence)}><span style={{ width: active.confidence + '%' }} /></div>
                     </div>
                   ) : (
                     <div style={{ fontSize: 12.5, color: 'var(--fg-dim)' }}>Not in dictionary — define it below.</div>
@@ -264,7 +255,6 @@ export function TranslationEngine() {
                     </div>
                   ) : (
                     <div className="flex" style={{ gap: 8, marginTop: 'auto', paddingTop: 12 }}>
-                      <button className="btn sm primary" onClick={lockIn} disabled={!active.entry}>↓ Lock in</button>
                       <button className="btn sm ghost" onClick={pinForEdit}>{active.entry ? 'Edit' : 'Define'}</button>
                     </div>
                   )}

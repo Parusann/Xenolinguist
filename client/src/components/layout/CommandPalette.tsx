@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
-import { getConfidenceLevel } from 'shared/constants'
+import { EvidenceStatus } from '@/components/common/EvidenceStatus'
 
 interface CommandPaletteProps {
   onClose: () => void
@@ -18,7 +18,7 @@ interface Item {
   label: string
   secondary?: string
   hint?: string
-  confidence?: number
+  confidence?: number | null
   run: () => void
 }
 
@@ -122,7 +122,7 @@ export function CommandPalette({ onClose, onNavigate, onOpenAIChat, onShowShortc
                   <div style={{ fontSize: 13, color: 'var(--fg)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: item.kind === 'nav' || item.kind === 'tool' || item.kind === 'help' ? 'var(--font-sans)' : 'var(--font-mono)' }}>{highlight(item.label)}</div>
                   {item.secondary && <div style={{ fontSize: 11, color: 'var(--fg-mute)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{highlight(item.secondary)}</div>}
                 </div>
-                {item.confidence !== undefined && <span className={'badge ' + getConfidenceLevel(item.confidence)} style={{ flexShrink: 0 }}>{item.confidence}%</span>}
+                {item.confidence !== undefined && <EvidenceStatus value={item.confidence} />}
                 {item.hint && <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)', flexShrink: 0 }}>{item.hint}</span>}
               </div>
             ))

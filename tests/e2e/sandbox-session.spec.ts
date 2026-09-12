@@ -20,9 +20,12 @@ test('W07 failed session saves recover with the same key, attempts, reveals and 
   await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
   await page.locator('[data-tour="samples"]').click(); await page.locator('[data-tour="sandbox"]').click();
   await expect(page.getByPlaceholder('Meaning?')).toHaveValue('unfinished');
+  const recoveryFailure = page.waitForResponse(response => response.url().endsWith('/mutations') && response.status() === 500);
   await openProfile(page, server.url, profile.name);
+  await recoveryFailure;
   await expect(page.getByPlaceholder('Meaning?')).toHaveValue('unfinished');
   await expect(page.getByText(/First-attempt unaided matches: 0\/2/)).toBeVisible();
+  await expect(page.getByText('Save failed', { exact: true })).toBeVisible(); // Wait for the recovery attempt before removing the failure fixture.
   await page.unroute('**/api/profiles/*/mutations');
   await page.getByRole('button', { name: 'Retry save for Practice recovery' }).click();
   await expect(page.getByText('Saved', { exact: true })).toBeVisible();

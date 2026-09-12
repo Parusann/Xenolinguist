@@ -2,7 +2,7 @@
 
 > A fully-local, AI-powered **language-decoding workbench**: capture samples of an unknown, alien, or constructed language and progressively decode its numbers, vocabulary, grammar, and meaning with the help of a local LLM, audio playback, speech-to-text, and phonetic transcription. Everything runs offline on your machine — no cloud APIs.
 
-This document describes every feature in the app, how it works, and where it lives in the code. File references use `path:line` against the repository root.
+This feature reference began as a pre-implementation inventory; some architectural descriptions and line references are historical. Use [implementation progress](implementation-progress.md) and the linked package documents for the current persistence, audio, sandbox and evaluation boundaries.
 
 ---
 
@@ -59,7 +59,7 @@ The central entity is **`LanguageProfile`** (`shared/types.ts:55`), which aggreg
 | Type | Key fields | Notes |
 |------|-----------|-------|
 | `LanguageProfile` | `id, name, description, phonetic_notes, is_sandbox, sandbox_difficulty?, dictionary[], grammar_rules[], number_system, samples[], audio_clips[], created_at, updated_at` | One JSON file per profile |
-| `DictionaryEntry` | `alien_word, english_meaning, part_of_speech, confidence (0–100), context, examples[], notes` | Confidence buckets: ≥76 confirmed, ≥41 probable, else unknown |
+| `DictionaryEntry` | `alien_word, english_meaning, part_of_speech, confidence (null or 0–100), context, examples[], notes` | Optional user belief (null or 0–100); no validation status |
 | `GrammarRule` | `rule, evidence[], confidence` | |
 | `NumberSystem` | `base \| null, mappings: Record<number,string>, operators: Record<string,string>` | JSON keys persist as strings — coerce on read |
 | `Sample` | `alien_text, english_translation \| null, source, phonetic_notes, decoded, audio_id \| null, ipa?` | `ipa` carries the joined phone string |
@@ -79,7 +79,7 @@ The central entity is **`LanguageProfile`** (`shared/types.ts:55`), which aggreg
 | **Routing & provider shell** | `/` → marketing `HeroPage`; `/app` → `Workbench`; `*` → redirect `/`. `Workbench` nests `SessionLog → Ollama → Profile` providers and swaps between `LandingScreen` and `AppShell` based on whether a profile is loaded. | `client/src/main.tsx:9`, `App.tsx:12` |
 | **Workbench shell & phase nav** | Header breadcrumb + status pills, hover-expanding sidebar, phase content area, and overlays. Sandbox profiles prepend a Sandbox phase to the six standard phases. Active phase is in-memory state. | `components/layout/AppShell.tsx:37` |
 | **Sidebar** | Hover-expanding left rail with phase glyphs, number-key hints, a back-to-profiles brand mark (keyboard-activatable), and a command-palette launcher. | `components/layout/Sidebar.tsx` |
-| **Status bar** | Bottom bar: Ollama connection dot, decode %, confidence counts, a "Saving" pulse (debounced PUT in flight), and toggles for the session log / shortcuts. Purely presentational. | `components/layout/StatusBar.tsx` |
+| **Status bar** | Bottom bar: Ollama connection dot, distinct observation/assertion counts, and durable save status, and toggles for the session log / shortcuts. Purely presentational. | `components/layout/StatusBar.tsx` |
 | **Command palette** | `Ctrl/Cmd+K` launcher: navigate phases, run tools (AI chat, tour, shortcuts), and jump to dictionary words / samples / grammar rules / number mappings. | `components/layout/CommandPalette.tsx` |
 | **Session log** | Bottom slide-up panel of timestamped events (info/ai/success/error/warning), newest-first, with clear/close. Populated app-wide via `useSessionLog().addEntry`. | `components/layout/SessionLog.tsx` |
 | **Keyboard shortcuts + help** | Registered shortcuts (`useKeyboardShortcuts`) and a grouped modal listing them (`Shift+?`), dismissible by Escape / outside-click. | `hooks/useKeyboardShortcuts.ts`, `components/layout/ShortcutsHelp.tsx` |
@@ -93,7 +93,7 @@ The central entity is **`LanguageProfile`** (`shared/types.ts:55`), which aggreg
 
 | Feature | What it does | API / Where |
 |---------|--------------|-------------|
-| **Profile selector (Landing)** | Lists saved profiles sorted by recency, each with live word count and decode %, plus New Language / Sandbox CTAs and a "Load demo language (Eridian)" button. Animated Vanta + particle backdrop. | `GET /api/profiles`, `GET /api/profiles/:id` — `components/landing/LandingScreen.tsx:158` |
+| **Profile selector (Landing)** | Lists saved profiles sorted by recency, each with distinct assertion and observation counts, plus New Language / Sandbox CTAs and a "Load demo language (Eridian)" button. Animated Vanta + particle backdrop. | `GET /api/profiles`, `GET /api/profiles/:id` — `components/landing/LandingScreen.tsx:158` |
 | **Profile setup form** | Create a new language or sandbox challenge (name, description, phonetic notes). On success the workbench swaps in `AppShell`. | `POST /api/profiles` — `components/landing/ProfileSetup.tsx` |
 | **Profile CRUD** | Full document persistence: list, read, create, update (full-document PUT), delete. Each profile is a pretty-printed JSON file; a lightweight `profiles.json` index holds `{id,name,created_at,updated_at}` for the list. | `GET/POST/PUT/DELETE /api/profiles[/:id]` — `routes/profiles.ts`, `services/profile-store.ts` |
 | **Demo language "Eridian"** | One-click pre-seeded, internally-consistent partially-decoded language (base-8 numbers, SOV grammar, 20 dictionary entries, 5 rules, 8 samples) so users can explore the workflow without starting from zero. | `POST /api/profiles/demo` — `shared/demo-language.ts`, `routes/profiles.ts:14` |
@@ -116,34 +116,33 @@ The capture surface. `SampleInput.tsx` is a large two-pane component (a known re
 - **Sample list** — search, all/decoded/audio filters, mini-waveforms, re-transcribe action, and delete-with-undo.
 - **Per-sample re-transcribe** — re-runs Whisper on a stored clip and writes the transcript/phonetic-guess into `phonetic_notes`.
 
-`SampleDecodeView.tsx` is the right-pane Decode View: it tokenizes `alien_text` on whitespace (stripping attached punctuation for the dictionary lookup), colors each token by dictionary confidence (emerald/amber/red), shows a decode-% bar, and offers a per-token popover (dismissible by Escape or outside-click) to view a known word or define an unknown one inline.
+`SampleDecodeView.tsx` is the right-pane Decode View: it tokenizes `alien_text` on whitespace (stripping attached punctuation for the dictionary lookup), colors each token by user belief, shows dictionary coverage with its token denominator, and offers a per-token popover (dismissible by Escape or outside-click) to view a known word or define an unknown one inline.
 
 ### Phase 02 — Numbers (`components/phase2-numbers/NumberDecoder.tsx`)
 - **Number & operator mapping editor** — an editable 1–N grid (range 10/20/50/100) mapping integers→alien words, plus operators (+ − × ÷ =).
-- **Base inference (heuristic, client-side)** — `scoreBase()` scores candidate bases {5,6,7,8,10,12,16,20} by token-overlap between `word(n)` and `word(base)`/`word(n−base)`, picks the best, and visualizes confidence across bases.
+- **Exploratory base comparison** — reports support/checked and comparison coverage for eight candidates, requires two distinct supporting comparisons, preserves ties and leaves working-base selection explicit. See [workspace evidence](workspace-evidence.md).
 - **AI number analysis** — a `numberAnalysis` pass that produces an explanatory write-up only (does not mutate the base/mappings).
 
 ### Phase 03 — Vocabulary (`components/phase3-vocabulary/VocabularyBuilder.tsx`)
-- **Dictionary CRUD** — add/edit/delete entries (word, meaning, POS, confidence, context, examples, notes), bucketed confirmed/probable/unknown, with card and table views and an inspector with promote/demote (jumps confidence between bucket anchors). Delete is undo-able as a **true restore** (preserves the entry's id/created_at, so audio-segment links survive).
+- **Dictionary CRUD** — add/edit/delete entries (word, meaning, POS, optional user belief, context, examples, notes), with card and table views and an inspector. New entries start unrated; no promotion/demotion shortcuts. Delete is undo-able as a **true restore** (preserves the entry's id/created_at, so audio-segment links survive).
 - **AI suggest** — a `patternAnalysis` pass proposing meanings for unmapped words (advisory text, not auto-applied).
 - **Per-word audio + TTS** — a Speak button on each word, and an inline waveform `AudioPlayer` clamped to the linked clip segment's `[start,end]` window.
 
 ### Phase 04 — Grammar (`components/phase4-grammar/GrammarAnalyzer.tsx`)
-- **Rule management** — add structural rules (description, multi-line evidence, confidence), filter by bucket, inspect evidence.
+- **Rule management** — add structural rules (description, cited examples, optional user belief), filter rated/unrated, inspect examples.
 - **AI grammar inference** — a `grammarInference` pass over dictionary+rules+samples (advisory text).
 
 ### Phase 05 — Translation (`components/phase5-translation/TranslationEngine.tsx`)
-- **Live word-by-word translation** (Alien→English) — exact-match dictionary lookup per token, colored by confidence, with an average-confidence readout and copy.
-- **Token inspector** — click a word to see/correct the dictionary candidate or "lock-in" confidence to ≥76.
+- **Live word-by-word translation** (Alien→English) — exact-match dictionary lookup per token, colored by user belief, with a dictionary-match count and copy.
+- **Token inspector** — click a word to see or correct the asserted dictionary candidate.
 - **Whole-text AI translation** — a `translation` pass over dictionary+grammar+samples+text producing prose (advisory).
 - **Reverse translation** (English→Alien) — token-indexed reverse lookup (matches any whitespace/slash-separated word of a gloss, so multi-word meanings like "to run" resolve), `[word]` for misses.
 
 ### Phase 06 — Dashboard / "Field Log" (`components/phase6-dashboard/Dashboard.tsx`)
 Read-only overview of the active profile:
-- **Decoding-progress hero ring** — weighted completeness (dictionary 30 / grammar 25 / numbers 15 / samples 15 / avg-confidence 15), via `lib/profileStats.ts:getDecodingProgress`.
-- **Confidence distribution** — confirmed/probable/unknown breakdown with bars.
-- **Growth-trend sparklines** — real cumulative series built from `created_at` timestamps (decode % is a vocabulary-weighted proxy).
-- **Stat tiles, milestones, discovery timeline, AI field notes** — counts, next-milestone trackers, a session-log-derived timeline, and conditional prose notes.
+- **Distinct workspace counts** — observations, asserted word–meaning pairs, grammar notes and competing forms, with definitions. Evaluated linguistic coverage remains unavailable.
+- **Saved metric history** — server-recorded counts at successful saves; no reconstructed decoding curve.
+- **Range milestone, session activity and guidance** — count exactly mappings 1–20, show session log events and label deterministic advice as guidance.
 - **Import / Export JSON / Export CSV** — import merges present sections; export downloads the full profile JSON or a dictionary CSV.
 
 ---
@@ -224,7 +223,7 @@ A fully-local phone recognizer (`services/ipa-phones.ts`):
 | **`UndoProvider` + `useUndoRedo`** | A 20-deep undo stack (`pushAction({description, undo})`). Dictionary-delete undo is now a **true restore** (preserves id/created_at); sample-delete undo restores the text (its audio was deleted with it). There is no redo. |
 | **`useAI` / `useAutoSuggest`** | AI dispatch and debounced quick-suggest. |
 | **`useKeyboardShortcuts`** | Global shortcut registration. |
-| **`lib/profileStats.ts`** | Pure stats: decoding progress, confidence counts, cumulative trends. |
+| **`lib/profileStats.ts`** | Manual rating counts; shared/metrics provides distinct workspace counts, saved snapshots and exploratory numeral support. |
 
 ---
 

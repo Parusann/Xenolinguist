@@ -9,7 +9,7 @@ import type { PartOfSpeech, DictionaryEntry } from 'shared/types'
 import { AudioPlayer } from '@/components/audio/AudioPlayer'
 import { SpeakButton } from '@/components/audio/SpeakButton'
 import { ContextMenu, type ContextMenuItem } from '@/components/layout/ContextMenu'
-import { ConfRing } from '@/components/common/ConfRing'
+import { EvidenceStatus, BeliefInput } from '@/components/common/EvidenceStatus'
 import { getConfidenceCounts } from '@/lib/profileStats'
 
 const BUCKET_COLOR: Record<string, string> = {
@@ -37,11 +37,11 @@ export function VocabularyBuilder() {
   const [newWord, setNewWord] = useState('')
   const [newMeaning, setNewMeaning] = useState('')
   const [newPos, setNewPos] = useState<PartOfSpeech>('unknown')
-  const [newConfidence, setNewConfidence] = useState(80)
+  const [newConfidence, setNewConfidence] = useState<number | null>(null)
   const [newContext, setNewContext] = useState('')
 
   const dictionary = profile?.dictionary || []
-  const counts = profile ? getConfidenceCounts(profile) : { confirmed: 0, probable: 0, unknown: 0, total: 0 }
+  const counts = profile ? getConfidenceCounts(profile) : { rated: 0, unrated: 0, total: 0 }
 
   const filtered = dictionary.filter((entry) => {
     if (activeCategory !== 'all' && entry.part_of_speech !== activeCategory) return false
@@ -68,7 +68,7 @@ export function VocabularyBuilder() {
     setNewWord('')
     setNewMeaning('')
     setNewPos('unknown')
-    setNewConfidence(80)
+    setNewConfidence(null)
     setNewContext('')
     setShowAddForm(false)
   }
@@ -85,17 +85,6 @@ export function VocabularyBuilder() {
 
   const updateEntry = (id: string, patch: Partial<DictionaryEntry>) => {
     updateProfile({ dictionary: dictionary.map((e) => (e.id === id ? { ...e, ...patch } : e)) })
-  }
-
-  const promote = (entry: DictionaryEntry) => {
-    const level = getConfidenceLevel(entry.confidence)
-    const next = level === 'unknown' ? 60 : level === 'probable' ? 88 : Math.min(100, entry.confidence + 5)
-    updateEntry(entry.id, { confidence: next })
-  }
-  const demote = (entry: DictionaryEntry) => {
-    const level = getConfidenceLevel(entry.confidence)
-    const next = level === 'confirmed' ? 60 : level === 'probable' ? 30 : Math.max(0, entry.confidence - 10)
-    updateEntry(entry.id, { confidence: next })
   }
 
   const startEdit = () => {
@@ -159,10 +148,7 @@ export function VocabularyBuilder() {
               <span className="kicker">PHASE 03</span>
             </div>
             <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>
-              <span className="font-mono c-confirmed">{counts.confirmed}</span> confirmed ·{' '}
-              <span className="font-mono c-probable">{counts.probable}</span> probable ·{' '}
-              <span className="font-mono c-unknown">{counts.unknown}</span> unknown ·{' '}
-              <span className="font-mono">{counts.total}</span> total
+              {counts.total} records · {counts.rated} rated by user · {counts.unrated} unrated assertions
             </p>
           </div>
           <div className="flex" style={{ gap: 8 }}>
@@ -213,11 +199,11 @@ export function VocabularyBuilder() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
                 <label className="label">Alien Word</label>
-                <input value={newWord} onChange={(e) => setNewWord(e.target.value)} className="input" autoFocus />
+                <input aria-label="Alien Word" value={newWord} onChange={(e) => setNewWord(e.target.value)} className="input" autoFocus />
               </div>
               <div>
                 <label className="label">English Meaning</label>
-                <input value={newMeaning} onChange={(e) => setNewMeaning(e.target.value)} className="input" />
+                <input aria-label="English Meaning" value={newMeaning} onChange={(e) => setNewMeaning(e.target.value)} className="input" />
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
@@ -228,8 +214,7 @@ export function VocabularyBuilder() {
                 </select>
               </div>
               <div>
-                <label className="label">Confidence · {newConfidence}%</label>
-                <input type="range" min={0} max={100} value={newConfidence} onChange={(e) => setNewConfidence(Number(e.target.value))} style={{ width: '100%', accentColor: 'var(--accent)', marginTop: 10 }} />
+                <BeliefInput value={newConfidence} onChange={setNewConfidence} />
               </div>
               <div>
                 <label className="label">Context</label>
@@ -265,7 +250,7 @@ export function VocabularyBuilder() {
                   >
                     <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
                       <span className="badge">{entry.part_of_speech}</span>
-                      <ConfRing value={entry.confidence} size={28} stroke={2.5} />
+                      <EvidenceStatus value={entry.confidence} />
                     </div>
                     <div className="flex" style={{ alignItems: 'center', gap: 6 }}>
                       <div className={'word-token wt-' + level} style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 500, marginBottom: 2, padding: 0 }}>{entry.alien_word}</div>
@@ -288,7 +273,7 @@ export function VocabularyBuilder() {
             <table className="glass-card expr-color" style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-mono)', fontSize: 12.5 }}>
               <thead>
                 <tr style={{ color: 'var(--fg-mute)', textAlign: 'left' }}>
-                  {['WORD', 'MEANING', 'POS', 'CONF', 'CONTEXT'].map((h) => (
+                  {['WORD', 'MEANING', 'POS', 'USER BELIEF', 'CONTEXT'].map((h) => (
                     <th key={h} style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>{h}</th>
                   ))}
                 </tr>
@@ -307,10 +292,7 @@ export function VocabularyBuilder() {
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--fg-1)', fontFamily: 'var(--font-sans)' }}>{entry.english_meaning}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--fg-mute)' }}>{entry.part_of_speech}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
-                        <div className="flex" style={{ gap: 8 }}>
-                          <div className={'cbar ' + level} style={{ width: 60 }}><span style={{ width: entry.confidence + '%' }} /></div>
-                          <span style={{ fontSize: 11 }}>{entry.confidence}</span>
-                        </div>
+                        <EvidenceStatus value={entry.confidence} />
                       </td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--fg-mute)', fontFamily: 'var(--font-sans)', fontSize: 12, maxWidth: 320 }}>{entry.context || '—'}</td>
                     </tr>
@@ -352,7 +334,7 @@ export function VocabularyBuilder() {
             <div className="flex" style={{ alignItems: 'flex-start', gap: 14 }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 30, fontWeight: 500, color: BUCKET_COLOR[getConfidenceLevel(sel.confidence)], lineHeight: 1 }}>{sel.alien_word}</div>
               <div className="flex-1" />
-              <ConfRing value={editing ? draft.confidence ?? sel.confidence : sel.confidence} size={52} stroke={3.5} />
+              <EvidenceStatus value={editing ? draft.confidence : sel.confidence} />
             </div>
 
             {editing ? (
@@ -368,8 +350,7 @@ export function VocabularyBuilder() {
                   </select>
                 </div>
                 <div>
-                  <label className="label">Confidence · {draft.confidence}%</label>
-                  <input type="range" min={0} max={100} value={draft.confidence ?? 0} onChange={(e) => setDraft((d) => ({ ...d, confidence: Number(e.target.value) }))} style={{ width: '100%', accentColor: 'var(--accent)' }} />
+                  <BeliefInput value={draft.confidence ?? null} onChange={value => setDraft(d => ({ ...d, confidence: value }))} />
                 </div>
                 <div>
                   <label className="label">Context</label>
@@ -387,7 +368,7 @@ export function VocabularyBuilder() {
                 </div>
                 <div className="flex" style={{ gap: 8 }}>
                   <span className="badge">{sel.part_of_speech}</span>
-                  <span className={'badge ' + getConfidenceLevel(sel.confidence)}>{getConfidenceLevel(sel.confidence)}</span>
+                  <EvidenceStatus value={sel.confidence} />
                 </div>
                 <hr className="hr" style={{ margin: '4px 0' }} />
                 <div>
@@ -411,19 +392,13 @@ export function VocabularyBuilder() {
                 <div className="glass-inner" style={{ padding: 12, marginTop: 6 }}>
                   <div className="flex" style={{ gap: 8, marginBottom: 6, alignItems: 'center' }}>
                     <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
-                    <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>AI Suggestion</span>
+                    <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>Guidance</span>
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--fg-1)', lineHeight: 1.5 }}>
-                    {getConfidenceLevel(sel.confidence) === 'confirmed'
-                      ? 'High confidence — appears consistently across multiple samples with the same gloss.'
-                      : getConfidenceLevel(sel.confidence) === 'probable'
-                      ? 'Probable. Consider eliciting in a controlled context to confirm part-of-speech.'
-                      : 'Insufficient evidence. Try parallel-mode capture with a native speaker present.'}
+                    Record examples in new contexts and competing meanings. A belief rating alone does not establish evidence or accuracy.
                   </div>
                 </div>
                 <div className="flex" style={{ gap: 8, marginTop: 'auto' }}>
-                  <button className="btn sm" onClick={() => promote(sel)}>↑ Promote</button>
-                  <button className="btn sm ghost" onClick={() => demote(sel)}>⌫ Demote</button>
                   <button className="btn sm ghost" style={{ marginLeft: 'auto', color: 'var(--conf-unknown)' }} onClick={() => handleDeleteWithUndo(sel)}>Delete</button>
                 </div>
               </>

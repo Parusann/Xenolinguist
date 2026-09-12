@@ -1,6 +1,6 @@
 import { useProfile } from '@/stores/profile-context'
 import { useOllama } from '@/stores/ollama-context'
-import { getConfidenceCounts, getDecodingProgress } from '@/lib/profileStats'
+import { workspaceMetrics } from 'shared/metrics/workspace-metrics'
 import { SaveStatus } from './SaveStatus'
 
 interface StatusBarProps {
@@ -13,10 +13,7 @@ export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarPr
   const { profile } = useProfile()
   const { connected } = useOllama()
 
-  const counts = profile
-    ? getConfidenceCounts(profile)
-    : { confirmed: 0, probable: 0, unknown: 0, total: 0 }
-  const decode = profile ? getDecodingProgress(profile) : 0
+  const metrics = profile ? workspaceMetrics(profile) : null
 
   return (
     <div className="status-bar">
@@ -29,11 +26,11 @@ export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarPr
       </span>
       <span className="sep">·</span>
       <span className="item">
-        DECODE <b style={{ color: 'var(--accent)' }}>{decode}%</b>
+        OBSERVATIONS <b style={{ color: 'var(--accent)' }}>{metrics?.observations ?? 0}</b>
       </span>
       <span className="sep">·</span>
       <span className="item">
-        CONF · {counts.confirmed} confirmed / {counts.probable} probable / {counts.unknown} unknown
+        {metrics?.assertedEntries ?? 0} assertions · evaluation unavailable
       </span>
 
       <span className="sep">·</span>

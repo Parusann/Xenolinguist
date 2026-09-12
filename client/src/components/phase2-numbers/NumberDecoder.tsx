@@ -2,28 +2,10 @@ import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
-import { getConfidenceLevel } from 'shared/constants'
+import { rankBases } from 'shared/metrics/number-evidence'
+import { countMappings } from 'shared/metrics/workspace-metrics'
 
-const BASE_CANDIDATES = [5, 6, 7, 8, 10, 12, 16, 20]
 const OPERATORS = ['+', '-', '×', '÷', '=']
-
-const tokensOf = (w: string) => w.toLowerCase().split(/[^a-zà-ɏ']+/i).filter(Boolean)
-
-/** Heuristic base-fit score: for n in (B, 2B], does word(n) reuse a token from
- *  word(B) or word(n-B)? Real signal derived from the actual mappings. */
-function scoreBase(mappings: Record<number, string>, B: number): number {
-  let checked = 0
-  let hits = 0
-  for (let n = B + 1; n <= 2 * B; n++) {
-    const w = mappings[n]
-    if (!w) continue
-    checked++
-    const wTokens = tokensOf(w)
-    const ref = [mappings[B], mappings[n - B]].filter(Boolean) as string[]
-    if (ref.some((r) => tokensOf(r).some((t) => wTokens.includes(t)))) hits++
-  }
-  return checked ? hits / checked : 0
-}
 
 export function NumberDecoder() {
   const { profile, updateProfile } = useProfile()
@@ -37,12 +19,9 @@ export function NumberDecoder() {
   const mappings = numberSystem.mappings as Record<number, string>
   const operators = numberSystem.operators as Record<string, string>
   const base = numberSystem.base
-  const mappedCount = Object.keys(mappings).length
-
-  const scores = useMemo(() => BASE_CANDIDATES.map((b) => ({ base: b, score: scoreBase(mappings, b) })), [mappings])
-  const best = useMemo(() => scores.reduce((a, b) => (b.score > a.score ? b : a), scores[0]), [scores])
-  const displayBase = base ?? (best.score > 0 ? best.base : null)
-  const baseConfidence = Math.round((scores.find((s) => s.base === displayBase)?.score ?? 0) * 100)
+  const mappedCount = countMappings(mappings, 1, range)
+  const { scores, leaders, suggestedBase } = useMemo(() => rankBases(mappings), [mappings])
+  const displayBase = base
 
   const decompose = (n: number): number[] => {
     const b = displayBase
@@ -71,7 +50,6 @@ export function NumberDecoder() {
 
   const handleDetectBase = async () => {
     if (!profile) return
-    if (best.score > 0) updateProfile({ number_system: { ...numberSystem, base: best.base } })
     const mapped = Object.entries(mappings).map(([n, w]) => `${n} = "${w}"`).join('\n')
     if (mapped) {
       try { setAnalysisResult(await runTask('numberAnalysis', `Number mappings:\n${mapped}`)) }
@@ -80,12 +58,11 @@ export function NumberDecoder() {
   }
 
   const numbers = Array.from({ length: range }, (_, i) => i + 1)
-  const unmapped = numbers.filter((n) => !mappings[n]).length
+  const unmapped = numbers.filter((n) => !mappings[n]?.trim()).length
   const opsSet = OPERATORS.filter((op) => operators[op]).length
 
   const notes: { dot: string; text: React.ReactNode }[] = []
-  if (displayBase) notes.push({ dot: 'confirmed', text: <>Base <span className="font-mono c-confirmed">{displayBase}</span> detected — roll-over at <span className="font-mono c-confirmed">{mappings[displayBase] || `#${displayBase}`}</span>.</> })
-  else notes.push({ dot: 'unknown', text: <>Not enough mappings to detect a base — map a contiguous run of numbers.</> })
+  notes.push({ dot: 'probable', text: <>Base selection is a working user assertion. Positional breakdown uses that selection only.</> })
   notes.push({ dot: unmapped > 0 ? 'probable' : 'confirmed', text: <>{unmapped > 0 ? <>{unmapped} of 1–{range} still unmapped.</> : <>All numbers 1–{range} are mapped.</>}</> })
   notes.push({ dot: opsSet > 0 ? 'confirmed' : 'unknown', text: <>{opsSet}/{OPERATORS.length} operators defined{opsSet === 0 ? ' — define + and = to start.' : '.'}</> })
 
@@ -98,7 +75,7 @@ export function NumberDecoder() {
               <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>Number <em>System</em></h1>
               <span className="kicker">PHASE 02</span>
             </div>
-            <p className="dim" style={{ marginTop: 6, fontSize: 13, maxWidth: 580 }}>Numbers are the Rosetta Stone. Map words to integers, detect the base, then everything else gets easier.</p>
+            <p className="dim" style={{ marginTop: 6, fontSize: 13, maxWidth: 580 }}>Numbers are the Rosetta Stone. Map words to integers, explore possible structure, and compare alternative bases.</p>
           </div>
           <div className="flex" style={{ gap: 8, alignItems: 'center' }}>
             <span className="label" style={{ marginBottom: 0 }}>Range</span>
@@ -108,34 +85,26 @@ export function NumberDecoder() {
               <option value={50}>1–50</option>
               <option value={100}>1–100</option>
             </select>
-            <button className="btn primary sm" onClick={handleDetectBase} disabled={!connected || loading || mappedCount < 3} title={mappedCount < 3 ? 'Map at least 3 numbers' : undefined}>{loading ? 'Detecting…' : '⌖ Detect Base'}</button>
+            <button className="btn primary sm" onClick={handleDetectBase} disabled={!connected || loading || mappedCount < 3} title={mappedCount < 3 ? 'Map at least 3 numbers' : undefined}>{loading ? 'Analyzing…' : '⌖ AI Analyze'}</button>
           </div>
         </div>
 
-        {/* Base detection */}
         <div className="glass-card" style={{ padding: 18 }}>
-          <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
-            <span className="label" style={{ marginBottom: 0 }}>Detected Base System</span>
-            {displayBase && <span className={'badge ' + getConfidenceLevel(baseConfidence)}>{getConfidenceLevel(baseConfidence) === 'confirmed' ? 'confirmed' : 'estimate'} · {baseConfidence}%</span>}
-          </div>
-          <div className="flex" style={{ gap: 24, alignItems: 'flex-end' }}>
-            <div>
-              <div className="text-glow" style={{ fontFamily: 'var(--font-display)', fontSize: 64, fontWeight: 200, lineHeight: 1, letterSpacing: '-0.04em' }}>
-                base<em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>{displayBase ?? '?'}</em>
-              </div>
-              <div className="dim" style={{ fontSize: 12, marginTop: 4 }}>
-                {displayBase ? <>roll-over at <span className="font-mono c-confirmed">{mappings[displayBase] || `#${displayBase}`}</span></> : 'map numbers, then detect'}
-              </div>
-            </div>
-            <div className="flex-1" style={{ display: 'flex', gap: 4, alignItems: 'end', height: 80, paddingLeft: 32, borderLeft: '1px solid var(--border)' }}>
-              {scores.map((b) => (
-                <div key={b.base} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flex: 1 }}>
-                  <div style={{ width: '70%', height: `${Math.max(b.score * 100, 2)}%`, background: b.base === displayBase ? 'linear-gradient(to top, var(--accent-deep), var(--accent))' : 'rgba(255,255,255,0.12)', borderRadius: 2, minHeight: 2 }} />
-                  <span className="font-mono" style={{ fontSize: 10, color: b.base === displayBase ? 'var(--accent)' : 'var(--fg-mute)' }}>{b.base}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <h2 className="label">Exploratory base comparison</h2>
+          <p className="dim">Token reuse in (B, 2B] checks whether a compound reuses tokens from both B and n−B. Both references must exist. Repeated labels are excluded. Support is a heuristic, not a probability; these mappings have no verified independent provenance.</p>
+          <label className="label">Working base (user-selected)
+            <select className="input" aria-label="Working base" value={base ?? ''} onChange={event => updateProfile({ number_system: { ...numberSystem, base: event.target.value ? Number(event.target.value) : null } })}>
+              <option value="">Unset</option>{Array.from({ length: 35 }, (_, i) => i + 2).map(value => <option key={value} value={value}>{value}</option>)}
+            </select>
+          </label>
+          <p>{suggestedBase ? `Exploratory suggestion: base ${suggestedBase}.` : leaders.length > 1 ? `Tied candidates: ${leaders.map(candidate => candidate.base).join(', ')}. No single base suggested.` : 'Insufficient support: at least two distinct supporting comparisons are required.'}</p>
+          <table style={{ width: '100%', textAlign: 'left', fontSize: 13 }}>
+            <thead><tr><th>Candidate base</th><th>Support / checked</th><th>Comparison coverage</th></tr></thead>
+            <tbody>{scores.map(score => <tr key={score.base}>
+              <td>{score.base}{leaders.length > 1 && leaders.some(leader => leader.base === score.base) ? ' (tied)' : ''}</td>
+              <td>{score.support}/{score.checked}{score.checked === 0 ? ' · no evidence' : ''}</td><td>{score.checked}/{score.possible} candidate integers</td>
+            </tr>)}</tbody>
+          </table>
         </div>
 
         {/* Mappings grid */}
@@ -147,7 +116,7 @@ export function NumberDecoder() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 10 }}>
             {numbers.map((n) => {
               const word = mappings[n]
-              const has = !!word
+              const has = !!word?.trim()
               const parts = decompose(n)
               return (
                 <div key={n} onMouseEnter={() => setHover(n)} onMouseLeave={() => setHover(null)} className="glass-inner" style={{ padding: '12px 14px', borderColor: hover === n ? 'rgba(0,230,118,0.4)' : has ? 'var(--border-mid)' : 'var(--border)', background: hover === n ? 'rgba(0,230,118,0.06)' : 'var(--bg-inner)', transition: 'all 120ms ease' }}>
@@ -155,7 +124,7 @@ export function NumberDecoder() {
                     <span className="font-mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>{n}</span>
                     <span className="font-mono" style={{ fontSize: 9, color: has ? 'var(--accent)' : 'var(--fg-faint)' }}>{has ? '● mapped' : '—'}</span>
                   </div>
-                  <input value={word || ''} onChange={(e) => handleMapping(n, e.target.value)} placeholder="—" style={{ width: '100%', background: 'transparent', border: 0, outline: 'none', fontFamily: 'var(--font-mono)', fontSize: has ? 14 : 13, fontWeight: 500, color: has ? 'var(--fg)' : 'var(--fg-faint)' }} />
+                  <input aria-label={`Number ${n} mapping`} value={word || ''} onChange={(e) => handleMapping(n, e.target.value)} placeholder="—" style={{ width: '100%', background: 'transparent', border: 0, outline: 'none', fontFamily: 'var(--font-mono)', fontSize: has ? 14 : 13, fontWeight: 500, color: has ? 'var(--fg)' : 'var(--fg-faint)' }} />
                   <div className="flex" style={{ gap: 4, marginTop: 4, height: 4 }}>
                     {parts.map((p, i) => (
                       <span key={i} style={{ width: 6, height: 4, borderRadius: 1, background: p ? `rgba(0,230,118,${0.3 + p * 0.12})` : 'rgba(255,255,255,0.05)' }} />
