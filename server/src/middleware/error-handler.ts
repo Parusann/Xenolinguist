@@ -4,6 +4,8 @@ import { ZodError } from 'zod';
 import { ProfileError, validationError } from '../../../shared/schemas/errors.js';
 
 export function errorHandler(err: Error, _req: Request, res: Response, next: NextFunction) {
+  // JSON parser messages can quote request bodies, including development pairing codes.
+  if ((err as Error & { type?: string }).type === 'entity.parse.failed') return res.status(400).json({ error: 'Invalid JSON body', code: 'INVALID_JSON' });
   console.error('[server] Error:', err.message);
   // If the response already started (e.g. an SSE stream), we can't send a JSON body —
   // hand off to Express's default handler so it tears down the connection.

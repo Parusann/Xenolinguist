@@ -1,3 +1,4 @@
+import { desktopRequest } from './desktop-request.mjs';
 // Run an unpacked release outside the source tree, in an isolated desktop data directory.
 import { _electron as electron } from 'playwright';
 import { expect } from '@playwright/test';
@@ -35,7 +36,7 @@ try {
   // Even an empty ELECTRON_RUN_AS_NODE switches Electron into Node CLI mode.
   delete launchEnv.ELECTRON_RUN_AS_NODE;
   app = await electron.launch({ executablePath: resolved, cwd: dir,
-    args: [`--xeno-test-user-data=${dir}`],
+    args: [`--xeno-test-user-data=${dir}`, '--use-fake-device-for-media-stream'],
     env: launchEnv, timeout: 40_000 });
   app.process().stdout?.on('data', data => record.console.push(data.toString()));
   app.process().stderr?.on('data', data => record.console.push(data.toString()));
@@ -45,8 +46,38 @@ try {
   page.setDefaultTimeout(20_000);
   await page.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
   const origin = new URL(page.url()).origin;
+  expect((await page.request.get(`${origin}/api/health`)).status()).toBe(401);
+  expect((await page.request.post(`${origin}/api/audio/stages`, { data: 'unauthorized' })).status()).toBe(401);
+  expect((await desktopRequest(page).get(`${origin}/api/health`)).status()).toBe(200);
+  const boundary = await app.evaluate(async ({ BrowserWindow }, origin) => {
+    const primary = BrowserWindow.getAllWindows()[0];
+    const prefs = primary.webContents.getLastWebPreferences();
+    const other = new BrowserWindow({ show: false, webPreferences: { sandbox: true, contextIsolation: true, nodeIntegration: false } });
+    try {
+      await other.loadURL(origin);
+      const otherWindowStatus = await other.webContents.executeJavaScript("fetch('/api/health').then(r => r.status)");
+      return { otherWindowStatus, sandbox: prefs.sandbox, contextIsolation: prefs.contextIsolation, nodeIntegration: prefs.nodeIntegration, webSecurity: prefs.webSecurity };
+    } finally { other.destroy(); }
+  }, origin);
+  expect(boundary).toEqual({ otherWindowStatus: 401, sandbox: true, contextIsolation: true, nodeIntegration: false, webSecurity: true });
+  await page.evaluate(() => { window.open('https://untrusted.example/'); location.href = 'file:///untrusted.html'; });
+  // A subsequent app API request proves the blocked navigation left the trusted document usable.
+  expect((await desktopRequest(page).get(`${origin}/api/health`)).status()).toBe(200);
+  expect(new URL(page.url()).origin).toBe(origin);
+  expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);
+  record.checks.localBoundary = { ...boundary, anonymousHealth: 401, anonymousBinary: 401, trustedHealth: 200, foreignNavigationBlocked: true, popupDenied: true };
+  const media = await page.evaluate(async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const audioTracks = stream.getAudioTracks().length;
+    stream.getTracks().forEach(track => track.stop());
+    let cameraDenied = false;
+    try { const camera = await navigator.mediaDevices.getUserMedia({ video: true }); camera.getTracks().forEach(track => track.stop()); } catch { cameraDenied = true; }
+    return { audioTracks, cameraDenied };
+  });
+  expect(media).toEqual({ audioTracks: 1, cameraDenied: true });
+  record.checks.localBoundary.syntheticMicrophone = media;
   const request = async (route, body) => {
-    const response = await page.request.post(origin + route, { data: body, timeout: 180_000 });
+    const response = await desktopRequest(page).post(origin + route, { data: body, timeout: 180_000 });
     return { status: response.status(), body: await response.json() };
   };
   const wav = await readFile(path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav'));
@@ -71,8 +102,9 @@ try {
   record.checks.sampleSave = { status: (await save).status() };
   const persisted = JSON.parse(await readFile(path.join(dir, 'data/profiles', `${profile.body.id}.json`), 'utf8'));
   record.checks.sampleOnDisk = persisted.samples.some(sample => sample.alien_text === 'Packaged sample');
+  await expect(page.getByText('Packaged sample', { exact: true })).toBeVisible();
   const screenshot = await app.evaluate(async ({ BrowserWindow }) =>
-    (await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));
+    (await BrowserWindow.getAllWindows()[0].webContents.capturePage(undefined, { stayHidden: true, stayAwake: true })).toPNG().toString('base64'));
   if (screenshot) await writeFile(reportFile.replace(/\.json$/, '') + '.png', Buffer.from(screenshot, 'base64'));
   record.checks.loadedWorkbench = await page.getByText('Packaged sample', { exact: true }).isVisible();
   // Exercise the real close handshake with a recoverable failed save, then restart on a new port.
@@ -123,12 +155,15 @@ try {
   reopened.setDefaultTimeout(20_000);
   await reopened.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
   const newOrigin = new URL(reopened.url()).origin;
+  expect((await desktopRequest(reopened).get(`${newOrigin}/api/health`)).status()).toBe(200);
+  expect((await reopened.request.get(`${newOrigin}/api/health`)).status()).toBe(401);
+  record.checks.localBoundary.relaunchAuthenticated = true;
   await reopened.addInitScript(() => localStorage.setItem('xenolinguist-tour-completed', '1'));
   await reopened.goto(`${newOrigin}/app`);
   await reopened.getByRole('button').filter({ has: reopened.getByText('Release smoke', { exact: true }) }).click();
   await expect(reopened.getByPlaceholder('Enter unknown language text to translate…')).toHaveValue('Draft across desktop origins');
   await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
-  const afterRestart = await (await reopened.request.get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
+  const afterRestart = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
   record.checks.pendingSaveRecovered = afterRestart.samples.filter(sample => sample.alien_text === 'Recovered after desktop close').length === 1;
   record.checks.desktopDraftRecovered = true;
   await reopened.locator('[data-tour="samples"]').click();
@@ -139,9 +174,9 @@ try {
   await expect(reopened.getByPlaceholder('Label this word...').first()).toBeVisible({ timeout: 120_000 });
   await reopened.getByRole('button', { name: 'Add Sample', exact: true }).click();
   await expect(reopened.getByRole('button', { name: 'Discard audio draft' })).toHaveCount(0);
-  const withAudio = await (await reopened.request.get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
+  const withAudio = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
   const clip = withAudio.audio_clips[0];
-  const original = await reopened.request.get(`${newOrigin}/api/audio/${clip.id}`);
+  const original = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${clip.id}`);
   const originalHash = createHash('sha256').update(await original.body()).digest('hex');
   expect(originalHash).toBe(record.fixture.sha256);
   expect(clip.assets.original.sha256).toBe(originalHash);
@@ -156,11 +191,11 @@ try {
   await expect(recoveredNumber.getByRole('textbox')).toHaveValue('unfinished number');
   await expect(recoveredNumber.getByRole('status')).toContainText('Not matched');
   await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
-  const sandboxRestored = await (await reopened.request.get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
+  const sandboxRestored = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
   expect(sandboxRestored.sandbox_session).toEqual(sandboxBeforeClose);
   await recoveredNumber.getByRole('textbox').fill('1'); await recoveredNumber.getByRole('button', { name: 'Check', exact: true }).click();
   await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
-  const sandboxSaved = await (await reopened.request.get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
+  const sandboxSaved = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
   expect(sandboxSaved.dictionary).toHaveLength(1); expect(sandboxSaved.sandbox_session.events).toHaveLength(3);
   record.checks.desktopSandboxRecovered = { sameSession: sandboxRestored.sandbox_session.id === sandboxBeforeClose.id,
     restoredEvents: sandboxRestored.sandbox_session.events.length, afterRetryEvents: sandboxSaved.sandbox_session.events.length,
@@ -186,7 +221,7 @@ try {
     const negativePage = await app.firstWindow();
     await negativePage.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
     const negativeOrigin = new URL(negativePage.url()).origin;
-    const negative = await negativePage.request.post(`${negativeOrigin}/api/ipa`, { data: { audio: wav.toString('base64') } });
+    const negative = await desktopRequest(negativePage).post(`${negativeOrigin}/api/ipa`, { data: { audio: wav.toString('base64') } });
     record.checks.missingModel = { status: negative.status(), body: await negative.json() };
     expect(record.checks.missingModel.status).toBe(503);
     expect(record.checks.missingModel.body.code).toBe('IPA_MODEL_MISSING');
@@ -197,7 +232,7 @@ try {
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered
-    && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
+    && record.checks.localBoundary?.relaunchAuthenticated && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
   if (!record.acceptancePassed) process.exitCode = 1;
 } catch (error) {
   record.failure = { message: error.message, stack: error.stack };

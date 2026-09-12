@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@font-face { font-family: 'Space Grotesk'; src: url('/fonts/spacegrotesk/SpaceGrotesk[wght].ttf') format('truetype'); font-weight: 300 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'JetBrains Mono'; src: url('/fonts/jetbrainsmono/JetBrainsMono[wght].ttf') format('truetype'); font-weight: 100 800; font-style: normal; font-display: swap; }
 /* ══════════════════════════════════════════════
    THEME TOKENS (Tailwind v4) — redesign palette.
    Old --color-* names kept so existing utilities

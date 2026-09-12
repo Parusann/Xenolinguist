@@ -1,3 +1,4 @@
+import { desktopRequest } from './desktop-request.mjs';
 // Standalone acceptance harness: copy with the fixture to a fresh runner, install only Playwright.
 import { _electron as electron } from 'playwright';
 import { mkdtemp, readFile, writeFile, realpath } from 'node:fs/promises';
@@ -22,7 +23,7 @@ try {
   app.process().stdout?.on('data', data => record.console.push(data.toString()));
   app.process().stderr?.on('data', data => record.console.push(data.toString()));
   const page = await app.firstWindow(); await page.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
-  const response = await page.request.post(new URL('/api/ipa', page.url()).href, { data: { audio: (await readFile(fixture)).toString('base64') }, timeout: 180_000 });
+  const response = await desktopRequest(page).post(new URL('/api/ipa', page.url()).href, { data: { audio: (await readFile(fixture)).toString('base64') }, timeout: 180_000 });
   record.status = response.status(); record.result = await response.json();
   const model = path.join(path.dirname(exe), 'resources/ipa-model/wav2vec2-phoneme/onnx/model.onnx');
   const hash = createHash('sha256'); for await (const chunk of createReadStream(model)) hash.update(chunk);

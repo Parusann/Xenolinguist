@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { test as base, expect, type Page } from '@playwright/test';
 import { fork, type ChildProcess } from 'node:child_process';
 import { mkdtemp, writeFile } from 'node:fs/promises';
@@ -9,6 +10,7 @@ export const wavFixture = path.join(root, 'server/src/__tests__/fixtures/hello-1
 
 class IsolatedServer {
   url = '';
+  readonly secret = randomBytes(32).toString('hex');
   log = '';
   private child?: ChildProcess;
   constructor(readonly dataDir: string) {}
@@ -22,6 +24,7 @@ class IsolatedServer {
       stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
     });
     this.child = child;
+    child.send({ secret: this.secret, mode: 'development' });
     await new Promise<void>((resolve, reject) => {
       const timer = setTimeout(() => { child.kill(); reject(new Error('Test server did not start')); }, 15_000);
       child.once('error', err => { clearTimeout(timer); reject(err); });
@@ -48,10 +51,10 @@ class IsolatedServer {
 }
 
 export const test = base.extend<{ server: IsolatedServer }>({
-  server: async ({}, use, info) => {
+  server: async ({ context }, use, info) => {
     const dir = await mkdtemp(path.join(tmpdir(), 'xeno-acceptance-browser-'));
     const server = new IsolatedServer(dir);
-    try { await server.start(); await use(server); }
+    try { await server.start(); await context.addCookies([{ name: 'xeno_dev_session', value: server.secret, url: server.url + '/api', path: undefined, httpOnly: true, sameSite: 'Strict' }]); await use(server); }
     finally {
       await server.stop();
       await info.attach('backend.log', { body: server.log, contentType: 'text/plain' });

@@ -1,0 +1,360 @@
+{
+  "recordedAt": "2026-09-12T17:02:04.102Z",
+  "source": {
+    "revision": "11b6a0e91301867f0751779001d7146f701b3773",
+    "branch": "implementation/reliability",
+    "workingFiles": [
+      {
+        "file": ".github/workflows/packaged-phones.yml",
+        "sha256": "298760141024c34c11f7556c3533071de6b23bcc207f8eaba62589cd5a19f752"
+      },
+      {
+        "file": ".gitignore",
+        "sha256": "4fc9a93e44c229e528bbc7a0abcd4d5ec6d2fffeeea34324e10b3c2a7a02029a"
+      },
+      {
+        "file": "client/index.html",
+        "sha256": "15a814f59a1cf3fa12c3aa9cdb90a910c599aaa98a1edb90ad710813dd208349"
+      },
+      {
+        "file": "client/package.json",
+        "sha256": "8d09875bcf6a3570a2c3ac05bcbd84c6044e1f62ab52d7610c041e6a67b47abd"
+      },
+      {
+        "file": "client/public/fonts/README.md",
+        "sha256": "aff7607d2407e3f45c10f951b4602a8de2d7c5f2f407d5c34c00a6010eb7cb14"
+      },
+      {
+        "file": "client/public/fonts/jetbrainsmono/JetBrainsMono[wght].ttf",
+        "sha256": "48715a42ec242c21e9f02692891e147d022299a52e48d5e413e1a942193ffeda"
+      },
+      {
+        "file": "client/public/fonts/jetbrainsmono/OFL.txt",
+        "sha256": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d"
+      },
+      {
+        "file": "client/public/fonts/spacegrotesk/OFL.txt",
+        "sha256": "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72"
+      },
+      {
+        "file": "client/public/fonts/spacegrotesk/SpaceGrotesk[wght].ttf",
+        "sha256": "acad6de1fc93436f5c0f1f4137751ef04f1aea3063e7036535970ffcfbd79f72"
+      },
+      {
+        "file": "client/src/App.tsx",
+        "sha256": "cb7af7124a3fd9f420808ef9ec32da5d0a9761dfdb52036ea13d4f84772f70ad"
+      },
+      {
+        "file": "client/src/components/audio/AudioRecorder.tsx",
+        "sha256": "37bc9edd4f242f9f1a4b093a515ad1ce84ecbb46bcff1d43b8acc12d2a2989f5"
+      },
+      {
+        "file": "client/src/components/common/VantaTopology.tsx",
+        "sha256": "cb41fae84f960e63ff124497a90639e4ff3c9cc069cc4aa3ba88ae19c7c0f2cd"
+      },
+      {
+        "file": "client/src/components/layout/LocalSessionGate.tsx",
+        "sha256": "82bbec777a0f7ca1c6d772fffacb55e04528edb2afe30fe11ae9980f47827248"
+      },
+      {
+        "file": "client/src/index.css",
+        "sha256": "fe61c87be55ed7b58d7d6e17bb20936de14e61620a2e959031dd82508d636bc2"
+      },
+      {
+        "file": "client/src/services/api.ts",
+        "sha256": "07afd02c3b9c7c0b204fb74acaf6927cdbfb9e7b224249289ec65f99bc6f1738"
+      },
+      {
+        "file": "client/vite.config.ts",
+        "sha256": "c83b70da9e80959fc7d40ba633119a5752bde11ce609ca719f97fba8021e1445"
+      },
+      {
+        "file": "docs/implementation-progress.md",
+        "sha256": "00591c7c60d7136ba89b94a045c18a3c53f7eb7249f50418f26bf27f85e204bf"
+      },
+      {
+        "file": "docs/testing.md",
+        "sha256": "504cc458ab5b0f5fd4eabb50a9118632469317044b8b78b9182b7e2b6783214d"
+      },
+      {
+        "file": "electron/main.ts",
+        "sha256": "b48904e7472bf9c609060db34ab970ed325cd424e513653dfc449b86018f0bc6"
+      },
+      {
+        "file": "electron/security.ts",
+        "sha256": "1d5dd66214cad0d3697b73693daefe0af83416a4bb6f55c7cc63b473744841c1"
+      },
+      {
+        "file": "electron/server-entry.ts",
+        "sha256": "80c9686eba6b6c11b041863bc7225c8e7ff1f6dcc572677ed65a0136d6318ea0"
+      },
+      {
+        "file": "package-lock.json",
+        "sha256": "fc881b5a77de4392d274d73c06b56489c26957b403b1a0d41e4015665c5e2b94"
+      },
+      {
+        "file": "scripts/desktop-request.mjs",
+        "sha256": "742a3afb0164c7a48708d62578c68762338175f719414570ed1cca911651ae35"
+      },
+      {
+        "file": "scripts/verify-clean-phones.mjs",
+        "sha256": "cef571a123b5e952d37e6db6254ab9a516f1102aa110297682054402d6197406"
+      },
+      {
+        "file": "scripts/verify-development.mjs",
+        "sha256": "709d9b61289fe94d8d71adb05aef838d6767201333221a7da742f57e2c20e90c"
+      },
+      {
+        "file": "scripts/verify-release.mjs",
+        "sha256": "1c961d80d880038496ef79f0e3a6f2ff326747dc1b6879360beeb099e462ed2b"
+      },
+      {
+        "file": "server/src/__tests__/app.test.ts",
+        "sha256": "8bb330accfbe9c7e91bccbdebb0bc2add68e49d6a7e8bc16310658c0196646b1"
+      },
+      {
+        "file": "server/src/__tests__/audio-lifecycle.test.ts",
+        "sha256": "c2377d527d2d011e80646f441b5f9cdf717e01e79faa08c9b16a7f3dc3ac151b"
+      },
+      {
+        "file": "server/src/__tests__/authenticated-request.ts",
+        "sha256": "373053d15431ac89d721f50b2a040dff0782ed4dd1190a0bac0d401e489a4462"
+      },
+      {
+        "file": "server/src/__tests__/electron-security.test.ts",
+        "sha256": "563c4c378613ec8c32251e9c50fff3b1629d1f3c591739dc268a0c4dce6c0db2"
+      },
+      {
+        "file": "server/src/__tests__/health.test.ts",
+        "sha256": "de111e3e657cb4dd7c8166dd4091ba4cb6d19f377d28d33dcf5175d257343f36"
+      },
+      {
+        "file": "server/src/__tests__/ipa-route.test.ts",
+        "sha256": "3eafa727c37206e534fc9af052716f3b79e74f6e239bf9ef50b5c89f09248feb"
+      },
+      {
+        "file": "server/src/__tests__/local-session.test.ts",
+        "sha256": "fd5450b25bf956bfc8b115ba908d9699f7fadcf1b690d6d0dfcb2f64461aba38"
+      },
+      {
+        "file": "server/src/__tests__/path-traversal.test.ts",
+        "sha256": "fe4aaa877d97a69709af8fa6845f7c6a2e37514746d7ebe062841e09b4811a2c"
+      },
+      {
+        "file": "server/src/__tests__/profile-concurrency.test.ts",
+        "sha256": "ebebd2afd42f7b41149dba28b0ca3604c9daf178e24e7aada0db9d125579722c"
+      },
+      {
+        "file": "server/src/__tests__/profile-migrations.test.ts",
+        "sha256": "461f38d426840679e2260140058e4cca1430a1815a363cd29287475722ad019d"
+      },
+      {
+        "file": "server/src/__tests__/server.test.ts",
+        "sha256": "2ee0aa3acd89eadc79cc29d47846a58220b4b96f66356f96fa81fbfeb86bc1bd"
+      },
+      {
+        "file": "server/src/__tests__/stt-route.test.ts",
+        "sha256": "e477cf4f6c8a7c3595f87caba6f2cea40a50618a07df7b3ca6db9c5a6c23dcf8"
+      },
+      {
+        "file": "server/src/__tests__/tts-route.test.ts",
+        "sha256": "fc5b30133dd102cb23f4a857359d0450831fc741b95eb01f301b86d41c794314"
+      },
+      {
+        "file": "server/src/__tests__/tts.test.ts",
+        "sha256": "850f17b7ca2e0de7a6d17be0d664eede998ecffa6ed445eb29824a4681ebc2ad"
+      },
+      {
+        "file": "server/src/app.ts",
+        "sha256": "77a10b82765b1c3e0629ea55cc3fb4b8797ee4499d3ce92450342a3fe8b893e9"
+      },
+      {
+        "file": "server/src/index.ts",
+        "sha256": "8c762c1fb33c1bf643f4d5dbc910e14945bd3be446f558ef819c0c9e4da63d14"
+      },
+      {
+        "file": "server/src/middleware/error-handler.ts",
+        "sha256": "2635cca80db1959d2b892e6547777c88ad74cf0b1ab4e83b4c7a9c760b2a233c"
+      },
+      {
+        "file": "server/src/middleware/local-session.ts",
+        "sha256": "651bdb54b085b43737fffa3306037f1dd83f1c401938bebd08e7b9789413d4a7"
+      },
+      {
+        "file": "tests/e2e/audio-lifecycle.spec.ts",
+        "sha256": "20f13eef33e0f6651ab8cad74a5845371718745945a73e953bd0df336128d6df"
+      },
+      {
+        "file": "tests/e2e/fixtures.ts",
+        "sha256": "7ecca8f394019ca135966ec7a0010d81ba4f96d6b815f89a5afb3d75238d3b40"
+      },
+      {
+        "file": "tests/e2e/local-session.spec.ts",
+        "sha256": "374587a741ad86c3b079ff5668bcb3cb3c8ccc8481283beafe2db71b629eb8d2"
+      }
+    ],
+    "node": "25.8.2",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "executable": {
+    "bytes": 231522816,
+    "sha256": "69706310d09f56087ae1e733e2ff965dbe1145927ad8354755ef5dc04a4ccfd0"
+  },
+  "appArchive": {
+    "bytes": 2355782,
+    "sha256": "fe03f15c56e4c7a2b4d6b4099144fc8552cd458e2b506e326c64361f977de171"
+  },
+  "fixture": {
+    "bytes": 110286,
+    "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+  },
+  "acceptancePassed": true,
+  "sourceNote": "Verification ran against the working implementation above its parent revision. File hashes identify that state; later documentation and the compact evidence record do not change the tested runtime.",
+  "runtime": {
+    "versions": {
+      "node": "24.15.0",
+      "acorn": "8.16.0",
+      "ada": "3.4.4",
+      "amaro": "1.1.8",
+      "ares": "1.34.6",
+      "brotli": "1.2.0",
+      "cldr": "48.0",
+      "icu": "78.2",
+      "llhttp": "9.3.1",
+      "merve": "1.2.2",
+      "modules": "146",
+      "napi": "10",
+      "nbytes": "0.1.3",
+      "ncrypto": "0.0.1",
+      "nghttp2": "1.68.0",
+      "openssl": "0.0.0",
+      "simdjson": "4.5.0",
+      "simdutf": "7.7.0",
+      "sqlite": "3.51.3",
+      "tz": "2025c",
+      "undici": "7.24.4",
+      "unicode": "17.0",
+      "uv": "1.51.0",
+      "uvwasi": "0.0.23",
+      "v8": "14.8.178.28-electron.0",
+      "zlib": "1.3.2.1-motley",
+      "zstd": "1.6.0",
+      "electron": "42.3.3",
+      "chrome": "148.0.7778.218"
+    },
+    "packaged": true
+  },
+  "checks": {
+    "localBoundary": {
+      "otherWindowStatus": 401,
+      "sandbox": true,
+      "contextIsolation": true,
+      "nodeIntegration": false,
+      "webSecurity": true,
+      "anonymousHealth": 401,
+      "anonymousBinary": 401,
+      "trustedHealth": 200,
+      "foreignNavigationBlocked": true,
+      "popupDenied": true,
+      "syntheticMicrophone": {
+        "audioTracks": 1,
+        "cameraDenied": true
+      },
+      "relaunchAuthenticated": true
+    },
+    "wavUpload": {
+      "status": 200,
+      "body": {
+        "filename": "release-fixture.wav",
+        "size": 110286
+      }
+    },
+    "sampleSave": {
+      "status": 200
+    },
+    "sampleOnDisk": true,
+    "loadedWorkbench": true,
+    "pendingSaveRecovered": true,
+    "desktopDraftRecovered": true,
+    "desktopAudioDraftRecovered": true,
+    "desktopAudioSaved": {
+      "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "assets": {
+        "original": {
+          "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+          "bytes": 110286,
+          "mime": "audio/wav"
+        },
+        "analysis": {
+          "sha256": "0ca6b28535d9385d576c695a6563294e028105cda30539a139a23b292a3a942b",
+          "bytes": 110286,
+          "mime": "audio/wav"
+        }
+      },
+      "phoneSegments": 48,
+      "playback": true
+    },
+    "desktopSandboxRecovered": {
+      "sameSession": true,
+      "restoredEvents": 2,
+      "afterRetryEvents": 3,
+      "dictionaryEntries": 1,
+      "fixtureGeneration": true
+    },
+    "desktopEvidenceMetrics": {
+      "unratedAssertion": true,
+      "historyVisible": true,
+      "latestSnapshot": {
+        "version": 1,
+        "revision": 4,
+        "recorded_at": "2026-09-12T17:01:59.848Z",
+        "counts": {
+          "observations": 0,
+          "assertedEntries": 1,
+          "grammarNotes": 0,
+          "competingForms": 0,
+          "mappings1To20": 1,
+          "ratedEntries": 0
+        }
+      }
+    },
+    "missingModel": {
+      "status": 503,
+      "body": {
+        "error": "ipa-unavailable",
+        "code": "IPA_MODEL_MISSING",
+        "requestId": "0427f95d-b76b-4efb-b561-777442bde204",
+        "retryable": true
+      }
+    },
+    "ipa": {
+      "status": 200,
+      "segments": 46,
+      "identity": {
+        "modelId": "wav2vec2-phoneme",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "alphabet": "TIMIT ARPABET",
+        "transformers": "4.2.0",
+        "backend": "onnxruntime-node",
+        "node": "24.15.0"
+      }
+    },
+    "stt": {
+      "status": 200,
+      "nonemptyText": true
+    }
+  },
+  "restart": {
+    "originChanged": true
+  },
+  "verificationLimits": [
+    "Local unpacked Windows executable, not installer certification or independent W09 CI.",
+    "Synthetic microphone input exercises actual Electron permission handlers, not physical recording hardware.",
+    "Sandbox generation is a deterministic fixture; native inference success is not linguistic accuracy.",
+    "Three gated native unit checks remain skipped; native endpoints pass separately.",
+    "The existing Unicode translation browser failure remains expected.",
+    "Secret rotation and stale-secret rejection are covered by server tests; native relaunch proves trusted access with a newly launched backend without extracting its credential.",
+    "Compromised operating systems and same-origin renderer execution remain outside the boundary."
+  ]
+}

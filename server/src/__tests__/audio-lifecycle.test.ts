@@ -2,7 +2,7 @@ import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import request from 'supertest';
+import request, { testSession } from './authenticated-request.js';
 import { AudioStore } from '../services/audio-store.js';
 import { ProfileStore } from '../services/profile-store.js';
 import { createApp } from '../app.js';
@@ -35,7 +35,7 @@ describe('durable audio lifecycle', () => {
     await audio.cleanup(Date.now() + 7 * 86400000);
     await profiles.mutate(profile.id, { expectedRevision: 2, mutationId: 'undo', operations });
     expect((await profiles.get(profile.id))?.samples[0].audio_id).toBe(clip.id);
-    expect((await request(createApp()).delete(`/api/audio/${clip.id}`)).status).toBe(409);
+    expect((await request(createApp(testSession)).delete(`/api/audio/${clip.id}`)).status).toBe(409);
   });
   it('rejects missing or tampered assets before profile creation and immutable retry', async () => {
     const audio = new AudioStore(), staged = await audio.stage(wav), complete = await audio.complete(staged.id, wav);
@@ -59,7 +59,7 @@ describe('durable audio lifecycle', () => {
     ancillary.writeUInt32LE(ancillary.length - 8, 4); expect(inspectPcmWav(ancillary).duration).toBe(inspectPcmWav(wav).duration);
     const bad = Buffer.from(wav); bad.writeUInt16LE(4, 32);
     for (const bytes of [wav.subarray(0, 80), bad, Buffer.from('unsupported')]) await expect(new AudioStore().stage(bytes)).rejects.toHaveProperty('code');
-    expect((await request(createApp()).post('/api/audio/stages').type('application/octet-stream').send(Buffer.alloc(MAX_AUDIO_BYTES + 1))).status).toBe(413);
+    expect((await request(createApp(testSession)).post('/api/audio/stages').type('application/octet-stream').send(Buffer.alloc(MAX_AUDIO_BYTES + 1))).status).toBe(413);
   });
   it('restores binary desktop drafts through a new instance and confines identifiers', async () => {
     const directory = path.join(dir, 'drafts'), store = new DesktopAudioDrafts(directory);

@@ -116,6 +116,11 @@ test('W06 decodes a real WebM/Opus recording and keeps audio when explicit analy
 });
 
 test('W06 microphone capture uses the same durable draft and save flow without automatic model calls', async ({ page, server }) => {
+  await page.addInitScript(() => {
+    Object.assign(window, { speechRecognitionCalls: 0 });
+    const forbiddenRecognition = function () { Object.assign(window, { speechRecognitionCalls: 1 }); throw new Error('Automatic browser recognition is forbidden'); };
+    Object.assign(window, { SpeechRecognition: forbiddenRecognition, webkitSpeechRecognition: forbiddenRecognition });
+  });
   const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Microphone capture' } })).json();
   let modelRequests = 0;
   page.on('request', request => { if (/\/api\/(ipa|stt)$/.test(request.url())) modelRequests++; });
@@ -133,6 +138,7 @@ test('W06 microphone capture uses the same durable draft and save flow without a
   await expect(page.getByRole('button', { name: 'Discard audio draft' })).toHaveCount(0);
   const saved = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
   expect(saved.audio_clips[0].assets.original.mime).toBe('audio/webm'); expect(modelRequests).toBe(0);
+  expect(await page.evaluate(() => (window as unknown as { speechRecognitionCalls: number }).speechRecognitionCalls)).toBe(0);
 });
 
 test('W06 rejects unsupported, truncated and oversized imports without replacing a valid draft', async ({ page, server }) => {

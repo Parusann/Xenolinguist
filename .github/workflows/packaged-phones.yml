@@ -33,6 +33,7 @@ jobs:
       - name: Prepare independent verification harness
         run: |
           New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/phone-harness"
+          Copy-Item scripts/desktop-request.mjs "$env:RUNNER_TEMP/phone-harness/"
           Copy-Item scripts/verify-clean-phones.mjs "$env:RUNNER_TEMP/phone-harness/"
           Copy-Item server/src/__tests__/fixtures/hello-16k.wav "$env:RUNNER_TEMP/phone-harness/"
       - uses: actions/upload-artifact@v4

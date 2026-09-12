@@ -2,7 +2,7 @@ import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import request from 'supertest';
+import request, { testSession } from './authenticated-request.js';
 import { createApp } from '../app.js';
 import { ProfileStore } from '../services/profile-store.js';
 import { migrateProfile, parseProfile } from '../../../shared/schemas/profile.js';
@@ -90,7 +90,7 @@ describe('versioned profile boundary', () => {
   ])('preserves invalid/future bytes and returns the corresponding classification', async (bytes, code) => {
     const file = path.join(dir, 'profiles/legacy-test.json');
     await fs.writeFile(file, bytes);
-    const response = await request(createApp()).get('/api/profiles/legacy-test');
+    const response = await request(createApp(testSession)).get('/api/profiles/legacy-test');
     expect(response.status).toBe(422);
     expect(response.body).toMatchObject({ code, retryable: false, requestId: expect.any(String) });
     expect(await fs.readFile(file, 'utf8')).toBe(bytes);
@@ -107,7 +107,7 @@ describe('versioned profile boundary', () => {
   });
 
   it('rejects malformed API bodies before a profile is persisted and preserves immutable metadata on update', async () => {
-    const app = createApp();
+    const app = createApp(testSession);
     const bad = await request(app).post('/api/profiles').send({ name: 'Bad', number_system: { base: 1, mappings: {}, operators: {} } });
     expect(bad.status).toBe(400);
     expect(bad.body).toMatchObject({ code: 'PROFILE_INVALID', retryable: false, issues: expect.any(Array), requestId: expect.any(String) });

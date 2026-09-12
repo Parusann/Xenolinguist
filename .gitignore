@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .env
+.development-pairing
 server/data/profiles/
 *.log
 .DS_Store

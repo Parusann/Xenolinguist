@@ -1,3 +1,4 @@
+import { testSession } from './authenticated-request.js';
 import { describe, it, expect, afterEach } from 'vitest';
 import { mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -16,10 +17,10 @@ describe('startServer', () => {
     process.env.PORT = '0';
     process.env.DATA_DIR = await mkdtemp(path.join(tmpdir(), 'xeno-owner-test-'));
     const { startServer } = await import('../index.js?srv=1');
-    const handle = await startServer();
+    const handle = await startServer(testSession);
     close = handle.close;
     expect(handle.port).toBeGreaterThan(0);
-    const res = await fetch(`http://127.0.0.1:${handle.port}/api/health`);
+    const res = await fetch(`http://127.0.0.1:${handle.port}/api/health`, { headers: { 'X-Xeno-Session': testSession.secret } });
     const body = await res.json();
     expect(body.status).toBe('ok');
   });

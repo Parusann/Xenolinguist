@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import request from 'supertest';
+import request, { testSession } from './authenticated-request.js';
 
 afterEach(() => { delete process.env.ESPEAK_PATH; });
 
@@ -23,14 +23,14 @@ describe('tts-espeak.synthesize', () => {
 describe('POST /api/tts', () => {
   it('returns 400 when neither text nor phonemes is given', async () => {
     const { createApp } = await import('../app.js?tts=1');
-    const res = await request(createApp()).post('/api/tts').send({});
+    const res = await request(createApp(testSession)).post('/api/tts').send({});
     expect(res.status).toBe(400);
   });
 
   it('returns 503 when espeak is unavailable', async () => {
     delete process.env.ESPEAK_PATH;
     const { createApp } = await import('../app.js?tts=2');
-    const res = await request(createApp()).post('/api/tts').send({ text: 'hello' });
+    const res = await request(createApp(testSession)).post('/api/tts').send({ text: 'hello' });
     expect(res.status).toBe(503);
     expect(res.body.error).toBe('tts-unavailable');
   });

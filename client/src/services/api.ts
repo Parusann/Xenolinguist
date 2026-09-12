@@ -1,5 +1,7 @@
 import type { AIMessage } from 'shared/types'
 
+// Desktop credentials are injected by main; development uses an HttpOnly pairing cookie.
+// Never store or expose the session credential to application JavaScript.
 const BASE = '/api'
 
 export class ApiError extends Error {
@@ -14,7 +16,7 @@ export class ApiError extends Error {
 export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const headers = new Headers({ 'Content-Type': 'application/json' })
   new Headers(options?.headers).forEach((value, key) => headers.set(key, value))
-  const res = await fetch(`${BASE}${path}`, { ...options, headers,
+  const res = await fetch(`${BASE}${path}`, { ...options, headers, credentials: 'same-origin',
     signal: options?.signal ?? AbortSignal.timeout(15_000) })
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }))

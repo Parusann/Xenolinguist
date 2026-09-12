@@ -6,7 +6,8 @@ import { autoUpdater } from 'electron-updater';
 import { testUserData } from './test-launch.js';
 import { DesktopDraftStore } from './drafts.js';
 import { DesktopAudioDrafts } from './audio-drafts.js';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, randomBytes } from 'node:crypto';
+import { secureWindow, trustedSender } from './security.js';
 
 const acceptanceUserData = testUserData();
 if (acceptanceUserData) app.setPath('userData', acceptanceUserData);
@@ -21,16 +22,15 @@ process.on('uncaughtException', (err) => console.error('[main] uncaughtException
 let win: BrowserWindow | null = null;
 let serverProc: UtilityProcess | null = null;
 let serverPort: number | null = null;
+let serverSecret = '';
 let closeAllowed = false;
 let closeRequest: { id: string; resolve: (saved: boolean) => void } | null = null;
 const drafts = new DesktopDraftStore(path.join(app.getPath('userData'), 'pending-saves'));
 const audioDrafts = new DesktopAudioDrafts(path.join(app.getPath('userData'), 'pending-audio'));
 
 function trustedRenderer(event: IpcMainInvokeEvent) {
-  if (!win || event.sender !== win.webContents || event.senderFrame !== win.webContents.mainFrame)
-    throw new Error('Untrusted draft request');
   const expected = isDev ? DEV_URL : `http://127.0.0.1:${serverPort}`;
-  if (new URL(event.senderFrame.url).origin !== new URL(expected).origin) throw new Error('Untrusted draft origin');
+  if (!trustedSender(event, win, expected)) throw new Error('Untrusted application sender');
 }
 ipcMain.handle('drafts:read', event => { trustedRenderer(event); return drafts.list(); });
 ipcMain.handle('drafts:write', (event, record: unknown) => { trustedRenderer(event); return drafts.put(record); });
@@ -78,6 +78,8 @@ function startServerProcess(): Promise<number> {
       env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', ...espeakEnv, ...whisperEnv, ...ipaEnv, ...ipaDepsEnv },
       stdio: 'pipe',
     });
+    serverSecret = randomBytes(32).toString('hex');
+    serverProc.postMessage({ secret: serverSecret, mode: 'desktop' });
     serverProc.stdout?.on('data', (d) => console.log('[server]', d.toString().trim()));
     serverProc.stderr?.on('data', (d) => console.error('[server]', d.toString().trim()));
 
@@ -100,9 +102,10 @@ function startServerProcess(): Promise<number> {
       else if (msg?.type === 'server-error') settle(reject as (v: unknown) => void, new Error(msg.message));
     });
     // Any exit before 'server-ready' is a failure, even code 0 (clean exit pre-ready).
-    serverProc.on('exit', (code) =>
-      settle(reject as (v: unknown) => void, new Error(`server exited (${code ?? 'unknown'}) before ready`)),
-    );
+    serverProc.on('exit', (code) => {
+      serverPort = null; serverSecret = ''; serverProc = null;
+      settle(reject as (v: unknown) => void, new Error(`server exited (${code ?? 'unknown'}) before ready`));
+    });
   });
 }
 
@@ -117,10 +120,13 @@ async function createWindow() {
       preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: true,
+      webSecurity: true,
     },
   });
 
   if (isDev) {
+    secureWindow(win, DEV_URL);
     await win.loadURL(DEV_URL);
     win.webContents.openDevTools({ mode: 'detach' });
   } else {
@@ -128,6 +134,7 @@ async function createWindow() {
       // Reuse the already-forked server on macOS re-activate instead of forking a second one.
       const port = serverPort ?? await startServerProcess();
       serverPort = port;
+      secureWindow(win, `http://127.0.0.1:${port}`, serverSecret);
       await win.loadURL(`http://127.0.0.1:${port}`);
       if (!acceptanceUserData) autoUpdater.checkForUpdatesAndNotify().catch((e) => console.error('[update]', e));
     } catch (err) {

@@ -1,31 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { WaveformCanvas } from './WaveformCanvas'
 
-// Minimal Web Speech API surface used here; TS's DOM lib only ships the
-// result types (SpeechRecognitionResultList etc.), not the recognizer itself.
-interface SpeechRecognitionResultEvent {
-  results: SpeechRecognitionResultList
-}
-
-interface SpeechRecognitionInstance {
-  continuous: boolean
-  interimResults: boolean
-  maxAlternatives: number
-  onresult: ((event: SpeechRecognitionResultEvent) => void) | null
-  onerror: (() => void) | null
-  start(): void
-  stop(): void
-}
-
-type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance
-
-declare global {
-  interface Window {
-    SpeechRecognition?: SpeechRecognitionConstructor
-    webkitSpeechRecognition?: SpeechRecognitionConstructor
-  }
-}
-
 interface AudioRecorderProps {
   onRecordingComplete: (audioBlob: Blob) => void
   className?: string
@@ -44,11 +19,6 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
   const streamRef = useRef<MediaStream | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
 
-  // Live speech recognition during recording
-  const liveRecognitionRef = useRef<SpeechRecognitionInstance | null>(null)
-  const [liveTranscript, setLiveTranscript] = useState('')
-  const [liveLanguage, setLiveLanguage] = useState<string | null>(null)
-
   const stopRecording = useCallback(() => {
     if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
       mediaRecorder.current.stop()
@@ -56,10 +26,6 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(t => t.stop())
       streamRef.current = null
-    }
-    if (liveRecognitionRef.current) {
-      try { liveRecognitionRef.current.stop() } catch { /* recognition may already be inactive */ }
-      liveRecognitionRef.current = null
     }
     cancelAnimationFrame(animFrameRef.current)
     setRecording(false)
@@ -70,8 +36,6 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
       setRecordingError('')
-      setLiveTranscript('')
-      setLiveLanguage(null)
 
       // Set up analyser for live waveform
       const audioCtx = new AudioContext()
@@ -82,47 +46,6 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
       source.connect(analyser)
       analyserRef.current = analyser
 
-      // Start live speech recognition for real-time language detection
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-      if (SpeechRecognition) {
-        const recognition = new SpeechRecognition()
-        recognition.continuous = true
-        recognition.interimResults = true
-        recognition.maxAlternatives = 1
-
-        recognition.onresult = (event) => {
-          let transcript = ''
-          for (let i = 0; i < event.results.length; i++) {
-            transcript += event.results[i][0].transcript
-          }
-          setLiveTranscript(transcript)
-
-          // If we got a final result with decent confidence, try to identify the language
-          const lastResult = event.results[event.results.length - 1]
-          if (lastResult.isFinal && lastResult[0].confidence > 0.5) {
-            // The default recognition lang is browser locale — if it recognized text,
-            // that's likely the spoken language
-            const browserLang = navigator.language.split('-')[0]
-            const langMap: Record<string, string> = {
-              en: 'English', es: 'Spanish', fr: 'French', de: 'German',
-              it: 'Italian', pt: 'Portuguese', ru: 'Russian', ja: 'Japanese',
-              ko: 'Korean', zh: 'Chinese', ar: 'Arabic', hi: 'Hindi',
-              nl: 'Dutch', sv: 'Swedish', pl: 'Polish', tr: 'Turkish',
-            }
-            setLiveLanguage(langMap[browserLang] || browserLang)
-          }
-        }
-
-        recognition.onerror = () => {}
-        try {
-          recognition.start()
-          liveRecognitionRef.current = recognition
-        } catch {
-          /* start() throws if recognition is already active — live transcript is optional */
-        }
-      }
-
-      // Set up MediaRecorder
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' })
       chunksRef.current = []
 
@@ -177,9 +100,6 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(t => t.stop())
       }
-      if (liveRecognitionRef.current) {
-        try { liveRecognitionRef.current.stop() } catch { /* recognition may already be inactive */ }
-      }
       if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') audioCtxRef.current.close()
       cancelAnimationFrame(animFrameRef.current)
     }
@@ -214,19 +134,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
         )}
       </div>
 
-      {/* Live transcript during recording */}
-      {recording && liveTranscript && (
-        <div className="glass-inner rounded-lg px-3 py-2 border border-white/[0.04]">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-1 h-1 rounded-full bg-accent animate-pulse" />
-            <span className="text-[9px] font-mono text-gray-600 uppercase tracking-wider">Live Transcript</span>
-            {liveLanguage && (
-              <span className="text-[10px] font-mono text-accent/70">({liveLanguage})</span>
-            )}
-          </div>
-          <p className="text-[11px] text-gray-400 font-mono leading-relaxed truncate">{liveTranscript}</p>
-        </div>
-      )}
+      <p className="text-xs text-gray-500">Recording stays local. Choose Transcribe after recording to run local analysis.</p>
 
       {/* Controls */}
       <div className="flex items-center gap-3">

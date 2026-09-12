@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
-import request from 'supertest';
+import request, { testSession } from './authenticated-request.js';
 import { ProfileStore } from '../services/profile-store.js';
 import { atomicWrite } from '../services/atomic-file.js';
 import { acquireDataOwner } from '../services/data-owner.js';
@@ -34,7 +34,7 @@ describe('profile transactions and recovery', () => {
   });
 
   it('rejects missing PUT preconditions and stale full-profile replacement', async () => {
-    const app = createApp();
+    const app = createApp(testSession);
     const profile = (await request(app).post('/api/profiles').send({ name: 'Precondition' })).body;
     expect((await request(app).put(`/api/profiles/${profile.id}`).send({ description: 'unsafe' })).status).toBe(428);
     expect((await request(app).put(`/api/profiles/${profile.id}`).send({ revision: 0, description: 'first' })).status).toBe(200);

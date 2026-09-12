@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import request from 'supertest';
+import request, { testSession } from './authenticated-request.js';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
@@ -20,20 +20,20 @@ function minimalWavBase64(): string {
 describe('POST /api/ipa', () => {
   it('returns 400 when no audio is given', async () => {
     const { createApp } = await import('../app.js?ipa=1');
-    const res = await request(createApp()).post('/api/ipa').send({});
+    const res = await request(createApp(testSession)).post('/api/ipa').send({});
     expect(res.status).toBe(400);
   });
 
   it('returns 400 for a non-WAV (garbage) payload', async () => {
     const { createApp } = await import('../app.js?ipa=3');
-    const res = await request(createApp()).post('/api/ipa').send({ audio: Buffer.from('x').toString('base64') });
+    const res = await request(createApp(testSession)).post('/api/ipa').send({ audio: Buffer.from('x').toString('base64') });
     expect(res.status).toBe(400);
   });
 
   it('returns 503 when the model is unavailable', async () => {
     delete process.env.IPA_MODEL_DIR;
     const { createApp } = await import('../app.js?ipa=2');
-    const res = await request(createApp()).post('/api/ipa').send({ audio: readFileSync(path.join(__dirname, 'fixtures/hello-16k.wav')).toString('base64') });
+    const res = await request(createApp(testSession)).post('/api/ipa').send({ audio: readFileSync(path.join(__dirname, 'fixtures/hello-16k.wav')).toString('base64') });
     expect(res.status).toBe(503);
     expect(res.body.error).toBe('ipa-unavailable');
     expect(res.body.code).toBe('IPA_MODEL_MISSING');
@@ -42,7 +42,7 @@ describe('POST /api/ipa', () => {
 
   it('rejects an empty unsupported WAV before attempting model initialization', async () => {
     const { createApp } = await import('../app.js');
-    const res = await request(createApp()).post('/api/ipa').send({ audio: minimalWavBase64() });
+    const res = await request(createApp(testSession)).post('/api/ipa').send({ audio: minimalWavBase64() });
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('IPA_UNSUPPORTED_INPUT');
   });
