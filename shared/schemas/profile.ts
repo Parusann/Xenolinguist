@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { entityIdSchema as id, timestampSchema as timestamp, confidenceSchema, noteSchema as text } from './common.js';
 import { ProfileError, validationError } from './errors.js';
+import { audioAssetsSchema } from './audio.js';
 
 const manualConfidence = { confidence: confidenceSchema, user_asserted_confidence: confidenceSchema.optional() };
 export const dictionaryEntrySchema = z.strictObject({
@@ -20,6 +21,7 @@ export const audioSegmentSchema = z.strictObject({
 export const audioClipSchema = z.strictObject({
   id, filename: text, duration: z.number().finite().positive(),
   waveform: z.array(z.number().finite().min(0).max(1)), segments: z.array(audioSegmentSchema), created_at: timestamp,
+  assets: audioAssetsSchema.optional(),
 });
 export const sampleSchema = z.strictObject({
   id, alien_text: text, english_translation: text.nullable(), source: text, phonetic_notes: text,

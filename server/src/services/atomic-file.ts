@@ -7,7 +7,7 @@ export interface AtomicFileOptions {
   rename?: typeof fs.rename;
   afterFlush?: () => Promise<void>;
 }
-export async function atomicWrite(file: string, content: string, options: AtomicFileOptions = {}): Promise<void> {
+export async function atomicWrite(file: string, content: string | Uint8Array, options: AtomicFileOptions = {}): Promise<void> {
   const target = path.resolve(file);
   const temporary = `${target}.${randomUUID()}.tmp`;
   if (path.dirname(temporary) !== path.dirname(target)) throw new Error('Temporary file must be a sibling');

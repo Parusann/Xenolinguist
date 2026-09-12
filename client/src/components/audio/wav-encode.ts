@@ -1,11 +1,23 @@
-/** Nearest-neighbor downsample of mono float samples to 16 kHz. */
+import { inspectPcmWav } from 'shared/audio-container';
+/** Windowed-sinc low-pass resampling. Filtering before decimation suppresses aliasing. */
 export function downsampleTo16k(input: Float32Array, inputRate: number): Float32Array {
   const TARGET = 16000;
+  if (!Number.isFinite(inputRate) || inputRate < 8000 || inputRate > 192000) throw new Error('Unsupported sample rate');
   if (inputRate === TARGET) return input;
   const ratio = inputRate / TARGET;
   const outLen = Math.round(input.length / ratio);
   const out = new Float32Array(outLen);
-  for (let i = 0; i < outLen; i++) out[i] = input[Math.floor(i * ratio)] ?? 0;
+  const cutoff = Math.min(1, TARGET / inputRate) * 0.94, radius = 32;
+  for (let i = 0; i < outLen; i++) {
+    const position = i * ratio, center = Math.floor(position);
+    let sum = 0, weights = 0;
+    for (let j = Math.max(0, center - radius + 1); j <= Math.min(input.length - 1, center + radius); j++) {
+      const distance = position - j, x = Math.PI * distance * cutoff;
+      const weight = cutoff * (Math.abs(x) < 1e-8 ? 1 : Math.sin(x) / x) * (0.5 + 0.5 * Math.cos(Math.PI * distance / radius));
+      sum += input[j] * weight; weights += weight;
+    }
+    out[i] = weights ? sum / weights : 0;
+  }
   return out;
 }
 
@@ -29,10 +41,15 @@ export function encodeWavPcm16(samples: Float32Array, sampleRate: number): Array
 
 /** Decode an audio Blob, mix to mono, downsample to 16 kHz, return a WAV Blob. */
 export async function blobToWav16k(blob: Blob): Promise<Blob> {
+  const bytes = await blob.arrayBuffer();
+  try {
+    const pcm = inspectPcmWav(new Uint8Array(bytes));
+    if (pcm.channels === 1 && pcm.rate === 16000) return blob;
+  } catch { /* Other supported inputs need browser decoding. */ }
   const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
   const ctx = new AudioCtx();
   try {
-    const decoded = await ctx.decodeAudioData(await blob.arrayBuffer());
+    const decoded = await ctx.decodeAudioData(bytes);
     const ch = decoded.numberOfChannels;
     const mono = new Float32Array(decoded.length);
     for (let c = 0; c < ch; c++) {

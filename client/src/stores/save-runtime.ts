@@ -2,6 +2,7 @@ import { SaveQueue } from './save-queue'
 import { createDraftStore } from './draft-store'
 import { apiFetch } from '@/services/api'
 import type { LanguageProfile } from 'shared/types'
+import { flushAudioDrafts, hasUndurableAudio } from './audio-draft-store'
 
 let queue: SaveQueue | undefined
 export function getSaveQueue() {
@@ -21,10 +22,10 @@ desktop?.onFlushRequest?.(request => {
   const requestId = (request as { requestId?: unknown })?.requestId
   if (typeof requestId !== 'string') return
   document.documentElement.inert = true
-  void getSaveQueue().flush().then(saved => desktop.reportFlushResult?.({ requestId, saved })).catch(() => { document.documentElement.inert = false })
+  void Promise.all([getSaveQueue().flush(), flushAudioDrafts()]).then(results => desktop.reportFlushResult?.({ requestId, saved: results.every(Boolean) })).catch(() => { document.documentElement.inert = false })
 })
 desktop?.onCloseCancelled?.(() => { document.documentElement.inert = false })
 window.addEventListener('online', () => { if (queue) void queue.flush() })
 window.addEventListener('beforeunload', event => {
-  if (queue?.pending().some(status => !status.durable)) { event.preventDefault(); event.returnValue = '' }
+  if (hasUndurableAudio() || queue?.pending().some(status => !status.durable)) { event.preventDefault(); event.returnValue = '' }
 })

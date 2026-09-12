@@ -5,6 +5,7 @@ import { isOllamaUp, hasModel, pullDefaultModel } from './ollama.js';
 import { autoUpdater } from 'electron-updater';
 import { testUserData } from './test-launch.js';
 import { DesktopDraftStore } from './drafts.js';
+import { DesktopAudioDrafts } from './audio-drafts.js';
 import { randomUUID } from 'node:crypto';
 
 const acceptanceUserData = testUserData();
@@ -23,6 +24,7 @@ let serverPort: number | null = null;
 let closeAllowed = false;
 let closeRequest: { id: string; resolve: (saved: boolean) => void } | null = null;
 const drafts = new DesktopDraftStore(path.join(app.getPath('userData'), 'pending-saves'));
+const audioDrafts = new DesktopAudioDrafts(path.join(app.getPath('userData'), 'pending-audio'));
 
 function trustedRenderer(event: IpcMainInvokeEvent) {
   if (!win || event.sender !== win.webContents || event.senderFrame !== win.webContents.mainFrame)
@@ -32,6 +34,9 @@ function trustedRenderer(event: IpcMainInvokeEvent) {
 }
 ipcMain.handle('drafts:read', event => { trustedRenderer(event); return drafts.list(); });
 ipcMain.handle('drafts:write', (event, record: unknown) => { trustedRenderer(event); return drafts.put(record); });
+ipcMain.handle('audio-drafts:read', (event, id: unknown) => { trustedRenderer(event); return audioDrafts.read(id); });
+ipcMain.handle('audio-drafts:write', (event, id: unknown, record) => { trustedRenderer(event); return audioDrafts.write(id, record); });
+ipcMain.handle('audio-drafts:remove', (event, id: unknown) => { trustedRenderer(event); return audioDrafts.remove(id); });
 ipcMain.handle('app:flush-result', (event, result: unknown) => {
   trustedRenderer(event);
   if (!result || typeof result !== 'object') throw new Error('Invalid flush result');

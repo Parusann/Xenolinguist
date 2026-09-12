@@ -12,6 +12,7 @@ import { readRecoverableProfile } from './storage-recovery.js';
 import { withProfileLock } from './profile-locks.js';
 import { atomicWrite } from './atomic-file.js';
 import { dataDir } from '../config.js';
+import { AudioStore } from './audio-store.js';
 
 const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
 const toIndex = (p: LanguageProfile): ProfileIndex => ({ id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at });
@@ -68,6 +69,7 @@ export class ProfileStore {
     await this.init();
     const now = new Date().toISOString();
     const profile = parseProfile({ ...pickProfileData(input), id: randomUUID(), created_at: now, updated_at: now });
+    await new AudioStore().verifyProfile(profile);
     return this.locked(profile.id, () => this.save(profile));
   }
 
@@ -78,7 +80,9 @@ export class ProfileStore {
       const existing = await this.get(id);
       if (!existing) return null;
       this.checkRevision(existing, expectedRevision);
-      return this.save(parseProfile({ ...existing, ...patch, revision: existing.revision + 1, updated_at: new Date().toISOString() }));
+      const profile = parseProfile({ ...existing, ...patch, revision: existing.revision + 1, updated_at: new Date().toISOString() });
+      await new AudioStore().verifyProfile(profile, existing);
+      return this.save(profile);
     });
   }
 
@@ -103,6 +107,7 @@ export class ProfileStore {
       const revision = existing.revision + 1;
       const profile = parseProfile({ ...applyOperations(existing, mutation.operations), revision, updated_at: new Date().toISOString(),
         recent_mutations: [...existing.recent_mutations, { id: mutation.mutationId, digest, revision }].slice(-128) });
+      await new AudioStore().verifyProfile(profile, existing);
       await this.save(profile);
       return { profile, appliedRevision: revision, mutationId: mutation.mutationId, duplicate: false };
     });

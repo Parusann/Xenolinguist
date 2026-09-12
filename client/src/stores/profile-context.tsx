@@ -26,6 +26,8 @@ interface ProfileContextValue {
   addAudioClip: (clip: Omit<AudioClip, 'id' | 'created_at'>) => string
   updateAudioClip: (id: string, updates: Partial<AudioClip>) => void
   removeAudioClip: (id: string) => void
+  saveAudioSample: (profileId: string, sample: Sample, clip: AudioClip) => Promise<void>
+  restoreSample: (profileId: string, sample: Sample, clip?: AudioClip) => void
   closeProfile: () => void
   saving: boolean
   saveStatus: SaveStatus
@@ -211,6 +213,25 @@ export function ProfileProvider({
     addEntry('info', 'Profile closed')
   }, [addEntry])
 
+  const saveAudioSample = useCallback(async (id: string, sample: Sample, clip: AudioClip) => {
+    const before = queue.view(id)
+    if (!before) throw new Error('Profile is not loaded')
+    const existingSample = before.samples.find(entry => entry.id === sample.id)
+    const existingClip = before.audio_clips.find(entry => entry.id === clip.id)
+    queue.edit(before, { ...before,
+      samples: [...before.samples.filter(entry => entry.id !== sample.id), { ...sample, created_at: existingSample?.created_at ?? sample.created_at }],
+      audio_clips: [...before.audio_clips.filter(entry => entry.id !== clip.id), { ...clip, created_at: existingClip?.created_at ?? clip.created_at }],
+    })
+    await queue.retry(id)
+    if (queue.status(id).phase !== 'saved' || !queue.status(id).durable) throw new Error('Audio sample is pending. Resolve the save error or retry; the original is retained.')
+  }, [queue])
+  const restoreSample = useCallback((id: string, sample: Sample, clip?: AudioClip) => {
+    const previous = queue.view(id)
+    if (!previous) return
+    queue.edit(previous, { ...previous, samples: [...previous.samples.filter(entry => entry.id !== sample.id), sample],
+      audio_clips: clip ? [...previous.audio_clips.filter(entry => entry.id !== clip.id), clip] : previous.audio_clips })
+  }, [queue])
+
   const setDraft = useCallback((key: string, value: DraftValue) => {
     if (profileRef.current) queue.setDraft(profileRef.current.id, key, value)
   }, [queue])
@@ -235,6 +256,8 @@ export function ProfileProvider({
       addAudioClip,
       updateAudioClip,
       removeAudioClip,
+      saveAudioSample,
+      restoreSample,
       closeProfile,
       saving: saveStatus.phase === 'saving',
       saveStatus,

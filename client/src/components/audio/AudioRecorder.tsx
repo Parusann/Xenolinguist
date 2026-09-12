@@ -1,10 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { WaveformCanvas } from './WaveformCanvas'
-import { LanguageBadge } from './LanguageDetector'
-import { extractPeaks } from '@/lib/audio'
-import { useLanguageDetection } from '@/hooks/useLanguageDetection'
-import { transcribePhones as transcribeIpa } from '@/services/ipa'
-import type { SttSegment, IpaSegment } from 'shared/types'
 
 // Minimal Web Speech API surface used here; TS's DOM lib only ships the
 // result types (SpeechRecognitionResultList etc.), not the recognizer itself.
@@ -32,12 +27,12 @@ declare global {
 }
 
 interface AudioRecorderProps {
-  onRecordingComplete: (audioBlob: Blob, peaks: number[], duration: number, detectedLanguage?: string, segments?: SttSegment[], mode?: 'transcription' | 'phonetic-guess', ipa?: string, ipaSegments?: IpaSegment[]) => void
+  onRecordingComplete: (audioBlob: Blob) => void
   className?: string
 }
 
 export function AudioRecorder({ onRecordingComplete, className = '' }: AudioRecorderProps) {
-  const [phoneError, setPhoneError] = useState('')
+  const [recordingError, setRecordingError] = useState('')
   const [recording, setRecording] = useState(false)
   const [livePeaks, setLivePeaks] = useState<number[]>([])
   const [duration, setDuration] = useState(0)
@@ -48,7 +43,6 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
   const startTimeRef = useRef(0)
   const streamRef = useRef<MediaStream | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
-  const { detect, detecting, result: langResult, reset: resetLang } = useLanguageDetection()
 
   // Live speech recognition during recording
   const liveRecognitionRef = useRef<SpeechRecognitionInstance | null>(null)
@@ -75,7 +69,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
-      resetLang()
+      setRecordingError('')
       setLiveTranscript('')
       setLiveLanguage(null)
 
@@ -138,25 +132,9 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
 
       recorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
-        const dur = (Date.now() - startTimeRef.current) / 1000
-
-        // Decode for peaks; always release the AudioContext even if decoding throws.
-        let peaks: number[] = []
-        try {
-          const decoded = await audioCtx.decodeAudioData(await blob.arrayBuffer())
-          peaks = extractPeaks(decoded, 200)
-        } catch {
-          /* undecodable audio — proceed with an empty waveform */
-        } finally {
-          if (audioCtx.state !== 'closed') audioCtx.close()
-          audioCtxRef.current = null
-        }
-
-        // Run language detection and IPA phone recognition in parallel. Only a real detector
-        // result sets the language — the live browser-locale guess is a UI hint, not detection.
-        setPhoneError('')
-        const [det, ipa] = await Promise.all([detect(blob), transcribeIpa(blob, setPhoneError)])
-        onRecordingComplete(blob, peaks, dur, det?.language || undefined, det?.segments, det?.mode, ipa?.ipa, ipa?.segments)
+        if (audioCtx.state !== 'closed') void audioCtx.close()
+        audioCtxRef.current = null
+        onRecordingComplete(blob)
       }
 
       recorder.start(100)
@@ -168,6 +146,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
       // Animate live waveform
       const dataArray = new Uint8Array(analyser.frequencyBinCount)
       const drawLive = () => {
+        if ((Date.now() - startTimeRef.current) / 1000 >= 119) { stopRecording(); return }
         analyser.getByteTimeDomainData(dataArray)
 
         let max = 0
@@ -186,9 +165,12 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
       }
       drawLive()
     } catch (err) {
+      streamRef.current?.getTracks().forEach(track => track.stop())
+      if (audioCtxRef.current?.state !== 'closed') void audioCtxRef.current?.close()
+      setRecordingError('Recording could not start. Check microphone access and WebM/Opus support.')
       console.error('Microphone access denied:', err)
     }
-  }, [onRecordingComplete, detect, resetLang])
+  }, [onRecordingComplete, stopRecording])
 
   useEffect(() => {
     return () => {
@@ -261,9 +243,7 @@ export function AudioRecorder({ onRecordingComplete, className = '' }: AudioReco
         )}
       </div>
 
-      {/* Language detection result */}
-      <LanguageBadge result={langResult} detecting={detecting} />
-      {phoneError && <p role="status" className="text-xs text-amber-300">{phoneError}</p>}
+      {recordingError && <p role="alert" className="text-xs text-amber-300">{recordingError}</p>}
     </div>
   )
 }

@@ -32,6 +32,7 @@ export function AudioPlayer({
   className = '',
 }: AudioPlayerProps) {
   const [playing, setPlaying] = useState(false)
+  const [playbackError, setPlaybackError] = useState('')
   const [progress, setProgress] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -40,6 +41,8 @@ export function AudioPlayer({
   useEffect(() => {
     const audio = new Audio(src)
     audioRef.current = audio
+    const failed = () => { setPlaying(false); setPlaybackError('Audio could not play. The file may be missing or unsupported.') }
+    audio.addEventListener('error', failed)
 
     audio.addEventListener('ended', () => {
       setPlaying(false)
@@ -48,6 +51,7 @@ export function AudioPlayer({
     })
 
     return () => {
+      audio.removeEventListener('error', failed)
       audio.pause()
       audio.src = ''
       cancelAnimationFrame(animRef.current)
@@ -87,8 +91,8 @@ export function AudioPlayer({
       // play() rejects if the media can't start (autoplay policy, interrupted load) — only
       // enter the playing state on a real start, and reset on failure.
       audio.play()
-        .then(() => { setPlaying(true); updateProgress() })
-        .catch(() => setPlaying(false))
+        .then(() => { setPlaybackError(''); setPlaying(true); updateProgress() })
+        .catch(() => { setPlaying(false); setPlaybackError('Audio could not play. Try again or restore the original file.') })
     }
   }, [playing, updateProgress, start, end])
 
@@ -117,6 +121,7 @@ export function AudioPlayer({
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         <button
+          aria-label={playing ? 'Pause audio' : 'Play audio'}
           onClick={togglePlay}
           className="w-6 h-6 rounded-full glass-inner border border-white/[0.06] flex items-center justify-center text-accent text-[10px] hover:border-accent/30 transition-all flex-shrink-0"
         >
@@ -134,6 +139,7 @@ export function AudioPlayer({
         <span className="text-[10px] font-mono text-gray-600 flex-shrink-0">
           {formatTime(currentTime)}
         </span>
+        {playbackError && <span role="alert">{playbackError}</span>}
       </div>
     )
   }
@@ -143,6 +149,7 @@ export function AudioPlayer({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <button
+            aria-label={playing ? 'Pause audio' : 'Play audio'}
             onClick={togglePlay}
             className="w-8 h-8 rounded-full glass-inner border border-white/[0.06] flex items-center justify-center text-accent text-xs hover:border-accent/30 transition-all"
           >
@@ -162,6 +169,7 @@ export function AudioPlayer({
         )}
       </div>
 
+      {playbackError && <p role="alert">{playbackError}</p>}
       <WaveformCanvas
         peaks={peaks}
         progress={progress}

@@ -1,0 +1,240 @@
+{
+  "recordedAt": "2026-09-12T04:59:55.077Z",
+  "executable": {
+    "bytes": 231522816,
+    "sha256": "2cf1559035b9cc2baef5ed91b067a04d1e49f96d9938caac56b340b61ea60e3b"
+  },
+  "appArchive": {
+    "bytes": 2343705,
+    "sha256": "40432007e8b37ecdef0c8cd387218fef07c395c2e49f83fca1fe939be04ca26f"
+  },
+  "fixture": {
+    "bytes": 110286,
+    "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+  },
+  "acceptancePassed": true,
+  "source": {
+    "revision": "61077b7583e3896f1437c18793f6ec56319cdb24",
+    "branch": "implementation/reliability",
+    "node": "25.8.2",
+    "platform": "win32",
+    "arch": "x64",
+    "workingFiles": [
+      {
+        "file": "client/src/components/audio/AudioPlayer.tsx",
+        "sha256": "5d0f29b3d39220725b5f8488963236d7d5aa8812e1654a9c91b9aab7790320ba"
+      },
+      {
+        "file": "client/src/components/audio/AudioRecorder.tsx",
+        "sha256": "6e5e766b7aaede99ab97c8565fdbbd7244bf829761ac34fdc5447c7d42d996dd"
+      },
+      {
+        "file": "client/src/components/audio/AudioSegmenter.tsx",
+        "sha256": "cd8e6060dafb20ab79db9dd73e96682e1361b272b63e13d5d55f7cf93a800364"
+      },
+      {
+        "file": "client/src/components/audio/wav-encode.test.ts",
+        "sha256": "f3a85109eda387dbbadac65ac00511e9e1d555c5051603be77a2d8da2b7dfbb5"
+      },
+      {
+        "file": "client/src/components/audio/wav-encode.ts",
+        "sha256": "75659353e5e0e376722e44f31da6b0e98c69d4e68374abd9d65cb97e97a9585c"
+      },
+      {
+        "file": "client/src/components/phase1-samples/SampleInput.tsx",
+        "sha256": "f875cafbaf17689b6088d9e77e416e5a1fab446fe704c643d058c316519d5703"
+      },
+      {
+        "file": "client/src/hooks/useAudioImport.ts",
+        "sha256": "a0d2ac91acaa3ac96d40568af15e52de9f4a5899f200c2c5e15795c911d51649"
+      },
+      {
+        "file": "client/src/services/audio-import.ts",
+        "sha256": "986f31251d1a7997da12aa51cb922f4eda2fe83b2a2e6c5adc3e795718f75d57"
+      },
+      {
+        "file": "client/src/stores/audio-draft-store.ts",
+        "sha256": "ab9a6c705f2a70b19b22aea9ec9e788ccfc9b4f32f64919e8cb416e8d352ff35"
+      },
+      {
+        "file": "client/src/stores/profile-context.tsx",
+        "sha256": "ff947a86bec6a66aa59f7f83ef7e6665eb89ce81c701bfb77c40ab9e4b5ab09e"
+      },
+      {
+        "file": "client/src/stores/save-runtime.ts",
+        "sha256": "2d691bd4ecba726786bb9f6fd7a7ac717d212aa9667a900790c1371626cc2ac2"
+      },
+      {
+        "file": "client/src/workers/audio-analysis.worker.ts",
+        "sha256": "33696f713bc2dc08e850e3ebeac8fc4dacb62c1c58ea31b492ac41d970f0ca48"
+      },
+      {
+        "file": "electron/audio-drafts.ts",
+        "sha256": "72fc9757249f286b469c99b7af5a0bf5b3c1c12474637f09a72b07cc36eb59d9"
+      },
+      {
+        "file": "electron/main.ts",
+        "sha256": "491fa8c1c074ef591349e1b5289ba9ce62aa5027d8abc84f01482fb21e38bb5f"
+      },
+      {
+        "file": "electron/preload.ts",
+        "sha256": "0b1ebf9072841861f2a5bafc957f40192b24a89da302beb335fbd2deb08ff6e7"
+      },
+      {
+        "file": "scripts/verify-release.mjs",
+        "sha256": "3db3dbbcb858751b7d1500cbe94f8716b8f89e30c37fe2a1a136eee17d982e8f"
+      },
+      {
+        "file": "server/src/__tests__/audio-lifecycle.test.ts",
+        "sha256": "a2a7e9953d5762d87fb03e4dd61f6a9f768e72991170a9111a154ad9203ae46d"
+      },
+      {
+        "file": "server/src/middleware/async-handler.ts",
+        "sha256": "5913d1f1779eb62e27cf94f7469dddb10c1d0e5f9ed35bfe15e3e05bfe4445a3"
+      },
+      {
+        "file": "server/src/middleware/error-handler.ts",
+        "sha256": "03474241d46ae184353c34746a03195d8bf280fceaf4f60f457f8e2842c5fede"
+      },
+      {
+        "file": "server/src/routes/audio.ts",
+        "sha256": "21b0ea283a1020e5d56d0eec1f8d401e8193273824c0a332cf76560b6d504b87"
+      },
+      {
+        "file": "server/src/services/atomic-file.ts",
+        "sha256": "1edc8caddacf1f53d4dd6fc275dc56c573564d8fd741a018f99b5ec8895a2e31"
+      },
+      {
+        "file": "server/src/services/audio-store.ts",
+        "sha256": "91ffce65ad313f0f09e4170fbfa6124239495e9d9ef0c801f151bd1bfe9a1270"
+      },
+      {
+        "file": "server/src/services/profile-store.ts",
+        "sha256": "0af7444873bd8a56a7bb63fc95d0ec824afaf75f4b85dc8a0852475cb35aec96"
+      },
+      {
+        "file": "shared/audio-container.ts",
+        "sha256": "9c0c7cdb253fd1ae42714d1023e9e484550523d8d509cbc0b9ba853e7c76bcf7"
+      },
+      {
+        "file": "shared/schemas/audio.ts",
+        "sha256": "380b5f2b6e5ead24fe15c6a141a4c154ffce4cfa7c76f3204d48eb38f2f89805"
+      },
+      {
+        "file": "shared/schemas/profile.ts",
+        "sha256": "c1130ebcad379ec9d6f315310b1a48bd568615238597f8f622ccb01f294859d8"
+      },
+      {
+        "file": "tests/e2e/audio-lifecycle.spec.ts",
+        "sha256": "2af7a3b3955e2798f95b2f0fdbfbefa2f71fdf3ae896daf22fab0eb8745df718"
+      },
+      {
+        "file": "tests/e2e/review-regressions.spec.ts",
+        "sha256": "c7a4251e6da7287ef5616720393e2146c89fc9163f1932c4fbfc325ceeb5102d"
+      }
+    ],
+    "note": "Verified the W06 working tree before its implementation commit; per-file hashes identify the tested source."
+  },
+  "runtime": {
+    "packaged": true,
+    "versions": {
+      "node": "24.15.0",
+      "acorn": "8.16.0",
+      "ada": "3.4.4",
+      "amaro": "1.1.8",
+      "ares": "1.34.6",
+      "brotli": "1.2.0",
+      "cldr": "48.0",
+      "icu": "78.2",
+      "llhttp": "9.3.1",
+      "merve": "1.2.2",
+      "modules": "146",
+      "napi": "10",
+      "nbytes": "0.1.3",
+      "ncrypto": "0.0.1",
+      "nghttp2": "1.68.0",
+      "openssl": "0.0.0",
+      "simdjson": "4.5.0",
+      "simdutf": "7.7.0",
+      "sqlite": "3.51.3",
+      "tz": "2025c",
+      "undici": "7.24.4",
+      "unicode": "17.0",
+      "uv": "1.51.0",
+      "uvwasi": "0.0.23",
+      "v8": "14.8.178.28-electron.0",
+      "zlib": "1.3.2.1-motley",
+      "zstd": "1.6.0",
+      "electron": "42.3.3",
+      "chrome": "148.0.7778.218"
+    }
+  },
+  "checks": {
+    "wavUpload": {
+      "status": 200,
+      "body": {
+        "filename": "release-fixture.wav",
+        "size": 110286
+      }
+    },
+    "sampleSave": {
+      "status": 200
+    },
+    "sampleOnDisk": true,
+    "loadedWorkbench": true,
+    "pendingSaveRecovered": true,
+    "desktopDraftRecovered": true,
+    "desktopAudioDraftRecovered": true,
+    "desktopAudioSaved": {
+      "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "assets": {
+        "original": {
+          "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+          "bytes": 110286,
+          "mime": "audio/wav"
+        },
+        "analysis": {
+          "sha256": "0ca6b28535d9385d576c695a6563294e028105cda30539a139a23b292a3a942b",
+          "bytes": 110286,
+          "mime": "audio/wav"
+        }
+      },
+      "phoneSegments": 48,
+      "playback": true
+    },
+    "missingModel": {
+      "status": 503,
+      "body": {
+        "error": "ipa-unavailable",
+        "code": "IPA_MODEL_MISSING",
+        "requestId": "35c19db8-1f19-4104-9d6f-6a167c448529",
+        "retryable": true
+      }
+    },
+    "ipa": {
+      "status": 200,
+      "segments": 46,
+      "identity": {
+        "modelId": "wav2vec2-phoneme",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "alphabet": "TIMIT ARPABET",
+        "transformers": "4.2.0",
+        "backend": "onnxruntime-node",
+        "node": "24.15.0"
+      }
+    },
+    "stt": {
+      "status": 200,
+      "nonemptyText": true
+    }
+  },
+  "restart": {
+    "originChanged": true
+  },
+  "verificationLimits": [
+    "Unpacked local Windows executable, not installer certification.",
+    "Browser microphone uses a synthetic input device.",
+    "Three native unit checks were skipped; real native endpoints were exercised separately.",
+    "Retained-asset garbage collection and full audio archives are deferred."
+  ]
+}

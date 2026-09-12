@@ -168,7 +168,7 @@ test('F02 WAV import records decode, upload, save and restart boundaries', async
   page.on('response', response => {
     if (/\/api\/(audio|profiles)/.test(response.url()) && response.request().method() !== 'GET') {
       pending.push((async () => { network.push({ url: new URL(response.url()).pathname, status: response.status(),
-        request: response.request().postDataJSON()?.data ? { base64Length: response.request().postDataJSON().data.length } : response.request().postDataJSON(),
+        requestBytes: response.request().postDataBuffer()?.length ?? 0,
         body: await response.json().catch(() => null) }); })());
     }
   });
@@ -186,7 +186,7 @@ test('F02 WAV import records decode, upload, save and restart boundaries', async
   const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'WAV probe' } })).json();
   await openProfile(page, server.url, profile.name);
   await page.locator('input[type="file"]').setInputFiles(wavFixture);
-  await expect(page.getByText(/Recorded ·/)).toBeVisible();
+  await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
   const saved = page.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith(profile.id + '/mutations'));
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
   expect((await saved).status()).toBe(200);
@@ -198,6 +198,8 @@ test('F02 WAV import records decode, upload, save and restart boundaries', async
   const stored = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
   await attachJson('wav-boundaries.json', { fixture: { bytes: bytes.length, sha256 }, decode, network,
     directUpload: { status: control.status(), body: await control.json() }, storedAfterRestart: stored });
-  test.fail(true, 'F02: imported audio is lost; remove with audio repair');
   expect(stored.samples[0].audio_id).toBeTruthy();
+  const original = await page.request.get(`${server.url}/api/audio/${stored.samples[0].audio_id}`);
+  expect(createHash('sha256').update(await original.body()).digest('hex')).toBe(sha256);
+  expect(stored.audio_clips[0].assets.original.sha256).toBe(sha256);
 });

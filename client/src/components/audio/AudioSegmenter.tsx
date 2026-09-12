@@ -18,7 +18,6 @@ interface AudioSegmenterProps {
   className?: string
 }
 
-let segIdCounter = 0
 
 export function AudioSegmenter({
   src,
@@ -57,7 +56,7 @@ export function AudioSegmenter({
         return
       }
       const newSeg: Segment = {
-        id: `seg-${Date.now()}-${++segIdCounter}`,
+        id: `seg-${crypto.randomUUID()}`,
         start,
         end,
         label: '',

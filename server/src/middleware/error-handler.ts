@@ -8,6 +8,7 @@ export function errorHandler(err: Error, _req: Request, res: Response, next: Nex
   // If the response already started (e.g. an SSE stream), we can't send a JSON body —
   // hand off to Express's default handler so it tears down the connection.
   if (res.headersSent) return next(err);
+  if ((err as Error & { status?: number }).status === 413) return res.status(413).json({ code: 'PAYLOAD_TOO_LARGE', error: 'Upload exceeds the size limit', retryable: false });
   const structured = err instanceof ZodError ? validationError(err) : err;
   if (structured instanceof ProfileError) {
     const { code, message, issues, retryable, status, currentRevision } = structured;

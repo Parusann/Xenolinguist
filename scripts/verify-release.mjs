@@ -2,7 +2,7 @@
 import { _electron as electron } from 'playwright';
 import { expect } from '@playwright/test';
 import { mkdtemp, mkdir, writeFile, readFile, realpath, rename } from 'node:fs/promises';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { root, hashFile, inventory, sourceIdentity, saveRecord } from './verification-record.mjs';
@@ -42,6 +42,7 @@ try {
   record.runtime = await app.evaluate(({ app }) => ({ versions: process.versions, packaged: app.isPackaged, userData: app.getPath('userData') }));
   if (!record.runtime.packaged || path.resolve(record.runtime.userData) !== path.resolve(dir)) throw new Error('Desktop isolation check failed');
   const page = await app.firstWindow();
+  page.setDefaultTimeout(20_000);
   await page.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
   const origin = new URL(page.url()).origin;
   const request = async (route, body) => {
@@ -79,6 +80,9 @@ try {
   await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Recovered after desktop close');
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
   await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
+  await page.locator('input[type="file"]').setInputFiles({ name: 'desktop-original.wav', mimeType: 'audio/wav', buffer: wav });
+  await expect(page.getByText(/desktop-original.wav/)).toBeVisible();
+  await page.getByPlaceholder('IPA, tone markers').fill('Native audio draft');
   await page.locator('[data-tour="translation"]').click();
   await page.getByPlaceholder('Enter unknown language text to translate…').fill('Draft across desktop origins');
   await expect.poll(async () => {
@@ -94,8 +98,10 @@ try {
   await expect.poll(async () => { try { await fetch(`${origin}/api/health`, { signal: AbortSignal.timeout(500) }); return false; } catch { return true; } }).toBe(true);
   app = await electron.launch({ executablePath: resolved, cwd: dir, args: [`--xeno-test-user-data=${dir}`], env: launchEnv, timeout: 40_000 });
   const reopened = await app.firstWindow();
+  reopened.setDefaultTimeout(20_000);
   await reopened.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
   const newOrigin = new URL(reopened.url()).origin;
+  await reopened.addInitScript(() => localStorage.setItem('xenolinguist-tour-completed', '1'));
   await reopened.goto(`${newOrigin}/app`);
   await reopened.getByRole('button').filter({ has: reopened.getByText('Release smoke', { exact: true }) }).click();
   await expect(reopened.getByPlaceholder('Enter unknown language text to translate…')).toHaveValue('Draft across desktop origins');
@@ -103,6 +109,25 @@ try {
   const afterRestart = await (await reopened.request.get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
   record.checks.pendingSaveRecovered = afterRestart.samples.filter(sample => sample.alien_text === 'Recovered after desktop close').length === 1;
   record.checks.desktopDraftRecovered = true;
+  await reopened.locator('[data-tour="samples"]').click();
+  await expect(reopened.getByText(/desktop-original.wav ·/)).toBeVisible();
+  await expect(reopened.getByPlaceholder('IPA, tone markers')).toHaveValue('Native audio draft');
+  record.checks.desktopAudioDraftRecovered = true;
+  await reopened.getByRole('button', { name: 'Analyze phones', exact: true }).click();
+  await expect(reopened.getByPlaceholder('Label this word...').first()).toBeVisible({ timeout: 120_000 });
+  await reopened.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Discard audio draft' })).toHaveCount(0);
+  const withAudio = await (await reopened.request.get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
+  const clip = withAudio.audio_clips[0];
+  const original = await reopened.request.get(`${newOrigin}/api/audio/${clip.id}`);
+  const originalHash = createHash('sha256').update(await original.body()).digest('hex');
+  expect(originalHash).toBe(record.fixture.sha256);
+  expect(clip.assets.original.sha256).toBe(originalHash);
+  expect(withAudio.samples.find(sample => sample.audio_id === clip.id).ipa.length).toBeGreaterThan(0);
+  await reopened.getByRole('button', { name: 'Play audio', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Pause audio', exact: true })).toBeVisible();
+  await reopened.getByRole('button', { name: 'Pause audio', exact: true }).click();
+  record.checks.desktopAudioSaved = { originalHash, assets: clip.assets, phoneSegments: clip.segments.length, playback: true };
   record.restart = { firstOrigin: origin, secondOrigin: newOrigin, revision: afterRestart.revision };
   if (args.includes('--negative-model')) {
     // Only an explicitly requested, isolated temporary acceptance build may be modified.
@@ -128,13 +153,16 @@ try {
   record.acceptancePassed = record.checks.ipa.status === 200 && record.checks.stt.status === 200
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
-    && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered;
+    && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered
+    && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback;
   if (!record.acceptancePassed) process.exitCode = 1;
 } catch (error) {
   record.failure = { message: error.message, stack: error.stack };
   record.acceptancePassed = false;
   process.exitCode = 1;
 } finally {
+  // Release the isolated process even if a failure preceded the dialog override.
+  if (app) await app.evaluate(({ dialog }) => { dialog.showMessageBox = async () => ({ response: 1, checkboxChecked: false }); }).catch(() => {});
   try { await app?.close(); }
   finally {
     try { if (hiddenModel) await rename(hiddenModel.hidden, hiddenModel.model); }
