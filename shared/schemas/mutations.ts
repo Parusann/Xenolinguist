@@ -3,7 +3,7 @@ import { entityIdSchema } from './common.js';
 import { profileDataSchema, dictionaryEntrySchema, grammarRuleSchema, sampleSchema, audioClipSchema, numberSystemSchema } from './profile.js';
 
 export const collectionSchema = z.enum(['dictionary', 'grammar_rules', 'samples', 'audio_clips']);
-export const profileFieldsSchema = profileDataSchema.pick({ name: true, description: true, phonetic_notes: true, is_sandbox: true, sandbox_difficulty: true }).partial();
+export const profileFieldsSchema = profileDataSchema.pick({ name: true, description: true, phonetic_notes: true, is_sandbox: true, sandbox_difficulty: true, sandbox_session: true }).partial();
 export const operationSchema = z.discriminatedUnion('type', [
   z.strictObject({ type: z.literal('set-fields'), fields: profileFieldsSchema }),
   z.strictObject({ type: z.literal('set-numbers'), value: numberSystemSchema }),

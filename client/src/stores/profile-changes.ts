@@ -4,7 +4,7 @@ import { parseProfile } from 'shared/schemas/profile'
 
 const collections = ['dictionary', 'grammar_rules', 'samples', 'audio_clips'] as const
 const types = { dictionary: 'put-word', grammar_rules: 'put-rule', samples: 'put-sample', audio_clips: 'put-clip' } as const
-const scalarFields = ['name', 'description', 'phonetic_notes', 'is_sandbox', 'sandbox_difficulty'] as const
+const scalarFields = ['name', 'description', 'phonetic_notes', 'is_sandbox', 'sandbox_difficulty', 'sandbox_session'] as const
 const equal = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
 
 /** Three-way merge only fields the user changed. Return conflicts instead of overwriting remote edits. */

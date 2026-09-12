@@ -6,6 +6,7 @@ import type { LanguageProfile } from 'shared/types'
 import { createDefaultProfile } from 'shared/constants'
 import { parseProfile } from 'shared/schemas/profile'
 import { applyOperations } from 'shared/profile-operations'
+import { createSandboxSession, applySandboxAction } from 'shared/sandbox/session'
 
 const clone = <T,>(value: T): T => structuredClone(value)
 function profile(id = 'test'): LanguageProfile {
@@ -38,6 +39,23 @@ beforeEach(() => vi.useFakeTimers())
 afterEach(() => { vi.clearAllTimers(); vi.useRealTimers() })
 
 describe('durable save queue', () => {
+  it('recovers a failed sandbox event and its reward as one saved mutation', async () => {
+    const a = profile(), store = new MemoryStore(), remote = backend(a)
+    const workingApi = remote.api.mutate
+    remote.api.mutate = vi.fn(async () => { throw new Error('offline') })
+    const queue = new SaveQueue(remote.api, store, 60_000); await queue.load(a)
+    const session = createSandboxSession({ language_name: 'Test', phoneme_set: ['a'], number_base: 10, word_order: 'SVO', rules: ['SVO'],
+      number_words: { 1: 'ka', 2: 'ki', 3: 'ku' }, vocabulary: [{ alien: 'tal', english: 'sky', pos: 'noun' }], sample_sentences: [{ alien: 'tal', english: 'sky' }] }, 'session', a.created_at, 'fixture')
+    const next = applySandboxAction({ ...a, sandbox_session: session }, session.id, { type: 'reveal', challengeId: 'number-0' }, 'event', a.created_at)
+    queue.edit(a, next); expect(await queue.flush()).toBe(false)
+    remote.api.mutate = workingApi
+    const recovered = new SaveQueue(remote.api, store, 60_000); await recovered.load(a)
+    expect(recovered.view(a.id)?.sandbox_session?.events).toHaveLength(1)
+    expect(await recovered.flush()).toBe(true)
+    expect(remote.data.get(a.id)?.dictionary).toHaveLength(1)
+    expect(remote.data.get(a.id)?.sandbox_session?.events).toHaveLength(1)
+    expect(remote.applied.size).toBe(1)
+  })
   it('coalesces unsent edits without cancelling another profile', async () => {
     const a = profile('a'), b = profile('b'), store = new MemoryStore(), remote = backend(a, b)
     const queue = new SaveQueue(remote.api, store, 60_000)

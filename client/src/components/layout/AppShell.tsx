@@ -14,7 +14,7 @@ import { VocabularyBuilder } from '@/components/phase3-vocabulary/VocabularyBuil
 import { GrammarAnalyzer } from '@/components/phase4-grammar/GrammarAnalyzer'
 import { TranslationEngine } from '@/components/phase5-translation/TranslationEngine'
 import { Dashboard } from '@/components/phase6-dashboard/Dashboard'
-import { SandboxSetup, type ConlangData } from '@/components/sandbox/SandboxSetup'
+import { SandboxSetup } from '@/components/sandbox/SandboxSetup'
 import { SandboxController } from '@/components/sandbox/SandboxController'
 import { useProfile } from '@/stores/profile-context'
 import { useOllama } from '@/stores/ollama-context'
@@ -34,7 +34,6 @@ export function AppShell() {
   const [storedPhase, setActivePhase] = useProfileDraft<PhaseId>('activePhase', isSandbox ? 'sandbox' : 'samples')
   const activePhase = phases.some(phase => phase.id === storedPhase) ? storedPhase : isSandbox ? 'sandbox' : 'samples'
   const [logOpen, setLogOpen] = useState(false)
-  const [conlangData, setConlangData] = useState<ConlangData | null>(null)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
@@ -110,9 +109,9 @@ export function AppShell() {
   const renderPhase = () => {
     switch (activePhase) {
       case 'sandbox':
-        return conlangData
-          ? <SandboxController conlang={conlangData} onPlayAgain={() => setConlangData(null)} />
-          : <SandboxSetup onGenerated={setConlangData} />
+        return profile?.sandbox_session
+          ? <SandboxController />
+          : <SandboxSetup />
       case 'samples': return <SampleInput />
       case 'numbers': return <NumberDecoder />
       case 'vocabulary': return <VocabularyBuilder />

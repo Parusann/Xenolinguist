@@ -89,6 +89,28 @@ try {
     const local = JSON.parse(await readFile(path.join(dir, 'pending-saves', `${profile.body.id}.json`), 'utf8'));
     return local.batches.length > 0 && local.drafts['translation.alien'] === 'Draft across desktop origins';
   }).toBe(true);
+  // Deterministic generator output exercises session persistence, not generation quality.
+  const sandboxProfile = await request('/api/profiles', { name: 'Native practice', is_sandbox: true });
+  expect(sandboxProfile.status).toBe(201);
+  await page.route('**/api/ollama/status', route => route.fulfill({ json: { connected: true, models: ['fixture-model'] } }));
+  const practiceFixture = { language_name: 'Native fixture', phoneme_set: ['a'], number_base: 10, word_order: 'SVO', rules: ['Subject first'],
+    number_words: { 1: 'ka', 2: 'ki', 3: 'ku' }, vocabulary: [{ alien: 'tal', english: 'sky', pos: 'noun' }], sample_sentences: [{ alien: 'tal', english: 'sky' }] };
+  await page.route('**/api/ai/stream', route => route.fulfill({ contentType: 'text/event-stream', body: `data: ${JSON.stringify({ token: JSON.stringify(practiceFixture) })}\n\ndata: [DONE]\n\n` }));
+  await page.goto(`${origin}/app`);
+  await page.getByRole('button').filter({ has: page.getByText('Native practice', { exact: true }) }).click();
+  await page.getByRole('button', { name: 'Generate & Start Decoding' }).click();
+  const number = page.locator('[data-challenge="number-0"]');
+  await number.getByRole('textbox').fill('1cat'); await number.getByRole('button', { name: 'Check', exact: true }).click();
+  await expect(number.getByRole('status')).toContainText('Not matched');
+  await number.getByRole('button', { name: 'Hint', exact: true }).click();
+  await number.getByRole('textbox').fill('unfinished number');
+  await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
+  let sandboxBeforeClose;
+  await expect.poll(async () => {
+    const local = JSON.parse(await readFile(path.join(dir, 'pending-saves', `${sandboxProfile.body.id}.json`), 'utf8'));
+    sandboxBeforeClose = local.batches.at(-1)?.after.sandbox_session;
+    return sandboxBeforeClose?.guesses['number-0'] === 'unfinished number' && sandboxBeforeClose.events.length === 2;
+  }).toBe(true);
   // Simulate the explicit "Close anyway" choice only in this isolated acceptance app.
   await app.evaluate(({ dialog }) => { dialog.showMessageBox = async () => ({ response: 1, checkboxChecked: false }); });
   const closed = app.waitForEvent('close');
@@ -128,6 +150,21 @@ try {
   await expect(reopened.getByRole('button', { name: 'Pause audio', exact: true })).toBeVisible();
   await reopened.getByRole('button', { name: 'Pause audio', exact: true }).click();
   record.checks.desktopAudioSaved = { originalHash, assets: clip.assets, phoneSegments: clip.segments.length, playback: true };
+  await reopened.goto(`${newOrigin}/app`);
+  await reopened.getByRole('button').filter({ has: reopened.getByText('Native practice', { exact: true }) }).click();
+  const recoveredNumber = reopened.locator('[data-challenge="number-0"]');
+  await expect(recoveredNumber.getByRole('textbox')).toHaveValue('unfinished number');
+  await expect(recoveredNumber.getByRole('status')).toContainText('Not matched');
+  await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
+  const sandboxRestored = await (await reopened.request.get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
+  expect(sandboxRestored.sandbox_session).toEqual(sandboxBeforeClose);
+  await recoveredNumber.getByRole('textbox').fill('1'); await recoveredNumber.getByRole('button', { name: 'Check', exact: true }).click();
+  await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
+  const sandboxSaved = await (await reopened.request.get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
+  expect(sandboxSaved.dictionary).toHaveLength(1); expect(sandboxSaved.sandbox_session.events).toHaveLength(3);
+  record.checks.desktopSandboxRecovered = { sameSession: sandboxRestored.sandbox_session.id === sandboxBeforeClose.id,
+    restoredEvents: sandboxRestored.sandbox_session.events.length, afterRetryEvents: sandboxSaved.sandbox_session.events.length,
+    dictionaryEntries: sandboxSaved.dictionary.length, fixtureGeneration: true };
   record.restart = { firstOrigin: origin, secondOrigin: newOrigin, revision: afterRestart.revision };
   if (args.includes('--negative-model')) {
     // Only an explicitly requested, isolated temporary acceptance build may be modified.
@@ -154,7 +191,7 @@ try {
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered
-    && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback;
+    && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
   if (!record.acceptancePassed) process.exitCode = 1;
 } catch (error) {
   record.failure = { message: error.message, stack: error.stack };

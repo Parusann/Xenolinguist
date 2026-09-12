@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { entityIdSchema as id, timestampSchema as timestamp, confidenceSchema, noteSchema as text } from './common.js';
 import { ProfileError, validationError } from './errors.js';
 import { audioAssetsSchema } from './audio.js';
+import { sandboxSessionSchema } from './sandbox.js';
 
 const manualConfidence = { confidence: confidenceSchema, user_asserted_confidence: confidenceSchema.optional() };
 export const dictionaryEntrySchema = z.strictObject({
@@ -30,6 +31,7 @@ export const sampleSchema = z.strictObject({
 export const profileDataSchema = z.strictObject({
   name: text, description: text, phonetic_notes: text, is_sandbox: z.boolean(),
   sandbox_difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
+  sandbox_session: sandboxSessionSchema.nullable().optional(),
   dictionary: z.array(dictionaryEntrySchema), grammar_rules: z.array(grammarRuleSchema),
   number_system: numberSystemSchema, samples: z.array(sampleSchema), audio_clips: z.array(audioClipSchema),
 });

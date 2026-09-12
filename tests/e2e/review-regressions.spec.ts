@@ -129,7 +129,6 @@ test('F03 a one-letter vocabulary answer must not receive credit', async ({ page
   // All setup assertions precede the expected-failure annotation.
   const accepted = await page.getByPlaceholder('Meaning?').isDisabled();
   await attachJson('grading.json', { answer: 'a', expected: 'water', accepted });
-  test.fail(true, 'F03: substring grading accepts a letter; remove annotation with W07');
   expect(accepted).toBe(false);
 });
 
@@ -142,7 +141,6 @@ test('F03 navigating to another phase must preserve the sandbox draft', async ({
   await page.locator('[data-tour="sandbox"]').click();
   const draft = await page.getByPlaceholder('Your guess...').first().inputValue();
   await attachJson('sandbox-navigation.json', { before: '777', after: draft });
-  test.fail(true, 'F03: controller state is lost on phase unmount; remove with W07');
   expect(draft).toBe('777');
 });
 

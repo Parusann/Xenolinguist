@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
 import { useSessionLog } from '@/stores/session-log-context'
 import { useProfile } from '@/stores/profile-context'
+import { startSandbox } from '@/stores/sandbox-session'
+import { conlangSchema } from 'shared/schemas/sandbox'
+import { ZodError } from 'zod'
 import type { SandboxDifficulty } from 'shared/types'
 
 const DIFFICULTIES: { value: SandboxDifficulty; label: string; desc: string }[] = [
@@ -11,30 +14,22 @@ const DIFFICULTIES: { value: SandboxDifficulty; label: string; desc: string }[] 
   { value: 'hard', label: 'Hard', desc: 'Fundamentally alien structure, unusual phonemes, complex grammar' },
 ]
 
-interface SandboxSetupProps {
-  onGenerated: (conlang: ConlangData) => void
-}
-
-export interface ConlangData {
-  language_name: string
-  phoneme_set: string[]
-  number_base: number
-  word_order: string
-  rules: string[]
-  vocabulary: { alien: string; english: string; pos: string }[]
-  number_words: Record<string, string>
-  sample_sentences: { alien: string; english: string }[]
-}
-
-export function SandboxSetup({ onGenerated }: SandboxSetupProps) {
+export function SandboxSetup() {
+  const mounted = useRef(true)
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false } }, [])
+  const [error, setError] = useState('')
+  const failedResponse = useRef('')
   const [difficulty, setDifficulty] = useState<SandboxDifficulty>('easy')
   const [generating, setGenerating] = useState(false)
   const { runTask } = useAI()
-  const { connected } = useOllama()
+  const { connected, getModelForTask } = useOllama()
   const { addEntry } = useSessionLog()
-  const { updateProfile } = useProfile()
+  const { profile } = useProfile()
 
   const handleGenerate = async () => {
+    if (!profile || generating) return
+    const owner = profile.id, model = getModelForTask('conlangGeneration')
+    setError(''); failedResponse.current = ''
     setGenerating(true)
     addEntry('ai', `Generating ${difficulty} conlang...`)
 
@@ -50,6 +45,8 @@ Generate at least:
 - 5 grammar rules
 - 8 sample sentences of increasing complexity
 
+Use decimal integer keys for number_words. Declare every alien sentence token (including inflected forms and particles) in vocabulary or number_words. Spellings must be unique. Optional accepted_forms arrays may declare explicit synonymous English answers for vocabulary and sentences. Do not include undeclared tokens.
+
 IMPORTANT: Respond ONLY with valid JSON matching this exact format, no other text:
 {
   "language_name": "string",
@@ -63,35 +60,23 @@ IMPORTANT: Respond ONLY with valid JSON matching this exact format, no other tex
 }`
 
     try {
-      const result = await runTask('conlangGeneration', prompt)
+      const result = await runTask('conlangGeneration', prompt, { model })
+      if (!mounted.current) return
+      failedResponse.current = result
       // Extract JSON from the response (handle markdown code blocks)
       const jsonMatch = result.match(/\{[\s\S]*\}/)
       if (!jsonMatch) throw new Error('No JSON found in response')
-      const parsed = JSON.parse(jsonMatch[0]) as Partial<ConlangData>
-      // The model sometimes omits or mistypes fields. SandboxController iterates
-      // these at render time (Object.entries(number_words), vocabulary.forEach,
-      // sample_sentences/rules), so normalize every field to a safe shape here —
-      // otherwise a malformed response crashes the controller on mount.
-      if (typeof parsed.language_name !== 'string' || !Array.isArray(parsed.vocabulary)) {
-        throw new Error('Incomplete conlang data in response')
-      }
-      const conlang: ConlangData = {
-        language_name: parsed.language_name,
-        phoneme_set: Array.isArray(parsed.phoneme_set) ? parsed.phoneme_set : [],
-        number_base: typeof parsed.number_base === 'number' ? parsed.number_base : 10,
-        word_order: typeof parsed.word_order === 'string' ? parsed.word_order : '',
-        rules: Array.isArray(parsed.rules) ? parsed.rules : [],
-        vocabulary: parsed.vocabulary,
-        number_words: parsed.number_words && typeof parsed.number_words === 'object' ? parsed.number_words : {},
-        sample_sentences: Array.isArray(parsed.sample_sentences) ? parsed.sample_sentences : [],
-      }
-      addEntry('success', `Generated conlang: ${conlang.language_name}`)
-      updateProfile({ sandbox_difficulty: difficulty })
-      onGenerated(conlang)
+      const conlang = conlangSchema.parse(JSON.parse(jsonMatch[0]))
+      startSandbox(owner, conlang, difficulty, model)
+      failedResponse.current = ''
+      addEntry('success', `Generated practice: ${conlang.language_name}`)
     } catch (err) {
-      addEntry('error', `Failed to generate conlang: ${(err as Error).message}`)
+      if (!mounted.current) return
+      const message = err instanceof ZodError ? err.issues.slice(0, 4).map(issue => `${issue.path.join('.')}: ${issue.message}`).join('; ') : (err as Error).message
+      setError(`Could not start practice. ${message}. Try generating again.`)
+      addEntry('error', 'Generated practice could not be validated')
     } finally {
-      setGenerating(false)
+      if (mounted.current) setGenerating(false)
     }
   }
 
@@ -101,9 +86,18 @@ IMPORTANT: Respond ONLY with valid JSON matching this exact format, no other tex
         <h2 className="text-xl font-light mb-1 text-chrome">
           Sandbox <span className="font-medium text-chrome-accent">Mode</span>
         </h2>
-        <p className="text-xs text-gray-500">The AI will generate a language with hidden rules. Decode it step by step.</p>
+        <p className="text-xs text-gray-500">Generate a language for creative practice. Answers are stored for recovery and checked against accepted forms; this is not a validated linguistic benchmark.</p>
       </div>
 
+      {profile && !profile.sandbox_session && (profile.dictionary.length > 0 || profile.samples.length > 0 || profile.grammar_rules.length > 0 || Object.keys(profile.number_system.mappings).length > 0) &&
+        <p role="status" className="text-sm text-amber-300">This workspace has earlier practice entries but no saved exercise key. The previous exercise cannot be reconstructed. Your entries are preserved; generate a new practice session to continue.</p>}
+      {error && <div role="alert" className="space-y-2 text-sm text-amber-300">
+        <p>{error}</p>
+        {failedResponse.current && <button className="btn sm ghost" onClick={() => {
+          const url = URL.createObjectURL(new Blob([failedResponse.current], { type: 'text/plain' }))
+          const link = document.createElement('a'); link.href = url; link.download = 'sandbox-generation-diagnostic.txt'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000)
+        }}>Download failed response for diagnostics</button>}
+      </div>}
       <div className="glass-card rounded-xl p-6 space-y-5 border-glow">
         <label className="label">Select Difficulty</label>
         <div className="grid grid-cols-3 gap-3">
