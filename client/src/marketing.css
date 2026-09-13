@@ -746,3 +746,36 @@ html.marketing-active #root { height: auto !important; min-height: 100vh; }
 @media (max-width: 720px) {
   .download-panel { padding: 26px 22px; }
 }
+
+/* Public presentation: keyboard focus, readable narrow layouts and reduced motion. */
+.hero-page :is(a, button, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.hero-page .section, .hero-page .final-cta { scroll-margin-top: 88px; }
+.release-context { padding-top: 32px; padding-bottom: 32px; border-block: 1px solid var(--border); }
+.release-context p { max-width: 900px; line-height: 1.7; color: var(--fg-1); }
+.demo-moment .hero-eyebrow { flex-wrap: wrap; margin-bottom: 12px; }
+.demo-moment .hero-cinematic { min-height: 72px; flex-wrap: wrap; font-size: clamp(24px, 3.5vw, 48px); }
+.demo-moment .tok { white-space: normal; color: var(--accent); font-weight: 400; padding-right: 12px; }
+.demo-moment .hero-source { flex-wrap: wrap; gap: 12px; }
+.demo-moment .sample-rail { flex-wrap: wrap; margin-top: 0; }
+.sample-choice { min-width: 44px; min-height: 44px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; color: var(--fg-1); background: transparent; font: inherit; cursor: pointer; }
+.sample-choice[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+.demo-pane { min-width: 0; }
+.demo-pane label { font: 12px var(--font-mono); margin-bottom: 16px; color: var(--fg-dim); }
+.demo-pane textarea { background: transparent; border: 1px solid var(--border); border-radius: 6px; resize: vertical; color: var(--fg); font: 20px/1.6 var(--font-mono); min-height: 160px; width: 100%; padding: 8px; box-sizing: border-box; }
+.demo-pane .download-note { margin-top: 16px; }
+.demo-result { font: 24px/1.65 var(--font-display); flex: 1; overflow-wrap: anywhere; }
+.privacy-block > .download-note { margin-block: 24px; }
+.hero-footer { flex-wrap: wrap; }
+@media (max-width: 720px) {
+  .hero-nav { gap: 12px; padding-inline: 16px; }
+  .hero-nav .btn-hero { font-size: 11px !important; padding: 8px !important; white-space: normal; }
+  .hero-nav .word { font-size: 14px; }
+  .hero-cta { flex-wrap: wrap; }
+  .hero-cinematic, .hero-source, .hero-meta { min-width: 0; overflow-wrap: anywhere; }
+  .privacy-block { padding: 32px 20px; }
+  .hero-footer { padding-inline: 24px; gap: 16px; }
+}
+@media (max-width: 380px) { .phases-ribbon { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-page *, .hero-page *::before, .hero-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

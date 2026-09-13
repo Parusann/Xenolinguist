@@ -1,0 +1,33 @@
+# Current limitations and evidence boundaries
+
+Applies to the `implementation/reliability` preview through W11. The public v1.0.0 installer predates W01–W11. Source version, application package version and a released artifact are different identities; no new installer is implied by this documentation.
+
+## Interpretation and AI
+
+- Exact dictionary lookup is not compositional translation. Grammar notes are not applied automatically. Morphology, ambiguous senses and Unicode normalization/tokenization remain incomplete; the Unicode browser case is an expected failure awaiting W16.
+- Number-system candidates show heuristic support and ties. User belief is optional, manually supplied and not a probability. Content counts are not evaluated language coverage.
+- Local-model output is advisory and can be inconsistent. Creative practice is graded against a model-generated key, not independently verified truth. The Eridian corpus is fictional teaching material, not a benchmark.
+- One synthetic model smoke comparison is not a quality ranking. There is no measured universal decipherment capability or click-consonant recognition claim. Reproducible compiler, benchmark splits and symbolic/hybrid evaluation are planned work.
+- Model metadata is rechecked at execution, but an inaccurately reporting daemon or external tag replacement lies outside that guarantee. Full immutable prompt/model-digest run provenance is unfinished.
+
+## Recordings and portability
+
+Phone analysis uses an English-trained wav2vec2 CTC model and emits approximate TIMIT ARPABET, despite legacy `ipa` API names. Tested input is mono PCM16 RIFF/WAVE at 16 kHz, 25 ms–120 seconds. Browser-prepared WAV/WebM flows pass; other codec combinations depend on browser support. Timings and transcription can be wrong, especially for unfamiliar or constructed speech.
+
+Original recording bytes are separate assets. JSON includes references and metadata, not the files. Dashboard JSON import replaces selected language fields but does not restore all exported state (including AI history, sandbox sessions and metric snapshots). CSV is dictionary interchange. A complete portable archive is pending.
+
+Audio assets are retained for undo/recovery; exhaustive garbage collection is unfinished. Delete AI history removes live records, not copies in snapshots or prior exports. Retained partial answers can lose the newest unflushed fragment in an abrupt crash.
+
+## Runtime, release and offline use
+
+Windows x64 is the only manifested native platform. Retained local unpacked-app tests and one independent W05 phone-runtime job do not certify a signed installer, every Windows version, physical microphones, a clean machine for every package, or macOS/Linux support. The old v1.0.0 download is unsigned and has not been upgraded by development commits.
+
+Offline use needs the application assets plus any selected model already installed. Downloads, external links and desktop update checks use the network. OS/browser speech fallback depends on the chosen voice. The static website is served by GitHub Pages; typing in its dictionary widget triggers no application/API requests.
+
+Availability probes report files/service metadata, not guaranteed inference. Queue deadlines and limits bound work, but no latency guarantee exists across hardware. Phone cancellation uses a disposable process, with model reload cost per job. Jobs are in-memory and are not resumed after restart. Large model inventories may take longer to probe than the UI refresh timeout. Local data is not encrypted at rest, and hostile software running as the same user is outside the local API boundary.
+
+## What has been checked
+
+[Testing](testing.md) links unit, browser, real-model and Windows evidence. The W10 baseline has 202 passing unit tests and three gated native skips, plus 22 working browser checks and one expected Unicode failure. Real generation and native phone cancellation are followed by successful subsequent requests. Save queues, audio drafts, sandbox sessions and AI proposals recover in the tested restart scenarios. These are engineering acceptance checks; they are not broad scientific accuracy results or exhaustive power-loss testing.
+
+Next packages add release gates, complete archives, deterministic language generation and independently scored evaluation. See [implementation progress](implementation-progress.md).

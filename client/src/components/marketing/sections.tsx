@@ -1,286 +1,87 @@
 import { useState } from 'react'
 import { HeroMark } from './HeroMark'
+import { DEMO_DICTIONARY, DEMO_INPUT, DEMO_VERSION, demoLookup } from 'shared/demo-presentation'
+import { PRIMARY_LABEL, REPO_URL, SOURCE_URL, SOURCE_REVISION } from '@/lib/site'
 
-/* ── Phases ribbon ────────────────────────────────────────────────────── */
 const PHASE_DEFS = [
-  { num: '01', glyph: '{ }', name: 'Samples', desc: 'Capture raw alien text. Tag the source, add phonetic notes, attach audio.', stamp: 'FOUNDATION' },
-  { num: '02', glyph: '#', name: 'Numbers', desc: 'Map number words. Detect the base. The Rosetta Stone of any new language.', stamp: 'FIRST WIN' },
-  { num: '03', glyph: 'Aa', name: 'Vocabulary', desc: 'Build the dictionary. Each word carries user belief, context, examples, alternates.', stamp: 'GROWING' },
-  { num: '04', glyph: '⟨⟩', name: 'Grammar', desc: 'Document rules — word order, morphology, structure. Each rule needs evidence.', stamp: 'STRUCTURE' },
-  { num: '05', glyph: '⇄', name: 'Translation', desc: 'Live word-by-word. Hover any token for candidates, user belief, source samples.', stamp: 'MOMENT' },
-  { num: '06', glyph: '◈', name: 'Dashboard', desc: 'Field log. Distinct evidence counts, saved metric history, guidance, import / export.', stamp: 'RECEIPT' },
+  { num: '01', glyph: '{ }', name: 'Samples', desc: 'Save text, context and original recordings. Request audio analysis when needed.' },
+  { num: '02', glyph: '#', name: 'Numbers', desc: 'Map words to integers. Explore candidate bases with visible support and ties.' },
+  { num: '03', glyph: 'Aa', name: 'Vocabulary', desc: 'Record meanings, examples and optional user belief. A rating is not measured accuracy.' },
+  { num: '04', glyph: '⟨⟩', name: 'Grammar', desc: 'Write grammar notes and supporting examples. Review local-model suggestions yourself.' },
+  { num: '05', glyph: '⇄', name: 'Translation', desc: 'Look up known words in source order. Unknown forms remain unresolved; grammar is not applied automatically.' },
+  { num: '06', glyph: '◈', name: 'Dashboard', desc: 'Review content counts and saved metric history. Export profile JSON or dictionary CSV; audio files are separate.' },
 ]
 
 export function PhasesSection() {
-  return (
-    <section id="method" className="section">
-      <div className="section-eyebrow">
-        <span className="acc">02</span>
-        <span className="ln" />
-        <span>The method</span>
-      </div>
-      <h2 className="section-title">
-        Six steps. <em>One workflow.</em><br />
-        From silence to sentence.
-      </h2>
-      <p className="section-sub">
-        Every unknown language is decoded the same way — collect raw, crack the numbers, build a dictionary, infer grammar, translate, look back. Xenolinguist turns that loop into a tool. Keyboard <span className="font-mono" style={{ color: 'var(--fg)' }}>1–6</span> jumps you between phases.
-      </p>
-
-      <div className="phases-ribbon">
-        {PHASE_DEFS.map((p, i) => (
-          <div key={i} className="phase-card">
-            <div className="num">PHASE {p.num}</div>
-            <div className="glyph">{p.glyph}</div>
-            <div className="pname">{p.name}</div>
-            <div className="pdesc">{p.desc}</div>
-            <div className="stamp">— {p.stamp}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-/* ── Interactive mini-decoder demo ────────────────────────────────────── */
-interface DictEntry { en: string; conf: number; pos: string }
-const DEMO_DICT: Record<string, DictEntry> = {
-  'nesh': { en: 'I', conf: 86, pos: 'pron' },
-  'tor': { en: 'see', conf: 79, pos: 'verb' },
-  'fen': { en: 'three', conf: 96, pos: 'num' },
-  'krash-ai': { en: 'stones', conf: 88, pos: 'noun' },
-  'ka-tev': { en: 'seven', conf: 94, pos: 'num' },
-  'shen': { en: 'big', conf: 81, pos: 'adj' },
-  'tin': { en: 'small/softly', conf: 80, pos: 'adj' },
-  'thaal': { en: 'sun', conf: 91, pos: 'noun' },
-  'vesh': { en: 'vessel', conf: 84, pos: 'noun' },
-  'mira': { en: 'water', conf: 88, pos: 'noun' },
-  'ek': { en: 'is/are', conf: 82, pos: 'verb' },
-  'lo': { en: 'you', conf: 85, pos: 'pron' },
-  'ra': { en: 'and', conf: 84, pos: 'conn' },
-  'kel': { en: 'give', conf: 78, pos: 'verb' },
-  'kurr': { en: '[?]', conf: 28, pos: '?' },
-  'tirek': { en: 'good/full', conf: 52, pos: 'adj' },
-}
-
-type Bucket = 'confirmed' | 'probable' | 'unknown'
-interface Decoded { tok: string; type?: 'punct'; en?: string; conf?: number; pos?: string; bucket?: Bucket }
-
-function tokensFromText(t: string): string[] {
-  return t.trim().split(/(\s+|[.,!?])/).filter((x) => x.trim().length > 0)
-}
-
-function bucket(c: number | null | undefined): Bucket | null {
-  if (c == null) return null
-  if (c >= 76) return 'confirmed'
-  if (c >= 41) return 'probable'
-  return 'unknown'
+  return <section id="method" className="section">
+    <div className="section-eyebrow"><span className="acc">02</span><span className="ln" /><span>The workflow · implementation preview</span></div>
+    <h2 className="section-title">Six phases.<br /><em>Build an interpretation.</em></h2>
+    <p className="section-sub">Move between observations, vocabulary and hypotheses as your corpus grows. These tools organize an investigation; they do not establish that an unknown language has been decoded. Keys 1–6 switch phases when you are not typing.</p>
+    <div className="phases-ribbon">{PHASE_DEFS.map(phase => <div key={phase.num} className="phase-card"><div className="num">PHASE {phase.num}</div><div className="glyph">{phase.glyph}</div><div className="pname">{phase.name}</div><div className="pdesc">{phase.desc}</div></div>)}</div>
+  </section>
 }
 
 export function DemoSection() {
-  const [input, setInput] = useState('nesh tor fen krash-ai. lo ra nesh, mira ek vesh.')
-  const tokens = tokensFromText(input)
-  const decoded: Decoded[] = tokens.map((tok) => {
-    const clean = tok.toLowerCase()
-    if (/^[.,!?]$/.test(tok)) return { tok, type: 'punct' }
-    const entry = DEMO_DICT[clean]
-    if (entry) return { tok, ...entry, bucket: bucket(entry.conf) ?? undefined }
-    return { tok, en: '[?]', conf: 14, pos: '?', bucket: 'unknown' }
-  })
-
-  const confirmed = decoded.filter((d) => d.bucket === 'confirmed').length
-  const probable = decoded.filter((d) => d.bucket === 'probable').length
-  const unknown = decoded.filter((d) => d.bucket === 'unknown').length
-  const words = decoded.filter((d) => d.type !== 'punct').length
-
-  const rowStyle: React.CSSProperties = {
-    display: 'flex', gap: 12, alignItems: 'center',
-    marginTop: 'auto', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-mute)',
-  }
-
-  return (
-    <section id="proof" className="section">
-      <div className="section-eyebrow">
-        <span className="acc">03</span>
-        <span className="ln" />
-        <span>Try it</span>
-      </div>
-      <h2 className="section-title">
-        Type some Eridian.<br />
-        Watch it <em>decode.</em>
-      </h2>
-      <p className="section-sub">
-        A 16-word Eridian fragment is loaded below. Edit the source on the left — the right side updates token-by-token, each word colored by its illustrative user belief rating in this demo dictionary.
-      </p>
-
-      <div className="demo-frame">
-        <div className="demo-bar">
-          <span className="dot-bar" />
-          <span className="dot-bar" />
-          <span className="dot-bar" />
-          <span style={{ marginLeft: 8 }}>xenolinguist · live translation · Eridian → English</span>
-          <span style={{ flex: 1 }} />
-          <span style={{ color: 'var(--accent)' }}>● gemma4:e4b · local</span>
+  const [input, setInput] = useState(DEMO_INPUT)
+  const decoded = demoLookup(input)
+  const words = decoded.filter(item => !item.punctuation)
+  const matched = words.filter(item => item.entry).length
+  return <section id="proof" className="section">
+    <div className="section-eyebrow"><span className="acc">03</span><span className="ln" /><span>Interactive dictionary demonstration</span></div>
+    <h2 className="section-title">Type some Eridian.<br /><em>Look up saved meanings.</em></h2>
+    <p className="section-sub">This browser-only widget uses the same {DEMO_DICTIONARY.size}-entry fictional dictionary as the app’s new Eridian demo ({DEMO_VERSION}). It makes no model or API requests. Matching is by exact word, ignoring case and simple punctuation; unknown words show [?].</p>
+    <div className="demo-frame">
+      <div className="demo-bar"><span className="dot-bar" /><span style={{ marginLeft: 8 }}>Eridian → saved English glosses</span><span style={{ flex: 1 }} /><span style={{ color: 'var(--accent)' }}>Local dictionary lookup · no AI</span></div>
+      <div className="demo-grid">
+        <div className="demo-pane">
+          <label htmlFor="demo-input">Source — Eridian</label>
+          <textarea id="demo-input" value={input} maxLength={2000} onChange={event => setInput(event.target.value)} aria-describedby="demo-help" />
+          <p id="demo-help" className="download-note">Try “ka nesh lor”, “sa ren ku vol”, or an unknown word. Inputs stay in this page and are not saved.</p>
+          <p className="download-note">{words.length} words · {matched} matched · {words.length - matched} unknown</p>
         </div>
-        <div className="demo-grid">
-          <div className="demo-pane">
-            <h4>Source — Eridian</h4>
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-                resize: 'vertical',
-                color: 'var(--fg)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 22,
-                lineHeight: 1.55,
-                minHeight: 180,
-                width: '100%',
-                padding: 0,
-              }}
-            />
-            <div style={rowStyle}>
-              <span>{words} tokens</span>
-              <span style={{ color: 'var(--fg-faint)' }}>·</span>
-              <span className="c-confirmed">{confirmed} high belief</span>
-              <span className="c-probable">{probable} moderate belief</span>
-              <span className="c-unknown">{unknown} unknown</span>
-            </div>
-          </div>
-          <div className="demo-pane">
-            <h4>Translation — English</h4>
-            <div style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 22, lineHeight: 1.55, fontWeight: 300, letterSpacing: '-0.005em',
-              flex: 1,
-            }}>
-              {decoded.map((d, i) => {
-                if (d.type === 'punct') return <span key={i} style={{ color: 'var(--fg-mute)' }}>{d.tok}</span>
-                const cls = 'wt-' + d.bucket
-                const color = d.bucket === 'confirmed' ? 'var(--conf-confirmed)' : d.bucket === 'probable' ? 'var(--conf-probable)' : 'var(--conf-unknown)'
-                return (
-                  <span key={i} className={'word-token ' + cls} title={`${d.tok} → ${d.en} · illustrative user belief ${d.conf}/100`} style={{ color }}>
-                    {d.en}{' '}
-                  </span>
-                )
-              })}
-            </div>
-            <div style={rowStyle}>
-              <span>{confirmed + probable}/{words} tokens matched in this illustrative dictionary</span>
-              <span style={{ flex: 1 }} />
-              <span>↑ try typing your own</span>
-            </div>
-          </div>
+        <div className="demo-pane">
+          <h4>Word glosses — source order</h4>
+          <output aria-label="Dictionary result" htmlFor="demo-input" className="demo-result">{decoded.map((item, i) => <span key={i} className={item.entry ? 'c-confirmed' : item.punctuation ? '' : 'c-unknown'} title={item.entry ? `${item.token}: ${item.entry.part_of_speech}` : undefined}>{!item.punctuation && i > 0 ? ' ' : ''}{item.gloss}</span>)}</output>
+          <p className="download-note">{matched}/{words.length} words matched. This is dictionary coverage for this input, not translation accuracy or a confidence score.</p>
         </div>
       </div>
-    </section>
-  )
+    </div>
+  </section>
 }
 
-/* ── Feature grid ─────────────────────────────────────────────────────── */
 const FEATURES = [
-  { ico: '⌂', title: 'Local-first', text: 'Everything — your samples, your dictionary, your AI inference — runs on your machine via Ollama. Nothing leaves.' },
-  { ico: '♪', title: 'Audio decoding', text: 'Drop in field recordings. Auto-segment, label phonemes, link clips to dictionary entries. Click consonants welcome.' },
-  { ico: '△', title: 'Confidence-aware', text: 'Every word, every rule, every translation carries a 0–100 score. Color, weight, opacity, blur — pick how you want to see it.' },
-  { ico: '◈', title: 'Sandbox mode', text: 'Let the AI generate a synthetic language with hidden rules. Practice decoding from scratch, then peek at the answer key.' },
+  { ico: '⌂', title: 'Controlled local inference', text: 'The preview verifies local completion-model metadata, shows setup status and supports cancelling queued or running jobs. Chat requires a separately installed Ollama model.' },
+  { ico: '♪', title: 'Recordings with provenance', text: 'Keep original audio alongside a prepared analysis copy. Windows checks cover PCM16 WAV, browser-prepared recordings, whisper transcription and approximate TIMIT ARPABET phones from an English-trained model.' },
+  { ico: '△', title: 'Evidence and user belief', text: 'Keep observed samples, asserted dictionary entries and optional belief ratings distinct. No probability of correctness or independently evaluated language coverage is claimed.' },
+  { ico: '◈', title: 'Creative practice', text: 'Generate a practice language with an eligible local model. Sessions and answers are saved. The generated answer key can be inconsistent, so practice scores are not scientific evaluation.' },
 ]
-
 export function FeaturesSection() {
-  return (
-    <section className="section" style={{ paddingTop: 24 }}>
-      <div className="features">
-        {FEATURES.map((f, i) => (
-          <div key={i} className="feature">
-            <div className="ico">{f.ico}</div>
-            <h3>{f.title}</h3>
-            <p>{f.text}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
+  return <section className="section" aria-label="Preview capabilities" style={{ paddingTop: 24 }}><div className="features">{FEATURES.map(feature => <div key={feature.title} className="feature"><div className="ico">{feature.ico}</div><h3>{feature.title}</h3><p>{feature.text}</p></div>)}</div></section>
 }
 
-/* ── Privacy block (editorial moment) ─────────────────────────────────── */
 export function PrivacySection() {
-  return (
-    <section id="privacy" className="section">
-      <div className="privacy-block">
-        <div className="section-eyebrow" style={{ marginBottom: 28 }}>
-          <span className="acc">04</span>
-          <span className="ln" />
-          <span>On privacy</span>
-        </div>
-        <div className="big-quote">
-          You're decoding a language nobody knows.<br />
-          We don't think your <em>only copy of it</em> should sit on someone else's server.
-        </div>
-        <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, maxWidth: 900 }}>
-          {[
-            { k: '100%', v: 'of inference runs locally via Ollama' },
-            { k: '0', v: 'bytes of your dictionary leave the machine' },
-            { k: 'JSON', v: 'round-trip: import, edit, export, version' },
-          ].map((s, i) => (
-            <div key={i}>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 200, color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.03em' }}>{s.k}</div>
-              <div style={{ marginTop: 8, fontSize: 13, color: 'var(--fg-1)', lineHeight: 1.5 }}>{s.v}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+  return <section id="privacy" className="section"><div className="privacy-block">
+    <div className="section-eyebrow"><span className="acc">04</span><span className="ln" /><span>Local data, explicit setup</span></div>
+    <div className="big-quote">Keep your corpus<br /><em>on your own machine.</em></div>
+    <p className="section-sub">Profiles and recordings are stored locally. In the implementation preview, generation accepts verified local completion models and rejects cloud-backed metadata. This depends on an accurately reporting local Ollama daemon.</p>
+    <p className="download-note">Offline work requires installed application assets and, for AI, a downloaded model and running Ollama. Installation, model downloads, external links and desktop update checks use the network. OS/browser speech fallback depends on the selected voice. The static website is hosted on GitHub Pages; its dictionary widget does not send your text to a server.</p>
+    <p className="download-note">JSON exports contain profile data and audio references, not recording bytes. A complete portable archive, reproducible language benchmarks and a deterministic language compiler are roadmap work.</p>
+    <a href={`${SOURCE_URL}/docs/limitations.md`} target="_blank" rel="noreferrer">Read the current limitations →</a>
+  </div></section>
 }
 
-/* ── Final CTA ────────────────────────────────────────────────────────── */
 export function FinalCTA({ onEnterApp }: { onEnterApp: () => void }) {
-  return (
-    <section id="open" className="final-cta">
-      <div className="section-eyebrow" style={{ justifyContent: 'center' }}>
-        <span className="ln" />
-        <span>Ready?</span>
-        <span className="ln" />
-      </div>
-      <h2>
-        Make first<br />
-        <em>contact.</em>
-      </h2>
-      <p className="sub">
-        Open the workbench. Drop in your first sample. The first sentence you decode is the one you'll remember.
-      </p>
-      <div style={{ display: 'inline-flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <button className="btn-hero primary" onClick={onEnterApp}>
-          <span>Open workbench</span>
-          <span style={{ fontFamily: 'var(--font-mono)' }}>→</span>
-        </button>
-        <button className="btn-hero" onClick={() => window.open('https://github.com/Parusann/Xenolinguist', '_blank', 'noopener,noreferrer')}>
-          <span>★ Star on GitHub</span>
-        </button>
-      </div>
-    </section>
-  )
+  return <section id="open" className="final-cta">
+    <div className="section-eyebrow" style={{ justifyContent: 'center' }}><span className="ln" /><span>Source & license</span><span className="ln" /></div>
+    <h2>Explore the<br /><em>implementation.</em></h2>
+    <p className="sub">Read the architecture, tests and known limits. The repository is publicly viewable under a proprietary license; the license grants no general reuse rights.</p>
+    <div className="hero-cta" style={{ justifyContent: 'center' }}><button className="btn-hero primary" onClick={onEnterApp}>{PRIMARY_LABEL} →</button><a className="btn-hero" href={SOURCE_URL} target="_blank" rel="noreferrer">View implementation source →</a></div>
+  </section>
 }
 
-/* ── Footer ───────────────────────────────────────────────────────────── */
 export function HeroFooter() {
-  return (
-    <footer className="hero-footer">
-      <span className="hero-mark-row">
-        <HeroMark size={18} />
-        <span className="word" style={{ fontSize: 13 }}><span className="light">xeno</span>linguist</span>
-      </span>
-      <span style={{ color: 'var(--fg-faint)' }}>·</span>
-      <span>v1.0.0</span>
-      <span style={{ color: 'var(--fg-faint)' }}>·</span>
-      <span>MIT</span>
-      <span className="grow" />
-      <a href="https://github.com/Parusann/Xenolinguist#readme" target="_blank" rel="noreferrer">Docs</a>
-      <a href="https://github.com/Parusann/Xenolinguist" target="_blank" rel="noreferrer">GitHub</a>
-      <a href="https://github.com/Parusann/Xenolinguist/releases" target="_blank" rel="noreferrer">Changelog</a>
-      <a href="https://github.com/Parusann" target="_blank" rel="noreferrer">@parusan</a>
-    </footer>
-  )
+  return <footer className="hero-footer"><span className="hero-mark-row"><HeroMark size={18} /><span className="word" style={{ fontSize: 13 }}><span className="light">xeno</span>linguist</span></span>
+    <span>Preview source {SOURCE_REVISION}</span><a href={`${REPO_URL}/blob/main/LICENSE`} target="_blank" rel="noreferrer">Proprietary license</a><span className="grow" />
+    <a href={`${SOURCE_URL}/docs/FEATURES.md`} target="_blank" rel="noreferrer">Feature reference</a><a href={`${REPO_URL}/releases`} target="_blank" rel="noreferrer">Releases</a><span>© 2026 Parusan Natheeswaran</span>
+  </footer>
 }

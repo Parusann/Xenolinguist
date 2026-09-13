@@ -1,10 +1,8 @@
-// Distinguishes the two builds produced from this one codebase:
-//   - desktop / in-app build  → VITE_PUBLIC_SITE unset → isPublicSite === false
-//   - public GitHub Pages build → workflow sets VITE_PUBLIC_SITE=true
 export const isPublicSite = import.meta.env.VITE_PUBLIC_SITE === 'true'
-
-// Direct installer URL injected by the Pages workflow from the latest GitHub
-// Release. Falls back to the releases page when not provided (e.g. local builds).
-export const DOWNLOAD_URL =
-  import.meta.env.VITE_DOWNLOAD_URL ||
-  'https://github.com/Parusann/Xenolinguist/releases/latest'
+export const REPO_URL = 'https://github.com/Parusann/Xenolinguist'
+// Keep the installer, tag, date and limitations together. Update after verifying a new release.
+export const RELEASE = { version: '1.0.0', tag: 'v1.0.0', date: '2026-06-14', bytes: 440684361 }
+export const DOWNLOAD_URL = `${REPO_URL}/releases/download/${RELEASE.tag}/Xenolinguist-Setup-${RELEASE.version}.exe`
+export const SOURCE_REVISION: string = import.meta.env.VITE_SOURCE_REVISION || 'unversioned'
+export const SOURCE_URL = `${REPO_URL}/tree/implementation/reliability`
+export const PRIMARY_LABEL = isPublicSite ? 'Download for Windows' : 'Open workbench'

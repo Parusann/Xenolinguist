@@ -1,217 +1,98 @@
-<p align="center">
-  <img src="client/public/logo.svg" alt="Xenolinguist" width="84" />
-</p>
+<p align="center"><img src="client/public/logo.svg" alt="Xenolinguist" width="84" /></p>
 
-<h1 align="center">Xenolinguist</h1>
+# Xenolinguist
 
-<p align="center">
-  <strong>A local-first desktop workbench for decoding unknown languages</strong><br/>
-  <em>From the first sample to the first sentence — everything runs offline on your machine.</em>
-</p>
+A local desktop workbench for constructed-language exploration: collect text and recordings, build a dictionary, record grammar hypotheses and review local-model suggestions. The project combines typed data contracts, recoverable storage, native audio processing and controlled inference. It does not autonomously decipher arbitrary unknown languages.
 
-<p align="center">
-  <a href="https://github.com/Parusann/Xenolinguist/releases/latest"><img src="https://img.shields.io/github/v/release/Parusann/Xenolinguist?label=download&color=00e676" alt="Latest release" /></a>
-  <img src="https://img.shields.io/badge/platform-Windows-0078D6?logo=windows&logoColor=white" alt="Windows" />
-  <img src="https://img.shields.io/badge/Electron-42-47848F?logo=electron&logoColor=white" alt="Electron" />
-  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React 19" />
-  <img src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white" alt="Vite 8" />
-  <img src="https://img.shields.io/badge/AI-Local%20Ollama-000?logo=ollama&logoColor=white" alt="Local Ollama" />
-  <img src="https://img.shields.io/badge/license-Proprietary-lightgrey" alt="Proprietary" />
-</p>
+## Download versus implementation preview
 
-<p align="center">
-  <img src="docs/screenshots/hero.png" alt="Xenolinguist" width="860" />
-</p>
+**Published installer:** [v1.0.0 for Windows x64](https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe), published June 14, 2026, 440,684,361 bytes, unsigned. [Release details](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0).
 
-Xenolinguist is a desktop app for **decoding a language you have no key to** — alien,
-constructed, or obscure. It turns the methodology of first-contact linguistics into a
-tool: capture raw samples, crack the number system, build a dictionary, infer grammar,
-and translate — with a **local LLM, audio playback, speech-to-text, and phonetic
-transcription** assisting the whole way. Nothing leaves your machine: all AI runs through
-a local **Ollama** model and all voice processing uses bundled binaries. No account, no cloud.
+**Current development:** [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). The W01–W11 improvements described below are **not in that published installer**. The package version remains 1.0.0 during development; source revision and retained verification records identify the tested builds. No new installer has been released as part of these changes.
 
----
+The old installer predates the repaired phone runtime, revision-checked saves, recovery, authenticated local API and controlled model setup. It can attempt an automatic Ollama model download. The pre-implementation packaged baseline failed phone analysis; that baseline is a separate artifact and does not certify the published installer. Windows may identify the unsigned installer as an unknown publisher. Review the [release boundary](docs/desktop-release.md) before installing.
 
-## ⬇ Download
+[Public website](https://parusann.github.io/Xenolinguist/) is deployed from `main`; changes on the implementation branch appear there only after deployment. Its browser dictionary demonstration needs no backend or model.
 
-> **[Download for Windows (v1.0.0)](https://github.com/Parusann/Xenolinguist/releases/latest/download/Xenolinguist-Setup-1.0.0.exe)**  ·  Try the landing page live at **[parusann.github.io/Xenolinguist](https://parusann.github.io/Xenolinguist/)**
+## What the implementation does
 
-- **Windows 10 / 11, 64-bit.** Download, run the installer, and you're decoding.
-- **Unsigned build** — Windows SmartScreen will warn "unknown publisher." Click
-  **More info → Run anyway.** It's [open source for inspection](https://github.com/Parusann/Xenolinguist).
-- **AI features** (translation, field notes, suggestions) use a free, local
-  [Ollama](https://ollama.com) model — install it and the rest of the workbench works offline without it.
+| Phase | Behavior | Interpretation limit |
+| --- | --- | --- |
+| Samples | Retains text drafts, original audio, prepared analysis copies and saved clip/word links | Recordings are observations; transcriptions can be wrong |
+| Numbers | Stores integer mappings and ranks candidate bases with explicit support and ties | Exploratory fit is not proof of a number system |
+| Vocabulary | Stores meanings, examples, alternates and optional user belief | User belief is not calibrated confidence |
+| Grammar | Stores grammar notes and examples; can request model advice | Rules are not automatically validated or applied by the lookup engine |
+| Translation | Looks up dictionary tokens in source order and shows unresolved forms | No compositional translation; Unicode normalization/tokenization still has known gaps |
+| Dashboard | Shows content counts and server-recorded metric history | Counts are not decoding accuracy or evaluated coverage |
 
-<p align="center">
-  <img src="docs/screenshots/download.png" alt="Download" width="820" />
-</p>
+Creative practice generates a language with a selected local model, validates its structure, saves the session and grades against the generated answer key. The key can be linguistically inconsistent. Practice scores are separate from scientific evaluation, and assistance is accounted for separately.
 
----
+The Eridian seed is a versioned fictional teaching corpus. The app, public dictionary widget and illustrative hero examples derive their meanings from the same source. Existing saved demo profiles are not overwritten by a seed update.
 
-## The six-phase decoding workflow
+![Eridian workbench with chat unavailable](docs/screenshots/w11-workbench.png)
 
-Every unknown language is cracked the same way. Xenolinguist turns that loop into six
-phases (jump between them with keys **1–6**), each building on the last.
+*W11 browser workbench: the shared fictional demo with manual work available and chat not ready. This is the implementation preview, not the published installer.*
 
-| # | Phase | What you do |
-|---|-------|-------------|
-| 1 | **Samples** | Capture raw alien text; tag the source, add phonetic notes, attach & transcribe audio. |
-| 2 | **Numbers** | Map number words to integers and **detect the base** — the Rosetta Stone of any new language. |
-| 3 | **Vocabulary** | Build a living dictionary; every entry carries a 0–100 confidence, part of speech, context, and examples. |
-| 4 | **Grammar** | Document word-order, morphology, and structural rules — each backed by evidence. |
-| 5 | **Translation** | Live word-by-word decoding, every token colored by confidence, with inline correction. |
-| 6 | **Dashboard** | A "Field Log": decoding %, milestones, discovery timeline, AI notes, and JSON/CSV import-export. |
+## Engineering behind the interface
 
-<p align="center"><img src="docs/screenshots/phase1-samples.png" alt="Phase 1 — Samples" width="780" /><br/><em>Phase 1 · Samples — capture raw text & audio, auto-decode against the dictionary</em></p>
-<p align="center"><img src="docs/screenshots/phase2-numbers.png" alt="Phase 2 — Numbers" width="780" /><br/><em>Phase 2 · Numbers — map number words and auto-detect the base (Eridian is base-8)</em></p>
-<p align="center"><img src="docs/screenshots/phase3-vocabulary.png" alt="Phase 3 — Vocabulary" width="780" /><br/><em>Phase 3 · Vocabulary — a confidence-bucketed dictionary with a per-word inspector</em></p>
-<p align="center"><img src="docs/screenshots/phase4-grammar.png" alt="Phase 4 — Grammar" width="780" /><br/><em>Phase 4 · Grammar — evidence-backed structural rules with confidence scores</em></p>
-<p align="center"><img src="docs/screenshots/phase5-translation.png" alt="Phase 5 — Translation" width="780" /><br/><em>Phase 5 · Translation — live word-by-word decoding, each token colored by confidence</em></p>
-<p align="center"><img src="docs/screenshots/phase6-dashboard.png" alt="Phase 6 — Dashboard" width="780" /><br/><em>Phase 6 · Dashboard — decoding progress, confidence distribution, milestones, field notes</em></p>
+- **Persistence:** shared Zod schemas, guarded legacy migration, revision conflicts, serialized typed mutations, idempotency receipts, atomic replacement and recovery snapshots. A durable client queue retains pending work through restart.
+- **Audio:** immutable staged originals with SHA256 identities, a worker-prepared analysis copy, explicit inference/retry and atomic sample/clip saves. Windows packaging checks manifested native assets and isolated runtime dependencies.
+- **Inference:** local-model eligibility checks, explicit downloads, task-specific context/output budgets, deadlines, bounded queues and NDJSON validation. Cancellation propagates to Ollama, whisper and a disposable phone process; capacity is released after cleanup.
+- **Security boundary:** a per-launch desktop credential delivered through IPC, trusted-main-frame API access, Host/Origin checks, sandboxed rendering, restricted navigation and permissions. See [local security](docs/local-security.md).
+- **Retained proposals:** profile-scoped chat and task output, including partial text, model name, task and errors. Retention is bounded; proposals remain advisory.
 
----
+Architecture and behavior: [feature reference](docs/FEATURES.md), [audio lifecycle](docs/audio-lifecycle.md), [runtime jobs](docs/runtime-jobs.md), [workspace evidence](docs/workspace-evidence.md), [sandbox sessions](docs/sandbox-sessions.md).
 
-## Features
+## Setup and offline operation
 
-### 🎙 Voice subsystem — fully local
-Drop in field recordings and decode them by ear and eye:
-- **Text-to-speech** — hear any word or sentence rendered by bundled **espeak-ng** (browser-speech fallback when unavailable).
-- **Speech-to-text** — bundled **whisper.cpp** transcribes recordings, with **honesty gating**: results are labeled *transcription* vs *phonetic-guess* so hallucinated text on alien audio is never presented as fact.
-- **Phonetic / IPA recognition** — an in-process **wav2vec2 CTC** model emits time-aligned phones that seed the audio segmenter and feed the LLM.
+Windows x64 is the only manifested native target. The Windows executable is tested locally; a complete signed-installer/clean-machine release gate remains pending. macOS/Linux packaging is not supported by the current native manifest.
 
-### 🤖 Local AI (Ollama)
-All inference is local and private. Streaming responses (SSE), automatic **heavy/light
-model routing** per task, an AI chat panel primed with your dictionary/grammar/samples,
-and background pattern suggestions as you work.
+Manual text, dictionary and grammar work do not require Ollama. For model assistance, install/start [Ollama](https://ollama.com), then use **Runtime & setup** to select an installed, verified local completion model. Downloads require an explicit click in the preview. The default `gemma4:e4b` is about 9.61 GB; optional `llama3.2:3b` is about 2.02 GB. Allow additional temporary disk space. Model speed and memory requirements depend on hardware; no broad quality ranking is established.
 
-### 🧪 Sandbox mode
-Not ready for a real language? The AI generates a synthetic conlang with **hidden rules**,
-then walks you through decoding it — Number Discovery → Word Mapping → Sentence Decoding →
-Grammar Revelation — across Easy / Medium / Hard difficulties.
+Native audio uses bundled eSpeak NG, whisper.cpp and a wav2vec2 CTC model. The phone endpoint accepts mono PCM16 RIFF/WAVE at 16 kHz, 25 ms–120 seconds, and emits approximate **TIMIT ARPABET** from an English-trained model. It is not strict IPA or a universal/click-consonant recognizer. Browser-decodable WAV/WebM recordings are prepared for analysis; codec support varies. See [phone model notes](docs/ipa-model-notes.md) and [third-party provenance](vendor/THIRD_PARTY.md).
 
-### 🎛 Confidence everywhere
-Every word, rule, and translation carries a **0–100 score** (≥76 confirmed · ≥41 probable ·
-below that unknown), surfaced through color and weight so you always know how solid the decode is.
+Local work can run offline once assets and any selected model are installed. Installation, downloads, external links and desktop update checks use the network. Browser/OS speech fallback depends on the selected voice. Local-model checks rely on accurate Ollama metadata. This is not an absolute guarantee against all network activity on the host.
 
-<p align="center"><img src="docs/screenshots/ai-chat.png" alt="AI chat" width="780" /><br/><em>The Decoder AI panel — a local model reasoning over your corpus, in context</em></p>
-<p align="center"><img src="docs/screenshots/sandbox.png" alt="Sandbox" width="780" /><br/><em>Sandbox — generate a hidden-rule language and practice decoding from scratch</em></p>
-<p align="center"><img src="docs/screenshots/command-palette.png" alt="Command palette" width="780" /><br/><em>Command palette (Ctrl/Cmd+K) — jump to any phase, tool, word, or sample</em></p>
+## Build and verify
 
----
+Use a compatible Node runtime and `npm ci`; the latest retained local source checks used Node 25.8.2, while the packaged Electron 42 runtime used Node 24.15.0. The public build dependency engines require Node 20.19+ or 22.12+ in their supported release lines. See the lockfile and [testing guide](docs/testing.md).
 
-## How it works
-
-```
-samples ──▶ numbers ──▶ vocabulary ──▶ grammar ──▶ translation ──▶ dashboard
-  │ raw text   │ crack       │ build the    │ infer      │ decode        │ review &
-  │ + audio    │ the base    │ dictionary   │ the rules  │ live          │ export
-```
-
-A profile (one decoded language) is one JSON file. Pick up where you left off, or
-import/export the whole thing. Start from zero, load the seeded **Eridian** demo, or
-let the Sandbox generate a fresh challenge.
-
-<p align="center"><img src="docs/screenshots/landing.png" alt="Profile selector" width="780" /><br/><em>Profile selector — your saved languages, plus New / Sandbox / Load-demo</em></p>
-
----
-
-## Tech stack
-
-| Layer | Technology |
-|-------|-----------|
-| **Desktop shell** | Electron 42, electron-builder (NSIS installer + auto-update) |
-| **Frontend** | React 19, TypeScript, Vite 8, Tailwind CSS 4 |
-| **Backend** | Node.js + Express (forked by Electron onto a loopback port) |
-| **AI** | Local **Ollama** (streaming chat, per-task model routing) |
-| **Voice** | espeak-ng (TTS) · whisper.cpp (STT) · Transformers.js wav2vec2 (IPA phones) |
-| **Storage** | File-based JSON profiles (local) |
-| **Repo** | npm-workspace monorepo — `client` / `server` / `shared` / `electron` |
-
----
-
-## Build from source
-
-> For end users, the [installer](#-download) is all you need. This section is for developers.
-
-**Prerequisites:** Node.js 20+, and [Ollama](https://ollama.com) running with a chat model pulled.
-
-```bash
-git clone https://github.com/Parusann/Xenolinguist.git
+```sh
+git clone --branch implementation/reliability https://github.com/Parusann/Xenolinguist.git
 cd Xenolinguist
-npm install
-
-# Pull the default model for AI features (any chat model works — set OLLAMA_MODEL to override)
-ollama pull gemma4:e4b
-
-# Run the web app (client :5173 + API :3001)
+npm ci
+npm run provision:models
+# If the ignored native model is absent, explicitly download its pinned distribution:
+npm run provision:models -- --download
+npm run build:desktop
 npm run dev
+```
 
-# …or run the full desktop app
-npm run electron:dev
+Direct development browser use requires the one-time local pairing code printed by the backend. Open the Vite URL, choose the workbench and enter that code. `npm run electron:dev` starts the desktop development flow. Voice paths must be configured for direct development; the packaged app resolves its bundled resources. Model downloads are optional and separate from native asset provisioning.
 
-# …or build the distributable installer (output in release/)
+```sh
+npm run typecheck
+npm run lint -w client
+npm test
+npm run test:e2e
+# Build the Windows artifact locally; this command does not publish a release:
 npm run dist
-
-# Run the test suites (Vitest — 51 server + 12 client cases)
-npm test -w server
-npm test -w client
 ```
 
-<p align="center"><img src="docs/screenshots/new-profile.png" alt="New profile" width="780" /><br/><em>Creating a new language profile</em></p>
+The W10 baseline has 202 passing unit tests with three gated native skips, 22 working browser checks and one existing expected Unicode failure. Separate native and real-model probes verify cancellation, subsequent inference and restart recovery. W11 adds shared-demo and public-presentation checks; current results and commands are in [testing](docs/testing.md). Passing smoke tests do not establish linguistic quality or certify the old installer.
 
-### Configuration
+Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only), `OLLAMA_MODEL`, `WHISPER_TIMEOUT_MS`, `TTS_TIMEOUT_MS` and the native asset paths. Context/output budgets and generation deadlines are server-owned; the former `OLLAMA_TIMEOUT_MS` setting does not control the current generation service.
 
-All optional — sensible defaults are baked in (see `.env.example`).
+![Public dictionary demonstration](docs/screenshots/w11-dictionary.png)
 
-| Variable | Default | Meaning |
-|----------|---------|---------|
-| `DATA_DIR` | `server/data` (dev) | Where profiles + audio are stored (Electron sets this in prod) |
-| `OLLAMA_MODEL` | `gemma4:e4b` | Default model for new chats |
-| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama endpoint |
-| `OLLAMA_TIMEOUT_MS` | `120000` | Per-request / per-token Ollama watchdog |
-| `WHISPER_TIMEOUT_MS` | `120000` | Max wall-clock for one whisper run |
-| `TTS_TIMEOUT_MS` | `30000` | Max wall-clock for one espeak run |
-| `PORT` | `3001` | API port (`0` = OS-assigned, used in prod) |
-| `ESPEAK_PATH` / `WHISPER_BIN` / `WHISPER_MODEL` / `IPA_MODEL_DIR` | bundled (Windows) | Voice binary / model paths |
+*W11 public-page preview: exact lookup using the app’s Eridian seed, with no model requests. [Screenshot provenance](docs/screenshots/README.md).*
 
-**Full HTTP API reference:** see [`docs/FEATURES.md`](docs/FEATURES.md) §14. The complete
-feature reference for the whole app lives in [`docs/FEATURES.md`](docs/FEATURES.md).
+## Export and remaining work
 
----
+Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
 
-## Project structure
-
-```
-Xenolinguist/
-├── client/            # React SPA (Vite)
-│   └── src/components/
-│       ├── marketing/        # the public landing / download page
-│       ├── landing/          # profile selector + setup
-│       ├── layout/           # shell, sidebar, command palette, AI chat, tour
-│       ├── phase1-samples … phase6-dashboard/
-│       ├── sandbox/          # AI-generated practice language
-│       └── audio/            # recorder, player, waveform, segmenter
-├── server/            # Express API (profiles, ollama, ai, audio, tts, stt, ipa)
-├── shared/            # types, constants, AI prompts
-├── electron/          # main / preload / builder config
-├── vendor/            # bundled voice binaries + IPA model
-├── scripts/           # build, bundle, capture-screenshots, verify-*
-└── docs/              # FEATURES.md, screenshots, design specs
-```
-
----
-
-## A look at the landing site
-
-<p align="center"><img src="docs/screenshots/method.png" alt="Method" width="760" /></p>
-<p align="center"><img src="docs/screenshots/demo.png" alt="Interactive demo" width="760" /></p>
-<p align="center"><img src="docs/screenshots/features.png" alt="Features" width="760" /></p>
-<p align="center"><img src="docs/screenshots/privacy.png" alt="Privacy" width="760" /></p>
-
----
+Next work includes automated release gates, a complete portable archive, a deterministic language compiler, reproducible benchmark comparisons and a stronger linguistic inference engine. These are roadmap items. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
 
 ## License
 
-Copyright (c) 2026 Parusan Natheeswaran. All Rights Reserved.
-
-This software is proprietary. See [LICENSE](LICENSE) for details.
+Copyright (c) 2026 Parusan Natheeswaran. All Rights Reserved. The repository is publicly viewable, but the project is proprietary and the [LICENSE](LICENSE) grants no general reuse rights. Third-party dependencies and native assets retain their own [licenses and notices](vendor/THIRD_PARTY.md).

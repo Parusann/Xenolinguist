@@ -1,14 +1,9 @@
 import type { LanguageProfile } from './types';
 
-/**
- * A pre-seeded demo language ("Eridian") for exploring the Xenolinguist workflow
- * without starting from zero. Internally consistent: every word used in the samples
- * and grammar evidence appears in the dictionary, the number system is base-8, and
- * grammar is Subject-Object-Verb. Created via POST /api/profiles/demo.
- *
- * Nested entries carry fixed ids + created_at (unique within the profile); the server
- * assigns the profile id/created_at/updated_at on creation.
- */
+/** Fictional teaching corpus shared by the app and website. Ratings are illustrative
+ * user beliefs; these hand-authored examples are not an evaluated language compiler.
+ * Existing saved profiles are not overwritten when this seed changes. */
+export const DEMO_VERSION = 'eridian-demo-2';
 const T = '2026-06-07T00:00:00.000Z';
 
 export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated_at'> = {
@@ -17,7 +12,7 @@ export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated
   recent_mutations: [],
   name: 'Eridian',
   description:
-    'A partially-decoded demo language for exploring the decoding workflow. Base-8 number system, Subject-Object-Verb word order, and a mix of confirmed and unconfirmed vocabulary.',
+    `Fictional teaching corpus ${DEMO_VERSION}. Base-8 numbers and illustrative grammar notes. Vocabulary ratings represent example user beliefs, not measured accuracy.`,
   phonetic_notes:
     'Five vowels (a e i o u) and consonants k t n s r v l m + digraphs sh, th. Syllables are (C)V(C); stress falls on the first syllable. A glottal stop marks word boundaries in connected speech.',
   is_sandbox: false,
@@ -57,6 +52,8 @@ export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated
     { id: 'word-17', alien_word: 'ven', english_meaning: 'and / with', part_of_speech: 'connector', confidence: 84, context: 'Joins two nouns', examples: ['ka ven zo'], notes: '', created_at: T },
     { id: 'word-18', alien_word: 'ix', english_meaning: 'not (negation)', part_of_speech: 'particle', confidence: 80, context: 'Precedes the verb', examples: ['ka ix mok'], notes: '', created_at: T },
     { id: 'word-19', alien_word: 'sa', english_meaning: 'one', part_of_speech: 'number', confidence: 95, context: 'Counting sequence', examples: ['sa ren ku vol'], notes: 'Base-8 digit.', created_at: T },
+    { id: 'word-21', alien_word: 'ku', english_meaning: 'three', part_of_speech: 'number', confidence: 92, context: 'Counting sequence', examples: ['sa ren ku vol'], notes: 'Base-8 digit.', created_at: T },
+    { id: 'word-22', alien_word: 'vol', english_meaning: 'four', part_of_speech: 'number', confidence: 92, context: 'Counting sequence', examples: ['sa ren ku vol'], notes: 'Base-8 digit.', created_at: T },
     { id: 'word-20', alien_word: 'ren', english_meaning: 'two', part_of_speech: 'number', confidence: 92, context: 'Counting sequence', examples: ['sa ren ku vol'], notes: 'Base-8 digit.', created_at: T },
   ],
   grammar_rules: [

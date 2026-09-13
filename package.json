@@ -21,7 +21,8 @@
     "test:e2e:run": "playwright test",
     "verify:release": "node scripts/verify-release.mjs",
     "provision:models": "node scripts/provision-models.mjs",
-    "stage:runtime": "node scripts/stage-runtime.mjs"
+    "stage:runtime": "node scripts/stage-runtime.mjs",
+    "test:public": "node scripts/build-public.mjs && playwright test --config playwright.public.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

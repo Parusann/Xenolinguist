@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { isPublicSite } from '@/lib/site'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { SessionLogProvider } from '@/stores/session-log-context'
 import { OllamaProvider } from '@/stores/ollama-context'
@@ -30,7 +31,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HeroPage />} />
-      <Route path="/app" element={<LocalSessionGate><Workbench /></LocalSessionGate>} />
+      <Route path="/app" element={isPublicSite ? <Navigate to="/#download" replace /> : <LocalSessionGate><Workbench /></LocalSessionGate>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

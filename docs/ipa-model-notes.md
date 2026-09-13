@@ -2,6 +2,8 @@
 
 The phone service loads a local wav2vec2 CTC model and returns **TIMIT ARPABET phones from an English-trained model**, with approximate 20 ms frame timings. The existing `/api/ipa` route and `ipa` field remain compatibility names. This is not strict IPA, a universal phoneme recognizer, or an accuracy benchmark.
 
+This document describes the implementation preview. The published v1.0.0 installer predates these repairs; see [release status](desktop-release.md).
+
 ## Runtime resolution
 
 Development uses the installed Transformers package. Electron passes `XENO_RUNTIME_ROOT` pointing to `resources/server-deps`. `model-loader.ts` uses a `createRequire` anchor inside that directory and the package's supported Node require export. It rejects resolution outside that root. This removes the former reliance on `NODE_PATH`, which [Node ESM does not use](https://nodejs.org/api/esm.html#no-node_path). The anchor follows [Node's createRequire API](https://nodejs.org/api/module.html#modulecreaterequirefilename).
@@ -30,9 +32,9 @@ The distributed ONNX weights have SHA256 `8c4299744f0b7998c4fdc53438fa76835eaf9f
 
 Input must be RIFF/WAVE, mono PCM16 at 16000 Hz, between 25 ms and 120 seconds. Container sizes, chunk bounds, sample format, byte rate, block alignment and complete PCM samples are validated before loading a model. Unsupported containers, empty data, truncated chunks and incorrect rates/channels return HTTP 400 with `IPA_UNSUPPORTED_INPUT`.
 
-Failed loads clear the initialization promise, allowing retry; simultaneous first requests share initialization. Capability failures return HTTP 503 with a safe code and request ID: `IPA_MODEL_MISSING`, `IPA_MODEL_INVALID`, `IPA_PACKAGE_MISSING`, `IPA_NATIVE_LOAD_FAILED`, `IPA_MODEL_LOAD_FAILED`, or `IPA_INFERENCE_FAILED`. Detailed loader diagnostics remain local. The recorder displays actionable errors and retains its recording when phone analysis is unavailable. Independent analysis/retry controls and audio transactions belong to W06.
+Each W10 phone job runs in a fresh disposable child process. Failed initialization is isolated to that job; a later job can retry. Jobs share the acoustic lane with whisper and cancellation kills the child and waits for exit before releasing capacity. Capability failures return HTTP 503 with a safe code and request ID: `IPA_MODEL_MISSING`, `IPA_MODEL_INVALID`, `IPA_PACKAGE_MISSING`, `IPA_NATIVE_LOAD_FAILED`, `IPA_MODEL_LOAD_FAILED`, or `IPA_INFERENCE_FAILED`. Detailed loader diagnostics remain local. The recorder displays actionable errors and retains its recording when phone analysis is unavailable. The W06 audio flow provides independent analysis/retry controls and atomic audio transactions.
 
-Success includes `ipa`, `segments`, and `identity` containing the model ID/hash, output alphabet, Transformers version, backend and Node runtime version. Initial loading verifies the full model once; it is not continuously monitored for external file changes. A 120-second input limit bounds request size but is not a performance target or a calibrated acoustic limit.
+Success includes `ipa`, `segments`, and `identity` containing the model ID/hash, output alphabet, Transformers version, backend and Node runtime version. Initial loading verifies the full model once per child process; it is not continuously monitored during that inference. A 120-second input limit bounds request size but is not a performance target or a calibrated acoustic limit.
 
 ## Verification
 

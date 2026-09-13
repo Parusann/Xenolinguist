@@ -1,80 +1,58 @@
-# Desktop release
+# Desktop builds and release status
 
-## One-time prerequisites (maintainer provides)
-- **macOS:** Apple Developer ID Application cert + notarization creds
-  (`CSC_LINK`, `CSC_KEY_PASSWORD`, `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID`).
-- **Windows:** code-signing cert (`CSC_LINK`, `CSC_KEY_PASSWORD`).
-- **GitHub token** with `repo` scope as `GH_TOKEN` for publishing.
+## Published artifact versus development
 
-## Cut a release
-1. Bump `version` in `package.json`.
-2. `npm run dist` locally to smoke-test the installer (unsigned is fine for local testing).
-3. With the env vars above set: `npx electron-builder --config electron/builder.config.cjs --publish always`.
-4. electron-builder uploads the built artifacts + `latest.yml` to a GitHub Release;
-   installed apps auto-update on next launch via `electron-updater`.
+The latest published installer verified through GitHub release metadata on September 13, 2026 is [v1.0.0](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0), published June 14, 2026. Its asset is [Xenolinguist-Setup-1.0.0.exe](https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe), 440,684,361 bytes, SHA256 `5974906a74a11eb7d4e14c0923ec5ff870e5669ad050b832b10b773e8491c6b5`. The release is unsigned. Metadata/HTTP reachability checks are not installer execution tests.
 
-Unsigned builds run but show OS "unidentified developer" / SmartScreen warnings. v1.0.0
-shipped publicly unsigned by decision — the free+local rule rules out paid certs, and the
-download page documents the SmartScreen bypass. If the project ever adopts a cert (e.g.
-Azure Trusted Signing or an Apple Developer ID), the prerequisites above apply and
-signing slots back into the release flow.
+The `implementation/reliability` preview contains W01–W11 changes that are absent from that installer. The package version is still 1.0.0; identify preview builds by source revision, working-file hashes and artifact hashes in [verification records](verification/), not by the package version alone. The published tag's startup code can pull the default Ollama model automatically. W10 removed that behavior from the preview.
 
-## Windows: building without admin (winCodeSign symlink workaround)
+The old installer predates the repaired native dependency layout, durable saves and audio drafts, authenticated local API, verified local model selection and cancellable jobs. The [pre-implementation baseline](testing-baseline.json) reproduced phone-loading failure in a separately packaged artifact. Later successful Windows probes verify their own artifacts; they do not retroactively certify the old installer.
 
-On Windows, `electron-builder` extracts its `winCodeSign` tool, which contains macOS
-`.dylib` **symlinks**. Creating symlinks needs a privilege a normal user lacks, so the
-NSIS build fails with:
+Windows x64 is the only current native packaging target. `beforePack` rejects other targets because the manifest only covers Windows x64. Legacy macOS/Linux builder fields do not establish platform support. Do not describe an unpacked acceptance run as signed-installer or clean-machine installation certification.
 
-```
-ERROR: Cannot create symbolic link : A required privilege is not held by the client.
-  ... winCodeSign\<hash>\darwin\10.12\lib\libcrypto.dylib
+## Build a local preview
+
+Use a Node release compatible with locked dependencies, install with `npm ci`, and preserve all third-party notices. Local W10 checks used Node 25.8.2; the Electron 42 artifact embeds Node 24.15.0. Provision exact native assets before packaging:
+
+```sh
+npm ci
+npm run provision:models
+# Explicitly retrieve the pinned distribution only if the ignored model is absent:
+npm run provision:models -- --download
+npm run typecheck
+npm run lint -w client
+npm test
+npm run test:e2e
+npm run test:public
+npm run dist
 ```
 
-Two fixes (the macOS files are irrelevant to a Windows build):
+The asset provisioner validates checksums and fails rather than silently replacing mismatched files. It can also use a checksum-matching local installer with `--release-file=C:/Downloads/Xenolinguist-Setup-1.0.0.exe`. See [phone provisioning](ipa-model-notes.md).
 
-- **Preferred:** enable **Developer Mode** (Settings → Privacy & security → For developers)
-  or run the build from an elevated terminal, then `npm run dist`.
-- **No-admin workaround:** pre-extract `winCodeSign` into the cache *excluding* `darwin`,
-  so electron-builder finds a valid cache and skips its own (failing) extraction:
+The build bundles main, preload, backend and phone-child entries, stages production native dependencies outside ASAR, verifies lockfile versions and manifests, and packages the SPA plus native resources. The Windows output is `release/Xenolinguist-Setup-<version>.exe` and an unpacked executable. Ollama models are a separate optional installation; the preview does not pull them at startup.
 
-  ```bash
-  CACHE="$LOCALAPPDATA/electron-builder/Cache/winCodeSign"
-  SZA="node_modules/7zip-bin/win/x64/7za.exe"
-  # any of the cached *.7z is winCodeSign-2.6.0.7z
-  "$SZA" x "$CACHE/<one>.7z" -o"$CACHE/winCodeSign-2.6.0" '-xr!darwin' -y
-  CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist
-  ```
+A packaged probe should run outside the source checkout. For negative model checks, use an isolated `xeno-acceptance-*` copy under system temp, as enforced by the verifier:
 
-Either way the output (`release/Xenolinguist Setup <ver>.exe`) is **unsigned** — it runs
-but shows a SmartScreen "unknown publisher" prompt until real signing certs are configured.
+```sh
+npm run verify:release -- C:/Users/<user>/AppData/Local/Temp/xeno-acceptance-build/win-unpacked/Xenolinguist.exe test-results/release.json --negative-model
+```
 
-## Vendoring whisper.cpp (Windows) — voice Increment 2 (STT)
+That probe exercises the actual packaged runtime, native audio, API boundary and close/relaunch recovery. Synthetic fixtures do not establish physical microphone compatibility or linguistic accuracy. `node scripts/verify-local-chat.mjs` separately checks an already-installed local model, rejection of remote/embedding models and real generation cancellation/retry; it downloads no models.
 
-The speech-to-text sidecar bundles a prebuilt whisper.cpp CPU binary + a quantized model
-under `vendor/whisper/win/`, shipped to `resources/whisper/` via `extraResources`. The
-Electron main process sets `WHISPER_BIN`/`WHISPER_MODEL` (win32 only, `existsSync`-guarded);
-elsewhere they stay unset and `/api/stt` returns 503 (the UI degrades gracefully).
+## Preparing a future release
 
-Vendored files (do **not** add the other tools or `SDL2.dll` — `whisper-cli` only needs these):
+A commit/push to the implementation branch does not publish an installer. Before a future explicitly chosen release:
 
-- From the **whisper.cpp v1.8.6** GitHub release asset `whisper-bin-x64.zip` (the plain **CPU**
-  build — portable, no CUDA/BLAS deps): `whisper-cli.exe`, `whisper.dll`, `ggml.dll`,
-  `ggml-base.dll`, `ggml-cpu.dll`.
-- Model `ggml-base-q5_1.bin` (~57 MB, multilingual) from
-  `https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin`.
+1. Select a source revision and a new package/release version. Run the applicable unit, browser, public-page and packaged checks; retain hashes and limitations.
+2. Build the Windows installer from that verified source. Exercise installation and upgrade in an isolated environment; an unpacked test alone is insufficient.
+3. Decide and document signing status. A configured Windows certificate may use `CSC_LINK` and `CSC_KEY_PASSWORD`; an unsigned build will not gain trust from source visibility.
+4. Publish the exact checked artifact and updater metadata through the release workflow with the required GitHub credentials. Never put credentials into source or logs.
+5. Update `client/src/lib/site.ts` release version, date, size and URL together, and update its corresponding limitations, README and release notes. Verify the actual asset destination before deploying Pages.
 
-`.gitattributes` marks `vendor/whisper/win/*`, `*.dll`, `*.bin`, `*.wav` as `binary` so the
-exe/DLLs/model and the test WAV fixture aren't corrupted by line-ending conversion.
+The desktop calls `electron-updater.checkForUpdatesAndNotify()` in packaged operation. This uses the network; successful update/rollback behavior is not certified by the local runtime tests. W12/W25 contain the broader release gates.
 
-**Verify the bundled binary transcribes:** `node scripts/verify-stt.mjs` (runs the real
-spawn → JSON → language/mode path against `server/src/__tests__/fixtures/hello-16k.wav`;
-expects `mode: transcription`). This is the canonical check — the vitest gated test
-(`WHISPER_E2E=1`) is unreliable on Windows because vitest's forked worker can't spawn the
-multi-DLL `whisper-cli.exe`.
+## Native maintenance
 
-**To re-vendor / upgrade:** download the matching `whisper-bin-x64.zip` for the new release,
-copy the 5 files above, and re-run `verify-stt.mjs`.
+`vendor/model-manifest.json` and `vendor/THIRD_PARTY.md` are authoritative for shipped bytes and notices. Upgrade the whisper binary, dependent DLLs and model as a coherent set; update hashes and rerun native verification. Do not copy arbitrary latest binaries over manifested assets or claim reproducibility of a conversion whose original tool/model revision is unknown.
 
-**macOS / Linux:** not yet vendored — STT degrades to browser/none there until those builds
-add their whisper binaries. (Same staged approach as espeak-ng in Increment 1.)
-
+Windows packaging can require privileges for electron-builder's helper symlinks. Use an appropriately configured Windows build environment and record failures; do not bypass failed asset or runtime checks. No signed or cross-platform release is produced by this documentation update.

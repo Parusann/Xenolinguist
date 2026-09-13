@@ -1,0 +1,362 @@
+{
+  "recordedAt": "2026-09-13T21:51:46.201Z",
+  "source": {
+    "revision": "71d69dc399c784bcdd934733b4d868b4f47e034b",
+    "branch": "implementation/reliability",
+    "workingFiles": [
+      {
+        "file": ".github/workflows/pages.yml",
+        "sha256": "5545015936fd4c1b315e61094e360be31e1206ccabb8b9dfe4d9b5003aa02995"
+      },
+      {
+        "file": "README.md",
+        "sha256": "bacf268638ed70e9e130bfa146f74f383038cb7e59fd00e18fac6773e54531ac"
+      },
+      {
+        "file": "client/README.md",
+        "sha256": "7658f6cffad788a5db0eb57f0e7c5fb838dc67fdb12c001b64aff379c7a8e496"
+      },
+      {
+        "file": "client/src/App.tsx",
+        "sha256": "86198504fab7af67d00cf9999c9d45d6c66ce2566b3efbf8cb9d18e5949ac67e"
+      },
+      {
+        "file": "client/src/components/marketing/DecodeMoment.tsx",
+        "sha256": "e77a996e163acfddd606fa039a070378d6540bd317f4d7e9314f628d17de5c4b"
+      },
+      {
+        "file": "client/src/components/marketing/DownloadSection.test.tsx",
+        "sha256": "df863376befe06513e9a84fa0005dafae714cc0df37b5020c2c0daa34d0300d1"
+      },
+      {
+        "file": "client/src/components/marketing/DownloadSection.tsx",
+        "sha256": "aeab00ac5d6b040a3fdb6754dba6d51fc2d10cce7bbba527386b148341afc54f"
+      },
+      {
+        "file": "client/src/components/marketing/HeroPage.tsx",
+        "sha256": "12907ad1858eeb7b181d90237ef0ac02a5904341289c980c427bd5c14beeb271"
+      },
+      {
+        "file": "client/src/components/marketing/sections.tsx",
+        "sha256": "3024e38842f8eaae68be9bf7d3f6b13dc25c8a2f372ee968f48c7d3d8f1500f8"
+      },
+      {
+        "file": "client/src/lib/site.ts",
+        "sha256": "cc4aae22f1dd024a87f51ea475c26d61097586524988b6623bf6cdde8ec22d7e"
+      },
+      {
+        "file": "client/src/marketing.css",
+        "sha256": "d262b7f684a8a12c6d68504f0a43631161df1e1a85a02b7ac933fbb01b568d0e"
+      },
+      {
+        "file": "client/src/vite-env.d.ts",
+        "sha256": "24769e3aae76f9ef8bb273d9327671151395ac09f6807a7b01b1d53bdbfc809f"
+      },
+      {
+        "file": "client/vite.config.ts",
+        "sha256": "c5c20758c02e2f7d4382cedef9118821fd2491f1417a067d207648c35a42855a"
+      },
+      {
+        "file": "docs/FEATURES.md",
+        "sha256": "3fa6dfcfdf3a4af01ff278b918cf4402262aa6dfb3c8f6a3a505763e83f56936"
+      },
+      {
+        "file": "docs/desktop-release.md",
+        "sha256": "1ff04e498b5d273205a256e71eebab246daa455b8b6e16d4ed98c234a72eebab"
+      },
+      {
+        "file": "docs/implementation-progress.md",
+        "sha256": "43edfab812d364b3428d102887a738864f430b298a24f65eabd1ab0b6b88f01b"
+      },
+      {
+        "file": "docs/ipa-model-notes.md",
+        "sha256": "ea0610f940abaaa03b69841ce3eb5c65349dbbd6a7abddf1c56e6e92c52d96e4"
+      },
+      {
+        "file": "docs/limitations.md",
+        "sha256": "0425eb49a2d256cdef8889835eca77f5ad521228b482caf8a704ebf8b6815a37"
+      },
+      {
+        "file": "docs/public-presentation.md",
+        "sha256": "4d6539203821ff97be05620f6bc7f9083e2d4472f7ca4aafcf4e6527b0e6dbbc"
+      },
+      {
+        "file": "docs/screenshots/README.md",
+        "sha256": "30e59857db11f5f2feb1371318e1bc6b63b5f9ccd579e5d067f3db7560522d4f"
+      },
+      {
+        "file": "docs/screenshots/w11-dictionary.png",
+        "sha256": "b6b497dfaab41b2c9c0868c89b45952c1ddd154c63463546bcee1810eca83ffb"
+      },
+      {
+        "file": "docs/screenshots/w11-download.png",
+        "sha256": "2ccb1d9a9f6f643888ce6e16ac15a121f0570ee00a066a760e029053660bdfba"
+      },
+      {
+        "file": "docs/screenshots/w11-hero.png",
+        "sha256": "17634fdcf9260e9ad7160888d9e864034488ab887eea76134f921cd215c6aecf"
+      },
+      {
+        "file": "docs/screenshots/w11-workbench.png",
+        "sha256": "733282f8ab41c22292b1f16d66ee70bf84ca2ff40c4d70d1792d5bdcbe63e547"
+      },
+      {
+        "file": "docs/testing.md",
+        "sha256": "e587267828af8ce34dd6da4ab09551120da4e5720609509827e75dd9c3ea1300"
+      },
+      {
+        "file": "package.json",
+        "sha256": "10990097c7eebed141786cf865036e58628d1debe670dc2ee4a274591c67061c"
+      },
+      {
+        "file": "playwright.public.config.ts",
+        "sha256": "5260412c7b26d32f8a3eaf27f42de1eb3868f25db11c14e2ca5c126f303e1de3"
+      },
+      {
+        "file": "scripts/build-public.mjs",
+        "sha256": "c0fae598e67c4a94abd161d39eaca1822e84c33369dfbbb7e2ae22fa504c357e"
+      },
+      {
+        "file": "server/src/__tests__/demo-presentation.test.ts",
+        "sha256": "4ca636a8f1fe46e0ac86969d14afe552762d8699d720409eca5c166b4484c6da"
+      },
+      {
+        "file": "shared/demo-language.ts",
+        "sha256": "4cfc24977d7792c9654cac487365d74686115b8867a1a52f9edb0932b5d765da"
+      },
+      {
+        "file": "shared/demo-presentation.ts",
+        "sha256": "916c6dbdbd955d65c080543594b4feddad5011c135851a4e31fdd11b2aa12d32"
+      },
+      {
+        "file": "tests/e2e/demo-presentation.spec.ts",
+        "sha256": "45b1218725f4bac32b9358640912f2de25ef61c83f84b2d9ec60efe014ebaa3f"
+      },
+      {
+        "file": "tests/public/marketing.spec.ts",
+        "sha256": "7de7f35ccdd49677e3994a0cc20d374361398d3a4e04b4ed6b69ea19e73d0564"
+      },
+      {
+        "file": "tests/tsconfig.json",
+        "sha256": "47131902b903cb1b056408dc48e538594dcd34979cb935796936ac572bed36d5"
+      }
+    ],
+    "node": "25.8.2",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "sourceNote": "Working implementation above the named parent revision; file hashes identify this state. Documentation and this compact record were completed after the tested flows. Public screenshots show the source label with +working. Final public tests and builds include the gloss punctuation fix; the complete workbench run preceded that presentation-only fix.",
+  "acceptancePassed": true,
+  "unitChecks": {
+    "serverAndSharedPassed": 174,
+    "clientPassed": 30,
+    "gatedNativeSkipped": 3
+  },
+  "publicChecks": [
+    {
+      "title": "public dictionary uses canonical meanings without model or API requests",
+      "expected": "passed",
+      "status": "expected"
+    },
+    {
+      "title": "download actions expose a pinned release and distinguish the preview",
+      "expected": "passed",
+      "status": "expected"
+    },
+    {
+      "title": "example controls and dictionary input work from the keyboard",
+      "expected": "passed",
+      "status": "expected"
+    },
+    {
+      "title": "public page fits 320px and loads its assets",
+      "expected": "passed",
+      "status": "expected"
+    },
+    {
+      "title": "public page fits 390px and loads its assets",
+      "expected": "passed",
+      "status": "expected"
+    },
+    {
+      "title": "public page fits 768px and loads its assets",
+      "expected": "passed",
+      "status": "expected"
+    },
+    {
+      "title": "public page fits 1440px and loads its assets",
+      "expected": "passed",
+      "status": "expected"
+    },
+    {
+      "title": "automatic examples pause and resume without starting inference",
+      "expected": "passed",
+      "status": "expected"
+    }
+  ],
+  "publicStats": {
+    "startTime": "2026-09-13T21:50:14.200Z",
+    "duration": 6173.53,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "workbenchSuite": {
+    "command": "npm run test:e2e",
+    "totalCases": 24,
+    "workingFlows": 23,
+    "knownExpectedFailures": 1,
+    "unexpectedFailures": 0,
+    "durationSeconds": 58,
+    "source": "Completed Playwright console result; the JSON report was subsequently replaced by the focused screenshot run."
+  },
+  "workbenchScreenshotFollowup": [
+    {
+      "title": "new app demo matches the public corpus and existing profiles remain unchanged",
+      "expected": "passed",
+      "status": "expected"
+    }
+  ],
+  "finalChecks": {
+    "typecheck": true,
+    "clientLint": true,
+    "publicBuild": true,
+    "desktopBuild": true
+  },
+  "buildFiles": {
+    "public": [
+      {
+        "file": "index.html",
+        "bytes": 571,
+        "sha256": "adc8763d0335e954968eacfbca4e9d7cf1ed81749e2586a948765d234944cf21"
+      },
+      {
+        "file": "assets/index-BVMKmXf_.js",
+        "bytes": 374317,
+        "sha256": "18d425e3f11995439598f1ed7c2d9ac6b6d1770b74ab792b41d1c62c62a4f6dc"
+      },
+      {
+        "file": "assets/index-CX1AsQAC.css",
+        "bytes": 74175,
+        "sha256": "c12f48878c843fa7fe416e6b500553467114b176e905481084965866f2b1de4b"
+      }
+    ],
+    "desktop": [
+      {
+        "file": "index.html",
+        "bytes": 532,
+        "sha256": "b7471f67242ec5547408fffe5898537d0c18bfaffc429f181a9725e59169ffcd"
+      },
+      {
+        "file": "assets/index-BAU6VYn2.js",
+        "bytes": 549210,
+        "sha256": "4b68c6ef6206f8a42962a0c7e370fabcb20f6091b1558060279d102efa07c3bb"
+      },
+      {
+        "file": "assets/index-BSXjRzYK.css",
+        "bytes": 74136,
+        "sha256": "d009759530730d94e3d35462d15edad06a6498c160402e355b2dd822747886af"
+      }
+    ]
+  },
+  "screenshots": [
+    {
+      "file": "docs/screenshots/w11-hero.png",
+      "bytes": 1660212,
+      "sha256": "17634fdcf9260e9ad7160888d9e864034488ab887eea76134f921cd215c6aecf"
+    },
+    {
+      "file": "docs/screenshots/w11-dictionary.png",
+      "bytes": 352432,
+      "sha256": "b6b497dfaab41b2c9c0868c89b45952c1ddd154c63463546bcee1810eca83ffb"
+    },
+    {
+      "file": "docs/screenshots/w11-download.png",
+      "bytes": 446962,
+      "sha256": "2ccb1d9a9f6f643888ce6e16ac15a121f0570ee00a066a760e029053660bdfba"
+    },
+    {
+      "file": "docs/screenshots/w11-workbench.png",
+      "bytes": 266579,
+      "sha256": "733282f8ab41c22292b1f16d66ee70bf84ca2ff40c4d70d1792d5bdcbe63e547"
+    }
+  ],
+  "links": {
+    "checkedAt": "2026-09-13T21:46:13.442Z",
+    "checks": [
+      {
+        "url": "https://parusann.github.io/Xenolinguist/",
+        "status": 200,
+        "finalHost": "parusann.github.io",
+        "contentLength": "467"
+      },
+      {
+        "url": "https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0",
+        "status": 200,
+        "finalHost": "github.com",
+        "contentLength": null
+      },
+      {
+        "url": "https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe",
+        "status": 200,
+        "finalHost": "release-assets.githubusercontent.com",
+        "contentLength": "440684361"
+      },
+      {
+        "url": "https://github.com/Parusann/Xenolinguist/tree/implementation/reliability",
+        "status": 200,
+        "finalHost": "github.com",
+        "contentLength": null
+      },
+      {
+        "url": "https://github.com/Parusann/Xenolinguist/blob/main/LICENSE",
+        "status": 200,
+        "finalHost": "github.com",
+        "contentLength": null
+      },
+      {
+        "url": "https://ollama.com",
+        "status": 200,
+        "finalHost": "ollama.com",
+        "contentLength": null
+      }
+    ],
+    "release": {
+      "tag": "v1.0.0",
+      "published": "2026-06-14T00:04:47Z",
+      "assets": [
+        {
+          "name": "latest.yml",
+          "size": 353,
+          "reportedDigest": "sha256:954380790337393f34941f36d115fd584c0699650d80dae05b880f076ec6849f",
+          "url": "https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/latest.yml"
+        },
+        {
+          "name": "Xenolinguist-Setup-1.0.0.exe",
+          "size": 440684361,
+          "reportedDigest": "sha256:5974906a74a11eb7d4e14c0923ec5ff870e5669ad050b832b10b773e8491c6b5",
+          "url": "https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe"
+        },
+        {
+          "name": "Xenolinguist-Setup-1.0.0.exe.blockmap",
+          "size": 456834,
+          "reportedDigest": "sha256:7262a4ff06a84033c0eb8b5e8f171fcfbbe9d7df81a476a01df5649f52b9d016",
+          "url": "https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe.blockmap"
+        }
+      ]
+    },
+    "limits": [
+      "HTTP HEAD and GitHub metadata only; installer was not downloaded or installed in W11.",
+      "Implementation-branch documents are validated locally before push; Pages still deploys main separately."
+    ]
+  },
+  "limits": [
+    "No new installer execution, signing, native runtime certification or Pages deployment in W11.",
+    "Public tests verify selected flows and viewport bounds, not comprehensive accessibility or all browsers.",
+    "The full workbench suite contains one expected Unicode failure; it is not a working product flow.",
+    "Three native unit tests remain gated; W10 native evidence belongs to its own artifact.",
+    "Public dictionary and Eridian examples are illustrative; no model quality or decipherment benchmark.",
+    "The desktop bundle retains its existing greater-than-500-kB size warning."
+  ]
+}

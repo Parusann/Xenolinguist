@@ -5,7 +5,7 @@ import { HeroMark } from './HeroMark'
 import { DecodeMoment } from './DecodeMoment'
 import { PhasesSection, DemoSection, FeaturesSection, PrivacySection, FinalCTA, HeroFooter } from './sections'
 import { DownloadSection } from './DownloadSection'
-import { isPublicSite } from '@/lib/site'
+import { isPublicSite, PRIMARY_LABEL, SOURCE_REVISION } from '@/lib/site'
 import '@/marketing.css'
 
 /** Decorative reticle framing the alien subject in the hero image. */
@@ -25,24 +25,20 @@ function HeroReticle() {
   )
 }
 
-/**
- * Marketing hero page (route "/") — a 1:1 port of the designer prototype
- * (prototypes/hero/{Hero,Sections,HeroApp}.jsx + hero.css). Fixed nav, cinematic
- * image hero with the DecodeMoment animation, and below-fold sections, all over a
- * fixed Vanta topology backdrop that reads through the translucent lower sections.
- */
+/** Shared marketing page; public and desktop actions have distinct destinations. */
 export function HeroPage() {
   const navigate = useNavigate()
-  // Public site has no workbench (static host, needs the local server + Ollama),
+  // Public site has no workbench (static host; the app needs the local server),
   // so CTAs scroll to the download block instead of opening /app.
   const onPrimary = isPublicSite
-    ? () => document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' })
+    ? () => document.getElementById('download')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
     : () => navigate('/app')
 
   // The workbench locks the viewport; the hero needs to scroll. This class
   // (scoped in marketing.css) unlocks overflow only while the hero is mounted.
   useEffect(() => {
     document.documentElement.classList.add('marketing-active')
+    document.getElementById(window.location.hash.slice(1))?.scrollIntoView()
     return () => document.documentElement.classList.remove('marketing-active')
   }, [])
 
@@ -62,9 +58,9 @@ export function HeroPage() {
             {/* Corner caption */}
             <div className="hero-caption">
               <span className="ln" />
-              <span className="ttl">Field Capture · 04.06.2026</span>
-              <span>Eridian first-contact corpus</span>
-              <span>Profile #042 · Decoding 47%</span>
+              <span className="ttl">Fictional first-contact scene</span>
+              <span>Eridian teaching corpus</span>
+              <span>Illustration · no measured decoding score</span>
             </div>
 
             {/* Top nav */}
@@ -75,16 +71,16 @@ export function HeroPage() {
               </span>
               <span className="privacy-chip">
                 <span style={{ width: 6, height: 6, borderRadius: 3, background: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }} />
-                Ollama · Local-only
+                Local workbench
               </span>
               <div className="links">
                 <a href="#method">Method</a>
-                <a href="#proof">Proof</a>
+                <a href="#proof">Dictionary demo</a>
                 <a href="#privacy">Privacy</a>
-                <a href="#open">Open source</a>
+                <a href="#open">Source & license</a>
               </div>
               <button className="btn-hero primary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={onPrimary}>
-                Open workbench →
+                {PRIMARY_LABEL} →
               </button>
             </nav>
 
@@ -99,26 +95,26 @@ export function HeroPage() {
               </h1>
 
               <div style={{ marginTop: 56, width: '100%' }}>
-                <DecodeMoment speed={1} />
+                <DecodeMoment />
               </div>
 
               <p className="hero-sub float-up" style={{ animationDelay: '180ms' }}>
-                A local-first workbench for translating <b>unknown languages</b> — from the first sample to the first sentence. Inspired by first-contact linguistics. Your data <b>never leaves your machine</b>.
+                A local workbench for <b>constructed-language exploration</b>. Collect samples, build a dictionary, record grammar ideas and review model suggestions. A tool for investigation, with explicit limits on what it can infer.
               </p>
 
               <div className="hero-cta float-up" style={{ animationDelay: '260ms' }}>
                 <button className="btn-hero primary" onClick={onPrimary}>
-                  <span>Start decoding</span>
+                  <span>{PRIMARY_LABEL}</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>→</span>
                 </button>
-                <button className="btn-hero" onClick={onPrimary}>
+                <a className="btn-hero" href="#proof">
                   <span style={{ width: 14, height: 14, borderRadius: 7, border: '1.5px solid currentColor', display: 'grid', placeItems: 'center' }}>
                     <span style={{ width: 4, height: 4, borderRadius: 2, background: 'currentColor' }} />
                   </span>
-                  <span>Try the sandbox</span>
-                </button>
+                  <span>Try dictionary demo</span>
+                </a>
                 <span style={{ color: 'var(--fg-mute)', fontFamily: 'var(--font-mono)', fontSize: 12, marginLeft: 8 }}>
-                  no account · runs offline · MIT
+                  no account · offline after setup · proprietary
                 </span>
               </div>
             </div>
@@ -126,7 +122,7 @@ export function HeroPage() {
             <div className="hero-meta">
               <span className="dot-row">
                 <span style={{ width: 5, height: 5, borderRadius: 3, background: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }} />
-                <span>v1.0.0 — Eridian engine</span>
+                <span>Development preview · source {SOURCE_REVISION}</span>
               </span>
               <span style={{ color: 'var(--fg-faint)' }}>·</span>
               <span>Built for conlangers, sci-fi worldbuilders, linguistics nerds</span>
@@ -136,6 +132,7 @@ export function HeroPage() {
           </section>
 
           <div className="scroll-veil" />
+          <section className="section release-context" aria-label="Version status"><p>This page describes the implementation preview. The published v1.0.0 installer predates the reliability improvements shown here. See download details before installing.</p></section>
           <PhasesSection />
           <DemoSection />
           <FeaturesSection />
