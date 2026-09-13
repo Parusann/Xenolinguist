@@ -1,7 +1,6 @@
 import { app, BrowserWindow, utilityProcess, ipcMain, dialog, type IpcMainInvokeEvent, type UtilityProcess } from 'electron';
 import path from 'path';
 import { existsSync } from 'fs';
-import { isOllamaUp, hasModel, pullDefaultModel } from './ollama.js';
 import { autoUpdater } from 'electron-updater';
 import { testUserData } from './test-launch.js';
 import { DesktopDraftStore } from './drafts.js';
@@ -150,17 +149,6 @@ async function createWindow() {
       );
     }
   }
-
-  void (async () => {
-    if (!win || acceptanceUserData) return;
-    if (await isOllamaUp()) {
-      if (!(await hasModel())) {
-        try { await pullDefaultModel(win); } catch (e) { console.error('[ollama] pull failed', e); }
-      }
-    } else {
-      win.webContents.send('ollama:offline', { url: process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434' });
-    }
-  })();
 
   win.on('closed', () => { win = null; });
   win.on('close', event => {

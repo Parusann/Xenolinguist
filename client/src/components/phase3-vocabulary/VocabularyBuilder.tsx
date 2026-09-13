@@ -21,7 +21,7 @@ const BUCKET_COLOR: Record<string, string> = {
 export function VocabularyBuilder() {
   const { profile, addDictionaryEntry, addDictionaryEntryRaw, removeDictionaryEntry, updateProfile } = useProfile()
   const { runTask, loading, streamedText } = useAI()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
   const { pushAction } = useUndo()
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; entry: DictionaryEntry } | null>(null)
   const [activeCategory, setActiveCategory] = useState<string>('all')

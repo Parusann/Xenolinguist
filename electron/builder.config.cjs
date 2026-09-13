@@ -26,7 +26,7 @@ module.exports = {
   ],
   asar: true,
   // The forked server bundle must be a real file on disk for utilityProcess.fork.
-  asarUnpack: ['electron/dist/server.cjs'],
+  asarUnpack: ['electron/dist/server.cjs', 'electron/dist/phone-process.cjs'],
   win: { target: ['nsis'], artifactName: 'Xenolinguist-Setup-${version}.${ext}' },
   mac: { target: ['dmg'], category: 'public.app-category.education' },
   linux: { target: ['AppImage', 'deb'], category: 'Education' },

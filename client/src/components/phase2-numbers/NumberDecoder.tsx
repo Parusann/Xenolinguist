@@ -10,7 +10,7 @@ const OPERATORS = ['+', '-', '×', '÷', '=']
 export function NumberDecoder() {
   const { profile, updateProfile } = useProfile()
   const { runTask, loading, streamedText } = useAI()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
   const [range, setRange] = useState(20)
   const [analysisResult, setAnalysisResult] = useState('')
   const [hover, setHover] = useState<number | null>(null)

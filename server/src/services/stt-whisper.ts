@@ -51,7 +51,7 @@ export class SttUnavailableError extends Error {
   constructor(message: string) { super(message); this.name = 'SttUnavailableError'; }
 }
 
-export interface SttInput { wav: Buffer; language?: string }
+export interface SttInput { wav: Buffer; language?: string; signal?: AbortSignal }
 
 /** Best-effort parse of "auto-detected language: en (p = 0.98)" from whisper stderr. */
 function parseLanguageProb(stderr: string): number {
@@ -61,6 +61,7 @@ function parseLanguageProb(stderr: string): number {
 
 /** Transcribe 16 kHz mono WAV bytes via the bundled whisper.cpp. */
 export async function transcribe(input: SttInput): Promise<SttResult> {
+  input.signal?.throwIfAborted();
   const bin = whisperBinPath();
   const model = whisperModelPath();
   if (!bin || !model) throw new SttUnavailableError('whisper not configured');
@@ -74,18 +75,24 @@ export async function transcribe(input: SttInput): Promise<SttResult> {
     const stderr = await new Promise<string>((resolve, reject) => {
       // -oj writes <outBase>.json; -l auto enables language detection (default is English).
       const args = ['-m', model, '-f', inPath, '-oj', '-of', outBase, '-l', input.language ?? 'auto'];
-      const proc = spawn(bin, args, { cwd: path.dirname(bin) });
+      const proc = spawn(bin, args, { cwd: path.dirname(bin), windowsHide: true });
+      const cancel = () => { proc.kill('SIGKILL'); };
+      input.signal?.addEventListener('abort', cancel, { once: true });
+      if (input.signal?.aborted) cancel();
+      proc.stdout.resume();
       let err = '';
       let timedOut = false;
       const timer = setTimeout(() => { timedOut = true; proc.kill('SIGKILL'); }, WHISPER_TIMEOUT_MS);
-      proc.stderr.on('data', (d: Buffer) => { err += d.toString(); });
+      proc.stderr.on('data', (d: Buffer) => { err = (err + d.toString()).slice(-16384); });
       proc.on('error', (e: NodeJS.ErrnoException) => {
         clearTimeout(timer);
         reject(new SttUnavailableError(`whisper spawn error: ${e.code ?? e.message}`));
       });
       proc.on('close', (code) => {
+        input.signal?.removeEventListener('abort', cancel);
         clearTimeout(timer);
-        if (timedOut) reject(new Error('whisper timed out'));
+        if (input.signal?.aborted) reject(input.signal.reason);
+        else if (timedOut) reject(new Error('whisper timed out'));
         else if (code === 0) resolve(err);
         else reject(new Error(`whisper exited ${code}`));
       });

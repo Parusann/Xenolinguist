@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useEffect } from 'react'
 import { useAI } from './useAI'
 import { useOllama } from '@/stores/ollama-context'
 import { formatDictionaryForPrompt } from 'shared/prompts'
@@ -6,12 +6,13 @@ import type { DictionaryEntry } from 'shared/types'
 
 /**
  * Hook that triggers AI pattern analysis when a new sample is added.
- * Uses the light model for quick suggestions. Debounced to avoid spam.
+ * Uses the selected verified local model for quick suggestions. Debounced to avoid spam.
  */
 export function useAutoSuggest() {
   const { runTask, loading } = useAI()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
   const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  useEffect(() => () => clearTimeout(debounceRef.current), [])
 
   const suggestForSample = useCallback(async (
     alienText: string,

@@ -1,58 +1,30 @@
 import { Router } from 'express';
-import { AIService } from '../services/ai-service.js';
-import type { AIMessage } from '../../../shared/types.js';
+import { z } from 'zod';
+import { AIService, TASK_BUDGETS } from '../services/ai-service.js';
+import { jobs } from '../services/job-manager.js';
+import { RuntimeError } from '../services/runtime-error.js';
 
 export const aiRouter = Router();
-const aiService = new AIService();
-
-const VALID_ROLES = new Set(['user', 'assistant', 'system']);
-
-/** Validate the wire shape before handing messages to the Ollama client (which would otherwise
- *  throw an opaque error on a missing/malformed array). */
-function isValidMessages(m: unknown): m is AIMessage[] {
-  return (
-    Array.isArray(m) &&
-    m.length > 0 &&
-    m.every(
-      (x) =>
-        x != null &&
-        typeof x === 'object' &&
-        VALID_ROLES.has((x as { role?: unknown }).role as string) &&
-        typeof (x as { content?: unknown }).content === 'string'
-    )
-  );
-}
-
-aiRouter.post('/chat', async (req, res, next) => {
+const service = new AIService();
+const inputSchema = z.object({ messages: z.array(z.object({ role: z.enum(['user', 'assistant', 'system']), content: z.string().max(20000) })).min(1).max(60),
+  system: z.string().max(20000).optional(), model: z.string().min(1).max(200).optional(), task: z.enum(['chat', 'quickSuggest', 'patternAnalysis', 'grammarInference', 'translation', 'conlangGeneration', 'numberAnalysis', 'phoneticAnalysis']).default('chat') });
+for (const streaming of [false, true]) aiRouter.post(streaming ? '/stream' : '/chat', async (req, res, next) => {
+  const parsed = inputSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: 'Invalid AI request: check messages, model and task limits', code: 'AI_INPUT_INVALID' });
+  const input = parsed.data, controller = new AbortController();
+  const abort = () => { if (!res.writableEnded) controller.abort(); };
+  res.once('close', abort);
   try {
-    const { messages, system, model } = req.body ?? {};
-    if (!isValidMessages(messages)) {
-      return res.status(400).json({ error: 'messages must be a non-empty array of { role, content }' });
-    }
-    const result = await aiService.chat(messages, { system, model });
-    res.json({ content: result });
-  } catch (err) {
-    next(err);
-  }
-});
-
-aiRouter.post('/stream', async (req, res) => {
-  const { messages, system, model } = req.body ?? {};
-  if (!isValidMessages(messages)) {
-    return res.status(400).json({ error: 'messages must be a non-empty array of { role, content }' });
-  }
-
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-
-  try {
-    await aiService.stream(messages, { system, model }, (token: string) => {
-      res.write(`data: ${JSON.stringify({ token })}\n\n`);
-    });
-    res.write('data: [DONE]\n\n');
-  } catch (err) {
-    res.write(`data: ${JSON.stringify({ error: (err as Error).message })}\n\n`);
-  }
-  res.end();
+    const job = jobs.submit<string | void>('llm', input.task, signal => streaming
+      ? service.stream(input.messages, { ...input, signal }, token => { if (res.writableLength > 1024 * 1024) { controller.abort(); throw new RuntimeError('CLIENT_TOO_SLOW', 'Client stopped reading the stream'); } res.write('data: ' + JSON.stringify({ token }) + '\n\n'); })
+      : service.chat(input.messages, { ...input, signal }), { signal: controller.signal, deadlineMs: TASK_BUDGETS[input.task].deadline });
+    res.setHeader('X-Xeno-Job', job.id);
+    if (streaming) { res.setHeader('Content-Type', 'text/event-stream'); res.setHeader('Cache-Control', 'no-store'); res.write('data: ' + JSON.stringify({ jobId: job.id }) + '\n\n'); }
+    const result = await job.promise;
+    if (!res.destroyed) { if (streaming) res.end('data: [DONE]\n\n'); else res.json({ content: result, jobId: job.id }); }
+  } catch (error) {
+    if (res.destroyed) return;
+    if (streaming && res.headersSent) res.end('data: ' + JSON.stringify({ error: error instanceof RuntimeError ? error.message : 'Local model execution failed', code: error instanceof RuntimeError ? error.code : 'AI_FAILED' }) + '\n\n');
+    else next(error);
+  } finally { res.off('close', abort); }
 });

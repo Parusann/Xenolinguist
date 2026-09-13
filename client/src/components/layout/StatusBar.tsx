@@ -11,7 +11,7 @@ interface StatusBarProps {
 
 export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarProps) {
   const { profile } = useProfile()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
 
   const metrics = profile ? workspaceMetrics(profile) : null
 
@@ -22,7 +22,7 @@ export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarPr
           className="dot"
           style={{ width: 5, height: 5, ...(connected ? {} : { background: 'var(--conf-unknown)', boxShadow: '0 0 8px var(--conf-unknown)' }) }}
         />
-        <span style={{ color: 'var(--fg-dim)' }}>{connected ? 'Ollama connected' : 'Ollama offline'}</span>
+        <span style={{ color: 'var(--fg-dim)' }}>{connected ? 'Ollama connected' : 'Local chat not ready'}</span>
       </span>
       <span className="sep">·</span>
       <span className="item">

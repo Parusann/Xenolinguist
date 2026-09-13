@@ -1,0 +1,325 @@
+{
+  "recordedAt": "2026-09-12T23:01:18.737Z",
+  "source": {
+    "revision": "a92217a7506cf60e593b8e40ab2606fa96f5f942",
+    "branch": "implementation/reliability",
+    "workingFiles": [
+      {
+        "file": "client/src/App.tsx",
+        "sha256": "57b1cf88f2955de4bb5d7ec65bd9072f36f9e7035e9b0440c179d4f073ca069b"
+      },
+      {
+        "file": "client/src/components/landing/LandingScreen.tsx",
+        "sha256": "a60c8fa9851a284dd1230189ab751d7a318ba9fb3c423e88bceef50cc619b50a"
+      },
+      {
+        "file": "client/src/components/layout/AIChat.tsx",
+        "sha256": "9a499508aae6675721f9a45f74ffcfa822a4cbd7a292bd1f7124e7e4efc55b6e"
+      },
+      {
+        "file": "client/src/components/layout/AppShell.tsx",
+        "sha256": "b847f8027eddefda992faa3fe26dbb672324f19867d28e82814a9ef378922131"
+      },
+      {
+        "file": "client/src/components/layout/RuntimeStatus.tsx",
+        "sha256": "ee7711203b84e42c1934eebbe89a75ef2c6558cf5c43eb20b9ca29b77003ec90"
+      },
+      {
+        "file": "client/src/components/layout/StatusBar.tsx",
+        "sha256": "f321e74f39db49b21966a0fb3056a7cb29ced075a9878207ee3d94893960bab1"
+      },
+      {
+        "file": "client/src/components/phase1-samples/SampleInput.tsx",
+        "sha256": "de54fa3845d608e9286ec30fcd7999e95322b09b4bd417a6bb95400b87193d06"
+      },
+      {
+        "file": "client/src/components/phase2-numbers/NumberDecoder.tsx",
+        "sha256": "45341654736dd06877c93baf5c77d9507669a190969dc442ba9d56dd88f5093e"
+      },
+      {
+        "file": "client/src/components/phase3-vocabulary/VocabularyBuilder.tsx",
+        "sha256": "3d9cf2a6ee5ecce4617698641aef1026cd9754e59f7418af67153712e929787b"
+      },
+      {
+        "file": "client/src/components/phase4-grammar/GrammarAnalyzer.tsx",
+        "sha256": "ab7257c237d01092807fe73b8d31a7e0771710221a643697ae1b55fbe739a12f"
+      },
+      {
+        "file": "client/src/components/phase5-translation/TranslationEngine.tsx",
+        "sha256": "4c3453a89e55e2fbfdd18875f0140102bda0034c9489970b604956dd11a32d68"
+      },
+      {
+        "file": "client/src/components/sandbox/SandboxSetup.tsx",
+        "sha256": "b72b8cb0e70e0a997289f2387ac9f4b55a5d857817a29291feecdc0b72b2257e"
+      },
+      {
+        "file": "client/src/hooks/useAI.ts",
+        "sha256": "ec881b1aaf0b03493af1cdf78a421880f72789efd6bebc26675dc3bd9435cce9"
+      },
+      {
+        "file": "client/src/hooks/useAutoSuggest.ts",
+        "sha256": "3a9bb74903df872a6366584533d7472c29c212199f0d33b88fcaccbac2d78783"
+      },
+      {
+        "file": "client/src/services/api.ts",
+        "sha256": "b62399477ee90f63bc5722d201624d15b2e5eb7a37d3694d7560639530454d4a"
+      },
+      {
+        "file": "client/src/stores/ai-history.ts",
+        "sha256": "ecc9633813a1ac523efa3dce18d9a158971a4e9571454ca3b2533cd87a8c7279"
+      },
+      {
+        "file": "client/src/stores/ollama-context.tsx",
+        "sha256": "59f935161b2c4db18d0c20fdcd6d8cc98854d68fb89339e9eb7b95476a4876c9"
+      },
+      {
+        "file": "client/src/stores/profile-changes.ts",
+        "sha256": "058955828a2d688282b79d0a012cdc1e1627e1ad65e6e645df342b945048dd9e"
+      },
+      {
+        "file": "docs/implementation-progress.md",
+        "sha256": "46987e17fd534b15e44b4f7e2c557f5a68c088cc1d208de6afe5b874420c4c7f"
+      },
+      {
+        "file": "docs/local-security.md",
+        "sha256": "c0e561d8ac0f89b919af95230edc684d7b30a78d6f84cee8881f0978336f5d22"
+      },
+      {
+        "file": "docs/testing.md",
+        "sha256": "ceafa63200a9928577877d2771dbc0d8184e37e47ab3dfdf410f7da6da3e704e"
+      },
+      {
+        "file": "electron/builder.config.cjs",
+        "sha256": "2a8a0e77d03ee79514a8f2f3921c363e55157c25b4c44d92bb7eba75f1d1e47f"
+      },
+      {
+        "file": "electron/main.ts",
+        "sha256": "491940e8db777e2301704a4aef21c8dfdaefaa925bb3dfa6fd07485eb60a529f"
+      },
+      {
+        "file": "electron/ollama.ts",
+        "sha256": "5e2a4000b5b7b7f17d00472cbdcadcbaa509458735e48d63e78469c74e639e73"
+      },
+      {
+        "file": "electron/preload.ts",
+        "sha256": "456314f08746efc566012fa288725ffc863ca10d5641b5084b2a0a8949108950"
+      },
+      {
+        "file": "scripts/bundle.mjs",
+        "sha256": "6386aa240dca8f336f44f807a20ae7411d66f578099035c5e3753071dd704e8e"
+      },
+      {
+        "file": "scripts/verify-local-chat.mjs",
+        "sha256": "69c10c188374d42a826ee94b2b037e131a5ed9c8a7ae1bc151e54c94f3c8ac6e"
+      },
+      {
+        "file": "scripts/verify-release.mjs",
+        "sha256": "dc56df01a832b795aa5b09d40dd4375f7890b148243edc19793c423ec4866996"
+      },
+      {
+        "file": "server/src/__tests__/ai-history.test.ts",
+        "sha256": "c9f10b14e506c3d755f7197f89db3b092de1663df7cf74b9df337af32d00af74"
+      },
+      {
+        "file": "server/src/__tests__/inference-boundary.test.ts",
+        "sha256": "107904911c85af1969ef8cf568701ffbb4ace7dff821475ca5ace8932719307b"
+      },
+      {
+        "file": "server/src/__tests__/job-manager.test.ts",
+        "sha256": "f3c1ffd3406082ea69fa465fb1cb7db679604e64acdf01daf0eec6f8e9cef3ef"
+      },
+      {
+        "file": "server/src/__tests__/ndjson.test.ts",
+        "sha256": "0d900284cc739a2563bed6568ad9b02968b7f57a49acddd5213bb3318a1a1ec6"
+      },
+      {
+        "file": "server/src/__tests__/ollama-runtime.test.ts",
+        "sha256": "f4f5ec428e1b11d55d9e2729751be5baa925f8b17e072d9a0fa52d1dc78aecc6"
+      },
+      {
+        "file": "server/src/app.ts",
+        "sha256": "3e9a48e94363e101985abae2a8465597613fdc63b46e60726f44d0670cfbe503"
+      },
+      {
+        "file": "server/src/middleware/error-handler.ts",
+        "sha256": "2be51a86eb23d23a28a448c9af61b3dac1e3cf54238b19146915fc3ca25f4997"
+      },
+      {
+        "file": "server/src/routes/ai.ts",
+        "sha256": "03166af56960673c6b0a0c08688d695f41e7379c591815819375ab7ca605b5df"
+      },
+      {
+        "file": "server/src/routes/ipa.ts",
+        "sha256": "b63eefde4ab51f03cd1e72b5c8b9b1fc19b4a48cefa07c7090185f0b147222cb"
+      },
+      {
+        "file": "server/src/routes/jobs.ts",
+        "sha256": "bae5ac99c08a6841cac39caa711c3228d05141bcfa542b0e8087e1037280aa21"
+      },
+      {
+        "file": "server/src/routes/ollama.ts",
+        "sha256": "a707c87fa566bc76dd787300d5ad0a7b13b8d9fe8f82ee60ceeddc88b6ca51e7"
+      },
+      {
+        "file": "server/src/routes/stt.ts",
+        "sha256": "f73ad6da9bafdf2c6d2442e1be262df3596287e1794a1044b928bebf3180f24b"
+      },
+      {
+        "file": "server/src/services/ai-service.ts",
+        "sha256": "b4fdf5d2baeacf85b1cfd2d8e10d9db248260f794ce543266c10f297ca871f48"
+      },
+      {
+        "file": "server/src/services/job-manager.ts",
+        "sha256": "7167249dde0c573e8e21085b41986271610fbdca2eb2a654ae0dd645d529268b"
+      },
+      {
+        "file": "server/src/services/ndjson.ts",
+        "sha256": "b969faeaf08025d7dc2a49782d7a81ab6847d6b8e12e3e3c4f7be1bad3f70550"
+      },
+      {
+        "file": "server/src/services/ollama-runtime.ts",
+        "sha256": "4052c0604f3c34c2722aefbd2882485d40e4fd92ed17d7d31dd2d4cd37605182"
+      },
+      {
+        "file": "server/src/services/phone-process-entry.ts",
+        "sha256": "e2d099ba7af484b1d3da8fbbbd3678e66631c2fabe3538ab1294b360d469fd3f"
+      },
+      {
+        "file": "server/src/services/phone-process.ts",
+        "sha256": "659305283f68f73820c7884dbf414129e93a759946a6ed88ba3edcdc35499dee"
+      },
+      {
+        "file": "server/src/services/runtime-capabilities.ts",
+        "sha256": "aa60ca9deaf016cb310c5d32da5e2a7e6b1b0616cb86bb49f933836326424abd"
+      },
+      {
+        "file": "server/src/services/runtime-error.ts",
+        "sha256": "be5e78c13732f64a38b6e890d9c740e8b22830dd98859792c2ecb93078adaba0"
+      },
+      {
+        "file": "server/src/services/stt-whisper.ts",
+        "sha256": "4c41c434cca24916c16f8b74eda27afc7c65b4399f112412cb916453cad634b6"
+      },
+      {
+        "file": "shared/schemas/ai-history.ts",
+        "sha256": "4223d31e2c739cfee646583c4b2b72215a1d4c8ee406ed273fd98ad80ea8ad4a"
+      },
+      {
+        "file": "shared/schemas/capabilities.ts",
+        "sha256": "c998591c7af626f7f3617de173b03da0d9a17aef3a78166758cac32f4837058e"
+      },
+      {
+        "file": "shared/schemas/mutations.ts",
+        "sha256": "92ab28b860a8e5eca4d1819eb5cbc9baa6dcb55f6c140dcff314d5742517f984"
+      },
+      {
+        "file": "shared/schemas/profile.ts",
+        "sha256": "8ffd5276b21c374ba017fed55bfae050c7a853fe674983c1a08f6fc4a1435bae"
+      },
+      {
+        "file": "tests/e2e/fixtures.ts",
+        "sha256": "9c112d5f8fbc47d97f804ca54c76ff413c98f76cc0a29ffbef93f47ed192a4ff"
+      },
+      {
+        "file": "tests/e2e/runtime-jobs.spec.ts",
+        "sha256": "f46ccffb58f974f3013b2526647eb5b82db88b379e74a07593adfffa9d844ddf"
+      }
+    ],
+    "node": "25.8.2",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "checks": {
+    "remote": {
+      "availableForTest": true,
+      "status": 422,
+      "code": "MODEL_NOT_LOCAL_CHAT"
+    },
+    "embedding": {
+      "availableForTest": true,
+      "status": 422,
+      "code": "MODEL_NOT_LOCAL_CHAT"
+    },
+    "localChat": {
+      "status": 200,
+      "content": "sky blue",
+      "elapsedMs": 429
+    },
+    "liveGenerationCancellation": {
+      "receivedTokenBeforeCancel": true,
+      "status": 202,
+      "cleanupMs": 8
+    },
+    "afterCancellation": {
+      "status": 200,
+      "content": "ready"
+    },
+    "jobsSettled": true
+  },
+  "model": {
+    "name": "gemma4:e4b",
+    "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+    "size": 9608350718,
+    "capabilities": [
+      "completion",
+      "vision",
+      "audio",
+      "tools",
+      "thinking"
+    ],
+    "location": "local",
+    "eligible": true,
+    "reason": "Local completion model verified"
+  },
+  "acceptancePassed": true,
+  "limits": [
+    "Synthetic prompts, not a linguistic quality benchmark.",
+    "Uses models already installed on this host; no new downloads.",
+    "Actual backend generation, cancellation after a token and successful subsequent generation are exercised. Download failure paths use deterministic protocol fixtures.",
+    "The final authenticated request used a warm model. Timings are individual observations, not comparable performance measurements or latency guarantees."
+  ],
+  "sourceNote": "Verification ran against the working implementation above its parent revision. File hashes identify that state; subsequent documentation, compact evidence and verifier limitation wording do not change the tested application runtime.",
+  "earlierDirectOllamaSmoke": {
+    "recordedAt": "2026-09-12T22:37:49.512Z",
+    "prompt": "Two-entry synthetic dictionary translation, not linguistic accuracy evaluation",
+    "results": [
+      {
+        "model": "gemma4:e4b",
+        "status": 200,
+        "elapsedMs": 9098,
+        "content": "sky blue",
+        "evalCount": 3,
+        "evalDurationNs": 25542000,
+        "loadDurationNs": 8977438700,
+        "capabilities": [
+          "completion",
+          "vision",
+          "audio",
+          "tools",
+          "thinking"
+        ]
+      },
+      {
+        "model": "llama3.2:3b",
+        "status": 200,
+        "elapsedMs": 4033,
+        "content": "Heaven",
+        "evalCount": 3,
+        "evalDurationNs": 17523000,
+        "loadDurationNs": 3941488300,
+        "capabilities": [
+          "completion",
+          "tools"
+        ]
+      }
+    ],
+    "options": {
+      "num_ctx": 4096,
+      "num_predict": 64,
+      "temperature": 0,
+      "seed": 42,
+      "think": false,
+      "keep_alive": 0
+    }
+  }
+}

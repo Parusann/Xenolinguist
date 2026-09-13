@@ -157,7 +157,7 @@ export function LandingScreen() {
   const [loadingDemo, setLoadingDemo] = useState(false)
   const { loadProfile } = useProfile()
   const { addEntry } = useSessionLog()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
 
   // Hydrate current counts from each saved profile.
   useEffect(() => {

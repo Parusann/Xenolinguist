@@ -22,7 +22,7 @@ const bucketOf = (conf: number | null) => getConfidenceLevel(conf)
 export function TranslationEngine() {
   const { profile, updateDictionaryEntry, addDictionaryEntry } = useProfile()
   const { runTask, loading, streamedText } = useAI()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
   const [alienInput, setAlienInput] = useProfileDraft<string>('translation.alien', '')
   const [aiTranslation, setAiTranslation] = useState('')
   const [reverseMode, setReverseMode] = useProfileDraft<boolean>('translation.reverseMode', false)

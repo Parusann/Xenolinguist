@@ -13,8 +13,6 @@ contextBridge.exposeInMainWorld('xeno', {
     electron: process.versions.electron,
     node: process.versions.node,
   },
-  onOllamaOffline: subscribe('ollama:offline'),
-  onOllamaPullProgress: subscribe('ollama:pull-progress'),
   readSaveQueue: () => ipcRenderer.invoke('drafts:read'),
   writeSaveQueue: (record: unknown) => ipcRenderer.invoke('drafts:write', record),
   readAudioDraft: (id: string) => ipcRenderer.invoke('audio-drafts:read', id),

@@ -27,7 +27,7 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
 
 export async function streamAI(
   messages: AIMessage[],
-  options: { system?: string; model?: string; signal?: AbortSignal },
+  options: { system?: string; model?: string; task?: string; signal?: AbortSignal },
   onToken: (token: string) => void,
 ): Promise<void> {
   const { signal, ...opts } = options
@@ -35,7 +35,7 @@ export async function streamAI(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ messages, ...opts }),
-    signal,
+    signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(250000)]) : AbortSignal.timeout(250000),
   })
 
   // Surface a non-2xx (e.g. a 400 validation error) instead of trying to read an error body as a stream.
@@ -50,7 +50,7 @@ export async function streamAI(
   const decoder = new TextDecoder()
   let buffer = ''
 
-  while (true) {
+  try { while (true) {
     const { done, value } = await reader.read()
     if (done) break
 
@@ -76,4 +76,6 @@ export async function streamAI(
       if (parsed.token) onToken(parsed.token)
     }
   }
+  throw new Error('AI connection ended before completion; the partial answer is retained')
+  } finally { await reader.cancel().catch(() => {}); reader.releaseLock() }
 }

@@ -48,3 +48,4 @@ if (existsSync('electron/main.ts')) {
 }
 
 console.log('bundled electron/dist');
+await build({ ...common, entryPoints: ['server/src/services/phone-process-entry.ts'], outfile: 'electron/dist/phone-process.cjs', external: ['@huggingface/transformers', 'onnxruntime-node', 'onnxruntime-web'] });

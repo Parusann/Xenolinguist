@@ -8,7 +8,7 @@ The renderer uses sandboxing, context isolation, disabled Node integration and w
 
 The packaged app's CSP permits same-origin scripts and connections, local fonts, and the blob resources needed by audio and workers. It blocks evaluated and inline scripts, frames, objects and form submissions. Inline styles remain necessary for existing React style props. The former p5/Vanta background required evaluated JavaScript, so a small Canvas 2D contour animation replaces it without weakening script policy. It supports reduced motion. Fonts ship with their original licenses; see [font provenance](../client/public/fonts/README.md).
 
-Recording uses MediaRecorder and does not start browser SpeechRecognition. Phone analysis and local whisper transcription remain explicit actions. This change does not certify every model or service as offline: Ollama model eligibility, automatic model setup, and readiness controls belong to W10. Updater checks and user-requested external links also remain network activity.
+Recording uses MediaRecorder and does not start browser SpeechRecognition. Phone analysis and local whisper transcription remain explicit actions. W10 adds local-model metadata checks, explicit downloads and independent readiness controls; see [runtime jobs](runtime-jobs.md). This does not certify the behavior of a compromised model daemon. Updater checks and user-requested external links also remain network activity.
 
 ## Development pairing
 

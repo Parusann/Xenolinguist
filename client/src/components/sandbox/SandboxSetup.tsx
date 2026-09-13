@@ -22,7 +22,7 @@ export function SandboxSetup() {
   const [difficulty, setDifficulty] = useState<SandboxDifficulty>('easy')
   const [generating, setGenerating] = useState(false)
   const { runTask } = useAI()
-  const { connected, getModelForTask } = useOllama()
+  const { ready: connected, getModelForTask } = useOllama()
   const { addEntry } = useSessionLog()
   const { profile } = useProfile()
 

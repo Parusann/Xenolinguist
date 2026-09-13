@@ -4,6 +4,7 @@ import { ProfileError, validationError } from './errors.js';
 import { audioAssetsSchema } from './audio.js';
 import { sandboxSessionSchema } from './sandbox.js';
 import { metricSnapshotsSchema } from './metrics.js';
+import { aiHistorySchema } from './ai-history.js';
 
 const manualConfidence = { confidence: confidenceSchema.nullable().default(null), user_asserted_confidence: confidenceSchema.nullable().optional() };
 export const dictionaryEntrySchema = z.strictObject({
@@ -33,6 +34,7 @@ export const profileDataSchema = z.strictObject({
   name: text, description: text, phonetic_notes: text, is_sandbox: z.boolean(),
   sandbox_difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
   sandbox_session: sandboxSessionSchema.nullable().optional(),
+  ai_history: aiHistorySchema.optional(),
   dictionary: z.array(dictionaryEntrySchema), grammar_rules: z.array(grammarRuleSchema),
   number_system: numberSystemSchema, samples: z.array(sampleSchema), audio_clips: z.array(audioClipSchema),
 });

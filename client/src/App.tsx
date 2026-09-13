@@ -6,6 +6,7 @@ import { ProfileProvider } from '@/stores/profile-context'
 import { AppShell } from '@/components/layout/AppShell'
 import { LandingScreen } from '@/components/landing/LandingScreen'
 import { LocalSessionGate } from '@/components/layout/LocalSessionGate'
+import { RuntimeStatus } from '@/components/layout/RuntimeStatus'
 import { HeroPage } from '@/components/marketing/HeroPage'
 
 /** The workbench app: profile selector → shell. Providers scoped here so the
@@ -18,6 +19,7 @@ function Workbench() {
       <OllamaProvider>
         <ProfileProvider onProfileChange={(p) => setActiveProfileId(p?.id ?? null)}>
           {activeProfileId ? <AppShell key={activeProfileId} /> : <LandingScreen />}
+          <RuntimeStatus />
         </ProfileProvider>
       </OllamaProvider>
     </SessionLogProvider>

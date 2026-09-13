@@ -9,7 +9,7 @@ import { formatDictionaryForPrompt, formatSamplesForPrompt, formatGrammarForProm
 export function GrammarAnalyzer() {
   const { profile, addGrammarRule, removeGrammarRule } = useProfile()
   const { runTask, loading, streamedText } = useAI()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
   const [analysisResult, setAnalysisResult] = useState('')
   const [newRule, setNewRule] = useState('')
   const [newEvidence, setNewEvidence] = useState('')

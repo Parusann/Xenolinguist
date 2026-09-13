@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { randomUUID } from 'node:crypto';
 import { ZodError } from 'zod';
 import { ProfileError, validationError } from '../../../shared/schemas/errors.js';
+import { RuntimeError } from '../services/runtime-error.js';
 
 export function errorHandler(err: Error, _req: Request, res: Response, next: NextFunction) {
   // JSON parser messages can quote request bodies, including development pairing codes.
@@ -10,6 +11,7 @@ export function errorHandler(err: Error, _req: Request, res: Response, next: Nex
   // If the response already started (e.g. an SSE stream), we can't send a JSON body —
   // hand off to Express's default handler so it tears down the connection.
   if (res.headersSent) return next(err);
+  if (err instanceof RuntimeError) return res.status(err.status).json({ error: err.message, code: err.code, retryable: true });
   if ((err as Error & { status?: number }).status === 413) return res.status(413).json({ code: 'PAYLOAD_TOO_LARGE', error: 'Upload exceeds the size limit', retryable: false });
   const structured = err instanceof ZodError ? validationError(err) : err;
   if (structured instanceof ProfileError) {

@@ -82,6 +82,24 @@ try {
   };
   const wav = await readFile(path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav'));
   record.fixture = await hashFile(path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav'));
+  record.checks.runtimeCapabilities = await (await desktopRequest(page).get(origin + '/api/ollama/capabilities')).json();
+  for (const key of ['storage', 'tts', 'stt', 'phones']) expect(record.checks.runtimeCapabilities[key].state).toBe('available');
+  expect(record.checks.runtimeCapabilities.chat.state).toBe('unavailable');
+  // Keep the original renderer request open while cancelling the actual spawned native process.
+  await page.evaluate(audio => {
+    window.__phoneCancellation = fetch('/api/ipa', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ audio }) }).then(async response => ({ status: response.status, body: await response.json() }));
+  }, wav.toString('base64'));
+  let cancelledJob;
+  await expect.poll(async () => {
+    const current = await (await desktopRequest(page).get(origin + '/api/jobs')).json();
+    cancelledJob = current.jobs.find(job => job.state === 'running' && job.task === 'Phone analysis' && job.progress?.status === 'Native phone process started');
+    return !!cancelledJob;
+  }, { intervals: [10, 20, 50], timeout: 10000 }).toBe(true);
+  const cancelStatus = await page.evaluate(async id => (await fetch('/api/jobs/' + id, { method: 'DELETE' })).status, cancelledJob.id);
+  expect(cancelStatus).toBe(202);
+  const cancelled = await page.evaluate(() => window.__phoneCancellation);
+  expect(cancelled.status).toBe(409); expect(cancelled.body.code).toBe('JOB_CANCELLED');
+  record.checks.nativeJobCancellation = { nativeProcessStarted: true, status: cancelled.status, code: cancelled.body.code };
   record.checks.ipa = await request('/api/ipa', { audio: wav.toString('base64') });
   if (record.checks.ipa.status === 200) {
     expect(record.checks.ipa.body.ipa.length).toBeGreaterThan(0);
@@ -124,7 +142,7 @@ try {
   // Deterministic generator output exercises session persistence, not generation quality.
   const sandboxProfile = await request('/api/profiles', { name: 'Native practice', is_sandbox: true });
   expect(sandboxProfile.status).toBe(201);
-  await page.route('**/api/ollama/status', route => route.fulfill({ json: { connected: true, models: ['fixture-model'] } }));
+  await page.route('**/api/ollama/status', route => route.fulfill({ json: { connected: true, ready: true, models: ['fixture-model'] } }));
   const practiceFixture = { language_name: 'Native fixture', phoneme_set: ['a'], number_base: 10, word_order: 'SVO', rules: ['Subject first'],
     number_words: { 1: 'ka', 2: 'ki', 3: 'ku' }, vocabulary: [{ alien: 'tal', english: 'sky', pos: 'noun' }], sample_sentences: [{ alien: 'tal', english: 'sky' }] };
   await page.route('**/api/ai/stream', route => route.fulfill({ contentType: 'text/event-stream', body: `data: ${JSON.stringify({ token: JSON.stringify(practiceFixture) })}\n\ndata: [DONE]\n\n` }));
@@ -192,6 +210,10 @@ try {
   await expect(recoveredNumber.getByRole('status')).toContainText('Not matched');
   await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
   const sandboxRestored = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
+  const recoveredProposal = sandboxRestored.ai_history?.find(message => message.task === 'conlangGeneration');
+  expect(recoveredProposal?.state).toBe('complete');
+  expect(recoveredProposal?.model).toBe('fixture-model');
+  record.checks.desktopAIHistoryRecovered = { state: recoveredProposal.state, task: recoveredProposal.task, fixtureGeneration: true };
   expect(sandboxRestored.sandbox_session).toEqual(sandboxBeforeClose);
   await recoveredNumber.getByRole('textbox').fill('1'); await recoveredNumber.getByRole('button', { name: 'Check', exact: true }).click();
   await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
@@ -232,7 +254,7 @@ try {
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered
-    && record.checks.localBoundary?.relaunchAuthenticated && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
+    && record.checks.nativeJobCancellation?.nativeProcessStarted && record.checks.localBoundary?.relaunchAuthenticated && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
   if (!record.acceptancePassed) process.exitCode = 1;
 } catch (error) {
   record.failure = { message: error.message, stack: error.stack };

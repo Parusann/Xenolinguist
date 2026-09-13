@@ -27,7 +27,7 @@ const SANDBOX_PHASE = { id: 'sandbox', label: 'Sandbox', icon: '◈', desc: 'AI-
 
 export function AppShell() {
   const { profile } = useProfile()
-  const { connected, selectedModel } = useOllama()
+  const { ready: connected, selectedModel } = useOllama()
   const { undo } = useUndo()
   const isSandbox = profile?.is_sandbox
   const phases = isSandbox ? [SANDBOX_PHASE, ...PHASES] : PHASES
@@ -155,12 +155,12 @@ export function AppShell() {
 
         {/* Status pills */}
         <div className="flex items-center gap-3" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-mute)' }}>
-          <div className="flex items-center gap-1.5" title={connected ? `Primary: ${selectedModel}` : 'Ollama offline'}>
+          <div className="flex items-center gap-1.5" title={connected ? `Primary: ${selectedModel}` : 'Local chat not ready'}>
             <span
               className="dot"
               style={{ width: 5, height: 5, ...(connected ? {} : { background: 'var(--conf-unknown)', boxShadow: '0 0 8px var(--conf-unknown)' }) }}
             />
-            <span style={{ color: 'var(--fg-1)' }}>{connected ? selectedModel?.split(':')[0] || 'Ollama' : 'Offline'}</span>
+            <span style={{ color: 'var(--fg-1)' }}>{connected ? selectedModel?.split(':')[0] || 'Ollama' : 'Not ready'}</span>
           </div>
           <span style={{ color: 'var(--fg-faint)' }}>·</span>
           <span><b style={{ color: 'var(--fg)' }}>{profile?.dictionary.length || 0}</b> words</span>

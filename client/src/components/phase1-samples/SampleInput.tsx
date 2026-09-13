@@ -21,7 +21,7 @@ import { stageAudio } from '@/services/audio-import'
 export function SampleInput() {
   const { profile, addSample, removeSample, saveAudioSample, restoreSample, addDictionaryEntry, updateSample } = useProfile()
   const { runTask, loading, streamedText } = useAI()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
   const { suggestForSample } = useAutoSuggest()
   const { pushAction } = useUndo()
   const { addEntry } = useSessionLog()

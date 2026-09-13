@@ -67,7 +67,7 @@ export { expect };
 
 export async function preparePage(page: Page) {
   await page.addInitScript(() => localStorage.setItem('xenolinguist-tour-completed', '1'));
-  await page.route('**/api/ollama/status', route => route.fulfill({ json: { connected: true, models: ['fixture-model'] } }));
+  await page.route('**/api/ollama/status', route => route.fulfill({ json: { connected: true, ready: true, models: ['fixture-model'] } }));
   // This fixture is deterministic UI input, not a claim of real model inference.
   await page.route('**/api/ai/stream', route => route.fulfill({
     contentType: 'text/event-stream', body: `data: ${JSON.stringify({ token: JSON.stringify({
