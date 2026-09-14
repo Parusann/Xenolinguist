@@ -4,6 +4,13 @@ import { mkdtemp, mkdir, writeFile, readFile, unlink, rm } from 'node:fs/promise
 import path from 'node:path';
 import os from 'node:os';
 import { recordArtifact, verifyArtifact, fingerprint, contained } from '../../scripts/verify-artifact-layout.mjs';
+import { includeRuntimeFile } from '../../scripts/stage-runtime.mjs';
+
+test('runtime staging retains the selected ONNX binding, DLLs and notices while excluding foreign native targets', () => {
+  for (const file of ['bin', 'bin/napi-v6', 'bin/napi-v6/win32', 'bin/napi-v6/win32/x64', 'bin/napi-v6/win32/x64/onnxruntime_binding.node', 'bin/napi-v6/win32/x64/onnxruntime.dll', 'dist/binding.js', 'LICENSE', 'package.json']) assert.equal(includeRuntimeFile('onnxruntime-node', file, 'win32', 'x64'), true, file);
+  for (const file of ['bin/napi-v6/darwin', 'bin/napi-v6/linux/x64/libonnxruntime.so.1', 'bin/napi-v6/win32/arm64/DirectML.dll', 'bin\\napi-v6\\win32\\ia32', 'node_modules/nested/index.js']) assert.equal(includeRuntimeFile('onnxruntime-node', file, 'win32', 'x64'), false, file);
+  assert.equal(includeRuntimeFile('another-package', 'bin/napi-v6/darwin/library', 'win32', 'x64'), true);
+});
 
 async function fixture(t) {
   const base = await mkdtemp(path.join(os.tmpdir(), 'xeno-layout-test-'));

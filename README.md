@@ -55,7 +55,7 @@ Local work can run offline once assets and any selected model are installed. Ins
 
 ## Build and verify
 
-Use a compatible Node runtime and `npm ci`; the latest retained local source checks used Node 25.8.2, while the packaged Electron 42 runtime used Node 24.15.0. The public build dependency engines require Node 20.19+ or 22.12+ in their supported release lines. See the lockfile and [testing guide](docs/testing.md).
+Use Node 24 and `npm ci` to match CI. Local W12 checks also passed on Node 25.8.2; the tested Electron 42.11.3 artifact embeds Node 24.19.0. See the lockfile and [CI/release guide](docs/ci-release-gates.md).
 
 ```sh
 git clone --branch implementation/reliability https://github.com/Parusann/Xenolinguist.git
@@ -71,15 +71,16 @@ npm run dev
 Direct development browser use requires the one-time local pairing code printed by the backend. Open the Vite URL, choose the workbench and enter that code. `npm run electron:dev` starts the desktop development flow. Voice paths must be configured for direct development; the packaged app resolves its bundled resources. Model downloads are optional and separate from native asset provisioning.
 
 ```sh
-npm run typecheck
-npm run lint -w client
-npm test
-npm run test:e2e
+npm run check:source
+npx playwright install chromium
+npm run test:e2e:run
+npm run test:public
+npm run audit:record
 # Build the Windows artifact locally; this command does not publish a release:
 npm run dist
 ```
 
-The W10 baseline has 202 passing unit tests with three gated native skips, 22 working browser checks and one existing expected Unicode failure. Separate native and real-model probes verify cancellation, subsequent inference and restart recovery. W11 adds shared-demo and public-presentation checks; current results and commands are in [testing](docs/testing.md). Passing smoke tests do not establish linguistic quality or certify the old installer.
+The W12 local baseline has 204 passing unit tests plus seven tooling tests, three gated native unit skips, 23 working workbench checks, one expected Unicode failure and eight public-site checks. A separate installed-application CI workflow requires native audio, access boundaries and restart recovery on a fresh Windows runner. Real local-model probes require an available host with installed models. Current results and commands are in [testing](docs/testing.md); unresolved advisories are in the [dependency review](docs/dependency-review.md). These checks do not establish linguistic quality or certify the old installer.
 
 Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only), `OLLAMA_MODEL`, `WHISPER_TIMEOUT_MS`, `TTS_TIMEOUT_MS` and the native asset paths. Context/output budgets and generation deadlines are server-owned; the former `OLLAMA_TIMEOUT_MS` setting does not control the current generation service.
 
@@ -91,7 +92,7 @@ Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only
 
 Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
 
-Next work includes automated release gates, a complete portable archive, a deterministic language compiler, reproducible benchmark comparisons and a stronger linguistic inference engine. These are roadmap items. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
+Next work includes a complete portable archive, a deterministic language compiler, reproducible benchmark comparisons and a stronger linguistic inference engine. These are roadmap items. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
 
 ## License
 

@@ -1,6 +1,6 @@
 # Current limitations and evidence boundaries
 
-Applies to the `implementation/reliability` preview through W11. The public v1.0.0 installer predates W01–W11. Source version, application package version and a released artifact are different identities; no new installer is implied by this documentation.
+Applies to the `implementation/reliability` preview through W12. The public v1.0.0 installer predates W01–W12. Source version, application package version and a released artifact are different identities; no new public installer is implied by this documentation.
 
 ## Interpretation and AI
 
@@ -20,7 +20,7 @@ Audio assets are retained for undo/recovery; exhaustive garbage collection is un
 
 ## Runtime, release and offline use
 
-Windows x64 is the only manifested native platform. Retained local unpacked-app tests and one independent W05 phone-runtime job do not certify a signed installer, every Windows version, physical microphones, a clean machine for every package, or macOS/Linux support. The old v1.0.0 download is unsigned and has not been upgraded by development commits.
+Windows x64 is the only manifested native platform. W12 adds independent installation and application acceptance on a fresh Windows runner; see the [CI guide and evidence](ci-release-gates.md). This does not certify signing, upgrades/uninstallation, every Windows version, physical microphones or macOS/Linux native support. Source regression tests also run on Linux. The old v1.0.0 download is unsigned and has not been upgraded by development commits.
 
 Offline use needs the application assets plus any selected model already installed. Downloads, external links and desktop update checks use the network. OS/browser speech fallback depends on the chosen voice. The static website is served by GitHub Pages; typing in its dictionary widget triggers no application/API requests.
 
@@ -28,6 +28,6 @@ Availability probes report files/service metadata, not guaranteed inference. Que
 
 ## What has been checked
 
-[Testing](testing.md) links unit, browser, real-model and Windows evidence. The W10 baseline has 202 passing unit tests and three gated native skips, plus 22 working browser checks and one expected Unicode failure. Real generation and native phone cancellation are followed by successful subsequent requests. Save queues, audio drafts, sandbox sessions and AI proposals recover in the tested restart scenarios. These are engineering acceptance checks; they are not broad scientific accuracy results or exhaustive power-loss testing.
+[Testing](testing.md) links unit, browser, real-model and Windows evidence. The W12 local baseline has 204 passing unit tests and seven tooling tests, three gated native unit skips, 23 working workbench checks, one expected Unicode failure and eight public-site checks. Required installed native assertions run separately from the gated unit tests. Real generation and native phone cancellation are followed by successful subsequent requests. Save queues, audio drafts, sandbox sessions and AI proposals recover in the tested restart scenarios. These are engineering acceptance checks; they are not broad scientific accuracy results or exhaustive power-loss testing. Four reviewed native-chain audit package entries remain; see [dependency dispositions](dependency-review.md).
 
-Next packages add release gates, complete archives, deterministic language generation and independently scored evaluation. See [implementation progress](implementation-progress.md).
+Next packages add complete archives, deterministic language generation and independently scored evaluation. See [implementation progress](implementation-progress.md).

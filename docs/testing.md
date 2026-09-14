@@ -1,6 +1,6 @@
 # Acceptance testing
 
-The current common commands and CI boundaries are documented in [CI and installed release verification](ci-release-gates.md). W12 adds six artifact-integrity tests to the 204 server/shared/client tests. The three gated native unit skips remain explicit; the installed acceptance workflow separately requires real native audio inference. See [dependency review](dependency-review.md) for updates and retained advisories.
+The current common commands and CI boundaries are documented in [CI and installed release verification](ci-release-gates.md). W12 adds seven artifact-integrity and runtime-target tests to the 204 server/shared/client tests. The three gated native unit skips remain explicit; the installed acceptance workflow separately requires real native audio inference. See [dependency review](dependency-review.md) for updates and retained advisories.
 
 The W01 harness separates reproducible defects from passing release requirements. Browser tests run the real bundled Express backend and built React application, with a fresh temporary data directory for each test. Individual browser checks use explicit deterministic model/status and failure fixtures where needed; the suite does not measure model quality.
 

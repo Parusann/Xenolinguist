@@ -3,12 +3,26 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+export function includeRuntimeFile(packageName, relative, platform = process.platform, arch = process.arch) {
+  const parts = relative.split(/[\\/]/);
+  if (parts.includes('node_modules')) return false;
+  // ONNX loads bin/napi-v6/${process.platform}/${process.arch}/onnxruntime_binding.node.
+  // Keep only that native target; retain package code, metadata and license files.
+  if (packageName === 'onnxruntime-node' && parts[0] === 'bin' && parts[1] === 'napi-v6') {
+    if (parts.length >= 3 && parts[2] !== platform) return false;
+    if (parts.length >= 4 && parts[3] !== arch) return false;
+  }
+  return true;
+}
 export async function verifyPackagedRuntime(directory) {
   const manifest = JSON.parse(await fs.readFile(path.join(directory, 'runtime-manifest.json'), 'utf8'));
   for (const entry of manifest.packages) {
     const metadata = JSON.parse(await fs.readFile(path.join(directory, entry.path, 'package.json'), 'utf8'));
     if (metadata.name !== entry.name || metadata.version !== entry.version) throw new Error(`Packaged runtime dependency mismatch: ${entry.name}`);
   }
+  const onnx = manifest.packages.find(entry => entry.name === 'onnxruntime-node');
+  if (!onnx) throw new Error('Missing ONNX runtime package');
+  await fs.access(path.join(directory, onnx.path, 'bin/napi-v6', manifest.platform, manifest.arch, 'onnxruntime_binding.node'));
 }
 export async function stageRuntime() {
   const lockBytes = await fs.readFile(path.join(root, 'package-lock.json'));
@@ -36,7 +50,7 @@ export async function stageRuntime() {
     const key = path.relative(root, source).split(path.sep).join('/');
     const pinned = lock.packages[key];
     if (!pinned || pinned.version !== metadata.version || !pinned.integrity) throw new Error(`Dependency differs from lockfile: ${key}`);
-    await fs.cp(source, path.join(output, key), { recursive: true, filter: file => file === source || path.basename(file) !== 'node_modules' });
+    await fs.cp(source, path.join(output, key), { recursive: true, filter: file => file === source || includeRuntimeFile(metadata.name, path.relative(source, file)) });
     packages.push({ name, version: metadata.version, path: key, integrity: pinned.integrity, license: metadata.license ?? null });
     for (const dependency of Object.keys(metadata.dependencies ?? {})) await visit(dependency, source);
     for (const dependency of Object.keys(metadata.optionalDependencies ?? {})) await visit(dependency, source, true);

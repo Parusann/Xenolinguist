@@ -599,7 +599,7 @@
   },
   "sourceChecks": {
     "unitPassed": 204,
-    "toolingPassed": 6,
+    "toolingPassed": 7,
     "nativeUnitSkipped": 3,
     "workbenchWorking": 23,
     "workbenchExpectedFailure": 1,
@@ -631,7 +631,7 @@
     }
   },
   "independentInstallerCI": {
-    "status": "retry-pending",
+    "status": "target-payload-retry-pending",
     "firstRun": "https://github.com/Parusann/Xenolinguist/actions/runs/34800931332",
     "firstFailure": "Model extractor was no longer supplied transitively by electron-builder; now declared directly."
   },
@@ -703,5 +703,568 @@
     "verifiedAssetFiles": 452,
     "extractor": "7zip-bin 5.2.0",
     "note": "Downloaded the pinned distribution and tracked assets into a fresh temporary vendor directory; checked every manifest hash."
+  },
+  "followUpFindings": [
+    {
+      "run": "https://github.com/Parusann/Xenolinguist/actions/runs/34801198211",
+      "finding": "NSIS returned success for a mixed-separator destination without the expected executable. A minimal NSIS probe reproduced it; native backslashes fix the request."
+    },
+    {
+      "run": "https://github.com/Parusann/Xenolinguist/actions/runs/34801680631",
+      "finding": "Installation succeeded; strict inventory comparison found six missing foreign-architecture ONNX binaries. Staging now selects only Windows x64 and retains every-file verification."
+    }
+  ],
+  "runtimeSelection": {
+    "removedFiles": 11,
+    "removedUncompressedBytes": 158113768,
+    "toolingTestsPassed": 7
+  },
+  "localTarget": {
+    "source": {
+      "revision": "1e61124eeebfe6b06bdb60ed56b9d12084124de7",
+      "branch": "implementation/reliability",
+      "workingFiles": [
+        {
+          "file": "README.md",
+          "sha256": "da7f2b0ae3461be9c00f19c4ed6ee070dd1f303835fe5f00cfb48f0b928cc6b1"
+        },
+        {
+          "file": "docs/ci-release-gates.md",
+          "sha256": "b9677712a130382467b73ad4f38f6fa6dfd4e0c1f3de51fbb5d62393ab8f2be8"
+        },
+        {
+          "file": "docs/ipa-model-notes.md",
+          "sha256": "0f043f8b59194a7ee5415662e795d1ac0208666b1d5cddb07f7772c71f5d5079"
+        },
+        {
+          "file": "docs/limitations.md",
+          "sha256": "d439a511ddea7fc9188afdb49d746b759cc9012b0d47a12518bfd3dd0a53353f"
+        },
+        {
+          "file": "docs/testing.md",
+          "sha256": "391f4ebac17d543d54193f8c758260ccb7007a5c55c83549fc58ed41c234dbbe"
+        },
+        {
+          "file": "scripts/stage-runtime.mjs",
+          "sha256": "dccd074d9a4e5ab3f165b9385b3d982e99716ebdcd5ac56353b89ccbe253f2b7"
+        },
+        {
+          "file": "tests/tooling/artifact-layout.test.mjs",
+          "sha256": "54e79743d317994726d7a3b9c885afbe6758ed26bc7148ae16f71d490dd678ed"
+        }
+      ],
+      "node": "25.8.2",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "passed": true,
+    "standalone": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "1582a48c86bc4d272e19b92933d695c1150a6f48d998c54430fefe0f41ca6321"
+    },
+    "appArchive": {
+      "bytes": 2959999,
+      "sha256": "99556640e6d92672422f8198f38c1a2cae0c1bbf12cadf97c1c33f619f35ff01"
+    },
+    "lockfile": {
+      "bytes": 361003,
+      "sha256": "0a278ef8cb13db63613e9570d85e63efebdbf49b51b563b87de859e1275e46a3"
+    },
+    "runtime": {
+      "versions": {
+        "node": "24.19.0",
+        "acorn": "8.17.0",
+        "ada": "3.4.4",
+        "amaro": "1.1.10",
+        "ares": "1.34.6",
+        "brotli": "1.2.0",
+        "cldr": "48.0",
+        "icu": "78.2",
+        "llhttp": "9.4.3",
+        "merve": "1.2.2",
+        "modules": "146",
+        "napi": "10",
+        "nbytes": "0.1.4",
+        "ncrypto": "0.0.1",
+        "nghttp2": "1.69.0",
+        "nghttp3": "",
+        "ngtcp2": "",
+        "openssl": "0.0.0",
+        "simdjson": "4.6.4",
+        "simdutf": "7.7.0",
+        "sqlite": "3.53.3",
+        "tz": "2025c",
+        "undici": "7.29.0",
+        "unicode": "17.0",
+        "uv": "1.52.1",
+        "uvwasi": "0.0.23",
+        "v8": "14.8.178.38-electron.0",
+        "zlib": "1.3.2.1-motley",
+        "zstd": "1.6.0",
+        "electron": "42.11.3",
+        "chrome": "148.0.7778.280"
+      },
+      "packaged": true,
+      "userData": "C:\\Users\\parus\\AppData\\Local\\Temp\\xeno-acceptance-desktop-91hcty"
+    },
+    "checks": {
+      "artifactLayout": {
+        "passed": true,
+        "checkedFiles": 3772,
+        "additionalFiles": [],
+        "source": {
+          "revision": "1e61124eeebfe6b06bdb60ed56b9d12084124de7",
+          "branch": "implementation/reliability",
+          "workingFiles": [
+            {
+              "file": "README.md",
+              "sha256": "da7f2b0ae3461be9c00f19c4ed6ee070dd1f303835fe5f00cfb48f0b928cc6b1"
+            },
+            {
+              "file": "docs/ci-release-gates.md",
+              "sha256": "b9677712a130382467b73ad4f38f6fa6dfd4e0c1f3de51fbb5d62393ab8f2be8"
+            },
+            {
+              "file": "docs/ipa-model-notes.md",
+              "sha256": "0f043f8b59194a7ee5415662e795d1ac0208666b1d5cddb07f7772c71f5d5079"
+            },
+            {
+              "file": "docs/limitations.md",
+              "sha256": "d439a511ddea7fc9188afdb49d746b759cc9012b0d47a12518bfd3dd0a53353f"
+            },
+            {
+              "file": "docs/testing.md",
+              "sha256": "391f4ebac17d543d54193f8c758260ccb7007a5c55c83549fc58ed41c234dbbe"
+            },
+            {
+              "file": "scripts/stage-runtime.mjs",
+              "sha256": "dccd074d9a4e5ab3f165b9385b3d982e99716ebdcd5ac56353b89ccbe253f2b7"
+            },
+            {
+              "file": "tests/tooling/artifact-layout.test.mjs",
+              "sha256": "54e79743d317994726d7a3b9c885afbe6758ed26bc7148ae16f71d490dd678ed"
+            }
+          ],
+          "node": "25.8.2",
+          "platform": "win32",
+          "arch": "x64"
+        },
+        "manifest": {
+          "bytes": 825638,
+          "sha256": "fb58fd1968424d60d85b194917bc7152135c3a981a10889b2195fff9b3a71e53"
+        },
+        "checks": {
+          "requiredFiles": 9,
+          "nativeGroups": 3,
+          "runtimePackages": 50
+        }
+      },
+      "localBoundary": {
+        "otherWindowStatus": 401,
+        "sandbox": true,
+        "contextIsolation": true,
+        "nodeIntegration": false,
+        "webSecurity": true,
+        "anonymousHealth": 401,
+        "anonymousBinary": 401,
+        "trustedHealth": 200,
+        "foreignNavigationBlocked": true,
+        "popupDenied": true,
+        "syntheticMicrophone": {
+          "audioTracks": 1,
+          "cameraDenied": true
+        },
+        "relaunchAuthenticated": true
+      },
+      "runtimeCapabilities": {
+        "checkedAt": "2026-09-14T21:22:40.804Z",
+        "expiresAt": "2026-09-14T21:22:45.804Z",
+        "storage": {
+          "state": "available",
+          "detail": "Local storage write probe passed"
+        },
+        "tts": {
+          "state": "available",
+          "detail": "Local speech synthesis files present; execution is checked when requested"
+        },
+        "stt": {
+          "state": "available",
+          "detail": "Local transcription files present; execution is checked when requested"
+        },
+        "phones": {
+          "state": "available",
+          "detail": "Phone asset sizes match; hashes and native runtime are checked at inference"
+        },
+        "chat": {
+          "state": "unavailable",
+          "detail": "Start the local Ollama service to use chat"
+        },
+        "resources": {
+          "cpuCount": 24,
+          "freeMemoryBytes": 17725095936,
+          "totalMemoryBytes": 33440882688
+        },
+        "setupModels": [
+          {
+            "name": "gemma4:e4b",
+            "approximateBytes": 9610000000
+          },
+          {
+            "name": "llama3.2:3b",
+            "approximateBytes": 2020000000
+          }
+        ]
+      },
+      "nativeJobCancellation": {
+        "nativeProcessStarted": true,
+        "status": 409,
+        "code": "JOB_CANCELLED"
+      },
+      "ipa": {
+        "status": 200,
+        "body": {
+          "ipa": "h# dh ax l ow w eh l pau dh ah kcl k w ih kcl k pau r aw n dcl f aa kcl k s ah m pau s ow m ah n ah l ey z ih dcl n ao gcl g h#",
+          "segments": [
+            {
+              "phone": "h#",
+              "start": 0,
+              "end": 0.02
+            },
+            {
+              "phone": "dh",
+              "start": 0.04,
+              "end": 0.06
+            },
+            {
+              "phone": "ax",
+              "start": 0.06,
+              "end": 0.08
+            },
+            {
+              "phone": "l",
+              "start": 0.14,
+              "end": 0.16
+            },
+            {
+              "phone": "ow",
+              "start": 0.18,
+              "end": 0.2
+            },
+            {
+              "phone": "w",
+              "start": 0.32,
+              "end": 0.36
+            },
+            {
+              "phone": "eh",
+              "start": 0.38,
+              "end": 0.4
+            },
+            {
+              "phone": "l",
+              "start": 0.52,
+              "end": 0.56
+            },
+            {
+              "phone": "pau",
+              "start": 0.64,
+              "end": 0.66
+            },
+            {
+              "phone": "dh",
+              "start": 0.7,
+              "end": 0.72
+            },
+            {
+              "phone": "ah",
+              "start": 0.72,
+              "end": 0.74
+            },
+            {
+              "phone": "kcl",
+              "start": 0.8,
+              "end": 0.82
+            },
+            {
+              "phone": "k",
+              "start": 0.82,
+              "end": 0.86
+            },
+            {
+              "phone": "w",
+              "start": 0.88,
+              "end": 0.92
+            },
+            {
+              "phone": "ih",
+              "start": 0.92,
+              "end": 0.94
+            },
+            {
+              "phone": "kcl",
+              "start": 1.04,
+              "end": 1.06
+            },
+            {
+              "phone": "k",
+              "start": 1.06,
+              "end": 1.08
+            },
+            {
+              "phone": "pau",
+              "start": 1.12,
+              "end": 1.14
+            },
+            {
+              "phone": "r",
+              "start": 1.16,
+              "end": 1.18
+            },
+            {
+              "phone": "aw",
+              "start": 1.2,
+              "end": 1.22
+            },
+            {
+              "phone": "n",
+              "start": 1.34,
+              "end": 1.36
+            },
+            {
+              "phone": "dcl",
+              "start": 1.38,
+              "end": 1.4
+            },
+            {
+              "phone": "f",
+              "start": 1.44,
+              "end": 1.46
+            },
+            {
+              "phone": "aa",
+              "start": 1.48,
+              "end": 1.5
+            },
+            {
+              "phone": "kcl",
+              "start": 1.58,
+              "end": 1.62
+            },
+            {
+              "phone": "k",
+              "start": 1.62,
+              "end": 1.64
+            },
+            {
+              "phone": "s",
+              "start": 1.7,
+              "end": 1.72
+            },
+            {
+              "phone": "ah",
+              "start": 1.8,
+              "end": 1.82
+            },
+            {
+              "phone": "m",
+              "start": 1.9,
+              "end": 1.94
+            },
+            {
+              "phone": "pau",
+              "start": 2.04,
+              "end": 2.06
+            },
+            {
+              "phone": "s",
+              "start": 2.1,
+              "end": 2.12
+            },
+            {
+              "phone": "ow",
+              "start": 2.16,
+              "end": 2.18
+            },
+            {
+              "phone": "m",
+              "start": 2.28,
+              "end": 2.3
+            },
+            {
+              "phone": "ah",
+              "start": 2.32,
+              "end": 2.34
+            },
+            {
+              "phone": "n",
+              "start": 2.4,
+              "end": 2.44
+            },
+            {
+              "phone": "ah",
+              "start": 2.46,
+              "end": 2.48
+            },
+            {
+              "phone": "l",
+              "start": 2.52,
+              "end": 2.54
+            },
+            {
+              "phone": "ey",
+              "start": 2.56,
+              "end": 2.58
+            },
+            {
+              "phone": "z",
+              "start": 2.7,
+              "end": 2.72
+            },
+            {
+              "phone": "ih",
+              "start": 2.74,
+              "end": 2.76
+            },
+            {
+              "phone": "dcl",
+              "start": 2.82,
+              "end": 2.86
+            },
+            {
+              "phone": "n",
+              "start": 2.88,
+              "end": 2.9
+            },
+            {
+              "phone": "ao",
+              "start": 2.9,
+              "end": 2.92
+            },
+            {
+              "phone": "gcl",
+              "start": 3.06,
+              "end": 3.08
+            },
+            {
+              "phone": "g",
+              "start": 3.08,
+              "end": 3.1
+            },
+            {
+              "phone": "h#",
+              "start": 3.42,
+              "end": 3.44
+            }
+          ],
+          "identity": {
+            "modelId": "wav2vec2-phoneme",
+            "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+            "alphabet": "TIMIT ARPABET",
+            "transformers": "4.2.0",
+            "backend": "onnxruntime-node",
+            "node": "24.19.0"
+          }
+        }
+      },
+      "stt": {
+        "status": 200,
+        "body": {
+          "language": "en",
+          "text": "Hello world, the quick brown fox, dumb, over the lazy dog.",
+          "segments": [
+            {
+              "start": 0,
+              "end": 3.18,
+              "text": "Hello world, the quick brown fox, dumb, over the lazy dog."
+            }
+          ],
+          "languageProb": 0.876527,
+          "mode": "transcription"
+        }
+      },
+      "tts": {
+        "status": 200,
+        "bytes": 86537,
+        "wav": true
+      },
+      "wavUpload": {
+        "status": 200,
+        "body": {
+          "filename": "release-fixture.wav",
+          "size": 110286
+        }
+      },
+      "sampleSave": {
+        "status": 200
+      },
+      "sampleOnDisk": true,
+      "loadedWorkbench": true,
+      "pendingSaveRecovered": true,
+      "desktopDraftRecovered": true,
+      "desktopAudioDraftRecovered": true,
+      "desktopAudioSaved": {
+        "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "0ca6b28535d9385d576c695a6563294e028105cda30539a139a23b292a3a942b",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phoneSegments": 48,
+        "playback": true
+      },
+      "desktopAIHistoryRecovered": {
+        "state": "complete",
+        "task": "conlangGeneration",
+        "fixtureGeneration": true
+      },
+      "desktopSandboxRecovered": {
+        "sameSession": true,
+        "restoredEvents": 2,
+        "afterRetryEvents": 3,
+        "dictionaryEntries": 1,
+        "fixtureGeneration": true
+      },
+      "desktopEvidenceMetrics": {
+        "unratedAssertion": true,
+        "historyVisible": true,
+        "latestSnapshot": {
+          "version": 1,
+          "revision": 4,
+          "recorded_at": "2026-09-14T21:23:37.701Z",
+          "counts": {
+            "observations": 0,
+            "assertedEntries": 1,
+            "grammarNotes": 0,
+            "competingForms": 0,
+            "mappings1To20": 1,
+            "ratedEntries": 0
+          }
+        }
+      },
+      "missingModel": {
+        "status": 503,
+        "body": {
+          "error": "ipa-unavailable",
+          "code": "IPA_MODEL_MISSING",
+          "requestId": "b54b977f-4697-4bcd-8bf1-28c9bfda63f4",
+          "retryable": true
+        }
+      }
+    },
+    "integrationCoverage": {
+      "nativeAudio": "required: bundled STT, TTS and phones must succeed",
+      "localChat": {
+        "status": "not-run",
+        "reason": "Ollama is deliberately unavailable in this isolated acceptance run. Run npm run verify:local-model separately on a host with installed local models."
+      }
+    }
   }
 }
