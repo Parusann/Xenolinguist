@@ -2,10 +2,14 @@
 
 W12 introduces two independent required-to-review workflow results on pull requests and pushes to `main` and `implementation/reliability`. Repository branch protection is a separate setting; these workflows do not configure it.
 
+[Retained W12 evidence](verification/w12-ci-gates.json) records source revisions, installer checksums, verification results and the failures that led to the final gates.
+
 1. **Source regression gates** uses Node 24 and `npm ci` on Windows and Linux. `npm run check:source` runs client ESLint, syntax checks for repository MJS scripts, TypeScript checks across client/server/desktop/tests, unit and tooling tests, and the production desktop bundle. It then runs the isolated workbench browser suite and public-site suite. Reports and failure traces are retained for 14 days.
 2. **Windows installer acceptance** verifies the pinned native asset manifest on every build, including cache hits, builds an NSIS installer with publication disabled, and hashes every unpacked application file. A second Windows runner has no source checkout or application dependency installation. It installs only the harness's locked Playwright dependencies, silently installs the actual NSIS artifact into a disposable directory, then verifies the installed application against the build inventory before launching it.
 
 The portable inventory records the source revision, source lock hash, native models, staged dependency identities and SHA-256/byte length of every application file. Verification rejects changed/missing files, duplicate or escaping paths, symlinks and unexpected additions. The NSIS-generated `Uninstall Xenolinguist.exe` is the only permitted addition; it is not covered by the pre-install application inventory. Artifact transfer and this comparison provide integrity evidence within the CI run, not publisher authentication or a reproducible-build claim.
+
+Lock hashes cover exact checkout bytes. Git line-ending conversion produces different raw lock hashes on Windows and Linux for the same committed JSON; each report retains its own hash, and the installed Windows payload is compared with its Windows build lock.
 
 ONNX staging selects only the target platform and architecture while retaining its code and notices. The Windows installer comparison exposed six missing foreign-architecture files in the earlier all-platform payload. Selecting Windows x64 before packaging removes eleven unused binaries (158,113,768 bytes uncompressed) and keeps the unpacked inventory aligned with the intended installer contents. The verifier still requires every declared file.
 
