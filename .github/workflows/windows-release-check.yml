@@ -75,10 +75,15 @@ jobs:
         run: |
           $installer = @(Get-ChildItem -LiteralPath "$env:RUNNER_TEMP/installer" -Filter '*.exe')
           if ($installer.Count -ne 1) { throw 'Expected exactly one installer' }
-          $installed = "$env:RUNNER_TEMP/xeno-acceptance-installed"
-          $process = Start-Process -FilePath $installer[0].FullName -ArgumentList '/S', "/D=$installed" -WindowStyle Hidden -Wait -PassThru
+          # NSIS requires native backslashes and an unquoted /D argument last.
+          $installed = Join-Path $env:RUNNER_TEMP 'xeno-acceptance-installed'
+          $process = Start-Process -FilePath $installer[0].FullName -ArgumentList "/S /D=$installed" -WindowStyle Hidden -Wait -PassThru
           if ($process.ExitCode -ne 0) { throw "Installer failed: $($process.ExitCode)" }
-          if (!(Test-Path -LiteralPath "$installed/Xenolinguist.exe")) { throw 'Installed executable missing' }
+          if (!(Test-Path -LiteralPath "$installed/Xenolinguist.exe")) {
+            Get-ChildItem -LiteralPath $env:RUNNER_TEMP -Directory | Select-Object Name
+            Get-ChildItem -LiteralPath "$env:LOCALAPPDATA/Programs" -Filter '*xeno*' -ErrorAction SilentlyContinue | Select-Object FullName
+            throw "Installed executable missing from $installed"
+          }
       - name: Verify installed native audio, boundary and restart recovery
         working-directory: ${{ runner.temp }}/release-harness
         env:
