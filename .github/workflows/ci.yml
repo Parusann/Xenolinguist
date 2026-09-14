@@ -1,0 +1,39 @@
+name: Source regression gates
+on:
+  push:
+    branches: [main, implementation/reliability]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: source-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  regression:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check:source
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e:run
+      - run: npm run test:public
+      - name: Retain dependency audit
+        if: always()
+        run: npm run audit:record
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: source-results-${{ matrix.os }}
+          path: test-results/
+          retention-days: 14

@@ -1,0 +1,90 @@
+name: Windows installer acceptance
+on:
+  push:
+    branches: [main, implementation/reliability]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: installer-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v4
+        with:
+          path: |
+            vendor/ipa-model/wav2vec2-phoneme/onnx
+            ${{ runner.temp }}/xenolinguist-model-cache
+          key: native-win-x64-${{ hashFiles('vendor/model-manifest.json') }}
+      # Cache hits still undergo manifest/byte verification.
+      - run: npm run provision:models -- --download
+      - run: npm run build:desktop
+      - name: Build installer without publishing
+        run: npx electron-builder --config electron/builder.config.cjs --win nsis --x64 --publish never --config.nsis.runAfterFinish=false --config.directories.output="$env:RUNNER_TEMP/xeno-acceptance-ci-build"
+      - name: Record payload and prepare locked independent harness
+        run: |
+          node scripts/prepare-release-harness.mjs "$env:RUNNER_TEMP/release-harness"
+          node scripts/verify-artifact-layout.mjs "$env:RUNNER_TEMP/xeno-acceptance-ci-build/win-unpacked" "$env:RUNNER_TEMP/release-harness/artifact-manifest.json" --record
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: ${{ runner.temp }}/xeno-acceptance-ci-build/Xenolinguist-Setup-*.exe
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-harness
+          path: ${{ runner.temp }}/release-harness
+          if-no-files-found: error
+          retention-days: 7
+  verify-clean:
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      # Deliberately no checkout, source node_modules, model cache or Ollama.
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-installer
+          path: ${{ runner.temp }}/installer
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-harness
+          path: ${{ runner.temp }}/release-harness
+      - name: Install only locked browser automation
+        working-directory: ${{ runner.temp }}/release-harness
+        run: npm ci --ignore-scripts
+      - name: Install application into disposable runner directory
+        run: |
+          $installer = @(Get-ChildItem -LiteralPath "$env:RUNNER_TEMP/installer" -Filter '*.exe')
+          if ($installer.Count -ne 1) { throw 'Expected exactly one installer' }
+          $installed = "$env:RUNNER_TEMP/xeno-acceptance-installed"
+          $process = Start-Process -FilePath $installer[0].FullName -ArgumentList '/S', "/D=$installed" -WindowStyle Hidden -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "Installer failed: $($process.ExitCode)" }
+          if (!(Test-Path -LiteralPath "$installed/Xenolinguist.exe")) { throw 'Installed executable missing' }
+      - name: Verify installed native audio, boundary and restart recovery
+        working-directory: ${{ runner.temp }}/release-harness
+        run: node scripts/verify-release.mjs "$env:RUNNER_TEMP/xeno-acceptance-installed/Xenolinguist.exe" result.json --standalone --artifact-manifest=artifact-manifest.json --negative-model
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: installed-acceptance-result
+          path: |
+            ${{ runner.temp }}/release-harness/result.json
+            ${{ runner.temp }}/release-harness/*.png
+            ${{ runner.temp }}/release-harness/artifact-manifest.json
+          retention-days: 30

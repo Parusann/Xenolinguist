@@ -1,18 +1,7 @@
 name: Packaged Windows phones
 on:
   workflow_dispatch:
-  push:
-    branches: [implementation/reliability]
-    paths:
-      - '.github/workflows/packaged-phones.yml'
-      - 'server/src/services/*phone*'
-      - 'server/src/services/model-*.ts'
-      - 'electron/**'
-      - 'scripts/*runtime*'
-      - 'scripts/*models*'
-      - 'scripts/verify-clean-phones.mjs'
-      - 'vendor/model-manifest.json'
-      - 'package-lock.json'
+  # Retained as a manual diagnostic; windows-release-check.yml covers pushes/PRs.
 permissions:
   contents: read
 jobs:

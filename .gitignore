@@ -14,7 +14,6 @@ vendor/ipa-model-cache/
 _ipa_spike.mjs
 test-results/
 playwright-report/
-# IPA model weights exceed GitHub's 100MB file limit — regenerated via the quantize step
-# in docs/ipa-model-notes.md (config/tokenizer ARE tracked). Productionize via Git LFS or
-# download-on-first-run if the weights must be in the repo.
+# Model weights are provisioned explicitly from the pinned asset manifest.
+# CI caches these bytes and verifies their hashes on every build, including cache hits.
 vendor/ipa-model/**/*.onnx

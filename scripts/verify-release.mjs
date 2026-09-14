@@ -1,5 +1,8 @@
+import { verifyArtifact } from './verify-artifact-layout.mjs';
+import { createRequire } from 'node:module';
+import { existsSync } from 'node:fs';
 import { desktopRequest } from './desktop-request.mjs';
-// Run an unpacked release outside the source tree, in an isolated desktop data directory.
+// Run a packaged/installed release outside the source tree, in isolated desktop data.
 import { _electron as electron } from 'playwright';
 import { expect } from '@playwright/test';
 import { mkdtemp, mkdir, writeFile, readFile, realpath, rename } from 'node:fs/promises';
@@ -9,6 +12,17 @@ import path from 'node:path';
 import { root, hashFile, inventory, sourceIdentity, saveRecord } from './verification-record.mjs';
 
 const args = process.argv.slice(2);
+const standalone = args.includes('--standalone');
+if (standalone) {
+  if (existsSync(path.join(root, '.git'))) throw Error('Standalone verification must have no source checkout');
+  const require = createRequire(import.meta.url);
+  for (const dependency of ['@huggingface/transformers', 'onnxruntime-node', 'express']) {
+    try { require.resolve(dependency); throw Error('Standalone harness can resolve source dependency: ' + dependency); }
+    catch (error) { if (error.code !== 'MODULE_NOT_FOUND') throw error; }
+  }
+}
+const source = standalone ? JSON.parse(await readFile(path.join(root, 'source.json'), 'utf8')) : sourceIdentity();
+if (standalone && process.env.GITHUB_SHA && source.revision !== process.env.GITHUB_SHA) throw Error('Harness source differs from workflow revision');
 const executable = args[0];
 if (!executable) throw new Error('Usage: node scripts/verify-release.mjs <unpacked executable outside repo> [report.json]');
 const resolved = await realpath(executable);
@@ -20,16 +34,27 @@ const token = randomBytes(16).toString('hex');
 await writeFile(path.join(dir, '.xeno-test-token'), token);
 const reportFile = path.resolve(args[1] ?? path.join(root, 'test-results/release-report.json'));
 await mkdir(path.dirname(reportFile), { recursive: true });
-const record = { source: sourceIdentity(), executable: await hashFile(resolved),
+const record = { source, standalone, executable: await hashFile(resolved),
   appArchive: await hashFile(path.join(resources, 'app.asar')),
-  lockfile: await hashFile(path.join(root, 'package-lock.json')),
+  lockfile: await hashFile(path.join(root, standalone ? 'source-package-lock.json' : 'package-lock.json')),
   modelFiles: await inventory(path.join(resources, 'ipa-model')),
   whisperFiles: await inventory(path.join(resources, 'whisper')),
   runtimeFiles: await inventory(path.join(resources, 'server-deps')),
-  isolatedUserData: dir, checks: {}, console: [] };
+  isolatedUserData: dir, integrationCoverage: {
+    nativeAudio: 'required: bundled STT, TTS and phones must succeed',
+    localChat: { status: 'not-run', reason: 'Ollama is deliberately unavailable in this isolated acceptance run. Run npm run verify:local-model separately on a host with installed local models.' },
+  }, checks: {}, console: [] };
 let app;
 let hiddenModel;
 try {
+  const artifactManifest = args.find(arg => arg.startsWith('--artifact-manifest='))?.slice('--artifact-manifest='.length);
+  if (standalone && !artifactManifest) throw Error('Standalone release check requires the build artifact manifest');
+  if (artifactManifest) {
+    record.checks.artifactLayout = await verifyArtifact(path.dirname(resolved), artifactManifest);
+    expect(record.checks.artifactLayout.source.revision).toBe(source.revision);
+    const metadata = JSON.parse(await readFile(artifactManifest, 'utf8'));
+    expect(metadata.lockSha256).toBe(record.lockfile.sha256);
+  }
   // These paired credentials opt into isolation; normal launches ignore DATA_DIR.
   const launchEnv = { ...process.env, XENO_TEST_MODE: '1', XENO_TEST_TOKEN: token,
     OLLAMA_BASE_URL: 'http://127.0.0.1:1', NODE_PATH: '', NODE_OPTIONS: '' };
@@ -108,6 +133,11 @@ try {
     expect(record.checks.ipa.body.identity.modelSha256).toBe(record.modelFiles.find(file => file.file.endsWith('.onnx')).sha256);
   }
   record.checks.stt = await request('/api/stt', { audio: wav.toString('base64') });
+  expect(record.checks.stt.status).toBe(200); expect(record.checks.stt.body.text.trim().length).toBeGreaterThan(0);
+  const speech = await desktopRequest(page).post(origin + '/api/tts', { data: { text: 'Hello from the local workbench' } });
+  const speechBytes = await speech.body();
+  expect(speech.status()).toBe(200); expect(speechBytes.subarray(0, 4).toString()).toBe('RIFF'); expect(speechBytes.length).toBeGreaterThan(44);
+  record.checks.tts = { status: speech.status(), bytes: speechBytes.length, wav: true };
   record.checks.wavUpload = await request('/api/audio/upload', { id: 'release-fixture', data: wav.toString('base64') });
   const profile = await request('/api/profiles', { name: 'Release smoke' });
   if (profile.status !== 201) throw new Error('Release profile creation failed');
@@ -250,7 +280,7 @@ try {
     await app.close(); app = undefined;
     await rename(hiddenModel.hidden, model); hiddenModel = undefined;
   }
-  record.acceptancePassed = record.checks.ipa.status === 200 && record.checks.stt.status === 200
+  record.acceptancePassed = record.checks.ipa.status === 200 && record.checks.stt.status === 200 && record.checks.tts.status === 200
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered
