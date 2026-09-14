@@ -205,7 +205,7 @@ export function SampleInput() {
           <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Capture raw alien text. Tag the source, add phonetic notes, attach audio.</p>
         </div>
 
-        <div className="glass-card" style={{ padding: 18 }} inert={audioSaving || preparing || !!analyzingAudio ? true : undefined}>
+        <fieldset className="glass-card" aria-label="New sample" style={{ padding: 18, margin: 0, minWidth: 0 }} disabled={audioSaving || preparing || !!analyzingAudio} inert={audioSaving || preparing || !!analyzingAudio ? true : undefined}>
           <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <span className="label" style={{ marginBottom: 0 }}>New Sample</span>
             <label className="flex" style={{ gap: 6, alignItems: 'center', fontSize: 12, color: 'var(--fg-dim)', cursor: 'pointer', userSelect: 'none' }}>
@@ -301,7 +301,7 @@ export function SampleInput() {
               )}
             </div>
           )}
-        </div>
+        </fieldset>
 
         {(preparing || audioSaving || analyzingAudio) && <p role="status">{preparing ? 'Preparing audio…' : audioSaving ? 'Saving audio and sample…' : 'Analyzing audio…'}</p>}
         {audioError && <p role="alert" className="text-xs text-amber-300">{audioError}</p>}

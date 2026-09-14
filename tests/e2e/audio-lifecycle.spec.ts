@@ -4,6 +4,28 @@ import { test, expect, preparePage, openProfile, wavFixture, attachJson } from '
 test.use({ launchOptions: { args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] } });
 test.beforeEach(async ({ page }) => { await preparePage(page); });
 
+test('sample inputs wait for delayed draft recovery before accepting and saving text', async ({ page, server }) => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Delayed recovery' } })).json();
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'xeno', { value: { readAudioDraft: () => new Promise(resolve => {
+      Object.defineProperty(window, '__finishAudioRecovery', { configurable: true, value: () => resolve(null) });
+    }) } });
+  });
+  await openProfile(page, server.url, profile.name);
+  const input = page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.');
+  await expect(input).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Add Sample', exact: true })).toBeDisabled();
+  await expect.poll(() => page.evaluate(() => typeof (window as unknown as { __finishAudioRecovery?: () => void }).__finishAudioRecovery)).toBe('function');
+  await page.evaluate(() => (window as unknown as { __finishAudioRecovery: () => void }).__finishAudioRecovery());
+  await input.fill('Text after recovery');
+  await expect(input).toHaveValue('Text after recovery');
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await expect.poll(async () => {
+    const saved = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
+    return saved.samples.filter((sample: { alien_text: string }) => sample.alien_text === 'Text after recovery').length;
+  }).toBe(1);
+});
+
 test('W06 persists original bytes before worker processing so an interrupted preparation recovers', async ({ page, server }) => {
   const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Interrupted preparation' } })).json();
   await openProfile(page, server.url, profile.name);

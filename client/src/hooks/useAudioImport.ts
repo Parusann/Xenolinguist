@@ -4,7 +4,8 @@ import { prepareAudio, type PreparedAudio } from '@/services/audio-import'
 export interface PendingAudio extends PreparedAudio { draft: AudioDraft; blobUrl: string }
 export function useAudioImport(profileId: string | undefined) {
   const [pendingAudio, setPendingAudio] = useState<PendingAudio | null>(null)
-  const [preparing, setPreparing] = useState(false)
+  // Recovery starts with the first render, before effects can make the form inert.
+  const [preparing, setPreparing] = useState(Boolean(profileId))
   const [audioError, setAudioError] = useState('')
   const generation = useRef(0), currentUrl = useRef('')
   useEffect(() => {

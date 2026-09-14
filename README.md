@@ -80,7 +80,7 @@ npm run audit:record
 npm run dist
 ```
 
-The W12 local baseline has 204 passing unit tests plus seven tooling tests, three gated native unit skips, 23 working workbench checks, one expected Unicode failure and eight public-site checks. A separate installed-application CI workflow requires native audio, access boundaries and restart recovery on a fresh Windows runner. Real local-model probes require an available host with installed models. Current results and commands are in [testing](docs/testing.md); unresolved advisories are in the [dependency review](docs/dependency-review.md). These checks do not establish linguistic quality or certify the old installer.
+The W12 local baseline has 204 passing unit tests plus seven tooling tests, three gated native unit skips, 24 working workbench checks, one expected Unicode failure and eight public-site checks. A separate installed-application CI workflow requires native audio, access boundaries and restart recovery on a fresh Windows runner. Real local-model probes require an available host with installed models. Current results and commands are in [testing](docs/testing.md); unresolved advisories are in the [dependency review](docs/dependency-review.md). These checks do not establish linguistic quality or certify the old installer.
 
 Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only), `OLLAMA_MODEL`, `WHISPER_TIMEOUT_MS`, `TTS_TIMEOUT_MS` and the native asset paths. Context/output budgets and generation deadlines are server-owned; the former `OLLAMA_TIMEOUT_MS` setting does not control the current generation service.
 

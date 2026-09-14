@@ -601,7 +601,7 @@
     "unitPassed": 204,
     "toolingPassed": 7,
     "nativeUnitSkipped": 3,
-    "workbenchWorking": 23,
+    "workbenchWorking": 24,
     "workbenchExpectedFailure": 1,
     "publicPassed": 8,
     "lint": true,
@@ -631,7 +631,7 @@
     }
   },
   "independentInstallerCI": {
-    "status": "target-payload-retry-pending",
+    "status": "final-form-retry-pending",
     "firstRun": "https://github.com/Parusann/Xenolinguist/actions/runs/34800931332",
     "firstFailure": "Model extractor was no longer supplied transitively by electron-builder; now declared directly."
   },
@@ -712,6 +712,10 @@
     {
       "run": "https://github.com/Parusann/Xenolinguist/actions/runs/34801680631",
       "finding": "Installation succeeded; strict inventory comparison found six missing foreign-architecture ONNX binaries. Staging now selects only Windows x64 and retains every-file verification."
+    },
+    {
+      "run": "https://github.com/Parusann/Xenolinguist/actions/runs/34898614051",
+      "finding": "Linux sample-save test attempted input while audio recovery made the form inert, but the textarea still appeared enabled to browser automation. A delayed-recovery fixture failed before the fix and passed after initializing busy state and disabling the fieldset."
     }
   ],
   "runtimeSelection": {
@@ -1255,6 +1259,457 @@
           "error": "ipa-unavailable",
           "code": "IPA_MODEL_MISSING",
           "requestId": "b54b977f-4697-4bcd-8bf1-28c9bfda63f4",
+          "retryable": true
+        }
+      }
+    },
+    "integrationCoverage": {
+      "nativeAudio": "required: bundled STT, TTS and phones must succeed",
+      "localChat": {
+        "status": "not-run",
+        "reason": "Ollama is deliberately unavailable in this isolated acceptance run. Run npm run verify:local-model separately on a host with installed local models."
+      }
+    }
+  },
+  "installedCheckpoint": {
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/34898614065",
+    "source": {
+      "revision": "eba38ac64623e42ff4b50dd2cffdccb1e599571e",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.20.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "passed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "1582a48c86bc4d272e19b92933d695c1150a6f48d998c54430fefe0f41ca6321"
+    },
+    "appArchive": {
+      "bytes": 2959999,
+      "sha256": "99556640e6d92672422f8198f38c1a2cae0c1bbf12cadf97c1c33f619f35ff01"
+    },
+    "checks": {
+      "artifactLayout": {
+        "passed": true,
+        "checkedFiles": 3772,
+        "additionalFiles": [
+          "Uninstall Xenolinguist.exe"
+        ],
+        "source": {
+          "revision": "eba38ac64623e42ff4b50dd2cffdccb1e599571e",
+          "branch": "implementation/reliability",
+          "workingFiles": [],
+          "node": "24.20.0",
+          "platform": "win32",
+          "arch": "x64"
+        },
+        "manifest": {
+          "bytes": 824628,
+          "sha256": "617deb3127a2738fe088a03dc62a1d044ebb09ca519172cc8fcb9ce1aa5468fa"
+        },
+        "checks": {
+          "requiredFiles": 9,
+          "nativeGroups": 3,
+          "runtimePackages": 50
+        }
+      },
+      "localBoundary": {
+        "otherWindowStatus": 401,
+        "sandbox": true,
+        "contextIsolation": true,
+        "nodeIntegration": false,
+        "webSecurity": true,
+        "anonymousHealth": 401,
+        "anonymousBinary": 401,
+        "trustedHealth": 200,
+        "foreignNavigationBlocked": true,
+        "popupDenied": true,
+        "syntheticMicrophone": {
+          "audioTracks": 1,
+          "cameraDenied": true
+        },
+        "relaunchAuthenticated": true
+      },
+      "runtimeCapabilities": {
+        "checkedAt": "2026-09-14T21:30:28.230Z",
+        "expiresAt": "2026-09-14T21:30:33.230Z",
+        "storage": {
+          "state": "available",
+          "detail": "Local storage write probe passed"
+        },
+        "tts": {
+          "state": "available",
+          "detail": "Local speech synthesis files present; execution is checked when requested"
+        },
+        "stt": {
+          "state": "available",
+          "detail": "Local transcription files present; execution is checked when requested"
+        },
+        "phones": {
+          "state": "available",
+          "detail": "Phone asset sizes match; hashes and native runtime are checked at inference"
+        },
+        "chat": {
+          "state": "unavailable",
+          "detail": "Start the local Ollama service to use chat"
+        },
+        "resources": {
+          "cpuCount": 4,
+          "freeMemoryBytes": 13083906048,
+          "totalMemoryBytes": 17174360064
+        },
+        "setupModels": [
+          {
+            "name": "gemma4:e4b",
+            "approximateBytes": 9610000000
+          },
+          {
+            "name": "llama3.2:3b",
+            "approximateBytes": 2020000000
+          }
+        ]
+      },
+      "nativeJobCancellation": {
+        "nativeProcessStarted": true,
+        "status": 409,
+        "code": "JOB_CANCELLED"
+      },
+      "ipa": {
+        "status": 200,
+        "body": {
+          "ipa": "h# dh ax l ow w eh l pau dh ah kcl k w ih kcl k pau r aw n dcl f aa kcl k s ah m pau s ow m ah n ah l ey z ih dcl n ao gcl g h#",
+          "segments": [
+            {
+              "phone": "h#",
+              "start": 0,
+              "end": 0.02
+            },
+            {
+              "phone": "dh",
+              "start": 0.04,
+              "end": 0.06
+            },
+            {
+              "phone": "ax",
+              "start": 0.06,
+              "end": 0.08
+            },
+            {
+              "phone": "l",
+              "start": 0.14,
+              "end": 0.16
+            },
+            {
+              "phone": "ow",
+              "start": 0.18,
+              "end": 0.2
+            },
+            {
+              "phone": "w",
+              "start": 0.34,
+              "end": 0.36
+            },
+            {
+              "phone": "eh",
+              "start": 0.38,
+              "end": 0.4
+            },
+            {
+              "phone": "l",
+              "start": 0.52,
+              "end": 0.56
+            },
+            {
+              "phone": "pau",
+              "start": 0.64,
+              "end": 0.66
+            },
+            {
+              "phone": "dh",
+              "start": 0.68,
+              "end": 0.72
+            },
+            {
+              "phone": "ah",
+              "start": 0.72,
+              "end": 0.74
+            },
+            {
+              "phone": "kcl",
+              "start": 0.8,
+              "end": 0.82
+            },
+            {
+              "phone": "k",
+              "start": 0.82,
+              "end": 0.86
+            },
+            {
+              "phone": "w",
+              "start": 0.88,
+              "end": 0.92
+            },
+            {
+              "phone": "ih",
+              "start": 0.92,
+              "end": 0.94
+            },
+            {
+              "phone": "kcl",
+              "start": 1.04,
+              "end": 1.06
+            },
+            {
+              "phone": "k",
+              "start": 1.06,
+              "end": 1.08
+            },
+            {
+              "phone": "pau",
+              "start": 1.12,
+              "end": 1.14
+            },
+            {
+              "phone": "r",
+              "start": 1.16,
+              "end": 1.18
+            },
+            {
+              "phone": "aw",
+              "start": 1.2,
+              "end": 1.22
+            },
+            {
+              "phone": "n",
+              "start": 1.34,
+              "end": 1.36
+            },
+            {
+              "phone": "dcl",
+              "start": 1.38,
+              "end": 1.4
+            },
+            {
+              "phone": "f",
+              "start": 1.44,
+              "end": 1.46
+            },
+            {
+              "phone": "aa",
+              "start": 1.48,
+              "end": 1.5
+            },
+            {
+              "phone": "kcl",
+              "start": 1.58,
+              "end": 1.62
+            },
+            {
+              "phone": "k",
+              "start": 1.62,
+              "end": 1.64
+            },
+            {
+              "phone": "s",
+              "start": 1.7,
+              "end": 1.72
+            },
+            {
+              "phone": "ah",
+              "start": 1.8,
+              "end": 1.82
+            },
+            {
+              "phone": "m",
+              "start": 1.9,
+              "end": 1.94
+            },
+            {
+              "phone": "pau",
+              "start": 2.04,
+              "end": 2.06
+            },
+            {
+              "phone": "s",
+              "start": 2.1,
+              "end": 2.12
+            },
+            {
+              "phone": "ow",
+              "start": 2.16,
+              "end": 2.18
+            },
+            {
+              "phone": "m",
+              "start": 2.28,
+              "end": 2.3
+            },
+            {
+              "phone": "ah",
+              "start": 2.32,
+              "end": 2.34
+            },
+            {
+              "phone": "n",
+              "start": 2.4,
+              "end": 2.44
+            },
+            {
+              "phone": "ah",
+              "start": 2.46,
+              "end": 2.48
+            },
+            {
+              "phone": "l",
+              "start": 2.52,
+              "end": 2.54
+            },
+            {
+              "phone": "ey",
+              "start": 2.56,
+              "end": 2.58
+            },
+            {
+              "phone": "z",
+              "start": 2.7,
+              "end": 2.72
+            },
+            {
+              "phone": "ih",
+              "start": 2.74,
+              "end": 2.76
+            },
+            {
+              "phone": "dcl",
+              "start": 2.82,
+              "end": 2.86
+            },
+            {
+              "phone": "n",
+              "start": 2.88,
+              "end": 2.9
+            },
+            {
+              "phone": "ao",
+              "start": 2.9,
+              "end": 2.92
+            },
+            {
+              "phone": "gcl",
+              "start": 3.06,
+              "end": 3.08
+            },
+            {
+              "phone": "g",
+              "start": 3.08,
+              "end": 3.1
+            },
+            {
+              "phone": "h#",
+              "start": 3.42,
+              "end": 3.44
+            }
+          ],
+          "identity": {
+            "modelId": "wav2vec2-phoneme",
+            "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+            "alphabet": "TIMIT ARPABET",
+            "transformers": "4.2.0",
+            "backend": "onnxruntime-node",
+            "node": "24.19.0"
+          }
+        }
+      },
+      "stt": {
+        "status": 200,
+        "body": {
+          "language": "en",
+          "text": "Hello world, the quick brown fox, dumb, over the lazy dog.",
+          "segments": [
+            {
+              "start": 0,
+              "end": 3.18,
+              "text": "Hello world, the quick brown fox, dumb, over the lazy dog."
+            }
+          ],
+          "languageProb": 0.876527,
+          "mode": "transcription"
+        }
+      },
+      "tts": {
+        "status": 200,
+        "bytes": 86537,
+        "wav": true
+      },
+      "wavUpload": {
+        "status": 200,
+        "body": {
+          "filename": "release-fixture.wav",
+          "size": 110286
+        }
+      },
+      "sampleSave": {
+        "status": 200
+      },
+      "sampleOnDisk": true,
+      "loadedWorkbench": true,
+      "pendingSaveRecovered": true,
+      "desktopDraftRecovered": true,
+      "desktopAudioDraftRecovered": true,
+      "desktopAudioSaved": {
+        "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phoneSegments": 49,
+        "playback": true
+      },
+      "desktopAIHistoryRecovered": {
+        "state": "complete",
+        "task": "conlangGeneration",
+        "fixtureGeneration": true
+      },
+      "desktopSandboxRecovered": {
+        "sameSession": true,
+        "restoredEvents": 2,
+        "afterRetryEvents": 3,
+        "dictionaryEntries": 1,
+        "fixtureGeneration": true
+      },
+      "desktopEvidenceMetrics": {
+        "unratedAssertion": true,
+        "historyVisible": true,
+        "latestSnapshot": {
+          "version": 1,
+          "revision": 4,
+          "recorded_at": "2026-09-14T21:31:27.918Z",
+          "counts": {
+            "observations": 0,
+            "assertedEntries": 1,
+            "grammarNotes": 0,
+            "competingForms": 0,
+            "mappings1To20": 1,
+            "ratedEntries": 0
+          }
+        }
+      },
+      "missingModel": {
+        "status": 503,
+        "body": {
+          "error": "ipa-unavailable",
+          "code": "IPA_MODEL_MISSING",
+          "requestId": "1ca44f26-5418-4de2-b85e-b9d224021a5a",
           "retryable": true
         }
       }
