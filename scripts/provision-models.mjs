@@ -62,7 +62,7 @@ async function provision() {
       const extraction = await fs.mkdtemp(path.join(os.tmpdir(), 'xeno-model-extract-'));
       const seven = path.join(root, 'node_modules/7zip-bin/win/x64/7za.exe');
       const result = spawnSync(seven, ['x', archive, `-o${extraction}`, group.distribution.member, '-y'], { windowsHide: true, encoding: 'utf8' });
-      if (result.error || result.status > 1) throw new Error('Model archive extraction failed');
+      if (result.error || ![0, 1].includes(result.status)) throw new Error(`Model archive extraction failed (${result.error?.code ?? result.status}): ${(result.stderr || result.stdout || '').trim()}`);
       const extracted = safePath(extraction, group.distribution.member);
       if (!await matches(extracted, file)) throw new Error('Extracted model checksum mismatch');
       await fs.mkdir(path.dirname(destination), { recursive: true });

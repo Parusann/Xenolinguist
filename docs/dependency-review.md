@@ -8,7 +8,7 @@ The initial audit contained 39 affected package entries (4 critical, 25 high, 8 
 | --- | --- |
 | Tests and bundling | Both workspaces use Vitest 4.1.11; Vite resolves to 8.3.0, esbuild to 0.28.2 and tsx to 4.23.13. This removes the old Vitest/Vite development-server chain. Unit suites, TypeScript, production builds and browser flows are checked after the update. |
 | HTTP server | Express 4.22.2 and Express 4 type definitions 4.17.25 now use the same major API. The root override pins qs 6.16.0, including Express's narrower declared tilde range. HTTP contract tests and browser requests verify the selected parser with the bundled backend. npm 11's workspace `npm ls qs` may still label Express's declared range invalid; the explicit override and lockfile intentionally select 6.16.0, and locked installation is checked in CI. Revisit the override when Express accepts the patched range. |
-| Desktop packaging | Electron stays on major 42 and resolves to 42.11.3; electron-builder resolves to 26.15.3 and electron-updater to 6.8.9. Native acceptance uses the resulting executable, not the development Electron executable. |
+| Desktop packaging | Electron stays on major 42 and resolves to 42.11.3; electron-builder resolves to 26.15.3 and electron-updater to 6.8.9. `7zip-bin` 5.2.0 is an explicit development dependency because manifest provisioning invokes its Windows extractor directly; it is no longer inherited from the builder. Native acceptance uses the resulting executable, not the development Electron executable. |
 | Native inference | Transformers.js 4.2.0, onnxruntime-node 1.24.3, sharp 0.34.5 and the manifest-pinned model bytes remain paired. No unverified major native-library override is used to suppress audit findings. |
 
 ## Outstanding dispositions

@@ -631,11 +631,77 @@
     }
   },
   "independentInstallerCI": {
-    "status": "pending"
+    "status": "retry-pending",
+    "firstRun": "https://github.com/Parusann/Xenolinguist/actions/runs/34800931332",
+    "firstFailure": "Model extractor was no longer supplied transitively by electron-builder; now declared directly."
   },
   "limits": [
     "Local execution used an unpacked application; installation is checked by the new independent CI workflow.",
-    "Real Ollama inference was not rerun in W12 local acceptance.",
     "No signed/public installer release or main/Pages deployment."
-  ]
+  ],
+  "localModels": {
+    "recordedAt": "2026-09-14T02:58:42.407Z",
+    "source": {
+      "revision": "5c8feb397c9c990b768e54f3cd03bf570507f8db",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "25.8.2",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "checks": {
+      "remote": {
+        "availableForTest": true,
+        "status": 422,
+        "code": "MODEL_NOT_LOCAL_CHAT"
+      },
+      "embedding": {
+        "availableForTest": true,
+        "status": 422,
+        "code": "MODEL_NOT_LOCAL_CHAT"
+      },
+      "localChat": {
+        "status": 200,
+        "content": "sky blue",
+        "elapsedMs": 8447
+      },
+      "liveGenerationCancellation": {
+        "receivedTokenBeforeCancel": true,
+        "status": 202,
+        "cleanupMs": 3
+      },
+      "afterCancellation": {
+        "status": 200,
+        "content": "ready"
+      },
+      "jobsSettled": true
+    },
+    "model": {
+      "name": "gemma4:e4b",
+      "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+      "size": 9608350718,
+      "capabilities": [
+        "completion",
+        "vision",
+        "audio",
+        "tools",
+        "thinking"
+      ],
+      "location": "local",
+      "eligible": true,
+      "reason": "Local completion model verified"
+    },
+    "acceptancePassed": true,
+    "limits": [
+      "One synthetic dictionary prompt, not a linguistic quality benchmark.",
+      "Uses models already installed on this host; no new downloads.",
+      "Actual backend generation, cancellation after a token and successful subsequent generation are exercised; download failure paths use deterministic protocol fixtures."
+    ]
+  },
+  "provisioning": {
+    "emptyDirectoryPassed": true,
+    "verifiedAssetFiles": 452,
+    "extractor": "7zip-bin 5.2.0",
+    "note": "Downloaded the pinned distribution and tracked assets into a fresh temporary vendor directory; checked every manifest hash."
+  }
 }

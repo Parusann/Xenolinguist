@@ -28,6 +28,9 @@ jobs:
           key: native-win-x64-${{ hashFiles('vendor/model-manifest.json') }}
       # Cache hits still undergo manifest/byte verification.
       - run: npm run provision:models -- --download
+        env:
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
       - run: npm run build:desktop
       - name: Build installer without publishing
         run: npx electron-builder --config electron/builder.config.cjs --win nsis --x64 --publish never --config.nsis.runAfterFinish=false --config.directories.output="$env:RUNNER_TEMP/xeno-acceptance-ci-build"
@@ -78,6 +81,9 @@ jobs:
           if (!(Test-Path -LiteralPath "$installed/Xenolinguist.exe")) { throw 'Installed executable missing' }
       - name: Verify installed native audio, boundary and restart recovery
         working-directory: ${{ runner.temp }}/release-harness
+        env:
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
         run: node scripts/verify-release.mjs "$env:RUNNER_TEMP/xeno-acceptance-installed/Xenolinguist.exe" result.json --standalone --artifact-manifest=artifact-manifest.json --negative-model
       - uses: actions/upload-artifact@v4
         if: always()
