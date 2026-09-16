@@ -1,0 +1,263 @@
+{
+  "workPackage": "W13",
+  "reviewedOn": "2026-09-15",
+  "implementationRevision": "0cdc51c9e0f01041943eb0b5d85c0d708cae2c38",
+  "candidateRevision": "ff0316d44baaa505fb591f5b7ce2dc1ea9d7ffdf",
+  "local": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed",
+    "unitPassed": 221,
+    "nativeUnitSkipped": 3,
+    "toolingPassed": 7,
+    "archiveTestsPassed": 17,
+    "workbench": {
+      "working": 26,
+      "expectedFailure": "F08: Unicode translation remains scheduled for W16",
+      "unexpectedFailures": 0,
+      "flaky": 0,
+      "reportStartTime": "2026-09-15T23:58:00.562Z"
+    },
+    "publicSitePassed": 8,
+    "dependencyAudit": {
+      "recordedAt": "2026-09-15T23:56:44.315Z",
+      "allHighPackageEntries": 4,
+      "productionHighPackageEntries": 4,
+      "disposition": "Unchanged native dependency families; see docs/dependency-review.md"
+    },
+    "testCorrections": [
+      "File selection now awaits disabled-fieldset draft recovery; Playwright setInputFiles does not wait for enabled state itself.",
+      "Legacy JSON import selects its .json input explicitly now that the dashboard also has an archive input.",
+      "Archive playback uses the application's Play/Pause audio controls."
+    ]
+  },
+  "coverage": [
+    "Independent source and empty destination data directories",
+    "Byte-identical original and analysis recordings, audio retrieval and browser playback",
+    "Remapped sample/clip/segment/dictionary relationships and repeated-import collision avoidance",
+    "Saved AI records and metric history; explicit sandbox inclusion and continued deterministic grading",
+    "Revision-checked replacement with a recoverable independent complete backup",
+    "Failed publication preserves the old profile byte-for-byte and permits retry",
+    "Truncated, corrupt, missing, future-version, incompatible-field, duplicate, traversal, symlink, excessive-compression, entry-count and invalid-audio rejection",
+    "Authenticated upload, strict restore options, post-preview tampering and missing-evidence rejection"
+  ],
+  "ci": {
+    "status": "passed",
+    "sourceRun": "https://github.com/Parusann/Xenolinguist/actions/runs/35038392588",
+    "installedRun": "https://github.com/Parusann/Xenolinguist/actions/runs/35038392593",
+    "supersededRuns": [
+      35038158612,
+      35038158639
+    ],
+    "supersededReason": "Automatically cancelled after adding required bundled dependency license notices; no failed conclusion was replaced.",
+    "sourcePlatforms": {
+      "windows": {
+        "browser": {
+          "startTime": "2026-09-16T00:09:37.717Z",
+          "duration": 159612.356,
+          "expected": 27,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "publicSite": {
+          "startTime": "2026-09-16T00:12:20.428Z",
+          "duration": 14945.547,
+          "expected": 8,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "lockfile": {
+          "bytes": 373561,
+          "sha256": "204ca5a105d7f755af7b4757d91b50b752d32e434476e6c41efecac1b025ad6d"
+        },
+        "allAudit": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "productionAudit": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      },
+      "linux": {
+        "browser": {
+          "startTime": "2026-09-16T00:05:25.514Z",
+          "duration": 109734.52399999999,
+          "expected": 27,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "publicSite": {
+          "startTime": "2026-09-16T00:07:16.187Z",
+          "duration": 6838.206,
+          "expected": 8,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "lockfile": {
+          "bytes": 363194,
+          "sha256": "743892bc748bad7f516fcc24b30d77c50ae779d714ce775654ddc2a44c781cd9"
+        },
+        "allAudit": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "productionAudit": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "installed": {
+      "passed": true,
+      "standalone": true,
+      "source": {
+        "revision": "ff0316d44baaa505fb591f5b7ce2dc1ea9d7ffdf",
+        "branch": "implementation/reliability",
+        "workingFiles": [],
+        "node": "24.20.0",
+        "platform": "win32",
+        "arch": "x64"
+      },
+      "executable": {
+        "bytes": 235128320,
+        "sha256": "9e0e407c0f383f3a0de8a27e5803901e52d9863aacf114fe5b7cafea906c1704"
+      },
+      "appArchive": {
+        "bytes": 2959999,
+        "sha256": "543ebc0144b5742f64789ed4115c2a54e9c247f71919e9777e17e1bab60ab5bc"
+      },
+      "lockfile": {
+        "bytes": 373561,
+        "sha256": "204ca5a105d7f755af7b4757d91b50b752d32e434476e6c41efecac1b025ad6d"
+      },
+      "artifactLayout": {
+        "passed": true,
+        "checkedFiles": 3772,
+        "additionalFiles": [
+          "Uninstall Xenolinguist.exe"
+        ],
+        "source": {
+          "revision": "ff0316d44baaa505fb591f5b7ce2dc1ea9d7ffdf",
+          "branch": "implementation/reliability",
+          "workingFiles": [],
+          "node": "24.20.0",
+          "platform": "win32",
+          "arch": "x64"
+        },
+        "manifest": {
+          "bytes": 824628,
+          "sha256": "5dc84aad397deb8f471853b8cee386b9530e5e7919ed1973c3b605c9d1cdba51"
+        },
+        "checks": {
+          "requiredFiles": 9,
+          "nativeGroups": 3,
+          "runtimePackages": 50
+        }
+      },
+      "archives": {
+        "passed": true,
+        "projects": [
+          {
+            "bytes": 234326,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 3,
+              "recordings": 1,
+              "proposals": 0,
+              "snapshots": 4
+            },
+            "sandboxIncluded": true,
+            "restoredAudioHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+          },
+          {
+            "bytes": 4431,
+            "counts": {
+              "words": 1,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 1,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          }
+        ]
+      },
+      "native": {
+        "ipa": {
+          "status": 200,
+          "segments": 46,
+          "identity": {
+            "modelId": "wav2vec2-phoneme",
+            "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+            "alphabet": "TIMIT ARPABET",
+            "transformers": "4.2.0",
+            "backend": "onnxruntime-node",
+            "node": "24.19.0"
+          }
+        },
+        "sttStatus": 200,
+        "tts": {
+          "status": 200,
+          "bytes": 86537,
+          "wav": true
+        },
+        "missingModel": {
+          "status": 503,
+          "code": "IPA_MODEL_MISSING"
+        }
+      },
+      "otherPassingChecks": [
+        "localBoundary",
+        "nativeJobCancellation",
+        "pendingSaveRecovered",
+        "desktopDraftRecovered",
+        "desktopAudioDraftRecovered",
+        "desktopAudioSaved",
+        "desktopAIHistoryRecovered",
+        "desktopSandboxRecovered",
+        "desktopEvidenceMetrics"
+      ]
+    },
+    "installerArtifact": {
+      "id": 10423999060,
+      "name": "windows-installer",
+      "zipBytes": 405349569,
+      "zipSha256": "f3438f566467b6bf396ca20e5032944dc4faaf728701fd535f54f3e9e8124175",
+      "expiresAt": "2026-09-23T00:07:44Z",
+      "note": "GitHub artifact ZIP digest, not the contained Setup executable digest. This CI candidate is not a public release."
+    }
+  },
+  "limits": [
+    "256 MiB archive and expanded-data cap; 32 MiB audio member cap; 2048 entries; 100:1 per-entry compression ratio",
+    "Archives are readable and unsigned; checksums are not authenticity proofs",
+    "Only saved schema-2 state is portable; unsaved drafts, running jobs and model binaries are excluded",
+    "Excluding sandbox session state does not redact derived records or answers already saved in AI history",
+    "Legacy audio remains legacy; previews do not invent absent analysis assets",
+    "Pre-publication interruptions may retain safe orphan assets and backups; automatic garbage collection remains future work",
+    "No public release, Pages deployment or exhaustive power-loss certification"
+  ],
+  "finalizedOn": "2026-09-16"
+}
