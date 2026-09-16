@@ -18,6 +18,8 @@ New-project restore is the default. Replacing the active project requires select
 
 There are no separate research-run records in schema 2 yet. Future research schemas need an explicit archive-version update rather than silently dropping unknown fields. JSON and CSV remain limited interchange formats: Dashboard JSON import replaces selected language fields and cannot restore recording bytes, AI history, sandbox sessions or metric history.
 
+Excluding the sandbox session does not redact practice-derived dictionary entries, samples or answers already present in saved AI history. Inspect those records separately before sharing an archive.
+
 ## Format and input limits
 
 The file is a standard ZIP with `manifest.json`, `profile.json`, and audio members named `audio/<id>/original`, `audio/<id>/analysis`, or `audio/<id>/legacy.wav` / `legacy.webm`. The version-1 manifest declares profile schema 2, source identity/revision, creation time, sandbox selection, and the byte length and SHA-256 of every payload member. The manifest is the metadata envelope and does not contain a self-referential hash. Checksums detect inconsistency; they are not a signature or proof of origin. Archives are readable and unencrypted.
