@@ -160,6 +160,7 @@ try {
   await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Recovered after desktop close');
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
   await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
   await page.locator('input[type="file"]').setInputFiles({ name: 'desktop-original.wav', mimeType: 'audio/wav', buffer: wav });
   await expect(page.getByText(/desktop-original.wav/)).toBeVisible();
   await page.getByPlaceholder('IPA, tone markers').fill('Native audio draft');
@@ -258,6 +259,38 @@ try {
   await expect(reopened.getByText('Saved metric history', { exact: true })).toBeVisible();
   await expect(reopened.getByText('Tested linguistic hypotheses: unavailable')).toBeVisible();
   record.checks.desktopEvidenceMetrics = { unratedAssertion: true, historyVisible: true, latestSnapshot: sandboxSaved.metric_snapshots.at(-1) };
+  const archiveChecks = [];
+  for (const sourceProfile of [withAudio, sandboxSaved]) {
+    const restored = await reopened.evaluate(async source => {
+      const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
+      if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
+      const bytes = await exported.arrayBuffer();
+      const inspected = await fetch('/api/archives/inspect', { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: bytes });
+      if (!inspected.ok) throw new Error(`Archive inspection failed: ${inspected.status}`);
+      const preview = await inspected.json();
+      const committed = await fetch(`/api/archives/${preview.token}/restore`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode: 'new' }) });
+      if (!committed.ok) throw new Error(`Archive restore failed: ${committed.status}`);
+      return { bytes: bytes.byteLength, preview, ...(await committed.json()) };
+    }, sourceProfile);
+    expect(restored.profile.id).not.toBe(sourceProfile.id);
+    expect(restored.profile.metric_snapshots).toEqual(sourceProfile.metric_snapshots);
+    expect(restored.profile.ai_history?.map(item => item.content)).toEqual(sourceProfile.ai_history?.map(item => item.content));
+    if (sourceProfile.sandbox_session) {
+      expect(restored.profile.sandbox_session.challenges).toEqual(sourceProfile.sandbox_session.challenges);
+      expect(restored.profile.sandbox_session.events.map(({ id: _id, ...event }) => event)).toEqual(sourceProfile.sandbox_session.events.map(({ id: _id, ...event }) => event));
+    }
+    let restoredAudioHash;
+    if (sourceProfile.audio_clips.length) {
+      const restoredClip = restored.profile.audio_clips[0];
+      expect(restored.profile.samples.some(sample => sample.audio_id === restoredClip.id)).toBe(true);
+      const response = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${restoredClip.id}`);
+      restoredAudioHash = createHash('sha256').update(await response.body()).digest('hex');
+      expect(restoredAudioHash).toBe(record.fixture.sha256);
+      expect(restoredClip.assets).toEqual(sourceProfile.audio_clips[0].assets);
+    }
+    archiveChecks.push({ bytes: restored.bytes, counts: restored.preview.counts, sandboxIncluded: true, restoredAudioHash });
+  }
+  record.checks.portableArchives = { passed: true, projects: archiveChecks };
   record.restart = { firstOrigin: origin, secondOrigin: newOrigin, revision: afterRestart.revision };
   if (args.includes('--negative-model')) {
     // Only an explicitly requested, isolated temporary acceptance build may be modified.
@@ -283,7 +316,7 @@ try {
   record.acceptancePassed = record.checks.ipa.status === 200 && record.checks.stt.status === 200 && record.checks.tts.status === 200
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
-    && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered
+    && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed
     && record.checks.nativeJobCancellation?.nativeProcessStarted && record.checks.localBoundary?.relaunchAuthenticated && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
   if (!record.acceptancePassed) process.exitCode = 1;
 } catch (error) {

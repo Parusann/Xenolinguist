@@ -5,6 +5,7 @@ import { useToast } from '@/stores/toast-context'
 import type { LanguageProfile } from 'shared/types'
 import { migrateProfile, parseProfile } from 'shared/schemas/profile'
 import { workspaceMetrics } from 'shared/metrics/workspace-metrics'
+import { ProjectArchive } from './ProjectArchive'
 
 export function Dashboard() {
   const { profile, updateProfile } = useProfile()
@@ -74,11 +75,13 @@ export function Dashboard() {
     <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 20 }}>
       <div><h1 className="h-display">Field <em>Log</em></h1><p className="dim">Workspace evidence for {profile.name}</p></div>
       <div className="flex" style={{ gap: 8 }}>
-        <label className="btn sm">↓ Import<input ref={importRef} type="file" accept=".json" onChange={handleImport} className="hidden" /></label>
+        <label className="btn sm">↓ Import JSON<input ref={importRef} type="file" accept=".json" onChange={handleImport} className="hidden" /></label>
         <button className="btn primary sm" onClick={handleExport}>↑ Export JSON</button>
         <button className="btn sm ghost" onClick={handleExportCSV} disabled={!totalWords}>↑ CSV</button>
       </div>
     </div>
+    <ProjectArchive />
+    <p className="dim">JSON and CSV are limited interchange formats, not complete backups. JSON import updates language fields only and does not restore recording bytes, AI history, sandbox progress or metric history. Use .xeno for a portable project.</p>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 16 }}>
       {tiles.map(([label, count, definition]) => <div className="glass-card" key={label} style={{ padding: 20 }}>
         <div className="label">{label}</div><div className="text-glow" style={{ fontSize: 40 }}>{count}</div><p className="dim" style={{ fontSize: 12 }}>{definition}</p>

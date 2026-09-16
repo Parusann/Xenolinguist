@@ -52,7 +52,7 @@ test('W02 invalid nested import never reaches live profile state', async ({ page
   await page.locator('[data-tour="dashboard"]').click();
   const writes: string[] = [];
   page.on('request', request => { if (request.method() === 'PUT' || request.url().endsWith('/mutations')) writes.push(request.url()); });
-  await page.locator('input[type="file"]').setInputFiles({ name: 'invalid.json', mimeType: 'application/json',
+  await page.locator('input[type="file"][accept=".json"]').setInputFiles({ name: 'invalid.json', mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify({ ...profile, number_system: { base: 1, mappings: {}, operators: {} } })) });
   await expect(page.getByText('Invalid profile JSON file', { exact: true })).toBeVisible();
   expect(writes).toEqual([]);
@@ -183,6 +183,7 @@ test('F02 WAV import records decode, upload, save and restart boundaries', async
   });
   const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'WAV probe' } })).json();
   await openProfile(page, server.url, profile.name);
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
   await page.locator('input[type="file"]').setInputFiles(wavFixture);
   await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
   const saved = page.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith(profile.id + '/mutations'));

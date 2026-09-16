@@ -35,6 +35,7 @@ test('W06 persists original bytes before worker processing so an interrupted pre
       setTimeout(() => post.call(this, message, Array.isArray(options) ? { transfer: options } : options), 10_000);
     };
   });
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
   await page.locator('input[type="file"]').setInputFiles(wavFixture);
   await expect.poll(() => page.evaluate(id => new Promise<number>((resolve, reject) => {
     const request = indexedDB.open('xenolinguist-audio-drafts', 1);
@@ -52,6 +53,7 @@ test('W06 failed audio saves retain annotations across reload; retry, playback, 
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Audio recovery' } })).json();
   await openProfile(page, server.url, profile.name);
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
   await page.locator('input[type="file"]').setInputFiles(wavFixture);
   await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
   await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Retained audio');
@@ -117,6 +119,7 @@ test('W06 decodes a real WebM/Opus recording and keeps audio when explicit analy
     oscillator.stop(); destination.stream.getTracks().forEach(track => track.stop()); await context.close();
     return Array.from(new Uint8Array(await new Blob(chunks).arrayBuffer()));
   });
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
   await page.locator('input[type="file"]').setInputFiles({ name: 'recorded.webm', mimeType: 'audio/webm', buffer: Buffer.from(bytes) });
   await expect(page.getByText(/recorded.webm ·/)).toBeVisible();
   await page.route('**/api/ipa', route => route.fulfill({ status: 503, json: { code: 'IPA_MODEL_MISSING' } }));
@@ -166,9 +169,11 @@ test('W06 microphone capture uses the same durable draft and save flow without a
 test('W06 rejects unsupported, truncated and oversized imports without replacing a valid draft', async ({ page, server }) => {
   const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Invalid audio' } })).json();
   await openProfile(page, server.url, profile.name);
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
   await page.locator('input[type="file"]').setInputFiles(wavFixture);
   await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
   for (const [name, bytes] of [['bad.mp3', Buffer.from('invalid')], ['short.wav', (await readFile(wavFixture)).subarray(0, 80)], ['large.wav', Buffer.alloc(32 * 1024 * 1024 + 1)]] as const) {
+    await expect(page.locator('input[type="file"]')).toBeEnabled();
     await page.locator('input[type="file"]').setInputFiles({ name, mimeType: 'audio/wav', buffer: bytes });
     await expect(page.getByRole('alert')).toBeVisible(); await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
   }

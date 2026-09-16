@@ -1,6 +1,6 @@
 # Current limitations and evidence boundaries
 
-Applies to the `implementation/reliability` preview through W12. The public v1.0.0 installer predates W01–W12. Source version, application package version and a released artifact are different identities; no new public installer is implied by this documentation.
+Applies to the `implementation/reliability` preview through W13. The public v1.0.0 installer predates W01–W13. Source version, application package version and a released artifact are different identities; no new public installer is implied by this documentation.
 
 ## Interpretation and AI
 
@@ -14,7 +14,7 @@ Applies to the `implementation/reliability` preview through W12. The public v1.0
 
 Phone analysis uses an English-trained wav2vec2 CTC model and emits approximate TIMIT ARPABET, despite legacy `ipa` API names. Tested input is mono PCM16 RIFF/WAVE at 16 kHz, 25 ms–120 seconds. Browser-prepared WAV/WebM flows pass; other codec combinations depend on browser support. Timings and transcription can be wrong, especially for unfamiliar or constructed speech.
 
-Original recording bytes are separate assets. JSON includes references and metadata, not the files. Dashboard JSON import replaces selected language fields but does not restore all exported state (including AI history, sandbox sessions and metric snapshots). CSV is dictionary interchange. A complete portable archive is pending.
+Original recording bytes are separate assets. JSON includes references and metadata, not the files. Dashboard JSON import replaces selected language fields but does not restore all exported state (including AI history, sandbox sessions and metric snapshots). CSV is dictionary interchange. W13 `.xeno` archives restore saved state and recording bytes, with sandbox state explicitly selected at export. Archives are capped at 256 MiB and exclude unsaved drafts, running jobs and model binaries. Legacy recordings retain their existing format without inventing analysis data. See [archive boundaries](project-archives.md).
 
 Audio assets are retained for undo/recovery; exhaustive garbage collection is unfinished. Delete AI history removes live records, not copies in snapshots or prior exports. Retained partial answers can lose the newest unflushed fragment in an abrupt crash.
 
@@ -30,4 +30,4 @@ Availability probes report files/service metadata, not guaranteed inference. Que
 
 [Testing](testing.md) links unit, browser, real-model and Windows evidence. The W12 local baseline has 204 passing unit tests and seven tooling tests, three gated native unit skips, 24 working workbench checks, one expected Unicode failure and eight public-site checks. Required installed native assertions run separately from the gated unit tests. Real generation and native phone cancellation are followed by successful subsequent requests. Save queues, audio drafts, sandbox sessions and AI proposals recover in the tested restart scenarios. These are engineering acceptance checks; they are not broad scientific accuracy results or exhaustive power-loss testing. Four reviewed native-chain audit package entries remain; see [dependency dispositions](dependency-review.md).
 
-Next packages add complete archives, deterministic language generation and independently scored evaluation. See [implementation progress](implementation-progress.md).
+Next packages add deterministic language generation and independently scored evaluation. See [implementation progress](implementation-progress.md).

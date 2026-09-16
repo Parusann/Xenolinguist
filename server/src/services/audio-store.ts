@@ -11,7 +11,7 @@ import { inspectPcmWav } from '../../../shared/audio-container.js';
 import type { LanguageProfile } from '../../../shared/types.js';
 const SAFE = /^[A-Za-z0-9_-]{1,128}$/;
 const digest = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
-function originalMime(bytes: Buffer): 'audio/wav' | 'audio/webm' {
+export function originalMime(bytes: Buffer): 'audio/wav' | 'audio/webm' {
   if (!bytes.length || bytes.length > MAX_AUDIO_BYTES) throw new ProfileError('AUDIO_SIZE_INVALID', 'Audio must be between 1 byte and 32 MiB', 413);
   if (bytes.length >= 44 && bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WAVE') {
     try { inspectPcmWav(bytes); } catch (error) { throw new ProfileError('AUDIO_INVALID', (error as Error).message); }

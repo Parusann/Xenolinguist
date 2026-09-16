@@ -20,3 +20,5 @@ The initial audit contained 39 affected package entries (4 critical, 25 high, 8 
 | Transformers / onnxruntime-node audit entries | These are propagated dependency findings from the two families above. They are not separate demonstrated faults in the phoneme model or inference API. |
 
 No applicable complete fix was offered by the reviewed audit for these remaining native families. Recheck before any public installer release and before introducing archive/image input. The current acceptance suite verifies packaging and application behavior; it is not an exploit test or security certification. Existing licenses and native notices remain required.
+
+W13 review on 2026-09-15 adds yauzl 3.4.0 and yazl 3.3.1, bundled into the backend, for portable project archives. Imports use sequential entry streams, separate actual-byte/digest checks and generated staging filenames; they never invoke adm-zip or a general-purpose extract-all operation. The locked full and production audits still contain the same four high native-chain entries. See [archive boundaries and negative tests](project-archives.md).

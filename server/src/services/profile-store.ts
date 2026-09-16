@@ -93,6 +93,30 @@ export class ProfileStore {
     if (existing.revision !== expected) throw new ProfileError('REVISION_CONFLICT', 'This profile changed since the edit began', 409, [], false, existing.revision);
   }
 
+  /** Archive assets use fresh identities. The profile rename is the sole visibility/commit point. */
+  async restoreArchive(profile: LanguageProfile, expectedRevision: number | undefined,
+    prepare: (existing: LanguageProfile | null) => Promise<void>) {
+    await this.init();
+    profile = parseProfile(profile);
+    return this.locked(profile.id, async () => {
+      const existing = await this.get(profile.id);
+      if (expectedRevision !== undefined) {
+        if (!existing) throw new ProfileError('PROFILE_MISSING', 'Replacement project no longer exists', 404);
+        this.checkRevision(existing, expectedRevision);
+      } else if (existing) throw new ProfileError('PROFILE_EXISTS', 'Import identity already exists', 409);
+      const restored = parseProfile({ ...profile, revision: existing ? Math.max(existing.revision, profile.revision) + 1 : profile.revision,
+        recent_mutations: [], updated_at: new Date().toISOString() });
+      await prepare(existing);
+      await new AudioStore().verifyProfile(restored);
+      await withProfileLock(`recovery:${this.file(restored.id)}`, async () => {
+        await this.write(this.file(restored.id), JSON.stringify(restored, null, 2), { previous: Boolean(existing) });
+      });
+      // The index is a rebuildable cache; never turn a committed restore into a reported failure.
+      try { await this.list(); } catch (error) { console.error('[archives:index-refresh]', (error as Error).message); }
+      return restored;
+    });
+  }
+
   async mutate(id: string, input: unknown) {
     const mutation = mutationSchema.parse(input);
     if (!SAFE_ID.test(id)) return null;

@@ -3,6 +3,7 @@ import { useProfile } from '@/stores/profile-context'
 import { useSessionLog } from '@/stores/session-log-context'
 import { useOllama } from '@/stores/ollama-context'
 import { ProfileSetup } from './ProfileSetup'
+import { ProjectArchive } from '@/components/phase6-dashboard/ProjectArchive'
 import { VantaTopology } from '@/components/common/VantaTopology'
 import { XenoMark } from '@/components/common/XenoMark'
 import { workspaceMetrics } from 'shared/metrics/workspace-metrics'
@@ -226,9 +227,10 @@ export function LandingScreen() {
           position: 'relative',
           zIndex: 2,
           height: '100%',
+          overflowY: 'auto',
           display: 'grid',
-          gridTemplateColumns: '1fr 520px 1fr',
-          gridTemplateRows: '1fr auto 1fr',
+          gridTemplateColumns: '1fr minmax(0, 520px) 1fr',
+          gridTemplateRows: 'minmax(0, 1fr) auto minmax(0, 1fr)',
           alignItems: 'center',
           transition: 'opacity 1s ease, transform 1s ease',
           opacity: ready ? 1 : 0,
@@ -315,6 +317,7 @@ export function LandingScreen() {
           </div>
 
           {/* Saved profiles */}
+          <details style={{ marginBottom: 16 }}><summary style={{ cursor: 'pointer' }}>Restore a .xeno project archive</summary><ProjectArchive /></details>
           <SaveStatus />
           {profiles.length > 0 && (
             <div>

@@ -90,9 +90,11 @@ Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only
 
 ## Export and remaining work
 
-Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
+The Field Log exports portable **.xeno project archives**, including saved data, AI/metric history and recording bytes. Sandbox answers and progress are an explicit option. Import from the profile selector or Field Log; preview verified content, create a new project by default, or explicitly replace a project after an automatic complete backup. See [archive format, limits and recovery](docs/project-archives.md).
 
-Next work includes a complete portable archive, a deterministic language compiler, reproducible benchmark comparisons and a stronger linguistic inference engine. These are roadmap items. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
+Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard JSON import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
+
+Next work includes a deterministic language compiler, reproducible benchmark comparisons and a stronger linguistic inference engine. These are roadmap items. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
 
 ## License
 
