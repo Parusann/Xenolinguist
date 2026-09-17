@@ -172,7 +172,7 @@ try {
   }).toBe(true);
   const compilerProfile = await request('/api/profiles', { name: 'Native compiler practice', is_sandbox: true });
   expect(compilerProfile.status).toBe(201);
-  await page.goto(`${origin}/app`);
+  await page.getByTitle('Back to profiles', { exact: true }).click();
   await page.getByRole('button').filter({ has: page.getByText('Native compiler practice', { exact: true }) }).click();
   await page.getByRole('button', { name: 'Start validated practice' }).click();
   const compilerFirst = page.locator('[data-compiler-challenge="c-0"]');
@@ -180,7 +180,11 @@ try {
   await compilerFirst.getByRole('button', { name: 'Check translation', exact: true }).click();
   await expect(compilerFirst.getByRole('status')).toContainText('Not matched');
   await compilerFirst.getByRole('textbox').fill('unfinished compiler answer');
-  await expect(page.getByText('Saved', { exact: true })).toBeVisible();
+  // Another project intentionally still has a failed save, so the global indicator cannot say Saved.
+  await expect.poll(async () => {
+    const draft = JSON.parse(await readFile(path.join(dir, 'pending-saves', `${compilerProfile.body.id}.json`), 'utf8'));
+    return Object.entries(draft.drafts).some(([key, value]) => key.startsWith('compiler:') && value === 'unfinished compiler answer');
+  }).toBe(true);
   const compilerBeforeClose = await (await desktopRequest(page).get(`${origin}/api/compiler/${compilerProfile.body.id}`)).json();
   expect(compilerBeforeClose.challenges.every(c => Object.keys(c).join(',') === 'id,utterance')).toBe(true);
   expect(JSON.stringify(compilerBeforeClose)).not.toMatch(/"(?:seed|lexicon|truth|datasetHash)":/);
@@ -191,7 +195,7 @@ try {
   const practiceFixture = { language_name: 'Native fixture', phoneme_set: ['a'], number_base: 10, word_order: 'SVO', rules: ['Subject first'],
     number_words: { 1: 'ka', 2: 'ki', 3: 'ku' }, vocabulary: [{ alien: 'tal', english: 'sky', pos: 'noun' }], sample_sentences: [{ alien: 'tal', english: 'sky' }] };
   await page.route('**/api/ai/stream', route => route.fulfill({ contentType: 'text/event-stream', body: `data: ${JSON.stringify({ token: JSON.stringify(practiceFixture) })}\n\ndata: [DONE]\n\n` }));
-  await page.goto(`${origin}/app`);
+  await page.getByTitle('Back to profiles', { exact: true }).click();
   await page.getByRole('button').filter({ has: page.getByText('Native practice', { exact: true }) }).click();
   await page.getByRole('button', { name: 'Generate & Start Decoding' }).click();
   const number = page.locator('[data-challenge="number-0"]');
@@ -248,7 +252,7 @@ try {
   await expect(reopened.getByRole('button', { name: 'Pause audio', exact: true })).toBeVisible();
   await reopened.getByRole('button', { name: 'Pause audio', exact: true }).click();
   record.checks.desktopAudioSaved = { originalHash, assets: clip.assets, phoneSegments: clip.segments.length, playback: true };
-  await reopened.goto(`${newOrigin}/app`);
+  await reopened.getByTitle('Back to profiles', { exact: true }).click();
   await reopened.getByRole('button').filter({ has: reopened.getByText('Native practice', { exact: true }) }).click();
   const recoveredNumber = reopened.locator('[data-challenge="number-0"]');
   await expect(recoveredNumber.getByRole('textbox')).toHaveValue('unfinished number');
@@ -273,7 +277,7 @@ try {
   await expect(reopened.getByText('Saved metric history', { exact: true })).toBeVisible();
   await expect(reopened.getByText('Tested linguistic hypotheses: unavailable')).toBeVisible();
   record.checks.desktopEvidenceMetrics = { unratedAssertion: true, historyVisible: true, latestSnapshot: sandboxSaved.metric_snapshots.at(-1) };
-  await reopened.goto(`${newOrigin}/app`);
+  await reopened.getByTitle('Back to profiles', { exact: true }).click();
   await reopened.getByRole('button').filter({ has: reopened.getByText('Native compiler practice', { exact: true }) }).click();
   const compilerRecovered = reopened.locator('[data-compiler-challenge="c-0"]');
   await expect(compilerRecovered.getByRole('textbox')).toHaveValue('unfinished compiler answer');
