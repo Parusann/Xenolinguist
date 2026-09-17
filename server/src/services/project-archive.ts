@@ -17,10 +17,11 @@ import { AudioStore, originalMime } from './audio-store.js';
 import { wavToFloat32 } from './ipa-phones.js';
 import { inspectPcmWav } from '../../../shared/audio-container.js';
 import { atomicWrite } from './atomic-file.js';
+import { readCompilerRecord, writeCompilerRecord, validateCompilerRecord } from './compiler-sandbox.js';
 
 const hash = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
 const invalid = (message: string) => new ProfileError('ARCHIVE_INVALID', message, 422);
-const allowed = /^(manifest\.json|profile\.json|audio\/[A-Za-z0-9_-]{1,128}\/(original|analysis|legacy\.wav|legacy\.webm))$/;
+const allowed = /^(manifest\.json|profile\.json|compiler-session\.json|audio\/[A-Za-z0-9_-]{1,128}\/(original|analysis|legacy\.wav|legacy\.webm))$/;
 type Member = { file: string; bytes: number; sha256: string };
 type Inspection = { directory: string; members: Map<string, Member>; profile: LanguageProfile; manifest: ArchiveManifest; expires: number };
 
@@ -41,6 +42,7 @@ function remap(source: LanguageProfile, targetId: string) {
   for (const collection of [profile.dictionary, profile.grammar_rules, profile.samples, profile.audio_clips])
     for (const entry of collection) ids.set(entry.id, randomUUID());
   profile.id = targetId; profile.recent_mutations = [];
+  if (profile.compiler_session_id) profile.compiler_session_id = randomUUID();
   profile.dictionary.forEach(entry => { entry.id = ids.get(entry.id)!; });
   profile.grammar_rules.forEach(entry => { entry.id = ids.get(entry.id)!; });
   profile.samples.forEach(entry => { entry.id = ids.get(entry.id)!; if (entry.audio_id) entry.audio_id = ids.get(entry.audio_id)!; });
@@ -96,7 +98,7 @@ export class ProjectArchives {
 
   private async pack(profile: LanguageProfile, includeSandbox: boolean, directory: string) {
     profile = structuredClone(profile);
-    if (!includeSandbox) delete profile.sandbox_session;
+    if (!includeSandbox) { delete profile.sandbox_session; delete profile.compiler_session_id; }
     const members = new Map<string, Member>();
     let total = 0;
     const add = async (name: string, input: Readable, max = LIMIT.memberBytes as number) => {
@@ -105,6 +107,7 @@ export class ProjectArchives {
       total += member.bytes; members.set(name, member);
     };
     await add('profile.json', Readable.from([Buffer.from(JSON.stringify(profile))]), LIMIT.profileBytes);
+    if (profile.compiler_session_id) await add('compiler-session.json', Readable.from([Buffer.from(JSON.stringify(await readCompilerRecord(profile.compiler_session_id)))]), LIMIT.profileBytes);
     const audio = new AudioStore();
     for (const clip of profile.audio_clips) {
       if (clip.assets) {
@@ -124,7 +127,7 @@ export class ProjectArchives {
         if (!found) throw invalid('A legacy recording is missing; a complete backup cannot be created');
       }
     }
-    const manifest: ArchiveManifest = { format: 'xenolinguist', archiveVersion: 1, profileSchemaVersion: 2,
+    const manifest: ArchiveManifest = { format: 'xenolinguist', archiveVersion: profile.compiler_session_id ? 2 : 1, profileSchemaVersion: 2,
       createdAt: new Date().toISOString(), sourceProfileId: profile.id, sourceRevision: profile.revision,
       sandboxIncluded: includeSandbox, members: [...members].map(([name, member]) => ({ path: name, bytes: member.bytes, sha256: member.sha256 })) };
     archiveManifestSchema.parse(manifest);
@@ -178,7 +181,7 @@ export class ProjectArchives {
         return JSON.parse(await fs.readFile(member.file, 'utf8')) as Record<string, unknown>;
       };
       const rawManifest = await json('manifest.json');
-      if (rawManifest.archiveVersion !== 1 || rawManifest.profileSchemaVersion !== 2)
+      if (![1, 2].includes(rawManifest.archiveVersion as number) || rawManifest.profileSchemaVersion !== 2)
         throw new ProfileError('ARCHIVE_VERSION_UNSUPPORTED', 'This archive requires a different application version. No project was changed.', 422);
       const manifest = archiveManifestSchema.parse(rawManifest), declared = new Set<string>();
       for (const member of manifest.members) {
@@ -196,6 +199,10 @@ export class ProjectArchives {
       const profile = parseProfile(rawProfile), expected = new Set(['profile.json']);
       if (profile.id !== manifest.sourceProfileId || profile.revision !== manifest.sourceRevision
         || (!manifest.sandboxIncluded && profile.sandbox_session)) throw invalid('Manifest does not match its project');
+      if (profile.compiler_session_id) {
+        if (manifest.archiveVersion !== 2 || !manifest.sandboxIncluded) throw invalid('Compiler session requires a complete version 2 sandbox archive');
+        validateCompilerRecord(await json('compiler-session.json')); expected.add('compiler-session.json');
+      }
       for (const clip of profile.audio_clips) {
         if (clip.assets) {
           for (const kind of ['original', 'analysis'] as const) {
@@ -260,6 +267,12 @@ export class ProjectArchives {
         } finally { await this.remove(directory); }
       }
       const audio = new AudioStore();
+      if (profile.compiler_session_id) {
+        const member = inspection.members.get('compiler-session.json')!;
+        const record = validateCompilerRecord(JSON.parse(await fs.readFile(member.file, 'utf8')));
+        record.sessionId = randomUUID(); record.events.forEach(event => { event.id = randomUUID(); });
+        await writeCompilerRecord(record, profile.compiler_session_id);
+      }
       for (const clip of inspection.profile.audio_clips) {
         const id = ids.get(clip.id)!;
         if (clip.assets) {

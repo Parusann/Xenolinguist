@@ -16,6 +16,7 @@ import { TranslationEngine } from '@/components/phase5-translation/TranslationEn
 import { Dashboard } from '@/components/phase6-dashboard/Dashboard'
 import { SandboxSetup } from '@/components/sandbox/SandboxSetup'
 import { SandboxController } from '@/components/sandbox/SandboxController'
+import { CompilerSandbox } from '@/components/sandbox/CompilerSandbox'
 import { useProfile } from '@/stores/profile-context'
 import { useOllama } from '@/stores/ollama-context'
 import { useUndo } from '@/stores/undo-context'
@@ -109,7 +110,7 @@ export function AppShell() {
   const renderPhase = () => {
     switch (activePhase) {
       case 'sandbox':
-        return profile?.sandbox_session
+        return profile?.compiler_session_id ? <CompilerSandbox /> : profile?.sandbox_session
           ? <SandboxController />
           : <SandboxSetup />
       case 'samples': return <SampleInput />

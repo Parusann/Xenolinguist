@@ -14,6 +14,7 @@ New-project restore is the default. Replacing the active project requires select
 | AI history | Saved user/assistant records, model labels, state and task metadata are retained. These remain proposals, not validated linguistic results. |
 | Metric history | Existing snapshots remain intact; importing does not fabricate earlier history. |
 | Sandbox answer key, events, guesses and progress | Exported only when **Include sandbox answers and progress** is selected. Replacement backups always include them. |
+| Validated compiler session | Inclusive exports use archive version 2 with a checked private seed/version/event member. Restores regenerate the same dataset under fresh session and snapshot identities. |
 | Unsaved drafts, current session activity, running jobs, model binaries and settings | Excluded. Complete pending saves before export; local models are provisioned separately. |
 
 There are no separate research-run records in schema 2 yet. Future research schemas need an explicit archive-version update rather than silently dropping unknown fields. JSON and CSV remain limited interchange formats: Dashboard JSON import replaces selected language fields and cannot restore recording bytes, AI history, sandbox sessions or metric history.
@@ -23,6 +24,8 @@ Excluding the sandbox session does not redact practice-derived dictionary entrie
 ## Format and input limits
 
 The file is a standard ZIP with `manifest.json`, `profile.json`, and audio members named `audio/<id>/original`, `audio/<id>/analysis`, or `audio/<id>/legacy.wav` / `legacy.webm`. The version-1 manifest declares profile schema 2, source identity/revision, creation time, sandbox selection, and the byte length and SHA-256 of every payload member. The manifest is the metadata envelope and does not contain a self-referential hash. Checksums detect inconsistency; they are not a signature or proof of origin. Archives are readable and unencrypted.
+
+W14 retains version-1 reading and writing for ordinary projects. Archives containing validated compiler state use version 2 and additionally declare `compiler-session.json`. The member is required whenever the saved profile has a compiler pointer; import validates its frozen generator version, dataset digest and event history. Excluding sandbox state removes both this member and its pointer. The older application rejects version 2 rather than silently dropping the new state. JSON exports omit compiler pointers and are not compiler-session backups.
 
 | Limit | Value |
 | --- | --- |

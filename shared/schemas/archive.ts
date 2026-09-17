@@ -4,11 +4,11 @@ import { entityIdSchema, timestampSchema } from './common.js';
 export const ARCHIVE_LIMITS = { bytes: 256 * 1024 * 1024, memberBytes: 32 * 1024 * 1024,
   profileBytes: 10 * 1024 * 1024, manifestBytes: 1024 * 1024, entries: 2048, ratio: 100, previewMs: 10 * 60 * 1000 } as const;
 export const archiveMemberSchema = z.strictObject({
-  path: z.string().regex(/^(profile\.json|audio\/[A-Za-z0-9_-]{1,128}\/(original|analysis|legacy\.wav|legacy\.webm))$/),
+  path: z.string().regex(/^(profile\.json|compiler-session\.json|audio\/[A-Za-z0-9_-]{1,128}\/(original|analysis|legacy\.wav|legacy\.webm))$/),
   bytes: z.number().int().positive().max(ARCHIVE_LIMITS.memberBytes), sha256: z.string().regex(/^[a-f0-9]{64}$/),
 });
 export const archiveManifestSchema = z.strictObject({
-  format: z.literal('xenolinguist'), archiveVersion: z.literal(1), profileSchemaVersion: z.literal(2),
+  format: z.literal('xenolinguist'), archiveVersion: z.union([z.literal(1), z.literal(2)]), profileSchemaVersion: z.literal(2),
   createdAt: timestampSchema, sourceProfileId: entityIdSchema, sourceRevision: z.number().int().nonnegative(),
   sandboxIncluded: z.boolean(), members: z.array(archiveMemberSchema).min(1).max(ARCHIVE_LIMITS.entries - 1),
 });

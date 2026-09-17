@@ -170,7 +170,21 @@ try {
     const local = JSON.parse(await readFile(path.join(dir, 'pending-saves', `${profile.body.id}.json`), 'utf8'));
     return local.batches.length > 0 && local.drafts['translation.alien'] === 'Draft across desktop origins';
   }).toBe(true);
-  // Deterministic generator output exercises session persistence, not generation quality.
+  const compilerProfile = await request('/api/profiles', { name: 'Native compiler practice', is_sandbox: true });
+  expect(compilerProfile.status).toBe(201);
+  await page.goto(`${origin}/app`);
+  await page.getByRole('button').filter({ has: page.getByText('Native compiler practice', { exact: true }) }).click();
+  await page.getByRole('button', { name: 'Start validated practice' }).click();
+  const compilerFirst = page.locator('[data-compiler-challenge="c-0"]');
+  await compilerFirst.getByRole('textbox').fill('wrong');
+  await compilerFirst.getByRole('button', { name: 'Check translation', exact: true }).click();
+  await expect(compilerFirst.getByRole('status')).toContainText('Not matched');
+  await compilerFirst.getByRole('textbox').fill('unfinished compiler answer');
+  await expect(page.getByText('Saved', { exact: true })).toBeVisible();
+  const compilerBeforeClose = await (await desktopRequest(page).get(`${origin}/api/compiler/${compilerProfile.body.id}`)).json();
+  expect(compilerBeforeClose.challenges.every(c => Object.keys(c).join(',') === 'id,utterance')).toBe(true);
+  expect(JSON.stringify(compilerBeforeClose)).not.toMatch(/"(?:seed|lexicon|truth|datasetHash)":/);
+  // Model fixture output exercises creative session persistence, not generation quality.
   const sandboxProfile = await request('/api/profiles', { name: 'Native practice', is_sandbox: true });
   expect(sandboxProfile.status).toBe(201);
   await page.route('**/api/ollama/status', route => route.fulfill({ json: { connected: true, ready: true, models: ['fixture-model'] } }));
@@ -259,8 +273,22 @@ try {
   await expect(reopened.getByText('Saved metric history', { exact: true })).toBeVisible();
   await expect(reopened.getByText('Tested linguistic hypotheses: unavailable')).toBeVisible();
   record.checks.desktopEvidenceMetrics = { unratedAssertion: true, historyVisible: true, latestSnapshot: sandboxSaved.metric_snapshots.at(-1) };
+  await reopened.goto(`${newOrigin}/app`);
+  await reopened.getByRole('button').filter({ has: reopened.getByText('Native compiler practice', { exact: true }) }).click();
+  const compilerRecovered = reopened.locator('[data-compiler-challenge="c-0"]');
+  await expect(compilerRecovered.getByRole('textbox')).toHaveValue('unfinished compiler answer');
+  await expect(compilerRecovered.getByRole('status')).toContainText('Not matched');
+  const compilerAfterRestart = await (await desktopRequest(reopened).get(`${newOrigin}/api/compiler/${compilerProfile.body.id}`)).json();
+  expect(compilerAfterRestart).toEqual(compilerBeforeClose);
+  await reopened.locator('[data-compiler-challenge="c-1"]').getByRole('button', { name: 'Reveal translation' }).click();
+  await expect(reopened.locator('[data-compiler-challenge="c-1"]').getByRole('status')).toContainText('Revealed:');
+  const compilerSaved = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${compilerProfile.body.id}`)).json();
+  const compilerView = await (await desktopRequest(reopened).get(`${newOrigin}/api/compiler/${compilerProfile.body.id}`)).json();
+  expect(compilerView.feedback.filter(f => f.answer)).toHaveLength(1);
+  record.checks.compilerPractice = { passed: true, version: compilerView.version, observations: compilerView.observations.length,
+    challenges: compilerView.challenges.length, sameSessionAfterRelaunch: true, draftRecovered: true, reveals: 1 };
   const archiveChecks = [];
-  for (const sourceProfile of [withAudio, sandboxSaved]) {
+  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved]) {
     const restored = await reopened.evaluate(async source => {
       const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
       if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
@@ -278,6 +306,14 @@ try {
     if (sourceProfile.sandbox_session) {
       expect(restored.profile.sandbox_session.challenges).toEqual(sourceProfile.sandbox_session.challenges);
       expect(restored.profile.sandbox_session.events.map(({ id: _id, ...event }) => event)).toEqual(sourceProfile.sandbox_session.events.map(({ id: _id, ...event }) => event));
+    }
+    if (sourceProfile.compiler_session_id) {
+      const restoredCompiler = await (await desktopRequest(reopened).get(`${newOrigin}/api/compiler/${restored.profile.id}`)).json();
+      expect(restoredCompiler.sessionId).not.toBe(compilerView.sessionId);
+      expect(restoredCompiler.challenges).toEqual(compilerView.challenges);
+      expect(restoredCompiler.observations).toEqual(compilerView.observations);
+      expect(restoredCompiler.feedback).toEqual(compilerView.feedback);
+      record.checks.compilerPractice.archiveRestored = true;
     }
     let restoredAudioHash;
     if (sourceProfile.audio_clips.length) {
@@ -317,6 +353,7 @@ try {
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed
+    && record.checks.compilerPractice?.passed && record.checks.compilerPractice?.archiveRestored
     && record.checks.nativeJobCancellation?.nativeProcessStarted && record.checks.localBoundary?.relaunchAuthenticated && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
   if (!record.acceptancePassed) process.exitCode = 1;
 } catch (error) {

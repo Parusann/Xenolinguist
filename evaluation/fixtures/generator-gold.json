@@ -1,0 +1,1433 @@
+{
+  "prng42": [
+    0.6011037519201636,
+    0.44829055899754167,
+    0.8524657934904099,
+    0.6697340414393693,
+    0.17481389874592423
+  ],
+  "seed42": {
+    "version": "xeno-dataset-1",
+    "spec": {
+      "version": "xeno-generator-1",
+      "seed": 42,
+      "phonemes": [
+        "p",
+        "t",
+        "k",
+        "m",
+        "n",
+        "s",
+        "l",
+        "r",
+        "a",
+        "e",
+        "i",
+        "o",
+        "u"
+      ],
+      "lexicon": {
+        "0": "neto",
+        "1": "keru",
+        "2": "rare",
+        "3": "neti",
+        "4": "rusi",
+        "5": "nupa",
+        "6": "laku",
+        "7": "sale",
+        "8": "leke",
+        "9": "tenu",
+        "10": "mere",
+        "11": "tinu",
+        "bird": "rilo",
+        "robot": "nano",
+        "fox": "seka",
+        "child": "lupe",
+        "see": "sapi",
+        "follow": "some",
+        "help": "peno",
+        "red": "rina",
+        "small": "nipu",
+        "open": "laru",
+        "close": "muli",
+        "plural": "sota",
+        "past": "kato",
+        "future": "kema",
+        "not": "temo",
+        "and": "niru",
+        "add": "rotu",
+        "multiply": "tota",
+        "radix": "tuti"
+      },
+      "ambiguity": "none",
+      "family": "VSO",
+      "adjectivePlacement": "after",
+      "numberBase": 4,
+      "features": {
+        "plural": true,
+        "tense": true,
+        "negation": true
+      }
+    },
+    "observations": [
+      {
+        "id": "o-0",
+        "utterance": "sapi laru rotu tota rare tuti keru rilo sota muli laru keru nano muli",
+        "english": "9 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 9,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-1",
+        "utterance": "sapi laru keru lupe muli laru keru rilo muli",
+        "english": "1 child does see 1 bird",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "bird",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-2",
+        "utterance": "some laru keru lupe muli laru keru rilo muli",
+        "english": "1 child does follow 1 bird",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "bird",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-3",
+        "utterance": "peno laru keru seka nipu muli laru keru lupe muli",
+        "english": "1 small fox does help 1 child",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": [
+                  "small"
+                ]
+              },
+              "action": "help",
+              "patient": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-4",
+        "utterance": "peno laru keru nano muli laru keru seka muli",
+        "english": "1 robot does help 1 fox",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "help",
+              "patient": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-5",
+        "utterance": "sapi laru rare rilo sota muli laru keru nano muli",
+        "english": "2 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 2,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-6",
+        "utterance": "some laru keru nano muli laru keru seka muli",
+        "english": "1 robot does follow 1 fox",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-7",
+        "utterance": "peno laru keru lupe muli laru keru rilo muli",
+        "english": "1 child does help 1 bird",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "help",
+              "patient": {
+                "noun": "bird",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-8",
+        "utterance": "sapi laru rotu tota rare tuti neto rilo sota muli laru keru nano muli",
+        "english": "8 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 8,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-9",
+        "utterance": "sapi laru keru rilo muli laru keru nano muli",
+        "english": "1 bird does see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-10",
+        "utterance": "temo sapi laru keru lupe muli laru keru rilo muli",
+        "english": "1 child does not see 1 bird",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "bird",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-11",
+        "utterance": "sapi laru keru nano muli laru keru seka muli",
+        "english": "1 robot does see 1 fox",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-12",
+        "utterance": "sapi laru keru seka muli laru keru lupe muli",
+        "english": "1 fox does see 1 child",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-13",
+        "utterance": "kema some laru keru nano muli laru keru seka muli",
+        "english": "1 robot will follow 1 fox",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "future",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-14",
+        "utterance": "sapi laru keru rilo muli laru keru nano muli niru some laru keru nano muli laru keru seka muli",
+        "english": "1 bird does see 1 robot and 1 robot does follow 1 fox",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            },
+            {
+              "agent": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-15",
+        "utterance": "some laru keru rilo muli laru keru nano muli",
+        "english": "1 bird does follow 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-16",
+        "utterance": "sapi laru rotu tota rare tuti neti rilo sota muli laru keru nano muli",
+        "english": "11 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 11,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-17",
+        "utterance": "sapi laru rotu tota neti tuti neto rilo sota muli laru keru nano muli",
+        "english": "12 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 12,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-18",
+        "utterance": "sapi laru rotu tota keru tuti rare rilo sota muli laru keru nano muli",
+        "english": "6 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 6,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-19",
+        "utterance": "sapi laru neti rilo sota muli laru keru nano muli",
+        "english": "3 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 3,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-20",
+        "utterance": "kato some laru keru nano muli laru keru seka muli",
+        "english": "1 robot did follow 1 fox",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "past",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-21",
+        "utterance": "peno laru keru rilo muli laru keru nano muli",
+        "english": "1 bird does help 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "help",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-22",
+        "utterance": "peno laru keru seka rina muli laru keru lupe muli",
+        "english": "1 red fox does help 1 child",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": [
+                  "red"
+                ]
+              },
+              "action": "help",
+              "patient": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-23",
+        "utterance": "sapi laru rotu tota keru tuti neti rilo sota muli laru keru nano muli",
+        "english": "7 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 7,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-24",
+        "utterance": "sapi laru rotu tota keru tuti neto rilo sota muli laru keru nano muli",
+        "english": "4 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 4,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-25",
+        "utterance": "sapi laru rotu tota rare tuti rare rilo sota muli laru keru nano muli",
+        "english": "10 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 10,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-26",
+        "utterance": "some laru keru seka muli laru keru lupe muli",
+        "english": "1 fox does follow 1 child",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-27",
+        "utterance": "sapi laru rotu tota keru tuti keru rilo sota muli laru keru nano muli",
+        "english": "5 birds do see 1 robot",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 5,
+                "attributes": []
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "o-28",
+        "utterance": "peno laru keru seka muli laru keru lupe muli",
+        "english": "1 fox does help 1 child",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "fox",
+                "count": 1,
+                "attributes": []
+              },
+              "action": "help",
+              "patient": {
+                "noun": "child",
+                "count": 1,
+                "attributes": []
+              },
+              "tense": "present",
+              "negated": false
+            }
+          ]
+        }
+      }
+    ],
+    "targets": [
+      {
+        "id": "c-0",
+        "utterance": "kato temo peno laru rotu tota rotu tota keru tuti neto tuti keru nano rina nipu sota muli laru rare seka nipu sota muli",
+        "english": "17 red small robots did not help 2 small foxes",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "robot",
+                "count": 17,
+                "attributes": [
+                  "red",
+                  "small"
+                ]
+              },
+              "action": "help",
+              "patient": {
+                "noun": "fox",
+                "count": 2,
+                "attributes": [
+                  "small"
+                ]
+              },
+              "tense": "past",
+              "negated": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "c-1",
+        "utterance": "kema temo some laru rotu tota rare tuti keru lupe rina nipu sota muli laru rare nano nipu sota muli",
+        "english": "9 red small children will not follow 2 small robots",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "child",
+                "count": 9,
+                "attributes": [
+                  "red",
+                  "small"
+                ]
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "robot",
+                "count": 2,
+                "attributes": [
+                  "small"
+                ]
+              },
+              "tense": "future",
+              "negated": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "c-2",
+        "utterance": "kato temo peno laru rotu tota rotu tota keru tuti neto tuti keru nano rina nipu sota muli laru rare seka nipu sota muli niru kato temo sapi laru rotu tota neti tuti keru rilo rina nipu sota muli laru rare nano nipu sota muli",
+        "english": "17 red small robots did not help 2 small foxes and 13 red small birds did not see 2 small robots",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "robot",
+                "count": 17,
+                "attributes": [
+                  "red",
+                  "small"
+                ]
+              },
+              "action": "help",
+              "patient": {
+                "noun": "fox",
+                "count": 2,
+                "attributes": [
+                  "small"
+                ]
+              },
+              "tense": "past",
+              "negated": true
+            },
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 13,
+                "attributes": [
+                  "red",
+                  "small"
+                ]
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 2,
+                "attributes": [
+                  "small"
+                ]
+              },
+              "tense": "past",
+              "negated": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "c-3",
+        "utterance": "kema temo some laru rotu tota keru tuti keru seka rina nipu sota muli laru rare lupe nipu sota muli",
+        "english": "5 red small foxes will not follow 2 small children",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "fox",
+                "count": 5,
+                "attributes": [
+                  "red",
+                  "small"
+                ]
+              },
+              "action": "follow",
+              "patient": {
+                "noun": "child",
+                "count": 2,
+                "attributes": [
+                  "small"
+                ]
+              },
+              "tense": "future",
+              "negated": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "c-4",
+        "utterance": "kato temo sapi laru rotu tota neti tuti keru rilo rina nipu sota muli laru rare nano nipu sota muli",
+        "english": "13 red small birds did not see 2 small robots",
+        "truth": {
+          "clauses": [
+            {
+              "agent": {
+                "noun": "bird",
+                "count": 13,
+                "attributes": [
+                  "red",
+                  "small"
+                ]
+              },
+              "action": "see",
+              "patient": {
+                "noun": "robot",
+                "count": 2,
+                "attributes": [
+                  "small"
+                ]
+              },
+              "tense": "past",
+              "negated": true
+            }
+          ]
+        }
+      }
+    ],
+    "sha256": "d7deb86b421410bab8cffe79241d55aee6117d0e3eab3a081bf8b7e2a16b4048"
+  },
+  "manifest": {
+    "version": "xeno-dataset-1",
+    "generatorVersion": "xeno-generator-1",
+    "splits": [
+      {
+        "name": "development",
+        "records": [
+          {
+            "seed": 10000,
+            "family": "SVO",
+            "sha256": "d3eb74cd03741368a1efce6c3616bd7ccfeb41611c7b8431f200c1c8680004dc"
+          },
+          {
+            "seed": 10001,
+            "family": "SOV",
+            "sha256": "6debb443b16750bb96b50db1a3e93d052245741c7099db0d01fead30c2e4989b"
+          },
+          {
+            "seed": 10002,
+            "family": "SVO",
+            "sha256": "d827b8cb3a2e7f0926eaea60ccd969bab74aaf40a4a2c1467caa90046cf40803"
+          },
+          {
+            "seed": 10003,
+            "family": "SOV",
+            "sha256": "8d88e0bb6dcc34e1bcf660434a675d1d7510e4008e6a5f37bdb3e12a58e6d41c"
+          },
+          {
+            "seed": 10004,
+            "family": "SVO",
+            "sha256": "6f804eacc05834422bb6e9135260e73692eadfe9d7262df7cb3014e78dbe4865"
+          },
+          {
+            "seed": 10005,
+            "family": "SOV",
+            "sha256": "b36b015cbd3e6853a431ddd0d3c4a5c7c850f99e1ab955306e0c373e7b7d1047"
+          },
+          {
+            "seed": 10006,
+            "family": "SVO",
+            "sha256": "9ce09008e61415aa3f9c26ba2a4f1183eabc99ef88a3084b25a5f47f1616c9ca"
+          },
+          {
+            "seed": 10007,
+            "family": "SOV",
+            "sha256": "f25660b1fd70bc61093549a96a7e96b405fc3bc03aef2f014a66c1a3b12654a9"
+          },
+          {
+            "seed": 10008,
+            "family": "SVO",
+            "sha256": "32df1995f734011ee49e91e10680fe3a3aca2aae391170fb8f5e07f1159b25c3"
+          },
+          {
+            "seed": 10009,
+            "family": "SOV",
+            "sha256": "ac9f70013c44c43320859fd86b8d72fcb968721d92ef53aba40cd2fb478995f8"
+          },
+          {
+            "seed": 10010,
+            "family": "SVO",
+            "sha256": "10051ec54a01ce2b9718589c0729b1874594dd028c7d5c3ef7901443a3fcd96b"
+          },
+          {
+            "seed": 10011,
+            "family": "SOV",
+            "sha256": "e6a96d4cbd2cb0f82dd98ad7e9261ff875f5a0785bbfe71b8832d2b0e957584c"
+          },
+          {
+            "seed": 10012,
+            "family": "SVO",
+            "sha256": "3f9403bbd108282d4c21652d4d4b5640bb9d6ed0a5e1aaa5038ec4729e938a20"
+          },
+          {
+            "seed": 10013,
+            "family": "SOV",
+            "sha256": "863a6001a6cf0d6c961c368953f39bc7ab4ca5676e468947b13c7d56f8c301d6"
+          },
+          {
+            "seed": 10014,
+            "family": "SVO",
+            "sha256": "94b4f4ff29345f0d709260de9896bb7665697fa3a6d5093b5f96c261bde67779"
+          },
+          {
+            "seed": 10015,
+            "family": "SOV",
+            "sha256": "37706468b933c33eef5c284e3e6d135dc386b5a13a20c9f80cc65228f11dd2f1"
+          },
+          {
+            "seed": 10016,
+            "family": "SVO",
+            "sha256": "3f6355f868f500415900f51fbf31f0df1e6eadf14139ac1167c1d69a63af6b61"
+          },
+          {
+            "seed": 10017,
+            "family": "SOV",
+            "sha256": "ecb5fb191e533bdb6fcf061fb0e85a0bd84246b2e2b87dde133d275a9a8b2827"
+          },
+          {
+            "seed": 10018,
+            "family": "SVO",
+            "sha256": "1a24bf637b21e653cffce3083d133a22150375887cf96b350ced6143dd9b322e"
+          },
+          {
+            "seed": 10019,
+            "family": "SOV",
+            "sha256": "61d4bbfc4f2cbd9587f8950d3444aa1c4889b367b8408ecc1e5ea23de7e7aa57"
+          },
+          {
+            "seed": 10020,
+            "family": "SVO",
+            "sha256": "da46896a9d8b72decbe34d14308b4bfb85f9eade8362d80057ae440bf4c9ad68"
+          },
+          {
+            "seed": 10021,
+            "family": "SOV",
+            "sha256": "fb31fd655ef4856f81333dca823b4a0fb43155268c132702f7a5a1f9d5dc134d"
+          },
+          {
+            "seed": 10022,
+            "family": "SVO",
+            "sha256": "8df2d708d76c4ddb7ba9855d5abc6012fb6f1ef3f5b04d559049b2817a39e548"
+          },
+          {
+            "seed": 10023,
+            "family": "SOV",
+            "sha256": "fc80940c18671727003424ad78d1f3919b26cd72aa98f8e1027dce0726627c82"
+          },
+          {
+            "seed": 10024,
+            "family": "SVO",
+            "sha256": "0b62eb467ba078e549acfa8d51881d7e86cdca49d769c4d8e1a8b470ee4115ba"
+          },
+          {
+            "seed": 10025,
+            "family": "SOV",
+            "sha256": "d51fe572f7b41bfa857d6d546bc66962770bd4f271723e3e8ceaf1f0b8275032"
+          },
+          {
+            "seed": 10026,
+            "family": "SVO",
+            "sha256": "845c27ab4e0b6697a698650cdfa3b9c627875c21180b39d2e8a276029f5cd7df"
+          },
+          {
+            "seed": 10027,
+            "family": "SOV",
+            "sha256": "daba221a04834a14174be47e49a42f440343618095fa1a27e8004b04e0f35913"
+          },
+          {
+            "seed": 10028,
+            "family": "SVO",
+            "sha256": "728f9e894b923c2685a5e4d391f4bcec058a0e88668eac8d9e73d9c0d47d3d87"
+          },
+          {
+            "seed": 10029,
+            "family": "SOV",
+            "sha256": "02a53abf9319567f6a72084db3836c9713c7b3b1dd72acd0f5e415062d18a804"
+          }
+        ],
+        "sha256": "1ab85a8999c5e8a2c9ebc3ec74afa0d3c5c1df46c3b522d3b17d5588f0898817"
+      },
+      {
+        "name": "evaluation",
+        "records": [
+          {
+            "seed": 20000,
+            "family": "SVO",
+            "sha256": "f7d846da14faf653f7a9cacc5db80f8c02ff7f33ba4a437658e1d6e6b251630f"
+          },
+          {
+            "seed": 20001,
+            "family": "SOV",
+            "sha256": "e1e65a8501c73c38906162430705c25c69627a4fc4656616643a732217821596"
+          },
+          {
+            "seed": 20002,
+            "family": "SVO",
+            "sha256": "2214008451d6d5fa1a126d3701d61b6025273fadfcddcb913c206f9721f30f00"
+          },
+          {
+            "seed": 20003,
+            "family": "SOV",
+            "sha256": "3d3b2e89b54880ef2e123e4f986d6c248638e742af1de469d263a93f1765a7da"
+          },
+          {
+            "seed": 20004,
+            "family": "SVO",
+            "sha256": "c61092d6415c0a8ac05fe9c354e90d5ab5a0805d19468b1765c66ea934dcab31"
+          },
+          {
+            "seed": 20005,
+            "family": "SOV",
+            "sha256": "a322e60f4afd366cf782fd3513ffe9399b03df3f48ed7d3214830a07ae242672"
+          },
+          {
+            "seed": 20006,
+            "family": "SVO",
+            "sha256": "307a925f9e9a3d36018ef136848f1634f84f2004c25bd13a71ad2cfb4ea2d22f"
+          },
+          {
+            "seed": 20007,
+            "family": "SOV",
+            "sha256": "eaaa8fc81526c89c5b2ddd6f67ec95fa505ddfd26cc4d9be480ca0ff4cba5cfc"
+          },
+          {
+            "seed": 20008,
+            "family": "SVO",
+            "sha256": "a6a644fb9104bc8a19ab2a0eb7db524a052a8d69b2fb91c70e3da1c465969285"
+          },
+          {
+            "seed": 20009,
+            "family": "SOV",
+            "sha256": "098b5f76e7fc1db1612891e60d8d7c7b0b4f09bfcb109e4f4756ee8c660ac7dd"
+          },
+          {
+            "seed": 20010,
+            "family": "SVO",
+            "sha256": "e2fde0bfb8e2ca1bb423bf534d9b83f3bc0cc5e5db657e957f937fb44a0d58e5"
+          },
+          {
+            "seed": 20011,
+            "family": "SOV",
+            "sha256": "bcbfffab97ebd802a2fb69aa2ff0276a7bd526f53f4a2af529f9e7923c739c5a"
+          },
+          {
+            "seed": 20012,
+            "family": "SVO",
+            "sha256": "0ce4dce136e6d10bd04840fa7a6309b6c57ae5bf08808338f9451e244673a6bd"
+          },
+          {
+            "seed": 20013,
+            "family": "SOV",
+            "sha256": "f57bb1f0dd3dc3612faccd4de295f0d2af4dd2ea5bed5586a6771de1b9eb5ec1"
+          },
+          {
+            "seed": 20014,
+            "family": "SVO",
+            "sha256": "4d4876385d8b32b7e179611e9bbb58bacb925e902783be609301eeed66393587"
+          },
+          {
+            "seed": 20015,
+            "family": "SOV",
+            "sha256": "5c155ead7a9359628daab3a8798321116b98aa8c009f39a5918ec45a2a773f7f"
+          },
+          {
+            "seed": 20016,
+            "family": "SVO",
+            "sha256": "6250e3292817eb6a5865d0310d5e674c89ce5676ad90492dfe3e6561d13379dc"
+          },
+          {
+            "seed": 20017,
+            "family": "SOV",
+            "sha256": "feb27121ab769eb003e1b3961ae8f1c5b6c06fe6d0e6c40643ef42603c31d200"
+          },
+          {
+            "seed": 20018,
+            "family": "SVO",
+            "sha256": "4055d370a97e530558cc039df4870703d12fecc5f20852154dfd6bbecf29e587"
+          },
+          {
+            "seed": 20019,
+            "family": "SOV",
+            "sha256": "74f28a8baede7b358099a1aca43c08d4791fb57b275822c8f0f7be68d167d74e"
+          },
+          {
+            "seed": 20020,
+            "family": "SVO",
+            "sha256": "aa3c365bb0cdec3c6c35c1d69d5cb75eef107afe16bdf296627b95e0eafbec7d"
+          },
+          {
+            "seed": 20021,
+            "family": "SOV",
+            "sha256": "6475acdd43a77f3414fea08286e6be07b93815b813f2901986f46c5d1b805234"
+          },
+          {
+            "seed": 20022,
+            "family": "SVO",
+            "sha256": "cc88eb47234714f3b7cf87fda77bfa60c243de380e9f100fd4972f06ab5ac71e"
+          },
+          {
+            "seed": 20023,
+            "family": "SOV",
+            "sha256": "99f29547f36ccb92a92d12c7196e313fb824b0281397594d5a5575d4fa601ca8"
+          },
+          {
+            "seed": 20024,
+            "family": "SVO",
+            "sha256": "24cd9f45568f6a329ac9439ce306c38d60cb4f05871d9f04dd69b21efcb6baf2"
+          },
+          {
+            "seed": 20025,
+            "family": "SOV",
+            "sha256": "daeba7829bdb60a85d7c87b2abbec71e6f03b2fe67a00048f9b3bbe8d060837b"
+          },
+          {
+            "seed": 20026,
+            "family": "SVO",
+            "sha256": "c6f4da9479e9f3382247c46ff49fc1a9021ac73e98fad37d8fa164c71f82bb3a"
+          },
+          {
+            "seed": 20027,
+            "family": "SOV",
+            "sha256": "fd1a05cb6e239df9c3ab02c51899074c9415eea104fe4bd1e9072caa5f09f5de"
+          },
+          {
+            "seed": 20028,
+            "family": "SVO",
+            "sha256": "9d205958416c682766689092c01eafd9555725764615e17a19ecdedc762adc45"
+          },
+          {
+            "seed": 20029,
+            "family": "SOV",
+            "sha256": "d844f1782fd5259fee473b1034c8aeb08dac0463a59440bfb75340e2e9ba0786"
+          }
+        ],
+        "sha256": "2edb459d2dad20c2899aed2aacd42b60928194ce60a1b66db0c85418d172cf21"
+      },
+      {
+        "name": "structural",
+        "records": [
+          {
+            "seed": 30000,
+            "family": "VSO",
+            "sha256": "77d639bfc105573183d9dadd530929d8e11fee98e14eb66bfd186c21788b3cfa"
+          },
+          {
+            "seed": 30001,
+            "family": "VSO",
+            "sha256": "5c3a20d752a2dfeb70d7a683a2f58123e0090674b551472aa252cf895244b4e6"
+          },
+          {
+            "seed": 30002,
+            "family": "VSO",
+            "sha256": "003353a11ce3b4a9c794b68ea68b41d14507fec0b4c5166a413faf92c8e80e61"
+          },
+          {
+            "seed": 30003,
+            "family": "VSO",
+            "sha256": "ecd7419dec36b3e17895ee3dbbca929d11c5535adb2a59e865b0e753f3b2f9e4"
+          },
+          {
+            "seed": 30004,
+            "family": "VSO",
+            "sha256": "68bad7b4ec95529eb7cf7f71632cb1ee1f61a386dfda27b4ba5b83a1d9ba0194"
+          },
+          {
+            "seed": 30005,
+            "family": "VSO",
+            "sha256": "0f23c9dae8b39a98efdf70f6daadbfcea68512f0d60c6ef029d656d7365586fb"
+          },
+          {
+            "seed": 30006,
+            "family": "VSO",
+            "sha256": "be63ef83d350e3e5521ad8f5b5d8c7503e513cf23dc9f9de8a887bdfc0fca164"
+          },
+          {
+            "seed": 30007,
+            "family": "VSO",
+            "sha256": "873ec0e0b1980d5a19e41922041be8b686d843f5732828963f938ec6f0dda27e"
+          },
+          {
+            "seed": 30008,
+            "family": "VSO",
+            "sha256": "a32b9f2d5666a5c9d8e35a961a13f964c9e6ed5e841c107c35280df5f66d32bf"
+          },
+          {
+            "seed": 30009,
+            "family": "VSO",
+            "sha256": "08e17dd1a31c1b88fe182763d97c4ed56739041b5a3921ffee03c0877880af40"
+          },
+          {
+            "seed": 30010,
+            "family": "VSO",
+            "sha256": "92bf4ed9c6d1291af2ab6f84da7490f4d12e05e1f374fd4baffa307d0483fa94"
+          },
+          {
+            "seed": 30011,
+            "family": "VSO",
+            "sha256": "efab990442c15117ea453f10711cb14aac576b36ccfec9b2c74415a66988ddf0"
+          },
+          {
+            "seed": 30012,
+            "family": "VSO",
+            "sha256": "1c9e89cf482505958f318e09a96b526dccdb1aaebebcc842d90ce4f32c4fd782"
+          },
+          {
+            "seed": 30013,
+            "family": "VSO",
+            "sha256": "b3af168351df0d1f03bce29895a4421118bda014bf7546fcfec100b84672585e"
+          },
+          {
+            "seed": 30014,
+            "family": "VSO",
+            "sha256": "21a3a8169bcacbadda1af8f8edb010e4ba5873675acb9e86f38e9324b8a21713"
+          },
+          {
+            "seed": 30015,
+            "family": "VSO",
+            "sha256": "ef8cb8a8bc4a865f1df0dfeb0b57a466d6bd66abf343769263cd904dfe3beb2f"
+          },
+          {
+            "seed": 30016,
+            "family": "VSO",
+            "sha256": "464ecfc6092cb9a49ff1e4d353c6088f766f883a74b51a9433f4ac2e03a4e1e5"
+          },
+          {
+            "seed": 30017,
+            "family": "VSO",
+            "sha256": "8b6d79a78960282cea8bdac9315f4c059738b391b4078db4630506a24d31a665"
+          },
+          {
+            "seed": 30018,
+            "family": "VSO",
+            "sha256": "fd49a985d3460fdb2ff6666df46a94256145ed339adcba7cca604d49c403f005"
+          },
+          {
+            "seed": 30019,
+            "family": "VSO",
+            "sha256": "4d6409a2c68adb7ac8a47412db2e9cddc9c9df87cfb32ac96ee1c68f0ac9fa05"
+          },
+          {
+            "seed": 30020,
+            "family": "VSO",
+            "sha256": "0e06c43a665ffb60e1ce01f42d4fe155875539832fb2f4ba55a3593b8c77cc13"
+          },
+          {
+            "seed": 30021,
+            "family": "VSO",
+            "sha256": "7dacac1d229edecd5fcd0c89c0ba074d26d877170d1064d942581922af1b136a"
+          },
+          {
+            "seed": 30022,
+            "family": "VSO",
+            "sha256": "73d492ceed2b765abba5f606101a97f82a9776acec3bf70700adb1e820fee36c"
+          },
+          {
+            "seed": 30023,
+            "family": "VSO",
+            "sha256": "4559eb5625ad7b0ed80d7ded6941cea58c38d548b76e4b2fa8160efe6c18e1ca"
+          },
+          {
+            "seed": 30024,
+            "family": "VSO",
+            "sha256": "ca4b70e0f92d071a76c466ce6d1ec6c845511e3dcf81aba55706c02276e89921"
+          },
+          {
+            "seed": 30025,
+            "family": "VSO",
+            "sha256": "b7caf73242bfe5bceee9d65a9f863e91c7a83537f42a659db4296699998af9f3"
+          },
+          {
+            "seed": 30026,
+            "family": "VSO",
+            "sha256": "a83433d0143ab52b63d8ba271163e84f1849fcfca7270f82f5eff6368b81ad9c"
+          },
+          {
+            "seed": 30027,
+            "family": "VSO",
+            "sha256": "4fe1e8483e3af104e930d7a7a49b8a6f85683c0f42622cfe98576c9f74e564a9"
+          },
+          {
+            "seed": 30028,
+            "family": "VSO",
+            "sha256": "8ea1c9eddef72df9e7058b1116f5aba965fa8e339c4b174468bc25c98a712a54"
+          },
+          {
+            "seed": 30029,
+            "family": "VSO",
+            "sha256": "2d49b709bbb654f305e794d25d01e9d3b4497e22df2486862d65ec0541e79862"
+          }
+        ],
+        "sha256": "44748c655d60d54d930929b4ea258089604457f708d4f8c6b4c4e0f4e87864af"
+      }
+    ],
+    "sha256": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94"
+  }
+}

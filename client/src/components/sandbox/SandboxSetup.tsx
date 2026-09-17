@@ -7,6 +7,7 @@ import { startSandbox } from '@/stores/sandbox-session'
 import { conlangSchema } from 'shared/schemas/sandbox'
 import { ZodError } from 'zod'
 import type { SandboxDifficulty } from 'shared/types'
+import { apiFetch } from '@/services/api'
 
 const DIFFICULTIES: { value: SandboxDifficulty; label: string; desc: string }[] = [
   { value: 'easy', label: 'Easy', desc: 'English-like structure, familiar phonemes, base-10 numbers' },
@@ -24,7 +25,17 @@ export function SandboxSetup() {
   const { runTask } = useAI()
   const { ready: connected, getModelForTask } = useOllama()
   const { addEntry } = useSessionLog()
-  const { profile } = useProfile()
+  const { profile, loadProfile, saveStatus } = useProfile()
+
+  const startValidated = async () => {
+    if (!profile || generating) return
+    setGenerating(true); setError('')
+    try {
+      await apiFetch(`/compiler/${profile.id}`, { method: 'POST', body: JSON.stringify({ type: 'start', expectedRevision: profile.revision, requestId: crypto.randomUUID() }) })
+      if (mounted.current) await loadProfile(profile.id)
+    } catch (cause) { if (mounted.current) setError(`Could not start validated practice. ${(cause as Error).message}. Reload the project to check whether the request was saved.`) }
+    finally { if (mounted.current) setGenerating(false) }
+  }
 
   const handleGenerate = async () => {
     if (!profile || generating) return
@@ -86,8 +97,14 @@ IMPORTANT: Respond ONLY with valid JSON matching this exact format, no other tex
         <h2 className="text-xl font-light mb-1 text-chrome">
           Sandbox <span className="font-medium text-chrome-accent">Mode</span>
         </h2>
-        <p className="text-xs text-gray-500">Generate a language for creative practice. Answers are stored for recovery and checked against accepted forms; this is not a validated linguistic benchmark.</p>
+        <p className="text-xs text-gray-500">Choose reproducible compiler exercises or creative model-generated practice.</p>
       </div>
+
+      <section className="glass-card rounded-xl p-6 space-y-3" aria-label="Validated practice setup">
+        <h3 className="text-lg text-accent">Validated compiler mode</h3>
+        <p className="text-sm text-gray-400">Decode a synthetic language from grounded observations. Each sentence is compiled from a meaning tree and checked for consistency. New compositions are graded on the server. No model download is needed.</p>
+        <button className="btn-primary" disabled={generating || saveStatus.phase !== 'saved' || !saveStatus.durable} onClick={() => void startValidated()}>Start validated practice</button>
+      </section>
 
       {profile && !profile.sandbox_session && (profile.dictionary.length > 0 || profile.samples.length > 0 || profile.grammar_rules.length > 0 || Object.keys(profile.number_system.mappings).length > 0) &&
         <p role="status" className="text-sm text-amber-300">This workspace has earlier practice entries but no saved exercise key. The previous exercise cannot be reconstructed. Your entries are preserved; generate a new practice session to continue.</p>}
@@ -99,6 +116,8 @@ IMPORTANT: Respond ONLY with valid JSON matching this exact format, no other tex
         }}>Download failed response for diagnostics</button>}
       </div>}
       <div className="glass-card rounded-xl p-6 space-y-5 border-glow">
+        <h3 className="text-lg">Creative LLM mode</h3>
+        <p className="text-xs text-gray-500">Generated content is checked for structural validity, but may contain linguistic contradictions. Accepted answers are stored in the browser for recovery. This mode is not a validated benchmark.</p>
         <label className="label">Select Difficulty</label>
         <div className="grid grid-cols-3 gap-3">
           {DIFFICULTIES.map(d => (

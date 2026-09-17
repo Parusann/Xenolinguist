@@ -17,7 +17,8 @@ The implementation follows the 26-work-package review plan. This log distinguish
 | W11 | Implemented; public and workbench checks passed | Shared versioned Eridian presentation, truthful dictionary widget, pinned release/preview distinction, setup and license corrections, responsive keyboard controls and current documentation. See [presentation claims](public-presentation.md). |
 | W12 | Implemented; Windows/Linux source and independent installer CI passed | Locked source gates, tested Pages builds, standalone installed-app acceptance, complete payload hashes, target-specific runtime staging, input-readiness repair and reviewed dependency updates. See [CI and release gates](ci-release-gates.md). |
 | W13 | Implemented; Windows/Linux source and independent installer CI passed | Versioned portable archives, bounded staged inspection, checksum/reference validation, preview, collision remapping and atomic restore with complete replacement backups. See [project archives](project-archives.md). |
-| W14 onward | Pending | Deterministic language compiler and the research engine. |
+| W14 | Implemented; verification in progress | Deterministic compiler, executable semantics, frozen datasets, private server grading and version-2 compiler archives. See [deterministic compiler](deterministic-compiler.md). |
+| W15 onward | Pending | Baseline evaluation, reproducible research results and subsequent engine work. |
 
 W03 and W04 ship together because requiring revisions without updating the existing client would break saves. Desktop draft persistence uses a stable user-data file store instead of renderer IndexedDB, because the desktop backend's random port changes the browser origin on restart. Browser use retains IndexedDB.
 

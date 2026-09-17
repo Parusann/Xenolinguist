@@ -2,7 +2,7 @@
 
 Sandbox practice stores its generated language, answer key, stable challenge IDs, draft answers, grading events, current step, visible exercises, word-help mode and completion state in `profile.sandbox_session`. Browser and desktop recovery use the existing revisioned profile queue. Answer events and their dictionary, number, sample or grammar updates enter the same mutation, so a failed save can retry the complete change. Competing edits to a session produce a save conflict rather than silently combining different answer histories.
 
-The session format and grader each have version 1. A session records the selected generator model name and creation time. This is creative practice using a model-generated answer key, not a blind or scientifically validated language benchmark. The stored key is accessible in profile JSON. Model digest capture, executable language semantics and benchmark generation belong to later work.
+The creative session format and grader each have version 1. A session records the selected generator model name and creation time. This is creative practice using a model-generated answer key, not a blind or scientifically validated language benchmark. The stored key is accessible in profile JSON. W14 adds a separate [deterministic compiler mode](deterministic-compiler.md) with executable semantics, server-owned keys and versioned datasets. Model digest capture and comparative learner evaluation remain future work.
 
 ## Grading contract
 

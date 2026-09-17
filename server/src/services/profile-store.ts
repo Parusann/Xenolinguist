@@ -152,4 +152,23 @@ export class ProfileStore {
       // Audio and migration backups are retained for later explicit archive/garbage-collection work.
     });
   }
+
+  /** Publish a private immutable compiler snapshot through one server-owned profile pointer. */
+  async commitCompiler(id: string, expectedRevision: number, requestId: string, digest: string,
+    prepare: (profile: LanguageProfile) => Promise<string | null>) {
+    if (!SAFE_ID.test(id)) throw new ProfileError('PROFILE_MISSING', 'Project not found', 404);
+    return this.locked(id, async () => {
+      const existing = await this.get(id);
+      if (!existing) throw new ProfileError('PROFILE_MISSING', 'Project not found', 404);
+      const previous = existing.recent_mutations.find(m => m.id === requestId);
+      if (previous) {
+        if (previous.digest !== digest) throw new ProfileError('MUTATION_ID_REUSED', 'Request identifier already used', 409);
+        return existing;
+      }
+      this.checkRevision(existing, expectedRevision);
+      const compiler_session_id = await prepare(existing), revision = existing.revision + 1;
+      return this.save(parseProfile({ ...existing, compiler_session_id, revision, updated_at: new Date().toISOString(),
+        recent_mutations: [...existing.recent_mutations, { id: requestId, digest, revision }].slice(-128) }));
+    });
+  }
 }

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { entityIdSchema, timestampSchema } from './common.js';
+import type { LearnerInput } from '../../engine/src/types.js';
 import { GRADING_VERSION, matchAccepted, matchInteger, normalizeAnswer, sentenceTokens, submissionKey } from '../sandbox/grading.js';
 
 const text = z.string().trim().min(1).max(2000).refine(value => normalizeAnswer(value).length > 0, 'Text must contain more than punctuation');
@@ -73,3 +74,16 @@ export const sandboxSessionSchema = z.strictObject({
     ctx.addIssue({ code: 'custom', path: ['sentenceIndex'], message: 'Unknown sentence selection' });
 });
 export type SandboxSession = z.infer<typeof sandboxSessionSchema>;
+
+// Compiler keys are server-owned. This contract contains permitted observations and submitted feedback only.
+export const compilerRequestSchema = z.discriminatedUnion('type', [
+  z.strictObject({ type: z.literal('start'), requestId: entityIdSchema, expectedRevision: z.number().int().nonnegative() }),
+  z.strictObject({ type: z.literal('attempt'), requestId: entityIdSchema, expectedRevision: z.number().int().nonnegative(),
+    sessionId: entityIdSchema, challengeId: entityIdSchema, answer: z.string().trim().min(1).max(2000) }),
+  z.strictObject({ type: z.literal('reveal'), requestId: entityIdSchema, expectedRevision: z.number().int().nonnegative(), sessionId: entityIdSchema, challengeId: entityIdSchema }),
+  z.strictObject({ type: z.literal('close'), requestId: entityIdSchema, expectedRevision: z.number().int().nonnegative(), sessionId: entityIdSchema }),
+]);
+export interface CompilerView extends LearnerInput {
+  sessionId: string; revision: number;
+  feedback: { challengeId: string; attempts: number; matched: boolean; revealed: boolean; assisted: boolean; answer?: string; lastAnswer?: string }[];
+}

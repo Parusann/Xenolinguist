@@ -17,7 +17,8 @@ export function Dashboard() {
   const totalWords = profile.dictionary.length
   const snapshots = profile.metric_snapshots ?? []
   const handleExport = () => {
-    const blob = new Blob([JSON.stringify(profile, null, 2)], { type: 'application/json' })
+    const portable = { ...profile }; delete portable.compiler_session_id
+    const blob = new Blob([JSON.stringify(portable, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -78,6 +79,7 @@ export function Dashboard() {
         <label className="btn sm">↓ Import JSON<input ref={importRef} type="file" accept=".json" onChange={handleImport} className="hidden" /></label>
         <button className="btn primary sm" onClick={handleExport}>↑ Export JSON</button>
         <button className="btn sm ghost" onClick={handleExportCSV} disabled={!totalWords}>↑ CSV</button>
+        {profile.compiler_session_id && <p className="dim">Validated practice is excluded from JSON exports. Use a .xeno archive with sandbox progress included to preserve it.</p>}
       </div>
     </div>
     <ProjectArchive />
