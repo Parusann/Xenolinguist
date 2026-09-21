@@ -53,6 +53,11 @@ test('W16 explicit senses, aliases and case policy survive UI save and reload', 
   expect(saved.dictionary[0]).toMatchObject({ english_meaning: 'river / finance', form_aliases: ['Tál'], senses: [
     { meaning: 'river bank', aliases: ['shore'] }, { meaning: 'financial bank', aliases: [] },
   ] });
+  await page.getByLabel('Case-sensitive matching').uncheck();
+  await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).lexical_policy?.caseSensitive).toBe(false);
+  await page.locator('[data-tour="dashboard"]').click();
+  await page.locator('input[type="file"][accept=".json"]').setInputFiles({ name: 'lexical.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(saved)) });
+  await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).lexical_policy?.caseSensitive).toBe(true);
   await openProfile(page, server.url, profile.name);
   await page.locator('[data-tour="translation"]').click();
   await page.getByPlaceholder('Enter unknown language text to translate…').fill('Tal tal Ta\u0301l');
@@ -64,6 +69,10 @@ test('W16 explicit senses, aliases and case policy survive UI save and reload', 
   await page.getByPlaceholder('Type English text…').fill('shore financial bank finance');
   await page.getByRole('button', { name: 'Translate', exact: true }).click();
   await expect(page.getByTestId('reverse-translation')).toHaveText('Tal Tal [finance]');
+  const legacy = { ...saved }; delete legacy.lexical_policy;
+  await page.locator('[data-tour="dashboard"]').click();
+  await page.locator('input[type="file"][accept=".json"]').setInputFiles({ name: 'legacy.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
+  await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).lexical_policy).toEqual({ caseSensitive: false, apostrophes: 'internal', hyphens: 'internal', segmentation: 'whitespace' });
 });
 
 test('W16 legacy reverse phrases and competing segmentations remain explicit', async ({ page, server }) => {

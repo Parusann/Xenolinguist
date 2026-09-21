@@ -103,7 +103,7 @@ The Field Log exports portable **.xeno project archives**, including saved data,
 
 Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard JSON import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
 
-The deterministic compiler and evaluation harness provide a foundation for subsequent Unicode repairs and a broader linguistic inference engine. Those extensions remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
+The deterministic compiler, reproducible evaluation harness and Unicode lexicon provide a foundation for executable grammar and a broader linguistic inference engine. Those subsequent extensions remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
 
 ## License
 

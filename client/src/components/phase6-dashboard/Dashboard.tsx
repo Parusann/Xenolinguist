@@ -6,6 +6,7 @@ import type { LanguageProfile } from 'shared/types'
 import { migrateProfile, parseProfile } from 'shared/schemas/profile'
 import { workspaceMetrics } from 'shared/metrics/workspace-metrics'
 import { ProjectArchive } from './ProjectArchive'
+import { DEFAULT_LEXICAL_POLICY } from 'engine/text/normalize'
 
 export function Dashboard() {
   const { profile, updateProfile } = useProfile()
@@ -35,6 +36,7 @@ export function Dashboard() {
       try {
         const imported = migrateProfile(JSON.parse(reader.result as string))
         const updates: Partial<LanguageProfile> = {
+          lexical_policy: imported.lexical_policy ?? DEFAULT_LEXICAL_POLICY,
           dictionary: imported.dictionary, grammar_rules: imported.grammar_rules,
           samples: imported.samples, number_system: imported.number_system, audio_clips: imported.audio_clips,
         }
