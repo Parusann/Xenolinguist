@@ -8,7 +8,7 @@ A local desktop workbench for constructed-language exploration: collect text and
 
 **Published installer:** [v1.0.0 for Windows x64](https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe), published June 14, 2026, 440,684,361 bytes, unsigned. [Release details](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0).
 
-**Current development:** [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). The W01–W11 improvements described below are **not in that published installer**. The package version remains 1.0.0 during development; source revision and retained verification records identify the tested builds. No new installer has been released as part of these changes.
+**Current development:** [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). The implementation improvements described below are **not in that published installer**. The package version remains 1.0.0 during development; source revision and retained verification records identify the tested builds. No new installer has been released as part of these changes.
 
 The old installer predates the repaired phone runtime, revision-checked saves, recovery, authenticated local API and controlled model setup. It can attempt an automatic Ollama model download. The pre-implementation packaged baseline failed phone analysis; that baseline is a separate artifact and does not certify the published installer. Windows may identify the unsigned installer as an unknown publisher. Review the [release boundary](docs/desktop-release.md) before installing.
 
@@ -27,6 +27,8 @@ The old installer predates the repaired phone runtime, revision-checked saves, r
 
 Creative practice generates a language with a selected local model, validates its structure, saves the session and grades against the generated answer key. The key can be linguistically inconsistent. Practice scores are separate from scientific evaluation, and assistance is accounted for separately.
 
+Deterministic practice uses an executable, bounded language compiler with private server grading, explicit answer reveals and recoverable sessions. Its versioned corpus supplies 90 seed-disjoint languages for research. See [compiler behavior and limits](docs/deterministic-compiler.md).
+
 The Eridian seed is a versioned fictional teaching corpus. The app, public dictionary widget and illustrative hero examples derive their meanings from the same source. Existing saved demo profiles are not overwritten by a seed update.
 
 ![Eridian workbench with chat unavailable](docs/screenshots/w11-workbench.png)
@@ -43,9 +45,15 @@ The Eridian seed is a versioned fictional teaching corpus. The app, public dicti
 
 Architecture and behavior: [feature reference](docs/FEATURES.md), [audio lifecycle](docs/audio-lifecycle.md), [runtime jobs](docs/runtime-jobs.md), [workspace evidence](docs/workspace-evidence.md), [sandbox sessions](docs/sandbox-sessions.md).
 
+## Reproducible language-learning experiments
+
+The offline evaluation harness compares frozen word lookup, a constrained symbolic learner, local-model inference and a hybrid fallback. Each receives the same observations; the scorer keeps target meanings separate. The symbolic method eliminates inconsistent structural hypotheses and learns lexical bindings from examples. Its supplied grammar assumptions are explicit, so success is not presented as unrestricted language discovery.
+
+`npm run evaluate:full` produces per-item predictions, model digests/settings, source and corpus hashes, paired language-level uncertainty intervals and standalone figures. The initial configuration uses 30 evaluation languages, three observation budgets and two model sampling seeds. `npm run evaluate:verify -- RESULT_DIRECTORY` replays scoring and checks retained artifacts without model inference. Setup, method definitions and interpretation limits are in the [evaluation protocol](docs/evaluation-protocol.md). This research harness is separate from the workbench's dictionary translator.
+
 ## Setup and offline operation
 
-Windows x64 is the only manifested native target. The Windows executable is tested locally; a complete signed-installer/clean-machine release gate remains pending. macOS/Linux packaging is not supported by the current native manifest.
+Windows x64 is the only manifested native target. An independent Windows CI job installs and verifies implementation artifacts on a fresh runner; public release and signing remain pending. macOS/Linux packaging is not supported by the current native manifest.
 
 Manual text, dictionary and grammar work do not require Ollama. For model assistance, install/start [Ollama](https://ollama.com), then use **Runtime & setup** to select an installed, verified local completion model. Downloads require an explicit click in the preview. The default `gemma4:e4b` is about 9.61 GB; optional `llama3.2:3b` is about 2.02 GB. Allow additional temporary disk space. Model speed and memory requirements depend on hardware; no broad quality ranking is established.
 
@@ -80,7 +88,7 @@ npm run audit:record
 npm run dist
 ```
 
-The W12 local baseline has 204 passing unit tests plus seven tooling tests, three gated native unit skips, 24 working workbench checks, one expected Unicode failure and eight public-site checks. A separate installed-application CI workflow requires native audio, access boundaries and restart recovery on a fresh Windows runner. Real local-model probes require an available host with installed models. Current results and commands are in [testing](docs/testing.md); unresolved advisories are in the [dependency review](docs/dependency-review.md). These checks do not establish linguistic quality or certify the old installer.
+Source CI requires unit/tooling tests, workbench and public-site checks, and a deterministic evaluation subset. A separate installed-application CI workflow requires native audio, access boundaries, archive round trips and restart recovery on a fresh Windows runner. Three gated native unit skips and one expected workbench Unicode failure remain explicit. Real local-model experiments require an available host with installed models. Current counts and verification records are in [implementation progress](docs/implementation-progress.md); commands are in [testing](docs/testing.md), and unresolved advisories are in the [dependency review](docs/dependency-review.md). Application checks do not establish linguistic quality or certify the old installer.
 
 Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only), `OLLAMA_MODEL`, `WHISPER_TIMEOUT_MS`, `TTS_TIMEOUT_MS` and the native asset paths. Context/output budgets and generation deadlines are server-owned; the former `OLLAMA_TIMEOUT_MS` setting does not control the current generation service.
 
@@ -94,7 +102,7 @@ The Field Log exports portable **.xeno project archives**, including saved data,
 
 Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard JSON import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
 
-Next work includes a deterministic language compiler, reproducible benchmark comparisons and a stronger linguistic inference engine. These are roadmap items. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
+The deterministic compiler and evaluation harness provide a foundation for subsequent Unicode repairs and a broader linguistic inference engine. Those extensions remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
 
 ## License
 
