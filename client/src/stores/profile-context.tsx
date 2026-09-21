@@ -1,3 +1,4 @@
+import { storedForm } from 'engine/text/normalize'
 import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react'
 import type { LanguageProfile, DictionaryEntry, GrammarRule, Sample, AudioClip } from 'shared/types'
 import { useSessionLog } from './session-log-context'
@@ -110,7 +111,7 @@ export function ProfileProvider({
 
   const addDictionaryEntry = useCallback((entry: Omit<DictionaryEntry, 'id' | 'created_at'>): string => {
     const id = genId('word')
-    const newEntry: DictionaryEntry = { ...entry, id, created_at: new Date().toISOString() }
+    const newEntry: DictionaryEntry = { ...entry, alien_word: storedForm(entry.alien_word), id, created_at: new Date().toISOString() }
     updateAndSave(prev => ({ ...prev, dictionary: [...prev.dictionary, newEntry] }))
     addEntry('success', `Mapped: "${entry.alien_word}" → "${entry.english_meaning}"`)
     return id

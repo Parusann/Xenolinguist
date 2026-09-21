@@ -29,6 +29,7 @@
     "test:tooling": "node --test tests/tooling/artifact-layout.test.mjs",
     "dataset:export": "tsx evaluation/src/export.ts",
     "evaluate": "tsx evaluation/src/runner.ts",
+    "evaluate:unicode": "tsx evaluation/src/unicode-benchmark.ts",
     "evaluate:ci": "tsx evaluation/src/runner.ts evaluation/configs/ci.json",
     "evaluate:full": "tsx evaluation/src/runner.ts evaluation/configs/baseline.json",
     "evaluate:verify": "tsx evaluation/src/verify.ts",

@@ -66,6 +66,31 @@ function rewriteManifest(members: Map<string, Buffer>) {
 }
 
 describe('portable project archives', () => {
+  it('persists lexical policy and explicit senses through mutation, reload and archive remapping', async () => {
+    const store = new ProfileStore(), profile = await fixture();
+    const policy = { caseSensitive: true, apostrophes: 'boundary', hyphens: 'internal', segmentation: 'dictionary' };
+    const word = { ...profile.dictionary[0], alien_word: '水', english_meaning: 'water / liquid',
+      form_aliases: ['மீன்'], senses: [{ meaning: 'water', aliases: ['fresh water'] }, { meaning: 'liquid', aliases: [] }] };
+    const updated = await store.mutate(profile.id, { expectedRevision: profile.revision, mutationId: 'lexical', operations: [
+      { type: 'set-fields', fields: { lexical_policy: policy } }, { type: 'put-word', value: word },
+    ] });
+    const saved = (await new ProfileStore().get(profile.id))!;
+    expect(saved.lexical_policy).toEqual(policy);
+    expect(saved.dictionary[0]).toMatchObject(word);
+    const exported = await new ProjectArchives().export(saved.id, updated!.profile.revision, true);
+    const bytes = await fs.readFile(exported.file); await exported.dispose();
+    process.env.DATA_DIR = path.join(root, 'lexical-destination');
+    const archives = new ProjectArchives(), preview = await archives.inspect(Readable.from([bytes]));
+    const { profile: restored } = await archives.restore(preview.token, { mode: 'new' });
+    expect(restored.lexical_policy).toEqual(policy);
+    expect(restored.dictionary[0]).toMatchObject({ ...word, id: restored.dictionary[0].id });
+    expect(restored.dictionary[0].id).not.toBe(word.id);
+    const invalid = await request(createApp(testSession)).post(`/api/profiles/${restored.id}/mutations`).send({ expectedRevision: restored.revision, mutationId: 'invalid-sense',
+      operations: [{ type: 'put-word', value: { ...restored.dictionary[0], senses: [{ meaning: '', aliases: [] }] } }] });
+    expect(invalid.status).toBe(400);
+    expect((await new ProfileStore().get(restored.id))!.dictionary).toEqual(restored.dictionary);
+  });
+
   it('restores all saved state and byte-identical audio into an independent empty data directory', async () => {
     const { profile, bytes } = await archive(); process.env.DATA_DIR = path.join(root, 'destination');
     const service = new ProjectArchives(), preview = await service.inspect(Readable.from([bytes]));

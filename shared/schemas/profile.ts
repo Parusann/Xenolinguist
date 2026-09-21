@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { lexicalPolicySchema, lexicalSenseSchema } from './lexicon.js';
 import { entityIdSchema as id, timestampSchema as timestamp, confidenceSchema, noteSchema as text } from './common.js';
 import { ProfileError, validationError } from './errors.js';
 import { audioAssetsSchema } from './audio.js';
@@ -8,6 +9,8 @@ import { aiHistorySchema } from './ai-history.js';
 
 const manualConfidence = { confidence: confidenceSchema.nullable().default(null), user_asserted_confidence: confidenceSchema.nullable().optional() };
 export const dictionaryEntrySchema = z.strictObject({
+  form_aliases: z.array(z.string().trim().min(1).max(512)).max(64).optional(),
+  senses: z.array(lexicalSenseSchema).max(64).optional(),
   id, alien_word: text, english_meaning: text,
   part_of_speech: z.enum(['noun', 'verb', 'adjective', 'pronoun', 'number', 'connector', 'particle', 'unknown']),
   ...manualConfidence, context: text, examples: z.array(text), notes: text, created_at: timestamp,
@@ -31,6 +34,7 @@ export const sampleSchema = z.strictObject({
   decoded: z.boolean(), audio_id: id.nullable(), ipa: text.nullable(), created_at: timestamp,
 });
 export const profileDataSchema = z.strictObject({
+  lexical_policy: lexicalPolicySchema.optional(),
   name: text, description: text, phonetic_notes: text, is_sandbox: z.boolean(),
   sandbox_difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
   sandbox_session: sandboxSessionSchema.nullable().optional(),

@@ -20,9 +20,9 @@ The old installer predates the repaired phone runtime, revision-checked saves, r
 | --- | --- | --- |
 | Samples | Retains text drafts, original audio, prepared analysis copies and saved clip/word links | Recordings are observations; transcriptions can be wrong |
 | Numbers | Stores integer mappings and ranks candidate bases with explicit support and ties | Exploratory fit is not proof of a number system |
-| Vocabulary | Stores meanings, examples, alternates and optional user belief | User belief is not calibrated confidence |
+| Vocabulary | Stores display glosses, explicit senses, accepted aliases, examples and optional user belief | User belief is not calibrated confidence |
 | Grammar | Stores grammar notes and examples; can request model advice | Rules are not automatically validated or applied by the lookup engine |
-| Translation | Looks up dictionary tokens in source order and shows unresolved forms | No compositional translation; Unicode normalization/tokenization still has known gaps |
+| Translation | Unicode-aware dictionary lookup with source spans, competing senses and unresolved forms | No compositional translation or general script-specific word segmentation |
 | Dashboard | Shows content counts and server-recorded metric history | Counts are not decoding accuracy or evaluated coverage |
 
 Creative practice generates a language with a selected local model, validates its structure, saves the session and grades against the generated answer key. The key can be linguistically inconsistent. Practice scores are separate from scientific evaluation, and assistance is accounted for separately.
@@ -37,6 +37,7 @@ The Eridian seed is a versioned fictional teaching corpus. The app, public dicti
 
 ## Engineering behind the interface
 
+- **Lexical processing:** NFC comparison, original Unicode source spans, profile-controlled case/boundaries, cached lookup tries and explicit sense/alias contracts. Ambiguous lexical matches remain visible. See [Unicode lexicon](docs/unicode-lexicon.md).
 - **Persistence:** shared Zod schemas, guarded legacy migration, revision conflicts, serialized typed mutations, idempotency receipts, atomic replacement and recovery snapshots. A durable client queue retains pending work through restart.
 - **Audio:** immutable staged originals with SHA256 identities, a worker-prepared analysis copy, explicit inference/retry and atomic sample/clip saves. Windows packaging checks manifested native assets and isolated runtime dependencies.
 - **Inference:** local-model eligibility checks, explicit downloads, task-specific context/output budgets, deadlines, bounded queues and NDJSON validation. Cancellation propagates to Ollama, whisper and a disposable phone process; capacity is released after cleanup.
@@ -88,7 +89,7 @@ npm run audit:record
 npm run dist
 ```
 
-Source CI requires unit/tooling tests, workbench and public-site checks, and a deterministic evaluation subset. A separate installed-application CI workflow requires native audio, access boundaries, archive round trips and restart recovery on a fresh Windows runner. Three gated native unit skips and one expected workbench Unicode failure remain explicit. Real local-model experiments require an available host with installed models. Current counts and verification records are in [implementation progress](docs/implementation-progress.md); commands are in [testing](docs/testing.md), and unresolved advisories are in the [dependency review](docs/dependency-review.md). Application checks do not establish linguistic quality or certify the old installer.
+Source CI requires unit/tooling tests, workbench and public-site checks, and a deterministic evaluation subset. A separate installed-application CI workflow requires native audio, access boundaries, archive round trips and restart recovery on a fresh Windows runner. Three gated native unit skips remain explicit; the former expected Unicode workbench failure now passes. Real local-model experiments require an available host with installed models. Current counts and verification records are in [implementation progress](docs/implementation-progress.md); commands are in [testing](docs/testing.md), and unresolved advisories are in the [dependency review](docs/dependency-review.md). Application checks do not establish linguistic quality or certify the old installer.
 
 Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only), `OLLAMA_MODEL`, `WHISPER_TIMEOUT_MS`, `TTS_TIMEOUT_MS` and the native asset paths. Context/output budgets and generation deadlines are server-owned; the former `OLLAMA_TIMEOUT_MS` setting does not control the current generation service.
 

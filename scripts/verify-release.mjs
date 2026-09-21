@@ -291,8 +291,28 @@ try {
   expect(compilerView.feedback.filter(f => f.answer)).toHaveLength(1);
   record.checks.compilerPractice = { passed: true, version: compilerView.version, observations: compilerView.observations.length,
     challenges: compilerView.challenges.length, sameSessionAfterRelaunch: true, draftRecovered: true, reveals: 1 };
+  const lexicalWord = (id, alien_word, english_meaning, extra = {}) => ({ id, alien_word, english_meaning,
+    part_of_speech: 'noun', confidence: null, context: '', examples: [], notes: '', created_at: '2026-09-21T00:00:00.000Z', ...extra });
+  const lexicalResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native Unicode lexicon', lexical_policy: { caseSensitive: true, apostrophes: 'internal', hyphens: 'internal', segmentation: 'whitespace' },
+    dictionary: [lexicalWord('water', '水', 'water', { form_aliases: ['水水'], senses: [{ meaning: 'water', aliases: ['aqua'] }] }),
+      lexicalWord('tamil', 'தமிழ்', 'Tamil'), lexicalWord('coffee', 'café', 'coffee'), lexicalWord('river', 'Tal', 'river'), lexicalWord('sky', 'Tal', 'sky')],
+  } });
+  expect(lexicalResponse.status()).toBe(201);
+  const lexicalProfile = await lexicalResponse.json();
+  await reopened.getByTitle('Back to profiles', { exact: true }).click();
+  await reopened.getByRole('button').filter({ has: reopened.getByText(lexicalProfile.name, { exact: true }) }).click();
+  await reopened.locator('[data-tour="translation"]').click();
+  await reopened.getByPlaceholder('Enter unknown language text to translate…').fill('水 தமிழ் cafe\u0301 Tal tal!');
+  await expect(reopened.getByTestId('lexical-translation')).toHaveText('water Tamil coffee ⟦river | sky⟧ [tal]!');
+  await reopened.getByRole('button', { name: 'English → Alien', exact: true }).click();
+  await reopened.getByPlaceholder('Type English text…').fill('aqua');
+  await reopened.getByRole('button', { name: 'Translate', exact: true }).click();
+  await expect(reopened.getByTestId('reverse-translation')).toHaveText('水');
+  record.checks.unicodeLexicon = { passed: true, scripts: ['Han', 'Tamil', 'Latin decomposed accent'],
+    casePolicy: true, competingHomographs: true, explicitReverseAlias: true };
   const archiveChecks = [];
-  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved]) {
+  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile]) {
     const restored = await reopened.evaluate(async source => {
       const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
       if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
@@ -318,6 +338,11 @@ try {
       expect(restoredCompiler.observations).toEqual(compilerView.observations);
       expect(restoredCompiler.feedback).toEqual(compilerView.feedback);
       record.checks.compilerPractice.archiveRestored = true;
+    }
+    if (sourceProfile.id === lexicalProfile.id) {
+      expect(restored.profile.lexical_policy).toEqual(lexicalProfile.lexical_policy);
+      expect(restored.profile.dictionary.map(({ id: _id, ...entry }) => entry)).toEqual(lexicalProfile.dictionary.map(({ id: _id, ...entry }) => entry));
+      record.checks.unicodeLexicon.archiveRestored = true;
     }
     let restoredAudioHash;
     if (sourceProfile.audio_clips.length) {
@@ -357,6 +382,7 @@ try {
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed
+    && record.checks.unicodeLexicon?.passed && record.checks.unicodeLexicon?.archiveRestored
     && record.checks.compilerPractice?.passed && record.checks.compilerPractice?.archiveRestored
     && record.checks.nativeJobCancellation?.nativeProcessStarted && record.checks.localBoundary?.relaunchAuthenticated && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
   if (!record.acceptancePassed) process.exitCode = 1;

@@ -1,3 +1,8 @@
+import { useLexicon } from '@/hooks/useLexicon'
+import { DEFAULT_LEXICAL_POLICY, storedForm } from 'engine/text/normalize'
+import { LexicalFields } from './LexicalFields'
+import { cleanLexicalFields, validLexicalFields } from '@/lib/lexicalFields'
+import type { LexicalPolicy } from 'shared/types'
 import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
@@ -19,7 +24,7 @@ const BUCKET_COLOR: Record<string, string> = {
 }
 
 export function VocabularyBuilder() {
-  const { profile, addDictionaryEntry, addDictionaryEntryRaw, removeDictionaryEntry, updateProfile } = useProfile()
+  const { profile, addDictionaryEntry, addDictionaryEntryRaw, removeDictionaryEntry, updateProfile, updateDictionaryEntry } = useProfile()
   const { runTask, loading, streamedText } = useAI()
   const { ready: connected } = useOllama()
   const { pushAction } = useUndo()
@@ -34,30 +39,29 @@ export function VocabularyBuilder() {
   const [draft, setDraft] = useState<Partial<DictionaryEntry>>({})
 
   // Add form state
+  const [newLexical, setNewLexical] = useState<Pick<DictionaryEntry, 'senses' | 'form_aliases'>>({})
+  const [editId, setEditId] = useState<string | null>(null)
   const [newWord, setNewWord] = useState('')
   const [newMeaning, setNewMeaning] = useState('')
   const [newPos, setNewPos] = useState<PartOfSpeech>('unknown')
   const [newConfidence, setNewConfidence] = useState<number | null>(null)
   const [newContext, setNewContext] = useState('')
 
-  const dictionary = profile?.dictionary || []
+  const lexicon = useLexicon(profile)
+  const dictionary = lexicon.dictionary
+  const policy = profile?.lexical_policy ?? DEFAULT_LEXICAL_POLICY
+  const changePolicy = (patch: Partial<LexicalPolicy>) => updateProfile({ lexical_policy: { ...policy, ...patch } })
   const counts = profile ? getConfidenceCounts(profile) : { rated: 0, unrated: 0, total: 0 }
 
-  const filtered = dictionary.filter((entry) => {
-    if (activeCategory !== 'all' && entry.part_of_speech !== activeCategory) return false
-    if (search) {
-      const q = search.toLowerCase()
-      return entry.alien_word.toLowerCase().includes(q) || entry.english_meaning.toLowerCase().includes(q)
-    }
-    return true
-  })
+  const filtered = lexicon.search(search).filter(entry => activeCategory === 'all' || entry.part_of_speech === activeCategory)
 
   const sel = dictionary.find((e) => e.id === selectedId) ?? dictionary[0] ?? null
 
   const handleAdd = () => {
-    if (!newWord.trim() || !newMeaning.trim()) return
+    if (!newWord.trim() || !newMeaning.trim() || !validLexicalFields(newLexical)) return
     addDictionaryEntry({
-      alien_word: newWord.trim(),
+      alien_word: storedForm(newWord),
+      ...cleanLexicalFields(newLexical),
       english_meaning: newMeaning.trim(),
       part_of_speech: newPos,
       confidence: newConfidence,
@@ -65,6 +69,7 @@ export function VocabularyBuilder() {
       examples: [],
       notes: '',
     })
+    setNewLexical({})
     setNewWord('')
     setNewMeaning('')
     setNewPos('unknown')
@@ -83,13 +88,12 @@ export function VocabularyBuilder() {
     }
   }
 
-  const updateEntry = (id: string, patch: Partial<DictionaryEntry>) => {
-    updateProfile({ dictionary: dictionary.map((e) => (e.id === id ? { ...e, ...patch } : e)) })
-  }
-
   const startEdit = () => {
     if (!sel) return
+    setEditId(sel.id)
     setDraft({
+      form_aliases: sel.form_aliases,
+      senses: sel.senses,
       english_meaning: sel.english_meaning,
       part_of_speech: sel.part_of_speech,
       confidence: sel.confidence,
@@ -99,7 +103,8 @@ export function VocabularyBuilder() {
     setEditing(true)
   }
   const saveEdit = () => {
-    if (sel) updateEntry(sel.id, draft)
+    if (!sel || sel.id !== editId || !validLexicalFields(draft)) return
+    updateDictionaryEntry(sel.id, { ...draft, ...cleanLexicalFields(draft) })
     setEditing(false)
   }
 
@@ -192,9 +197,20 @@ export function VocabularyBuilder() {
           </div>
         </div>
 
+        <details className="glass-inner" style={{ padding: 10 }}>
+          <summary>Word matching settings</summary>
+          <p className="dim" style={{ fontSize: 12 }}>Applies to translation, sample inspection and dictionary search. Original spellings stay intact. Add spaces yourself, or enable dictionary segmentation to expose competing matches in unspaced text.</p>
+          <label><input type="checkbox" checked={policy.caseSensitive} onChange={e => changePolicy({ caseSensitive: e.target.checked })} /> Case-sensitive matching</label>
+          <div className="flex" style={{ gap: 10, marginTop: 8 }}>
+            <label>Apostrophes <select aria-label="Apostrophe boundaries" className="input" value={policy.apostrophes} onChange={e => changePolicy({ apostrophes: e.target.value as LexicalPolicy['apostrophes'] })}><option value="internal">Join letters</option><option value="boundary">Word boundary</option></select></label>
+            <label>Hyphens <select aria-label="Hyphen boundaries" className="input" value={policy.hyphens} onChange={e => changePolicy({ hyphens: e.target.value as LexicalPolicy['hyphens'] })}><option value="internal">Join letters</option><option value="boundary">Word boundary</option></select></label>
+            <label>Segmentation <select aria-label="Word segmentation" className="input" value={policy.segmentation} onChange={e => changePolicy({ segmentation: e.target.value as LexicalPolicy['segmentation'] })}><option value="whitespace">Spaces / punctuation</option><option value="dictionary">Dictionary matches</option></select></label>
+          </div>
+        </details>
+
         {/* Add form */}
         {showAddForm && (
-          <div className="glass-card" style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="glass-card" style={{ maxHeight: '60vh', overflow: 'auto', flexShrink: 0, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <span className="label" style={{ color: 'var(--accent)', marginBottom: 0 }}>New Entry</span>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
@@ -221,8 +237,9 @@ export function VocabularyBuilder() {
                 <input value={newContext} onChange={(e) => setNewContext(e.target.value)} placeholder="Where first encountered" className="input" />
               </div>
             </div>
+            <LexicalFields value={newLexical} onChange={setNewLexical} />
             <div className="flex" style={{ gap: 8 }}>
-              <button className="btn primary sm" onClick={handleAdd} disabled={!newWord.trim() || !newMeaning.trim()}>Add to Dictionary</button>
+              <button className="btn primary sm" onClick={handleAdd} disabled={!newWord.trim() || !newMeaning.trim() || !validLexicalFields(newLexical)}>Add to Dictionary</button>
               <button className="btn sm ghost" onClick={() => setShowAddForm(false)}>Cancel</button>
             </div>
           </div>
@@ -243,7 +260,7 @@ export function VocabularyBuilder() {
                 return (
                   <div
                     key={entry.id}
-                    onClick={() => setSelectedId(entry.id)}
+                    onClick={() => { setSelectedId(entry.id); setEditing(false) }}
                     onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setContextMenu({ x: e.clientX, y: e.clientY, entry }) }}
                     className="glass-card"
                     style={{ padding: 14, cursor: 'pointer', borderColor: isSel ? 'rgba(0,230,118,0.4)' : 'var(--border)', background: isSel ? 'rgba(0,230,118,0.05)' : 'var(--bg-rise)' }}
@@ -282,7 +299,7 @@ export function VocabularyBuilder() {
                 {filtered.map((entry) => {
                   const level = getConfidenceLevel(entry.confidence)
                   return (
-                    <tr key={entry.id} onClick={() => setSelectedId(entry.id)} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setContextMenu({ x: e.clientX, y: e.clientY, entry }) }} style={{ background: sel?.id === entry.id ? 'rgba(0,230,118,0.05)' : 'transparent', cursor: 'pointer' }}>
+                    <tr key={entry.id} onClick={() => { setSelectedId(entry.id); setEditing(false) }} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setContextMenu({ x: e.clientX, y: e.clientY, entry }) }} style={{ background: sel?.id === entry.id ? 'rgba(0,230,118,0.05)' : 'transparent', cursor: 'pointer' }}>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
                         <span className="flex" style={{ alignItems: 'center', gap: 6 }}>
                           <span className={'word-token wt-' + level} style={{ padding: 0, fontSize: 13 }}>{entry.alien_word}</span>
@@ -323,7 +340,7 @@ export function VocabularyBuilder() {
               <span className="label" style={{ marginBottom: 0 }}>Inspector</span>
               {editing ? (
                 <div className="flex" style={{ gap: 8 }}>
-                  <button className="btn xs" onClick={saveEdit}>Save</button>
+                  <button className="btn xs" onClick={saveEdit} disabled={sel.id !== editId || !validLexicalFields(draft)}>Save</button>
                   <button className="btn xs ghost" onClick={() => setEditing(false)}>Cancel</button>
                 </div>
               ) : (
@@ -339,9 +356,10 @@ export function VocabularyBuilder() {
 
             {editing ? (
               <>
+                <LexicalFields value={draft} onChange={value => setDraft(d => ({ ...d, ...value }))} />
                 <div>
                   <label className="label">Meaning</label>
-                  <input className="input" value={draft.english_meaning ?? ''} onChange={(e) => setDraft((d) => ({ ...d, english_meaning: e.target.value }))} />
+                  <input aria-label="Display gloss" className="input" value={draft.english_meaning ?? ''} onChange={(e) => setDraft((d) => ({ ...d, english_meaning: e.target.value }))} />
                 </div>
                 <div>
                   <label className="label">Part of Speech</label>
@@ -369,6 +387,10 @@ export function VocabularyBuilder() {
                 <div className="flex" style={{ gap: 8 }}>
                   <span className="badge">{sel.part_of_speech}</span>
                   <EvidenceStatus value={sel.confidence} />
+                </div>
+                <div style={{ fontSize: 12 }}>
+                  {sel.form_aliases?.length ? <p>Accepted forms: {sel.form_aliases.join(' · ')}</p> : null}
+                  {sel.senses?.length ? sel.senses.map((sense, i) => <p key={i}>Sense {i + 1}: {sense.meaning}{sense.aliases.length ? ` (aliases: ${sense.aliases.join(' · ')})` : ''}</p>) : <p className="dim">Display gloss only. No explicit senses recorded.</p>}
                 </div>
                 <hr className="hr" style={{ margin: '4px 0' }} />
                 <div>

@@ -18,8 +18,12 @@ import { useAudioImport } from '@/hooks/useAudioImport'
 import { audioDraftStore } from '@/stores/audio-draft-store'
 import { stageAudio } from '@/services/audio-import'
 
+import { normalize } from 'engine/text/normalize'
+import { useLexicon } from '@/hooks/useLexicon'
+
 export function SampleInput() {
   const { profile, addSample, removeSample, saveAudioSample, restoreSample, addDictionaryEntry, updateSample } = useProfile()
+  const lexicon = useLexicon(profile)
   const { runTask, loading, streamedText } = useAI()
   const { ready: connected } = useOllama()
   const { suggestForSample } = useAutoSuggest()
@@ -189,7 +193,7 @@ export function SampleInput() {
   const visible = samples.filter((s) => {
     if (filter === 'decoded' && !s.decoded) return false
     if (filter === 'audio' && !s.audio_id) return false
-    if (search && !s.alien_text.toLowerCase().includes(search.toLowerCase()) && !(s.english_translation || '').toLowerCase().includes(search.toLowerCase())) return false
+    if (search && !normalize(s.alien_text, lexicon.policy).includes(normalize(search, lexicon.policy)) && !normalize(s.english_translation || '', lexicon.policy).includes(normalize(search, lexicon.policy))) return false
     return true
   })
 
@@ -272,21 +276,21 @@ export function SampleInput() {
                   <span className="label" style={{ marginBottom: 6, display: 'block' }}>Link to dictionary</span>
                   <div className="flex" style={{ gap: 6, flexWrap: 'wrap' }}>
                     {pendingSegments.map((s) => {
-                      const known = profile?.dictionary.find((d) => d.alien_word.toLowerCase() === s.label.toLowerCase())
+                      const known = lexicon.lookup(s.label)
                       return (
                         <button
                           key={s.id}
                           className="btn xs ghost"
-                          title={known ? `Already in dictionary: ${known.english_meaning}` : 'Add to dictionary'}
-                          style={{ color: known ? 'var(--accent)' : undefined }}
+                          title={known.length ? `Dictionary candidates: ${known.map(candidate => candidate.meaning).join(' | ')}` : 'Add to dictionary'}
+                          style={{ color: known.length ? 'var(--accent)' : undefined }}
                           onClick={() => {
-                            if (known || !s.label.trim()) return
+                            if (known.length || !s.label.trim()) return
                             const entryId = addDictionaryEntry({ alien_word: s.label, english_meaning: '', part_of_speech: 'unknown', confidence: null, context: 'From audio transcript', examples: [], notes: '' })
                             // Persist the link onto the saved AudioSegment when the sample is added.
                             setPendingSegments((prev) => prev.map((seg) => seg.id === s.id ? { ...seg, dictionary_entry_id: entryId } : seg))
                           }}
                         >
-                          {known ? `✓ ${s.label}` : `+ ${s.label}`}
+                          {known.length ? `✓ ${s.label}` : `+ ${s.label}`}
                         </button>
                       )
                     })}
@@ -327,7 +331,7 @@ export function SampleInput() {
       {/* RIGHT — samples list / decode view */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, overflow: 'hidden' }}>
         {selectedSample && profile ? (
-          <SampleDecodeView sample={selectedSample} dictionary={profile.dictionary} onClose={() => setSelectedSample(null)} onDefineWord={(entry) => addDictionaryEntry(entry)} />
+          <SampleDecodeView sample={selectedSample} profile={profile} onClose={() => setSelectedSample(null)} onDefineWord={(entry) => addDictionaryEntry(entry)} />
         ) : (
           <>
             <div className="flex" style={{ gap: 10, alignItems: 'center' }}>

@@ -1,11 +1,15 @@
 import { EvidenceStatus, BeliefInput } from '@/components/common/EvidenceStatus'
-import { useState, useRef, useEffect } from 'react'
-import type { Sample, DictionaryEntry, PartOfSpeech } from 'shared/types'
+import { useState, useRef, useEffect, useMemo } from 'react'
+import type { Sample, DictionaryEntry, PartOfSpeech, LanguageProfile } from 'shared/types'
 import { getConfidenceLevel, PART_OF_SPEECH_OPTIONS } from 'shared/constants'
+
+import { useLexicon } from '@/hooks/useLexicon'
+import { renderToken, type LexicalAnalysis } from 'engine/lexicon/index'
+import { storedForm } from 'engine/text/normalize'
 
 interface SampleDecodeViewProps {
   sample: Sample
-  dictionary: DictionaryEntry[]
+  profile: LanguageProfile
   onClose: () => void
   onDefineWord: (entry: Omit<DictionaryEntry, 'id' | 'created_at'>) => void
 }
@@ -13,6 +17,9 @@ interface SampleDecodeViewProps {
 interface TokenData {
   word: string
   entry: DictionaryEntry | null
+  kind: string
+  candidates: LexicalAnalysis[]
+  output: string
 }
 
 interface PopoverState {
@@ -20,7 +27,7 @@ interface PopoverState {
   mode: 'view' | 'define'
 }
 
-export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: SampleDecodeViewProps) {
+export function SampleDecodeView({ sample, profile, onClose, onDefineWord }: SampleDecodeViewProps) {
   const [popover, setPopover] = useState<PopoverState | null>(null)
   const [defineForm, setDefineForm] = useState<DefineFormState>({
     english_meaning: '',
@@ -31,14 +38,11 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
   const popoverRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Split alien text into words and look up each in the dictionary
-  const tokens: TokenData[] = sample.alien_text.split(/\s+/).filter(Boolean).map(word => {
-    // Strip attached punctuation for the lookup (display keeps the original token) so e.g.
-    // "krash." still matches the dictionary entry "krash".
-    const clean = word.toLowerCase().replace(/[^a-zà-ɏ'-]/g, '')
-    const entry = dictionary.find(d => d.alien_word.toLowerCase() === clean) ?? null
-    return { word, entry }
-  })
+  const lexicon = useLexicon(profile)
+  const tokens: TokenData[] = useMemo(() => lexicon.analyze(sample.alien_text).map(token => ({
+    word: token.text, kind: token.kind, candidates: token.candidates, output: renderToken(token),
+    entry: token.candidates.length === 1 ? token.candidates[0].entry : null,
+  })), [lexicon, sample.alien_text])
 
   // Close popover on outside click or Escape.
   useEffect(() => {
@@ -64,7 +68,7 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
       setPopover(null)
       return
     }
-    if (token.entry) {
+    if (token.candidates.length) {
       setPopover({ tokenIndex: index, mode: 'view' })
     } else {
       setDefineForm({
@@ -81,7 +85,7 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
     if (!popover) return
     const token = tokens[popover.tokenIndex]
     onDefineWord({
-      alien_word: token.word,
+      alien_word: storedForm(token.word),
       english_meaning: defineForm.english_meaning.trim(),
       part_of_speech: defineForm.part_of_speech,
       confidence: defineForm.confidence,
@@ -113,8 +117,8 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
     return 'badge badge-unknown'
   }
 
-  const knownCount = tokens.filter(t => t.entry !== null).length
-  const totalCount = tokens.length
+  const knownCount = tokens.filter(t => t.candidates.some(candidate => candidate.meaning.trim())).length
+  const totalCount = tokens.filter(t => t.kind === 'word').length
   const decodePercent = totalCount > 0 ? Math.round((knownCount / totalCount) * 100) : 0
 
   return (
@@ -128,7 +132,7 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
           <div>
             <h3 className="text-sm font-medium text-white">Decode View</h3>
             <p className="text-[10px] text-gray-600 font-mono mt-0.5">
-              {knownCount}/{totalCount} words mapped &middot; {decodePercent}% dictionary coverage
+              {knownCount}/{totalCount} regions have candidate meanings &middot; {decodePercent}% region coverage
             </p>
           </div>
         </div>
@@ -152,9 +156,9 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
       {/* Token grid */}
       <div className="glass-inner rounded-lg p-5 mb-4">
         <label className="label mb-3">Alien Text</label>
-        <div className="flex flex-wrap gap-2 relative">
-          {tokens.map((token, i) => (
-            <div key={i} className="relative">
+        <div data-testid="sample-lexical-tokens" className="relative" style={{ whiteSpace: 'pre-wrap', lineHeight: 3 }}>
+          {tokens.map((token, i) => token.kind !== 'word' ? <span key={i}>{token.word}</span> : (
+            <span key={i} className="relative" style={{ display: 'inline-block', verticalAlign: 'top' }}>
               <button
                 onClick={() => handleTokenClick(i)}
                 className={`
@@ -165,9 +169,9 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
                 `}
               >
                 {token.word}
-                {token.entry && (
+                {token.candidates.length > 0 && (
                   <span className="block text-[9px] opacity-50 mt-0.5 font-sans">
-                    {token.entry.english_meaning}
+                    {token.output}
                   </span>
                 )}
               </button>
@@ -178,8 +182,14 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
                   ref={popoverRef}
                   className="absolute z-50 top-full left-0 mt-2 animate-fade-in"
                 >
-                  {popover.mode === 'view' && token.entry ? (
-                    <WordPopover entry={token.entry} badgeClass={getConfidenceBadgeClass(token.entry)} />
+                  {popover.mode === 'view' && token.candidates.length ? (
+                    <div style={{ maxHeight: 320, overflow: 'auto' }}>
+                      {token.candidates.length > 1 && <p className="glass">Competing analyses — no meaning selected.</p>}
+                      {token.candidates.map((candidate, j) => <div key={j}>
+                        <p className="glass">{candidate.text} → {candidate.meaning} · [{candidate.start}, {candidate.end})</p>
+                        <WordPopover entry={candidate.entry} badgeClass={getConfidenceBadgeClass(candidate.entry)} />
+                      </div>)}
+                    </div>
                   ) : (
                     <DefinePopover
                       word={token.word}
@@ -191,7 +201,7 @@ export function SampleDecodeView({ sample, dictionary, onClose, onDefineWord }: 
                   )}
                 </div>
               )}
-            </div>
+            </span>
           ))}
         </div>
       </div>

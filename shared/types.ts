@@ -1,3 +1,4 @@
+import type { lexicalPolicySchema, lexicalSenseSchema } from './schemas/lexicon.js';
 import type { z } from 'zod';
 import type { dictionaryEntrySchema, grammarRuleSchema, numberSystemSchema, audioClipSchema, audioSegmentSchema, sampleSchema, profileSchema } from './schemas/profile';
 
@@ -80,3 +81,5 @@ export interface IpaResult {
   segments: IpaSegment[];
   identity?: { modelId: string; modelSha256: string; alphabet: 'TIMIT ARPABET'; transformers: string; backend: string; node: string };
 }
+export type LexicalPolicy = z.infer<typeof lexicalPolicySchema>;
+export type LexicalSense = z.infer<typeof lexicalSenseSchema>;

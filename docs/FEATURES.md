@@ -31,9 +31,9 @@ The workbench provides profile selection/creation, a shared demo, six phases, a 
 | --- | --- | --- |
 | Samples | Add/edit source text, translation notes and phonetic notes; attach recordings; retain failed saves and drafts | A transcription or decoded flag is not verification of a meaning |
 | Numbers | Record integer mappings, manually set a base, compare candidate fits and request AI advice | Scores describe heuristic support and ties, not statistical confidence |
-| Vocabulary | Edit words, meanings, alternatives, examples, parts of speech and optional 0–100 user belief | Repeated assertions do not become independent evidence |
+| Vocabulary | Edit words, explicit senses, accepted aliases, examples, parts of speech and optional 0–100 user belief | Repeated assertions do not become independent evidence |
 | Grammar | Record rule text and evidence strings; request advisory model analysis | Rule text is not compiled or automatically validated |
-| Translation | Dictionary lookup in source order with candidates and unresolved tokens; optional model analysis | No systematic composition, morphology or automatic grammar application; Unicode forms still have a known regression |
+| Translation | Dictionary lookup in source order with candidates and unresolved tokens; optional model analysis | No systematic composition, morphology or automatic grammar application; Unicode matching retains competing analyses; dictionary segmentation is optional |
 | Dashboard | Separate observation/assertion counts, user-belief counts, saved metric history and guidance | No defensible “language decoded” percentage or evaluated coverage |
 
 [Workspace evidence](workspace-evidence.md) defines the metrics and their boundaries.
@@ -100,3 +100,5 @@ Validation/conflicts, queue limits, missing runtime assets and upstream failures
 `ESPEAK_PATH`, `WHISPER_BIN`, `WHISPER_MODEL`, `IPA_MODEL_DIR` and packaged `XENO_RUNTIME_ROOT` resolve native components. Packaging verifies asset hashes and staged production dependencies against manifests/lockfile. Windows x64 is the only allowed native target even though older cross-platform builder fields remain. Offline use begins after provisioning and optional model setup; update checks, downloads and external links use the network.
 
 See [desktop release](desktop-release.md), [testing](testing.md) and [limitations](limitations.md). Historical reviews and screenshots describe their recorded source, not necessarily current behavior.
+
+See [Unicode lexicon](unicode-lexicon.md) for normalization, source offsets, profile settings and ambiguity limits.

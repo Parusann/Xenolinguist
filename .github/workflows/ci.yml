@@ -26,6 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run check:source
       - run: npm run evaluate:ci
+      - run: npm run evaluate:unicode
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e:run
       - run: npm run test:public

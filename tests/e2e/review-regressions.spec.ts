@@ -154,7 +154,6 @@ test('F08 a saved Unicode word must translate', async ({ page, server }) => {
   await page.getByPlaceholder('Enter unknown language text to translate…').fill('水');
   const translated = await page.getByText('water', { exact: true }).count();
   await attachJson('unicode.json', { word: '水', expected: 'water', translated });
-  test.fail(true, 'F08: token cleaning discards non-Latin letters; remove with W16');
   expect(translated).toBeGreaterThan(0);
 });
 
