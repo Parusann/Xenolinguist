@@ -24,11 +24,29 @@ Every method receives the same ordered prefix of paired utterances, controlled E
 
 The runner/scorer owns private datasets. Learner modules have no imports from the generator, scorer or filesystem. This is an auditable software boundary, not a sandbox against malicious code or an operator with repository access. The synthetic grammar and generation source are public; these languages are not a contamination-proof external benchmark.
 
+```mermaid
+flowchart LR
+  corpus["Frozen compiler dataset"] --> projection["Allowed observations and query surfaces"]
+  prior["Declared common grammar prior"] --> learners
+  projection --> learners["Lookup / symbolic / local model / hybrid"]
+  learners --> predictions["Predictions, abstentions and failures"]
+  corpus --> key["Scorer-only target meanings"]
+  predictions --> scorer["All-item scoring"]
+  key --> scorer
+  scorer --> raw["Raw records and provenance"]
+  raw --> report["Paired comparisons and figures"]
+  raw --> replay["Independent hash and score replay"]
+```
+
 All methods have the same **supplied grammar prior**: a one-to-one token lexicon, the semantic noun/action/attribute domain, entity bracketing, plural/tense/negation/conjunction markers, alphabetical attribute order, prefix numeral arithmetic, three candidate clause orders, two adjective placements, and four possible bases. These assumptions were designed with knowledge of the generator. Learned parameters are the selected clause order, adjective placement, base, and observation-supported token bindings. No manual language-specific rules or true dictionary entries are supplied. No oracle-rule result is reported as a learner.
 
 The symbolic method searches 24 structural hypotheses. The LLM sees the same prior in its system message; it is not given a solver or hidden tools. LLM-only and hybrid have at most one local generation request per language/budget/repetition, the same context/output/time limits, temperature and sampling seed. Hybrid can consume less compute when symbolic consensus already answers all probes. This matches information and maximum inference budgets, not FLOPs or implementation sophistication. The hybrid's additional computation derives entirely from permitted observations and is its explicit treatment difference.
 
+For each structural hypothesis, the learner expands an observation's scene into a sequence of semantic labels and aligns those labels with the observed tokens. A forward/inverse binding map rejects contradictions in either direction. This avoids enumerating every possible vocabulary permutation: training scans at most 24 template/token alignments per example, then the independent decoder checks each surviving hypothesis against a query. With `m` observations of average token length `L`, the main alignment work is bounded by `O(24 m L)` in this fixed hypothesis class. The retained hypotheses and bindings explain what the learner inferred; the supplied templates explain why this bound does not extend to arbitrary grammar discovery.
+
 Baseline configuration: `gemma4:e4b` (the application's default), temperature 0.2, context 8,192 tokens, output cap 2,048 tokens, 90-second request deadline, model seeds 41 and 42, thinking disabled, JSON mode. No retry or corrective prompt is used. The exact installed digest is checked before and after inference and pinned against experiment preflight. Model weight size, capabilities, Ollama version, prompt/output token counts, load/inference durations and raw text are retained when returned by the daemon. Sampling seeds are not language seeds. Hardware and software can still change generated text despite matching seeds.
+
+The summary's `modelCalls` counter records entry into the model route. A metadata failure could prevent that attempt from reaching generation; consult its retained provenance rather than assuming a completed inference. The published W15 run separately confirms returned text for all 300 attempts. Missing or invalid completion envelopes remain errors, and absent daemon usage/duration fields remain unavailable rather than being invented.
 
 ## Adapters and ablations
 

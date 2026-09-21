@@ -1,0 +1,3979 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "recordedAt": "2026-09-21T12:10:50.690Z",
+  "implementationRevision": "fbf836513014f99eb09ea061d9a3e64974c7860a",
+  "sourceChecks": {
+    "unitTests": 251,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed",
+    "evaluationTests": 16,
+    "deterministicCiRecords": 12
+  },
+  "experiments": {
+    "baseline": {
+      "manifest": {
+        "version": 1,
+        "engineVersion": "xeno-baselines-1",
+        "config": {
+          "version": 1,
+          "name": "baseline",
+          "splits": [
+            "evaluation"
+          ],
+          "limit": 30,
+          "budgets": [
+            8,
+            16,
+            29
+          ],
+          "methods": [
+            "exact-lookup",
+            "symbolic",
+            "llm-only",
+            "hybrid"
+          ],
+          "modelSeeds": [
+            41,
+            42
+          ],
+          "model": {
+            "name": "gemma4:e4b",
+            "temperature": 0.2,
+            "num_ctx": 8192,
+            "num_predict": 2048,
+            "timeoutMs": 90000
+          },
+          "figures": true
+        },
+        "configHash": "bf28368a01c3721956093b5bce6b7cb489804213408faa98d2dd913b075ce8a7",
+        "source": {
+          "commit": "fbf836513014f99eb09ea061d9a3e64974c7860a",
+          "branch": "implementation/reliability",
+          "trackedDirty": false,
+          "files": [
+            {
+              "path": "engine/src/types.ts",
+              "sha256": "0a04f1726fd02425cc847d9e0a67f5d84c6b94f6aae61907f9c0056c90672ee1"
+            },
+            {
+              "path": "evaluation/configs/baseline.json",
+              "sha256": "e4211e0de414e6e461d44cc1b6b1e01f50e540b16b4dfa056298d27ea16f48c7"
+            },
+            {
+              "path": "evaluation/configs/ci.json",
+              "sha256": "c083a7a1d4e5115a6fd6a32f8ab2c94ad7fc5557f86dcda67aae0ccc6bcc1b8d"
+            },
+            {
+              "path": "evaluation/configs/development.json",
+              "sha256": "8033ce44d24b962015782de2dadb82f8e660f2909b2dc41e3eb4e11be09d35a1"
+            },
+            {
+              "path": "evaluation/configs/structural.json",
+              "sha256": "a88f25da5dc70742e98d6248c206d68b60001976dc38d6e20d739536bd5fe6d6"
+            },
+            {
+              "path": "evaluation/fixtures/generator-gold.json",
+              "sha256": "1d58ed563ebdc11aa5b33e993529f30ce9b81d68ebde6aaf3d1c1fb8cea12430"
+            },
+            {
+              "path": "evaluation/package.json",
+              "sha256": "fe1f87c03e9845443b090d67580481f7f4064c362a9a23b3f34753e58142a1a7"
+            },
+            {
+              "path": "evaluation/plot.py",
+              "sha256": "2448ac2e3a861bf50c5481cbf7eb30f212e619bc6a5990e94fe6fc81796d2ffe"
+            },
+            {
+              "path": "evaluation/requirements.txt",
+              "sha256": "48ee9dbf164ec7438470efa7b3847688dc1010a88d020a7777ace4934c1fcace"
+            },
+            {
+              "path": "evaluation/src/adapters/exact-lookup.ts",
+              "sha256": "fd1997a35387f203b030542d198f6b4679299c7b732a8ae015f3094ca6100623"
+            },
+            {
+              "path": "evaluation/src/adapters/hybrid.ts",
+              "sha256": "477f0a1ae3556fde45a4bbd123d2822df22ba29357d7b03947019f0621f035d4"
+            },
+            {
+              "path": "evaluation/src/adapters/llm-only.ts",
+              "sha256": "0221abe99b7dee3752d7e6c46b6028bd2fbab39d124016f32ad3b9fc3ad8c223"
+            },
+            {
+              "path": "evaluation/src/adapters/prior.ts",
+              "sha256": "0e380995345f1d83bda7cd205778803aa0c5506540b38ba2fc18851845e7f137"
+            },
+            {
+              "path": "evaluation/src/adapters/symbolic.ts",
+              "sha256": "8f296d25ca2b4407ca0be99365327da9c9beb31890d3258e31472e2ea3917775"
+            },
+            {
+              "path": "evaluation/src/baselines.test.ts",
+              "sha256": "15c7fa6fc47adfd77fee1fa93206bb7ae5ccb1f1211f670ce56386d0f1e07fe0"
+            },
+            {
+              "path": "evaluation/src/contracts.ts",
+              "sha256": "a5381dac859cf7e0d8ae7f569173ffa736e9501f63d6923fb886ffe62e788680"
+            },
+            {
+              "path": "evaluation/src/export.ts",
+              "sha256": "7f4d999b1f9d630e99f1b7c6500a6afacc06d786707af3e5c15a0812ca7dd8e6"
+            },
+            {
+              "path": "evaluation/src/generator/compile.ts",
+              "sha256": "7a76ea70812322227d80ba3773457efc9d01167f2b0bcfa503b185f3460f73f5"
+            },
+            {
+              "path": "evaluation/src/generator/compiler.test.ts",
+              "sha256": "dc7e5cc666389b181bd24e21bcdde6aa0ff5d9f1793d5e5d8113c766ba976085"
+            },
+            {
+              "path": "evaluation/src/generator/dataset.ts",
+              "sha256": "9e2c61a38f716cea2a6983e6cbce002473266a74f111374bdbe7fe1011e5cb4d"
+            },
+            {
+              "path": "evaluation/src/generator/grammar.ts",
+              "sha256": "c5ecb714e8800fff6bb5632137953859dd6ff445500470017031c852e1fe9c84"
+            },
+            {
+              "path": "evaluation/src/generator/lexicon.ts",
+              "sha256": "b99205acbe2444d975a8adf9176efeddcdf6be3ccc566eb733c92abbf117561e"
+            },
+            {
+              "path": "evaluation/src/generator/phonology.ts",
+              "sha256": "53e5e0c00f9f6d86a3e08cf07a25c55103eb11323d33d7f010a1448e01116ea7"
+            },
+            {
+              "path": "evaluation/src/generator/prng.ts",
+              "sha256": "5f3383d6bec61b887621a4f54fd00ce52932d8837f8b373fa5c838cafcceff33"
+            },
+            {
+              "path": "evaluation/src/generator/semantics.ts",
+              "sha256": "ed1f9461c2cf170062c8b548a7e4bc6584a63da8514ba4578d22b47063fb560c"
+            },
+            {
+              "path": "evaluation/src/metrics/accuracy.ts",
+              "sha256": "0f1925f082a1f2c1995f2d2740341ce0ca23a634fb5e78ee45c589d153d02763"
+            },
+            {
+              "path": "evaluation/src/metrics/calibration.ts",
+              "sha256": "01a1139af5ee5d6308d7cdad8302d41f44dbdeaf167f22e76e9814378044b04f"
+            },
+            {
+              "path": "evaluation/src/metrics/performance.ts",
+              "sha256": "879503d6ff5515a03381cecea149fd91990f9d432c7eb00c7da572e65a8c3b25"
+            },
+            {
+              "path": "evaluation/src/records.ts",
+              "sha256": "0c7279ee7c388a1df359feb02cc3816b149397a2d513871af55ad91da4a74072"
+            },
+            {
+              "path": "evaluation/src/reports.ts",
+              "sha256": "ccb3b1902278aaf424aa89aaae50c527a3e4bae18354fae6d12314dcb3b550ac"
+            },
+            {
+              "path": "evaluation/src/runner.ts",
+              "sha256": "0cba0eb31c161f3d730a0d10f1d1d680185c9451494c6cbeb942d2cfd8417aca"
+            },
+            {
+              "path": "evaluation/src/verify.ts",
+              "sha256": "12740eb18f82121d2a64a58dd299680835201a41bb22fe7fa26b64006a2989e7"
+            },
+            {
+              "path": "evaluation/tsconfig.json",
+              "sha256": "e4d0cc026e7719836858cbd1a13ebcadbbbf0b40f8543bbf8fbe912a5ecacdac"
+            },
+            {
+              "path": "package-lock.json",
+              "sha256": "9ffacde2e2d7d6091548c73813abdb70d377605c31afa420f9bee68789b09def"
+            },
+            {
+              "path": "package.json",
+              "sha256": "91c6f9eb4dd38dc39d56e8c2a30aa90b7a3e1f2a24d697fb6f02244de4be5e20"
+            },
+            {
+              "path": "server/src/config.ts",
+              "sha256": "bfba27d3f0981ff886517d3da627b494a87fcf07126d7ed6b0b55755d36ca39b"
+            },
+            {
+              "path": "server/src/services/ollama-runtime.ts",
+              "sha256": "4052c0604f3c34c2722aefbd2882485d40e4fd92ed17d7d31dd2d4cd37605182"
+            },
+            {
+              "path": "server/src/services/runtime-error.ts",
+              "sha256": "be5e78c13732f64a38b6e890d9c740e8b22830dd98859792c2ecb93078adaba0"
+            },
+            {
+              "path": "shared/schemas/capabilities.ts",
+              "sha256": "c998591c7af626f7f3617de173b03da0d9a17aef3a78166758cac32f4837058e"
+            },
+            {
+              "path": "tsconfig.base.json",
+              "sha256": "34e78df802f2b1c052dbc946db25423edcec01f0a79bb87b555d7a03f7fe6060"
+            }
+          ],
+          "snapshotHash": "4148afce19bf1672aece1adef48f8dc6aeb1ca4554c8e0cf34fe882effc1a9c5"
+        },
+        "corpus": {
+          "version": "xeno-dataset-1",
+          "generatorVersion": "xeno-generator-1",
+          "splits": [
+            {
+              "name": "development",
+              "records": [
+                {
+                  "seed": 10000,
+                  "family": "SVO",
+                  "sha256": "d3eb74cd03741368a1efce6c3616bd7ccfeb41611c7b8431f200c1c8680004dc"
+                },
+                {
+                  "seed": 10001,
+                  "family": "SOV",
+                  "sha256": "6debb443b16750bb96b50db1a3e93d052245741c7099db0d01fead30c2e4989b"
+                },
+                {
+                  "seed": 10002,
+                  "family": "SVO",
+                  "sha256": "d827b8cb3a2e7f0926eaea60ccd969bab74aaf40a4a2c1467caa90046cf40803"
+                },
+                {
+                  "seed": 10003,
+                  "family": "SOV",
+                  "sha256": "8d88e0bb6dcc34e1bcf660434a675d1d7510e4008e6a5f37bdb3e12a58e6d41c"
+                },
+                {
+                  "seed": 10004,
+                  "family": "SVO",
+                  "sha256": "6f804eacc05834422bb6e9135260e73692eadfe9d7262df7cb3014e78dbe4865"
+                },
+                {
+                  "seed": 10005,
+                  "family": "SOV",
+                  "sha256": "b36b015cbd3e6853a431ddd0d3c4a5c7c850f99e1ab955306e0c373e7b7d1047"
+                },
+                {
+                  "seed": 10006,
+                  "family": "SVO",
+                  "sha256": "9ce09008e61415aa3f9c26ba2a4f1183eabc99ef88a3084b25a5f47f1616c9ca"
+                },
+                {
+                  "seed": 10007,
+                  "family": "SOV",
+                  "sha256": "f25660b1fd70bc61093549a96a7e96b405fc3bc03aef2f014a66c1a3b12654a9"
+                },
+                {
+                  "seed": 10008,
+                  "family": "SVO",
+                  "sha256": "32df1995f734011ee49e91e10680fe3a3aca2aae391170fb8f5e07f1159b25c3"
+                },
+                {
+                  "seed": 10009,
+                  "family": "SOV",
+                  "sha256": "ac9f70013c44c43320859fd86b8d72fcb968721d92ef53aba40cd2fb478995f8"
+                },
+                {
+                  "seed": 10010,
+                  "family": "SVO",
+                  "sha256": "10051ec54a01ce2b9718589c0729b1874594dd028c7d5c3ef7901443a3fcd96b"
+                },
+                {
+                  "seed": 10011,
+                  "family": "SOV",
+                  "sha256": "e6a96d4cbd2cb0f82dd98ad7e9261ff875f5a0785bbfe71b8832d2b0e957584c"
+                },
+                {
+                  "seed": 10012,
+                  "family": "SVO",
+                  "sha256": "3f9403bbd108282d4c21652d4d4b5640bb9d6ed0a5e1aaa5038ec4729e938a20"
+                },
+                {
+                  "seed": 10013,
+                  "family": "SOV",
+                  "sha256": "863a6001a6cf0d6c961c368953f39bc7ab4ca5676e468947b13c7d56f8c301d6"
+                },
+                {
+                  "seed": 10014,
+                  "family": "SVO",
+                  "sha256": "94b4f4ff29345f0d709260de9896bb7665697fa3a6d5093b5f96c261bde67779"
+                },
+                {
+                  "seed": 10015,
+                  "family": "SOV",
+                  "sha256": "37706468b933c33eef5c284e3e6d135dc386b5a13a20c9f80cc65228f11dd2f1"
+                },
+                {
+                  "seed": 10016,
+                  "family": "SVO",
+                  "sha256": "3f6355f868f500415900f51fbf31f0df1e6eadf14139ac1167c1d69a63af6b61"
+                },
+                {
+                  "seed": 10017,
+                  "family": "SOV",
+                  "sha256": "ecb5fb191e533bdb6fcf061fb0e85a0bd84246b2e2b87dde133d275a9a8b2827"
+                },
+                {
+                  "seed": 10018,
+                  "family": "SVO",
+                  "sha256": "1a24bf637b21e653cffce3083d133a22150375887cf96b350ced6143dd9b322e"
+                },
+                {
+                  "seed": 10019,
+                  "family": "SOV",
+                  "sha256": "61d4bbfc4f2cbd9587f8950d3444aa1c4889b367b8408ecc1e5ea23de7e7aa57"
+                },
+                {
+                  "seed": 10020,
+                  "family": "SVO",
+                  "sha256": "da46896a9d8b72decbe34d14308b4bfb85f9eade8362d80057ae440bf4c9ad68"
+                },
+                {
+                  "seed": 10021,
+                  "family": "SOV",
+                  "sha256": "fb31fd655ef4856f81333dca823b4a0fb43155268c132702f7a5a1f9d5dc134d"
+                },
+                {
+                  "seed": 10022,
+                  "family": "SVO",
+                  "sha256": "8df2d708d76c4ddb7ba9855d5abc6012fb6f1ef3f5b04d559049b2817a39e548"
+                },
+                {
+                  "seed": 10023,
+                  "family": "SOV",
+                  "sha256": "fc80940c18671727003424ad78d1f3919b26cd72aa98f8e1027dce0726627c82"
+                },
+                {
+                  "seed": 10024,
+                  "family": "SVO",
+                  "sha256": "0b62eb467ba078e549acfa8d51881d7e86cdca49d769c4d8e1a8b470ee4115ba"
+                },
+                {
+                  "seed": 10025,
+                  "family": "SOV",
+                  "sha256": "d51fe572f7b41bfa857d6d546bc66962770bd4f271723e3e8ceaf1f0b8275032"
+                },
+                {
+                  "seed": 10026,
+                  "family": "SVO",
+                  "sha256": "845c27ab4e0b6697a698650cdfa3b9c627875c21180b39d2e8a276029f5cd7df"
+                },
+                {
+                  "seed": 10027,
+                  "family": "SOV",
+                  "sha256": "daba221a04834a14174be47e49a42f440343618095fa1a27e8004b04e0f35913"
+                },
+                {
+                  "seed": 10028,
+                  "family": "SVO",
+                  "sha256": "728f9e894b923c2685a5e4d391f4bcec058a0e88668eac8d9e73d9c0d47d3d87"
+                },
+                {
+                  "seed": 10029,
+                  "family": "SOV",
+                  "sha256": "02a53abf9319567f6a72084db3836c9713c7b3b1dd72acd0f5e415062d18a804"
+                }
+              ],
+              "sha256": "1ab85a8999c5e8a2c9ebc3ec74afa0d3c5c1df46c3b522d3b17d5588f0898817"
+            },
+            {
+              "name": "evaluation",
+              "records": [
+                {
+                  "seed": 20000,
+                  "family": "SVO",
+                  "sha256": "f7d846da14faf653f7a9cacc5db80f8c02ff7f33ba4a437658e1d6e6b251630f"
+                },
+                {
+                  "seed": 20001,
+                  "family": "SOV",
+                  "sha256": "e1e65a8501c73c38906162430705c25c69627a4fc4656616643a732217821596"
+                },
+                {
+                  "seed": 20002,
+                  "family": "SVO",
+                  "sha256": "2214008451d6d5fa1a126d3701d61b6025273fadfcddcb913c206f9721f30f00"
+                },
+                {
+                  "seed": 20003,
+                  "family": "SOV",
+                  "sha256": "3d3b2e89b54880ef2e123e4f986d6c248638e742af1de469d263a93f1765a7da"
+                },
+                {
+                  "seed": 20004,
+                  "family": "SVO",
+                  "sha256": "c61092d6415c0a8ac05fe9c354e90d5ab5a0805d19468b1765c66ea934dcab31"
+                },
+                {
+                  "seed": 20005,
+                  "family": "SOV",
+                  "sha256": "a322e60f4afd366cf782fd3513ffe9399b03df3f48ed7d3214830a07ae242672"
+                },
+                {
+                  "seed": 20006,
+                  "family": "SVO",
+                  "sha256": "307a925f9e9a3d36018ef136848f1634f84f2004c25bd13a71ad2cfb4ea2d22f"
+                },
+                {
+                  "seed": 20007,
+                  "family": "SOV",
+                  "sha256": "eaaa8fc81526c89c5b2ddd6f67ec95fa505ddfd26cc4d9be480ca0ff4cba5cfc"
+                },
+                {
+                  "seed": 20008,
+                  "family": "SVO",
+                  "sha256": "a6a644fb9104bc8a19ab2a0eb7db524a052a8d69b2fb91c70e3da1c465969285"
+                },
+                {
+                  "seed": 20009,
+                  "family": "SOV",
+                  "sha256": "098b5f76e7fc1db1612891e60d8d7c7b0b4f09bfcb109e4f4756ee8c660ac7dd"
+                },
+                {
+                  "seed": 20010,
+                  "family": "SVO",
+                  "sha256": "e2fde0bfb8e2ca1bb423bf534d9b83f3bc0cc5e5db657e957f937fb44a0d58e5"
+                },
+                {
+                  "seed": 20011,
+                  "family": "SOV",
+                  "sha256": "bcbfffab97ebd802a2fb69aa2ff0276a7bd526f53f4a2af529f9e7923c739c5a"
+                },
+                {
+                  "seed": 20012,
+                  "family": "SVO",
+                  "sha256": "0ce4dce136e6d10bd04840fa7a6309b6c57ae5bf08808338f9451e244673a6bd"
+                },
+                {
+                  "seed": 20013,
+                  "family": "SOV",
+                  "sha256": "f57bb1f0dd3dc3612faccd4de295f0d2af4dd2ea5bed5586a6771de1b9eb5ec1"
+                },
+                {
+                  "seed": 20014,
+                  "family": "SVO",
+                  "sha256": "4d4876385d8b32b7e179611e9bbb58bacb925e902783be609301eeed66393587"
+                },
+                {
+                  "seed": 20015,
+                  "family": "SOV",
+                  "sha256": "5c155ead7a9359628daab3a8798321116b98aa8c009f39a5918ec45a2a773f7f"
+                },
+                {
+                  "seed": 20016,
+                  "family": "SVO",
+                  "sha256": "6250e3292817eb6a5865d0310d5e674c89ce5676ad90492dfe3e6561d13379dc"
+                },
+                {
+                  "seed": 20017,
+                  "family": "SOV",
+                  "sha256": "feb27121ab769eb003e1b3961ae8f1c5b6c06fe6d0e6c40643ef42603c31d200"
+                },
+                {
+                  "seed": 20018,
+                  "family": "SVO",
+                  "sha256": "4055d370a97e530558cc039df4870703d12fecc5f20852154dfd6bbecf29e587"
+                },
+                {
+                  "seed": 20019,
+                  "family": "SOV",
+                  "sha256": "74f28a8baede7b358099a1aca43c08d4791fb57b275822c8f0f7be68d167d74e"
+                },
+                {
+                  "seed": 20020,
+                  "family": "SVO",
+                  "sha256": "aa3c365bb0cdec3c6c35c1d69d5cb75eef107afe16bdf296627b95e0eafbec7d"
+                },
+                {
+                  "seed": 20021,
+                  "family": "SOV",
+                  "sha256": "6475acdd43a77f3414fea08286e6be07b93815b813f2901986f46c5d1b805234"
+                },
+                {
+                  "seed": 20022,
+                  "family": "SVO",
+                  "sha256": "cc88eb47234714f3b7cf87fda77bfa60c243de380e9f100fd4972f06ab5ac71e"
+                },
+                {
+                  "seed": 20023,
+                  "family": "SOV",
+                  "sha256": "99f29547f36ccb92a92d12c7196e313fb824b0281397594d5a5575d4fa601ca8"
+                },
+                {
+                  "seed": 20024,
+                  "family": "SVO",
+                  "sha256": "24cd9f45568f6a329ac9439ce306c38d60cb4f05871d9f04dd69b21efcb6baf2"
+                },
+                {
+                  "seed": 20025,
+                  "family": "SOV",
+                  "sha256": "daeba7829bdb60a85d7c87b2abbec71e6f03b2fe67a00048f9b3bbe8d060837b"
+                },
+                {
+                  "seed": 20026,
+                  "family": "SVO",
+                  "sha256": "c6f4da9479e9f3382247c46ff49fc1a9021ac73e98fad37d8fa164c71f82bb3a"
+                },
+                {
+                  "seed": 20027,
+                  "family": "SOV",
+                  "sha256": "fd1a05cb6e239df9c3ab02c51899074c9415eea104fe4bd1e9072caa5f09f5de"
+                },
+                {
+                  "seed": 20028,
+                  "family": "SVO",
+                  "sha256": "9d205958416c682766689092c01eafd9555725764615e17a19ecdedc762adc45"
+                },
+                {
+                  "seed": 20029,
+                  "family": "SOV",
+                  "sha256": "d844f1782fd5259fee473b1034c8aeb08dac0463a59440bfb75340e2e9ba0786"
+                }
+              ],
+              "sha256": "2edb459d2dad20c2899aed2aacd42b60928194ce60a1b66db0c85418d172cf21"
+            },
+            {
+              "name": "structural",
+              "records": [
+                {
+                  "seed": 30000,
+                  "family": "VSO",
+                  "sha256": "77d639bfc105573183d9dadd530929d8e11fee98e14eb66bfd186c21788b3cfa"
+                },
+                {
+                  "seed": 30001,
+                  "family": "VSO",
+                  "sha256": "5c3a20d752a2dfeb70d7a683a2f58123e0090674b551472aa252cf895244b4e6"
+                },
+                {
+                  "seed": 30002,
+                  "family": "VSO",
+                  "sha256": "003353a11ce3b4a9c794b68ea68b41d14507fec0b4c5166a413faf92c8e80e61"
+                },
+                {
+                  "seed": 30003,
+                  "family": "VSO",
+                  "sha256": "ecd7419dec36b3e17895ee3dbbca929d11c5535adb2a59e865b0e753f3b2f9e4"
+                },
+                {
+                  "seed": 30004,
+                  "family": "VSO",
+                  "sha256": "68bad7b4ec95529eb7cf7f71632cb1ee1f61a386dfda27b4ba5b83a1d9ba0194"
+                },
+                {
+                  "seed": 30005,
+                  "family": "VSO",
+                  "sha256": "0f23c9dae8b39a98efdf70f6daadbfcea68512f0d60c6ef029d656d7365586fb"
+                },
+                {
+                  "seed": 30006,
+                  "family": "VSO",
+                  "sha256": "be63ef83d350e3e5521ad8f5b5d8c7503e513cf23dc9f9de8a887bdfc0fca164"
+                },
+                {
+                  "seed": 30007,
+                  "family": "VSO",
+                  "sha256": "873ec0e0b1980d5a19e41922041be8b686d843f5732828963f938ec6f0dda27e"
+                },
+                {
+                  "seed": 30008,
+                  "family": "VSO",
+                  "sha256": "a32b9f2d5666a5c9d8e35a961a13f964c9e6ed5e841c107c35280df5f66d32bf"
+                },
+                {
+                  "seed": 30009,
+                  "family": "VSO",
+                  "sha256": "08e17dd1a31c1b88fe182763d97c4ed56739041b5a3921ffee03c0877880af40"
+                },
+                {
+                  "seed": 30010,
+                  "family": "VSO",
+                  "sha256": "92bf4ed9c6d1291af2ab6f84da7490f4d12e05e1f374fd4baffa307d0483fa94"
+                },
+                {
+                  "seed": 30011,
+                  "family": "VSO",
+                  "sha256": "efab990442c15117ea453f10711cb14aac576b36ccfec9b2c74415a66988ddf0"
+                },
+                {
+                  "seed": 30012,
+                  "family": "VSO",
+                  "sha256": "1c9e89cf482505958f318e09a96b526dccdb1aaebebcc842d90ce4f32c4fd782"
+                },
+                {
+                  "seed": 30013,
+                  "family": "VSO",
+                  "sha256": "b3af168351df0d1f03bce29895a4421118bda014bf7546fcfec100b84672585e"
+                },
+                {
+                  "seed": 30014,
+                  "family": "VSO",
+                  "sha256": "21a3a8169bcacbadda1af8f8edb010e4ba5873675acb9e86f38e9324b8a21713"
+                },
+                {
+                  "seed": 30015,
+                  "family": "VSO",
+                  "sha256": "ef8cb8a8bc4a865f1df0dfeb0b57a466d6bd66abf343769263cd904dfe3beb2f"
+                },
+                {
+                  "seed": 30016,
+                  "family": "VSO",
+                  "sha256": "464ecfc6092cb9a49ff1e4d353c6088f766f883a74b51a9433f4ac2e03a4e1e5"
+                },
+                {
+                  "seed": 30017,
+                  "family": "VSO",
+                  "sha256": "8b6d79a78960282cea8bdac9315f4c059738b391b4078db4630506a24d31a665"
+                },
+                {
+                  "seed": 30018,
+                  "family": "VSO",
+                  "sha256": "fd49a985d3460fdb2ff6666df46a94256145ed339adcba7cca604d49c403f005"
+                },
+                {
+                  "seed": 30019,
+                  "family": "VSO",
+                  "sha256": "4d6409a2c68adb7ac8a47412db2e9cddc9c9df87cfb32ac96ee1c68f0ac9fa05"
+                },
+                {
+                  "seed": 30020,
+                  "family": "VSO",
+                  "sha256": "0e06c43a665ffb60e1ce01f42d4fe155875539832fb2f4ba55a3593b8c77cc13"
+                },
+                {
+                  "seed": 30021,
+                  "family": "VSO",
+                  "sha256": "7dacac1d229edecd5fcd0c89c0ba074d26d877170d1064d942581922af1b136a"
+                },
+                {
+                  "seed": 30022,
+                  "family": "VSO",
+                  "sha256": "73d492ceed2b765abba5f606101a97f82a9776acec3bf70700adb1e820fee36c"
+                },
+                {
+                  "seed": 30023,
+                  "family": "VSO",
+                  "sha256": "4559eb5625ad7b0ed80d7ded6941cea58c38d548b76e4b2fa8160efe6c18e1ca"
+                },
+                {
+                  "seed": 30024,
+                  "family": "VSO",
+                  "sha256": "ca4b70e0f92d071a76c466ce6d1ec6c845511e3dcf81aba55706c02276e89921"
+                },
+                {
+                  "seed": 30025,
+                  "family": "VSO",
+                  "sha256": "b7caf73242bfe5bceee9d65a9f863e91c7a83537f42a659db4296699998af9f3"
+                },
+                {
+                  "seed": 30026,
+                  "family": "VSO",
+                  "sha256": "a83433d0143ab52b63d8ba271163e84f1849fcfca7270f82f5eff6368b81ad9c"
+                },
+                {
+                  "seed": 30027,
+                  "family": "VSO",
+                  "sha256": "4fe1e8483e3af104e930d7a7a49b8a6f85683c0f42622cfe98576c9f74e564a9"
+                },
+                {
+                  "seed": 30028,
+                  "family": "VSO",
+                  "sha256": "8ea1c9eddef72df9e7058b1116f5aba965fa8e339c4b174468bc25c98a712a54"
+                },
+                {
+                  "seed": 30029,
+                  "family": "VSO",
+                  "sha256": "2d49b709bbb654f305e794d25d01e9d3b4497e22df2486862d65ec0541e79862"
+                }
+              ],
+              "sha256": "44748c655d60d54d930929b4ea258089604457f708d4f8c6b4c4e0f4e87864af"
+            }
+          ],
+          "sha256": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94"
+        },
+        "startedAt": "2026-09-21T04:10:31.417Z",
+        "environment": {
+          "node": "v25.8.2",
+          "platform": "win32",
+          "arch": "x64",
+          "osRelease": "10.0.26200",
+          "cpu": "AMD Ryzen 9 7900 12-Core Processor             ",
+          "logicalCpus": 24,
+          "memoryBytes": 33440882688
+        },
+        "modelPreflight": {
+          "model": {
+            "name": "gemma4:e4b",
+            "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+            "size": 9608350718,
+            "capabilities": [
+              "completion",
+              "vision",
+              "audio",
+              "tools",
+              "thinking"
+            ],
+            "location": "local",
+            "eligible": true,
+            "reason": "Local completion model verified"
+          },
+          "ollama": {
+            "version": "0.32.5"
+          },
+          "checkedAt": "2026-09-21T04:10:31.698Z"
+        },
+        "plan": {
+          "callsPerModelRun": 1,
+          "training": "ordered observation prefix, reset independently for each method/budget/repetition",
+          "order": "rotate methods by language index plus repetition; serial execution; cold loads retained"
+        },
+        "status": "complete",
+        "completedAt": "2026-09-21T04:32:26.042Z",
+        "records": 540,
+        "artifacts": [
+          {
+            "path": "evaluation-figures.png",
+            "sha256": "a287f7bc6974b3eb0dfeb964f928d9792ee02e8751dbe37e9c3f3fd71596240b"
+          },
+          {
+            "path": "evaluation-figures.svg",
+            "sha256": "f2af3bf446aef006d09bfa6d9c48fbdcaea37586919528848629760f380fbbe1"
+          },
+          {
+            "path": "model-residency.json",
+            "sha256": "398eb8c2fb1890fafe789c211a0d35c65722762d7d89423b8b95f0b38fb00996"
+          },
+          {
+            "path": "plot-environment.json",
+            "sha256": "a5732e1f9925a5b5483e907acdda9694d94d7a9bdd8cbc8d238adf6d85876ec5"
+          },
+          {
+            "path": "report.md",
+            "sha256": "af9f3db4df01d0421e931497752d194bd987af40f5f56c0e0effe5e37889b02f"
+          },
+          {
+            "path": "runs.jsonl",
+            "sha256": "13dc6656190f9bb8bd814217ba009db4fc75c47d8d879acab3c8894f2e2534fe"
+          },
+          {
+            "path": "summary.json",
+            "sha256": "c86d8116f8c3680203d98befcc433bc29522f42caffacd16a230543efb967205"
+          }
+        ]
+      },
+      "summary": {
+        "summaries": [
+          {
+            "split": "evaluation",
+            "method": "exact-lookup",
+            "observations": 8,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 221,
+              "accuracy": 0.8185185185185185,
+              "coverage": 0.8185185185185185,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 221,
+                "abstained": 49,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 83,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 83,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.42210000002523884,
+              "p95Ms": 0.6758000000845641,
+              "minMs": 0.2256000000052154,
+              "maxMs": 0.9805999999999813
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "symbolic",
+            "observations": 8,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 221,
+              "accuracy": 0.8185185185185185,
+              "coverage": 0.8185185185185185,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 221,
+                "abstained": 49,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 83,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 83,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.2765000001527369,
+              "p95Ms": 0.5433000000000447,
+              "minMs": 0.16879999998491257,
+              "maxMs": 0.5627000000094995
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "llm-only",
+            "observations": 8,
+            "languages": 30,
+            "runs": 60,
+            "modelCalls": 60,
+            "semantic": {
+              "total": 300,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0.3,
+              "selectiveAccuracy": 0,
+              "statuses": {
+                "answered": 90,
+                "abstained": 0,
+                "invalid": 165,
+                "error": 45,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 540,
+              "correct": 134,
+              "accuracy": 0.24814814814814815,
+              "coverage": 0.5203703703703704,
+              "selectiveAccuracy": 0.47686832740213525,
+              "statuses": {
+                "answered": 281,
+                "abstained": 74,
+                "invalid": 104,
+                "error": 81,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 166,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0.2891566265060241,
+              "selectiveAccuracy": 0,
+              "statuses": {
+                "answered": 48,
+                "abstained": 0,
+                "invalid": 93,
+                "error": 25,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 60,
+              "medianMs": 4625.1446,
+              "p95Ms": 7928.516199999955,
+              "minMs": 1949.4475000000093,
+              "maxMs": 11521.5839
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "hybrid",
+            "observations": 8,
+            "languages": 30,
+            "runs": 60,
+            "modelCalls": 60,
+            "semantic": {
+              "total": 300,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0.13,
+              "selectiveAccuracy": 0,
+              "statuses": {
+                "answered": 39,
+                "abstained": 90,
+                "invalid": 161,
+                "error": 10,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 540,
+              "correct": 442,
+              "accuracy": 0.8185185185185185,
+              "coverage": 0.8185185185185185,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 442,
+                "abstained": 88,
+                "invalid": 6,
+                "error": 4,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 166,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0.13253012048192772,
+              "selectiveAccuracy": 0,
+              "statuses": {
+                "answered": 22,
+                "abstained": 48,
+                "invalid": 90,
+                "error": 6,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 60,
+              "medianMs": 3974.1842999999644,
+              "p95Ms": 10010.977200000081,
+              "minMs": 1190.1023999999743,
+              "maxMs": 12342.24979999999
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "exact-lookup",
+            "observations": 16,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 246,
+              "accuracy": 0.9111111111111111,
+              "coverage": 0.9111111111111111,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 246,
+                "abstained": 24,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 83,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 83,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.581499999971129,
+              "p95Ms": 0.7685000000055879,
+              "minMs": 0.2813000000314787,
+              "maxMs": 0.8408000000054017
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "symbolic",
+            "observations": 16,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 4,
+              "accuracy": 0.02666666666666667,
+              "coverage": 0.02666666666666667,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 4,
+                "abstained": 146,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 246,
+              "accuracy": 0.9111111111111111,
+              "coverage": 0.9111111111111111,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 246,
+                "abstained": 24,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 83,
+              "correct": 3,
+              "accuracy": 0.03614457831325301,
+              "coverage": 0.03614457831325301,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 3,
+                "abstained": 80,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.3225999999558553,
+              "p95Ms": 0.7308999999659136,
+              "minMs": 0.2329000000609085,
+              "maxMs": 0.9285000000090804
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "llm-only",
+            "observations": 16,
+            "languages": 30,
+            "runs": 60,
+            "modelCalls": 60,
+            "semantic": {
+              "total": 300,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0.37333333333333335,
+              "selectiveAccuracy": 0,
+              "statuses": {
+                "answered": 112,
+                "abstained": 5,
+                "invalid": 183,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 540,
+              "correct": 210,
+              "accuracy": 0.3888888888888889,
+              "coverage": 0.6333333333333333,
+              "selectiveAccuracy": 0.6140350877192983,
+              "statuses": {
+                "answered": 342,
+                "abstained": 140,
+                "invalid": 58,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 166,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0.3674698795180723,
+              "selectiveAccuracy": 0,
+              "statuses": {
+                "answered": 61,
+                "abstained": 3,
+                "invalid": 102,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 60,
+              "medianMs": 4635.486399999994,
+              "p95Ms": 7363.946400000015,
+              "minMs": 1617.5365000000165,
+              "maxMs": 15456.526700000046
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "hybrid",
+            "observations": 16,
+            "languages": 30,
+            "runs": 60,
+            "modelCalls": 60,
+            "semantic": {
+              "total": 300,
+              "correct": 8,
+              "accuracy": 0.02666666666666667,
+              "coverage": 0.07666666666666666,
+              "selectiveAccuracy": 0.34782608695652173,
+              "statuses": {
+                "answered": 23,
+                "abstained": 192,
+                "invalid": 80,
+                "error": 5,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 540,
+              "correct": 492,
+              "accuracy": 0.9111111111111111,
+              "coverage": 0.912962962962963,
+              "selectiveAccuracy": 0.9979716024340771,
+              "statuses": {
+                "answered": 493,
+                "abstained": 45,
+                "invalid": 2,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 166,
+              "correct": 6,
+              "accuracy": 0.03614457831325301,
+              "coverage": 0.09036144578313253,
+              "selectiveAccuracy": 0.4,
+              "statuses": {
+                "answered": 15,
+                "abstained": 103,
+                "invalid": 45,
+                "error": 3,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 60,
+              "medianMs": 1550.4663999999175,
+              "p95Ms": 5853.968699999998,
+              "minMs": 1166.2021999999997,
+              "maxMs": 6709.810600000084
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "exact-lookup",
+            "observations": 29,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 270,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 270,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 83,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 83,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.5904999999911524,
+              "p95Ms": 0.9575000000186265,
+              "minMs": 0.3229000000283122,
+              "maxMs": 1.0667999999132007
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "symbolic",
+            "observations": 29,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 150,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 150,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 270,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 270,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 83,
+              "correct": 83,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 83,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.6076999999932013,
+              "p95Ms": 1.0339999999850988,
+              "minMs": 0.38939999998547137,
+              "maxMs": 1.09699999995064
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "llm-only",
+            "observations": 29,
+            "languages": 30,
+            "runs": 60,
+            "modelCalls": 60,
+            "semantic": {
+              "total": 300,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0.15,
+              "selectiveAccuracy": 0,
+              "statuses": {
+                "answered": 45,
+                "abstained": 0,
+                "invalid": 220,
+                "error": 35,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 540,
+              "correct": 207,
+              "accuracy": 0.38333333333333336,
+              "coverage": 0.575925925925926,
+              "selectiveAccuracy": 0.6655948553054662,
+              "statuses": {
+                "answered": 311,
+                "abstained": 122,
+                "invalid": 44,
+                "error": 63,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 166,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0.15060240963855423,
+              "selectiveAccuracy": 0,
+              "statuses": {
+                "answered": 25,
+                "abstained": 0,
+                "invalid": 121,
+                "error": 20,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 60,
+              "medianMs": 5474.211099999957,
+              "p95Ms": 9032.090800000005,
+              "minMs": 1840.4181999999564,
+              "maxMs": 18892.015100000004
+            }
+          },
+          {
+            "split": "evaluation",
+            "method": "hybrid",
+            "observations": 29,
+            "languages": 30,
+            "runs": 60,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 300,
+              "correct": 300,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 300,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 540,
+              "correct": 540,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 540,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 166,
+              "correct": 166,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 166,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 60,
+              "medianMs": 0.5858999999472871,
+              "p95Ms": 1.0009999999892898,
+              "minMs": 0.3699999999953434,
+              "maxMs": 1.1722999999765307
+            }
+          }
+        ],
+        "paired": [
+          {
+            "split": "evaluation",
+            "observations": 8,
+            "contrast": "symbolic minus exact-lookup",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 8,
+            "contrast": "llm-only minus exact-lookup",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 8,
+            "contrast": "hybrid minus exact-lookup",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 8,
+            "contrast": "llm-only minus symbolic",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 8,
+            "contrast": "hybrid minus symbolic",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 8,
+            "contrast": "hybrid minus llm-only",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 16,
+            "contrast": "symbolic minus exact-lookup",
+            "interval": {
+              "mean": 0.02666666666666667,
+              "lower": 0,
+              "upper": 0.07333333333333333,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 16,
+            "contrast": "llm-only minus exact-lookup",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 16,
+            "contrast": "hybrid minus exact-lookup",
+            "interval": {
+              "mean": 0.02666666666666667,
+              "lower": 0,
+              "upper": 0.07333333333333333,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 16,
+            "contrast": "llm-only minus symbolic",
+            "interval": {
+              "mean": -0.02666666666666667,
+              "lower": -0.07333333333333333,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 16,
+            "contrast": "hybrid minus symbolic",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 16,
+            "contrast": "hybrid minus llm-only",
+            "interval": {
+              "mean": 0.02666666666666667,
+              "lower": 0,
+              "upper": 0.07333333333333333,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 29,
+            "contrast": "symbolic minus exact-lookup",
+            "interval": {
+              "mean": 1,
+              "lower": 1,
+              "upper": 1,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 29,
+            "contrast": "llm-only minus exact-lookup",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 29,
+            "contrast": "hybrid minus exact-lookup",
+            "interval": {
+              "mean": 1,
+              "lower": 1,
+              "upper": 1,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 29,
+            "contrast": "llm-only minus symbolic",
+            "interval": {
+              "mean": -1,
+              "lower": -1,
+              "upper": -1,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 29,
+            "contrast": "hybrid minus symbolic",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "evaluation",
+            "observations": 29,
+            "contrast": "hybrid minus llm-only",
+            "interval": {
+              "mean": 1,
+              "lower": 1,
+              "upper": 1,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          }
+        ],
+        "calibration": {
+          "available": false,
+          "reason": "No declared probability-of-correctness semantics"
+        },
+        "limits": [
+          "Synthetic bounded grammar with supplied hypothesis class; not unrestricted language acquisition.",
+          "Accuracy uses every item, including abstentions, invalid responses, transport errors and timeouts.",
+          "Latency is wall time for an entire language batch (training plus all probes), not a per-item measurement.",
+          "Bootstrap intervals condition on the frozen languages and configuration; they do not model corpus design uncertainty.",
+          "Withheld forms contain at least one entity count absent from the full training corpus; all challenge compositions are withheld."
+        ]
+      }
+    },
+    "structural": {
+      "manifest": {
+        "version": 1,
+        "engineVersion": "xeno-baselines-1",
+        "config": {
+          "version": 1,
+          "name": "structural",
+          "splits": [
+            "structural"
+          ],
+          "limit": 30,
+          "budgets": [
+            8,
+            16,
+            29
+          ],
+          "methods": [
+            "exact-lookup",
+            "symbolic"
+          ],
+          "modelSeeds": [
+            41
+          ],
+          "model": {
+            "name": "gemma4:e4b",
+            "temperature": 0.2,
+            "num_ctx": 8192,
+            "num_predict": 2048,
+            "timeoutMs": 90000
+          },
+          "figures": true
+        },
+        "configHash": "534d0de073eb98f3282dfecf99d4d53e6bb12dba92c10042946f70d1ce1a1767",
+        "source": {
+          "commit": "fbf836513014f99eb09ea061d9a3e64974c7860a",
+          "branch": "implementation/reliability",
+          "trackedDirty": false,
+          "files": [
+            {
+              "path": "engine/src/types.ts",
+              "sha256": "0a04f1726fd02425cc847d9e0a67f5d84c6b94f6aae61907f9c0056c90672ee1"
+            },
+            {
+              "path": "evaluation/configs/baseline.json",
+              "sha256": "e4211e0de414e6e461d44cc1b6b1e01f50e540b16b4dfa056298d27ea16f48c7"
+            },
+            {
+              "path": "evaluation/configs/ci.json",
+              "sha256": "c083a7a1d4e5115a6fd6a32f8ab2c94ad7fc5557f86dcda67aae0ccc6bcc1b8d"
+            },
+            {
+              "path": "evaluation/configs/development.json",
+              "sha256": "8033ce44d24b962015782de2dadb82f8e660f2909b2dc41e3eb4e11be09d35a1"
+            },
+            {
+              "path": "evaluation/configs/structural.json",
+              "sha256": "a88f25da5dc70742e98d6248c206d68b60001976dc38d6e20d739536bd5fe6d6"
+            },
+            {
+              "path": "evaluation/fixtures/generator-gold.json",
+              "sha256": "1d58ed563ebdc11aa5b33e993529f30ce9b81d68ebde6aaf3d1c1fb8cea12430"
+            },
+            {
+              "path": "evaluation/package.json",
+              "sha256": "fe1f87c03e9845443b090d67580481f7f4064c362a9a23b3f34753e58142a1a7"
+            },
+            {
+              "path": "evaluation/plot.py",
+              "sha256": "2448ac2e3a861bf50c5481cbf7eb30f212e619bc6a5990e94fe6fc81796d2ffe"
+            },
+            {
+              "path": "evaluation/requirements.txt",
+              "sha256": "48ee9dbf164ec7438470efa7b3847688dc1010a88d020a7777ace4934c1fcace"
+            },
+            {
+              "path": "evaluation/src/adapters/exact-lookup.ts",
+              "sha256": "fd1997a35387f203b030542d198f6b4679299c7b732a8ae015f3094ca6100623"
+            },
+            {
+              "path": "evaluation/src/adapters/hybrid.ts",
+              "sha256": "477f0a1ae3556fde45a4bbd123d2822df22ba29357d7b03947019f0621f035d4"
+            },
+            {
+              "path": "evaluation/src/adapters/llm-only.ts",
+              "sha256": "0221abe99b7dee3752d7e6c46b6028bd2fbab39d124016f32ad3b9fc3ad8c223"
+            },
+            {
+              "path": "evaluation/src/adapters/prior.ts",
+              "sha256": "0e380995345f1d83bda7cd205778803aa0c5506540b38ba2fc18851845e7f137"
+            },
+            {
+              "path": "evaluation/src/adapters/symbolic.ts",
+              "sha256": "8f296d25ca2b4407ca0be99365327da9c9beb31890d3258e31472e2ea3917775"
+            },
+            {
+              "path": "evaluation/src/baselines.test.ts",
+              "sha256": "15c7fa6fc47adfd77fee1fa93206bb7ae5ccb1f1211f670ce56386d0f1e07fe0"
+            },
+            {
+              "path": "evaluation/src/contracts.ts",
+              "sha256": "a5381dac859cf7e0d8ae7f569173ffa736e9501f63d6923fb886ffe62e788680"
+            },
+            {
+              "path": "evaluation/src/export.ts",
+              "sha256": "7f4d999b1f9d630e99f1b7c6500a6afacc06d786707af3e5c15a0812ca7dd8e6"
+            },
+            {
+              "path": "evaluation/src/generator/compile.ts",
+              "sha256": "7a76ea70812322227d80ba3773457efc9d01167f2b0bcfa503b185f3460f73f5"
+            },
+            {
+              "path": "evaluation/src/generator/compiler.test.ts",
+              "sha256": "dc7e5cc666389b181bd24e21bcdde6aa0ff5d9f1793d5e5d8113c766ba976085"
+            },
+            {
+              "path": "evaluation/src/generator/dataset.ts",
+              "sha256": "9e2c61a38f716cea2a6983e6cbce002473266a74f111374bdbe7fe1011e5cb4d"
+            },
+            {
+              "path": "evaluation/src/generator/grammar.ts",
+              "sha256": "c5ecb714e8800fff6bb5632137953859dd6ff445500470017031c852e1fe9c84"
+            },
+            {
+              "path": "evaluation/src/generator/lexicon.ts",
+              "sha256": "b99205acbe2444d975a8adf9176efeddcdf6be3ccc566eb733c92abbf117561e"
+            },
+            {
+              "path": "evaluation/src/generator/phonology.ts",
+              "sha256": "53e5e0c00f9f6d86a3e08cf07a25c55103eb11323d33d7f010a1448e01116ea7"
+            },
+            {
+              "path": "evaluation/src/generator/prng.ts",
+              "sha256": "5f3383d6bec61b887621a4f54fd00ce52932d8837f8b373fa5c838cafcceff33"
+            },
+            {
+              "path": "evaluation/src/generator/semantics.ts",
+              "sha256": "ed1f9461c2cf170062c8b548a7e4bc6584a63da8514ba4578d22b47063fb560c"
+            },
+            {
+              "path": "evaluation/src/metrics/accuracy.ts",
+              "sha256": "0f1925f082a1f2c1995f2d2740341ce0ca23a634fb5e78ee45c589d153d02763"
+            },
+            {
+              "path": "evaluation/src/metrics/calibration.ts",
+              "sha256": "01a1139af5ee5d6308d7cdad8302d41f44dbdeaf167f22e76e9814378044b04f"
+            },
+            {
+              "path": "evaluation/src/metrics/performance.ts",
+              "sha256": "879503d6ff5515a03381cecea149fd91990f9d432c7eb00c7da572e65a8c3b25"
+            },
+            {
+              "path": "evaluation/src/records.ts",
+              "sha256": "0c7279ee7c388a1df359feb02cc3816b149397a2d513871af55ad91da4a74072"
+            },
+            {
+              "path": "evaluation/src/reports.ts",
+              "sha256": "ccb3b1902278aaf424aa89aaae50c527a3e4bae18354fae6d12314dcb3b550ac"
+            },
+            {
+              "path": "evaluation/src/runner.ts",
+              "sha256": "0cba0eb31c161f3d730a0d10f1d1d680185c9451494c6cbeb942d2cfd8417aca"
+            },
+            {
+              "path": "evaluation/src/verify.ts",
+              "sha256": "12740eb18f82121d2a64a58dd299680835201a41bb22fe7fa26b64006a2989e7"
+            },
+            {
+              "path": "evaluation/tsconfig.json",
+              "sha256": "e4d0cc026e7719836858cbd1a13ebcadbbbf0b40f8543bbf8fbe912a5ecacdac"
+            },
+            {
+              "path": "package-lock.json",
+              "sha256": "9ffacde2e2d7d6091548c73813abdb70d377605c31afa420f9bee68789b09def"
+            },
+            {
+              "path": "package.json",
+              "sha256": "91c6f9eb4dd38dc39d56e8c2a30aa90b7a3e1f2a24d697fb6f02244de4be5e20"
+            },
+            {
+              "path": "server/src/config.ts",
+              "sha256": "bfba27d3f0981ff886517d3da627b494a87fcf07126d7ed6b0b55755d36ca39b"
+            },
+            {
+              "path": "server/src/services/ollama-runtime.ts",
+              "sha256": "4052c0604f3c34c2722aefbd2882485d40e4fd92ed17d7d31dd2d4cd37605182"
+            },
+            {
+              "path": "server/src/services/runtime-error.ts",
+              "sha256": "be5e78c13732f64a38b6e890d9c740e8b22830dd98859792c2ecb93078adaba0"
+            },
+            {
+              "path": "shared/schemas/capabilities.ts",
+              "sha256": "c998591c7af626f7f3617de173b03da0d9a17aef3a78166758cac32f4837058e"
+            },
+            {
+              "path": "tsconfig.base.json",
+              "sha256": "34e78df802f2b1c052dbc946db25423edcec01f0a79bb87b555d7a03f7fe6060"
+            }
+          ],
+          "snapshotHash": "4148afce19bf1672aece1adef48f8dc6aeb1ca4554c8e0cf34fe882effc1a9c5"
+        },
+        "corpus": {
+          "version": "xeno-dataset-1",
+          "generatorVersion": "xeno-generator-1",
+          "splits": [
+            {
+              "name": "development",
+              "records": [
+                {
+                  "seed": 10000,
+                  "family": "SVO",
+                  "sha256": "d3eb74cd03741368a1efce6c3616bd7ccfeb41611c7b8431f200c1c8680004dc"
+                },
+                {
+                  "seed": 10001,
+                  "family": "SOV",
+                  "sha256": "6debb443b16750bb96b50db1a3e93d052245741c7099db0d01fead30c2e4989b"
+                },
+                {
+                  "seed": 10002,
+                  "family": "SVO",
+                  "sha256": "d827b8cb3a2e7f0926eaea60ccd969bab74aaf40a4a2c1467caa90046cf40803"
+                },
+                {
+                  "seed": 10003,
+                  "family": "SOV",
+                  "sha256": "8d88e0bb6dcc34e1bcf660434a675d1d7510e4008e6a5f37bdb3e12a58e6d41c"
+                },
+                {
+                  "seed": 10004,
+                  "family": "SVO",
+                  "sha256": "6f804eacc05834422bb6e9135260e73692eadfe9d7262df7cb3014e78dbe4865"
+                },
+                {
+                  "seed": 10005,
+                  "family": "SOV",
+                  "sha256": "b36b015cbd3e6853a431ddd0d3c4a5c7c850f99e1ab955306e0c373e7b7d1047"
+                },
+                {
+                  "seed": 10006,
+                  "family": "SVO",
+                  "sha256": "9ce09008e61415aa3f9c26ba2a4f1183eabc99ef88a3084b25a5f47f1616c9ca"
+                },
+                {
+                  "seed": 10007,
+                  "family": "SOV",
+                  "sha256": "f25660b1fd70bc61093549a96a7e96b405fc3bc03aef2f014a66c1a3b12654a9"
+                },
+                {
+                  "seed": 10008,
+                  "family": "SVO",
+                  "sha256": "32df1995f734011ee49e91e10680fe3a3aca2aae391170fb8f5e07f1159b25c3"
+                },
+                {
+                  "seed": 10009,
+                  "family": "SOV",
+                  "sha256": "ac9f70013c44c43320859fd86b8d72fcb968721d92ef53aba40cd2fb478995f8"
+                },
+                {
+                  "seed": 10010,
+                  "family": "SVO",
+                  "sha256": "10051ec54a01ce2b9718589c0729b1874594dd028c7d5c3ef7901443a3fcd96b"
+                },
+                {
+                  "seed": 10011,
+                  "family": "SOV",
+                  "sha256": "e6a96d4cbd2cb0f82dd98ad7e9261ff875f5a0785bbfe71b8832d2b0e957584c"
+                },
+                {
+                  "seed": 10012,
+                  "family": "SVO",
+                  "sha256": "3f9403bbd108282d4c21652d4d4b5640bb9d6ed0a5e1aaa5038ec4729e938a20"
+                },
+                {
+                  "seed": 10013,
+                  "family": "SOV",
+                  "sha256": "863a6001a6cf0d6c961c368953f39bc7ab4ca5676e468947b13c7d56f8c301d6"
+                },
+                {
+                  "seed": 10014,
+                  "family": "SVO",
+                  "sha256": "94b4f4ff29345f0d709260de9896bb7665697fa3a6d5093b5f96c261bde67779"
+                },
+                {
+                  "seed": 10015,
+                  "family": "SOV",
+                  "sha256": "37706468b933c33eef5c284e3e6d135dc386b5a13a20c9f80cc65228f11dd2f1"
+                },
+                {
+                  "seed": 10016,
+                  "family": "SVO",
+                  "sha256": "3f6355f868f500415900f51fbf31f0df1e6eadf14139ac1167c1d69a63af6b61"
+                },
+                {
+                  "seed": 10017,
+                  "family": "SOV",
+                  "sha256": "ecb5fb191e533bdb6fcf061fb0e85a0bd84246b2e2b87dde133d275a9a8b2827"
+                },
+                {
+                  "seed": 10018,
+                  "family": "SVO",
+                  "sha256": "1a24bf637b21e653cffce3083d133a22150375887cf96b350ced6143dd9b322e"
+                },
+                {
+                  "seed": 10019,
+                  "family": "SOV",
+                  "sha256": "61d4bbfc4f2cbd9587f8950d3444aa1c4889b367b8408ecc1e5ea23de7e7aa57"
+                },
+                {
+                  "seed": 10020,
+                  "family": "SVO",
+                  "sha256": "da46896a9d8b72decbe34d14308b4bfb85f9eade8362d80057ae440bf4c9ad68"
+                },
+                {
+                  "seed": 10021,
+                  "family": "SOV",
+                  "sha256": "fb31fd655ef4856f81333dca823b4a0fb43155268c132702f7a5a1f9d5dc134d"
+                },
+                {
+                  "seed": 10022,
+                  "family": "SVO",
+                  "sha256": "8df2d708d76c4ddb7ba9855d5abc6012fb6f1ef3f5b04d559049b2817a39e548"
+                },
+                {
+                  "seed": 10023,
+                  "family": "SOV",
+                  "sha256": "fc80940c18671727003424ad78d1f3919b26cd72aa98f8e1027dce0726627c82"
+                },
+                {
+                  "seed": 10024,
+                  "family": "SVO",
+                  "sha256": "0b62eb467ba078e549acfa8d51881d7e86cdca49d769c4d8e1a8b470ee4115ba"
+                },
+                {
+                  "seed": 10025,
+                  "family": "SOV",
+                  "sha256": "d51fe572f7b41bfa857d6d546bc66962770bd4f271723e3e8ceaf1f0b8275032"
+                },
+                {
+                  "seed": 10026,
+                  "family": "SVO",
+                  "sha256": "845c27ab4e0b6697a698650cdfa3b9c627875c21180b39d2e8a276029f5cd7df"
+                },
+                {
+                  "seed": 10027,
+                  "family": "SOV",
+                  "sha256": "daba221a04834a14174be47e49a42f440343618095fa1a27e8004b04e0f35913"
+                },
+                {
+                  "seed": 10028,
+                  "family": "SVO",
+                  "sha256": "728f9e894b923c2685a5e4d391f4bcec058a0e88668eac8d9e73d9c0d47d3d87"
+                },
+                {
+                  "seed": 10029,
+                  "family": "SOV",
+                  "sha256": "02a53abf9319567f6a72084db3836c9713c7b3b1dd72acd0f5e415062d18a804"
+                }
+              ],
+              "sha256": "1ab85a8999c5e8a2c9ebc3ec74afa0d3c5c1df46c3b522d3b17d5588f0898817"
+            },
+            {
+              "name": "evaluation",
+              "records": [
+                {
+                  "seed": 20000,
+                  "family": "SVO",
+                  "sha256": "f7d846da14faf653f7a9cacc5db80f8c02ff7f33ba4a437658e1d6e6b251630f"
+                },
+                {
+                  "seed": 20001,
+                  "family": "SOV",
+                  "sha256": "e1e65a8501c73c38906162430705c25c69627a4fc4656616643a732217821596"
+                },
+                {
+                  "seed": 20002,
+                  "family": "SVO",
+                  "sha256": "2214008451d6d5fa1a126d3701d61b6025273fadfcddcb913c206f9721f30f00"
+                },
+                {
+                  "seed": 20003,
+                  "family": "SOV",
+                  "sha256": "3d3b2e89b54880ef2e123e4f986d6c248638e742af1de469d263a93f1765a7da"
+                },
+                {
+                  "seed": 20004,
+                  "family": "SVO",
+                  "sha256": "c61092d6415c0a8ac05fe9c354e90d5ab5a0805d19468b1765c66ea934dcab31"
+                },
+                {
+                  "seed": 20005,
+                  "family": "SOV",
+                  "sha256": "a322e60f4afd366cf782fd3513ffe9399b03df3f48ed7d3214830a07ae242672"
+                },
+                {
+                  "seed": 20006,
+                  "family": "SVO",
+                  "sha256": "307a925f9e9a3d36018ef136848f1634f84f2004c25bd13a71ad2cfb4ea2d22f"
+                },
+                {
+                  "seed": 20007,
+                  "family": "SOV",
+                  "sha256": "eaaa8fc81526c89c5b2ddd6f67ec95fa505ddfd26cc4d9be480ca0ff4cba5cfc"
+                },
+                {
+                  "seed": 20008,
+                  "family": "SVO",
+                  "sha256": "a6a644fb9104bc8a19ab2a0eb7db524a052a8d69b2fb91c70e3da1c465969285"
+                },
+                {
+                  "seed": 20009,
+                  "family": "SOV",
+                  "sha256": "098b5f76e7fc1db1612891e60d8d7c7b0b4f09bfcb109e4f4756ee8c660ac7dd"
+                },
+                {
+                  "seed": 20010,
+                  "family": "SVO",
+                  "sha256": "e2fde0bfb8e2ca1bb423bf534d9b83f3bc0cc5e5db657e957f937fb44a0d58e5"
+                },
+                {
+                  "seed": 20011,
+                  "family": "SOV",
+                  "sha256": "bcbfffab97ebd802a2fb69aa2ff0276a7bd526f53f4a2af529f9e7923c739c5a"
+                },
+                {
+                  "seed": 20012,
+                  "family": "SVO",
+                  "sha256": "0ce4dce136e6d10bd04840fa7a6309b6c57ae5bf08808338f9451e244673a6bd"
+                },
+                {
+                  "seed": 20013,
+                  "family": "SOV",
+                  "sha256": "f57bb1f0dd3dc3612faccd4de295f0d2af4dd2ea5bed5586a6771de1b9eb5ec1"
+                },
+                {
+                  "seed": 20014,
+                  "family": "SVO",
+                  "sha256": "4d4876385d8b32b7e179611e9bbb58bacb925e902783be609301eeed66393587"
+                },
+                {
+                  "seed": 20015,
+                  "family": "SOV",
+                  "sha256": "5c155ead7a9359628daab3a8798321116b98aa8c009f39a5918ec45a2a773f7f"
+                },
+                {
+                  "seed": 20016,
+                  "family": "SVO",
+                  "sha256": "6250e3292817eb6a5865d0310d5e674c89ce5676ad90492dfe3e6561d13379dc"
+                },
+                {
+                  "seed": 20017,
+                  "family": "SOV",
+                  "sha256": "feb27121ab769eb003e1b3961ae8f1c5b6c06fe6d0e6c40643ef42603c31d200"
+                },
+                {
+                  "seed": 20018,
+                  "family": "SVO",
+                  "sha256": "4055d370a97e530558cc039df4870703d12fecc5f20852154dfd6bbecf29e587"
+                },
+                {
+                  "seed": 20019,
+                  "family": "SOV",
+                  "sha256": "74f28a8baede7b358099a1aca43c08d4791fb57b275822c8f0f7be68d167d74e"
+                },
+                {
+                  "seed": 20020,
+                  "family": "SVO",
+                  "sha256": "aa3c365bb0cdec3c6c35c1d69d5cb75eef107afe16bdf296627b95e0eafbec7d"
+                },
+                {
+                  "seed": 20021,
+                  "family": "SOV",
+                  "sha256": "6475acdd43a77f3414fea08286e6be07b93815b813f2901986f46c5d1b805234"
+                },
+                {
+                  "seed": 20022,
+                  "family": "SVO",
+                  "sha256": "cc88eb47234714f3b7cf87fda77bfa60c243de380e9f100fd4972f06ab5ac71e"
+                },
+                {
+                  "seed": 20023,
+                  "family": "SOV",
+                  "sha256": "99f29547f36ccb92a92d12c7196e313fb824b0281397594d5a5575d4fa601ca8"
+                },
+                {
+                  "seed": 20024,
+                  "family": "SVO",
+                  "sha256": "24cd9f45568f6a329ac9439ce306c38d60cb4f05871d9f04dd69b21efcb6baf2"
+                },
+                {
+                  "seed": 20025,
+                  "family": "SOV",
+                  "sha256": "daeba7829bdb60a85d7c87b2abbec71e6f03b2fe67a00048f9b3bbe8d060837b"
+                },
+                {
+                  "seed": 20026,
+                  "family": "SVO",
+                  "sha256": "c6f4da9479e9f3382247c46ff49fc1a9021ac73e98fad37d8fa164c71f82bb3a"
+                },
+                {
+                  "seed": 20027,
+                  "family": "SOV",
+                  "sha256": "fd1a05cb6e239df9c3ab02c51899074c9415eea104fe4bd1e9072caa5f09f5de"
+                },
+                {
+                  "seed": 20028,
+                  "family": "SVO",
+                  "sha256": "9d205958416c682766689092c01eafd9555725764615e17a19ecdedc762adc45"
+                },
+                {
+                  "seed": 20029,
+                  "family": "SOV",
+                  "sha256": "d844f1782fd5259fee473b1034c8aeb08dac0463a59440bfb75340e2e9ba0786"
+                }
+              ],
+              "sha256": "2edb459d2dad20c2899aed2aacd42b60928194ce60a1b66db0c85418d172cf21"
+            },
+            {
+              "name": "structural",
+              "records": [
+                {
+                  "seed": 30000,
+                  "family": "VSO",
+                  "sha256": "77d639bfc105573183d9dadd530929d8e11fee98e14eb66bfd186c21788b3cfa"
+                },
+                {
+                  "seed": 30001,
+                  "family": "VSO",
+                  "sha256": "5c3a20d752a2dfeb70d7a683a2f58123e0090674b551472aa252cf895244b4e6"
+                },
+                {
+                  "seed": 30002,
+                  "family": "VSO",
+                  "sha256": "003353a11ce3b4a9c794b68ea68b41d14507fec0b4c5166a413faf92c8e80e61"
+                },
+                {
+                  "seed": 30003,
+                  "family": "VSO",
+                  "sha256": "ecd7419dec36b3e17895ee3dbbca929d11c5535adb2a59e865b0e753f3b2f9e4"
+                },
+                {
+                  "seed": 30004,
+                  "family": "VSO",
+                  "sha256": "68bad7b4ec95529eb7cf7f71632cb1ee1f61a386dfda27b4ba5b83a1d9ba0194"
+                },
+                {
+                  "seed": 30005,
+                  "family": "VSO",
+                  "sha256": "0f23c9dae8b39a98efdf70f6daadbfcea68512f0d60c6ef029d656d7365586fb"
+                },
+                {
+                  "seed": 30006,
+                  "family": "VSO",
+                  "sha256": "be63ef83d350e3e5521ad8f5b5d8c7503e513cf23dc9f9de8a887bdfc0fca164"
+                },
+                {
+                  "seed": 30007,
+                  "family": "VSO",
+                  "sha256": "873ec0e0b1980d5a19e41922041be8b686d843f5732828963f938ec6f0dda27e"
+                },
+                {
+                  "seed": 30008,
+                  "family": "VSO",
+                  "sha256": "a32b9f2d5666a5c9d8e35a961a13f964c9e6ed5e841c107c35280df5f66d32bf"
+                },
+                {
+                  "seed": 30009,
+                  "family": "VSO",
+                  "sha256": "08e17dd1a31c1b88fe182763d97c4ed56739041b5a3921ffee03c0877880af40"
+                },
+                {
+                  "seed": 30010,
+                  "family": "VSO",
+                  "sha256": "92bf4ed9c6d1291af2ab6f84da7490f4d12e05e1f374fd4baffa307d0483fa94"
+                },
+                {
+                  "seed": 30011,
+                  "family": "VSO",
+                  "sha256": "efab990442c15117ea453f10711cb14aac576b36ccfec9b2c74415a66988ddf0"
+                },
+                {
+                  "seed": 30012,
+                  "family": "VSO",
+                  "sha256": "1c9e89cf482505958f318e09a96b526dccdb1aaebebcc842d90ce4f32c4fd782"
+                },
+                {
+                  "seed": 30013,
+                  "family": "VSO",
+                  "sha256": "b3af168351df0d1f03bce29895a4421118bda014bf7546fcfec100b84672585e"
+                },
+                {
+                  "seed": 30014,
+                  "family": "VSO",
+                  "sha256": "21a3a8169bcacbadda1af8f8edb010e4ba5873675acb9e86f38e9324b8a21713"
+                },
+                {
+                  "seed": 30015,
+                  "family": "VSO",
+                  "sha256": "ef8cb8a8bc4a865f1df0dfeb0b57a466d6bd66abf343769263cd904dfe3beb2f"
+                },
+                {
+                  "seed": 30016,
+                  "family": "VSO",
+                  "sha256": "464ecfc6092cb9a49ff1e4d353c6088f766f883a74b51a9433f4ac2e03a4e1e5"
+                },
+                {
+                  "seed": 30017,
+                  "family": "VSO",
+                  "sha256": "8b6d79a78960282cea8bdac9315f4c059738b391b4078db4630506a24d31a665"
+                },
+                {
+                  "seed": 30018,
+                  "family": "VSO",
+                  "sha256": "fd49a985d3460fdb2ff6666df46a94256145ed339adcba7cca604d49c403f005"
+                },
+                {
+                  "seed": 30019,
+                  "family": "VSO",
+                  "sha256": "4d6409a2c68adb7ac8a47412db2e9cddc9c9df87cfb32ac96ee1c68f0ac9fa05"
+                },
+                {
+                  "seed": 30020,
+                  "family": "VSO",
+                  "sha256": "0e06c43a665ffb60e1ce01f42d4fe155875539832fb2f4ba55a3593b8c77cc13"
+                },
+                {
+                  "seed": 30021,
+                  "family": "VSO",
+                  "sha256": "7dacac1d229edecd5fcd0c89c0ba074d26d877170d1064d942581922af1b136a"
+                },
+                {
+                  "seed": 30022,
+                  "family": "VSO",
+                  "sha256": "73d492ceed2b765abba5f606101a97f82a9776acec3bf70700adb1e820fee36c"
+                },
+                {
+                  "seed": 30023,
+                  "family": "VSO",
+                  "sha256": "4559eb5625ad7b0ed80d7ded6941cea58c38d548b76e4b2fa8160efe6c18e1ca"
+                },
+                {
+                  "seed": 30024,
+                  "family": "VSO",
+                  "sha256": "ca4b70e0f92d071a76c466ce6d1ec6c845511e3dcf81aba55706c02276e89921"
+                },
+                {
+                  "seed": 30025,
+                  "family": "VSO",
+                  "sha256": "b7caf73242bfe5bceee9d65a9f863e91c7a83537f42a659db4296699998af9f3"
+                },
+                {
+                  "seed": 30026,
+                  "family": "VSO",
+                  "sha256": "a83433d0143ab52b63d8ba271163e84f1849fcfca7270f82f5eff6368b81ad9c"
+                },
+                {
+                  "seed": 30027,
+                  "family": "VSO",
+                  "sha256": "4fe1e8483e3af104e930d7a7a49b8a6f85683c0f42622cfe98576c9f74e564a9"
+                },
+                {
+                  "seed": 30028,
+                  "family": "VSO",
+                  "sha256": "8ea1c9eddef72df9e7058b1116f5aba965fa8e339c4b174468bc25c98a712a54"
+                },
+                {
+                  "seed": 30029,
+                  "family": "VSO",
+                  "sha256": "2d49b709bbb654f305e794d25d01e9d3b4497e22df2486862d65ec0541e79862"
+                }
+              ],
+              "sha256": "44748c655d60d54d930929b4ea258089604457f708d4f8c6b4c4e0f4e87864af"
+            }
+          ],
+          "sha256": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94"
+        },
+        "startedAt": "2026-09-21T04:11:04.109Z",
+        "environment": {
+          "node": "v25.8.2",
+          "platform": "win32",
+          "arch": "x64",
+          "osRelease": "10.0.26200",
+          "cpu": "AMD Ryzen 9 7900 12-Core Processor             ",
+          "logicalCpus": 24,
+          "memoryBytes": 33440882688
+        },
+        "modelPreflight": null,
+        "plan": {
+          "callsPerModelRun": 1,
+          "training": "ordered observation prefix, reset independently for each method/budget/repetition",
+          "order": "rotate methods by language index plus repetition; serial execution; cold loads retained"
+        },
+        "status": "complete",
+        "completedAt": "2026-09-21T04:11:07.488Z",
+        "records": 180,
+        "artifacts": [
+          {
+            "path": "plot-environment.json",
+            "sha256": "a5732e1f9925a5b5483e907acdda9694d94d7a9bdd8cbc8d238adf6d85876ec5"
+          },
+          {
+            "path": "report.md",
+            "sha256": "283443c6ba3025a3f24206c835a8bf393b5772ed4bc9fd7a116c73f4b402960a"
+          },
+          {
+            "path": "runs.jsonl",
+            "sha256": "51ceb299ef6c74b90c7f25b8b6d254e345a4c0072318b94489be44c3141c49b2"
+          },
+          {
+            "path": "structural-figures.png",
+            "sha256": "0105b0ce046ccdb3cb38700b8754fe44277bf4c5c58eb7ba31d09d5209d8f37d"
+          },
+          {
+            "path": "structural-figures.svg",
+            "sha256": "14a438815d36ec09162e007921d1059547d8003fd00faf2cdf5b1f7022bfbb20"
+          },
+          {
+            "path": "summary.json",
+            "sha256": "3ff73212242f9342e0a904ddde27fad9350e631d9c1efc7819e1d678b4e78a8a"
+          }
+        ]
+      },
+      "summary": {
+        "summaries": [
+          {
+            "split": "structural",
+            "method": "exact-lookup",
+            "observations": 8,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 223,
+              "accuracy": 0.825925925925926,
+              "coverage": 0.825925925925926,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 223,
+                "abstained": 47,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 85,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 85,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.2518000000000029,
+              "p95Ms": 0.59050000000002,
+              "minMs": 0.1817999999999529,
+              "maxMs": 0.9223999999999819
+            }
+          },
+          {
+            "split": "structural",
+            "method": "symbolic",
+            "observations": 8,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 223,
+              "accuracy": 0.825925925925926,
+              "coverage": 0.825925925925926,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 223,
+                "abstained": 47,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 85,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 85,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.27190000000001646,
+              "p95Ms": 0.5285000000000082,
+              "minMs": 0.1893999999999778,
+              "maxMs": 0.5926000000000613
+            }
+          },
+          {
+            "split": "structural",
+            "method": "exact-lookup",
+            "observations": 16,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 242,
+              "accuracy": 0.8962962962962963,
+              "coverage": 0.8962962962962963,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 242,
+                "abstained": 28,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 85,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 85,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.28829999999999245,
+              "p95Ms": 0.42010000000004766,
+              "minMs": 0.20830000000000837,
+              "maxMs": 0.5548000000000002
+            }
+          },
+          {
+            "split": "structural",
+            "method": "symbolic",
+            "observations": 16,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 242,
+              "accuracy": 0.8962962962962963,
+              "coverage": 0.8962962962962963,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 242,
+                "abstained": 28,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 85,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 85,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.3099000000000842,
+              "p95Ms": 0.5523000000000593,
+              "minMs": 0.2218000000000302,
+              "maxMs": 0.6241999999999734
+            }
+          },
+          {
+            "split": "structural",
+            "method": "exact-lookup",
+            "observations": 29,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 150,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 270,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 270,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 85,
+              "correct": 0,
+              "accuracy": 0,
+              "coverage": 0,
+              "selectiveAccuracy": null,
+              "statuses": {
+                "answered": 0,
+                "abstained": 85,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.39200000000005275,
+              "p95Ms": 0.5092999999999392,
+              "minMs": 0.3045000000000755,
+              "maxMs": 0.8704000000000178
+            }
+          },
+          {
+            "split": "structural",
+            "method": "symbolic",
+            "observations": 29,
+            "languages": 30,
+            "runs": 30,
+            "modelCalls": 0,
+            "semantic": {
+              "total": 150,
+              "correct": 150,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 150,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "lexical": {
+              "total": 270,
+              "correct": 270,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 270,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "withheldForms": {
+              "total": 85,
+              "correct": 85,
+              "accuracy": 1,
+              "coverage": 1,
+              "selectiveAccuracy": 1,
+              "statuses": {
+                "answered": 85,
+                "abstained": 0,
+                "invalid": 0,
+                "error": 0,
+                "timeout": 0
+              }
+            },
+            "latency": {
+              "count": 30,
+              "medianMs": 0.4499000000000706,
+              "p95Ms": 0.6571999999999889,
+              "minMs": 0.35799999999994725,
+              "maxMs": 1.3412999999999897
+            }
+          }
+        ],
+        "paired": [
+          {
+            "split": "structural",
+            "observations": 8,
+            "contrast": "symbolic minus exact-lookup",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "structural",
+            "observations": 16,
+            "contrast": "symbolic minus exact-lookup",
+            "interval": {
+              "mean": 0,
+              "lower": 0,
+              "upper": 0,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          },
+          {
+            "split": "structural",
+            "observations": 29,
+            "contrast": "symbolic minus exact-lookup",
+            "interval": {
+              "mean": 1,
+              "lower": 1,
+              "upper": 1,
+              "languageCount": 30,
+              "draws": 2000,
+              "seed": 150015,
+              "method": "paired language-cluster percentile bootstrap; repeated runs averaged within language"
+            }
+          }
+        ],
+        "calibration": {
+          "available": false,
+          "reason": "No declared probability-of-correctness semantics"
+        },
+        "limits": [
+          "Synthetic bounded grammar with supplied hypothesis class; not unrestricted language acquisition.",
+          "Accuracy uses every item, including abstentions, invalid responses, transport errors and timeouts.",
+          "Latency is wall time for an entire language batch (training plus all probes), not a per-item measurement.",
+          "Bootstrap intervals condition on the frozen languages and configuration; they do not model corpus design uncertainty.",
+          "Withheld forms contain at least one entity count absent from the full training corpus; all challenge compositions are withheld."
+        ]
+      }
+    }
+  },
+  "repeatedOutputAgreement": [
+    {
+      "method": "llm-only",
+      "observations": 8,
+      "comparedPredictions": 150,
+      "identicalStatusAndStructuredOutput": 81
+    },
+    {
+      "method": "llm-only",
+      "observations": 16,
+      "comparedPredictions": 150,
+      "identicalStatusAndStructuredOutput": 82
+    },
+    {
+      "method": "llm-only",
+      "observations": 29,
+      "comparedPredictions": 150,
+      "identicalStatusAndStructuredOutput": 115
+    },
+    {
+      "method": "hybrid",
+      "observations": 8,
+      "comparedPredictions": 150,
+      "identicalStatusAndStructuredOutput": 114
+    },
+    {
+      "method": "hybrid",
+      "observations": 16,
+      "comparedPredictions": 150,
+      "identicalStatusAndStructuredOutput": 135
+    },
+    {
+      "method": "hybrid",
+      "observations": 29,
+      "comparedPredictions": 150,
+      "identicalStatusAndStructuredOutput": 150
+    }
+  ],
+  "observedExecution": {
+    "digests": [
+      "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb"
+    ],
+    "incompleteResponseCount": 19,
+    "promptTokensMax": 3321,
+    "outputTokensMax": 2048,
+    "doneReasons": {
+      "stop": 279,
+      "unavailable": 19,
+      "length": 2
+    },
+    "callsWithRetainedRawText": 300
+  },
+  "archives": [
+    {
+      "path": "docs/verification/w15-baseline-results.zip",
+      "bytes": 1004026,
+      "sha256": "e6729d6df54c96e96e2d983f119e0baa82932fde0137515b9771edaf8d8d4257"
+    },
+    {
+      "path": "docs/verification/w15-structural-results.zip",
+      "bytes": 402449,
+      "sha256": "fe3dcc8dfffc6123fd5ac4f1af89519d6a2fcdb6b7cdada944863a8707b83b7e"
+    }
+  ],
+  "replay": {
+    "baseline": "passed by runner and after extraction into an independent temporary directory",
+    "structural": "passed by runner and after extraction into an independent temporary directory"
+  },
+  "ci": {
+    "sourceRun": {
+      "conclusion": "success",
+      "headSha": "fbf836513014f99eb09ea061d9a3e64974c7860a",
+      "jobs": [
+        {
+          "completedAt": "2026-09-21T04:19:25Z",
+          "conclusion": "success",
+          "databaseId": 106210931777,
+          "name": "regression (windows-latest)",
+          "startedAt": "2026-09-21T04:10:34Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-09-21T04:10:36Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-09-21T04:10:35Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:10:50Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v6",
+              "number": 2,
+              "startedAt": "2026-09-21T04:10:36Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:29Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v6",
+              "number": 3,
+              "startedAt": "2026-09-21T04:10:50Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:50Z",
+              "conclusion": "success",
+              "name": "Run npm ci",
+              "number": 4,
+              "startedAt": "2026-09-21T04:11:29Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:12:50Z",
+              "conclusion": "success",
+              "name": "Run npm run check:source",
+              "number": 5,
+              "startedAt": "2026-09-21T04:11:50Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:12:52Z",
+              "conclusion": "success",
+              "name": "Run npm run evaluate:ci",
+              "number": 6,
+              "startedAt": "2026-09-21T04:12:50Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:16:25Z",
+              "conclusion": "success",
+              "name": "Run npx playwright install --with-deps chromium",
+              "number": 7,
+              "startedAt": "2026-09-21T04:12:52Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:19:00Z",
+              "conclusion": "success",
+              "name": "Run npm run test:e2e:run",
+              "number": 8,
+              "startedAt": "2026-09-21T04:16:25Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:19:14Z",
+              "conclusion": "success",
+              "name": "Run npm run test:public",
+              "number": 9,
+              "startedAt": "2026-09-21T04:19:00Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:19:17Z",
+              "conclusion": "success",
+              "name": "Retain dependency audit",
+              "number": 10,
+              "startedAt": "2026-09-21T04:19:14Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:19:20Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 11,
+              "startedAt": "2026-09-21T04:19:17Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:19:20Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v6",
+              "number": 21,
+              "startedAt": "2026-09-21T04:19:20Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:19:23Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v6",
+              "number": 22,
+              "startedAt": "2026-09-21T04:19:20Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:19:23Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 23,
+              "startedAt": "2026-09-21T04:19:23Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35559995096/job/106210931777"
+        },
+        {
+          "completedAt": "2026-09-21T04:14:39Z",
+          "conclusion": "success",
+          "databaseId": 106210931912,
+          "name": "regression (ubuntu-latest)",
+          "startedAt": "2026-09-21T04:10:36Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-09-21T04:10:38Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-09-21T04:10:37Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:10:41Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v6",
+              "number": 2,
+              "startedAt": "2026-09-21T04:10:38Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:10:48Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v6",
+              "number": 3,
+              "startedAt": "2026-09-21T04:10:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:03Z",
+              "conclusion": "success",
+              "name": "Run npm ci",
+              "number": 4,
+              "startedAt": "2026-09-21T04:10:48Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:44Z",
+              "conclusion": "success",
+              "name": "Run npm run check:source",
+              "number": 5,
+              "startedAt": "2026-09-21T04:11:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:45Z",
+              "conclusion": "success",
+              "name": "Run npm run evaluate:ci",
+              "number": 6,
+              "startedAt": "2026-09-21T04:11:44Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:12:12Z",
+              "conclusion": "success",
+              "name": "Run npx playwright install --with-deps chromium",
+              "number": 7,
+              "startedAt": "2026-09-21T04:11:45Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:22Z",
+              "conclusion": "success",
+              "name": "Run npm run test:e2e:run",
+              "number": 8,
+              "startedAt": "2026-09-21T04:12:12Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:33Z",
+              "conclusion": "success",
+              "name": "Run npm run test:public",
+              "number": 9,
+              "startedAt": "2026-09-21T04:14:22Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:34Z",
+              "conclusion": "success",
+              "name": "Retain dependency audit",
+              "number": 10,
+              "startedAt": "2026-09-21T04:14:33Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:36Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 11,
+              "startedAt": "2026-09-21T04:14:34Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:36Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v6",
+              "number": 21,
+              "startedAt": "2026-09-21T04:14:36Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:37Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v6",
+              "number": 22,
+              "startedAt": "2026-09-21T04:14:36Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:37Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 23,
+              "startedAt": "2026-09-21T04:14:37Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35559995096/job/106210931912"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35559995096"
+    },
+    "installedRun": {
+      "conclusion": "success",
+      "headSha": "fbf836513014f99eb09ea061d9a3e64974c7860a",
+      "jobs": [
+        {
+          "completedAt": "2026-09-21T04:14:23Z",
+          "conclusion": "success",
+          "databaseId": 106210931728,
+          "name": "build",
+          "startedAt": "2026-09-21T04:10:34Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-09-21T04:10:36Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-09-21T04:10:34Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:10:43Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v6",
+              "number": 2,
+              "startedAt": "2026-09-21T04:10:36Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:03Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v6",
+              "number": 3,
+              "startedAt": "2026-09-21T04:10:43Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:25Z",
+              "conclusion": "success",
+              "name": "Run npm ci",
+              "number": 4,
+              "startedAt": "2026-09-21T04:11:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:30Z",
+              "conclusion": "success",
+              "name": "Run actions/cache@v4",
+              "number": 5,
+              "startedAt": "2026-09-21T04:11:25Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:33Z",
+              "conclusion": "success",
+              "name": "Run npm run provision:models -- --download",
+              "number": 6,
+              "startedAt": "2026-09-21T04:11:30Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:11:41Z",
+              "conclusion": "success",
+              "name": "Run npm run build:desktop",
+              "number": 7,
+              "startedAt": "2026-09-21T04:11:33Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:10Z",
+              "conclusion": "success",
+              "name": "Build installer without publishing",
+              "number": 8,
+              "startedAt": "2026-09-21T04:11:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:14Z",
+              "conclusion": "success",
+              "name": "Record payload and prepare locked independent harness",
+              "number": 9,
+              "startedAt": "2026-09-21T04:14:10Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:18Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 10,
+              "startedAt": "2026-09-21T04:14:14Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:19Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 11,
+              "startedAt": "2026-09-21T04:14:18Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:19Z",
+              "conclusion": "success",
+              "name": "Post Run actions/cache@v4",
+              "number": 20,
+              "startedAt": "2026-09-21T04:14:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:19Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v6",
+              "number": 21,
+              "startedAt": "2026-09-21T04:14:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:22Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v6",
+              "number": 22,
+              "startedAt": "2026-09-21T04:14:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:22Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 23,
+              "startedAt": "2026-09-21T04:14:22Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35559995088/job/106210931728"
+        },
+        {
+          "completedAt": "2026-09-21T04:17:34Z",
+          "conclusion": "success",
+          "databaseId": 106211562630,
+          "name": "verify-clean",
+          "startedAt": "2026-09-21T04:14:25Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-09-21T04:14:28Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-09-21T04:14:26Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:39Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v6",
+              "number": 2,
+              "startedAt": "2026-09-21T04:14:28Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:14:59Z",
+              "conclusion": "success",
+              "name": "Run actions/download-artifact@v4",
+              "number": 3,
+              "startedAt": "2026-09-21T04:14:39Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:15:00Z",
+              "conclusion": "success",
+              "name": "Run actions/download-artifact@v4",
+              "number": 4,
+              "startedAt": "2026-09-21T04:14:59Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:15:07Z",
+              "conclusion": "success",
+              "name": "Install only locked browser automation",
+              "number": 5,
+              "startedAt": "2026-09-21T04:15:00Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:16:03Z",
+              "conclusion": "success",
+              "name": "Install application into disposable runner directory",
+              "number": 6,
+              "startedAt": "2026-09-21T04:15:07Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:17:30Z",
+              "conclusion": "success",
+              "name": "Verify installed native audio, boundary and restart recovery",
+              "number": 7,
+              "startedAt": "2026-09-21T04:16:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:17:31Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 8,
+              "startedAt": "2026-09-21T04:17:30Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:17:31Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v6",
+              "number": 16,
+              "startedAt": "2026-09-21T04:17:31Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-09-21T04:17:31Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 17,
+              "startedAt": "2026-09-21T04:17:31Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35559995088/job/106211562630"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35559995088"
+    },
+    "sourceArtifacts": [
+      {
+        "id": 10622251113,
+        "node_id": "MDg6QXJ0aWZhY3QxMDYyMjI1MTExMw==",
+        "name": "source-results-windows-latest",
+        "size_in_bytes": 14080013,
+        "url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10622251113",
+        "archive_download_url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10622251113/zip",
+        "expired": false,
+        "digest": "sha256:d89698c443a52b35ada3ce54d58db259f86296681c13e39432805e3a853b49c3",
+        "created_at": "2026-09-21T04:19:20Z",
+        "updated_at": "2026-09-21T04:19:20Z",
+        "expires_at": "2026-10-05T04:19:17Z",
+        "workflow_run": {
+          "id": 35559995096,
+          "repository_id": 1203231375,
+          "head_repository_id": 1203231375,
+          "head_branch": "implementation/reliability",
+          "head_sha": "fbf836513014f99eb09ea061d9a3e64974c7860a"
+        }
+      },
+      {
+        "id": 10621977091,
+        "node_id": "MDg6QXJ0aWZhY3QxMDYyMTk3NzA5MQ==",
+        "name": "source-results-ubuntu-latest",
+        "size_in_bytes": 13764609,
+        "url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10621977091",
+        "archive_download_url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10621977091/zip",
+        "expired": false,
+        "digest": "sha256:a3afc4a4aaad6449aa66aebb8914e62c06ae66c0f7612ffd75d5dab730e2df65",
+        "created_at": "2026-09-21T04:14:36Z",
+        "updated_at": "2026-09-21T04:14:36Z",
+        "expires_at": "2026-10-05T04:14:34Z",
+        "workflow_run": {
+          "id": 35559995096,
+          "repository_id": 1203231375,
+          "head_repository_id": 1203231375,
+          "head_branch": "implementation/reliability",
+          "head_sha": "fbf836513014f99eb09ea061d9a3e64974c7860a"
+        }
+      }
+    ],
+    "installedArtifacts": [
+      {
+        "id": 10622265734,
+        "node_id": "MDg6QXJ0aWZhY3QxMDYyMjI2NTczNA==",
+        "name": "release-harness",
+        "size_in_bytes": 360373,
+        "url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10622265734",
+        "archive_download_url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10622265734/zip",
+        "expired": false,
+        "digest": "sha256:ed7404387873b281b9878cbc843e4c685659b0b123b880c5fe4fbbace392be62",
+        "created_at": "2026-09-21T04:14:19Z",
+        "updated_at": "2026-09-21T04:14:19Z",
+        "expires_at": "2026-09-28T04:14:18Z",
+        "workflow_run": {
+          "id": 35559995088,
+          "repository_id": 1203231375,
+          "head_repository_id": 1203231375,
+          "head_branch": "implementation/reliability",
+          "head_sha": "fbf836513014f99eb09ea061d9a3e64974c7860a"
+        }
+      },
+      {
+        "id": 10622140885,
+        "node_id": "MDg6QXJ0aWZhY3QxMDYyMjE0MDg4NQ==",
+        "name": "windows-installer",
+        "size_in_bytes": 405355911,
+        "url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10622140885",
+        "archive_download_url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10622140885/zip",
+        "expired": false,
+        "digest": "sha256:9069c538e4dda9ab9401522022f1475c06fdfacb353ff82b04720ca544bf1f79",
+        "created_at": "2026-09-21T04:14:18Z",
+        "updated_at": "2026-09-21T04:14:18Z",
+        "expires_at": "2026-09-28T04:14:15Z",
+        "workflow_run": {
+          "id": 35559995088,
+          "repository_id": 1203231375,
+          "head_repository_id": 1203231375,
+          "head_branch": "implementation/reliability",
+          "head_sha": "fbf836513014f99eb09ea061d9a3e64974c7860a"
+        }
+      },
+      {
+        "id": 10621553424,
+        "node_id": "MDg6QXJ0aWZhY3QxMDYyMTU1MzQyNA==",
+        "name": "installed-acceptance-result",
+        "size_in_bytes": 506803,
+        "url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10621553424",
+        "archive_download_url": "https://api.github.com/repos/Parusann/Xenolinguist/actions/artifacts/10621553424/zip",
+        "expired": false,
+        "digest": "sha256:e57fee6e1f63888c21d7e5a7b8abad15b1b28405225dec0b029d0881479a7016",
+        "created_at": "2026-09-21T04:17:31Z",
+        "updated_at": "2026-09-21T04:17:31Z",
+        "expires_at": "2026-10-21T04:17:30Z",
+        "workflow_run": {
+          "id": 35559995088,
+          "repository_id": 1203231375,
+          "head_repository_id": 1203231375,
+          "head_branch": "implementation/reliability",
+          "head_sha": "fbf836513014f99eb09ea061d9a3e64974c7860a"
+        }
+      }
+    ],
+    "installedAcceptance": {
+      "source": {
+        "revision": "fbf836513014f99eb09ea061d9a3e64974c7860a",
+        "branch": "implementation/reliability",
+        "workingFiles": [],
+        "node": "24.20.0",
+        "platform": "win32",
+        "arch": "x64"
+      },
+      "acceptancePassed": true,
+      "appArchive": {
+        "bytes": 2961075,
+        "sha256": "316c3536a4a991eecd5341927324362d836dfec41d8ff74083533b0a9ce21c97"
+      },
+      "checkedFiles": 3772,
+      "compiler": {
+        "passed": true,
+        "version": "xeno-generator-1",
+        "observations": 29,
+        "challenges": 5,
+        "sameSessionAfterRelaunch": true,
+        "draftRecovered": true,
+        "reveals": 1,
+        "archiveRestored": true
+      },
+      "archives": {
+        "passed": true,
+        "projects": [
+          {
+            "bytes": 234326,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 3,
+              "recordings": 1,
+              "proposals": 0,
+              "snapshots": 4
+            },
+            "sandboxIncluded": true,
+            "restoredAudioHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+          },
+          {
+            "bytes": 4431,
+            "counts": {
+              "words": 1,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 1,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2428,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          }
+        ]
+      },
+      "ipaStatus": 200,
+      "sttStatus": 200,
+      "ttsStatus": 200,
+      "missingModel": {
+        "status": 503,
+        "body": {
+          "error": "ipa-unavailable",
+          "code": "IPA_MODEL_MISSING",
+          "requestId": "721b3732-069f-4ea5-a314-553751b43302",
+          "retryable": true
+        }
+      },
+      "electron": "42.11.3",
+      "node": "24.19.0"
+    },
+    "sourceReports": {
+      "linux": {
+        "browser": {
+          "startTime": "2026-09-21T04:12:13.301Z",
+          "duration": 128683.855,
+          "expected": 28,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "publicSite": {
+          "startTime": "2026-09-21T04:14:23.423Z",
+          "duration": 9586.912,
+          "expected": 8,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "evaluationReplay": "passed after downloading and extracting CI artifact",
+        "audit": {
+          "recordedAt": "2026-09-21T04:14:33.755Z",
+          "lockfile": {
+            "bytes": 363616,
+            "sha256": "9ffacde2e2d7d6091548c73813abdb70d377605c31afa420f9bee68789b09def"
+          },
+          "auditReportVersion": 2,
+          "vulnerabilities": {
+            "@huggingface/transformers": {
+              "name": "@huggingface/transformers",
+              "severity": "high",
+              "isDirect": true,
+              "via": [
+                "onnxruntime-node",
+                "sharp"
+              ],
+              "effects": [],
+              "range": "<=4.2.0",
+              "nodes": [
+                "node_modules/@huggingface/transformers"
+              ],
+              "fixAvailable": true
+            },
+            "adm-zip": {
+              "name": "adm-zip",
+              "severity": "high",
+              "isDirect": false,
+              "via": [
+                {
+                  "source": 1123686,
+                  "name": "adm-zip",
+                  "dependency": "adm-zip",
+                  "title": "adm-zip: Crafted ZIP file triggers 4GB memory allocation",
+                  "url": "https://github.com/advisories/GHSA-xcpc-8h2w-3j85",
+                  "severity": "high",
+                  "cwe": [
+                    "CWE-400",
+                    "CWE-789"
+                  ],
+                  "cvss": {
+                    "score": 7.5,
+                    "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+                  },
+                  "range": "<0.6.0"
+                },
+                {
+                  "source": 1193734,
+                  "name": "adm-zip",
+                  "dependency": "adm-zip",
+                  "title": "adm-zip extraction follows destination symlinks, allowing arbitrary file overwrite",
+                  "url": "https://github.com/advisories/GHSA-vwc7-r8mq-g2x9",
+                  "severity": "moderate",
+                  "cwe": [
+                    "CWE-59"
+                  ],
+                  "cvss": {
+                    "score": 6.5,
+                    "vectorString": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:N"
+                  },
+                  "range": ">=0.5.9 <=0.6.0"
+                },
+                {
+                  "source": 1239030,
+                  "name": "adm-zip",
+                  "dependency": "adm-zip",
+                  "title": "adm-zip: Uncontrolled memory allocation via the declared uncompressed size (DoS)",
+                  "url": "https://github.com/advisories/GHSA-7q85-xj36-vmfc",
+                  "severity": "high",
+                  "cwe": [
+                    "CWE-789"
+                  ],
+                  "cvss": {
+                    "score": 7.5,
+                    "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+                  },
+                  "range": "<0.6.1"
+                }
+              ],
+              "effects": [
+                "onnxruntime-node"
+              ],
+              "range": "<=0.6.0",
+              "nodes": [
+                "node_modules/adm-zip"
+              ],
+              "fixAvailable": true
+            },
+            "onnxruntime-node": {
+              "name": "onnxruntime-node",
+              "severity": "high",
+              "isDirect": false,
+              "via": [
+                "adm-zip"
+              ],
+              "effects": [
+                "@huggingface/transformers"
+              ],
+              "range": "1.22.0-dev.20250415-c18e06d5e3 - 1.29.0-dev.20260811-e415ef9afd",
+              "nodes": [
+                "node_modules/onnxruntime-node"
+              ],
+              "fixAvailable": true
+            },
+            "sharp": {
+              "name": "sharp",
+              "severity": "high",
+              "isDirect": false,
+              "via": [
+                {
+                  "source": 1124066,
+                  "name": "sharp",
+                  "dependency": "sharp",
+                  "title": "sharp inherited vulnerabilities in libvips: CVE-2026-33327, CVE-2026-33328, CVE-2026-35590, CVE-2026-35591",
+                  "url": "https://github.com/advisories/GHSA-f88m-g3jw-g9cj",
+                  "severity": "high",
+                  "cwe": [
+                    "CWE-1395"
+                  ],
+                  "cvss": {
+                    "score": 0,
+                    "vectorString": null
+                  },
+                  "range": "<0.35.0"
+                },
+                {
+                  "source": 1193725,
+                  "name": "sharp",
+                  "dependency": "sharp",
+                  "title": "sharp: Vulnerabilities in libheif: GHSA-g89c-p67h-r497 and GHSA-2jg2-4ch7-h545",
+                  "url": "https://github.com/advisories/GHSA-rgj7-g3m4-5g8c",
+                  "severity": "high",
+                  "cwe": [
+                    "CWE-122"
+                  ],
+                  "cvss": {
+                    "score": 0,
+                    "vectorString": null
+                  },
+                  "range": "<0.35.4"
+                }
+              ],
+              "effects": [
+                "@huggingface/transformers"
+              ],
+              "range": "<=0.35.4-rc.0",
+              "nodes": [
+                "node_modules/sharp"
+              ],
+              "fixAvailable": true
+            }
+          },
+          "metadata": {
+            "vulnerabilities": {
+              "info": 0,
+              "low": 0,
+              "moderate": 0,
+              "high": 4,
+              "critical": 0,
+              "total": 4
+            },
+            "dependencies": {
+              "prod": 193,
+              "dev": 467,
+              "optional": 110,
+              "peer": 20,
+              "peerOptional": 0,
+              "total": 764
+            }
+          }
+        }
+      },
+      "windows": {
+        "browser": {
+          "startTime": "2026-09-21T04:16:26.766Z",
+          "duration": 153348.88199999998,
+          "expected": 28,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "publicSite": {
+          "startTime": "2026-09-21T04:19:02.642Z",
+          "duration": 11636.761,
+          "expected": 8,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "evaluationReplay": "passed after downloading and extracting CI artifact",
+        "audit": {
+          "recordedAt": "2026-09-21T04:19:16.299Z",
+          "lockfile": {
+            "bytes": 374001,
+            "sha256": "9d41c59998b756dc557aea44b8ebb9266dd1e24f7c9df7acec8c9c28cd5d53ee"
+          },
+          "auditReportVersion": 2,
+          "vulnerabilities": {
+            "@huggingface/transformers": {
+              "name": "@huggingface/transformers",
+              "severity": "high",
+              "isDirect": true,
+              "via": [
+                "onnxruntime-node",
+                "sharp"
+              ],
+              "effects": [],
+              "range": "<=4.2.0",
+              "nodes": [
+                "node_modules/@huggingface/transformers"
+              ],
+              "fixAvailable": true
+            },
+            "adm-zip": {
+              "name": "adm-zip",
+              "severity": "high",
+              "isDirect": false,
+              "via": [
+                {
+                  "source": 1123686,
+                  "name": "adm-zip",
+                  "dependency": "adm-zip",
+                  "title": "adm-zip: Crafted ZIP file triggers 4GB memory allocation",
+                  "url": "https://github.com/advisories/GHSA-xcpc-8h2w-3j85",
+                  "severity": "high",
+                  "cwe": [
+                    "CWE-400",
+                    "CWE-789"
+                  ],
+                  "cvss": {
+                    "score": 7.5,
+                    "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+                  },
+                  "range": "<0.6.0"
+                },
+                {
+                  "source": 1193734,
+                  "name": "adm-zip",
+                  "dependency": "adm-zip",
+                  "title": "adm-zip extraction follows destination symlinks, allowing arbitrary file overwrite",
+                  "url": "https://github.com/advisories/GHSA-vwc7-r8mq-g2x9",
+                  "severity": "moderate",
+                  "cwe": [
+                    "CWE-59"
+                  ],
+                  "cvss": {
+                    "score": 6.5,
+                    "vectorString": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:N"
+                  },
+                  "range": ">=0.5.9 <=0.6.0"
+                },
+                {
+                  "source": 1239030,
+                  "name": "adm-zip",
+                  "dependency": "adm-zip",
+                  "title": "adm-zip: Uncontrolled memory allocation via the declared uncompressed size (DoS)",
+                  "url": "https://github.com/advisories/GHSA-7q85-xj36-vmfc",
+                  "severity": "high",
+                  "cwe": [
+                    "CWE-789"
+                  ],
+                  "cvss": {
+                    "score": 7.5,
+                    "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+                  },
+                  "range": "<0.6.1"
+                }
+              ],
+              "effects": [
+                "onnxruntime-node"
+              ],
+              "range": "<=0.6.0",
+              "nodes": [
+                "node_modules/adm-zip"
+              ],
+              "fixAvailable": true
+            },
+            "onnxruntime-node": {
+              "name": "onnxruntime-node",
+              "severity": "high",
+              "isDirect": false,
+              "via": [
+                "adm-zip"
+              ],
+              "effects": [
+                "@huggingface/transformers"
+              ],
+              "range": "1.22.0-dev.20250415-c18e06d5e3 - 1.29.0-dev.20260811-e415ef9afd",
+              "nodes": [
+                "node_modules/onnxruntime-node"
+              ],
+              "fixAvailable": true
+            },
+            "sharp": {
+              "name": "sharp",
+              "severity": "high",
+              "isDirect": false,
+              "via": [
+                {
+                  "source": 1124066,
+                  "name": "sharp",
+                  "dependency": "sharp",
+                  "title": "sharp inherited vulnerabilities in libvips: CVE-2026-33327, CVE-2026-33328, CVE-2026-35590, CVE-2026-35591",
+                  "url": "https://github.com/advisories/GHSA-f88m-g3jw-g9cj",
+                  "severity": "high",
+                  "cwe": [
+                    "CWE-1395"
+                  ],
+                  "cvss": {
+                    "score": 0,
+                    "vectorString": null
+                  },
+                  "range": "<0.35.0"
+                },
+                {
+                  "source": 1193725,
+                  "name": "sharp",
+                  "dependency": "sharp",
+                  "title": "sharp: Vulnerabilities in libheif: GHSA-g89c-p67h-r497 and GHSA-2jg2-4ch7-h545",
+                  "url": "https://github.com/advisories/GHSA-rgj7-g3m4-5g8c",
+                  "severity": "high",
+                  "cwe": [
+                    "CWE-122"
+                  ],
+                  "cvss": {
+                    "score": 0,
+                    "vectorString": null
+                  },
+                  "range": "<0.35.4"
+                }
+              ],
+              "effects": [
+                "@huggingface/transformers"
+              ],
+              "range": "<=0.35.4-rc.0",
+              "nodes": [
+                "node_modules/sharp"
+              ],
+              "fixAvailable": true
+            }
+          },
+          "metadata": {
+            "vulnerabilities": {
+              "info": 0,
+              "low": 0,
+              "moderate": 0,
+              "high": 4,
+              "critical": 0,
+              "total": 4
+            },
+            "dependencies": {
+              "prod": 193,
+              "dev": 467,
+              "optional": 110,
+              "peer": 20,
+              "peerOptional": 0,
+              "total": 764
+            }
+          }
+        }
+      }
+    }
+  },
+  "developmentSmoke": {
+    "path": "docs/verification/w15-development-smoke-results.zip",
+    "bytes": 697404,
+    "sha256": "ee6ffe2b64e0685413bce4ac08bda01179bce07c4742af31980e34f5e7bd6ac3",
+    "note": "Two exploratory development-only probes on seed 10000, before the implementation freeze: llama3.2:3b and the application default gemma4:e4b. Their earlier source snapshots, failures and all repetitions remain in the archive. These are not comparative held-out results."
+  },
+  "publicationFigure": {
+    "script": "docs/verification/plot-w15-results.py",
+    "scriptSha256": "cdaae6e494f56153a6d80ea89d99e01a28809cfb4e3b0e0a2d0bf219089e8990",
+    "path": "docs/verification/w15-baseline-figures.png",
+    "sha256": "1c415bee920dd24de60462e26c465487de2e31a8236a4e5fedc49946397c9d59",
+    "sourceRawSha256": "13dc6656190f9bb8bd814217ba009db4fc75c47d8d879acab3c8894f2e2534fe",
+    "note": "Separate publication overview; original experiment figures remain unchanged inside the archive."
+  }
+}
