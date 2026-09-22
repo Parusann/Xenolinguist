@@ -1,10 +1,10 @@
 # Current limitations and evidence boundaries
 
-Applies to the `implementation/reliability` preview through W16. The public v1.0.0 installer predates W01–W16. Source version, application package version and a released artifact are different identities; no new public installer is implied by this documentation.
+Applies to the `implementation/reliability` preview through W17. The public v1.0.0 installer predates W01–W17. Source version, application package version and a released artifact are different identities; no new public installer is implied by this documentation.
 
 ## Interpretation and AI
 
-- Exact dictionary lookup is not compositional translation. Grammar notes are not applied automatically. Unicode normalization, explicit senses and source spans are implemented. Competing lexical analyses remain unresolved; morphology, executable grammar and general script-specific word segmentation are unfinished. See the [lexicon contract](unicode-lexicon.md).
+- Exact dictionary lookup remains separate from symbolic translation. Typed rules now support bounded noun plural/verb tense affixes, negation, adjective placement and SVO/SOV/VSO clauses. Notebook prose does not execute. Competing analyses, unsupported syntax and search limits remain explicit; general morphology, learned rules and script-specific segmentation are unfinished. See [typed grammar](typed-grammar.md). See the [lexicon contract](unicode-lexicon.md).
 - Number-system candidates show heuristic support and ties. User belief is optional, manually supplied and not a probability. Content counts are not evaluated language coverage.
 - Local-model output is advisory and can be inconsistent. Creative practice is graded against a model-generated key, not independently verified truth. The Eridian corpus is fictional teaching material, not a benchmark.
 - One synthetic model smoke comparison is not a quality ranking. There is no measured universal decipherment capability or click-consonant recognition claim. The deterministic compiler and frozen symbolic/model/hybrid experiments are implemented under an explicit bounded grammar prior; see [measured results](evaluation-results.md).
@@ -30,4 +30,4 @@ Availability probes report files/service metadata, not guaranteed inference. Que
 
 [Testing](testing.md) links unit, browser, real-model and Windows evidence. The W16 local baseline has 271 passing unit tests and seven tooling tests, three gated native unit skips, all 31 workbench checks passing and eight public-site checks. Required installed native assertions run separately from the gated unit tests. Real generation and native phone cancellation are followed by successful subsequent requests. Save queues, audio drafts, sandbox sessions and AI proposals recover in the tested restart scenarios. These are engineering acceptance checks; they are not broad scientific accuracy results or exhaustive power-loss testing. Four reviewed native-chain audit package entries remain; see [dependency dispositions](dependency-review.md).
 
-Next packages add executable typed grammar and broader inference. See [implementation progress](implementation-progress.md).
+Next packages add rule induction from grounded observations and broader inference. See [implementation progress](implementation-progress.md).

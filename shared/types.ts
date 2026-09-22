@@ -1,5 +1,7 @@
 import type { lexicalPolicySchema, lexicalSenseSchema } from './schemas/lexicon.js';
 import type { z } from 'zod';
+import type { executableRuleSchema } from './schemas/grammar.js';
+export type ExecutableRule = z.infer<typeof executableRuleSchema>;
 import type { dictionaryEntrySchema, grammarRuleSchema, numberSystemSchema, audioClipSchema, audioSegmentSchema, sampleSchema, profileSchema } from './schemas/profile';
 
 export type DictionaryEntry = z.infer<typeof dictionaryEntrySchema>;

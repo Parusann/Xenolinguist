@@ -39,7 +39,7 @@ export function VocabularyBuilder() {
   const [draft, setDraft] = useState<Partial<DictionaryEntry>>({})
 
   // Add form state
-  const [newLexical, setNewLexical] = useState<Pick<DictionaryEntry, 'senses' | 'form_aliases'>>({})
+  const [newLexical, setNewLexical] = useState<Pick<DictionaryEntry, 'senses' | 'form_aliases' | 'verb_frame' | 'english_plural'>>({})
   const [editId, setEditId] = useState<string | null>(null)
   const [newWord, setNewWord] = useState('')
   const [newMeaning, setNewMeaning] = useState('')
@@ -92,6 +92,8 @@ export function VocabularyBuilder() {
     if (!sel) return
     setEditId(sel.id)
     setDraft({
+      verb_frame: sel.verb_frame,
+      english_plural: sel.english_plural,
       form_aliases: sel.form_aliases,
       senses: sel.senses,
       english_meaning: sel.english_meaning,

@@ -66,6 +66,32 @@ function rewriteManifest(members: Map<string, Buffer>) {
 }
 
 describe('portable project archives', () => {
+  it('retains executable grammar and lexical frames through mutation and archive ID remapping', async () => {
+    const store = new ProfileStore(), profile = await fixture();
+    const executable = { kind: 'plural-affix', position: 'suffix', affix: '-en' };
+    const updated = await store.mutate(profile.id, { expectedRevision: profile.revision, mutationId: 'typed-grammar', operations: [
+      { type: 'put-rule', value: { ...profile.grammar_rules[0], executable } },
+      { type: 'put-word', value: { ...profile.dictionary[0], english_plural: 'skies' } },
+    ] });
+    const exported = await new ProjectArchives().export(profile.id, updated!.profile.revision, true);
+    const bytes = await fs.readFile(exported.file); await exported.dispose();
+    process.env.DATA_DIR = path.join(root, 'grammar-destination');
+    const archives = new ProjectArchives(), preview = await archives.inspect(Readable.from([bytes]));
+    const { profile: restored } = await archives.restore(preview.token, { mode: 'new' });
+    expect(restored.grammar_rules[0].executable).toEqual(executable);
+    expect(restored.grammar_rules[0].id).not.toBe(profile.grammar_rules[0].id);
+    expect(restored.dictionary[0].english_plural).toBe('skies');
+    const { derive } = await import('../../../engine/src/translation/derive.js');
+    const result = derive('tal-en', restored);
+    expect(result.status).toBe('resolved');
+    expect(result.candidates[0].ruleIds).toEqual([restored.grammar_rules[0].id]);
+    expect(result.candidates[0].tree).toMatchObject({ kind: 'nominal', nominal: { englishPlural: 'skies' } });
+    const invalid = await request(createApp(testSession)).post(`/api/profiles/${restored.id}/mutations`).send({ expectedRevision: restored.revision, mutationId: 'invalid-grammar',
+      operations: [{ type: 'put-rule', value: { ...restored.grammar_rules[0], executable: { ...executable, affix: '' } } }] });
+    expect(invalid.status).toBe(400);
+    expect((await new ProfileStore().get(restored.id))!.grammar_rules).toEqual(restored.grammar_rules);
+  });
+
   it('persists lexical policy and explicit senses through mutation, reload and archive remapping', async () => {
     const store = new ProfileStore(), profile = await fixture();
     const policy = { caseSensitive: true, apostrophes: 'boundary', hyphens: 'internal', segmentation: 'dictionary' };

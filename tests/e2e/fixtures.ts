@@ -82,6 +82,9 @@ export async function preparePage(page: Page) {
 export async function openProfile(page: Page, url: string, name: string) {
   await page.goto(`${url}/app`);
   await page.getByRole('button').filter({ has: page.getByText(name, { exact: true }) }).click();
+  // The selector also has a file input for archive import. Wait for the
+  // asynchronous profile transition before a caller can select that input.
+  await expect(page.getByRole('banner')).toContainText(name);
 }
 
 export async function attachJson(name: string, value: unknown) {

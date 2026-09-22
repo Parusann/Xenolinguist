@@ -3,7 +3,7 @@ import type { LanguageProfile } from './types';
 /** Fictional teaching corpus shared by the app and website. Ratings are illustrative
  * user beliefs; these hand-authored examples are not an evaluated language compiler.
  * Existing saved profiles are not overwritten when this seed changes. */
-export const DEMO_VERSION = 'eridian-demo-2';
+export const DEMO_VERSION = 'eridian-demo-3';
 const T = '2026-06-07T00:00:00.000Z';
 
 export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated_at'> = {
@@ -12,7 +12,7 @@ export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated
   recent_mutations: [],
   name: 'Eridian',
   description:
-    `Fictional teaching corpus ${DEMO_VERSION}. Base-8 numbers and illustrative grammar notes. Vocabulary ratings represent example user beliefs, not measured accuracy.`,
+    `Fictional teaching corpus ${DEMO_VERSION}. Base-8 numbers and manually supplied typed grammar examples; these rules were not discovered. Vocabulary ratings represent example user beliefs, not measured accuracy.`,
   phonetic_notes:
     'Five vowels (a e i o u) and consonants k t n s r v l m + digraphs sh, th. Syllables are (C)V(C); stress falls on the first syllable. A glottal stop marks word boundaries in connected speech.',
   is_sandbox: false,
@@ -33,21 +33,21 @@ export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated
     operators: {},
   },
   dictionary: [
-    { id: 'word-1', alien_word: 'nesh', english_meaning: 'star / light', part_of_speech: 'noun', confidence: 88, context: 'Recurs in night-sky samples', examples: ['ka nesh lor'], notes: 'Often paired with tor (sky).', created_at: T },
+    { id: 'word-1', senses: [{ meaning: 'star', aliases: [] }], alien_word: 'nesh', english_meaning: 'star / light', part_of_speech: 'noun', confidence: 88, context: 'Recurs in night-sky samples', examples: ['ka nesh lor'], notes: 'Often paired with tor (sky).', created_at: T },
     { id: 'word-2', alien_word: 'tor', english_meaning: 'sky', part_of_speech: 'noun', confidence: 80, context: 'Weather / sky descriptions', examples: ['vel tor krash'], notes: '', created_at: T },
     { id: 'word-3', alien_word: 'vel', english_meaning: 'water', part_of_speech: 'noun', confidence: 85, context: 'Rain and rivers', examples: ['vel tor krash'], notes: '', created_at: T },
     { id: 'word-4', alien_word: 'kor', english_meaning: 'stone', part_of_speech: 'noun', confidence: 78, context: 'Inscriptions on rock', examples: [], notes: '', created_at: T },
-    { id: 'word-5', alien_word: 'ral', english_meaning: 'person / being', part_of_speech: 'noun', confidence: 72, context: 'Subject of many utterances', examples: ['ral mok'], notes: 'Plural ral-en attested.', created_at: T },
-    { id: 'word-6', alien_word: 'dru', english_meaning: 'dwelling / home', part_of_speech: 'noun', confidence: 55, context: 'Settlement signals', examples: ['dru nim'], notes: 'Meaning probable, not confirmed.', created_at: T },
+    { id: 'word-5', senses: [{ meaning: 'person', aliases: [] }], alien_word: 'ral', english_meaning: 'person / being', part_of_speech: 'noun', confidence: 72, context: 'Subject of many utterances', examples: ['ral mok'], notes: 'Plural ral-en attested.', created_at: T },
+    { id: 'word-6', senses: [{ meaning: 'dwelling', aliases: [] }], alien_word: 'dru', english_meaning: 'dwelling / home', part_of_speech: 'noun', confidence: 55, context: 'Settlement signals', examples: ['dru nim'], notes: 'Meaning probable, not confirmed.', created_at: T },
     { id: 'word-7', alien_word: 'nakto', english_meaning: 'night / darkness', part_of_speech: 'noun', confidence: 60, context: 'Time-of-day markers', examples: [], notes: '', created_at: T },
     { id: 'word-8', alien_word: 'vaela', english_meaning: 'day / sun-cycle', part_of_speech: 'noun', confidence: 58, context: 'Time-of-day markers', examples: [], notes: 'Possibly contrasts with nakto.', created_at: T },
-    { id: 'word-9', alien_word: 'mok', english_meaning: 'to speak', part_of_speech: 'verb', confidence: 70, context: 'Communication verbs', examples: ['ral mok', 'ka ix mok'], notes: '', created_at: T },
-    { id: 'word-10', alien_word: 'lor', english_meaning: 'to see', part_of_speech: 'verb', confidence: 65, context: 'Perception verbs', examples: ['ka nesh lor'], notes: '', created_at: T },
-    { id: 'word-11', alien_word: 'krash', english_meaning: 'to fall / descend', part_of_speech: 'verb', confidence: 75, context: 'Motion verbs', examples: ['vel tor krash'], notes: '', created_at: T },
+    { id: 'word-9', verb_frame: 'intransitive', alien_word: 'mok', english_meaning: 'to speak', part_of_speech: 'verb', confidence: 70, context: 'Communication verbs', examples: ['ral mok', 'ka ix mok'], notes: '', created_at: T },
+    { id: 'word-10', verb_frame: 'transitive', alien_word: 'lor', english_meaning: 'to see', part_of_speech: 'verb', confidence: 65, context: 'Perception verbs', examples: ['ka nesh lor'], notes: '', created_at: T },
+    { id: 'word-11', verb_frame: 'intransitive', alien_word: 'krash', english_meaning: 'to fall / descend', part_of_speech: 'verb', confidence: 75, context: 'Motion verbs', examples: ['vel tor krash'], notes: '', created_at: T },
     { id: 'word-12', alien_word: 'thume', english_meaning: 'to give', part_of_speech: 'verb', confidence: 48, context: 'Exchange contexts', examples: [], notes: 'Low confidence — few examples.', created_at: T },
-    { id: 'word-13', alien_word: 'shu', english_meaning: 'great / large', part_of_speech: 'adjective', confidence: 62, context: 'Follows the noun it modifies', examples: ['nesh shu'], notes: '', created_at: T },
+    { id: 'word-13', senses: [{ meaning: 'large', aliases: [] }], alien_word: 'shu', english_meaning: 'great / large', part_of_speech: 'adjective', confidence: 62, context: 'Follows the noun it modifies', examples: ['nesh shu'], notes: '', created_at: T },
     { id: 'word-14', alien_word: 'nim', english_meaning: 'small', part_of_speech: 'adjective', confidence: 52, context: 'Follows the noun it modifies', examples: ['dru nim'], notes: '', created_at: T },
-    { id: 'word-15', alien_word: 'ka', english_meaning: 'I / me', part_of_speech: 'pronoun', confidence: 82, context: 'First-person subject', examples: ['ka nesh lor', 'ka ven zo'], notes: '', created_at: T },
+    { id: 'word-15', senses: [{ meaning: 'I', aliases: [] }], alien_word: 'ka', english_meaning: 'I / me', part_of_speech: 'pronoun', confidence: 82, context: 'First-person subject', examples: ['ka nesh lor', 'ka ven zo'], notes: '', created_at: T },
     { id: 'word-16', alien_word: 'zo', english_meaning: 'you', part_of_speech: 'pronoun', confidence: 76, context: 'Second-person', examples: ['ka ven zo'], notes: '', created_at: T },
     { id: 'word-17', alien_word: 'ven', english_meaning: 'and / with', part_of_speech: 'connector', confidence: 84, context: 'Joins two nouns', examples: ['ka ven zo'], notes: '', created_at: T },
     { id: 'word-18', alien_word: 'ix', english_meaning: 'not (negation)', part_of_speech: 'particle', confidence: 80, context: 'Precedes the verb', examples: ['ka ix mok'], notes: '', created_at: T },
@@ -57,10 +57,11 @@ export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated
     { id: 'word-20', alien_word: 'ren', english_meaning: 'two', part_of_speech: 'number', confidence: 92, context: 'Counting sequence', examples: ['sa ren ku vol'], notes: 'Base-8 digit.', created_at: T },
   ],
   grammar_rules: [
-    { id: 'rule-1', rule: 'Word order is Subject-Object-Verb (SOV).', evidence: ['ka nesh lor = I see the star', 'vel tor krash = water falls from the sky'], confidence: 78, created_at: T },
-    { id: 'rule-2', rule: 'Plurals are formed with the suffix -en.', evidence: ['nesh-en = stars', 'ral-en = people'], confidence: 65, created_at: T },
-    { id: 'rule-3', rule: "Negation uses the particle 'ix' immediately before the verb.", evidence: ['ka ix mok = I do not speak'], confidence: 70, created_at: T },
-    { id: 'rule-4', rule: 'Adjectives follow the noun they modify.', evidence: ['nesh shu = great star', 'dru nim = small dwelling'], confidence: 60, created_at: T },
+    { id: 'rule-6', rule: 'Manually supplied intransitive pattern: subject before verb.', executable: { kind: 'clause-order', order: 'SOV', arguments: 1 }, evidence: ['ka ix mok = I do not speak'], confidence: null, created_at: T },
+    { id: 'rule-1', executable: { kind: 'clause-order', order: 'SOV', arguments: 2 }, rule: 'Word order is Subject-Object-Verb (SOV).', evidence: ['ka nesh lor = I see the star', 'vel tor krash = water falls from the sky'], confidence: 78, created_at: T },
+    { id: 'rule-2', executable: { kind: 'plural-affix', position: 'suffix', affix: '-en' }, rule: 'Plurals are formed with the suffix -en.', evidence: ['nesh-en = stars', 'ral-en = people'], confidence: 65, created_at: T },
+    { id: 'rule-3', executable: { kind: 'negation', position: 'before', marker: 'ix' }, rule: "Negation uses the particle 'ix' immediately before the verb.", evidence: ['ka ix mok = I do not speak'], confidence: 70, created_at: T },
+    { id: 'rule-4', executable: { kind: 'adjective-order', position: 'after' }, rule: 'Adjectives follow the noun they modify.', evidence: ['nesh shu = great star', 'dru nim = small dwelling'], confidence: 60, created_at: T },
     { id: 'rule-5', rule: "The connector 'ven' joins two nouns (and / with).", evidence: ['ka ven zo = you and I'], confidence: 82, created_at: T },
   ],
   samples: [

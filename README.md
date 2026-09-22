@@ -21,8 +21,8 @@ The old installer predates the repaired phone runtime, revision-checked saves, r
 | Samples | Retains text drafts, original audio, prepared analysis copies and saved clip/word links | Recordings are observations; transcriptions can be wrong |
 | Numbers | Stores integer mappings and ranks candidate bases with explicit support and ties | Exploratory fit is not proof of a number system |
 | Vocabulary | Stores display glosses, explicit senses, accepted aliases, examples and optional user belief | User belief is not calibrated confidence |
-| Grammar | Stores grammar notes and examples; can request model advice | Rules are not automatically validated or applied by the lookup engine |
-| Translation | Unicode-aware dictionary lookup with source spans, competing senses and unresolved forms | No compositional translation or general script-specific word segmentation |
+| Grammar | Stores notebook prose or typed affix, negation, adjective and clause rules with previews | Executable rules are manual assertions, not discovered facts |
+| Translation | Separate lexical glosses, bounded symbolic meaning trees with derivations, and optional model output | Symbolic mode supports one typed clause or noun phrase; general syntax and script-specific segmentation remain unsupported |
 | Dashboard | Shows content counts and server-recorded metric history | Counts are not decoding accuracy or evaluated coverage |
 
 Creative practice generates a language with a selected local model, validates its structure, saves the session and grades against the generated answer key. The key can be linguistically inconsistent. Practice scores are separate from scientific evaluation, and assistance is accounted for separately.
@@ -37,6 +37,7 @@ The Eridian seed is a versioned fictional teaching corpus. The app, public dicti
 
 ## Engineering behind the interface
 
+- **Typed grammar:** bounded morphology and span-chart parsing, explicit argument frames, traceable semantic roles and reverse generation. Every derivation cites rules and original spans; incomplete searches remain unresolved. See [typed grammar](docs/typed-grammar.md).
 - **Lexical processing:** NFC comparison, original Unicode source spans, profile-controlled case/boundaries, cached lookup tries and explicit sense/alias contracts. Ambiguous lexical matches remain visible. See [Unicode lexicon](docs/unicode-lexicon.md).
 - **Persistence:** shared Zod schemas, guarded legacy migration, revision conflicts, serialized typed mutations, idempotency receipts, atomic replacement and recovery snapshots. A durable client queue retains pending work through restart.
 - **Audio:** immutable staged originals with SHA256 identities, a worker-prepared analysis copy, explicit inference/retry and atomic sample/clip saves. Windows packaging checks manifested native assets and isolated runtime dependencies.
@@ -103,7 +104,7 @@ The Field Log exports portable **.xeno project archives**, including saved data,
 
 Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard JSON import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
 
-The deterministic compiler, reproducible evaluation harness and Unicode lexicon provide a foundation for executable grammar and a broader linguistic inference engine. Those subsequent extensions remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
+The deterministic compiler, reproducible evaluation harness and Unicode lexicon now support a bounded typed-grammar interpreter and provide a foundation for learned morphology and broader linguistic inference. Those subsequent extensions remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
 
 ## License
 

@@ -311,8 +311,28 @@ try {
   await expect(reopened.getByTestId('reverse-translation')).toHaveText('水');
   record.checks.unicodeLexicon = { passed: true, scripts: ['Han', 'Tamil', 'Latin decomposed accent'],
     casePolicy: true, competingHomographs: true, explicitReverseAlias: true };
+  const grammarRule = (id, executable) => ({ id, executable, rule: 'Manually supplied acceptance rule', evidence: [], confidence: null, created_at: '2026-09-21T00:00:00.000Z' });
+  const grammarResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native typed grammar', dictionary: [lexicalWord('speaker', 'ka', 'I', { part_of_speech: 'pronoun' }),
+      lexicalWord('star', 'nesh', 'star'), lexicalWord('see', 'lor', 'to see', { part_of_speech: 'verb', verb_frame: 'transitive' })],
+    grammar_rules: [grammarRule('sov', { kind: 'clause-order', order: 'SOV', arguments: 2 }), grammarRule('plural', { kind: 'plural-affix', position: 'suffix', affix: '-en' }),
+      grammarRule('past', { kind: 'tense-affix', position: 'prefix', affix: 'pa-', tense: 'past' }), grammarRule('not', { kind: 'negation', marker: 'ix', position: 'before' })],
+  } });
+  expect(grammarResponse.status()).toBe(201);
+  const grammarProfile = await grammarResponse.json();
+  await reopened.getByTitle('Back to profiles', { exact: true }).click();
+  await reopened.getByRole('button').filter({ has: reopened.getByText(grammarProfile.name, { exact: true }) }).click();
+  await reopened.locator('[data-tour="translation"]').click();
+  await reopened.getByPlaceholder('Enter unknown language text to translate…').fill('ka nesh-en ix pa-lor');
+  const symbolic = reopened.getByRole('region', { name: 'Symbolic translation', exact: true });
+  await symbolic.getByRole('button', { name: 'Analyze symbolically' }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('I did not see the stars');
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('plural-affix: “-en” [7, 10)');
+  await symbolic.getByText('Reverse generation from this meaning · resolved', { exact: true }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('ka nesh-en ix pa-lor');
+  record.checks.typedGrammar = { passed: true, novelPlural: true, sovRoles: true, negation: true, pastAffix: true, sourceSpans: true, reverseGeneration: true };
   const archiveChecks = [];
-  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile]) {
+  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile]) {
     const restored = await reopened.evaluate(async source => {
       const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
       if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
@@ -343,6 +363,11 @@ try {
       expect(restored.profile.lexical_policy).toEqual(lexicalProfile.lexical_policy);
       expect(restored.profile.dictionary.map(({ id: _id, ...entry }) => entry)).toEqual(lexicalProfile.dictionary.map(({ id: _id, ...entry }) => entry));
       record.checks.unicodeLexicon.archiveRestored = true;
+    }
+    if (sourceProfile.id === grammarProfile.id) {
+      expect(restored.profile.grammar_rules.map(({ id: _id, ...rule }) => rule)).toEqual(grammarProfile.grammar_rules.map(({ id: _id, ...rule }) => rule));
+      expect(restored.profile.dictionary.map(({ id: _id, ...entry }) => entry)).toEqual(grammarProfile.dictionary.map(({ id: _id, ...entry }) => entry));
+      record.checks.typedGrammar.archiveRestored = true;
     }
     let restoredAudioHash;
     if (sourceProfile.audio_clips.length) {
@@ -382,6 +407,7 @@ try {
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed
+    && record.checks.typedGrammar?.passed && record.checks.typedGrammar?.archiveRestored
     && record.checks.unicodeLexicon?.passed && record.checks.unicodeLexicon?.archiveRestored
     && record.checks.compilerPractice?.passed && record.checks.compilerPractice?.archiveRestored
     && record.checks.nativeJobCancellation?.nativeProcessStarted && record.checks.localBoundary?.relaunchAuthenticated && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;

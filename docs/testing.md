@@ -31,7 +31,7 @@ node scripts/verify-stt.mjs
 
 `test:e2e` rebuilds the client, server, and Electron bundles first. `test:e2e:run` reuses those bundles for test-authoring iterations. Do not use stale bundles to certify a source change. Reports, screenshots, traces, and native runtime/model hashes are written beneath the ignored `test-results/` directory. Browser and native scripts preserve their synthetic temporary data for diagnosis; they do not accept the normal user profile directory.
 
-The browser suite has twenty-seven working acceptance checks and one remaining expected failure: Unicode translation. The substring-grading and sandbox navigation defects now have passing assertions. Audio coverage includes original-file preservation, interrupted preparation, upload/profile failures, reload/retry, playback/download, linked segments, delete/undo, real WebM/Opus decoding and synthetic microphone capture. Expected failures execute setup before declaring the known failing assertion. Playwright counts expected failures as passed when reproduced; do not report them as working product flows.
+At W17 the browser suite has 33 working acceptance checks and no expected failures; Unicode translation was repaired in W16. The substring-grading and sandbox navigation defects now have passing assertions. Audio coverage includes original-file preservation, interrupted preparation, upload/profile failures, reload/retry, playback/download, linked segments, delete/undo, real WebM/Opus decoding and synthetic microphone capture. Expected failures execute setup before declaring the known failing assertion. Playwright counts expected failures as passed when reproduced; do not report them as working product flows.
 
 W06 verification ran the full earlier 14-case suite (11 working checks and 3 expected failures), then all six affected audio checks against the final build after adding interrupted-preparation coverage. That checkpoint had 129 passing unit tests and three gated native unit checks skipped. W07 has 153 passing unit tests and the same three skips; the full 18-case browser suite passed (17 working checks and one expected failure), followed by all five affected sandbox checks after the final integer-grading correction.
 
@@ -111,3 +111,12 @@ The current local gate passes 271 unit tests and seven tooling tests, with three
 
 
 Final revision `6081538` passes these gates on both Windows and Linux in [source CI](https://github.com/Parusann/Xenolinguist/actions/runs/35601801641). Both downloaded 12-record evaluation subsets also replay locally. [Independent installed Windows acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/35601801579) passes all required checks, including the new lexical checks and four project archive round trips. [W16 evidence](verification/w16-unicode-lexicon.json) retains the results and exact application/source identities.
+
+
+## W17 typed grammar
+
+Local validation passes 298 unit tests (268 server/shared/engine/evaluation and 30 client), seven tooling tests, lint, type checks and the desktop build. Three gated native unit checks remain skipped. All 33 workbench checks and eight public checks pass. The 26 grammar cases cover novel morphology, semantic roles, conflicts, original source spans, explicit limits and generation; archive integration checks execution after ID remapping. The deterministic evaluation subset replays 12 records and the Unicode comparison retains 14/14 repaired versus 5/14 frozen outcomes.
+
+Initial browser runs exposed an intermittent fixture navigation race: `openProfile` returned after clicking while the selector's archive file input was still present. File selection could target that disappearing input instead of the Samples input. Supplying a byte buffer did not solve it. The helper now waits for the selected profile's workbench header; eight diagnostic repetitions and the subsequent full 33-case run pass without retries. Production audio behavior was unchanged.
+
+The installed harness now requires a plural, past-tense, negated SOV clause, original affix spans, reverse generation and a fifth project archive round trip preserving typed rules/verb frames. Independent CI completion is recorded in [implementation progress](implementation-progress.md). See [typed grammar](typed-grammar.md) for the supported language family and explicit failure states.

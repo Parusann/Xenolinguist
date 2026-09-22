@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { lexicalPolicySchema, lexicalSenseSchema } from './lexicon.js';
+import { executableRuleSchema } from './grammar.js';
 import { entityIdSchema as id, timestampSchema as timestamp, confidenceSchema, noteSchema as text } from './common.js';
 import { ProfileError, validationError } from './errors.js';
 import { audioAssetsSchema } from './audio.js';
@@ -9,13 +10,15 @@ import { aiHistorySchema } from './ai-history.js';
 
 const manualConfidence = { confidence: confidenceSchema.nullable().default(null), user_asserted_confidence: confidenceSchema.nullable().optional() };
 export const dictionaryEntrySchema = z.strictObject({
+  verb_frame: z.enum(['intransitive', 'transitive']).nullable().optional(),
+  english_plural: z.string().trim().min(1).max(128).nullable().optional(),
   form_aliases: z.array(z.string().trim().min(1).max(512)).max(64).optional(),
   senses: z.array(lexicalSenseSchema).max(64).optional(),
   id, alien_word: text, english_meaning: text,
   part_of_speech: z.enum(['noun', 'verb', 'adjective', 'pronoun', 'number', 'connector', 'particle', 'unknown']),
   ...manualConfidence, context: text, examples: z.array(text), notes: text, created_at: timestamp,
 });
-export const grammarRuleSchema = z.strictObject({ id, rule: text, evidence: z.array(text), ...manualConfidence, created_at: timestamp });
+export const grammarRuleSchema = z.strictObject({ id, rule: text, executable: executableRuleSchema.nullable().optional(), evidence: z.array(text), ...manualConfidence, created_at: timestamp });
 export const numberSystemSchema = z.strictObject({
   base: z.number().int().min(2).max(36).nullable(),
   mappings: z.record(z.string().regex(/^(0|[1-9]\d*)$/), text), operators: z.record(text, text),

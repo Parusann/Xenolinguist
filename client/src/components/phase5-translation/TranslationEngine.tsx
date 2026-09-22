@@ -1,3 +1,4 @@
+import { SymbolicTranslation } from './SymbolicTranslation'
 import { EvidenceStatus } from '@/components/common/EvidenceStatus'
 import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
@@ -119,7 +120,7 @@ export function TranslationEngine() {
             <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>Translation <em>Engine</em></h1>
             <span className="kicker">PHASE 05</span>
           </div>
-          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Dictionary substitution using asserted meanings. Colors show user belief only. Run AI Full Translation separately for model output.</p>
+          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Lexical glosses preserve source order. Symbolic translation uses typed rules; AI Full Translation runs separately. Colors show user belief only.</p>
         </div>
         <div className="flex" style={{ gap: 12, alignItems: 'center' }}>
           {Legend}
@@ -154,7 +155,7 @@ export function TranslationEngine() {
           {/* TRANSLATION */}
           <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
-              <span className="label" style={{ marginBottom: 0 }}>Translation · English</span>
+              <span className="label" style={{ marginBottom: 0 }}>Lexical gloss · English</span>
               <span className="dim">{mappedCount}/{realTokens.length} regions have candidate meanings</span>
             </div>
             <div data-testid="lexical-translation" className="expr-color" style={{ whiteSpace: 'pre-wrap', flex: 1, overflow: 'auto', fontSize: 22, lineHeight: 1.9, letterSpacing: '-0.005em' }}>
@@ -272,6 +273,10 @@ export function TranslationEngine() {
           </div>
         </div>
       )}
+
+      {!reverseMode && profile && <div style={{ maxHeight: 290, overflow: 'auto', flexShrink: 0 }}>
+        <SymbolicTranslation profile={profile} source={alienInput} />
+      </div>}
 
       {/* AI full-translation result */}
       {(loading || aiTranslation) && !reverseMode && (

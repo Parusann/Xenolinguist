@@ -46,7 +46,7 @@ Optional `form_aliases`, `senses` and `lexical_policy` fields extend profile ver
 
 Unit checks cover NFC/decomposed offsets, Han, Tamil, Cyrillic, IPA, astral letters, Hangul, numbers, unknown scripts, punctuation, case policy, phrase aliases, homographs, competing segmentation and cache invalidation. Integration checks cover typed mutations, disk reload, archive remapping and malformed-sense rejection. Browser checks exercise the actual panels, Unicode word creation, sense/alias editing, persisted case policy and reverse phrases. The independent installed-app harness additionally checks Unicode lookup, competing homographs, an explicit reverse alias and archive restoration.
 
-Final revision `6081538` passes Windows/Linux source CI and independent Windows installer acceptance. [Retained verification](verification/w16-unicode-lexicon.json) includes both platforms’ lexical results, replay records and the installed application hash. See [implementation progress](implementation-progress.md) for the completed verification boundary. W17 will introduce executable typed grammar; it is not part of this change.
+Final revision `6081538` passes Windows/Linux source CI and independent Windows installer acceptance. [Retained verification](verification/w16-unicode-lexicon.json) includes both platforms’ lexical results, replay records and the installed application hash. See [implementation progress](implementation-progress.md) for the completed verification boundary. W17 adds a separate [typed-grammar interpreter](typed-grammar.md); the lexical substitution contract described here remains independent.
 
 
 ![Competing lexical senses in the translation inspector](verification/w16-competing-senses.png)
