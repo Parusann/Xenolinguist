@@ -62,4 +62,9 @@ Optional `executable`, `verb_frame` and `english_plural` fields extend profile v
 
 The grammar tests exercise unseen plural stems, both tense affix directions, negation placement, adjective order, SVO/SOV/VSO roles, subject/object reversal, lexical/morphological ambiguity, source spans, unsupported syntax, English overrides, search limits and reverse-generation round trips. Archive integration checks restored execution against remapped IDs and rejects malformed rules without modifying stored state. Browser tests exercise editor validation, unsaved preview, save/reload, notebook conversion, derived meaning and zero model calls. The independent installer harness requires a plural/past/negated SOV derivation and reverse generation, plus preservation of typed grammar and dictionary frames through archives.
 
-These are bounded interpreter acceptance tests, not a held-out induction benchmark or a claim of natural-language coverage. W18 will address learning rules from grounded observations. See [implementation progress](implementation-progress.md) for the exact tested revision and completed CI evidence.
+These are bounded interpreter acceptance tests, not a held-out induction benchmark or a claim of natural-language coverage. W18 will address learning rules from grounded observations. See [implementation progress](implementation-progress.md) and [retained W17 evidence](verification/w17-typed-grammar.json) for the exact tested revision and completed CI results.
+
+
+![A manually configured Eridian clause with plural and SOV derivations](verification/w17-typed-derivation.png)
+
+The local browser acceptance screenshot shows `ka nesh-en shu lor`: lexical substitution leaves the unseen plural unresolved, while the configured symbolic grammar derives its meaning and cites original source spans. Model readiness is a test fixture; this flow makes no model calls.
