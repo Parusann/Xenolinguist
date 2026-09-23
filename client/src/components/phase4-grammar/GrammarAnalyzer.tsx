@@ -1,5 +1,6 @@
 import type { ExecutableRule, GrammarRule } from 'shared/types'
 import { executableRuleSchema } from 'shared/schemas/grammar'
+import { InductionPanel } from './InductionPanel'
 import { RuleEditor } from './RuleEditor'
 import { SymbolicTranslation } from '@/components/phase5-translation/SymbolicTranslation'
 import { useState } from 'react'
@@ -65,6 +66,7 @@ export function GrammarAnalyzer() {
           <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Typed rules can execute; prose remains a notebook entry. Rules and cited examples are user assertions, not discovered facts.</p>
         </div>
 
+        {profile && <InductionPanel profile={profile} />}
         <div className="glass-card" style={{ padding: 18 }}>
           <span className="label">Add Grammar Rule</span>
           <div style={{ marginTop: 12 }}>

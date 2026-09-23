@@ -331,8 +331,41 @@ try {
   await symbolic.getByText('Reverse generation from this meaning · resolved', { exact: true }).click();
   await expect(symbolic.getByTestId('symbolic-result')).toContainText('ka nesh-en ix pa-lor');
   record.checks.typedGrammar = { passed: true, novelPlural: true, sovRoles: true, negation: true, pastAffix: true, sourceSpans: true, reverseGeneration: true };
+  const inductionAt = '2026-09-22T00:00:00.000Z';
+  const inductionSources = ['nesh', 'nesh-en', 'kor', 'kor-en', 'tal-en'];
+  const inductionResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native grounded induction', dictionary: [lexicalWord('ind-star','nesh','star'),lexicalWord('ind-stone','kor','stone'),lexicalWord('ind-bird','tal','bird')],
+    samples: inductionSources.map((surface,i)=>({id:'ind-sample-'+i,alien_text:surface,english_translation:null,source:'Grounded acceptance fixture',phonetic_notes:'',decoded:false,audio_id:null,ipa:null,created_at:inductionAt})),
+  } });
+  expect(inductionResponse.status()).toBe(201);
+  const inductionInitial = await inductionResponse.json();
+  await reopened.getByTitle('Back to profiles', { exact:true }).click();
+  await reopened.getByRole('button').filter({has:reopened.getByText(inductionInitial.name,{exact:true})}).click();
+  await reopened.locator('[data-tour="grammar"]').click();
+  const learning = reopened.getByRole('region',{name:'Grounded rule learning'});
+  await learning.getByText('Assign a known meaning',{exact:true}).click();
+  for(let i=0;i<5;i++) {
+    await learning.getByLabel('Grounded sample',{exact:true}).selectOption('ind-sample-'+i);
+    await learning.getByLabel('Observation use',{exact:true}).selectOption(i===4?'validation':'fit');
+    await learning.getByLabel('Subject or noun',{exact:true}).selectOption(i===4?'ind-bird':i<2?'ind-star':'ind-stone');
+    await learning.getByLabel('Grounded plural',{exact:true}).setChecked(i===1||i===3||i===4);
+    await learning.getByRole('button',{name:'Add grounded observation',exact:true}).click();
+  }
+  await learning.getByRole('button',{name:'Infer grounded rules',exact:true}).click();
+  await expect(learning.getByTestId('induction-result')).toContainText('Validation: 1/1 correct; no-rule baseline 0/1.');
+  expect((await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${inductionInitial.id}`)).json()).grammar_rules).toHaveLength(0);
+  await learning.getByRole('button',{name:'Accept proposed rules',exact:true}).click();
+  await expect.poll(async()=> (await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${inductionInitial.id}`)).json()).grammar_rules.length).toBe(1);
+  const inductionProfile = await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${inductionInitial.id}`)).json();
+  expect(inductionProfile.grammar_rules[0].executable).toEqual({kind:'plural-affix',position:'suffix',affix:'-en'});
+  expect(inductionProfile.grammar_rules[0].evidence.join(' ')).toContain('grounded-induction-1');
+  await reopened.locator('[data-tour="translation"]').click();
+  await reopened.getByPlaceholder('Enter unknown language text to translate…').fill('tal-en');
+  await symbolic.getByRole('button',{name:'Analyze symbolically'}).click();
+  await expect(symbolic).toContainText('the birds');
+  record.checks.groundedInduction = { passed:true, workerExecuted:true, independentValidation:true, explicitAcceptance:true, acceptedRuleExecuted:true };
   const archiveChecks = [];
-  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile]) {
+  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile, inductionProfile]) {
     const restored = await reopened.evaluate(async source => {
       const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
       if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
@@ -368,6 +401,10 @@ try {
       expect(restored.profile.grammar_rules.map(({ id: _id, ...rule }) => rule)).toEqual(grammarProfile.grammar_rules.map(({ id: _id, ...rule }) => rule));
       expect(restored.profile.dictionary.map(({ id: _id, ...entry }) => entry)).toEqual(grammarProfile.dictionary.map(({ id: _id, ...entry }) => entry));
       record.checks.typedGrammar.archiveRestored = true;
+    }
+    if(sourceProfile.id===inductionProfile.id) {
+      expect(restored.profile.grammar_rules.map(({id:_id,...rule})=>rule)).toEqual(inductionProfile.grammar_rules.map(({id:_id,...rule})=>rule));
+      record.checks.groundedInduction.archiveRestored=true;
     }
     let restoredAudioHash;
     if (sourceProfile.audio_clips.length) {
@@ -407,6 +444,7 @@ try {
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed
+    && record.checks.groundedInduction?.passed && record.checks.groundedInduction?.archiveRestored
     && record.checks.typedGrammar?.passed && record.checks.typedGrammar?.archiveRestored
     && record.checks.unicodeLexicon?.passed && record.checks.unicodeLexicon?.archiveRestored
     && record.checks.compilerPractice?.passed && record.checks.compilerPractice?.archiveRestored

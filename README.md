@@ -104,8 +104,11 @@ The Field Log exports portable **.xeno project archives**, including saved data,
 
 Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard JSON import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
 
-The deterministic compiler, reproducible evaluation harness and Unicode lexicon now support a bounded typed-grammar interpreter and provide a foundation for learned morphology and broader linguistic inference. Those subsequent extensions remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
+The deterministic compiler, reproducible evaluation harness, Unicode lexicon and typed interpreter now support grounded affix/order induction. Number grammar inference, first-class evidence relationships and validated model research proposals remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
 
 ## License
 
 Copyright (c) 2026 Parusan Natheeswaran. All Rights Reserved. The repository is publicly viewable, but the project is proprietary and the [LICENSE](LICENSE) grants no general reuse rights. Third-party dependencies and native assets retain their own [licenses and notices](vendor/THIRD_PARTY.md).
+
+
+The [grounded induction engine](docs/grounded-induction.md) learns bounded affix and word-order proposals from supplied lexical anchors and distinct grounded observations. Fit-only description-length search, independent validation, manual acceptance and retained ablations make its assumptions inspectable. It does not discover arbitrary languages or silently use model output as ground truth.

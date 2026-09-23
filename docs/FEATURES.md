@@ -21,7 +21,7 @@ A profile is a version-2 JSON document containing dictionary entries, number map
 
 Writes use typed operations and expected revisions, a per-profile serialized transaction, atomic file replacement and recovery snapshots. Stale writes return HTTP 409. The client preserves pending operations, retries through idempotency receipts and exposes unresolved conflicts. Text/audio drafts and the active phase recover across reload; native queue persistence survives the random origin changing at restart. This is tested recovery behavior, not exhaustive power-loss certification.
 
-The dashboard exports the current profile as JSON and dictionary rows as CSV. Import validates and replaces dictionary, grammar, samples, number mappings and clip metadata in the active profile. It does **not** restore all exported fields or copy recording bytes. Chat, sandbox state, metric history and profile identity are not restored by this import. A complete portable archive remains W13.
+The dashboard exports the current profile as JSON and dictionary rows as CSV. Import validates and replaces dictionary, grammar, samples, number mappings and clip metadata in the active profile. It does **not** restore all exported fields or copy recording bytes. Chat, sandbox state, metric history and profile identity are not restored by this import. Complete `.xeno` archives include saved project data and verified audio; see [project archives](project-archives.md).
 
 ## Navigation and phases
 
@@ -104,3 +104,6 @@ See [desktop release](desktop-release.md), [testing](testing.md) and [limitation
 See [Unicode lexicon](unicode-lexicon.md) for normalization, source offsets, profile settings and ambiguity limits.
 
 [Executable typed grammar](typed-grammar.md) describes rule editing, bounded parsing, meaning trees, generation and manual-demo provenance.
+
+
+[Grounded rule learning](grounded-induction.md) adds known-meaning sample annotation, fit-only description-length search, independent validation, reviewable proposals and explicit acceptance. It executes in a cancellable worker and retains alternative rules, support and rejection reasons. Accepted rules/evidence survive `.xeno` restoration; pending grounding annotations remain local drafts until the W20 evidence model.

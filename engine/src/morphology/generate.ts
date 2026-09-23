@@ -10,7 +10,7 @@ import type { GrammarProfile } from '../translation/derive.js';
 const ref = z.strictObject({ entryId: z.string().min(1).max(128), sense: z.number().int().nonnegative().max(63).nullable(), lemma: z.string().min(1).max(512) });
 const nominal = z.strictObject({ head: ref.extend({ pos: z.enum(['noun', 'pronoun']) }), plural: z.boolean(),
   adjectives: z.array(ref.extend({ pos: z.literal('adjective') })).max(LIMITS.adjectives), englishPlural: z.string().min(1).max(128).optional() });
-const meaningTreeSchema = z.discriminatedUnion('kind', [
+export const meaningTreeSchema = z.discriminatedUnion('kind', [
   z.strictObject({ kind: z.literal('nominal'), nominal }),
   z.strictObject({ kind: z.literal('clause'), subject: nominal, object: nominal.optional(), verb: ref.extend({ pos: z.literal('verb') }),
     tense: z.enum(['present', 'past', 'future']), negated: z.boolean() }),

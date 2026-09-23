@@ -123,3 +123,10 @@ The installed harness now requires a plural, past-tense, negated SOV clause, ori
 
 
 Final revision `646e902` passes [source CI on Windows and Linux](https://github.com/Parusann/Xenolinguist/actions/runs/35767898552), including all 33 workbench and eight public checks without retries. Both downloaded 12-record evaluation artifacts replay locally. [Independent installed acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/35767898650) passes every typed grammar gate and all five archives, native IPA/STT/TTS, restart recovery and missing-model rejection after verifying 3,772 payload files. [Retained W17 evidence](verification/w17-typed-grammar.json) records application/source identities and explicit limits.
+
+
+## W18 grounded induction
+
+Local source gates pass 314 unit tests (284 server/shared/engine/evaluation and 30 client), seven tooling tests, lint, type checks and the desktop build. Three native unit checks remain gated. The full 34-case workbench suite and eight public checks pass. The new browser flow grounds samples, reviews/dismisses a proposal without saving, explicitly accepts it, reloads, restores an archive and rejects stale acceptance. Thirteen engine induction tests cover withheld prediction, duplicate evidence, leakage, sparse support, malformed references, ambiguity, irregularity, coding costs and DP spans; three experiment tests check split separation, exact replay, overwrite refusal and tamper detection.
+
+The original 12-record evaluation subset replays with its frozen corpus hash unchanged; repaired Unicode still scores 14/14. W18 development experiments retain 60 condition/language records across 12 seeds, with full source snapshots and deterministic replay. Evaluation seeds are reserved for the frozen implementation and CI. The installed harness adds a worker-driven learned plural with distinct validation, explicit acceptance, subsequent symbolic execution and a sixth archive round trip. Final revision, exact evaluation results and independent CI are recorded in [implementation progress](implementation-progress.md). Four high native-chain audit entries remain.
