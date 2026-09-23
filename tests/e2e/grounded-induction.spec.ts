@@ -1,4 +1,6 @@
 import { derive } from '../../engine/src/translation/derive';
+import { readdir } from 'node:fs/promises';
+import path from 'node:path';
 import { test,expect,preparePage,openProfile } from './fixtures';
 import { groundedDataset } from '../../evaluation/src/induction/corpus';
 const at='2026-09-22T00:00:00.000Z';
@@ -30,6 +32,9 @@ test('W18 learns a new plural, reviews the proposal and preserves accepted evide
  await page.getByPlaceholder('Enter unknown language text to translate…').fill(observations[4].surface);
  const symbolic=page.getByRole('region',{name:'Symbolic translation',exact:true});await symbolic.getByRole('button',{name:'Analyze symbolically'}).click();await expect(symbolic).toContainText('the birds');
  const exported=await page.request.get(`${server.url}/api/archives/export/${profile.id}?revision=${saved.revision}&sandbox=false`);expect(exported.ok()).toBe(true);
+ // Download completion precedes staging cleanup; archive operations are exclusive.
+ // Assert cleanup completes before starting the separate inspection operation.
+ await expect.poll(()=>readdir(path.join(server.dataDir,'archive-staging'))).toEqual([]);
  const inspected=await page.request.post(`${server.url}/api/archives/inspect`,{data:await exported.body(),headers:{'Content-Type':'application/octet-stream'}});expect(inspected.ok()).toBe(true);
  const token=(await inspected.json()).token;const restored=await page.request.post(`${server.url}/api/archives/${token}/restore`,{data:{mode:'new'}});expect(restored.status()).toBe(201);const restoredProfile=(await restored.json()).profile;expect(restoredProfile.grammar_rules[0].evidence).toEqual(saved.grammar_rules[0].evidence);expect(restoredProfile.grammar_rules[0].executable).toEqual(saved.grammar_rules[0].executable);
  expect(derive(observations[4].surface,restoredProfile).status).toBe('resolved');
