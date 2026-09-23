@@ -1,0 +1,3366 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "recordedAt": "2026-09-23T19:37:01.496953+00:00",
+  "implementationRevision": "1cf6e9055a446557edb86f1adf81d1df328b6d03",
+  "verifiedRevision": "60619e1448d8b954aaa496abf482f886929d9046",
+  "verificationFollowupScope": "CI worker concurrency, browser fixture archive-cleanup sequencing and test documentation only; application and induction algorithms unchanged.",
+  "sourceChecks": {
+    "unitTests": 314,
+    "serverSharedEngineEvaluationTests": 284,
+    "clientTests": 30,
+    "inductionEngineTests": 13,
+    "inductionExperimentTests": 3,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed",
+    "browserTests": 34,
+    "expectedBrowserFailures": 0,
+    "publicTests": 8
+  },
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "60619e1448d8b954aaa496abf482f886929d9046",
+    "jobs": [
+      {
+        "completedAt": "2026-09-23T19:31:57Z",
+        "conclusion": "success",
+        "databaseId": 107345105247,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-09-23T19:27:07Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35909393880/job/107345105247"
+      },
+      {
+        "completedAt": "2026-09-23T19:36:06Z",
+        "conclusion": "success",
+        "databaseId": 107345105747,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-09-23T19:27:07Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35909393880/job/107345105747"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35909393880"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-09-23T19:28:55.801Z",
+        "duration": 165459.702,
+        "expected": 34,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-23T19:31:42.704Z",
+        "duration": 9032.212,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "lexicalRegression": {
+        "version": "unicode-lexical-1",
+        "scope": "Hand-authored lexical regression probes with supplied dictionaries; not language induction or held-out semantic accuracy.",
+        "denominator": 14,
+        "frozenPass": 5,
+        "repairedPass": 14,
+        "rows": [
+          {
+            "id": "ascii",
+            "expected": [
+              "water"
+            ],
+            "frozen": [
+              "water"
+            ],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "han",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "tamil",
+            "expected": [
+              "Tamil"
+            ],
+            "frozen": [],
+            "repaired": [
+              "Tamil"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "cyrillic",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "decomposed-accent",
+            "expected": [
+              "coffee"
+            ],
+            "frozen": [],
+            "repaired": [
+              "coffee"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "precomposed-accent",
+            "expected": [
+              "coffee"
+            ],
+            "frozen": [
+              "coffee"
+            ],
+            "repaired": [
+              "coffee"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "ipa-tie",
+            "expected": [
+              "tea"
+            ],
+            "frozen": [],
+            "repaired": [
+              "tea"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "smart-apostrophe",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "ascii-apostrophe",
+            "expected": [
+              "cannot"
+            ],
+            "frozen": [
+              "cannot"
+            ],
+            "repaired": [
+              "cannot"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "hyphen",
+            "expected": [
+              "purple"
+            ],
+            "frozen": [
+              "purple"
+            ],
+            "repaired": [
+              "purple"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "astral-letter",
+            "expected": [
+              "astral letter"
+            ],
+            "frozen": [],
+            "repaired": [
+              "astral letter"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "homographs",
+            "expected": [
+              "water",
+              "sky"
+            ],
+            "frozen": [
+              "water"
+            ],
+            "repaired": [
+              "water",
+              "sky"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "accepted-form",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "unknown",
+            "expected": [],
+            "frozen": [],
+            "repaired": [],
+            "frozenPass": true,
+            "repairedPass": true
+          }
+        ],
+        "node": "v24.20.0",
+        "sourceSha256": {
+          "evaluation/fixtures/unicode-lexical.json": "0f39f15c793b61a5187543f52ab26fad4655421aa1b8553289f2573d05cefb83",
+          "evaluation/src/unicode-benchmark.ts": "12a38fa12f1e21bcdf5e10ff7078ba3a1a54bebd2e220138c3692b84497835d6",
+          "evaluation/src/adapters/exact-lookup.ts": "fd1997a35387f203b030542d198f6b4679299c7b732a8ae015f3094ca6100623",
+          "engine/src/lexicon/index.ts": "22c937880af7a5748fea4dcbd83fff154e38c4345e88e7370c816be86e82e794",
+          "engine/src/lexicon/senses.ts": "7c7e76046d5fe157620c305537508fb59e51f61bda164c3a263b28d6d9570ced",
+          "engine/src/text/normalize.ts": "2448b32d22abc4ec29eb52173831a146cd8ed6a69f067320f37f6dfc4c55033b",
+          "engine/src/text/spans.ts": "2ab2fe34bb445dd201f8abcbe3fd3c5a3c35a50e653730f09671ee700453af5d",
+          "engine/src/text/tokenize.ts": "cfc7f4567c0c8e251852ccdecd3b90e0492144e6d2fa9166cb214d06625fd592"
+        }
+      },
+      "downloadedFrozenEvaluationReplay": {
+        "passed": true,
+        "records": 12,
+        "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+        "sourceSnapshotHash": "c25fe62cec107f5ee094e4a8f5862bf0806038a6de9c53cbde7ea59fb2d527b4"
+      },
+      "downloadedInductionEvaluationReplay": {
+        "passed": true,
+        "records": 60,
+        "split": "evaluation",
+        "sourceSnapshotHash": "7a4e058ba76f390d54dd0f4d68d53d65631168b646452caae4afb951f6131b2c"
+      },
+      "inductionManifest": {
+        "version": "grounded-ablation-1",
+        "split": "evaluation",
+        "config": {
+          "version": "grounded-ablation-1",
+          "developmentSeeds": [
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111
+          ],
+          "evaluationSeeds": [
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211
+          ],
+          "conditions": [
+            "regular",
+            "sparse",
+            "irregular",
+            "syncretism",
+            "segmentation-ambiguity"
+          ],
+          "methods": [
+            "memorization",
+            "repaired-lookup",
+            "learned-rules",
+            "oracle-rules"
+          ]
+        },
+        "source": {
+          "commit": "60619e1448d8b954aaa496abf482f886929d9046",
+          "trackedDirty": false,
+          "files": [
+            {
+              "path": "engine/src/__tests__/grammar.test.ts",
+              "sha256": "a3ce73dfcf15e4453f798d0da7027a71e693d27eb28de76b7d58f7aa58775e0e"
+            },
+            {
+              "path": "engine/src/__tests__/induction.test.ts",
+              "sha256": "44a9f401108a6346faf0e51666b11d82112c3b0eb0e1184907af54aad3cd6f2c"
+            },
+            {
+              "path": "engine/src/__tests__/unicode.test.ts",
+              "sha256": "c185f889bf49ab2b36cc9f6378feaa95be612b2c33f91920b4135f4917629c7a"
+            },
+            {
+              "path": "engine/src/grammar/ast.ts",
+              "sha256": "45d4f6187265106cb95d75a356efb95ffacad9eb9f8e8e8edc4310151cc09a6e"
+            },
+            {
+              "path": "engine/src/grammar/parser.ts",
+              "sha256": "535ab8c37f876624e02993ed34d3acbc89f91a6c678b7a8e4918f7080798d5d8"
+            },
+            {
+              "path": "engine/src/grammar/transforms.ts",
+              "sha256": "9e90416a33999ef25ed18adad55da1ed75d8f72e8d9638ba43c20ef1174cc0c6"
+            },
+            {
+              "path": "engine/src/induction/affixes.ts",
+              "sha256": "614b8d7f66053915ef79b185972f76dd92d1d7d67b781230920e7ee123f8a8fe"
+            },
+            {
+              "path": "engine/src/induction/alignments.ts",
+              "sha256": "8556d60cf2f9352a65f78a08077073b8d699e064ea63acadf07c6c73f71c3669"
+            },
+            {
+              "path": "engine/src/induction/candidate-search.ts",
+              "sha256": "63435f0fe8daaca0df4781c4d56553fe4adccd3d94850d49af0c8aa5be2bd433"
+            },
+            {
+              "path": "engine/src/induction/contracts.ts",
+              "sha256": "4346ac993735c1105ac033c792c5b4695002e90590ff513642cf9cdc5c38beb0"
+            },
+            {
+              "path": "engine/src/induction/mdl.ts",
+              "sha256": "9053946376f0615ef39ac10e8c9b318291f67c51ae33b2807fdbfc499be4db91"
+            },
+            {
+              "path": "engine/src/induction/word-order.ts",
+              "sha256": "31e83c84ca057f76710f3055ed9f31ce2c7546601b0be2a768681778e05f5055"
+            },
+            {
+              "path": "engine/src/lexicon/index.ts",
+              "sha256": "22c937880af7a5748fea4dcbd83fff154e38c4345e88e7370c816be86e82e794"
+            },
+            {
+              "path": "engine/src/lexicon/senses.ts",
+              "sha256": "7c7e76046d5fe157620c305537508fb59e51f61bda164c3a263b28d6d9570ced"
+            },
+            {
+              "path": "engine/src/morphology/analyze.ts",
+              "sha256": "6573f99dd8d2efacb5f988728c420c97c09ba2c51465307511b3845307370dac"
+            },
+            {
+              "path": "engine/src/morphology/generate.ts",
+              "sha256": "4fa0e80974314d682285a8971e8ca0fde22c9d8fba392709806323fc0326edac"
+            },
+            {
+              "path": "engine/src/text/normalize.ts",
+              "sha256": "2448b32d22abc4ec29eb52173831a146cd8ed6a69f067320f37f6dfc4c55033b"
+            },
+            {
+              "path": "engine/src/text/spans.ts",
+              "sha256": "2ab2fe34bb445dd201f8abcbe3fd3c5a3c35a50e653730f09671ee700453af5d"
+            },
+            {
+              "path": "engine/src/text/tokenize.ts",
+              "sha256": "cfc7f4567c0c8e251852ccdecd3b90e0492144e6d2fa9166cb214d06625fd592"
+            },
+            {
+              "path": "engine/src/translation/derive.ts",
+              "sha256": "e7b4bfb068195d283b4759ac6dab7342d4ae1220edecdce92f487046ddec772e"
+            },
+            {
+              "path": "engine/src/translation/render.ts",
+              "sha256": "bab985c0e1165a22932906161699b360ec254de0a672b01197cd5babd216d43b"
+            },
+            {
+              "path": "engine/src/types.ts",
+              "sha256": "0a04f1726fd02425cc847d9e0a67f5d84c6b94f6aae61907f9c0056c90672ee1"
+            },
+            {
+              "path": "evaluation/configs/ablation.json",
+              "sha256": "0e4a9ceeb37e9609a2ca4d2b80e466e2e7a38003e0a85d24a98187aae80b1663"
+            },
+            {
+              "path": "evaluation/configs/baseline.json",
+              "sha256": "e4211e0de414e6e461d44cc1b6b1e01f50e540b16b4dfa056298d27ea16f48c7"
+            },
+            {
+              "path": "evaluation/configs/ci.json",
+              "sha256": "c083a7a1d4e5115a6fd6a32f8ab2c94ad7fc5557f86dcda67aae0ccc6bcc1b8d"
+            },
+            {
+              "path": "evaluation/configs/development.json",
+              "sha256": "8033ce44d24b962015782de2dadb82f8e660f2909b2dc41e3eb4e11be09d35a1"
+            },
+            {
+              "path": "evaluation/configs/structural.json",
+              "sha256": "a88f25da5dc70742e98d6248c206d68b60001976dc38d6e20d739536bd5fe6d6"
+            },
+            {
+              "path": "evaluation/fixtures/generator-gold.json",
+              "sha256": "1d58ed563ebdc11aa5b33e993529f30ce9b81d68ebde6aaf3d1c1fb8cea12430"
+            },
+            {
+              "path": "evaluation/fixtures/unicode-lexical.json",
+              "sha256": "0f39f15c793b61a5187543f52ab26fad4655421aa1b8553289f2573d05cefb83"
+            },
+            {
+              "path": "evaluation/package.json",
+              "sha256": "fe1f87c03e9845443b090d67580481f7f4064c362a9a23b3f34753e58142a1a7"
+            },
+            {
+              "path": "evaluation/src/adapters/exact-lookup.ts",
+              "sha256": "fd1997a35387f203b030542d198f6b4679299c7b732a8ae015f3094ca6100623"
+            },
+            {
+              "path": "evaluation/src/adapters/grounded-symbolic.ts",
+              "sha256": "c448be73f95e39cb422590f64c6521e388169159bbed28923cc0c507412975a0"
+            },
+            {
+              "path": "evaluation/src/adapters/hybrid.ts",
+              "sha256": "477f0a1ae3556fde45a4bbd123d2822df22ba29357d7b03947019f0621f035d4"
+            },
+            {
+              "path": "evaluation/src/adapters/llm-only.ts",
+              "sha256": "1bbf75742d737a69add0bd8e67fc3d70783869e0375b22facb7ea70971497dea"
+            },
+            {
+              "path": "evaluation/src/adapters/prior.ts",
+              "sha256": "0e380995345f1d83bda7cd205778803aa0c5506540b38ba2fc18851845e7f137"
+            },
+            {
+              "path": "evaluation/src/adapters/symbolic.ts",
+              "sha256": "8f296d25ca2b4407ca0be99365327da9c9beb31890d3258e31472e2ea3917775"
+            },
+            {
+              "path": "evaluation/src/baselines.test.ts",
+              "sha256": "15c7fa6fc47adfd77fee1fa93206bb7ae5ccb1f1211f670ce56386d0f1e07fe0"
+            },
+            {
+              "path": "evaluation/src/contracts.ts",
+              "sha256": "a5381dac859cf7e0d8ae7f569173ffa736e9501f63d6923fb886ffe62e788680"
+            },
+            {
+              "path": "evaluation/src/export.ts",
+              "sha256": "7f4d999b1f9d630e99f1b7c6500a6afacc06d786707af3e5c15a0812ca7dd8e6"
+            },
+            {
+              "path": "evaluation/src/generator/compile.ts",
+              "sha256": "7a76ea70812322227d80ba3773457efc9d01167f2b0bcfa503b185f3460f73f5"
+            },
+            {
+              "path": "evaluation/src/generator/compiler.test.ts",
+              "sha256": "dc7e5cc666389b181bd24e21bcdde6aa0ff5d9f1793d5e5d8113c766ba976085"
+            },
+            {
+              "path": "evaluation/src/generator/dataset.ts",
+              "sha256": "9e2c61a38f716cea2a6983e6cbce002473266a74f111374bdbe7fe1011e5cb4d"
+            },
+            {
+              "path": "evaluation/src/generator/grammar.ts",
+              "sha256": "c5ecb714e8800fff6bb5632137953859dd6ff445500470017031c852e1fe9c84"
+            },
+            {
+              "path": "evaluation/src/generator/lexicon.ts",
+              "sha256": "b99205acbe2444d975a8adf9176efeddcdf6be3ccc566eb733c92abbf117561e"
+            },
+            {
+              "path": "evaluation/src/generator/phonology.ts",
+              "sha256": "53e5e0c00f9f6d86a3e08cf07a25c55103eb11323d33d7f010a1448e01116ea7"
+            },
+            {
+              "path": "evaluation/src/generator/prng.ts",
+              "sha256": "5f3383d6bec61b887621a4f54fd00ce52932d8837f8b373fa5c838cafcceff33"
+            },
+            {
+              "path": "evaluation/src/generator/semantics.ts",
+              "sha256": "ed1f9461c2cf170062c8b548a7e4bc6584a63da8514ba4578d22b47063fb560c"
+            },
+            {
+              "path": "evaluation/src/induction/corpus.ts",
+              "sha256": "cc53e1eaf7b610dbba6b7689e29f0637bad6d3d0616f098378ed39fb6002ad84"
+            },
+            {
+              "path": "evaluation/src/induction/experiment.test.ts",
+              "sha256": "55dc422c8ce055af7546bedc6447bfe81560df59d3f403b1f02b766e945920ee"
+            },
+            {
+              "path": "evaluation/src/induction/experiment.ts",
+              "sha256": "8fa0bbb3e2b55746badffd5b3f66d4d4695987589001925924e472008155667f"
+            },
+            {
+              "path": "evaluation/src/induction/run.ts",
+              "sha256": "f270c72dcad9562cd0a8a0a17c39f1edc0bc1ae038ac8b254e0a73a95517164f"
+            },
+            {
+              "path": "evaluation/src/metrics/accuracy.ts",
+              "sha256": "0f1925f082a1f2c1995f2d2740341ce0ca23a634fb5e78ee45c589d153d02763"
+            },
+            {
+              "path": "evaluation/src/metrics/calibration.ts",
+              "sha256": "01a1139af5ee5d6308d7cdad8302d41f44dbdeaf167f22e76e9814378044b04f"
+            },
+            {
+              "path": "evaluation/src/metrics/performance.ts",
+              "sha256": "879503d6ff5515a03381cecea149fd91990f9d432c7eb00c7da572e65a8c3b25"
+            },
+            {
+              "path": "evaluation/src/records.ts",
+              "sha256": "0c7279ee7c388a1df359feb02cc3816b149397a2d513871af55ad91da4a74072"
+            },
+            {
+              "path": "evaluation/src/reports.ts",
+              "sha256": "ccb3b1902278aaf424aa89aaae50c527a3e4bae18354fae6d12314dcb3b550ac"
+            },
+            {
+              "path": "evaluation/src/runner.ts",
+              "sha256": "0cba0eb31c161f3d730a0d10f1d1d680185c9451494c6cbeb942d2cfd8417aca"
+            },
+            {
+              "path": "evaluation/src/unicode-benchmark.test.ts",
+              "sha256": "328d5ba5caac03d1b7bb22d7700303135d8b19019522738adae452712cc65779"
+            },
+            {
+              "path": "evaluation/src/unicode-benchmark.ts",
+              "sha256": "12a38fa12f1e21bcdf5e10ff7078ba3a1a54bebd2e220138c3692b84497835d6"
+            },
+            {
+              "path": "evaluation/src/verify.ts",
+              "sha256": "12740eb18f82121d2a64a58dd299680835201a41bb22fe7fa26b64006a2989e7"
+            },
+            {
+              "path": "evaluation/tsconfig.json",
+              "sha256": "e4d0cc026e7719836858cbd1a13ebcadbbbf0b40f8543bbf8fbe912a5ecacdac"
+            },
+            {
+              "path": "package-lock.json",
+              "sha256": "9ffacde2e2d7d6091548c73813abdb70d377605c31afa420f9bee68789b09def"
+            },
+            {
+              "path": "package.json",
+              "sha256": "da209385cf29c597f159757526c16cfb9b2245c37ee2d889084be445a57b4312"
+            },
+            {
+              "path": "shared/audio-container.ts",
+              "sha256": "9c0c7cdb253fd1ae42714d1023e9e484550523d8d509cbc0b9ba853e7c76bcf7"
+            },
+            {
+              "path": "shared/constants.ts",
+              "sha256": "dafb4b6b2b46fb825d467ef1dcef884bdbeb18fb7dd2ddfe9f7ef8400de5a7e3"
+            },
+            {
+              "path": "shared/demo-language.ts",
+              "sha256": "821586993b3ea830a9132a3a1e85d26df3eabd3be49dcafd5a99a1d0d385273d"
+            },
+            {
+              "path": "shared/demo-presentation.ts",
+              "sha256": "95c803dd00b99aca6ec11c25f17239e3afe8c9f048d871a731306175621f82b6"
+            },
+            {
+              "path": "shared/metrics/number-evidence.ts",
+              "sha256": "2c901a50e045c9d4c4c31d52240eba159c78c9fef14208e63d08dd04efc2ce64"
+            },
+            {
+              "path": "shared/metrics/workspace-metrics.test.ts",
+              "sha256": "2b5e1956f238c74189c377ea3eec58e3d20d6dacb29d2bfe44cf840bd44b9f0f"
+            },
+            {
+              "path": "shared/metrics/workspace-metrics.ts",
+              "sha256": "ba0ec0770e223e8d0da033131885a4c2e71401b3fbb92681308f1f9727e31973"
+            },
+            {
+              "path": "shared/package.json",
+              "sha256": "bb5516015f61220f7bddb2a99b00ada0b725601f0ce6a27389f1c432ba14b8fc"
+            },
+            {
+              "path": "shared/profile-operations.ts",
+              "sha256": "d3e62b4c1d53249747020af0f992ac4f28723a76a59317ef61589f6f56eed3ef"
+            },
+            {
+              "path": "shared/prompts.ts",
+              "sha256": "ea38171baa986e47a92d8a91a1299e7739c369f0aa5bf2e5bf53df74dcae3b33"
+            },
+            {
+              "path": "shared/sandbox/grading.test.ts",
+              "sha256": "613a9766c98d2dfa79610e649b11b2cbd3bf5b3539e119b36fff341880463528"
+            },
+            {
+              "path": "shared/sandbox/grading.ts",
+              "sha256": "98effe471a38db187158c509d7275f03009d348d932460b26bda20d5dac11a40"
+            },
+            {
+              "path": "shared/sandbox/session.ts",
+              "sha256": "dab8ba9508ed6268fe7d6155c74fb32ad0f05e0bee7ad85701cc0af73869e086"
+            },
+            {
+              "path": "shared/schemas/ai-history.ts",
+              "sha256": "4223d31e2c739cfee646583c4b2b72215a1d4c8ee406ed273fd98ad80ea8ad4a"
+            },
+            {
+              "path": "shared/schemas/archive.ts",
+              "sha256": "309fdef218a3ce1801bb03ad512cbd98240ed5d96325c89b8dab67ae07863fc4"
+            },
+            {
+              "path": "shared/schemas/audio.ts",
+              "sha256": "380b5f2b6e5ead24fe15c6a141a4c154ffce4cfa7c76f3204d48eb38f2f89805"
+            },
+            {
+              "path": "shared/schemas/capabilities.ts",
+              "sha256": "c998591c7af626f7f3617de173b03da0d9a17aef3a78166758cac32f4837058e"
+            },
+            {
+              "path": "shared/schemas/common.ts",
+              "sha256": "cefb1208f3c506179c0400b93e412388b2b0bf63a4f79e05e7b15efb17c856ab"
+            },
+            {
+              "path": "shared/schemas/errors.ts",
+              "sha256": "151d92940ed82451004cfb8516c3ab9f9bda45524854366edfd2fd6ff167aad5"
+            },
+            {
+              "path": "shared/schemas/grammar.ts",
+              "sha256": "00f3f15cd82d2689615fd6095bcf5e02b5ee4e18612cbc347d34ad60e41701f5"
+            },
+            {
+              "path": "shared/schemas/lexicon.ts",
+              "sha256": "15c1731488ac3464a7f05dabdba06e254f6dc9185a92ad853e8e6b26b2bf076e"
+            },
+            {
+              "path": "shared/schemas/metrics.ts",
+              "sha256": "cd9d2fab722ada474cfb8aef5dfb58ffa393662bad2877c1809bbf3167a65eac"
+            },
+            {
+              "path": "shared/schemas/mutations.ts",
+              "sha256": "0109af4798f3a6abf1bd320a620259312cc0c2f066fe7ad7149994755337d04f"
+            },
+            {
+              "path": "shared/schemas/profile.ts",
+              "sha256": "07668b46d7c5c264ad1f03ddf789bc8f5b1706215f79573758bfb5f00a776264"
+            },
+            {
+              "path": "shared/schemas/sandbox.ts",
+              "sha256": "13406a00914de7e8628bb7f8a7c72305d20b3e97077a41717d522387a14e5cc8"
+            },
+            {
+              "path": "shared/schemas/save-queue.ts",
+              "sha256": "11c998de4dcf51a2ee69b4b99fd0f0cef4d424fa8b0523670a966cbf0797f84a"
+            },
+            {
+              "path": "shared/types.ts",
+              "sha256": "0a0f2e01851e58f0e4f6f7108997cfaec2b3fee1776a43ea5ca7bddf15ee92cd"
+            },
+            {
+              "path": "tsconfig.base.json",
+              "sha256": "34e78df802f2b1c052dbc946db25423edcec01f0a79bb87b555d7a03f7fe6060"
+            }
+          ],
+          "snapshotHash": "7a4e058ba76f390d54dd0f4d68d53d65631168b646452caae4afb951f6131b2c"
+        },
+        "status": "complete",
+        "startedAt": "2026-09-23T19:28:20.742Z",
+        "records": 60,
+        "artifacts": [
+          {
+            "path": "records.json",
+            "sha256": "b6935610bd6a4f2c6b6b87b76c84d57c9cbe0be403dda911abeb814a694193cb"
+          },
+          {
+            "path": "summary.json",
+            "sha256": "c584d28f48448bcf75422b6ad1bd9f8da0743f49d539893fdc1926a5a673dc18"
+          }
+        ]
+      },
+      "inductionSummaryMatchesFrozenEvaluation": true,
+      "sourceJobLog": {
+        "bytes": 89471,
+        "sha256": "1fed6dddf026232db6ba5a1fa3a396ca8b5d57f1bf5799b4bd70260a03889c52"
+      },
+      "dependencyAudit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      },
+      "rawReportHashes": {
+        "browser": {
+          "bytes": 68683,
+          "sha256": "8bbcf870555a4e6d903289b4d01c8b33e490026944322963ea5fd060c94d9737"
+        },
+        "public": {
+          "bytes": 14471,
+          "sha256": "32fb2f61f1fd4f0532c4a791cfbe235d966d2d531df657ecd4d47ec099cf666d"
+        },
+        "lexical": {
+          "bytes": 4116,
+          "sha256": "200428842fe08f7c02cf033f3868b95d4c5a651600a8ba89dd9cd733d60d2cc4"
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-09-23T19:32:30.533Z",
+        "duration": 191639.644,
+        "expected": 34,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-23T19:35:44.735Z",
+        "duration": 11556.928,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "lexicalRegression": {
+        "version": "unicode-lexical-1",
+        "scope": "Hand-authored lexical regression probes with supplied dictionaries; not language induction or held-out semantic accuracy.",
+        "denominator": 14,
+        "frozenPass": 5,
+        "repairedPass": 14,
+        "rows": [
+          {
+            "id": "ascii",
+            "expected": [
+              "water"
+            ],
+            "frozen": [
+              "water"
+            ],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "han",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "tamil",
+            "expected": [
+              "Tamil"
+            ],
+            "frozen": [],
+            "repaired": [
+              "Tamil"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "cyrillic",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "decomposed-accent",
+            "expected": [
+              "coffee"
+            ],
+            "frozen": [],
+            "repaired": [
+              "coffee"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "precomposed-accent",
+            "expected": [
+              "coffee"
+            ],
+            "frozen": [
+              "coffee"
+            ],
+            "repaired": [
+              "coffee"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "ipa-tie",
+            "expected": [
+              "tea"
+            ],
+            "frozen": [],
+            "repaired": [
+              "tea"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "smart-apostrophe",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "ascii-apostrophe",
+            "expected": [
+              "cannot"
+            ],
+            "frozen": [
+              "cannot"
+            ],
+            "repaired": [
+              "cannot"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "hyphen",
+            "expected": [
+              "purple"
+            ],
+            "frozen": [
+              "purple"
+            ],
+            "repaired": [
+              "purple"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "astral-letter",
+            "expected": [
+              "astral letter"
+            ],
+            "frozen": [],
+            "repaired": [
+              "astral letter"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "homographs",
+            "expected": [
+              "water",
+              "sky"
+            ],
+            "frozen": [
+              "water"
+            ],
+            "repaired": [
+              "water",
+              "sky"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "accepted-form",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "unknown",
+            "expected": [],
+            "frozen": [],
+            "repaired": [],
+            "frozenPass": true,
+            "repairedPass": true
+          }
+        ],
+        "node": "v24.20.0",
+        "sourceSha256": {
+          "evaluation/fixtures/unicode-lexical.json": "9919b40dbacfdb9d5fb60e284a4cdb8f03b0d87800677e82b50a2a8addd9dddd",
+          "evaluation/src/unicode-benchmark.ts": "ccb871f3cb863f73b49d7ebbed637446e0594855400518c2160baf6b52fdbf59",
+          "evaluation/src/adapters/exact-lookup.ts": "d732f5a847ff380fa583283ee67de3b8d5b73f27ea46632fa8fcf4cf2818619d",
+          "engine/src/lexicon/index.ts": "699ef5c4f8dba3a7ed8dac913dc912122196b8512aecd37f92a2e1c76b778d69",
+          "engine/src/lexicon/senses.ts": "8c0b4145a7b4e9fce8ed5c77a597eaa47b2452d531450fb8f600432932cfea35",
+          "engine/src/text/normalize.ts": "c3d21f8708cbe69ecc96092f940b451fa2387a49e10095c80d8b76570721ff57",
+          "engine/src/text/spans.ts": "4f1cee81c8d733731e4c7c668fe36e591bec31d75b1ff16881d5d7d9c79b4227",
+          "engine/src/text/tokenize.ts": "86a89363f9ece2c0ed91ad5483eb6ab29e1c109152392852c49f97f35d7baf32"
+        }
+      },
+      "downloadedFrozenEvaluationReplay": {
+        "passed": true,
+        "records": 12,
+        "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+        "sourceSnapshotHash": "d5ca8067ceb5f11ca345674acbd6831e6e20cac279b154cd10e998f3e1d593e4"
+      },
+      "downloadedInductionEvaluationReplay": {
+        "passed": true,
+        "records": 60,
+        "split": "evaluation",
+        "sourceSnapshotHash": "67f54460737d6cfe8d07abbc938942d10a86be0d65ce93dc65e486924de2d006"
+      },
+      "inductionManifest": {
+        "version": "grounded-ablation-1",
+        "split": "evaluation",
+        "config": {
+          "version": "grounded-ablation-1",
+          "developmentSeeds": [
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111
+          ],
+          "evaluationSeeds": [
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211
+          ],
+          "conditions": [
+            "regular",
+            "sparse",
+            "irregular",
+            "syncretism",
+            "segmentation-ambiguity"
+          ],
+          "methods": [
+            "memorization",
+            "repaired-lookup",
+            "learned-rules",
+            "oracle-rules"
+          ]
+        },
+        "source": {
+          "commit": "60619e1448d8b954aaa496abf482f886929d9046",
+          "trackedDirty": false,
+          "files": [
+            {
+              "path": "engine/src/__tests__/grammar.test.ts",
+              "sha256": "e44a933a3404d7c06b098f3468de65d4c8b6a2e986cf7e3bba2b3484dd7044e4"
+            },
+            {
+              "path": "engine/src/__tests__/induction.test.ts",
+              "sha256": "de173226341ad279625e4379706cc1400c77202a9a69e59cc40bf4f34792a8bb"
+            },
+            {
+              "path": "engine/src/__tests__/unicode.test.ts",
+              "sha256": "f3d3185f78207a8cbcfa0fc50c9c7940ba094fb2ccf93284de4275daf36d4e95"
+            },
+            {
+              "path": "engine/src/grammar/ast.ts",
+              "sha256": "25073164a107c310427a6e081375bc6fed6d3edbcf33fb2fe8ad12aec6de11a8"
+            },
+            {
+              "path": "engine/src/grammar/parser.ts",
+              "sha256": "4bfff999fc25e295fac4c0674d5e4e40fd9d839c4d34a34ff62a1dd5321685e6"
+            },
+            {
+              "path": "engine/src/grammar/transforms.ts",
+              "sha256": "24f09ead85b8fcd6ca05741e623b479bf7b6bea1c9a31a9efaa4ed3a24543672"
+            },
+            {
+              "path": "engine/src/induction/affixes.ts",
+              "sha256": "dbcdbcc77551f02a96383e9c9b1f35a0265e7e452612d6eb1335262421d382d0"
+            },
+            {
+              "path": "engine/src/induction/alignments.ts",
+              "sha256": "66d5becf3f0f57125820c131b01545b7145c3ef63684ae25c86c9e67a38f8bac"
+            },
+            {
+              "path": "engine/src/induction/candidate-search.ts",
+              "sha256": "33ffa2520060aabbaa497c88b7d91c3d9aaa41e8128a15fd2fe4f172231b7293"
+            },
+            {
+              "path": "engine/src/induction/contracts.ts",
+              "sha256": "f50a47e2325991f998bacb92a751519fb81074856ef5d0bab604c5a7ecb67b0a"
+            },
+            {
+              "path": "engine/src/induction/mdl.ts",
+              "sha256": "2d67e66afbdc60cdd279e3d6d754283071b3752d91b098fdbc4367960f99fb82"
+            },
+            {
+              "path": "engine/src/induction/word-order.ts",
+              "sha256": "f8d2944f21b74b631948d536ac0822d8618e1c49a375975b7fd7f6cb84b94ea7"
+            },
+            {
+              "path": "engine/src/lexicon/index.ts",
+              "sha256": "699ef5c4f8dba3a7ed8dac913dc912122196b8512aecd37f92a2e1c76b778d69"
+            },
+            {
+              "path": "engine/src/lexicon/senses.ts",
+              "sha256": "8c0b4145a7b4e9fce8ed5c77a597eaa47b2452d531450fb8f600432932cfea35"
+            },
+            {
+              "path": "engine/src/morphology/analyze.ts",
+              "sha256": "e762e78c96cdc1b8dd8cd157b91fbbe956f3e32a2a9d8b742274e7e33c5ac564"
+            },
+            {
+              "path": "engine/src/morphology/generate.ts",
+              "sha256": "952c779c91bd6ccd21fc58af6d910b0e3a1b26db3a76e26aa34ea2327161b678"
+            },
+            {
+              "path": "engine/src/text/normalize.ts",
+              "sha256": "c3d21f8708cbe69ecc96092f940b451fa2387a49e10095c80d8b76570721ff57"
+            },
+            {
+              "path": "engine/src/text/spans.ts",
+              "sha256": "4f1cee81c8d733731e4c7c668fe36e591bec31d75b1ff16881d5d7d9c79b4227"
+            },
+            {
+              "path": "engine/src/text/tokenize.ts",
+              "sha256": "86a89363f9ece2c0ed91ad5483eb6ab29e1c109152392852c49f97f35d7baf32"
+            },
+            {
+              "path": "engine/src/translation/derive.ts",
+              "sha256": "7d4cde9617a737864c63c35d48c28255c7530bc595fb013312e07fa2f21cbcad"
+            },
+            {
+              "path": "engine/src/translation/render.ts",
+              "sha256": "e6fa1afac3a9b3afa204741bb4a632d109b7950f545d1bdfb7c27ace55e0b92b"
+            },
+            {
+              "path": "engine/src/types.ts",
+              "sha256": "ae7ce4145eeca8415c0de46eac493d4c29573472eaef607cf80c7034860352f7"
+            },
+            {
+              "path": "evaluation/configs/ablation.json",
+              "sha256": "cb78b5ea37ac77672fb1359928e289428f203baebbbe8f7d2dd317abeb11cf30"
+            },
+            {
+              "path": "evaluation/configs/baseline.json",
+              "sha256": "24ff37425ba01a6b5546230e44bf9e8906bf53d2e995d767bd3f1af8f97585a1"
+            },
+            {
+              "path": "evaluation/configs/ci.json",
+              "sha256": "9d828dd1f38f65dfeb2d55ab562424dd4804a52217b3e7bc51e43c7dd9ebfa7d"
+            },
+            {
+              "path": "evaluation/configs/development.json",
+              "sha256": "d68899e2b63004cff8983aa5f94af5e197cf16bf1d9bbc33fb26e331d5cbbdda"
+            },
+            {
+              "path": "evaluation/configs/structural.json",
+              "sha256": "9d4a74f641ed9dbd50ee9f606667b60cf08fe9b31468149b1f6cd2d49b32f921"
+            },
+            {
+              "path": "evaluation/fixtures/generator-gold.json",
+              "sha256": "b350c2a2565a42e5fb0aaf104da9a04925c445f45b107519f040cefd559f8433"
+            },
+            {
+              "path": "evaluation/fixtures/unicode-lexical.json",
+              "sha256": "9919b40dbacfdb9d5fb60e284a4cdb8f03b0d87800677e82b50a2a8addd9dddd"
+            },
+            {
+              "path": "evaluation/package.json",
+              "sha256": "a7ce48badca8090204f02125b389d71878ba99490adc10e9e18cca9212fece11"
+            },
+            {
+              "path": "evaluation/src/adapters/exact-lookup.ts",
+              "sha256": "d732f5a847ff380fa583283ee67de3b8d5b73f27ea46632fa8fcf4cf2818619d"
+            },
+            {
+              "path": "evaluation/src/adapters/grounded-symbolic.ts",
+              "sha256": "39a37d1f2ae40ab31d47ea909f04d93acbb6a70dbe09f9d65463a78a26288be6"
+            },
+            {
+              "path": "evaluation/src/adapters/hybrid.ts",
+              "sha256": "a4401dd528d78c3cd7ff127dd7c2a3722927b339662a888b4bb93f5b67d25db7"
+            },
+            {
+              "path": "evaluation/src/adapters/llm-only.ts",
+              "sha256": "15777d20eae001385c2f1e03729a31df3c7b061010db950e57547f0c57ed3669"
+            },
+            {
+              "path": "evaluation/src/adapters/prior.ts",
+              "sha256": "02c898a6e79e2b06ea08acdb7a93e21ab5b1408fdfdbc717bb26301e09122547"
+            },
+            {
+              "path": "evaluation/src/adapters/symbolic.ts",
+              "sha256": "3e0111dbaa6a9bd549394c588b607d181a97665a1a52931ffc927a22493b68bf"
+            },
+            {
+              "path": "evaluation/src/baselines.test.ts",
+              "sha256": "222dd52abda6c7686fb94481dacc45f15dd65d05bba61091ca35a817bbb769bb"
+            },
+            {
+              "path": "evaluation/src/contracts.ts",
+              "sha256": "a5289967ed6f1e54d23b2424a64d87dbe5bd40ff00af4e3778cd0609f5f82545"
+            },
+            {
+              "path": "evaluation/src/export.ts",
+              "sha256": "886f98fe62d0ed461abd7faa82e295d08db930f8eb234546d707d63fcb424ad4"
+            },
+            {
+              "path": "evaluation/src/generator/compile.ts",
+              "sha256": "3b98422925e3052269824da9bd9fb0aba55d6bad93479a4d6459bd7cfdaf5dc3"
+            },
+            {
+              "path": "evaluation/src/generator/compiler.test.ts",
+              "sha256": "d76a36283fe6b54f6b61cf199f63cc39f35f12d42f212729c315c1beff897363"
+            },
+            {
+              "path": "evaluation/src/generator/dataset.ts",
+              "sha256": "335a8225ac2d0830b6d1ea88556a5e01e14b0c91707a6054ad38e50682352d3b"
+            },
+            {
+              "path": "evaluation/src/generator/grammar.ts",
+              "sha256": "56f1c4bd12fd28798fd9e88e3d3cc699cfe0d401507b89522499eca4c625aec0"
+            },
+            {
+              "path": "evaluation/src/generator/lexicon.ts",
+              "sha256": "d26d103525fc86373a76369d73751c00c4c68c0ac95bcb16bb2fe9658bc2e361"
+            },
+            {
+              "path": "evaluation/src/generator/phonology.ts",
+              "sha256": "52fc3d605a6d7ae3636da6a07a1614de060d40eacc7c712901acd448fe0d3efa"
+            },
+            {
+              "path": "evaluation/src/generator/prng.ts",
+              "sha256": "0d30835b3ded0301f3889603b932049db619628ce243aaeb12f972f86c424e7a"
+            },
+            {
+              "path": "evaluation/src/generator/semantics.ts",
+              "sha256": "b7bb2a3e79a0d9695977cdd79a94dd7fb4a2ed42ab862f4346eabce87ef0ce04"
+            },
+            {
+              "path": "evaluation/src/induction/corpus.ts",
+              "sha256": "96a249f0fbc50acfbd03a0f4901694bcfb2686e0dd21502f6eab9e3ec95768ae"
+            },
+            {
+              "path": "evaluation/src/induction/experiment.test.ts",
+              "sha256": "6503042822fbe856f1298bdc2998e7b87e474b1144f505bd11ded6466141f34c"
+            },
+            {
+              "path": "evaluation/src/induction/experiment.ts",
+              "sha256": "3b71848e37ce8d9fdcb412f0207eecab5637b643703b9a01a963218eed3dd65e"
+            },
+            {
+              "path": "evaluation/src/induction/run.ts",
+              "sha256": "b35eb3b99a496452ed8e262f9d622afbbf54b1b2d6d2c2292ea5c5b568f2958f"
+            },
+            {
+              "path": "evaluation/src/metrics/accuracy.ts",
+              "sha256": "9079aa48c8ab6e78970fa47b8e959fdd3d899d67202ff5b0ca35619f7b16decf"
+            },
+            {
+              "path": "evaluation/src/metrics/calibration.ts",
+              "sha256": "9a381702d929615dc7a8d13831fc5320c2704367182e4fd4cc9b10e896bc8c45"
+            },
+            {
+              "path": "evaluation/src/metrics/performance.ts",
+              "sha256": "3c93d021b14c19fd1cc4c125e9e0c9de495d90f0c95da126e84ed2967ddd8dc7"
+            },
+            {
+              "path": "evaluation/src/records.ts",
+              "sha256": "de21309ac06c1386b502f1acca7f31ef71b90be1955a727fc9a65b2338ce5226"
+            },
+            {
+              "path": "evaluation/src/reports.ts",
+              "sha256": "7887c9fcd73e03bec6e4c9cd2a9113f3d9213650f1bbb5f1bd7d82f674bb1aa4"
+            },
+            {
+              "path": "evaluation/src/runner.ts",
+              "sha256": "40d1d66d99e2d1d646c47389c800a1983bd4ce6cd24acfdbc7daf96ea2c245a1"
+            },
+            {
+              "path": "evaluation/src/unicode-benchmark.test.ts",
+              "sha256": "805033d097f1aa1e9c2d38494e4308332ed82cd66d65d65496d7cf074040f3b4"
+            },
+            {
+              "path": "evaluation/src/unicode-benchmark.ts",
+              "sha256": "ccb871f3cb863f73b49d7ebbed637446e0594855400518c2160baf6b52fdbf59"
+            },
+            {
+              "path": "evaluation/src/verify.ts",
+              "sha256": "84ddfee11a76e2fc336100c414fcc9a3b4a696ab0511b4abdeb0de43d900ab55"
+            },
+            {
+              "path": "evaluation/tsconfig.json",
+              "sha256": "0ee6226dc8de5be0d07b790fd41be995fcb7f0e4cd81a9b900945aa11211d436"
+            },
+            {
+              "path": "package-lock.json",
+              "sha256": "9d41c59998b756dc557aea44b8ebb9266dd1e24f7c9df7acec8c9c28cd5d53ee"
+            },
+            {
+              "path": "package.json",
+              "sha256": "df995738f86c2416cdf37cf76144f73e6e32d064366c4e518f6947dba530753a"
+            },
+            {
+              "path": "shared/audio-container.ts",
+              "sha256": "51d9c1df52d7d90f1e61d2c855276f6f741c40e969bc2c31089358cf220319ee"
+            },
+            {
+              "path": "shared/constants.ts",
+              "sha256": "76daf2f95c3450eb22665ab8915351391abb350a4679dce4a46b69225e4902b9"
+            },
+            {
+              "path": "shared/demo-language.ts",
+              "sha256": "8cbdda92193d64c074061913fad3817663d5cbcef358336810793c77ecd5a703"
+            },
+            {
+              "path": "shared/demo-presentation.ts",
+              "sha256": "916c6dbdbd955d65c080543594b4feddad5011c135851a4e31fdd11b2aa12d32"
+            },
+            {
+              "path": "shared/metrics/number-evidence.ts",
+              "sha256": "c94e88f78dc530c929e59cf2b401e4df12352d1bbd7d5097c74797c92d594f57"
+            },
+            {
+              "path": "shared/metrics/workspace-metrics.test.ts",
+              "sha256": "a32f0bc9925323cd3df58af5511b02c3e2f03ac52517c9c341af3d31c380b9ed"
+            },
+            {
+              "path": "shared/metrics/workspace-metrics.ts",
+              "sha256": "ea1e8d97c2728ab6f53b8555049e470bacb6cc991f33c82c06d1d949226f8361"
+            },
+            {
+              "path": "shared/package.json",
+              "sha256": "c0636b2d9e41c1ec7124cee850b1da77dd5be6b4e3609e5d3e3704b9efe34405"
+            },
+            {
+              "path": "shared/profile-operations.ts",
+              "sha256": "797043efdd1aa0d137e36655dd93c2c0d89081a2f740696c3c9646574ade7311"
+            },
+            {
+              "path": "shared/prompts.ts",
+              "sha256": "2e13020fb0a94f1eb2a11f98a685c4dc632ed089bbb99f3aab677eb69ba6dab8"
+            },
+            {
+              "path": "shared/sandbox/grading.test.ts",
+              "sha256": "9f96482166af31d3d1d9341de5f10e6cb7c2d2abc0c80243ee1cd9fca76b6fcf"
+            },
+            {
+              "path": "shared/sandbox/grading.ts",
+              "sha256": "d1079c35bd49690c05f32cbc58c31f2afa2a365430e2cb5bbbe9382de51e6b73"
+            },
+            {
+              "path": "shared/sandbox/session.ts",
+              "sha256": "84081d9ce17a8ff5f73a5b6fea6e63f03210c763a5b31bd34f52a964bf5ac225"
+            },
+            {
+              "path": "shared/schemas/ai-history.ts",
+              "sha256": "26e1cf1162cc4e692521ebc9c301154383b6c82dee9bc9218ed2fc4497e44ae2"
+            },
+            {
+              "path": "shared/schemas/archive.ts",
+              "sha256": "5f5f409c8b23343852b8122729ca5158417b81ce329e3e487415545abeaba319"
+            },
+            {
+              "path": "shared/schemas/audio.ts",
+              "sha256": "da039ab23e28a52e5062568bccad65ed431c743bca6124b7ecad0f1d134b2c14"
+            },
+            {
+              "path": "shared/schemas/capabilities.ts",
+              "sha256": "f8cf12548fb04c856ff82470cd5b9a87299b060c2dc94a3a3809bbd409d2312f"
+            },
+            {
+              "path": "shared/schemas/common.ts",
+              "sha256": "cb89480cbd135e23f5190bbfca1430c44c99d7938172179a1b8038a34fb9dbd0"
+            },
+            {
+              "path": "shared/schemas/errors.ts",
+              "sha256": "5c55862b7c2214aa9714a873fe383c20c0944dce11342709e31afd7793d5fb20"
+            },
+            {
+              "path": "shared/schemas/grammar.ts",
+              "sha256": "502364e82f1ca2c59590d9895b98e7e825926ec8913b62ceeeb2bd56b1840883"
+            },
+            {
+              "path": "shared/schemas/lexicon.ts",
+              "sha256": "1734d53bdccb867a160e05fa509f3903e289e07a2f4e3e747b94fd910f4fa40a"
+            },
+            {
+              "path": "shared/schemas/metrics.ts",
+              "sha256": "660c0de6ce768b1aa2bbcd4e3e92b887e64c344939b2da1d5de7c90eb0a0dc95"
+            },
+            {
+              "path": "shared/schemas/mutations.ts",
+              "sha256": "dd2b7e7d16b7497be5b1a4a5b0078d1435bf5b3bb2b31fd02d50df3a755b8b61"
+            },
+            {
+              "path": "shared/schemas/profile.ts",
+              "sha256": "ec7fac6b6b9b5e965b84cb7e7af12715cf5588d418449fbbbb5f87d4073f17f5"
+            },
+            {
+              "path": "shared/schemas/sandbox.ts",
+              "sha256": "ee1606ac2f27e9aa56b80e3414b055ab4251440635e7e60e7d25ab9042d26b60"
+            },
+            {
+              "path": "shared/schemas/save-queue.ts",
+              "sha256": "7795d1288d05d003f26d4148b6439781197d7a0753e7c0455e682325c44faa1d"
+            },
+            {
+              "path": "shared/types.ts",
+              "sha256": "b9de242a2d5d9a5590ea0e9a449ca296c06bad5ba639d4e02567ab243440377a"
+            },
+            {
+              "path": "tsconfig.base.json",
+              "sha256": "089bb838e6f821d9c5d93c0d8f895d04ea05393dc5f4d46320246675a6d66e69"
+            }
+          ],
+          "snapshotHash": "67f54460737d6cfe8d07abbc938942d10a86be0d65ce93dc65e486924de2d006"
+        },
+        "status": "complete",
+        "startedAt": "2026-09-23T19:28:59.515Z",
+        "records": 60,
+        "artifacts": [
+          {
+            "path": "records.json",
+            "sha256": "b6935610bd6a4f2c6b6b87b76c84d57c9cbe0be403dda911abeb814a694193cb"
+          },
+          {
+            "path": "summary.json",
+            "sha256": "c584d28f48448bcf75422b6ad1bd9f8da0743f49d539893fdc1926a5a673dc18"
+          }
+        ]
+      },
+      "inductionSummaryMatchesFrozenEvaluation": true,
+      "sourceJobLog": {
+        "bytes": 75479,
+        "sha256": "bf172f2f6e5fe4e8f976bb4ae2ad6c909170acbca179b210917d11e3b61bb758"
+      },
+      "dependencyAudit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      },
+      "rawReportHashes": {
+        "browser": {
+          "bytes": 70237,
+          "sha256": "eff178b558e2898617fcc2813ace871b42f89e084203e5844aeba2690ce10c86"
+        },
+        "public": {
+          "bytes": 14438,
+          "sha256": "228a40abf15f1cac705f0c53c3a01cce2d49295367c41389a927b33979f6cace"
+        },
+        "lexical": {
+          "bytes": 4116,
+          "sha256": "3ef293d1b75e84885e1123f0bb6fd1e03aa4852b1ef6d1858154f4afffcb93fb"
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "60619e1448d8b954aaa496abf482f886929d9046",
+    "jobs": [
+      {
+        "completedAt": "2026-09-23T19:30:47Z",
+        "conclusion": "success",
+        "databaseId": 107345128137,
+        "name": "build",
+        "startedAt": "2026-09-23T19:27:12Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35909394038/job/107345128137"
+      },
+      {
+        "completedAt": "2026-09-23T19:35:02Z",
+        "conclusion": "success",
+        "databaseId": 107346512537,
+        "name": "verify-clean",
+        "startedAt": "2026-09-23T19:30:50Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35909394038/job/107346512537"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35909394038"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-09-23T19:34:59.532Z",
+    "source": {
+      "revision": "60619e1448d8b954aaa496abf482f886929d9046",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.20.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "40e88e2b66cce4ebece5ad0caee2adc1aac8183822dcad7491498cb85f79e335"
+    },
+    "appArchive": {
+      "bytes": 2963246,
+      "sha256": "96a6dc47ec88ce5fa7779f5cd4972deba55a9713a2bc3843aa4aa2d36d874a62"
+    },
+    "lockfile": {
+      "bytes": 374001,
+      "sha256": "9d41c59998b756dc557aea44b8ebb9266dd1e24f7c9df7acec8c9c28cd5d53ee"
+    },
+    "fixture": {
+      "bytes": 110286,
+      "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+    },
+    "integrationCoverage": {
+      "nativeAudio": "required: bundled STT, TTS and phones must succeed",
+      "localChat": {
+        "status": "not-run",
+        "reason": "Ollama is deliberately unavailable in this isolated acceptance run. Run npm run verify:local-model separately on a host with installed local models."
+      }
+    },
+    "checks": {
+      "artifactLayout": {
+        "passed": true,
+        "checkedFiles": 3773,
+        "additionalFiles": [
+          "Uninstall Xenolinguist.exe"
+        ],
+        "source": {
+          "revision": "60619e1448d8b954aaa496abf482f886929d9046",
+          "branch": "implementation/reliability",
+          "workingFiles": [],
+          "node": "24.20.0",
+          "platform": "win32",
+          "arch": "x64"
+        },
+        "manifest": {
+          "bytes": 824822,
+          "sha256": "8eb060217faa5591f59dfaadfd6805aa8f756b344259124dd69a8f2d629ef2d8"
+        },
+        "checks": {
+          "requiredFiles": 9,
+          "nativeGroups": 3,
+          "runtimePackages": 50
+        }
+      },
+      "localBoundary": {
+        "otherWindowStatus": 401,
+        "sandbox": true,
+        "contextIsolation": true,
+        "nodeIntegration": false,
+        "webSecurity": true,
+        "anonymousHealth": 401,
+        "anonymousBinary": 401,
+        "trustedHealth": 200,
+        "foreignNavigationBlocked": true,
+        "popupDenied": true,
+        "syntheticMicrophone": {
+          "audioTracks": 1,
+          "cameraDenied": true
+        },
+        "relaunchAuthenticated": true
+      },
+      "runtimeCapabilities": {
+        "checkedAt": "2026-09-23T19:32:25.913Z",
+        "expiresAt": "2026-09-23T19:32:30.913Z",
+        "storage": {
+          "state": "available",
+          "detail": "Local storage write probe passed"
+        },
+        "tts": {
+          "state": "available",
+          "detail": "Local speech synthesis files present; execution is checked when requested"
+        },
+        "stt": {
+          "state": "available",
+          "detail": "Local transcription files present; execution is checked when requested"
+        },
+        "phones": {
+          "state": "available",
+          "detail": "Phone asset sizes match; hashes and native runtime are checked at inference"
+        },
+        "chat": {
+          "state": "unavailable",
+          "detail": "Start the local Ollama service to use chat"
+        },
+        "resources": {
+          "cpuCount": 4,
+          "freeMemoryBytes": 13240360960,
+          "totalMemoryBytes": 17174360064
+        },
+        "setupModels": [
+          {
+            "name": "gemma4:e4b",
+            "approximateBytes": 9610000000
+          },
+          {
+            "name": "llama3.2:3b",
+            "approximateBytes": 2020000000
+          }
+        ]
+      },
+      "nativeJobCancellation": {
+        "nativeProcessStarted": true,
+        "status": 409,
+        "code": "JOB_CANCELLED"
+      },
+      "ipa": {
+        "status": 200,
+        "body": {
+          "ipa": "h# dh ax l ow w eh l pau dh ah kcl k w ih kcl k pau r aw n dcl f aa kcl k s ah m pau s ow m ah n ah l ey z ih dcl n ao gcl g h#",
+          "segments": [
+            {
+              "phone": "h#",
+              "start": 0,
+              "end": 0.02
+            },
+            {
+              "phone": "dh",
+              "start": 0.04,
+              "end": 0.06
+            },
+            {
+              "phone": "ax",
+              "start": 0.06,
+              "end": 0.08
+            },
+            {
+              "phone": "l",
+              "start": 0.14,
+              "end": 0.16
+            },
+            {
+              "phone": "ow",
+              "start": 0.18,
+              "end": 0.2
+            },
+            {
+              "phone": "w",
+              "start": 0.34,
+              "end": 0.36
+            },
+            {
+              "phone": "eh",
+              "start": 0.38,
+              "end": 0.4
+            },
+            {
+              "phone": "l",
+              "start": 0.52,
+              "end": 0.56
+            },
+            {
+              "phone": "pau",
+              "start": 0.64,
+              "end": 0.66
+            },
+            {
+              "phone": "dh",
+              "start": 0.68,
+              "end": 0.72
+            },
+            {
+              "phone": "ah",
+              "start": 0.72,
+              "end": 0.74
+            },
+            {
+              "phone": "kcl",
+              "start": 0.8,
+              "end": 0.82
+            },
+            {
+              "phone": "k",
+              "start": 0.82,
+              "end": 0.86
+            },
+            {
+              "phone": "w",
+              "start": 0.88,
+              "end": 0.92
+            },
+            {
+              "phone": "ih",
+              "start": 0.92,
+              "end": 0.94
+            },
+            {
+              "phone": "kcl",
+              "start": 1.04,
+              "end": 1.06
+            },
+            {
+              "phone": "k",
+              "start": 1.06,
+              "end": 1.08
+            },
+            {
+              "phone": "pau",
+              "start": 1.12,
+              "end": 1.14
+            },
+            {
+              "phone": "r",
+              "start": 1.16,
+              "end": 1.18
+            },
+            {
+              "phone": "aw",
+              "start": 1.2,
+              "end": 1.22
+            },
+            {
+              "phone": "n",
+              "start": 1.34,
+              "end": 1.36
+            },
+            {
+              "phone": "dcl",
+              "start": 1.38,
+              "end": 1.4
+            },
+            {
+              "phone": "f",
+              "start": 1.44,
+              "end": 1.46
+            },
+            {
+              "phone": "aa",
+              "start": 1.48,
+              "end": 1.5
+            },
+            {
+              "phone": "kcl",
+              "start": 1.58,
+              "end": 1.62
+            },
+            {
+              "phone": "k",
+              "start": 1.62,
+              "end": 1.64
+            },
+            {
+              "phone": "s",
+              "start": 1.7,
+              "end": 1.72
+            },
+            {
+              "phone": "ah",
+              "start": 1.8,
+              "end": 1.82
+            },
+            {
+              "phone": "m",
+              "start": 1.9,
+              "end": 1.94
+            },
+            {
+              "phone": "pau",
+              "start": 2.04,
+              "end": 2.06
+            },
+            {
+              "phone": "s",
+              "start": 2.1,
+              "end": 2.12
+            },
+            {
+              "phone": "ow",
+              "start": 2.16,
+              "end": 2.18
+            },
+            {
+              "phone": "m",
+              "start": 2.28,
+              "end": 2.3
+            },
+            {
+              "phone": "ah",
+              "start": 2.32,
+              "end": 2.34
+            },
+            {
+              "phone": "n",
+              "start": 2.4,
+              "end": 2.44
+            },
+            {
+              "phone": "ah",
+              "start": 2.46,
+              "end": 2.48
+            },
+            {
+              "phone": "l",
+              "start": 2.52,
+              "end": 2.54
+            },
+            {
+              "phone": "ey",
+              "start": 2.56,
+              "end": 2.58
+            },
+            {
+              "phone": "z",
+              "start": 2.7,
+              "end": 2.72
+            },
+            {
+              "phone": "ih",
+              "start": 2.74,
+              "end": 2.76
+            },
+            {
+              "phone": "dcl",
+              "start": 2.82,
+              "end": 2.86
+            },
+            {
+              "phone": "n",
+              "start": 2.88,
+              "end": 2.9
+            },
+            {
+              "phone": "ao",
+              "start": 2.9,
+              "end": 2.92
+            },
+            {
+              "phone": "gcl",
+              "start": 3.06,
+              "end": 3.08
+            },
+            {
+              "phone": "g",
+              "start": 3.08,
+              "end": 3.1
+            },
+            {
+              "phone": "h#",
+              "start": 3.42,
+              "end": 3.44
+            }
+          ],
+          "identity": {
+            "modelId": "wav2vec2-phoneme",
+            "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+            "alphabet": "TIMIT ARPABET",
+            "transformers": "4.2.0",
+            "backend": "onnxruntime-node",
+            "node": "24.19.0"
+          }
+        }
+      },
+      "stt": {
+        "status": 200,
+        "body": {
+          "language": "en",
+          "text": "Hello world, the quick brown fox, dumb, over the lazy dog.",
+          "segments": [
+            {
+              "start": 0,
+              "end": 3.18,
+              "text": "Hello world, the quick brown fox, dumb, over the lazy dog."
+            }
+          ],
+          "languageProb": 0.876527,
+          "mode": "transcription"
+        }
+      },
+      "tts": {
+        "status": 200,
+        "bytes": 86537,
+        "wav": true
+      },
+      "wavUpload": {
+        "status": 200,
+        "body": {
+          "filename": "release-fixture.wav",
+          "size": 110286
+        }
+      },
+      "sampleSave": {
+        "status": 200
+      },
+      "sampleOnDisk": true,
+      "loadedWorkbench": true,
+      "pendingSaveRecovered": true,
+      "desktopDraftRecovered": true,
+      "desktopAudioDraftRecovered": true,
+      "desktopAudioSaved": {
+        "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phoneSegments": 49,
+        "playback": true
+      },
+      "desktopAIHistoryRecovered": {
+        "state": "complete",
+        "task": "conlangGeneration",
+        "fixtureGeneration": true
+      },
+      "desktopSandboxRecovered": {
+        "sameSession": true,
+        "restoredEvents": 2,
+        "afterRetryEvents": 3,
+        "dictionaryEntries": 1,
+        "fixtureGeneration": true
+      },
+      "desktopEvidenceMetrics": {
+        "unratedAssertion": true,
+        "historyVisible": true,
+        "latestSnapshot": {
+          "version": 1,
+          "revision": 4,
+          "recorded_at": "2026-09-23T19:33:32.595Z",
+          "counts": {
+            "observations": 0,
+            "assertedEntries": 1,
+            "grammarNotes": 0,
+            "competingForms": 0,
+            "mappings1To20": 1,
+            "ratedEntries": 0
+          }
+        }
+      },
+      "compilerPractice": {
+        "passed": true,
+        "version": "xeno-generator-1",
+        "observations": 29,
+        "challenges": 5,
+        "sameSessionAfterRelaunch": true,
+        "draftRecovered": true,
+        "reveals": 1,
+        "archiveRestored": true
+      },
+      "unicodeLexicon": {
+        "passed": true,
+        "scripts": [
+          "Han",
+          "Tamil",
+          "Latin decomposed accent"
+        ],
+        "casePolicy": true,
+        "competingHomographs": true,
+        "explicitReverseAlias": true,
+        "archiveRestored": true
+      },
+      "typedGrammar": {
+        "passed": true,
+        "novelPlural": true,
+        "sovRoles": true,
+        "negation": true,
+        "pastAffix": true,
+        "sourceSpans": true,
+        "reverseGeneration": true,
+        "archiveRestored": true
+      },
+      "groundedInduction": {
+        "passed": true,
+        "workerExecuted": true,
+        "independentValidation": true,
+        "explicitAcceptance": true,
+        "acceptedRuleExecuted": true,
+        "archiveRestored": true
+      },
+      "portableArchives": {
+        "passed": true,
+        "projects": [
+          {
+            "bytes": 234326,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 3,
+              "recordings": 1,
+              "proposals": 0,
+              "snapshots": 4
+            },
+            "sandboxIncluded": true,
+            "restoredAudioHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+          },
+          {
+            "bytes": 4431,
+            "counts": {
+              "words": 1,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 1,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2428,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2450,
+            "counts": {
+              "words": 5,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2777,
+            "counts": {
+              "words": 3,
+              "rules": 4,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 5209,
+            "counts": {
+              "words": 3,
+              "rules": 1,
+              "samples": 5,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          }
+        ]
+      },
+      "missingModel": {
+        "status": 503,
+        "body": {
+          "error": "ipa-unavailable",
+          "code": "IPA_MODEL_MISSING",
+          "requestId": "f41e579c-e3bd-47ac-88fc-ff1bb196c090",
+          "retryable": true
+        }
+      }
+    },
+    "restart": {
+      "firstOrigin": "http://127.0.0.1:58772",
+      "secondOrigin": "http://127.0.0.1:65509",
+      "revision": 2
+    }
+  },
+  "downloadedInstalledEvidence": {
+    "result": {
+      "bytes": 673188,
+      "sha256": "7d4cf49c5f84c155d4a13859386b56bde4bbb410f7ddc455c821b177a39c4ae3"
+    },
+    "artifactManifest": {
+      "bytes": 824822,
+      "sha256": "8eb060217faa5591f59dfaadfd6805aa8f756b344259124dd69a8f2d629ef2d8"
+    }
+  },
+  "experiments": {
+    "development": {
+      "file": "w18-development-results.zip",
+      "bytes": 272046,
+      "sha256": "a0ea7bc0727970fb2f9d898616ea278d5f1922a26ed2ef17e047f6b875395173",
+      "sourceSnapshotHash": "3cb0995cc9407e5f10e7757b7f84540447cfcecbb5945c199f38c30db5655f2d",
+      "summary": [
+        {
+          "condition": "regular",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "regular",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "regular",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 48,
+          "correct": 48
+        },
+        {
+          "condition": "regular",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 48,
+          "correct": 48
+        },
+        {
+          "condition": "sparse",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "sparse",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "sparse",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "sparse",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 48,
+          "correct": 48
+        },
+        {
+          "condition": "irregular",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "irregular",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "irregular",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 24,
+          "correct": 24
+        },
+        {
+          "condition": "irregular",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 24,
+          "correct": 24
+        },
+        {
+          "condition": "syncretism",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "syncretism",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "syncretism",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "syncretism",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 12,
+          "correct": 12
+        },
+        {
+          "condition": "segmentation-ambiguity",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "segmentation-ambiguity",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "segmentation-ambiguity",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "segmentation-ambiguity",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 24,
+          "correct": 24
+        }
+      ],
+      "manifest": {
+        "version": "grounded-ablation-1",
+        "split": "development",
+        "config": {
+          "version": "grounded-ablation-1",
+          "developmentSeeds": [
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111
+          ],
+          "evaluationSeeds": [
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211
+          ],
+          "conditions": [
+            "regular",
+            "sparse",
+            "irregular",
+            "syncretism",
+            "segmentation-ambiguity"
+          ],
+          "methods": [
+            "memorization",
+            "repaired-lookup",
+            "learned-rules",
+            "oracle-rules"
+          ]
+        },
+        "source": {
+          "commit": "1cf6e9055a446557edb86f1adf81d1df328b6d03",
+          "trackedDirty": false,
+          "files": [
+            {
+              "path": "engine/src/__tests__/grammar.test.ts",
+              "sha256": "eeab414a17600c53eca5782b2f27b7af9892dffea22d9780b22df8f43ba308bd"
+            },
+            {
+              "path": "engine/src/__tests__/induction.test.ts",
+              "sha256": "de173226341ad279625e4379706cc1400c77202a9a69e59cc40bf4f34792a8bb"
+            },
+            {
+              "path": "engine/src/__tests__/unicode.test.ts",
+              "sha256": "c185f889bf49ab2b36cc9f6378feaa95be612b2c33f91920b4135f4917629c7a"
+            },
+            {
+              "path": "engine/src/grammar/ast.ts",
+              "sha256": "45d4f6187265106cb95d75a356efb95ffacad9eb9f8e8e8edc4310151cc09a6e"
+            },
+            {
+              "path": "engine/src/grammar/parser.ts",
+              "sha256": "535ab8c37f876624e02993ed34d3acbc89f91a6c678b7a8e4918f7080798d5d8"
+            },
+            {
+              "path": "engine/src/grammar/transforms.ts",
+              "sha256": "9e90416a33999ef25ed18adad55da1ed75d8f72e8d9638ba43c20ef1174cc0c6"
+            },
+            {
+              "path": "engine/src/induction/affixes.ts",
+              "sha256": "dbcdbcc77551f02a96383e9c9b1f35a0265e7e452612d6eb1335262421d382d0"
+            },
+            {
+              "path": "engine/src/induction/alignments.ts",
+              "sha256": "66d5becf3f0f57125820c131b01545b7145c3ef63684ae25c86c9e67a38f8bac"
+            },
+            {
+              "path": "engine/src/induction/candidate-search.ts",
+              "sha256": "33ffa2520060aabbaa497c88b7d91c3d9aaa41e8128a15fd2fe4f172231b7293"
+            },
+            {
+              "path": "engine/src/induction/contracts.ts",
+              "sha256": "f50a47e2325991f998bacb92a751519fb81074856ef5d0bab604c5a7ecb67b0a"
+            },
+            {
+              "path": "engine/src/induction/mdl.ts",
+              "sha256": "2d67e66afbdc60cdd279e3d6d754283071b3752d91b098fdbc4367960f99fb82"
+            },
+            {
+              "path": "engine/src/induction/word-order.ts",
+              "sha256": "f8d2944f21b74b631948d536ac0822d8618e1c49a375975b7fd7f6cb84b94ea7"
+            },
+            {
+              "path": "engine/src/lexicon/index.ts",
+              "sha256": "22c937880af7a5748fea4dcbd83fff154e38c4345e88e7370c816be86e82e794"
+            },
+            {
+              "path": "engine/src/lexicon/senses.ts",
+              "sha256": "7c7e76046d5fe157620c305537508fb59e51f61bda164c3a263b28d6d9570ced"
+            },
+            {
+              "path": "engine/src/morphology/analyze.ts",
+              "sha256": "6573f99dd8d2efacb5f988728c420c97c09ba2c51465307511b3845307370dac"
+            },
+            {
+              "path": "engine/src/morphology/generate.ts",
+              "sha256": "952c779c91bd6ccd21fc58af6d910b0e3a1b26db3a76e26aa34ea2327161b678"
+            },
+            {
+              "path": "engine/src/text/normalize.ts",
+              "sha256": "2448b32d22abc4ec29eb52173831a146cd8ed6a69f067320f37f6dfc4c55033b"
+            },
+            {
+              "path": "engine/src/text/spans.ts",
+              "sha256": "2ab2fe34bb445dd201f8abcbe3fd3c5a3c35a50e653730f09671ee700453af5d"
+            },
+            {
+              "path": "engine/src/text/tokenize.ts",
+              "sha256": "cfc7f4567c0c8e251852ccdecd3b90e0492144e6d2fa9166cb214d06625fd592"
+            },
+            {
+              "path": "engine/src/translation/derive.ts",
+              "sha256": "e7b4bfb068195d283b4759ac6dab7342d4ae1220edecdce92f487046ddec772e"
+            },
+            {
+              "path": "engine/src/translation/render.ts",
+              "sha256": "73adb983d6b2dbcd512a5a1b804a7d860440a6d22c1bef1f081d9544066b1ac8"
+            },
+            {
+              "path": "engine/src/types.ts",
+              "sha256": "0a04f1726fd02425cc847d9e0a67f5d84c6b94f6aae61907f9c0056c90672ee1"
+            },
+            {
+              "path": "evaluation/configs/ablation.json",
+              "sha256": "cb78b5ea37ac77672fb1359928e289428f203baebbbe8f7d2dd317abeb11cf30"
+            },
+            {
+              "path": "evaluation/configs/baseline.json",
+              "sha256": "e4211e0de414e6e461d44cc1b6b1e01f50e540b16b4dfa056298d27ea16f48c7"
+            },
+            {
+              "path": "evaluation/configs/ci.json",
+              "sha256": "c083a7a1d4e5115a6fd6a32f8ab2c94ad7fc5557f86dcda67aae0ccc6bcc1b8d"
+            },
+            {
+              "path": "evaluation/configs/development.json",
+              "sha256": "8033ce44d24b962015782de2dadb82f8e660f2909b2dc41e3eb4e11be09d35a1"
+            },
+            {
+              "path": "evaluation/configs/structural.json",
+              "sha256": "a88f25da5dc70742e98d6248c206d68b60001976dc38d6e20d739536bd5fe6d6"
+            },
+            {
+              "path": "evaluation/fixtures/generator-gold.json",
+              "sha256": "1d58ed563ebdc11aa5b33e993529f30ce9b81d68ebde6aaf3d1c1fb8cea12430"
+            },
+            {
+              "path": "evaluation/fixtures/unicode-lexical.json",
+              "sha256": "0f39f15c793b61a5187543f52ab26fad4655421aa1b8553289f2573d05cefb83"
+            },
+            {
+              "path": "evaluation/package.json",
+              "sha256": "fe1f87c03e9845443b090d67580481f7f4064c362a9a23b3f34753e58142a1a7"
+            },
+            {
+              "path": "evaluation/src/adapters/exact-lookup.ts",
+              "sha256": "fd1997a35387f203b030542d198f6b4679299c7b732a8ae015f3094ca6100623"
+            },
+            {
+              "path": "evaluation/src/adapters/grounded-symbolic.ts",
+              "sha256": "39a37d1f2ae40ab31d47ea909f04d93acbb6a70dbe09f9d65463a78a26288be6"
+            },
+            {
+              "path": "evaluation/src/adapters/hybrid.ts",
+              "sha256": "477f0a1ae3556fde45a4bbd123d2822df22ba29357d7b03947019f0621f035d4"
+            },
+            {
+              "path": "evaluation/src/adapters/llm-only.ts",
+              "sha256": "0221abe99b7dee3752d7e6c46b6028bd2fbab39d124016f32ad3b9fc3ad8c223"
+            },
+            {
+              "path": "evaluation/src/adapters/prior.ts",
+              "sha256": "0e380995345f1d83bda7cd205778803aa0c5506540b38ba2fc18851845e7f137"
+            },
+            {
+              "path": "evaluation/src/adapters/symbolic.ts",
+              "sha256": "8f296d25ca2b4407ca0be99365327da9c9beb31890d3258e31472e2ea3917775"
+            },
+            {
+              "path": "evaluation/src/baselines.test.ts",
+              "sha256": "15c7fa6fc47adfd77fee1fa93206bb7ae5ccb1f1211f670ce56386d0f1e07fe0"
+            },
+            {
+              "path": "evaluation/src/contracts.ts",
+              "sha256": "a5381dac859cf7e0d8ae7f569173ffa736e9501f63d6923fb886ffe62e788680"
+            },
+            {
+              "path": "evaluation/src/export.ts",
+              "sha256": "7f4d999b1f9d630e99f1b7c6500a6afacc06d786707af3e5c15a0812ca7dd8e6"
+            },
+            {
+              "path": "evaluation/src/generator/compile.ts",
+              "sha256": "7a76ea70812322227d80ba3773457efc9d01167f2b0bcfa503b185f3460f73f5"
+            },
+            {
+              "path": "evaluation/src/generator/compiler.test.ts",
+              "sha256": "dc7e5cc666389b181bd24e21bcdde6aa0ff5d9f1793d5e5d8113c766ba976085"
+            },
+            {
+              "path": "evaluation/src/generator/dataset.ts",
+              "sha256": "9e2c61a38f716cea2a6983e6cbce002473266a74f111374bdbe7fe1011e5cb4d"
+            },
+            {
+              "path": "evaluation/src/generator/grammar.ts",
+              "sha256": "c5ecb714e8800fff6bb5632137953859dd6ff445500470017031c852e1fe9c84"
+            },
+            {
+              "path": "evaluation/src/generator/lexicon.ts",
+              "sha256": "b99205acbe2444d975a8adf9176efeddcdf6be3ccc566eb733c92abbf117561e"
+            },
+            {
+              "path": "evaluation/src/generator/phonology.ts",
+              "sha256": "53e5e0c00f9f6d86a3e08cf07a25c55103eb11323d33d7f010a1448e01116ea7"
+            },
+            {
+              "path": "evaluation/src/generator/prng.ts",
+              "sha256": "5f3383d6bec61b887621a4f54fd00ce52932d8837f8b373fa5c838cafcceff33"
+            },
+            {
+              "path": "evaluation/src/generator/semantics.ts",
+              "sha256": "ed1f9461c2cf170062c8b548a7e4bc6584a63da8514ba4578d22b47063fb560c"
+            },
+            {
+              "path": "evaluation/src/induction/corpus.ts",
+              "sha256": "96a249f0fbc50acfbd03a0f4901694bcfb2686e0dd21502f6eab9e3ec95768ae"
+            },
+            {
+              "path": "evaluation/src/induction/experiment.test.ts",
+              "sha256": "6503042822fbe856f1298bdc2998e7b87e474b1144f505bd11ded6466141f34c"
+            },
+            {
+              "path": "evaluation/src/induction/experiment.ts",
+              "sha256": "3b71848e37ce8d9fdcb412f0207eecab5637b643703b9a01a963218eed3dd65e"
+            },
+            {
+              "path": "evaluation/src/induction/run.ts",
+              "sha256": "b35eb3b99a496452ed8e262f9d622afbbf54b1b2d6d2c2292ea5c5b568f2958f"
+            },
+            {
+              "path": "evaluation/src/metrics/accuracy.ts",
+              "sha256": "0f1925f082a1f2c1995f2d2740341ce0ca23a634fb5e78ee45c589d153d02763"
+            },
+            {
+              "path": "evaluation/src/metrics/calibration.ts",
+              "sha256": "01a1139af5ee5d6308d7cdad8302d41f44dbdeaf167f22e76e9814378044b04f"
+            },
+            {
+              "path": "evaluation/src/metrics/performance.ts",
+              "sha256": "879503d6ff5515a03381cecea149fd91990f9d432c7eb00c7da572e65a8c3b25"
+            },
+            {
+              "path": "evaluation/src/records.ts",
+              "sha256": "0c7279ee7c388a1df359feb02cc3816b149397a2d513871af55ad91da4a74072"
+            },
+            {
+              "path": "evaluation/src/reports.ts",
+              "sha256": "ccb3b1902278aaf424aa89aaae50c527a3e4bae18354fae6d12314dcb3b550ac"
+            },
+            {
+              "path": "evaluation/src/runner.ts",
+              "sha256": "0cba0eb31c161f3d730a0d10f1d1d680185c9451494c6cbeb942d2cfd8417aca"
+            },
+            {
+              "path": "evaluation/src/unicode-benchmark.test.ts",
+              "sha256": "328d5ba5caac03d1b7bb22d7700303135d8b19019522738adae452712cc65779"
+            },
+            {
+              "path": "evaluation/src/unicode-benchmark.ts",
+              "sha256": "12a38fa12f1e21bcdf5e10ff7078ba3a1a54bebd2e220138c3692b84497835d6"
+            },
+            {
+              "path": "evaluation/src/verify.ts",
+              "sha256": "12740eb18f82121d2a64a58dd299680835201a41bb22fe7fa26b64006a2989e7"
+            },
+            {
+              "path": "evaluation/tsconfig.json",
+              "sha256": "e4d0cc026e7719836858cbd1a13ebcadbbbf0b40f8543bbf8fbe912a5ecacdac"
+            },
+            {
+              "path": "package-lock.json",
+              "sha256": "9ffacde2e2d7d6091548c73813abdb70d377605c31afa420f9bee68789b09def"
+            },
+            {
+              "path": "package.json",
+              "sha256": "df995738f86c2416cdf37cf76144f73e6e32d064366c4e518f6947dba530753a"
+            },
+            {
+              "path": "shared/audio-container.ts",
+              "sha256": "9c0c7cdb253fd1ae42714d1023e9e484550523d8d509cbc0b9ba853e7c76bcf7"
+            },
+            {
+              "path": "shared/constants.ts",
+              "sha256": "76daf2f95c3450eb22665ab8915351391abb350a4679dce4a46b69225e4902b9"
+            },
+            {
+              "path": "shared/demo-language.ts",
+              "sha256": "8cbdda92193d64c074061913fad3817663d5cbcef358336810793c77ecd5a703"
+            },
+            {
+              "path": "shared/demo-presentation.ts",
+              "sha256": "916c6dbdbd955d65c080543594b4feddad5011c135851a4e31fdd11b2aa12d32"
+            },
+            {
+              "path": "shared/metrics/number-evidence.ts",
+              "sha256": "c94e88f78dc530c929e59cf2b401e4df12352d1bbd7d5097c74797c92d594f57"
+            },
+            {
+              "path": "shared/metrics/workspace-metrics.test.ts",
+              "sha256": "a32f0bc9925323cd3df58af5511b02c3e2f03ac52517c9c341af3d31c380b9ed"
+            },
+            {
+              "path": "shared/metrics/workspace-metrics.ts",
+              "sha256": "ba0ec0770e223e8d0da033131885a4c2e71401b3fbb92681308f1f9727e31973"
+            },
+            {
+              "path": "shared/package.json",
+              "sha256": "bb5516015f61220f7bddb2a99b00ada0b725601f0ce6a27389f1c432ba14b8fc"
+            },
+            {
+              "path": "shared/profile-operations.ts",
+              "sha256": "d3e62b4c1d53249747020af0f992ac4f28723a76a59317ef61589f6f56eed3ef"
+            },
+            {
+              "path": "shared/prompts.ts",
+              "sha256": "2e13020fb0a94f1eb2a11f98a685c4dc632ed089bbb99f3aab677eb69ba6dab8"
+            },
+            {
+              "path": "shared/sandbox/grading.test.ts",
+              "sha256": "613a9766c98d2dfa79610e649b11b2cbd3bf5b3539e119b36fff341880463528"
+            },
+            {
+              "path": "shared/sandbox/grading.ts",
+              "sha256": "98effe471a38db187158c509d7275f03009d348d932460b26bda20d5dac11a40"
+            },
+            {
+              "path": "shared/sandbox/session.ts",
+              "sha256": "84081d9ce17a8ff5f73a5b6fea6e63f03210c763a5b31bd34f52a964bf5ac225"
+            },
+            {
+              "path": "shared/schemas/ai-history.ts",
+              "sha256": "4223d31e2c739cfee646583c4b2b72215a1d4c8ee406ed273fd98ad80ea8ad4a"
+            },
+            {
+              "path": "shared/schemas/archive.ts",
+              "sha256": "309fdef218a3ce1801bb03ad512cbd98240ed5d96325c89b8dab67ae07863fc4"
+            },
+            {
+              "path": "shared/schemas/audio.ts",
+              "sha256": "380b5f2b6e5ead24fe15c6a141a4c154ffce4cfa7c76f3204d48eb38f2f89805"
+            },
+            {
+              "path": "shared/schemas/capabilities.ts",
+              "sha256": "c998591c7af626f7f3617de173b03da0d9a17aef3a78166758cac32f4837058e"
+            },
+            {
+              "path": "shared/schemas/common.ts",
+              "sha256": "cefb1208f3c506179c0400b93e412388b2b0bf63a4f79e05e7b15efb17c856ab"
+            },
+            {
+              "path": "shared/schemas/errors.ts",
+              "sha256": "151d92940ed82451004cfb8516c3ab9f9bda45524854366edfd2fd6ff167aad5"
+            },
+            {
+              "path": "shared/schemas/grammar.ts",
+              "sha256": "00f3f15cd82d2689615fd6095bcf5e02b5ee4e18612cbc347d34ad60e41701f5"
+            },
+            {
+              "path": "shared/schemas/lexicon.ts",
+              "sha256": "15c1731488ac3464a7f05dabdba06e254f6dc9185a92ad853e8e6b26b2bf076e"
+            },
+            {
+              "path": "shared/schemas/metrics.ts",
+              "sha256": "cd9d2fab722ada474cfb8aef5dfb58ffa393662bad2877c1809bbf3167a65eac"
+            },
+            {
+              "path": "shared/schemas/mutations.ts",
+              "sha256": "0109af4798f3a6abf1bd320a620259312cc0c2f066fe7ad7149994755337d04f"
+            },
+            {
+              "path": "shared/schemas/profile.ts",
+              "sha256": "8071f51010f695969da9e1de28f2c4956557f64efc321dbbdb6ca329dee22417"
+            },
+            {
+              "path": "shared/schemas/sandbox.ts",
+              "sha256": "13406a00914de7e8628bb7f8a7c72305d20b3e97077a41717d522387a14e5cc8"
+            },
+            {
+              "path": "shared/schemas/save-queue.ts",
+              "sha256": "11c998de4dcf51a2ee69b4b99fd0f0cef4d424fa8b0523670a966cbf0797f84a"
+            },
+            {
+              "path": "shared/types.ts",
+              "sha256": "e176f9ca4749be44505d40d4e9dcf7ab9f16edcaac7bcc560287e07cf1bdd181"
+            },
+            {
+              "path": "tsconfig.base.json",
+              "sha256": "34e78df802f2b1c052dbc946db25423edcec01f0a79bb87b555d7a03f7fe6060"
+            }
+          ],
+          "snapshotHash": "3cb0995cc9407e5f10e7757b7f84540447cfcecbb5945c199f38c30db5655f2d"
+        },
+        "status": "complete",
+        "startedAt": "2026-09-23T03:29:28.936Z",
+        "records": 60,
+        "artifacts": [
+          {
+            "path": "records.json",
+            "sha256": "531429e52d50f8a5292d2cddc8f0669660fe0fe5b44b525f0f2f744198a6bd93"
+          },
+          {
+            "path": "summary.json",
+            "sha256": "c584d28f48448bcf75422b6ad1bd9f8da0743f49d539893fdc1926a5a673dc18"
+          }
+        ]
+      },
+      "extractedArchiveReplay": {
+        "passed": true,
+        "records": 60,
+        "split": "development",
+        "sourceSnapshotHash": "3cb0995cc9407e5f10e7757b7f84540447cfcecbb5945c199f38c30db5655f2d"
+      }
+    },
+    "evaluation": {
+      "file": "w18-evaluation-results.zip",
+      "bytes": 272063,
+      "sha256": "a576e2e777bc279baa12f1a5d13b7fa21be5044dd95863afd5ae79a9d72af760",
+      "sourceSnapshotHash": "3cb0995cc9407e5f10e7757b7f84540447cfcecbb5945c199f38c30db5655f2d",
+      "summary": [
+        {
+          "condition": "regular",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "regular",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "regular",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 48,
+          "correct": 48
+        },
+        {
+          "condition": "regular",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 48,
+          "correct": 48
+        },
+        {
+          "condition": "sparse",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "sparse",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "sparse",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "sparse",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 48,
+          "correct": 48
+        },
+        {
+          "condition": "irregular",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "irregular",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "irregular",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 24,
+          "correct": 24
+        },
+        {
+          "condition": "irregular",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 24,
+          "correct": 24
+        },
+        {
+          "condition": "syncretism",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "syncretism",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "syncretism",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "syncretism",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 12,
+          "correct": 12
+        },
+        {
+          "condition": "segmentation-ambiguity",
+          "method": "memorization",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "segmentation-ambiguity",
+          "method": "repaired-lookup",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "segmentation-ambiguity",
+          "method": "learned-rules",
+          "total": 48,
+          "answered": 0,
+          "correct": 0
+        },
+        {
+          "condition": "segmentation-ambiguity",
+          "method": "oracle-rules",
+          "total": 48,
+          "answered": 24,
+          "correct": 24
+        }
+      ],
+      "manifest": {
+        "version": "grounded-ablation-1",
+        "split": "evaluation",
+        "config": {
+          "version": "grounded-ablation-1",
+          "developmentSeeds": [
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111
+          ],
+          "evaluationSeeds": [
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211
+          ],
+          "conditions": [
+            "regular",
+            "sparse",
+            "irregular",
+            "syncretism",
+            "segmentation-ambiguity"
+          ],
+          "methods": [
+            "memorization",
+            "repaired-lookup",
+            "learned-rules",
+            "oracle-rules"
+          ]
+        },
+        "source": {
+          "commit": "1cf6e9055a446557edb86f1adf81d1df328b6d03",
+          "trackedDirty": false,
+          "files": [
+            {
+              "path": "engine/src/__tests__/grammar.test.ts",
+              "sha256": "eeab414a17600c53eca5782b2f27b7af9892dffea22d9780b22df8f43ba308bd"
+            },
+            {
+              "path": "engine/src/__tests__/induction.test.ts",
+              "sha256": "de173226341ad279625e4379706cc1400c77202a9a69e59cc40bf4f34792a8bb"
+            },
+            {
+              "path": "engine/src/__tests__/unicode.test.ts",
+              "sha256": "c185f889bf49ab2b36cc9f6378feaa95be612b2c33f91920b4135f4917629c7a"
+            },
+            {
+              "path": "engine/src/grammar/ast.ts",
+              "sha256": "45d4f6187265106cb95d75a356efb95ffacad9eb9f8e8e8edc4310151cc09a6e"
+            },
+            {
+              "path": "engine/src/grammar/parser.ts",
+              "sha256": "535ab8c37f876624e02993ed34d3acbc89f91a6c678b7a8e4918f7080798d5d8"
+            },
+            {
+              "path": "engine/src/grammar/transforms.ts",
+              "sha256": "9e90416a33999ef25ed18adad55da1ed75d8f72e8d9638ba43c20ef1174cc0c6"
+            },
+            {
+              "path": "engine/src/induction/affixes.ts",
+              "sha256": "dbcdbcc77551f02a96383e9c9b1f35a0265e7e452612d6eb1335262421d382d0"
+            },
+            {
+              "path": "engine/src/induction/alignments.ts",
+              "sha256": "66d5becf3f0f57125820c131b01545b7145c3ef63684ae25c86c9e67a38f8bac"
+            },
+            {
+              "path": "engine/src/induction/candidate-search.ts",
+              "sha256": "33ffa2520060aabbaa497c88b7d91c3d9aaa41e8128a15fd2fe4f172231b7293"
+            },
+            {
+              "path": "engine/src/induction/contracts.ts",
+              "sha256": "f50a47e2325991f998bacb92a751519fb81074856ef5d0bab604c5a7ecb67b0a"
+            },
+            {
+              "path": "engine/src/induction/mdl.ts",
+              "sha256": "2d67e66afbdc60cdd279e3d6d754283071b3752d91b098fdbc4367960f99fb82"
+            },
+            {
+              "path": "engine/src/induction/word-order.ts",
+              "sha256": "f8d2944f21b74b631948d536ac0822d8618e1c49a375975b7fd7f6cb84b94ea7"
+            },
+            {
+              "path": "engine/src/lexicon/index.ts",
+              "sha256": "22c937880af7a5748fea4dcbd83fff154e38c4345e88e7370c816be86e82e794"
+            },
+            {
+              "path": "engine/src/lexicon/senses.ts",
+              "sha256": "7c7e76046d5fe157620c305537508fb59e51f61bda164c3a263b28d6d9570ced"
+            },
+            {
+              "path": "engine/src/morphology/analyze.ts",
+              "sha256": "6573f99dd8d2efacb5f988728c420c97c09ba2c51465307511b3845307370dac"
+            },
+            {
+              "path": "engine/src/morphology/generate.ts",
+              "sha256": "952c779c91bd6ccd21fc58af6d910b0e3a1b26db3a76e26aa34ea2327161b678"
+            },
+            {
+              "path": "engine/src/text/normalize.ts",
+              "sha256": "2448b32d22abc4ec29eb52173831a146cd8ed6a69f067320f37f6dfc4c55033b"
+            },
+            {
+              "path": "engine/src/text/spans.ts",
+              "sha256": "2ab2fe34bb445dd201f8abcbe3fd3c5a3c35a50e653730f09671ee700453af5d"
+            },
+            {
+              "path": "engine/src/text/tokenize.ts",
+              "sha256": "cfc7f4567c0c8e251852ccdecd3b90e0492144e6d2fa9166cb214d06625fd592"
+            },
+            {
+              "path": "engine/src/translation/derive.ts",
+              "sha256": "e7b4bfb068195d283b4759ac6dab7342d4ae1220edecdce92f487046ddec772e"
+            },
+            {
+              "path": "engine/src/translation/render.ts",
+              "sha256": "73adb983d6b2dbcd512a5a1b804a7d860440a6d22c1bef1f081d9544066b1ac8"
+            },
+            {
+              "path": "engine/src/types.ts",
+              "sha256": "0a04f1726fd02425cc847d9e0a67f5d84c6b94f6aae61907f9c0056c90672ee1"
+            },
+            {
+              "path": "evaluation/configs/ablation.json",
+              "sha256": "cb78b5ea37ac77672fb1359928e289428f203baebbbe8f7d2dd317abeb11cf30"
+            },
+            {
+              "path": "evaluation/configs/baseline.json",
+              "sha256": "e4211e0de414e6e461d44cc1b6b1e01f50e540b16b4dfa056298d27ea16f48c7"
+            },
+            {
+              "path": "evaluation/configs/ci.json",
+              "sha256": "c083a7a1d4e5115a6fd6a32f8ab2c94ad7fc5557f86dcda67aae0ccc6bcc1b8d"
+            },
+            {
+              "path": "evaluation/configs/development.json",
+              "sha256": "8033ce44d24b962015782de2dadb82f8e660f2909b2dc41e3eb4e11be09d35a1"
+            },
+            {
+              "path": "evaluation/configs/structural.json",
+              "sha256": "a88f25da5dc70742e98d6248c206d68b60001976dc38d6e20d739536bd5fe6d6"
+            },
+            {
+              "path": "evaluation/fixtures/generator-gold.json",
+              "sha256": "1d58ed563ebdc11aa5b33e993529f30ce9b81d68ebde6aaf3d1c1fb8cea12430"
+            },
+            {
+              "path": "evaluation/fixtures/unicode-lexical.json",
+              "sha256": "0f39f15c793b61a5187543f52ab26fad4655421aa1b8553289f2573d05cefb83"
+            },
+            {
+              "path": "evaluation/package.json",
+              "sha256": "fe1f87c03e9845443b090d67580481f7f4064c362a9a23b3f34753e58142a1a7"
+            },
+            {
+              "path": "evaluation/src/adapters/exact-lookup.ts",
+              "sha256": "fd1997a35387f203b030542d198f6b4679299c7b732a8ae015f3094ca6100623"
+            },
+            {
+              "path": "evaluation/src/adapters/grounded-symbolic.ts",
+              "sha256": "39a37d1f2ae40ab31d47ea909f04d93acbb6a70dbe09f9d65463a78a26288be6"
+            },
+            {
+              "path": "evaluation/src/adapters/hybrid.ts",
+              "sha256": "477f0a1ae3556fde45a4bbd123d2822df22ba29357d7b03947019f0621f035d4"
+            },
+            {
+              "path": "evaluation/src/adapters/llm-only.ts",
+              "sha256": "0221abe99b7dee3752d7e6c46b6028bd2fbab39d124016f32ad3b9fc3ad8c223"
+            },
+            {
+              "path": "evaluation/src/adapters/prior.ts",
+              "sha256": "0e380995345f1d83bda7cd205778803aa0c5506540b38ba2fc18851845e7f137"
+            },
+            {
+              "path": "evaluation/src/adapters/symbolic.ts",
+              "sha256": "8f296d25ca2b4407ca0be99365327da9c9beb31890d3258e31472e2ea3917775"
+            },
+            {
+              "path": "evaluation/src/baselines.test.ts",
+              "sha256": "15c7fa6fc47adfd77fee1fa93206bb7ae5ccb1f1211f670ce56386d0f1e07fe0"
+            },
+            {
+              "path": "evaluation/src/contracts.ts",
+              "sha256": "a5381dac859cf7e0d8ae7f569173ffa736e9501f63d6923fb886ffe62e788680"
+            },
+            {
+              "path": "evaluation/src/export.ts",
+              "sha256": "7f4d999b1f9d630e99f1b7c6500a6afacc06d786707af3e5c15a0812ca7dd8e6"
+            },
+            {
+              "path": "evaluation/src/generator/compile.ts",
+              "sha256": "7a76ea70812322227d80ba3773457efc9d01167f2b0bcfa503b185f3460f73f5"
+            },
+            {
+              "path": "evaluation/src/generator/compiler.test.ts",
+              "sha256": "dc7e5cc666389b181bd24e21bcdde6aa0ff5d9f1793d5e5d8113c766ba976085"
+            },
+            {
+              "path": "evaluation/src/generator/dataset.ts",
+              "sha256": "9e2c61a38f716cea2a6983e6cbce002473266a74f111374bdbe7fe1011e5cb4d"
+            },
+            {
+              "path": "evaluation/src/generator/grammar.ts",
+              "sha256": "c5ecb714e8800fff6bb5632137953859dd6ff445500470017031c852e1fe9c84"
+            },
+            {
+              "path": "evaluation/src/generator/lexicon.ts",
+              "sha256": "b99205acbe2444d975a8adf9176efeddcdf6be3ccc566eb733c92abbf117561e"
+            },
+            {
+              "path": "evaluation/src/generator/phonology.ts",
+              "sha256": "53e5e0c00f9f6d86a3e08cf07a25c55103eb11323d33d7f010a1448e01116ea7"
+            },
+            {
+              "path": "evaluation/src/generator/prng.ts",
+              "sha256": "5f3383d6bec61b887621a4f54fd00ce52932d8837f8b373fa5c838cafcceff33"
+            },
+            {
+              "path": "evaluation/src/generator/semantics.ts",
+              "sha256": "ed1f9461c2cf170062c8b548a7e4bc6584a63da8514ba4578d22b47063fb560c"
+            },
+            {
+              "path": "evaluation/src/induction/corpus.ts",
+              "sha256": "96a249f0fbc50acfbd03a0f4901694bcfb2686e0dd21502f6eab9e3ec95768ae"
+            },
+            {
+              "path": "evaluation/src/induction/experiment.test.ts",
+              "sha256": "6503042822fbe856f1298bdc2998e7b87e474b1144f505bd11ded6466141f34c"
+            },
+            {
+              "path": "evaluation/src/induction/experiment.ts",
+              "sha256": "3b71848e37ce8d9fdcb412f0207eecab5637b643703b9a01a963218eed3dd65e"
+            },
+            {
+              "path": "evaluation/src/induction/run.ts",
+              "sha256": "b35eb3b99a496452ed8e262f9d622afbbf54b1b2d6d2c2292ea5c5b568f2958f"
+            },
+            {
+              "path": "evaluation/src/metrics/accuracy.ts",
+              "sha256": "0f1925f082a1f2c1995f2d2740341ce0ca23a634fb5e78ee45c589d153d02763"
+            },
+            {
+              "path": "evaluation/src/metrics/calibration.ts",
+              "sha256": "01a1139af5ee5d6308d7cdad8302d41f44dbdeaf167f22e76e9814378044b04f"
+            },
+            {
+              "path": "evaluation/src/metrics/performance.ts",
+              "sha256": "879503d6ff5515a03381cecea149fd91990f9d432c7eb00c7da572e65a8c3b25"
+            },
+            {
+              "path": "evaluation/src/records.ts",
+              "sha256": "0c7279ee7c388a1df359feb02cc3816b149397a2d513871af55ad91da4a74072"
+            },
+            {
+              "path": "evaluation/src/reports.ts",
+              "sha256": "ccb3b1902278aaf424aa89aaae50c527a3e4bae18354fae6d12314dcb3b550ac"
+            },
+            {
+              "path": "evaluation/src/runner.ts",
+              "sha256": "0cba0eb31c161f3d730a0d10f1d1d680185c9451494c6cbeb942d2cfd8417aca"
+            },
+            {
+              "path": "evaluation/src/unicode-benchmark.test.ts",
+              "sha256": "328d5ba5caac03d1b7bb22d7700303135d8b19019522738adae452712cc65779"
+            },
+            {
+              "path": "evaluation/src/unicode-benchmark.ts",
+              "sha256": "12a38fa12f1e21bcdf5e10ff7078ba3a1a54bebd2e220138c3692b84497835d6"
+            },
+            {
+              "path": "evaluation/src/verify.ts",
+              "sha256": "12740eb18f82121d2a64a58dd299680835201a41bb22fe7fa26b64006a2989e7"
+            },
+            {
+              "path": "evaluation/tsconfig.json",
+              "sha256": "e4d0cc026e7719836858cbd1a13ebcadbbbf0b40f8543bbf8fbe912a5ecacdac"
+            },
+            {
+              "path": "package-lock.json",
+              "sha256": "9ffacde2e2d7d6091548c73813abdb70d377605c31afa420f9bee68789b09def"
+            },
+            {
+              "path": "package.json",
+              "sha256": "df995738f86c2416cdf37cf76144f73e6e32d064366c4e518f6947dba530753a"
+            },
+            {
+              "path": "shared/audio-container.ts",
+              "sha256": "9c0c7cdb253fd1ae42714d1023e9e484550523d8d509cbc0b9ba853e7c76bcf7"
+            },
+            {
+              "path": "shared/constants.ts",
+              "sha256": "76daf2f95c3450eb22665ab8915351391abb350a4679dce4a46b69225e4902b9"
+            },
+            {
+              "path": "shared/demo-language.ts",
+              "sha256": "8cbdda92193d64c074061913fad3817663d5cbcef358336810793c77ecd5a703"
+            },
+            {
+              "path": "shared/demo-presentation.ts",
+              "sha256": "916c6dbdbd955d65c080543594b4feddad5011c135851a4e31fdd11b2aa12d32"
+            },
+            {
+              "path": "shared/metrics/number-evidence.ts",
+              "sha256": "c94e88f78dc530c929e59cf2b401e4df12352d1bbd7d5097c74797c92d594f57"
+            },
+            {
+              "path": "shared/metrics/workspace-metrics.test.ts",
+              "sha256": "a32f0bc9925323cd3df58af5511b02c3e2f03ac52517c9c341af3d31c380b9ed"
+            },
+            {
+              "path": "shared/metrics/workspace-metrics.ts",
+              "sha256": "ba0ec0770e223e8d0da033131885a4c2e71401b3fbb92681308f1f9727e31973"
+            },
+            {
+              "path": "shared/package.json",
+              "sha256": "bb5516015f61220f7bddb2a99b00ada0b725601f0ce6a27389f1c432ba14b8fc"
+            },
+            {
+              "path": "shared/profile-operations.ts",
+              "sha256": "d3e62b4c1d53249747020af0f992ac4f28723a76a59317ef61589f6f56eed3ef"
+            },
+            {
+              "path": "shared/prompts.ts",
+              "sha256": "2e13020fb0a94f1eb2a11f98a685c4dc632ed089bbb99f3aab677eb69ba6dab8"
+            },
+            {
+              "path": "shared/sandbox/grading.test.ts",
+              "sha256": "613a9766c98d2dfa79610e649b11b2cbd3bf5b3539e119b36fff341880463528"
+            },
+            {
+              "path": "shared/sandbox/grading.ts",
+              "sha256": "98effe471a38db187158c509d7275f03009d348d932460b26bda20d5dac11a40"
+            },
+            {
+              "path": "shared/sandbox/session.ts",
+              "sha256": "84081d9ce17a8ff5f73a5b6fea6e63f03210c763a5b31bd34f52a964bf5ac225"
+            },
+            {
+              "path": "shared/schemas/ai-history.ts",
+              "sha256": "4223d31e2c739cfee646583c4b2b72215a1d4c8ee406ed273fd98ad80ea8ad4a"
+            },
+            {
+              "path": "shared/schemas/archive.ts",
+              "sha256": "309fdef218a3ce1801bb03ad512cbd98240ed5d96325c89b8dab67ae07863fc4"
+            },
+            {
+              "path": "shared/schemas/audio.ts",
+              "sha256": "380b5f2b6e5ead24fe15c6a141a4c154ffce4cfa7c76f3204d48eb38f2f89805"
+            },
+            {
+              "path": "shared/schemas/capabilities.ts",
+              "sha256": "c998591c7af626f7f3617de173b03da0d9a17aef3a78166758cac32f4837058e"
+            },
+            {
+              "path": "shared/schemas/common.ts",
+              "sha256": "cefb1208f3c506179c0400b93e412388b2b0bf63a4f79e05e7b15efb17c856ab"
+            },
+            {
+              "path": "shared/schemas/errors.ts",
+              "sha256": "151d92940ed82451004cfb8516c3ab9f9bda45524854366edfd2fd6ff167aad5"
+            },
+            {
+              "path": "shared/schemas/grammar.ts",
+              "sha256": "00f3f15cd82d2689615fd6095bcf5e02b5ee4e18612cbc347d34ad60e41701f5"
+            },
+            {
+              "path": "shared/schemas/lexicon.ts",
+              "sha256": "15c1731488ac3464a7f05dabdba06e254f6dc9185a92ad853e8e6b26b2bf076e"
+            },
+            {
+              "path": "shared/schemas/metrics.ts",
+              "sha256": "cd9d2fab722ada474cfb8aef5dfb58ffa393662bad2877c1809bbf3167a65eac"
+            },
+            {
+              "path": "shared/schemas/mutations.ts",
+              "sha256": "0109af4798f3a6abf1bd320a620259312cc0c2f066fe7ad7149994755337d04f"
+            },
+            {
+              "path": "shared/schemas/profile.ts",
+              "sha256": "8071f51010f695969da9e1de28f2c4956557f64efc321dbbdb6ca329dee22417"
+            },
+            {
+              "path": "shared/schemas/sandbox.ts",
+              "sha256": "13406a00914de7e8628bb7f8a7c72305d20b3e97077a41717d522387a14e5cc8"
+            },
+            {
+              "path": "shared/schemas/save-queue.ts",
+              "sha256": "11c998de4dcf51a2ee69b4b99fd0f0cef4d424fa8b0523670a966cbf0797f84a"
+            },
+            {
+              "path": "shared/types.ts",
+              "sha256": "e176f9ca4749be44505d40d4e9dcf7ab9f16edcaac7bcc560287e07cf1bdd181"
+            },
+            {
+              "path": "tsconfig.base.json",
+              "sha256": "34e78df802f2b1c052dbc946db25423edcec01f0a79bb87b555d7a03f7fe6060"
+            }
+          ],
+          "snapshotHash": "3cb0995cc9407e5f10e7757b7f84540447cfcecbb5945c199f38c30db5655f2d"
+        },
+        "status": "complete",
+        "startedAt": "2026-09-23T03:29:21.324Z",
+        "records": 60,
+        "artifacts": [
+          {
+            "path": "records.json",
+            "sha256": "b6935610bd6a4f2c6b6b87b76c84d57c9cbe0be403dda911abeb814a694193cb"
+          },
+          {
+            "path": "summary.json",
+            "sha256": "c584d28f48448bcf75422b6ad1bd9f8da0743f49d539893fdc1926a5a673dc18"
+          }
+        ]
+      },
+      "extractedArchiveReplay": {
+        "passed": true,
+        "records": 60,
+        "split": "evaluation",
+        "sourceSnapshotHash": "3cb0995cc9407e5f10e7757b7f84540447cfcecbb5945c199f38c30db5655f2d"
+      }
+    }
+  },
+  "screenshot": {
+    "file": "w18-grounded-proposal.png",
+    "bytes": 363763,
+    "sha256": "a6172c51bc95b0a5b9fa5e1b197b2167334c892dd0bbdac56579f2c514826fe9",
+    "description": "Local final browser flow: a grounded plural proposal awaits explicit acceptance. Model readiness is a fixture; this flow makes no model calls."
+  },
+  "initialCi": {
+    "source": {
+      "conclusion": "failure",
+      "headSha": "1cf6e9055a446557edb86f1adf81d1df328b6d03",
+      "jobs": [
+        {
+          "completedAt": "2026-09-23T03:31:14Z",
+          "conclusion": "failure",
+          "databaseId": 107033047372,
+          "name": "regression (windows-latest)",
+          "startedAt": "2026-09-23T03:29:15Z",
+          "status": "completed",
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35814508803/job/107033047372"
+        },
+        {
+          "completedAt": "2026-09-23T03:34:13Z",
+          "conclusion": "success",
+          "databaseId": 107033047529,
+          "name": "regression (ubuntu-latest)",
+          "startedAt": "2026-09-23T03:29:14Z",
+          "status": "completed",
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35814508803/job/107033047529"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35814508803"
+    },
+    "installer": {
+      "conclusion": "success",
+      "headSha": "1cf6e9055a446557edb86f1adf81d1df328b6d03",
+      "jobs": [
+        {
+          "completedAt": "2026-09-23T03:33:22Z",
+          "conclusion": "success",
+          "databaseId": 107033047581,
+          "name": "build",
+          "startedAt": "2026-09-23T03:29:15Z",
+          "status": "completed",
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35814508816/job/107033047581"
+        },
+        {
+          "completedAt": "2026-09-23T03:38:09Z",
+          "conclusion": "success",
+          "databaseId": 107033906347,
+          "name": "verify-clean",
+          "startedAt": "2026-09-23T03:33:25Z",
+          "status": "completed",
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35814508816/job/107033906347"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35814508816"
+    },
+    "failure": "Windows archive restoration and durable audio integration tests exceeded their existing 5000 ms deadline (5576 ms and 5025 ms). New induction tests and Linux source checks passed.",
+    "fix": "Cap CI test workers at two to reduce disk contention; preserve per-test deadlines and assertions, with no retries.",
+    "verification": "Full local source gate with CI enabled and both exact-revision source CI jobs passed."
+  },
+  "browserFixtureFollowup": {
+    "source": {
+      "conclusion": "failure",
+      "headSha": "ec59e8d3a9921c871f5587bb3f93929f42e31b6a",
+      "jobs": [
+        {
+          "completedAt": "2026-09-23T19:20:12Z",
+          "conclusion": "success",
+          "databaseId": 107340668717,
+          "name": "regression (ubuntu-latest)",
+          "startedAt": "2026-09-23T19:15:21Z",
+          "status": "completed",
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35908077015/job/107340668717"
+        },
+        {
+          "completedAt": "2026-09-23T19:24:28Z",
+          "conclusion": "failure",
+          "databaseId": 107340669130,
+          "name": "regression (windows-latest)",
+          "startedAt": "2026-09-23T19:15:21Z",
+          "status": "completed",
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35908077015/job/107340669130"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35908077015"
+    },
+    "installer": {
+      "conclusion": "success",
+      "headSha": "ec59e8d3a9921c871f5587bb3f93929f42e31b6a",
+      "jobs": [
+        {
+          "completedAt": "2026-09-23T19:17:55Z",
+          "conclusion": "success",
+          "databaseId": 107340668318,
+          "name": "build",
+          "startedAt": "2026-09-23T19:15:21Z",
+          "status": "completed",
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35908076999/job/107340668318"
+        },
+        {
+          "completedAt": "2026-09-23T19:22:21Z",
+          "conclusion": "success",
+          "databaseId": 107341655066,
+          "name": "verify-clean",
+          "startedAt": "2026-09-23T19:17:58Z",
+          "status": "completed",
+          "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35908076999/job/107341655066"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35908076999"
+    },
+    "failure": "Windows browser fixture received ARCHIVE_BUSY when it inspected exported bytes before the completed download had finished staging cleanup. The other 33 browser tests and the full unit gate passed.",
+    "fix": "Assert isolated export staging cleanup completes before starting inspection. No production archive behavior or HTTP retry added.",
+    "verification": "Eight local diagnostic repetitions passed, followed by complete final Windows/Linux source CI with no test retries."
+  },
+  "limits": [
+    "Known dictionary anchors and human-grounded meanings are supplied; no autonomous decipherment claim.",
+    "Twelve evaluation languages, four withheld items per condition; five paired conditions are not independent language samples.",
+    "Bounded concatenative rule family and approximate beam search; no global optimality or calibrated probability claim.",
+    "Sparse, contradictory and segmentation-ambiguous evidence abstains; withheld irregular plurals remain unsupported.",
+    "Captured accepted-rule evidence is historical text; first-class linked evidence is W20.",
+    "No LLM calls or model-quality comparison in the W18 experiment.",
+    "Three gated native unit skips; native installed acceptance is independently exercised.",
+    "Four high native dependency-chain audit entries remain.",
+    "W14/W15 frozen corpus, adapters and published result archives are unchanged.",
+    "No main merge, public installer release or Pages deployment."
+  ]
+}

@@ -53,6 +53,8 @@ The offline evaluation harness compares frozen word lookup, a constrained symbol
 
 `npm run evaluate:full` produces per-item predictions, model digests/settings, source and corpus hashes, paired language-level uncertainty intervals and standalone figures. The initial configuration uses 30 evaluation languages, three observation budgets and two model sampling seeds. [The measured results and downloadable raw archives](docs/evaluation-results.md) retain successful, invalid and incomplete predictions. `npm run evaluate:verify -- RESULT_DIRECTORY` replays scoring and checks retained artifacts without model inference. Setup, method definitions and interpretation limits are in the [evaluation protocol](docs/evaluation-protocol.md). This research harness is separate from the workbench's dictionary translator.
 
+The [grounded induction engine](docs/grounded-induction.md) learns bounded affix and word-order proposals from supplied lexical anchors and distinct grounded observations. Fit-only description-length search, independent validation, manual acceptance and retained ablations make its assumptions inspectable. It does not discover arbitrary languages or silently use model output as ground truth. The [W18 results and raw archives](docs/induction-results.md) report regular generalization and explicit failure cases.
+
 ## Setup and offline operation
 
 Windows x64 is the only manifested native target. An independent Windows CI job installs and verifies implementation artifacts on a fresh runner; public release and signing remain pending. macOS/Linux packaging is not supported by the current native manifest.
@@ -109,6 +111,3 @@ The deterministic compiler, reproducible evaluation harness, Unicode lexicon and
 ## License
 
 Copyright (c) 2026 Parusan Natheeswaran. All Rights Reserved. The repository is publicly viewable, but the project is proprietary and the [LICENSE](LICENSE) grants no general reuse rights. Third-party dependencies and native assets retain their own [licenses and notices](vendor/THIRD_PARTY.md).
-
-
-The [grounded induction engine](docs/grounded-induction.md) learns bounded affix and word-order proposals from supplied lexical anchors and distinct grounded observations. Fit-only description-length search, independent validation, manual acceptance and retained ablations make its assumptions inspectable. It does not discover arbitrary languages or silently use model output as ground truth.

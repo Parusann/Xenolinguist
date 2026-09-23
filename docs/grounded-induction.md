@@ -60,4 +60,4 @@ npm run evaluate:induction -- verify test-results/induction-evaluation-TIMESTAMP
 
 Each run refuses overwrite, snapshots its source/config/lockfile, retains complete inputs, predictions, oracle rules on the evaluator side, alternatives and reasons, and verifies artifact hashes, experiment cells, regenerated outputs and scoring. Replaying with changed engine code can fail; use the retained source revision/snapshot for historical reproduction. Source CI runs the declared evaluation protocol; the independent installed harness exercises actual worker induction, withheld validation, explicit acceptance, symbolic execution and archive preservation.
 
-See [implementation progress](implementation-progress.md) for the tested revision and final measured results. Scientific conclusions remain limited to this corpus and its supplied anchors.
+See [measured results and failure cases](induction-results.md) for the frozen evaluation, raw records and source archives, and [implementation progress](implementation-progress.md) for independent application verification. Scientific conclusions remain limited to this corpus and its supplied anchors.
