@@ -7,6 +7,7 @@ import type { dictionaryEntrySchema, grammarRuleSchema, numberSystemSchema, audi
 export type DictionaryEntry = z.infer<typeof dictionaryEntrySchema>;
 export type GrammarRule = z.infer<typeof grammarRuleSchema>;
 export type NumberSystem = z.infer<typeof numberSystemSchema>;
+export type { NumberObservation, NumberGrammar, NumberExpression } from './schemas/numbers.js';
 export type AudioClip = z.infer<typeof audioClipSchema>;
 export type AudioSegment = z.infer<typeof audioSegmentSchema>;
 export type Sample = z.infer<typeof sampleSchema>;

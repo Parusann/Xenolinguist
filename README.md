@@ -19,7 +19,7 @@ The old installer predates the repaired phone runtime, revision-checked saves, r
 | Phase | Behavior | Interpretation limit |
 | --- | --- | --- |
 | Samples | Retains text drafts, original audio, prepared analysis copies and saved clip/word links | Recordings are observations; transcriptions can be wrong |
-| Numbers | Stores integer mappings and ranks candidate bases with explicit support and ties | Exploratory fit is not proof of a number system |
+| Numbers | Infers bounded arithmetic grammars, predicts forms with composition trees and suggests distinguishing observations | Fit and validation remain separate; ambiguous candidates remain visible |
 | Vocabulary | Stores display glosses, explicit senses, accepted aliases, examples and optional user belief | User belief is not calibrated confidence |
 | Grammar | Stores notebook prose or typed affix, negation, adjective and clause rules with previews | Executable rules are manual assertions, not discovered facts |
 | Translation | Separate lexical glosses, bounded symbolic meaning trees with derivations, and optional model output | Symbolic mode supports one typed clause or noun phrase; general syntax and script-specific segmentation remain unsupported |
@@ -54,6 +54,8 @@ The offline evaluation harness compares frozen word lookup, a constrained symbol
 `npm run evaluate:full` produces per-item predictions, model digests/settings, source and corpus hashes, paired language-level uncertainty intervals and standalone figures. The initial configuration uses 30 evaluation languages, three observation budgets and two model sampling seeds. [The measured results and downloadable raw archives](docs/evaluation-results.md) retain successful, invalid and incomplete predictions. `npm run evaluate:verify -- RESULT_DIRECTORY` replays scoring and checks retained artifacts without model inference. Setup, method definitions and interpretation limits are in the [evaluation protocol](docs/evaluation-protocol.md). This research harness is separate from the workbench's dictionary translator.
 
 The [grounded induction engine](docs/grounded-induction.md) learns bounded affix and word-order proposals from supplied lexical anchors and distinct grounded observations. Fit-only description-length search, independent validation, manual acceptance and retained ablations make its assumptions inspectable. It does not discover arbitrary languages or silently use model output as ground truth. The [W18 results and raw archives](docs/induction-results.md) report regular generalization and explicit failure cases.
+
+The [number grammar engine](docs/number-grammar.md) compares additive and multiplicative forms, preserves competing candidates, and exposes predicted arithmetic trees with independent validation.
 
 ## Setup and offline operation
 
@@ -106,7 +108,7 @@ The Field Log exports portable **.xeno project archives**, including saved data,
 
 Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard JSON import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
 
-The deterministic compiler, reproducible evaluation harness, Unicode lexicon and typed interpreter now support grounded affix/order induction. Number grammar inference, first-class evidence relationships and validated model research proposals remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
+The deterministic compiler, reproducible evaluation harness, Unicode lexicon and typed interpreter now support grounded affix/order induction. Number grammar inference now adds bounded composition and disagreement queries. First-class evidence relationships and validated model research proposals remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
 
 ## License
 

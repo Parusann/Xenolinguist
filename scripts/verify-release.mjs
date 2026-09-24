@@ -5,7 +5,7 @@ import { desktopRequest } from './desktop-request.mjs';
 // Run a packaged/installed release outside the source tree, in isolated desktop data.
 import { _electron as electron } from 'playwright';
 import { expect } from '@playwright/test';
-import { mkdtemp, mkdir, writeFile, readFile, realpath, rename } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, realpath, rename, readdir } from 'node:fs/promises';
 import { randomBytes, createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
@@ -364,12 +364,39 @@ try {
   await symbolic.getByRole('button',{name:'Analyze symbolically'}).click();
   await expect(symbolic).toContainText('the birds');
   record.checks.groundedInduction = { passed:true, workerExecuted:true, independentValidation:true, explicitAcceptance:true, acceptedRuleExecuted:true };
+  const numberResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native number composition', number_system: { base: null, mappings: { 1:'ra', 2:'ru', 3:'ri', 5:'ka', 6:'ka ra', 7:'ka ru' }, operators: {} },
+  } });
+  expect(numberResponse.status()).toBe(201); const numberInitial = await numberResponse.json();
+  await reopened.getByTitle('Back to profiles', { exact:true }).click();
+  await reopened.getByRole('button').filter({has:reopened.getByText(numberInitial.name,{exact:true})}).click();
+  await reopened.locator('[data-tour="numbers"]').click();
+  const numbers = reopened.getByRole('region',{name:'Number grammar inference',exact:true});
+  await numbers.getByRole('button',{name:'Infer number grammar',exact:true}).click();
+  await expect(numbers.getByTestId('number-inference-result')).toContainText('ambiguous');
+  const numberQuestion = numbers.getByRole('region',{name:'Number question',exact:true});
+  await expect(numberQuestion).toContainText('Next useful observation: 10');
+  await numberQuestion.getByLabel('Observed number answer').fill('ru ka');
+  await numberQuestion.getByRole('button',{name:'Save answer as validation'}).click();
+  await expect(numbers).toContainText('previous predictions are stale');
+  await expect.poll(async()=> (await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${numberInitial.id}`)).json()).number_system.validation_values).toEqual([10]);
+  await numbers.getByRole('button',{name:'Infer number grammar',exact:true}).click();
+  const numberPrediction = numbers.getByRole('region',{name:'Number prediction',exact:true});
+  await expect(numberPrediction).toContainText('All leading grammars agree');
+  await expect(numberPrediction).toContainText('ru ka ri');
+  await numberPrediction.getByText('Composition tree',{exact:true}).click(); await expect(numberPrediction).toContainText('×');
+  const numberProfile = await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${numberInitial.id}`)).json();
+  expect(numberProfile.number_system.base).toBeNull(); expect(numberProfile.number_system.mappings[13]).toBeUndefined();
+  record.checks.numberGrammar = { passed:true, workerExecuted:true, ambiguityRetained:true, discriminatingQuestion:true, validationPersisted:true, withheldPrediction:true, compositionTree:true };
+  // Export response bytes can arrive before the exclusive staging cleanup finishes.
+  await reopened.exposeFunction('waitForArchiveCleanup', async () => { await expect.poll(() => readdir(path.join(dir,'data','archive-staging'))).toEqual([]); });
   const archiveChecks = [];
-  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile, inductionProfile]) {
+  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile, inductionProfile, numberProfile]) {
     const restored = await reopened.evaluate(async source => {
       const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
       if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
       const bytes = await exported.arrayBuffer();
+      await window.waitForArchiveCleanup();
       const inspected = await fetch('/api/archives/inspect', { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: bytes });
       if (!inspected.ok) throw new Error(`Archive inspection failed: ${inspected.status}`);
       const preview = await inspected.json();
@@ -405,6 +432,10 @@ try {
     if(sourceProfile.id===inductionProfile.id) {
       expect(restored.profile.grammar_rules.map(({id:_id,...rule})=>rule)).toEqual(inductionProfile.grammar_rules.map(({id:_id,...rule})=>rule));
       record.checks.groundedInduction.archiveRestored=true;
+    }
+    if(sourceProfile.id===numberProfile.id) {
+      expect(restored.profile.number_system).toEqual(numberProfile.number_system);
+      record.checks.numberGrammar.archiveRestored=true;
     }
     let restoredAudioHash;
     if (sourceProfile.audio_clips.length) {
@@ -445,6 +476,7 @@ try {
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed
     && record.checks.groundedInduction?.passed && record.checks.groundedInduction?.archiveRestored
+    && record.checks.numberGrammar?.passed && record.checks.numberGrammar?.archiveRestored
     && record.checks.typedGrammar?.passed && record.checks.typedGrammar?.archiveRestored
     && record.checks.unicodeLexicon?.passed && record.checks.unicodeLexicon?.archiveRestored
     && record.checks.compilerPractice?.passed && record.checks.compilerPractice?.archiveRestored

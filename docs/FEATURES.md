@@ -30,7 +30,7 @@ The workbench provides profile selection/creation, a shared demo, six phases, a 
 | Phase | Implemented behavior | Limits |
 | --- | --- | --- |
 | Samples | Add/edit source text, translation notes and phonetic notes; attach recordings; retain failed saves and drafts | A transcription or decoded flag is not verification of a meaning |
-| Numbers | Record integer mappings, manually set a base, compare candidate fits and request AI advice | Scores describe heuristic support and ties, not statistical confidence |
+| Numbers | Infer arithmetic grammars, predict number forms/trees, retain alternatives and supply distinguishing observations | Fit and validation counts are separate; no calibrated confidence or automatic acceptance |
 | Vocabulary | Edit words, explicit senses, accepted aliases, examples, parts of speech and optional 0–100 user belief | Repeated assertions do not become independent evidence |
 | Grammar | Record rule text and evidence strings; request advisory model analysis | Rule text is not compiled or automatically validated |
 | Translation | Dictionary lookup in source order with candidates and unresolved tokens; optional model analysis | Typed morphology and one-clause composition are bounded; notebook prose never executes. General syntax and script-specific segmentation are unsupported |
@@ -107,3 +107,6 @@ See [Unicode lexicon](unicode-lexicon.md) for normalization, source offsets, pro
 
 
 [Grounded rule learning](grounded-induction.md) adds known-meaning sample annotation, fit-only description-length search, independent validation, reviewable proposals and explicit acceptance. It executes in a cancellable worker and retains alternative rules, support and rejection reasons. Accepted rules/evidence survive `.xeno` restoration; pending grounding annotations remain local drafts until the W20 evidence model.
+
+
+[Number grammar inference](number-grammar.md) uses a bounded worker, explicit atoms/addition/multiplication, independently selected validation mappings and disagreement questions. Predicted forms are never silently added as observed evidence.

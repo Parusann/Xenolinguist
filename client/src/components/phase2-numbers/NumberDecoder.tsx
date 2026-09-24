@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
-import { rankBases } from 'shared/metrics/number-evidence'
+import { NumberGrammarPanel } from './NumberGrammarPanel'
 import { countMappings } from 'shared/metrics/workspace-metrics'
 
 const OPERATORS = ['+', '-', '×', '÷', '=']
@@ -20,12 +20,11 @@ export function NumberDecoder() {
   const operators = numberSystem.operators as Record<string, string>
   const base = numberSystem.base
   const mappedCount = countMappings(mappings, 1, range)
-  const { scores, leaders, suggestedBase } = useMemo(() => rankBases(mappings), [mappings])
   const displayBase = base
 
   const decompose = (n: number): number[] => {
     const b = displayBase
-    if (!b || n <= 0) return [] // no detected base yet → no (misleading) positional breakdown
+    if (!Number.isInteger(b) || !b || b < 2 || b > 36 || n <= 0) return []
     const out: number[] = []
     let x = n
     while (x > 0) { out.unshift(x % b); x = Math.floor(x / b) }
@@ -67,7 +66,7 @@ export function NumberDecoder() {
   notes.push({ dot: opsSet > 0 ? 'confirmed' : 'unknown', text: <>{opsSet}/{OPERATORS.length} operators defined{opsSet === 0 ? ' — define + and = to start.' : '.'}</> })
 
   return (
-    <div className="phase-enter" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 20, height: '100%', overflow: 'auto' }}>
+    <div className="phase-enter" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 360px', gap: 20, height: '100%', overflow: 'auto' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
           <div>
@@ -89,22 +88,15 @@ export function NumberDecoder() {
           </div>
         </div>
 
+        {profile && <NumberGrammarPanel profile={profile} />}
         <div className="glass-card" style={{ padding: 18 }}>
-          <h2 className="label">Exploratory base comparison</h2>
-          <p className="dim">Token reuse in (B, 2B] checks whether a compound reuses tokens from both B and n−B. Both references must exist. Repeated labels are excluded. Support is a heuristic, not a probability; these mappings have no verified independent provenance.</p>
+          <h2 className="label">Manual positional notation</h2>
+          <p className="dim">This user-selected base controls the visual digit breakdown only. It does not select, accept or validate an inferred language grammar.</p>
           <label className="label">Working base (user-selected)
             <select className="input" aria-label="Working base" value={base ?? ''} onChange={event => updateProfile({ number_system: { ...numberSystem, base: event.target.value ? Number(event.target.value) : null } })}>
               <option value="">Unset</option>{Array.from({ length: 35 }, (_, i) => i + 2).map(value => <option key={value} value={value}>{value}</option>)}
             </select>
           </label>
-          <p>{suggestedBase ? `Exploratory suggestion: base ${suggestedBase}.` : leaders.length > 1 ? `Tied candidates: ${leaders.map(candidate => candidate.base).join(', ')}. No single base suggested.` : 'Insufficient support: at least two distinct supporting comparisons are required.'}</p>
-          <table style={{ width: '100%', textAlign: 'left', fontSize: 13 }}>
-            <thead><tr><th>Candidate base</th><th>Support / checked</th><th>Comparison coverage</th></tr></thead>
-            <tbody>{scores.map(score => <tr key={score.base}>
-              <td>{score.base}{leaders.length > 1 && leaders.some(leader => leader.base === score.base) ? ' (tied)' : ''}</td>
-              <td>{score.support}/{score.checked}{score.checked === 0 ? ' · no evidence' : ''}</td><td>{score.checked}/{score.possible} candidate integers</td>
-            </tr>)}</tbody>
-          </table>
         </div>
 
         {/* Mappings grid */}

@@ -7,6 +7,7 @@ import { audioAssetsSchema } from './audio.js';
 import { sandboxSessionSchema } from './sandbox.js';
 import { metricSnapshotsSchema } from './metrics.js';
 import { aiHistorySchema } from './ai-history.js';
+import { numeralValueSchema, NUMBER_LIMITS } from './numbers.js';
 
 const manualConfidence = { confidence: confidenceSchema.nullable().default(null), user_asserted_confidence: confidenceSchema.nullable().optional() };
 export const dictionaryEntrySchema = z.strictObject({
@@ -21,6 +22,7 @@ export const dictionaryEntrySchema = z.strictObject({
 export const grammarRuleSchema = z.strictObject({ id, rule: text, executable: executableRuleSchema.nullable().optional(), evidence: z.array(text), ...manualConfidence, created_at: timestamp });
 export const numberSystemSchema = z.strictObject({
   base: z.number().int().min(2).max(36).nullable(),
+  validation_values: z.array(numeralValueSchema).max(NUMBER_LIMITS.observations).optional(),
   mappings: z.record(z.string().regex(/^(0|[1-9]\d*)$/), text), operators: z.record(text, text),
 });
 export const audioSegmentSchema = z.strictObject({

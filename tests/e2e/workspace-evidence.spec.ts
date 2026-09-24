@@ -47,11 +47,14 @@ test('W08 duplicate assertions cannot become decoded progress; beliefs are optio
 test('W08 failed saves do not fabricate history; number ranges, sparse evidence and ties are explicit', async ({ page, server }) => {
   const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Number evidence', number_system: { base: null, mappings: { 1: 'ra', 2: 'ru', 5: 'ka', 6: 'ka ra', 0: 'zero', 21: 'extra' }, operators: {} } } })).json();
   await openProfile(page, server.url, profile.name); await page.locator('[data-tour="numbers"]').click();
+  await page.getByRole('button', { name: 'Infer number grammar', exact: true }).click();
   await expect(page.getByText('Insufficient support:', { exact: false })).toBeVisible();
   await expect(page.getByText('Mappings · 4/20', { exact: true })).toBeVisible();
   await page.route('**/api/profiles/*/mutations', route => route.fulfill({ status: 500, json: { error: 'Injected save failure' } }));
   await page.getByRole('textbox', { name: 'Number 7 mapping', exact: true }).fill('ka ru');
-  await expect(page.getByText('Exploratory suggestion: base 5.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Infer number grammar', exact: true }).click();
+  await expect(page.getByTestId('number-inference-result')).toContainText('ambiguous');
+  await expect(page.getByRole('combobox', { name: 'Number grammar candidate' }).locator('option:checked')).toContainText('Base 5');
   await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
   let saved = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
   expect(saved.metric_snapshots).toEqual(profile.metric_snapshots);
@@ -61,7 +64,9 @@ test('W08 failed saves do not fabricate history; number ranges, sparse evidence 
   await page.getByRole('textbox', { name: 'Number 12 mapping', exact: true }).fill('ten ru');
   await lastFailure;
   await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
-  await expect(page.getByText('Tied candidates: 5, 10. No single base suggested.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Infer number grammar', exact: true }).click();
+  await expect(page.getByRole('combobox', { name: 'Number grammar candidate' }).locator('option:checked')).toContainText('Base 10');
+  await expect(page.getByRole('combobox', { name: 'Number grammar candidate' }).locator('option').filter({ hasText: 'Base 5' }).first()).toBeAttached();
   await expect(page.getByRole('combobox', { name: 'Working base', exact: true })).toHaveValue('');
   await page.unroute('**/api/profiles/*/mutations');
   await page.getByRole('button', { name: 'Retry save for Number evidence', exact: true }).click();

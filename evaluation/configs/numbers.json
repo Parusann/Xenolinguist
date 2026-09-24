@@ -1,0 +1,7 @@
+{
+  "version": "number-experiment-1",
+  "developmentSeed": 301,
+  "evaluationSeed": 401,
+  "bases": [2, 3, 4, 5, 10, 20, 36],
+  "conditions": ["regular", "sparse", "withheld-irregular", "duplicate-form"]
+}
