@@ -55,7 +55,7 @@ The offline evaluation harness compares frozen word lookup, a constrained symbol
 
 The [grounded induction engine](docs/grounded-induction.md) learns bounded affix and word-order proposals from supplied lexical anchors and distinct grounded observations. Fit-only description-length search, independent validation, manual acceptance and retained ablations make its assumptions inspectable. It does not discover arbitrary languages or silently use model output as ground truth. The [W18 results and raw archives](docs/induction-results.md) report regular generalization and explicit failure cases.
 
-The [number grammar engine](docs/number-grammar.md) compares additive and multiplicative forms, preserves competing candidates, and exposes predicted arithmetic trees with independent validation.
+The [number grammar engine](docs/number-grammar.md) compares additive and multiplicative forms, preserves competing candidates, and exposes predicted arithmetic trees with independent validation. [Measured results and raw archives](docs/number-results.md) retain successful predictions, irregular errors and abstentions.
 
 ## Setup and offline operation
 

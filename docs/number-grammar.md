@@ -48,4 +48,4 @@ npm run evaluate:numbers -- verify PATH_TO_RESULTS
 
 Runs refuse overwrite, retain source/config/lock snapshots and complete candidates, inputs, target-side truths, predictions, trees and failures. Replay checks hashes, planned cells, independently regenerated outcomes and summaries. Use the recorded Git revision for historical reproduction. W15 and W18 algorithms, configurations and published result archives remain unchanged.
 
-See [implementation progress](implementation-progress.md) and [testing](testing.md) for the measured revision, browser checks and independent installed-app acceptance.
+See [measured results and raw archives](number-results.md) for exact evaluation denominators and replayable data, and [implementation progress](implementation-progress.md) for browser and independent installed-app acceptance.
