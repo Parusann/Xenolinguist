@@ -57,6 +57,8 @@ The [grounded induction engine](docs/grounded-induction.md) learns bounded affix
 
 The [number grammar engine](docs/number-grammar.md) compares additive and multiplicative forms, preserves competing candidates, and exposes predicted arithmetic trees with independent validation. [Measured results and raw archives](docs/number-results.md) retain successful predictions, irregular errors and abstentions.
 
+The [research notebook](docs/research-evidence.md) links immutable source captures to competing hypotheses and retained symbolic derivations. Corrections append annotation revisions, contradictions stay visible, and changed dependencies mark old results stale. Saved derivations are replayed on the server; supplied-target checks and user acceptance are distinct from benchmark accuracy.
+
 ## Setup and offline operation
 
 Windows x64 is the only manifested native target. An independent Windows CI job installs and verifies implementation artifacts on a fresh runner; public release and signing remain pending. macOS/Linux packaging is not supported by the current native manifest.

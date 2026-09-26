@@ -13,7 +13,7 @@ let dir: string;
 const timestamp = '2026-06-07T00:00:00.000Z';
 const complete = () => ({ ...createDefaultProfile(), id: 'profile-test', created_at: timestamp, updated_at: timestamp });
 const legacy = () => {
-  const { schema_version: _version, revision: _revision, ...data } = { ...DEMO_LANGUAGE, id: 'legacy-test', created_at: timestamp, updated_at: timestamp };
+  const { schema_version: _version, revision: _revision, research: _research, ...data } = { ...DEMO_LANGUAGE, id: 'legacy-test', created_at: timestamp, updated_at: timestamp };
   return data;
 };
 beforeEach(async () => {
@@ -27,7 +27,7 @@ describe('versioned profile boundary', () => {
   it('migrates legitimate legacy data without changing identity, timestamps, notes or manual scores', () => {
     const original = legacy();
     const migrated = migrateProfile(original);
-    expect(migrated).toMatchObject({ ...original, schema_version: 2, revision: 0 });
+    expect(migrated).toMatchObject({ ...original, schema_version: 3, revision: 0 });
     expect(migrated.dictionary[0].user_asserted_confidence).toBe(original.dictionary[0].confidence);
     expect(migrateProfile(migrated)).toEqual(migrated);
     expect(original).not.toHaveProperty('schema_version');
@@ -73,7 +73,7 @@ describe('versioned profile boundary', () => {
     const file = path.join(dir, 'profiles/legacy-test.json');
     await fs.writeFile(file, original);
     const store = new ProfileStore();
-    expect((await store.get('legacy-test'))?.schema_version).toBe(2);
+    expect((await store.get('legacy-test'))?.schema_version).toBe(3);
     expect(await fs.readFile(file)).toEqual(original); // Reading alone never rewrites the original.
     const updated = await store.update('legacy-test', { description: 'New notes' }, 0);
     expect(updated?.revision).toBe(1);
@@ -116,6 +116,6 @@ describe('versioned profile boundary', () => {
     expect(created.status).toBe(201);
     const changed = await request(app).put(`/api/profiles/${created.body.id}`).send({ name: 'Renamed', id: 'spoof', revision: 0 });
     expect(changed.status).toBe(200);
-    expect(changed.body).toMatchObject({ id: created.body.id, created_at: created.body.created_at, schema_version: 2, revision: 1, name: 'Renamed' });
+    expect(changed.body).toMatchObject({ id: created.body.id, created_at: created.body.created_at, schema_version: 3, revision: 1, name: 'Renamed' });
   });
 });

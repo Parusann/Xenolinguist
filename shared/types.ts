@@ -86,3 +86,5 @@ export interface IpaResult {
 }
 export type LexicalPolicy = z.infer<typeof lexicalPolicySchema>;
 export type LexicalSense = z.infer<typeof lexicalSenseSchema>;
+
+export type { Research, Observation, Hypothesis, ResearchAnalysis, ResearchDependency } from './schemas/research.js';

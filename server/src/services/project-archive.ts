@@ -1,3 +1,5 @@
+import { remapResearch } from '../../../shared/research-remap.js';
+import { verifyResearch } from './research-integrity.js';
 import fs from 'node:fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import path from 'node:path';
@@ -8,7 +10,7 @@ import * as yauzl from 'yauzl';
 import { ZipFile } from 'yazl';
 import { ARCHIVE_LIMITS as LIMIT, archiveManifestSchema, archiveRestoreSchema, type ArchiveManifest,
   type ArchivePreview, type ArchiveRestore } from '../../../shared/schemas/archive.js';
-import { parseProfile } from '../../../shared/schemas/profile.js';
+import { migrateProfile, parseProfile } from '../../../shared/schemas/profile.js';
 import { ProfileError } from '../../../shared/schemas/errors.js';
 import type { LanguageProfile } from '../../../shared/types.js';
 import { dataDir } from '../config.js';
@@ -41,6 +43,8 @@ function remap(source: LanguageProfile, targetId: string) {
   const profile = structuredClone(source), ids = new Map<string, string>();
   for (const collection of [profile.dictionary, profile.grammar_rules, profile.samples, profile.audio_clips])
     for (const entry of collection) ids.set(entry.id, randomUUID());
+  for (const records of Object.values(profile.research)) for (const record of records) ids.set(record.id, randomUUID());
+  profile.research = remapResearch(profile.research, ids);
   profile.id = targetId; profile.recent_mutations = [];
   if (profile.compiler_session_id) profile.compiler_session_id = randomUUID();
   profile.dictionary.forEach(entry => { entry.id = ids.get(entry.id)!; });
@@ -127,7 +131,7 @@ export class ProjectArchives {
         if (!found) throw invalid('A legacy recording is missing; a complete backup cannot be created');
       }
     }
-    const manifest: ArchiveManifest = { format: 'xenolinguist', archiveVersion: profile.compiler_session_id ? 2 : 1, profileSchemaVersion: 2,
+    const manifest: ArchiveManifest = { format: 'xenolinguist', archiveVersion: profile.compiler_session_id ? 2 : 1, profileSchemaVersion: 3,
       createdAt: new Date().toISOString(), sourceProfileId: profile.id, sourceRevision: profile.revision,
       sandboxIncluded: includeSandbox, members: [...members].map(([name, member]) => ({ path: name, bytes: member.bytes, sha256: member.sha256 })) };
     archiveManifestSchema.parse(manifest);
@@ -181,7 +185,7 @@ export class ProjectArchives {
         return JSON.parse(await fs.readFile(member.file, 'utf8')) as Record<string, unknown>;
       };
       const rawManifest = await json('manifest.json');
-      if (![1, 2].includes(rawManifest.archiveVersion as number) || rawManifest.profileSchemaVersion !== 2)
+      if (![1, 2].includes(rawManifest.archiveVersion as number) || ![2, 3].includes(rawManifest.profileSchemaVersion as number))
         throw new ProfileError('ARCHIVE_VERSION_UNSUPPORTED', 'This archive requires a different application version. No project was changed.', 422);
       const manifest = archiveManifestSchema.parse(rawManifest), declared = new Set<string>();
       for (const member of manifest.members) {
@@ -196,7 +200,9 @@ export class ProjectArchives {
       if (Array.isArray(rawProfile.ai_history) && rawProfile.ai_history.some(record => !record || typeof record !== 'object'
         || Object.keys(record).some(key => !['id', 'role', 'content', 'timestamp', 'model', 'task', 'state', 'error'].includes(key))))
         throw invalid('Incompatible AI history fields');
-      const profile = parseProfile(rawProfile), expected = new Set(['profile.json']);
+      if (rawProfile.schema_version !== manifest.profileSchemaVersion) throw invalid('Profile schema does not match manifest');
+      const profile = migrateProfile(rawProfile), expected = new Set(['profile.json']);
+      verifyResearch(profile);
       if (profile.id !== manifest.sourceProfileId || profile.revision !== manifest.sourceRevision
         || (!manifest.sandboxIncluded && profile.sandbox_session)) throw invalid('Manifest does not match its project');
       if (profile.compiler_session_id) {

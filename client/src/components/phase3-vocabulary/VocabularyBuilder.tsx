@@ -1,3 +1,4 @@
+import { EvidenceInspector } from '@/components/evidence/EvidenceInspector'
 import { useLexicon } from '@/hooks/useLexicon'
 import { DEFAULT_LEXICAL_POLICY, storedForm } from 'engine/text/normalize'
 import { LexicalFields } from './LexicalFields'
@@ -338,6 +339,7 @@ export function VocabularyBuilder() {
       <div className="glass-card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12, overflow: 'auto' }}>
         {sel ? (
           <>
+            {profile && <EvidenceInspector profile={profile} targetId={sel.id} />}
             <div className="flex" style={{ justifyContent: 'space-between' }}>
               <span className="label" style={{ marginBottom: 0 }}>Inspector</span>
               {editing ? (

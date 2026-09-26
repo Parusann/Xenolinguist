@@ -39,6 +39,18 @@ beforeEach(() => vi.useFakeTimers())
 afterEach(() => { vi.clearAllTimers(); vi.useRealTimers() })
 
 describe('durable save queue', () => {
+  it('keeps competing research histories as a conflict instead of overwriting the remote audit trail', async () => {
+    const a = profile(), store = new MemoryStore(), remote = backend(a)
+    const capture = (id: string) => ({ id, created_at: a.created_at, text: id, source: 'manual', source_id: null,
+      content_sha256: '0'.repeat(64), origin: 'capture' as const, derived_from: [], audio: null })
+    const queue = new SaveQueue(remote.api, store, 60_000); await queue.load(a)
+    queue.edit(a, { ...a, research: { ...a.research, observations: [capture('local')] } })
+    remote.data.set(a.id, { ...a, revision: 1, research: { ...a.research, observations: [capture('remote')] } })
+    expect(await queue.flush()).toBe(false)
+    expect(queue.status(a.id).phase).toBe('conflict')
+    expect(remote.data.get(a.id)!.research.observations[0].id).toBe('remote')
+    expect(store.values.get(a.id)!.batches[0].after.research.observations[0].id).toBe('local')
+  })
   it('recovers a failed sandbox event and its reward as one saved mutation', async () => {
     const a = profile(), store = new MemoryStore(), remote = backend(a)
     const workingApi = remote.api.mutate

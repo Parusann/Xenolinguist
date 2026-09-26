@@ -1,3 +1,4 @@
+import type { Research } from 'shared/types'
 import { storedForm } from 'engine/text/normalize'
 import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react'
 import type { LanguageProfile, DictionaryEntry, GrammarRule, Sample, AudioClip } from 'shared/types'
@@ -9,6 +10,7 @@ import type { SaveStatus } from './save-queue'
 
 interface ProfileContextValue {
   profile: LanguageProfile | null
+  editResearch: (profileId: string, edit: (research: Research) => Research) => void
   loadProfile: (id: string) => Promise<void>
   createProfile: (data: { name: string; description: string; phonetic_notes: string; is_sandbox?: boolean }) => Promise<LanguageProfile>
   updateProfile: (updates: Partial<LanguageProfile>) => void
@@ -104,6 +106,10 @@ export function ProfileProvider({
     addEntry('success', `Created new profile: ${created.name}`)
     return created
   }, [addEntry, queue])
+
+  const editResearch = useCallback((profileId: string, edit: (research: Research) => Research) => {
+    updateAndSave(prev => prev.id === profileId ? { ...prev, research: edit(prev.research) } : prev)
+  }, [updateAndSave])
 
   const updateProfile = useCallback((updates: Partial<LanguageProfile>) => {
     updateAndSave(prev => ({ ...prev, ...updates }))
@@ -241,6 +247,7 @@ export function ProfileProvider({
   return (
     <ProfileContext.Provider value={{
       profile,
+      editResearch,
       loadProfile,
       createProfile,
       updateProfile,

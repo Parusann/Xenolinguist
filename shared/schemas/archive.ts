@@ -8,7 +8,7 @@ export const archiveMemberSchema = z.strictObject({
   bytes: z.number().int().positive().max(ARCHIVE_LIMITS.memberBytes), sha256: z.string().regex(/^[a-f0-9]{64}$/),
 });
 export const archiveManifestSchema = z.strictObject({
-  format: z.literal('xenolinguist'), archiveVersion: z.union([z.literal(1), z.literal(2)]), profileSchemaVersion: z.literal(2),
+  format: z.literal('xenolinguist'), archiveVersion: z.union([z.literal(1), z.literal(2)]), profileSchemaVersion: z.union([z.literal(2), z.literal(3)]),
   createdAt: timestampSchema, sourceProfileId: entityIdSchema, sourceRevision: z.number().int().nonnegative(),
   sandboxIncluded: z.boolean(), members: z.array(archiveMemberSchema).min(1).max(ARCHIVE_LIMITS.entries - 1),
 });

@@ -1,3 +1,4 @@
+import { EvidenceInspector } from '@/components/evidence/EvidenceInspector'
 import { SymbolicTranslation } from './SymbolicTranslation'
 import { EvidenceStatus } from '@/components/common/EvidenceStatus'
 import { useState, useMemo } from 'react'
@@ -206,6 +207,7 @@ export function TranslationEngine() {
                       <div style={{ fontSize: 13 }}>{candidate.text} → {candidate.meaning || 'No meaning recorded'}</div>
                       <div className="dim" style={{ fontSize: 11 }}>Source [{candidate.start}, {candidate.end}) · {candidate.sense === null ? 'display gloss' : `sense ${candidate.sense + 1}`}</div>
                       <EvidenceStatus value={candidate.entry.confidence} />
+                      {profile && <EvidenceInspector profile={profile} targetId={candidate.entry.id} />}
                     </div>
                   )) : <div style={{ fontSize: 12.5, color: 'var(--fg-dim)' }}>Not in dictionary — define it below.</div>}
                   {active.candidates.length > 1 && <p className="dim">Competing analyses remain unresolved. Edit individual entries in Vocabulary.</p>}

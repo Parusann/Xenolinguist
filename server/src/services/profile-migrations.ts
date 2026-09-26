@@ -13,7 +13,7 @@ export async function readProfileFile(file: string) {
   let source: unknown;
   try { source = JSON.parse(original); }
   catch { throw new ProfileError('PROFILE_CORRUPT', 'Profile file contains invalid JSON; the original has been preserved', 422); }
-  try { return { profile: migrateProfile(source), legacy: (source as { schema_version?: number }).schema_version !== 2, original }; }
+  try { return { profile: migrateProfile(source), legacy: (source as { schema_version?: number }).schema_version !== 3, original }; }
   catch (error) {
     if (error instanceof ProfileError && error.code === 'PROFILE_INVALID')
       throw new ProfileError('PROFILE_INVALID_ON_DISK', 'Profile data failed validation; the original has been preserved', 422, error.issues);
@@ -24,7 +24,8 @@ export async function readProfileFile(file: string) {
 export async function preserveLegacyBackup(file: string) {
   const record = await readProfileFile(file);
   if (!record?.legacy) return;
-  const backup = `${file}.v1.bak`;
+  const version = (JSON.parse(record.original) as { schema_version?: number }).schema_version ?? 1;
+  const backup = `${file}.v${version}.bak`;
   try { await fs.copyFile(file, backup, constants.COPYFILE_EXCL); }
   catch (error) {
     if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;

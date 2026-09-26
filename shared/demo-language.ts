@@ -1,3 +1,4 @@
+import { emptyResearch } from './schemas/research.js';
 import type { LanguageProfile } from './types';
 
 /** Fictional teaching corpus shared by the app and website. Ratings are illustrative
@@ -7,7 +8,8 @@ export const DEMO_VERSION = 'eridian-demo-3';
 const T = '2026-06-07T00:00:00.000Z';
 
 export const DEMO_LANGUAGE: Omit<LanguageProfile, 'id' | 'created_at' | 'updated_at'> = {
-  schema_version: 2,
+  schema_version: 3,
+  research: emptyResearch(),
   revision: 0,
   recent_mutations: [],
   name: 'Eridian',

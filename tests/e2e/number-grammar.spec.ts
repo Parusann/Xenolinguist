@@ -31,6 +31,8 @@ test('W19 tests a discriminating answer, predicts a withheld numeral and preserv
   await panel.getByText('Choose independent validation mappings', { exact: true }).click();
   await expect(panel.getByLabel('Validate number 10', { exact: true })).toBeChecked();
   await panel.getByRole('button', { name: 'Infer number grammar', exact: true }).click(); await expect(prediction).toContainText('ru ka ri');
+  await panel.getByRole('button', { name: 'Record candidate as research hypothesis' }).click();
+  await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).research.hypotheses.length).toBe(1);
   const saved = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
   expect(saved.number_system.base).toBeNull(); expect(saved.number_system.mappings[13]).toBeUndefined();
   const exported = await page.request.get(`${server.url}/api/archives/export/${profile.id}?revision=${saved.revision}&sandbox=false`); expect(exported.ok()).toBe(true);
@@ -39,5 +41,7 @@ test('W19 tests a discriminating answer, predicts a withheld numeral and preserv
   const restored = await page.request.post(`${server.url}/api/archives/${(await preview.json()).token}/restore`, { data: { mode: 'new' } }); expect(restored.status()).toBe(201);
   expect((await restored.json()).profile.number_system).toEqual(saved.number_system);
   await panel.getByLabel('Validate number 10', { exact: true }).uncheck(); await expect(panel).toContainText('previous predictions are stale');
+  await page.locator('[data-tour="dashboard"]').click();
+  await expect(page.getByRole('region', { name: 'Research evidence', exact: true })).toContainText('number mappings, validation selection or case policy changed');
   expect(modelCalls).toBe(0);
 });

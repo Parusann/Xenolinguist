@@ -110,3 +110,8 @@ See [Unicode lexicon](unicode-lexicon.md) for normalization, source offsets, pro
 
 
 [Number grammar inference](number-grammar.md) uses a bounded worker, explicit atoms/addition/multiplication, independently selected validation mappings and disagreement questions. Predicted forms are never silently added as observed evidence.
+
+
+## Research evidence
+
+Field Log can retain immutable source captures, append interpretation corrections, compare typed hypotheses, and link supporting, contradicting or ambiguous evidence. Vocabulary, grammar and translation inspectors expose these links. Saved symbolic derivations retain their rules, source spans and meaning trees; dependency changes mark old results stale. The server checks exact replay and supplied-target outcomes. Research records survive portable archives, including reference remapping. See [research evidence](research-evidence.md) for migration, score definitions and limitations.

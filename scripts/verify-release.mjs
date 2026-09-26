@@ -385,13 +385,54 @@ try {
   await expect(numberPrediction).toContainText('All leading grammars agree');
   await expect(numberPrediction).toContainText('ru ka ri');
   await numberPrediction.getByText('Composition tree',{exact:true}).click(); await expect(numberPrediction).toContainText('×');
+  await numbers.getByRole('button',{name:'Record candidate as research hypothesis'}).click();
+  await expect.poll(async()=> (await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${numberInitial.id}`)).json()).research.hypotheses.length).toBe(1);
   const numberProfile = await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${numberInitial.id}`)).json();
   expect(numberProfile.number_system.base).toBeNull(); expect(numberProfile.number_system.mappings[13]).toBeUndefined();
   record.checks.numberGrammar = { passed:true, workerExecuted:true, ambiguityRetained:true, discriminatingQuestion:true, validationPersisted:true, withheldPrediction:true, compositionTree:true };
+  const researchResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native research evidence', dictionary: [lexicalWord('research-word', 'tal', 'sky')],
+  } });
+  expect(researchResponse.status()).toBe(201); const researchInitial = await researchResponse.json();
+  const readResearch = async () => (await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${researchInitial.id}`)).json());
+  await reopened.getByTitle('Back to profiles', { exact:true }).click();
+  await reopened.getByRole('button').filter({has:reopened.getByText(researchInitial.name,{exact:true})}).click();
+  await reopened.locator('[data-tour="dashboard"]').click();
+  const researchPanel = reopened.getByRole('region',{name:'Research evidence',exact:true});
+  await researchPanel.getByLabel('Original observation',{exact:true}).fill('tal');
+  await researchPanel.getByLabel('Source context').fill('Native acceptance capture');
+  await researchPanel.getByRole('button',{name:'Capture observation',exact:true}).click();
+  await expect.poll(async()=> (await readResearch()).research.observations.length).toBe(1);
+  await researchPanel.getByLabel('Assertion to investigate').selectOption('research-word');
+  await researchPanel.getByRole('button',{name:'Propose hypothesis',exact:true}).click();
+  const researchHypothesis = researchPanel.getByLabel('Hypothesis tal → sky',{exact:true});
+  await researchHypothesis.getByLabel('Evidence observation for tal → sky').selectOption({label:'tal'});
+  await researchHypothesis.getByRole('button',{name:'Link evidence',exact:true}).click();
+  await expect.poll(async()=> (await readResearch()).research.links.length).toBe(1);
+  await researchHypothesis.getByLabel('Relationship',{exact:true}).selectOption('contradicts');
+  await researchHypothesis.getByRole('button',{name:'Link evidence',exact:true}).click();
+  await expect.poll(async()=> (await readResearch()).research.links.length).toBe(2);
+  await expect(researchHypothesis).toContainText('Support 1 · Contradiction 1');
+  await reopened.locator('[data-tour="translation"]').click();
+  await reopened.getByPlaceholder('Enter unknown language text to translate…').fill('tal');
+  await symbolic.getByRole('button',{name:'Analyze symbolically'}).click();
+  await symbolic.getByRole('button',{name:'Save derivation to research'}).click();
+  await expect.poll(async()=> (await readResearch()).research.analyses.length).toBe(1);
+  await reopened.locator('[data-tour="dashboard"]').click();
+  const researchObservation = researchPanel.getByLabel('Observation tal',{exact:true});
+  await researchObservation.locator('summary').click();
+  await researchObservation.getByLabel('Revised interpretation').fill('water instead of sky');
+  await researchObservation.getByRole('button',{name:'Append interpretation'}).click();
+  await expect.poll(async()=> (await readResearch()).research.annotations.length).toBe(1);
+  await expect(researchHypothesis.locator('summary').first()).toContainText('invalidated');
+  await expect(researchPanel).toContainText('tal · resolved · stale');
+  const researchProfile = await readResearch();
+  expect(researchProfile.research.observations[0].text).toBe('tal');
+  record.checks.researchEvidence = { passed:true, immutableCapture:true, contradictionVisible:true, derivationRetained:true, correctionInvalidates:true };
   // Export response bytes can arrive before the exclusive staging cleanup finishes.
   await reopened.exposeFunction('waitForArchiveCleanup', async () => { await expect.poll(() => readdir(path.join(dir,'data','archive-staging'))).toEqual([]); });
   const archiveChecks = [];
-  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile, inductionProfile, numberProfile]) {
+  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile, inductionProfile, numberProfile, researchProfile]) {
     const restored = await reopened.evaluate(async source => {
       const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
       if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
@@ -432,6 +473,14 @@ try {
     if(sourceProfile.id===inductionProfile.id) {
       expect(restored.profile.grammar_rules.map(({id:_id,...rule})=>rule)).toEqual(inductionProfile.grammar_rules.map(({id:_id,...rule})=>rule));
       record.checks.groundedInduction.archiveRestored=true;
+    }
+    if(sourceProfile.id===researchProfile.id) {
+      const restoredResearch = restored.profile.research;
+      expect(restoredResearch.observations[0].text).toBe('tal');
+      expect(restoredResearch.annotations[0].observation_id).toBe(restoredResearch.observations[0].id);
+      expect(restoredResearch.links[0].hypothesis_id).toBe(restoredResearch.hypotheses[0].id);
+      expect(restoredResearch.analyses[0].result.candidates[0].steps[0].entryId).toBe(restored.profile.dictionary[0].id);
+      record.checks.researchEvidence.archiveRestored=true;
     }
     if(sourceProfile.id===numberProfile.id) {
       expect(restored.profile.number_system).toEqual(numberProfile.number_system);
@@ -476,6 +525,7 @@ try {
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed
     && record.checks.groundedInduction?.passed && record.checks.groundedInduction?.archiveRestored
+    && record.checks.researchEvidence?.passed && record.checks.researchEvidence?.archiveRestored
     && record.checks.numberGrammar?.passed && record.checks.numberGrammar?.archiveRestored
     && record.checks.typedGrammar?.passed && record.checks.typedGrammar?.archiveRestored
     && record.checks.unicodeLexicon?.passed && record.checks.unicodeLexicon?.archiveRestored

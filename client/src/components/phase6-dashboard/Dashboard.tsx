@@ -1,3 +1,4 @@
+import { ResearchWorkbench } from '@/components/evidence/ResearchWorkbench'
 import { useRef } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useSessionLog } from '@/stores/session-log-context'
@@ -85,7 +86,8 @@ export function Dashboard() {
       </div>
     </div>
     <ProjectArchive />
-    <p className="dim">JSON and CSV are limited interchange formats, not complete backups. JSON import updates language fields only and does not restore recording bytes, AI history, sandbox progress or metric history. Use .xeno for a portable project.</p>
+    <ResearchWorkbench />
+    <p className="dim">JSON and CSV are limited interchange formats, not complete backups. JSON import updates language fields only and does not restore recording bytes, AI history, research records, sandbox progress or metric history. Use .xeno for a portable project.</p>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 16 }}>
       {tiles.map(([label, count, definition]) => <div className="glass-card" key={label} style={{ padding: 20 }}>
         <div className="label">{label}</div><div className="text-glow" style={{ fontSize: 40 }}>{count}</div><p className="dim" style={{ fontSize: 12 }}>{definition}</p>

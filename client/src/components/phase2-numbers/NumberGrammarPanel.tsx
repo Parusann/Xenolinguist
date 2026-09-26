@@ -1,3 +1,5 @@
+import { numberEvidenceSnapshot } from 'engine/evidence/graph'
+import { recordIdentity } from '@/components/evidence/identity'
 import { useEffect, useRef, useState } from 'react'
 import { describeNumberCandidate, describeNumberTree, predictConsensus, type nextNumberQuestion } from 'engine/numbers/predict'
 import type { NumberInference } from 'engine/numbers/score'
@@ -7,7 +9,7 @@ import { useProfileDraft } from '@/hooks/useProfileDraft'
 
 type WorkerResult = { inference: NumberInference; question: ReturnType<typeof nextNumberQuestion> }
 export function NumberGrammarPanel({ profile }: { profile: LanguageProfile }) {
-  const { updateProfile } = useProfile()
+  const { updateProfile, editResearch } = useProfile()
   const [target, setTarget] = useProfileDraft<string>('numbers.prediction', '13')
   const [answer, setAnswer] = useState('')
   const [result, setResult] = useState<(WorkerResult & { fingerprint: string }) | null>(null)
@@ -63,6 +65,12 @@ export function NumberGrammarPanel({ profile }: { profile: LanguageProfile }) {
           {inference.candidates.map(c => <option key={c.id} value={c.id}>{inference.leaderIds.includes(c.id) ? 'Leading · ' : ''}{describeNumberCandidate(c)} · link {JSON.stringify(c.grammar.additionJoiner)}{c.grammar.kind === 'multiplicative' ? ` · ${c.grammar.multiplicationOrder} × link ${JSON.stringify(c.grammar.multiplicationJoiner)}` : ''} · fit {c.support}/{c.fit.filter(o => o.outcome !== 'atom').length} · validation {c.validationSupport}/{c.validation.length} · {c.complexityBytes} bytes</option>)}
         </select></label>
         {candidate && <p>Fit support: {candidate.support}; contradictions: {candidate.contradictions}. Validation support: {candidate.validationSupport}/{candidate.validation.length}; contradictions: {candidate.validationContradictions}. Missing predictions remain in the denominator. Atoms are stored evidence, not successful composition tests.</p>}
+        {candidate && <button className="btn sm" onClick={() => {
+          try { editResearch(profile.id, r => ({ ...r, hypotheses: [...r.hypotheses, { ...recordIdentity(), label: describeNumberCandidate(candidate),
+            content: { kind: 'number', grammar: candidate.grammar, input_snapshot: numberEvidenceSnapshot(profile) }, provenance: 'engine',
+            manual_belief: null, score_definition: 'evidence-counts-1', supersedes: null }] })); setError('') }
+          catch (e) { setError((e as Error).message) }
+        }}>Record candidate as research hypothesis</button>}
         {candidate && <details><summary>Inspect candidate evidence and ordering</summary>
           <p>Addition linker: {JSON.stringify(candidate.grammar.additionJoiner)}. Multiplication: {candidate.grammar.multiplicationOrder}; linker: {JSON.stringify(candidate.grammar.multiplicationJoiner)}. Complexity: {candidate.complexityBytes} serialized UTF-8 bytes; a display preference only.</p>
           <table style={{ width: '100%', tableLayout: 'fixed', textAlign: 'left', fontSize: 12 }}><thead><tr><th>Use / value</th><th>Observed</th><th>Productive form</th><th>Outcome</th></tr></thead><tbody>

@@ -1,3 +1,4 @@
+import { emptyResearch } from './schemas/research.js';
 import type { PartOfSpeech, LanguageProfile } from './types';
 import { parseProfilePatch, profileDataSchema } from './schemas/profile.js';
 
@@ -58,7 +59,8 @@ export function beliefLabel(value: number | null | undefined): string {
 
 export function createDefaultProfile(): Omit<LanguageProfile, 'id' | 'created_at' | 'updated_at'> {
   return {
-    schema_version: 2,
+    schema_version: 3,
+  research: emptyResearch(),
     revision: 0,
     recent_mutations: [],
     name: '',

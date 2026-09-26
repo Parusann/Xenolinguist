@@ -1,3 +1,4 @@
+import { EvidenceInspector } from '@/components/evidence/EvidenceInspector'
 import type { ExecutableRule, GrammarRule } from 'shared/types'
 import { executableRuleSchema } from 'shared/schemas/grammar'
 import { InductionPanel } from './InductionPanel'
@@ -144,6 +145,7 @@ export function GrammarAnalyzer() {
             <div className="flex" style={{ gap: 8, marginTop: 10 }}>
               <EvidenceStatus value={sel.confidence} />
             </div>
+            {profile && <EvidenceInspector profile={profile} targetId={sel.id} />}
             <SavedRuleEditor key={sel.id + JSON.stringify(sel.executable)} rule={sel} save={value => updateGrammarRule(sel.id, { executable: value })} />
             {profile && <>
               <label className="label">Saved grammar preview<input className="input" aria-label="Saved grammar preview source" maxLength={2048} value={selectedPreview} onChange={e => setSelectedPreview(e.target.value)} /></label>

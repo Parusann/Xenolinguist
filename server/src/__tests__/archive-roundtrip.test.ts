@@ -66,6 +66,34 @@ function rewriteManifest(members: Map<string, Buffer>) {
 }
 
 describe('portable project archives', () => {
+  it('migrates a version 2 archive without inventing research history', async () => {
+    const { bytes } = await archive(), members = await unpack(bytes);
+    const profile = JSON.parse(members.get('profile.json')!.toString());
+    delete profile.research; profile.schema_version = 2;
+    members.set('profile.json', Buffer.from(JSON.stringify(profile)));
+    const manifest = JSON.parse(members.get('manifest.json')!.toString()); manifest.profileSchemaVersion = 2;
+    members.set('manifest.json', Buffer.from(JSON.stringify(manifest))); rewriteManifest(members);
+    const service = new ProjectArchives(), preview = await service.inspect(Readable.from([await pack(members)]));
+    const restored = (await service.restore(preview.token, { mode: 'new' })).profile;
+    expect(restored.schema_version).toBe(3); expect(restored.research.observations).toEqual([]);
+    expect(restored.revision).toBe(profile.revision);
+  });
+
+  it('retains exact captured audio spans and blocks removal of their source bytes', async () => {
+    const store = new ProfileStore(), profile = await fixture(), clip = profile.audio_clips[0];
+    const saved = (await store.update(profile.id, { research: { ...profile.research, observations: [{ id: 'audio-observation', created_at: now,
+      text: 'tal', content_sha256: createHash('sha256').update('tal').digest('hex'), source: 'field span', origin: 'sample', source_id: profile.samples[0].id,
+      derived_from: [], audio: { clip_id: clip.id, start: 0, end: 1, asset_sha256: clip.assets!.original.sha256 } }] } }, profile.revision))!;
+    await expect(store.update(profile.id, { samples: profile.samples.map(s => ({ ...s, audio_id: null })), audio_clips: [] }, saved.revision))
+      .rejects.toMatchObject({ code: 'RESEARCH_AUDIO_MISSING' });
+    const service = new ProjectArchives(), exported = await service.export(profile.id, saved.revision, true);
+    const bytes = await fs.readFile(exported.file); await exported.dispose();
+    const preview = await service.inspect(Readable.from([bytes]));
+    const restored = (await service.restore(preview.token, { mode: 'new' })).profile;
+    expect(restored.research.observations[0].audio).toEqual({ clip_id: restored.audio_clips[0].id, start: 0, end: 1, asset_sha256: clip.assets!.original.sha256 });
+    expect(restored.research.observations[0].source_id).toBe(restored.samples[0].id);
+  });
+
   it('retains executable grammar and lexical frames through mutation and archive ID remapping', async () => {
     const store = new ProfileStore(), profile = await fixture();
     const executable = { kind: 'plural-affix', position: 'suffix', affix: '-en' };

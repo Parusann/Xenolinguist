@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { verifyResearch } from './research-integrity.js';
 import path from 'node:path';
 import { randomUUID, createHash } from 'node:crypto';
 import type { LanguageProfile, ProfileIndex } from '../../../shared/types.js';
@@ -71,6 +72,7 @@ export class ProfileStore {
     await this.init();
     const now = new Date().toISOString();
     const profile = parseProfile({ ...pickProfileData(input), id: randomUUID(), created_at: now, updated_at: now });
+    verifyResearch(profile);
     await new AudioStore().verifyProfile(profile);
     return this.locked(profile.id, () => this.save(profile));
   }
@@ -83,6 +85,7 @@ export class ProfileStore {
       if (!existing) return null;
       this.checkRevision(existing, expectedRevision);
       const profile = parseProfile({ ...existing, ...patch, revision: existing.revision + 1, updated_at: new Date().toISOString() });
+      verifyResearch(profile, existing);
       await new AudioStore().verifyProfile(profile, existing);
       return this.save(profile);
     });
@@ -106,6 +109,7 @@ export class ProfileStore {
       } else if (existing) throw new ProfileError('PROFILE_EXISTS', 'Import identity already exists', 409);
       const restored = parseProfile({ ...profile, revision: existing ? Math.max(existing.revision, profile.revision) + 1 : profile.revision,
         recent_mutations: [], updated_at: new Date().toISOString() });
+      verifyResearch(restored);
       await prepare(existing);
       await new AudioStore().verifyProfile(restored);
       await withProfileLock(`recovery:${this.file(restored.id)}`, async () => {
@@ -133,6 +137,7 @@ export class ProfileStore {
       const revision = existing.revision + 1;
       const profile = parseProfile({ ...applyOperations(existing, mutation.operations), revision, updated_at: new Date().toISOString(),
         recent_mutations: [...existing.recent_mutations, { id: mutation.mutationId, digest, revision }].slice(-128) });
+      verifyResearch(profile, existing);
       await new AudioStore().verifyProfile(profile, existing);
       const saved = await this.save(profile);
       return { profile: saved, appliedRevision: revision, mutationId: mutation.mutationId, duplicate: false };
