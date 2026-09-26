@@ -71,7 +71,6 @@ Run the affected unit tests and type checks, then the real browser/native flow f
 
 The final unpacked Windows executable also passes `verify:release -- <executable> test-results/w08-final-release.json --negative-model`. Its expanded check requires an unrated sandbox reward and a server-recorded metric snapshot visible in the dashboard after native recovery. See [verification/w08-windows-evidence.json](verification/w08-windows-evidence.json). Model inference and original audio playback pass separately from these deterministic UI assertions. No new independent CI or installer certification is claimed.
 
-
 ## W09 local boundary
 
 `npm test` passes 183 tests (153 server/shared and 30 client), with three gated native unit checks skipped. Type checks, client lint and the desktop build pass. The complete 21-case browser suite passes 20 working checks and reproduces the existing expected Unicode-translation failure. Security coverage includes anonymous and binary API rejection, invalid origins, explicit pairing, HttpOnly cookie isolation, local fonts, no external asset requests and a real script blocked from evaluating code by CSP. Microphone coverage also asserts that browser SpeechRecognition never starts.
@@ -79,7 +78,6 @@ The final unpacked Windows executable also passes `verify:release -- <executable
 `node scripts/verify-development.mjs` separately passes the actual direct development server plus Vite proxy: pairing, profile creation, reload, inaccessible document cookie and secret-free server output. Both development ports must be available. Synthetic fixtures still require real credentials; production authentication has no bypass for tests.
 
 The unpacked Windows probe passes trusted-main-frame API access, anonymous HTTP and second-window rejection, blocked navigation/popups, sandbox preferences, synthetic audio capture and camera rejection. Native inference, original-file checksums, playback, failed-save recovery, persisted sandbox state and evidence history work across a real relaunch. The missing-model negative check still returns `IPA_MODEL_MISSING`. See [verification/w09-windows-boundary.json](verification/w09-windows-boundary.json) and [local-security.md](local-security.md). A fake capture device supplies the microphone input; permission handlers remain active. This does not certify physical microphone hardware, a signed installer, model accuracy or a clean-machine W09 CI run.
-
 
 ## W10 readiness, inference and retained history
 
@@ -91,7 +89,6 @@ The final unit baseline is 202 passing tests (172 server/shared and 30 client) p
 
 The final unpacked Windows probe verifies cancellation after a real phone child spawns, waits for its exit before reporting cancellation, then runs actual inference successfully. It reports storage/audio capabilities separately from unavailable chat, checks saved proposal recovery after native close/relaunch, and preserves all prior audio, sandbox and evidence checks. See [verification/w10-windows-runtime.json](verification/w10-windows-runtime.json). This local artifact is not a signed installer or independent clean-machine W10 certification.
 
-
 ## W11 public presentation and shared corpus
 
 The unit baseline is now 204 passing tests (174 server/shared and 30 client), with the same three gated native skips. Shared-presentation tests ensure every public phrase/gloss comes from the app's versioned Eridian seed and unknown words remain unresolved. The existing download component tests now require a pinned asset/version and a visible distinction between the old installer and preview setup.
@@ -102,16 +99,13 @@ The complete 24-case workbench suite passes: 23 working checks plus the known ex
 
 [W11 evidence](verification/w11-presentation.json) records source state, measurements and screenshots. External HEAD checks confirm the public site, GitHub release, direct installer, source branch, license and Ollama destinations; the installer response size matches GitHub metadata. The installer was not downloaded/installed in W11. New document paths are checked locally before push. Pages still deploys from `main`; pushing the implementation branch does not update the live site. [Presentation claims](public-presentation.md) map prominent statements to existing evidence and limits.
 
-
 ## W16 Unicode lexicon
 
 The current local gate passes 271 unit tests and seven tooling tests, with three gated native unit skips. All 31 workbench checks pass; F08 is now an ordinary passing regression rather than an expected failure. Eight public-site checks pass. `engine/src/__tests__/unicode.test.ts` checks source spans, Unicode scripts, normalization, phrase lookup, candidate preservation, segmentation policy and index invalidation. Archive integration covers persisted senses/aliases/policy and rejection of invalid senses without changing stored state.
 
 `npm run evaluate:unicode` writes all 14 supplied-dictionary probe outcomes and source hashes to `test-results/w16-unicode-results.json`: repaired lookup passes 14/14 and frozen W15 lookup passes 5/14. Source CI runs this comparison alongside the original 12-record deterministic subset. The installed harness requires Unicode lookup, explicit reverse aliases, case sensitivity, competing homographs and lexical archive restoration in addition to native audio and recovery. See [lexical contracts and limits](unicode-lexicon.md) and [implementation progress](implementation-progress.md) for the exact verification boundary.
 
-
 Final revision `6081538` passes these gates on both Windows and Linux in [source CI](https://github.com/Parusann/Xenolinguist/actions/runs/35601801641). Both downloaded 12-record evaluation subsets also replay locally. [Independent installed Windows acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/35601801579) passes all required checks, including the new lexical checks and four project archive round trips. [W16 evidence](verification/w16-unicode-lexicon.json) retains the results and exact application/source identities.
-
 
 ## W17 typed grammar
 
@@ -121,9 +115,7 @@ Initial browser runs exposed an intermittent fixture navigation race: `openProfi
 
 The installed harness now requires a plural, past-tense, negated SOV clause, original affix spans, reverse generation and a fifth project archive round trip preserving typed rules/verb frames. Independent CI completion is recorded in [implementation progress](implementation-progress.md). See [typed grammar](typed-grammar.md) for the supported language family and explicit failure states.
 
-
 Final revision `646e902` passes [source CI on Windows and Linux](https://github.com/Parusann/Xenolinguist/actions/runs/35767898552), including all 33 workbench and eight public checks without retries. Both downloaded 12-record evaluation artifacts replay locally. [Independent installed acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/35767898650) passes every typed grammar gate and all five archives, native IPA/STT/TTS, restart recovery and missing-model rejection after verifying 3,772 payload files. [Retained W17 evidence](verification/w17-typed-grammar.json) records application/source identities and explicit limits.
-
 
 ## W18 grounded induction
 
@@ -135,9 +127,7 @@ Local source gates pass 314 unit tests (284 server/shared/engine/evaluation and 
 
 The original 12-record evaluation subset replays with its frozen corpus hash unchanged; repaired Unicode still scores 14/14. W18 development experiments retain 60 condition/language records across 12 seeds, with full source snapshots and deterministic replay. Evaluation seeds are reserved for the frozen implementation and CI. The installed harness adds a worker-driven learned plural with distinct validation, explicit acceptance, subsequent symbolic execution and a sixth archive round trip. Final revision, exact evaluation results and independent CI are recorded in [implementation progress](implementation-progress.md). Four high native-chain audit entries remain.
 
-
 Final verification revision `60619e1` passes [source CI on Windows and Linux](https://github.com/Parusann/Xenolinguist/actions/runs/35909393880), with 34 workbench and eight public tests per platform and no retries. Both downloaded W18 evaluation artifacts replay all 60 records; both frozen W15 subsets replay all 12 records. [Independent installed acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/35909394038) verifies 3,773 payload files and passes every grounded-induction check, all six project archives, native audio and restart recovery. [W18 evidence](verification/w18-grounded-induction.json) retains exact revisions, hashes and failure history; [measured results](induction-results.md) includes all condition denominators and downloadable source/result archives.
-
 
 ## W19 number grammar
 
@@ -147,9 +137,10 @@ The new browser flow runs the worker without model calls, retains ambiguous cand
 
 Final revision `53ce34b` passes [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/35942915621): 336 unit tests, seven tooling tests, 35 workbench and eight public tests per platform. Both downloaded number experiments replay 336 records; W18 replays 60 records and the frozen baseline replays 12 on each platform. [Independent installed acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/35942915489) verifies 3,774 files and passes the number workflow, all seven archives, native audio and recovery. [W19 evidence](verification/w19-number-grammar.json) retains results and hashes; [number results](number-results.md) retains the complete error/abstention denominators.
 
-
 ## W20 research records
 
 W20 adds six pure evidence-graph tests, five store/replay tests, two archive cases and one save-queue conflict case. Local source gates pass 350 unit tests and seven tooling tests, with three gated native skips. Coverage includes model-restatement deduplication, transitive withdrawal and annotation invalidation, unrelated-note stability, competing parses, invalid reference graphs, version-2 profiles and sealed drafts, immutable history and hashes, exact derivation replay, fabricated supplied-target outcomes, retained recording spans, version-2 archives and complete ID remapping.
 
 The browser workflow captures an observation, records supporting and contradicting links, makes an explicit decision, saves evidence counts, traces a translated token to sources and saves a derivation. A supplied-target check and a later interpretation correction remain recorded; the prior derivation becomes stale and survives backend restart and archive restore. Number acceptance additionally records a typed hypothesis and checks invalidation when its validation inputs change. Independent installed acceptance exercises the research workflow and an eighth project archive. Current CI status is recorded in [implementation progress](implementation-progress.md); the [research contract](research-evidence.md) documents the boundaries and limits.
+
+Final W20 revision `db3b749` passes [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/36231029293) with 350 unit tests, seven tooling tests, 37 workbench and eight public checks per platform. Each platform's downloaded experiments replay 12/60/336 records. [Independent installed acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/36231029345) verifies 3,774 application files and passes the research workflow and all eight archive round trips. [W20 verification](verification/w20-research-evidence.json) retains the exact source and payload identities; [the research example](research-evidence.md#reopen-the-recorded-example) provides a reopenable project and replay assertions.

@@ -1,0 +1,1336 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "recordedAt": "2026-09-26T13:40:42.844415+00:00",
+  "implementationRevision": "db3b749c9349c03e7dd013466af08276c5da0b70",
+  "initialImplementationRevision": "309b9d7e3d6752772a5a98127474f04c9d98ca82",
+  "sourceChecks": {
+    "unitTests": 350,
+    "serverSharedEngineEvaluationTests": 319,
+    "clientTests": 31,
+    "researchUnitTestsAdded": 14,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed",
+    "browserTests": 37,
+    "publicTests": 8
+  },
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "db3b749c9349c03e7dd013466af08276c5da0b70",
+    "jobs": [
+      {
+        "completedAt": "2026-09-26T09:01:47Z",
+        "conclusion": "success",
+        "databaseId": 108374094776,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-09-26T08:51:24Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36231029293/job/108374094776"
+      },
+      {
+        "completedAt": "2026-09-26T08:57:09Z",
+        "conclusion": "success",
+        "databaseId": 108374094799,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-09-26T08:51:23Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36231029293/job/108374094799"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36231029293"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-09-26T08:53:24.505Z",
+        "duration": 205425.494,
+        "expected": 37,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-26T08:56:51.695Z",
+        "duration": 10031.896,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "downloadedReplays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "f7e3631e508f71f65c0f78ad5c36081fbf17ba3eed5f459ed8dc91317a70958c"
+        },
+        "grounded": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "98643887191ce53712034bdb29cd47b5c32ca1987ceccf8945320129f188997a"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "98643887191ce53712034bdb29cd47b5c32ca1987ceccf8945320129f188997a"
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "lexicalRegression": {
+        "version": "unicode-lexical-1",
+        "scope": "Hand-authored lexical regression probes with supplied dictionaries; not language induction or held-out semantic accuracy.",
+        "denominator": 14,
+        "frozenPass": 5,
+        "repairedPass": 14,
+        "rows": [
+          {
+            "id": "ascii",
+            "expected": [
+              "water"
+            ],
+            "frozen": [
+              "water"
+            ],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "han",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "tamil",
+            "expected": [
+              "Tamil"
+            ],
+            "frozen": [],
+            "repaired": [
+              "Tamil"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "cyrillic",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "decomposed-accent",
+            "expected": [
+              "coffee"
+            ],
+            "frozen": [],
+            "repaired": [
+              "coffee"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "precomposed-accent",
+            "expected": [
+              "coffee"
+            ],
+            "frozen": [
+              "coffee"
+            ],
+            "repaired": [
+              "coffee"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "ipa-tie",
+            "expected": [
+              "tea"
+            ],
+            "frozen": [],
+            "repaired": [
+              "tea"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "smart-apostrophe",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "ascii-apostrophe",
+            "expected": [
+              "cannot"
+            ],
+            "frozen": [
+              "cannot"
+            ],
+            "repaired": [
+              "cannot"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "hyphen",
+            "expected": [
+              "purple"
+            ],
+            "frozen": [
+              "purple"
+            ],
+            "repaired": [
+              "purple"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "astral-letter",
+            "expected": [
+              "astral letter"
+            ],
+            "frozen": [],
+            "repaired": [
+              "astral letter"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "homographs",
+            "expected": [
+              "water",
+              "sky"
+            ],
+            "frozen": [
+              "water"
+            ],
+            "repaired": [
+              "water",
+              "sky"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "accepted-form",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "unknown",
+            "expected": [],
+            "frozen": [],
+            "repaired": [],
+            "frozenPass": true,
+            "repairedPass": true
+          }
+        ],
+        "node": "v24.21.0",
+        "sourceSha256": {
+          "evaluation/fixtures/unicode-lexical.json": "0f39f15c793b61a5187543f52ab26fad4655421aa1b8553289f2573d05cefb83",
+          "evaluation/src/unicode-benchmark.ts": "12a38fa12f1e21bcdf5e10ff7078ba3a1a54bebd2e220138c3692b84497835d6",
+          "evaluation/src/adapters/exact-lookup.ts": "fd1997a35387f203b030542d198f6b4679299c7b732a8ae015f3094ca6100623",
+          "engine/src/lexicon/index.ts": "22c937880af7a5748fea4dcbd83fff154e38c4345e88e7370c816be86e82e794",
+          "engine/src/lexicon/senses.ts": "7c7e76046d5fe157620c305537508fb59e51f61bda164c3a263b28d6d9570ced",
+          "engine/src/text/normalize.ts": "2448b32d22abc4ec29eb52173831a146cd8ed6a69f067320f37f6dfc4c55033b",
+          "engine/src/text/spans.ts": "2ab2fe34bb445dd201f8abcbe3fd3c5a3c35a50e653730f09671ee700453af5d",
+          "engine/src/text/tokenize.ts": "cfc7f4567c0c8e251852ccdecd3b90e0492144e6d2fa9166cb214d06625fd592"
+        }
+      },
+      "sourceLog": {
+        "bytes": 92215,
+        "sha256": "c34a1ccf0cd53872b480db60b23b17c6796a3a8dd91b1b56c010a50f40220a85"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      },
+      "reportHashes": {
+        "browser-report.json": {
+          "bytes": 74413,
+          "sha256": "2d26e78d10d523b9c2c2f6b1b48a5f7fbd8fe74e01f4ee99e91f429e2cc3026b"
+        },
+        "public-browser-report.json": {
+          "bytes": 14876,
+          "sha256": "21808bca17a00c10a8ff63c3fbafddc9a4bd38057630a830451587ce55c8a509"
+        },
+        "w16-unicode-results.json": {
+          "bytes": 4116,
+          "sha256": "329996d6e65ed62ff3e479ff52c507bde8f04d0c2ea4214d79b643cc36ecd168"
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-09-26T08:57:24.403Z",
+        "duration": 238012.815,
+        "expected": 37,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-26T09:01:25.199Z",
+        "duration": 11815.283000000001,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "downloadedReplays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "eb1c7f0ab68c5aa54fd6f393b085d809b2c5d02449fa821a8152ab3f4c14a75a"
+        },
+        "grounded": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "6c580eb1b1c8c592c685d6f4930a54a351a0aae5ff4b614ba1a4d59074161436"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "6c580eb1b1c8c592c685d6f4930a54a351a0aae5ff4b614ba1a4d59074161436"
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "lexicalRegression": {
+        "version": "unicode-lexical-1",
+        "scope": "Hand-authored lexical regression probes with supplied dictionaries; not language induction or held-out semantic accuracy.",
+        "denominator": 14,
+        "frozenPass": 5,
+        "repairedPass": 14,
+        "rows": [
+          {
+            "id": "ascii",
+            "expected": [
+              "water"
+            ],
+            "frozen": [
+              "water"
+            ],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "han",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "tamil",
+            "expected": [
+              "Tamil"
+            ],
+            "frozen": [],
+            "repaired": [
+              "Tamil"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "cyrillic",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "decomposed-accent",
+            "expected": [
+              "coffee"
+            ],
+            "frozen": [],
+            "repaired": [
+              "coffee"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "precomposed-accent",
+            "expected": [
+              "coffee"
+            ],
+            "frozen": [
+              "coffee"
+            ],
+            "repaired": [
+              "coffee"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "ipa-tie",
+            "expected": [
+              "tea"
+            ],
+            "frozen": [],
+            "repaired": [
+              "tea"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "smart-apostrophe",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "ascii-apostrophe",
+            "expected": [
+              "cannot"
+            ],
+            "frozen": [
+              "cannot"
+            ],
+            "repaired": [
+              "cannot"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "hyphen",
+            "expected": [
+              "purple"
+            ],
+            "frozen": [
+              "purple"
+            ],
+            "repaired": [
+              "purple"
+            ],
+            "frozenPass": true,
+            "repairedPass": true
+          },
+          {
+            "id": "astral-letter",
+            "expected": [
+              "astral letter"
+            ],
+            "frozen": [],
+            "repaired": [
+              "astral letter"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "homographs",
+            "expected": [
+              "water",
+              "sky"
+            ],
+            "frozen": [
+              "water"
+            ],
+            "repaired": [
+              "water",
+              "sky"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "accepted-form",
+            "expected": [
+              "water"
+            ],
+            "frozen": [],
+            "repaired": [
+              "water"
+            ],
+            "frozenPass": false,
+            "repairedPass": true
+          },
+          {
+            "id": "unknown",
+            "expected": [],
+            "frozen": [],
+            "repaired": [],
+            "frozenPass": true,
+            "repairedPass": true
+          }
+        ],
+        "node": "v24.21.0",
+        "sourceSha256": {
+          "evaluation/fixtures/unicode-lexical.json": "9919b40dbacfdb9d5fb60e284a4cdb8f03b0d87800677e82b50a2a8addd9dddd",
+          "evaluation/src/unicode-benchmark.ts": "ccb871f3cb863f73b49d7ebbed637446e0594855400518c2160baf6b52fdbf59",
+          "evaluation/src/adapters/exact-lookup.ts": "d732f5a847ff380fa583283ee67de3b8d5b73f27ea46632fa8fcf4cf2818619d",
+          "engine/src/lexicon/index.ts": "699ef5c4f8dba3a7ed8dac913dc912122196b8512aecd37f92a2e1c76b778d69",
+          "engine/src/lexicon/senses.ts": "8c0b4145a7b4e9fce8ed5c77a597eaa47b2452d531450fb8f600432932cfea35",
+          "engine/src/text/normalize.ts": "c3d21f8708cbe69ecc96092f940b451fa2387a49e10095c80d8b76570721ff57",
+          "engine/src/text/spans.ts": "4f1cee81c8d733731e4c7c668fe36e591bec31d75b1ff16881d5d7d9c79b4227",
+          "engine/src/text/tokenize.ts": "86a89363f9ece2c0ed91ad5483eb6ab29e1c109152392852c49f97f35d7baf32"
+        }
+      },
+      "sourceLog": {
+        "bytes": 78893,
+        "sha256": "82c0bc0bc106fa2e4c904fc3c5021665b7d760ea8cc985a8d628e94629fc8343"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      },
+      "reportHashes": {
+        "browser-report.json": {
+          "bytes": 76118,
+          "sha256": "8acf87b7c570b562bbc0d3b7ea06d1d4d1e5a90ed564b1e815ddd810e98aba1d"
+        },
+        "public-browser-report.json": {
+          "bytes": 14853,
+          "sha256": "90c8b54a56339df2c50b0d8f984859a3312c27b6af2bce9dfef6d4f01e9d6e57"
+        },
+        "w16-unicode-results.json": {
+          "bytes": 4116,
+          "sha256": "e2acc11d7250411c6ae61b4a5c00203079b096799ad0083f08d0d7f6ce058549"
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "db3b749c9349c03e7dd013466af08276c5da0b70",
+    "jobs": [
+      {
+        "completedAt": "2026-09-26T08:53:50Z",
+        "conclusion": "success",
+        "databaseId": 108374095007,
+        "name": "build",
+        "startedAt": "2026-09-26T08:51:22Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36231029345/job/108374095007"
+      },
+      {
+        "completedAt": "2026-09-26T08:59:03Z",
+        "conclusion": "success",
+        "databaseId": 108374430824,
+        "name": "verify-clean",
+        "startedAt": "2026-09-26T08:53:53Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36231029345/job/108374430824"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36231029345"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-09-26T08:58:59.944Z",
+    "source": {
+      "revision": "db3b749c9349c03e7dd013466af08276c5da0b70",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "85346bafb4827e46b62007f941e9b729c66e460bc9b0fcf155dacf6ffc4f9a3f"
+    },
+    "appArchive": {
+      "bytes": 2978014,
+      "sha256": "c1fb36d5dd4a55b6efba922315f92d3430633ef5e1e0dcad42be943e15c4155f"
+    },
+    "lockfile": {
+      "bytes": 374001,
+      "sha256": "9d41c59998b756dc557aea44b8ebb9266dd1e24f7c9df7acec8c9c28cd5d53ee"
+    },
+    "fixture": {
+      "bytes": 110286,
+      "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+    },
+    "integrationCoverage": {
+      "nativeAudio": "required: bundled STT, TTS and phones must succeed",
+      "localChat": {
+        "status": "not-run",
+        "reason": "Ollama is deliberately unavailable in this isolated acceptance run. Run npm run verify:local-model separately on a host with installed local models."
+      }
+    },
+    "checks": {
+      "artifactLayout": {
+        "passed": true,
+        "checkedFiles": 3774,
+        "additionalFiles": [
+          "Uninstall Xenolinguist.exe"
+        ],
+        "source": {
+          "revision": "db3b749c9349c03e7dd013466af08276c5da0b70",
+          "branch": "implementation/reliability",
+          "workingFiles": [],
+          "node": "24.21.0",
+          "platform": "win32",
+          "arch": "x64"
+        },
+        "manifest": {
+          "bytes": 825013,
+          "sha256": "fba7ab2a1b3bd7a40c2a846cb256f2061d9addc41700c9abe5cb6242e4d051ae"
+        },
+        "checks": {
+          "requiredFiles": 9,
+          "nativeGroups": 3,
+          "runtimePackages": 50
+        }
+      },
+      "localBoundary": {
+        "otherWindowStatus": 401,
+        "sandbox": true,
+        "contextIsolation": true,
+        "nodeIntegration": false,
+        "webSecurity": true,
+        "anonymousHealth": 401,
+        "anonymousBinary": 401,
+        "trustedHealth": 200,
+        "foreignNavigationBlocked": true,
+        "popupDenied": true,
+        "syntheticMicrophone": {
+          "audioTracks": 1,
+          "cameraDenied": true
+        },
+        "relaunchAuthenticated": true
+      },
+      "runtimeCapabilities": {
+        "checkedAt": "2026-09-26T08:55:17.280Z",
+        "expiresAt": "2026-09-26T08:55:22.280Z",
+        "storage": {
+          "state": "available",
+          "detail": "Local storage write probe passed"
+        },
+        "tts": {
+          "state": "available",
+          "detail": "Local speech synthesis files present; execution is checked when requested"
+        },
+        "stt": {
+          "state": "available",
+          "detail": "Local transcription files present; execution is checked when requested"
+        },
+        "phones": {
+          "state": "available",
+          "detail": "Phone asset sizes match; hashes and native runtime are checked at inference"
+        },
+        "chat": {
+          "state": "unavailable",
+          "detail": "Start the local Ollama service to use chat"
+        },
+        "resources": {
+          "cpuCount": 4,
+          "freeMemoryBytes": 13301739520,
+          "totalMemoryBytes": 17174360064
+        },
+        "setupModels": [
+          {
+            "name": "gemma4:e4b",
+            "approximateBytes": 9610000000
+          },
+          {
+            "name": "llama3.2:3b",
+            "approximateBytes": 2020000000
+          }
+        ]
+      },
+      "nativeJobCancellation": {
+        "nativeProcessStarted": true,
+        "status": 409,
+        "code": "JOB_CANCELLED"
+      },
+      "ipa": {
+        "status": 200,
+        "body": {
+          "ipa": "h# dh ax l ow w eh l pau dh ah kcl k w ih kcl k pau r aw n dcl f aa kcl k s ah m pau s ow m ah n ah l ey z ih dcl n ao gcl g h#",
+          "segments": [
+            {
+              "phone": "h#",
+              "start": 0,
+              "end": 0.02
+            },
+            {
+              "phone": "dh",
+              "start": 0.04,
+              "end": 0.06
+            },
+            {
+              "phone": "ax",
+              "start": 0.06,
+              "end": 0.08
+            },
+            {
+              "phone": "l",
+              "start": 0.14,
+              "end": 0.16
+            },
+            {
+              "phone": "ow",
+              "start": 0.18,
+              "end": 0.2
+            },
+            {
+              "phone": "w",
+              "start": 0.34,
+              "end": 0.36
+            },
+            {
+              "phone": "eh",
+              "start": 0.38,
+              "end": 0.4
+            },
+            {
+              "phone": "l",
+              "start": 0.52,
+              "end": 0.56
+            },
+            {
+              "phone": "pau",
+              "start": 0.64,
+              "end": 0.66
+            },
+            {
+              "phone": "dh",
+              "start": 0.68,
+              "end": 0.72
+            },
+            {
+              "phone": "ah",
+              "start": 0.72,
+              "end": 0.74
+            },
+            {
+              "phone": "kcl",
+              "start": 0.8,
+              "end": 0.82
+            },
+            {
+              "phone": "k",
+              "start": 0.82,
+              "end": 0.86
+            },
+            {
+              "phone": "w",
+              "start": 0.88,
+              "end": 0.92
+            },
+            {
+              "phone": "ih",
+              "start": 0.92,
+              "end": 0.94
+            },
+            {
+              "phone": "kcl",
+              "start": 1.04,
+              "end": 1.06
+            },
+            {
+              "phone": "k",
+              "start": 1.06,
+              "end": 1.08
+            },
+            {
+              "phone": "pau",
+              "start": 1.12,
+              "end": 1.14
+            },
+            {
+              "phone": "r",
+              "start": 1.16,
+              "end": 1.18
+            },
+            {
+              "phone": "aw",
+              "start": 1.2,
+              "end": 1.22
+            },
+            {
+              "phone": "n",
+              "start": 1.34,
+              "end": 1.36
+            },
+            {
+              "phone": "dcl",
+              "start": 1.38,
+              "end": 1.4
+            },
+            {
+              "phone": "f",
+              "start": 1.44,
+              "end": 1.46
+            },
+            {
+              "phone": "aa",
+              "start": 1.48,
+              "end": 1.5
+            },
+            {
+              "phone": "kcl",
+              "start": 1.58,
+              "end": 1.62
+            },
+            {
+              "phone": "k",
+              "start": 1.62,
+              "end": 1.64
+            },
+            {
+              "phone": "s",
+              "start": 1.7,
+              "end": 1.72
+            },
+            {
+              "phone": "ah",
+              "start": 1.8,
+              "end": 1.82
+            },
+            {
+              "phone": "m",
+              "start": 1.9,
+              "end": 1.94
+            },
+            {
+              "phone": "pau",
+              "start": 2.04,
+              "end": 2.06
+            },
+            {
+              "phone": "s",
+              "start": 2.1,
+              "end": 2.12
+            },
+            {
+              "phone": "ow",
+              "start": 2.16,
+              "end": 2.18
+            },
+            {
+              "phone": "m",
+              "start": 2.28,
+              "end": 2.3
+            },
+            {
+              "phone": "ah",
+              "start": 2.32,
+              "end": 2.34
+            },
+            {
+              "phone": "n",
+              "start": 2.4,
+              "end": 2.44
+            },
+            {
+              "phone": "ah",
+              "start": 2.46,
+              "end": 2.48
+            },
+            {
+              "phone": "l",
+              "start": 2.52,
+              "end": 2.54
+            },
+            {
+              "phone": "ey",
+              "start": 2.56,
+              "end": 2.58
+            },
+            {
+              "phone": "z",
+              "start": 2.7,
+              "end": 2.72
+            },
+            {
+              "phone": "ih",
+              "start": 2.74,
+              "end": 2.76
+            },
+            {
+              "phone": "dcl",
+              "start": 2.82,
+              "end": 2.86
+            },
+            {
+              "phone": "n",
+              "start": 2.88,
+              "end": 2.9
+            },
+            {
+              "phone": "ao",
+              "start": 2.9,
+              "end": 2.92
+            },
+            {
+              "phone": "gcl",
+              "start": 3.06,
+              "end": 3.08
+            },
+            {
+              "phone": "g",
+              "start": 3.08,
+              "end": 3.1
+            },
+            {
+              "phone": "h#",
+              "start": 3.42,
+              "end": 3.44
+            }
+          ],
+          "identity": {
+            "modelId": "wav2vec2-phoneme",
+            "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+            "alphabet": "TIMIT ARPABET",
+            "transformers": "4.2.0",
+            "backend": "onnxruntime-node",
+            "node": "24.19.0"
+          }
+        }
+      },
+      "stt": {
+        "status": 200,
+        "body": {
+          "language": "en",
+          "text": "Hello world, the quick brown fox, dumb, over the lazy dog.",
+          "segments": [
+            {
+              "start": 0,
+              "end": 3.18,
+              "text": "Hello world, the quick brown fox, dumb, over the lazy dog."
+            }
+          ],
+          "languageProb": 0.876527,
+          "mode": "transcription"
+        }
+      },
+      "tts": {
+        "status": 200,
+        "bytes": 86537,
+        "wav": true
+      },
+      "wavUpload": {
+        "status": 200,
+        "body": {
+          "filename": "release-fixture.wav",
+          "size": 110286
+        }
+      },
+      "sampleSave": {
+        "status": 200
+      },
+      "sampleOnDisk": true,
+      "loadedWorkbench": true,
+      "pendingSaveRecovered": true,
+      "desktopDraftRecovered": true,
+      "desktopAudioDraftRecovered": true,
+      "desktopAudioSaved": {
+        "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phoneSegments": 49,
+        "playback": true
+      },
+      "desktopAIHistoryRecovered": {
+        "state": "complete",
+        "task": "conlangGeneration",
+        "fixtureGeneration": true
+      },
+      "desktopSandboxRecovered": {
+        "sameSession": true,
+        "restoredEvents": 2,
+        "afterRetryEvents": 3,
+        "dictionaryEntries": 1,
+        "fixtureGeneration": true
+      },
+      "desktopEvidenceMetrics": {
+        "unratedAssertion": true,
+        "historyVisible": true,
+        "latestSnapshot": {
+          "version": 1,
+          "revision": 4,
+          "recorded_at": "2026-09-26T08:56:25.531Z",
+          "counts": {
+            "observations": 0,
+            "assertedEntries": 1,
+            "grammarNotes": 0,
+            "competingForms": 0,
+            "mappings1To20": 1,
+            "ratedEntries": 0
+          }
+        }
+      },
+      "compilerPractice": {
+        "passed": true,
+        "version": "xeno-generator-1",
+        "observations": 29,
+        "challenges": 5,
+        "sameSessionAfterRelaunch": true,
+        "draftRecovered": true,
+        "reveals": 1,
+        "archiveRestored": true
+      },
+      "unicodeLexicon": {
+        "passed": true,
+        "scripts": [
+          "Han",
+          "Tamil",
+          "Latin decomposed accent"
+        ],
+        "casePolicy": true,
+        "competingHomographs": true,
+        "explicitReverseAlias": true,
+        "archiveRestored": true
+      },
+      "typedGrammar": {
+        "passed": true,
+        "novelPlural": true,
+        "sovRoles": true,
+        "negation": true,
+        "pastAffix": true,
+        "sourceSpans": true,
+        "reverseGeneration": true,
+        "archiveRestored": true
+      },
+      "groundedInduction": {
+        "passed": true,
+        "workerExecuted": true,
+        "independentValidation": true,
+        "explicitAcceptance": true,
+        "acceptedRuleExecuted": true,
+        "archiveRestored": true
+      },
+      "numberGrammar": {
+        "passed": true,
+        "workerExecuted": true,
+        "ambiguityRetained": true,
+        "discriminatingQuestion": true,
+        "validationPersisted": true,
+        "withheldPrediction": true,
+        "compositionTree": true,
+        "archiveRestored": true
+      },
+      "researchEvidence": {
+        "passed": true,
+        "immutableCapture": true,
+        "contradictionVisible": true,
+        "derivationRetained": true,
+        "correctionInvalidates": true,
+        "archiveRestored": true
+      },
+      "portableArchives": {
+        "passed": true,
+        "projects": [
+          {
+            "bytes": 234451,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 3,
+              "recordings": 1,
+              "proposals": 0,
+              "snapshots": 4
+            },
+            "sandboxIncluded": true,
+            "restoredAudioHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+          },
+          {
+            "bytes": 4556,
+            "counts": {
+              "words": 1,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 1,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2553,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2575,
+            "counts": {
+              "words": 5,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2902,
+            "counts": {
+              "words": 3,
+              "rules": 4,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 5334,
+            "counts": {
+              "words": 3,
+              "rules": 1,
+              "samples": 5,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2544,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 5933,
+            "counts": {
+              "words": 1,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          }
+        ]
+      },
+      "missingModel": {
+        "status": 503,
+        "body": {
+          "error": "ipa-unavailable",
+          "code": "IPA_MODEL_MISSING",
+          "requestId": "7e592835-3f84-4364-9a11-94a6e9ccdc5e",
+          "retryable": true
+        }
+      }
+    },
+    "restart": {
+      "firstOrigin": "http://127.0.0.1:50185",
+      "secondOrigin": "http://127.0.0.1:54579",
+      "revision": 2
+    }
+  },
+  "downloadedInstalledEvidence": {
+    "result.json": {
+      "bytes": 674241,
+      "sha256": "313fe7e41b59bb9cd03882cda71e65fe8ba7028172de09b0e53c22ceaa563897"
+    },
+    "artifact-manifest.json": {
+      "bytes": 825013,
+      "sha256": "fba7ab2a1b3bd7a40c2a846cb256f2061d9addc41700c9abe5cb6242e4d051ae"
+    }
+  },
+  "retainedExample": {
+    "replay": {
+      "passed": true,
+      "profileRevision": 7,
+      "originalCapture": "tal",
+      "decisionRetained": "accepted",
+      "effectiveHypothesisState": "invalidated",
+      "derivationReplayed": true,
+      "derivationStaleReasons": [
+        "evidence changed"
+      ],
+      "historicalSuppliedTarget": "matches",
+      "currentEvidenceCounts": {
+        "definition": "evidence-counts-1",
+        "supports": 0,
+        "contradicts": 0,
+        "ambiguous": 0,
+        "staleLinks": 2
+      }
+    },
+    "archiveRestoreReplay": {
+      "passed": true,
+      "restoredSchema": 3,
+      "revision": 7,
+      "collections": {
+        "observations": 1,
+        "annotations": 1,
+        "hypotheses": 1,
+        "links": 2,
+        "events": 1,
+        "tests": 1,
+        "analyses": 1,
+        "metrics": 1
+      },
+      "retainedInvalidation": true,
+      "replayPassed": true
+    },
+    "files": {
+      "w20-research-history.json": {
+        "bytes": 10853,
+        "sha256": "bb487461285cd879d9ed1906cdae04d1fd0fa5b873c890c6e2c65a73cd108def"
+      },
+      "w20-research-project.xeno": {
+        "bytes": 8816,
+        "sha256": "7e22b275cf88863dd02e128687e5fba3cdb77a1705c408e5905826d1d42b6da1"
+      },
+      "w20-research-correction.png": {
+        "bytes": 119613,
+        "sha256": "c4c01e690a4ff4a6eab51fc072ae2c410f582ed8f143fd5233219d1ff36a1c2b"
+      },
+      "w20-replay.mts": {
+        "bytes": 1921,
+        "sha256": "8165ec4a4efd7481cd0810aba8f1bcf3516f397aede7002fe17b7c8064797829"
+      }
+    }
+  },
+  "localFrozenReplays": {
+    "baseline": {
+      "passed": true,
+      "records": 12,
+      "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+      "sourceSnapshotHash": "c9aa766c927f542da4c66d69579170ff5f066be22ac6f2cefec968fa8158e87b"
+    },
+    "induction": {
+      "passed": true,
+      "records": 60,
+      "split": "evaluation",
+      "sourceSnapshotHash": "3cb0995cc9407e5f10e7757b7f84540447cfcecbb5945c199f38c30db5655f2d"
+    },
+    "number": {
+      "passed": true,
+      "records": 336,
+      "split": "evaluation",
+      "sourceSnapshotHash": "4216094e501869e80c178cfa29c26c0bf4ac819dec6ac9676ddea47aac6649c0"
+    }
+  },
+  "limits": [
+    "Source-root counts, decisions and supplied-target checks are not calibrated probabilities or held-out language accuracy.",
+    "Synthetic acceptance data; no W20 model calls or natural-language quality comparison.",
+    "Whole-inventory translation dependencies favor conservative invalidation; they are not a minimal dependency optimizer.",
+    "Research is append-only and bounded. Concurrent research histories require explicit conflict resolution.",
+    "Three gated native unit skips and four high native dependency-chain audit entries remain.",
+    "Frozen W15/W18/W19 experiment algorithms, configurations and published results are unchanged.",
+    "No main merge, public installer release or Pages deployment."
+  ]
+}

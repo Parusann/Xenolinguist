@@ -1,0 +1,253 @@
+{
+  "research": {
+    "observations": [
+      {
+        "id": "863c8b9d-532b-4688-b1ac-d6b801821905",
+        "created_at": "2026-09-26T08:34:21.136Z",
+        "text": "tal",
+        "content_sha256": "76891d6fef4278faeebbcacde7f0ae391e6b5911cd004fe5e3c62649417545cf",
+        "source": "Pointing at the sky",
+        "origin": "capture",
+        "source_id": null,
+        "derived_from": [],
+        "audio": null
+      }
+    ],
+    "annotations": [
+      {
+        "id": "75e476b5-0884-4243-9f71-c4c8edd881f2",
+        "created_at": "2026-09-26T08:34:28.386Z",
+        "observation_id": "863c8b9d-532b-4688-b1ac-d6b801821905",
+        "revision": 1,
+        "interpretation": "The speaker was pointing at water",
+        "supersedes": null,
+        "provenance": "user"
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "44593d6a-9196-4f8c-8bb7-31cb51ba2a10",
+        "created_at": "2026-09-26T08:34:22.068Z",
+        "label": "tal → sky",
+        "provenance": "user",
+        "content": {
+          "kind": "lexical",
+          "entry_id": "word",
+          "form": "tal",
+          "meaning": "sky"
+        },
+        "manual_belief": null,
+        "score_definition": "evidence-counts-1",
+        "supersedes": null
+      }
+    ],
+    "links": [
+      {
+        "id": "af7b7879-f0c3-4d9c-854e-420edb397268",
+        "created_at": "2026-09-26T08:34:22.122Z",
+        "hypothesis_id": "44593d6a-9196-4f8c-8bb7-31cb51ba2a10",
+        "observation_id": "863c8b9d-532b-4688-b1ac-d6b801821905",
+        "annotation_id": null,
+        "relation": "supports",
+        "span": null,
+        "note": ""
+      },
+      {
+        "id": "c047d4f2-5034-492b-a40f-dee16b9ff942",
+        "created_at": "2026-09-26T08:34:23.069Z",
+        "hypothesis_id": "44593d6a-9196-4f8c-8bb7-31cb51ba2a10",
+        "observation_id": "863c8b9d-532b-4688-b1ac-d6b801821905",
+        "annotation_id": null,
+        "relation": "contradicts",
+        "span": null,
+        "note": ""
+      }
+    ],
+    "events": [
+      {
+        "id": "5a3a01e5-566f-46e5-9464-3d5f91c254b5",
+        "created_at": "2026-09-26T08:34:23.137Z",
+        "kind": "hypothesis-status",
+        "hypothesis_id": "44593d6a-9196-4f8c-8bb7-31cb51ba2a10",
+        "status": "accepted",
+        "reason": "Retain as a working interpretation"
+      }
+    ],
+    "tests": [
+      {
+        "id": "c6b84045-52d6-43a6-9931-1119864f9fde",
+        "created_at": "2026-09-26T08:34:27.420Z",
+        "analysis_id": "da1641e4-7283-4cb7-b3f5-1106a6f71f35",
+        "expected": "the sky",
+        "outcome": "matches",
+        "definition": "supplied-target-1"
+      }
+    ],
+    "analyses": [
+      {
+        "id": "da1641e4-7283-4cb7-b3f5-1106a6f71f35",
+        "created_at": "2026-09-26T08:34:25.720Z",
+        "engine_version": "typed-grammar-1",
+        "profile_revision": 4,
+        "source": "tal",
+        "dependencies": [
+          {
+            "kind": "lexicon",
+            "id": "",
+            "snapshot": "[{\"alien_word\":\"tal\",\"confidence\":null,\"context\":\"\",\"created_at\":\"2026-09-25T00:00:00.000Z\",\"english_meaning\":\"sky\",\"examples\":[],\"id\":\"word\",\"notes\":\"\",\"part_of_speech\":\"noun\",\"user_asserted_confidence\":null}]"
+          },
+          {
+            "kind": "grammar",
+            "id": "",
+            "snapshot": "[]"
+          },
+          {
+            "kind": "policy",
+            "id": "",
+            "snapshot": "null"
+          },
+          {
+            "kind": "evidence",
+            "id": "",
+            "snapshot": "{\"annotations\":[],\"events\":[{\"created_at\":\"2026-09-26T08:34:23.137Z\",\"hypothesis_id\":\"44593d6a-9196-4f8c-8bb7-31cb51ba2a10\",\"id\":\"5a3a01e5-566f-46e5-9464-3d5f91c254b5\",\"kind\":\"hypothesis-status\",\"reason\":\"Retain as a working interpretation\",\"status\":\"accepted\"}],\"hypotheses\":[{\"content\":{\"entry_id\":\"word\",\"form\":\"tal\",\"kind\":\"lexical\",\"meaning\":\"sky\"},\"created_at\":\"2026-09-26T08:34:22.068Z\",\"id\":\"44593d6a-9196-4f8c-8bb7-31cb51ba2a10\",\"label\":\"tal → sky\",\"manual_belief\":null,\"provenance\":\"user\",\"score_definition\":\"evidence-counts-1\",\"supersedes\":null}],\"links\":[{\"annotation_id\":null,\"created_at\":\"2026-09-26T08:34:22.122Z\",\"hypothesis_id\":\"44593d6a-9196-4f8c-8bb7-31cb51ba2a10\",\"id\":\"af7b7879-f0c3-4d9c-854e-420edb397268\",\"note\":\"\",\"observation_id\":\"863c8b9d-532b-4688-b1ac-d6b801821905\",\"relation\":\"supports\",\"span\":null},{\"annotation_id\":null,\"created_at\":\"2026-09-26T08:34:23.069Z\",\"hypothesis_id\":\"44593d6a-9196-4f8c-8bb7-31cb51ba2a10\",\"id\":\"c047d4f2-5034-492b-a40f-dee16b9ff942\",\"note\":\"\",\"observation_id\":\"863c8b9d-532b-4688-b1ac-d6b801821905\",\"relation\":\"contradicts\",\"span\":null}],\"observations\":[{\"audio\":null,\"content_sha256\":\"76891d6fef4278faeebbcacde7f0ae391e6b5911cd004fe5e3c62649417545cf\",\"created_at\":\"2026-09-26T08:34:21.136Z\",\"derived_from\":[],\"id\":\"863c8b9d-532b-4688-b1ac-d6b801821905\",\"origin\":\"capture\",\"source\":\"Pointing at the sky\",\"source_id\":null,\"text\":\"tal\"}]}"
+          }
+        ],
+        "result": {
+          "status": "resolved",
+          "candidates": [
+            {
+              "tree": {
+                "kind": "nominal",
+                "nominal": {
+                  "head": {
+                    "entryId": "word",
+                    "sense": null,
+                    "lemma": "sky",
+                    "pos": "noun"
+                  },
+                  "plural": false,
+                  "adjectives": []
+                }
+              },
+              "ruleIds": [],
+              "steps": [
+                {
+                  "start": 0,
+                  "end": 3,
+                  "text": "tal",
+                  "operation": "lexical stem",
+                  "entryId": "word",
+                  "sense": null
+                }
+              ]
+            }
+          ],
+          "diagnostics": [],
+          "operations": 8
+        }
+      }
+    ],
+    "metrics": [
+      {
+        "id": "b57fa4e8-594a-406b-add8-b8da4458036a",
+        "created_at": "2026-09-26T08:34:24.039Z",
+        "definition": "evidence-counts-1",
+        "profile_revision": 3,
+        "hypothesis_id": "44593d6a-9196-4f8c-8bb7-31cb51ba2a10",
+        "dependencies": [
+          {
+            "kind": "hypothesis",
+            "id": "44593d6a-9196-4f8c-8bb7-31cb51ba2a10",
+            "snapshot": "{\"hypothesis\":{\"content\":{\"entry_id\":\"word\",\"form\":\"tal\",\"kind\":\"lexical\",\"meaning\":\"sky\"},\"created_at\":\"2026-09-26T08:34:22.068Z\",\"id\":\"44593d6a-9196-4f8c-8bb7-31cb51ba2a10\",\"label\":\"tal → sky\",\"manual_belief\":null,\"provenance\":\"user\",\"score_definition\":\"evidence-counts-1\",\"supersedes\":null},\"links\":[{\"link\":{\"annotation_id\":null,\"created_at\":\"2026-09-26T08:34:22.122Z\",\"hypothesis_id\":\"44593d6a-9196-4f8c-8bb7-31cb51ba2a10\",\"id\":\"af7b7879-f0c3-4d9c-854e-420edb397268\",\"note\":\"\",\"observation_id\":\"863c8b9d-532b-4688-b1ac-d6b801821905\",\"relation\":\"supports\",\"span\":null},\"observation\":{\"annotation\":null,\"capture\":{\"audio\":null,\"content_sha256\":\"76891d6fef4278faeebbcacde7f0ae391e6b5911cd004fe5e3c62649417545cf\",\"created_at\":\"2026-09-26T08:34:21.136Z\",\"derived_from\":[],\"id\":\"863c8b9d-532b-4688-b1ac-d6b801821905\",\"origin\":\"capture\",\"source\":\"Pointing at the sky\",\"source_id\":null,\"text\":\"tal\"},\"unavailable\":false}},{\"link\":{\"annotation_id\":null,\"created_at\":\"2026-09-26T08:34:23.069Z\",\"hypothesis_id\":\"44593d6a-9196-4f8c-8bb7-31cb51ba2a10\",\"id\":\"c047d4f2-5034-492b-a40f-dee16b9ff942\",\"note\":\"\",\"observation_id\":\"863c8b9d-532b-4688-b1ac-d6b801821905\",\"relation\":\"contradicts\",\"span\":null},\"observation\":{\"annotation\":null,\"capture\":{\"audio\":null,\"content_sha256\":\"76891d6fef4278faeebbcacde7f0ae391e6b5911cd004fe5e3c62649417545cf\",\"created_at\":\"2026-09-26T08:34:21.136Z\",\"derived_from\":[],\"id\":\"863c8b9d-532b-4688-b1ac-d6b801821905\",\"origin\":\"capture\",\"source\":\"Pointing at the sky\",\"source_id\":null,\"text\":\"tal\"},\"unavailable\":false}}],\"state\":{\"reasons\":[],\"state\":\"accepted\"}}"
+          }
+        ],
+        "supports": 1,
+        "contradicts": 1,
+        "ambiguous": 0
+      }
+    ]
+  },
+  "name": "Research record",
+  "description": "",
+  "phonetic_notes": "",
+  "is_sandbox": false,
+  "dictionary": [
+    {
+      "id": "word",
+      "alien_word": "tal",
+      "english_meaning": "sky",
+      "part_of_speech": "noun",
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "context": "",
+      "examples": [],
+      "notes": "",
+      "created_at": "2026-09-25T00:00:00.000Z"
+    }
+  ],
+  "grammar_rules": [],
+  "number_system": {
+    "base": null,
+    "mappings": {},
+    "operators": {}
+  },
+  "samples": [],
+  "audio_clips": [],
+  "metric_snapshots": [
+    {
+      "version": 1,
+      "revision": 0,
+      "recorded_at": "2026-09-26T08:34:20.329Z",
+      "counts": {
+        "observations": 0,
+        "assertedEntries": 1,
+        "grammarNotes": 0,
+        "competingForms": 0,
+        "mappings1To20": 0,
+        "ratedEntries": 0
+      }
+    }
+  ],
+  "id": "6fefe4c8-a02f-4398-8197-7a1473578e2c",
+  "created_at": "2026-09-26T08:34:20.329Z",
+  "updated_at": "2026-09-26T08:34:28.894Z",
+  "schema_version": 3,
+  "revision": 7,
+  "recent_mutations": [
+    {
+      "id": "e34afbf8-b9a2-4452-89e5-6a7b0a9f30e7",
+      "digest": "dc79080f89dcb9c963cd5d5b2accc533c94a8f4f8828796af3ff1beb3513444c",
+      "revision": 1
+    },
+    {
+      "id": "7f964f80-239b-40df-88ef-8135c0bbf455",
+      "digest": "74b686fdd20515336fbf1c2e91a46e118641a87ab516652d4b4c010a62ef8ed5",
+      "revision": 2
+    },
+    {
+      "id": "4bafbc2d-2c48-4cb5-8ef0-a034346a7dee",
+      "digest": "ba0fc58b0895f965532c2650d1a4cd9e9cfbe39fd734a5472257895b8603a87b",
+      "revision": 3
+    },
+    {
+      "id": "0ddd3976-7271-4c31-9228-1235bc25016e",
+      "digest": "50274664b073cc555b68c625c23ece4192a257232a874df94a75f1a0ffc6bc29",
+      "revision": 4
+    },
+    {
+      "id": "166ffade-47a1-4101-bc0f-06949f62416f",
+      "digest": "491713fe893b8de702facb8d4a14620a600ec25b6c757e294c368418b6a340e4",
+      "revision": 5
+    },
+    {
+      "id": "2157762f-4c0f-4d6d-a482-dde5695aa730",
+      "digest": "7f75b74886292934371052535d83e7fd7acc9dba25e5e219b4b7c2cefca34ca2",
+      "revision": 6
+    },
+    {
+      "id": "ea8a3bbd-3617-4271-884a-ac87963d871c",
+      "digest": "c5b407580aa320c04568c584744efc84012ff1619c8cddae9d68b3aa32172f63",
+      "revision": 7
+    }
+  ]
+}

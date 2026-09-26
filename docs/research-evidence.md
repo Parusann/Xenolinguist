@@ -6,7 +6,7 @@ W20 adds a version-3 research notebook with immutable observations, revisioned a
 
 A capture retains original text, its UTF-8 SHA-256, source context, capture time, provenance and any supplied source identifier. A saved sample is copied only on an explicit capture action. Editing or deleting that notebook sample does not rewrite the retained observation. Migration leaves research empty; old notes, samples, confidence ratings and generated prose do not become verified observations automatically.
 
-Audio captures retain a clip identity, half-open time span and original asset hash. The current capture form uses the entire available sample clip. The schema also supports narrower time spans. Evidence links can select half-open UTF-16 offsets into the original captured text. Hash and audio-span checks run at profile writes and archive inspection/restoration. A captured recording must remain available even after withdrawal; withdrawal excludes it from analyses, while retaining bytes for the audit trail.
+Audio captures retain a clip identity, half-open time span and original asset hash. The current capture form uses the entire available sample clip. The schema also supports narrower time spans. Evidence links can select half-open UTF-16 offsets into the original captured text. Hash and audio-span checks run at profile writes and archive inspection/restoration. Deleting a notebook sample keeps any recording retained by a research capture. A captured recording must remain available even after withdrawal; withdrawal excludes it from analyses, while retaining bytes for the audit trail.
 
 Corrections append an annotation with a consecutive revision and predecessor identifier. Earlier annotations and the original capture remain unchanged. Withdrawal appends an event. Derived observations name earlier parent captures; cycles and missing parents are rejected. Model restatements require parents and inherit their evidence roots. Hashes check consistency, not the authenticity or independence of an alleged source.
 
@@ -40,6 +40,18 @@ The current limits are 2,000 observations, 4,000 annotations, 1,000 hypotheses, 
 
 ## Verification
 
-See [implementation progress](implementation-progress.md) and [testing](testing.md) for the measured revision and CI state. Regression coverage includes version-2 files and sealed drafts, migration backups, legacy archives, hashes, immutable records, invalid spans/references, annotation chains, derived-evidence withdrawal, contradictory roots, exact replay, fabricated target checks, audio retention, ID remapping and save conflicts. The browser flow traces a translated word to competing evidence, saves a derivation, corrects its interpretation and checks stale history after backend restart and archive restore. Independent installed-app acceptance includes the research workflow and an eighth project archive.
+See [implementation progress](implementation-progress.md), [testing](testing.md) and [W20 verification](verification/w20-research-evidence.json) for the measured revision, CI results and exact payload identities. Regression coverage includes version-2 files and sealed drafts, migration backups, legacy archives, hashes, immutable records, invalid spans/references, annotation chains, derived-evidence withdrawal, contradictory roots, exact replay, fabricated target checks, audio retention, ID remapping and save conflicts. The browser flow traces a translated word to competing evidence, saves a derivation, corrects its interpretation and checks stale history after backend restart and archive restore. Independent installed-app acceptance includes the research workflow and an eighth project archive.
 
 W20 adds no language-model calls, calibrated probabilities or new scientific accuracy claims. Frozen W15, W18 and W19 experiment artifacts and algorithms remain unchanged.
+
+## Reopen the recorded example
+
+The [example project](verification/w20-research-project.xeno) retains the final synthetic browser scenario at implementation revision `309b9d7`. Import it as a new project from Field Log. It contains one original capture, its correction, a user acceptance decision, both supporting and contradicting links, a saved derivation, a supplied-target check and a prior count snapshot. The correction leaves the capture and prior results intact while invalidating the hypothesis and marking the old derivation/counts stale. It does not automatically rewrite the dictionary meaning. The archive was separately restored and its remapped derivation replayed.
+
+The same history is available as [readable JSON](verification/w20-research-history.json). With the W20 implementation and this report's verification files checked out together, install the locked dependencies and run the [replay check](verification/w20-replay.mts) from the repository root:
+
+```sh
+npx tsx docs/verification/w20-replay.mts
+```
+
+The check validates the profile, capture hash and retained derivation, then verifies the preserved acceptance decision, later invalidation, stale dependencies and historical target outcome. This is a reproducible application scenario, not a language accuracy benchmark. [The inspector screenshot](verification/w20-research-correction.png) shows the two retained links after their interpretation becomes stale.
