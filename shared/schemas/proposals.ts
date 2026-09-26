@@ -42,3 +42,23 @@ export interface ProposalValidation {
   errors: string[]; limitations: string[]; checks: ProposalCheck[];
   references: { valid: number; total: number }; input_sha256: string; changes: string[];
 }
+
+const outcomeSchema = z.strictObject({ outcome: z.enum(['matches', 'differs', 'unresolved']), rendered: z.string().nullable() });
+export const proposalValidationSchema = z.strictObject({ definition: z.literal('proposal-checks-1'),
+  status: z.enum(['invalid', 'falsified', 'inconclusive', 'compatible', 'request']), errors: z.array(z.string()).max(64),
+  limitations: z.array(z.string()).max(16), checks: z.array(z.strictObject({ sample_id: id, source: z.string(), expected: z.string(),
+    before: outcomeSchema, after: outcomeSchema, regression: z.boolean() })).max(PROPOSAL_LIMITS.tests),
+  references: z.strictObject({ valid: z.number().int().nonnegative(), total: z.number().int().nonnegative() }),
+  input_sha256: z.string().regex(/^[a-f0-9]{64}$/), changes: z.array(z.string()).max(8) });
+/** Preserve the complete typed runner payload, including versioned provenance extensions. */
+export const proposalRunSchema = z.strictObject({ version: z.literal('research-proposal-run-1'), state: z.literal('proposed'),
+  proposal: researchProposalSchema, validation: proposalValidationSchema,
+  provenance: z.object({ origin: z.literal('local-model'), model: z.string(), model_digest: z.string().min(1),
+    profile_id: id, profile_revision: z.number().int().nonnegative(), input_sha256: z.string().regex(/^[a-f0-9]{64}$/),
+    validation_sample_ids: z.array(id).max(PROPOSAL_LIMITS.tests), query: z.string(),
+    tool_calls: z.array(z.strictObject({ action: proposalActionSchema, result: z.json() })).max(PROPOSAL_LIMITS.tools),
+    calls: z.array(z.strictObject({ request_sha256: z.string().regex(/^[a-f0-9]{64}$/), response_sha256: z.string().regex(/^[a-f0-9]{64}$/),
+      elapsed_ms: z.number().nonnegative(), valid_structure: z.boolean() })).min(1).max(PROPOSAL_LIMITS.calls),
+    repair_attempts: z.number().int().min(0).max(1),
+  }).catchall(z.json()) });
+export type ProposalRun = z.infer<typeof proposalRunSchema>;

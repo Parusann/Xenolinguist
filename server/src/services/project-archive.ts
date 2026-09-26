@@ -1,5 +1,6 @@
 import { remapResearch } from '../../../shared/research-remap.js';
 import { verifyResearch } from './research-integrity.js';
+import { verifyProposalReviews } from './proposal-review-integrity.js';
 import fs from 'node:fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import path from 'node:path';
@@ -46,6 +47,15 @@ function remap(source: LanguageProfile, targetId: string) {
   for (const records of Object.values(profile.research)) for (const record of records) ids.set(record.id, randomUUID());
   profile.research = remapResearch(profile.research, ids);
   profile.id = targetId; profile.recent_mutations = [];
+  // Preserve historical source IDs, raw model output and hashes. Imported reviews are audit records,
+  // never executable approvals for the newly remapped workspace.
+  profile.proposal_reviews?.forEach(record => {
+    record.archived = true;
+    if (record.decision) {
+      record.decision.hypothesis_id = record.decision.hypothesis_id ? ids.get(record.decision.hypothesis_id) ?? record.decision.hypothesis_id : null;
+      record.decision.target_id = record.decision.target_id ? ids.get(record.decision.target_id) ?? record.decision.target_id : null;
+    }
+  });
   if (profile.compiler_session_id) profile.compiler_session_id = randomUUID();
   profile.dictionary.forEach(entry => { entry.id = ids.get(entry.id)!; });
   profile.grammar_rules.forEach(entry => { entry.id = ids.get(entry.id)!; });
@@ -203,6 +213,7 @@ export class ProjectArchives {
       if (rawProfile.schema_version !== manifest.profileSchemaVersion) throw invalid('Profile schema does not match manifest');
       const profile = migrateProfile(rawProfile), expected = new Set(['profile.json']);
       verifyResearch(profile);
+      verifyProposalReviews(profile);
       if (profile.id !== manifest.sourceProfileId || profile.revision !== manifest.sourceRevision
         || (!manifest.sandboxIncluded && profile.sandbox_session)) throw invalid('Manifest does not match its project');
       if (profile.compiler_session_id) {
@@ -234,7 +245,7 @@ export class ProjectArchives {
       return { token, expiresAt: new Date(expires).toISOString(), name: profile.name, sourceRevision: profile.revision,
         sandboxIncluded: manifest.sandboxIncluded, expandedBytes: total,
         counts: { words: profile.dictionary.length, rules: profile.grammar_rules.length, samples: profile.samples.length,
-          recordings: profile.audio_clips.length, proposals: profile.ai_history?.length ?? 0, snapshots: profile.metric_snapshots?.length ?? 0 },
+          recordings: profile.audio_clips.length, proposals: (profile.ai_history?.length ?? 0) + (profile.proposal_reviews?.length ?? 0), snapshots: profile.metric_snapshots?.length ?? 0 },
         warnings: [
           ...(!manifest.sandboxIncluded ? ['Sandbox answers and progress were excluded from this export.'] : []),
           ...(profile.audio_clips.some(clip => !clip.assets) ? ['Legacy recordings are preserved in their existing format; analysis audio may be unavailable.'] : []),

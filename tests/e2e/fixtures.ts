@@ -10,6 +10,7 @@ export const wavFixture = path.join(root, 'server/src/__tests__/fixtures/hello-1
 
 class IsolatedServer {
   url = '';
+  ollamaUrl = 'http://127.0.0.1:1';
   readonly secret = randomBytes(32).toString('hex');
   log = '';
   private child?: ChildProcess;
@@ -19,7 +20,7 @@ class IsolatedServer {
     const child = fork(path.join(root, 'electron/dist/server.cjs'), [], {
       cwd: this.dataDir,
       env: { ...process.env, DATA_DIR: this.dataDir, PORT: '0', NODE_ENV: 'test',
-        CLIENT_DIST: path.join(root, 'client/dist'), OLLAMA_BASE_URL: 'http://127.0.0.1:1',
+        CLIENT_DIST: path.join(root, 'client/dist'), OLLAMA_BASE_URL: this.ollamaUrl,
         IPA_MODEL_DIR: '', WHISPER_BIN: '', WHISPER_MODEL: '', ESPEAK_PATH: '', XENO_START: '' },
       stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
     });

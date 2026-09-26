@@ -6,9 +6,29 @@ import { RuntimeError } from '../services/runtime-error.js';
 import { proposalRequestSchema, PROPOSAL_LIMITS } from '../../../shared/schemas/proposals.js';
 import { ProfileStore } from '../services/profile-store.js';
 import { runResearchProposal } from '../services/research-proposal.js';
+import { ProposalReviews } from '../services/proposal-reviews.js';
 
 export const aiRouter = Router();
 const service = new AIService();
+const reviews = new ProposalReviews();
+aiRouter.get('/research/runs/:profileId', async (req, res, next) => {
+  try { res.setHeader('Cache-Control', 'no-store'); res.json(await reviews.list(req.params.profileId)); } catch (error) { next(error); }
+});
+aiRouter.post('/research/runs', async (req, res, next) => {
+  const controller = new AbortController();
+  const abort = () => { if (!res.writableEnded) controller.abort(); };
+  res.once('close', abort);
+  try { const result = await reviews.create(req.body, controller.signal); if (!res.destroyed) res.json(result); }
+  catch (error) { if (!res.destroyed) next(error); }
+  finally { res.off('close', abort); }
+});
+aiRouter.post('/research/runs/:profileId/:reviewId/decision', async (req, res, next) => {
+  try { res.json({ profile: await reviews.decide(req.params.profileId, req.params.reviewId, req.body) }); } catch (error) { next(error); }
+});
+aiRouter.delete('/research/runs/:profileId/:reviewId', async (req, res, next) => {
+  try { const { expectedRevision } = z.strictObject({ expectedRevision: z.number().int().nonnegative() }).parse(req.body);
+    res.json({ profile: await reviews.remove(req.params.profileId, req.params.reviewId, expectedRevision) }); } catch (error) { next(error); }
+});
 // Read-only preview endpoint. Review, durable decisions and application are separate operations.
 aiRouter.post('/research/proposal', async (req, res, next) => {
   const parsed = proposalRequestSchema.safeParse(req.body);

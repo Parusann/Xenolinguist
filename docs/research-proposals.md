@@ -1,6 +1,6 @@
 # Validated research proposals
 
-W21 is in progress. The first implementation unit provides a read-only proposal backend: typed model output, profile-scoped retrieval, bounded tools, citation checks, deterministic counterexamples and returned experiment provenance. Durable proposal review, acceptance through revisioned mutations, workbench integration and the comparative evaluation remain to be implemented. Existing chat and automatic suggestions still use their W10 free-text workflow.
+W21 is in progress. Typed model output, profile-scoped retrieval, bounded tools, citation checks and deterministic counterexamples now feed a durable workbench review. Explicit acceptance applies a tested change with model provenance and a recorded user reason. The comparative evaluation and integration of remaining task-specific AI entry points remain open. Existing conversation and automatic suggestions still use their W10 free-text workflow.
 
 ## Request and response boundary
 
@@ -47,7 +47,21 @@ Generation uses Ollama's [structured-output format](https://docs.ollama.com/capa
 
 A task allows four tool actions, at most six generation calls including one structural repair, and one shared 180-second deadline. Each call has a 16,384-token context, a 1,024-token output ceiling and a 48,000-code-unit input guard. The total declared output ceiling is 6,144 tokens, not a measured token count. Temperature is 0.2, seed 42, separate thinking output is disabled, and input is not silently truncated. Every call revalidates local model eligibility and the initially selected model digest. Invalid references or failed predictions are returned as such; only malformed structure gets the automatic repair attempt.
 
-Successful responses retain the verified model digest, settings, prompt-template hash, input fingerprint, bounded retrieval payload and IDs, query, selected test IDs, typed tool calls/results, request/response hashes, structural validity, repair count and elapsed timings. Arbitrary invalid text and private thinking fields are not retained. Failed or cancelled calls currently use the existing job error path; durable failed-run records are part of the remaining W21 work.
+Successful responses retain the verified model digest, settings, prompt-template hash, input fingerprint, bounded retrieval payload and IDs, query, selected test IDs, typed tool calls/results, request/response hashes, structural validity, repair count and elapsed timings. Arbitrary invalid text and private thinking fields are not retained. The durable endpoint retains sanitized failed/cancelled outcomes; an interrupted pending record survives restart without automatically resuming generation.
+
+## Durable review and application
+
+Open the AI panel and select **Review research proposals**. Capture evidence in Field Log, enter a question, and select up to 12 existing samples with supplied targets. The review shows quoted evidence and interpretation IDs, before/after predictions, counterexamples, proposed changes, alternatives, limitations and expandable experiment provenance. Generation and decisions require a saved workspace.
+
+`POST /api/ai/research/runs` accepts the same request as the preview endpoint. Before inference, it saves a source snapshot and pending record under the profile lock. Completion merges the result into the latest profile without overwriting intervening edits. `GET /api/ai/research/runs/:profileId` returns the profile and current review availability. The original `/research/proposal` endpoint remains read-only.
+
+`POST /api/ai/research/runs/:profileId/:reviewId/decision` requires `expectedRevision`, `mutationId`, `action` (`accept` or `reject`) and a reason. Acceptance independently rechecks the input fingerprint and predictions. A lexical or grammar candidate must be compatible, and at least one selected resolved case must actually use its proposed entry or rule. Unrelated passing cases do not qualify. Falsified, invalid, inconclusive, changed-input and restored proposals cannot be applied. Renaming a project or adding review metadata alone does not invalidate its linguistic inputs.
+
+Acceptance writes the executable change, a model-origin hypothesis, exact evidence links, user decision and idempotency receipt in one atomic profile commit. New/replaced words and rules remain unrated. Lexical replacement preserves user notes, context and examples while replacing executable senses. An observation request records a question only. Rejection changes no dictionary, grammar or research claim. Retrying the same decision cannot duplicate a hypothesis, including after the general mutation ledger expires.
+
+Review metadata cannot be edited through ordinary profile patches. Each record retains exact source/result JSON and SHA-256 hashes. Archive inspection replays validation and typed tools against the original snapshot. Restoring remaps accepted hypothesis/target references while preserving embedded historical IDs and payloads; restored runs cannot apply to the new workspace. Hashes and replay check consistency, not cryptographic proof of model authorship.
+
+Storage is bounded to 20 runs, 512,000 source characters and 256,000 result characters per run, and 2 MB of serialized review metadata per project. Source snapshots exclude nested proposal history, unrelated chat, metric snapshots and compiler/sandbox sessions. Unaccepted records can be explicitly deleted with a revision check; active and accepted records are retained. Previous exports and recovery snapshots may still contain deleted records. There is no silent pruning.
 
 ## Verification and remaining work
 
@@ -67,4 +81,6 @@ npx tsx docs/verification/w21-proposal-replay.mts
 
 This rebuilds retrieval and hashes, reruns each tool and the final proposal check, and verifies the separate future-tense counterexample. It does not call the model or claim to replay its generation or timing.
 
-The next W21 unit must persist complete review records and decisions, revalidate and apply explicitly accepted changes through revisioned mutations, provide the evidence/test/change preview in the workbench, and connect relevant AI entry points. Cancellation/restart/conflict and archive behavior need acceptance coverage. Finally, freeze a shared observation set and compare current prompting with the new pipeline on invalid-output rate, citation relevance, held-out predictions and runtime. W21's full exit condition remains open until that work passes.
+The review unit adds 14 persistence/application cases covering atomic write failure, competing decisions, stale evidence, lexical-note preservation, cancellation, interruption, bounded retention, corrupted records and historical archive restoration. Browser acceptance uses deterministic model responses to reject a falsified future-tense rule, accept the compatible past-tense candidate, restart the backend and reopen both decisions through an actual project export/import. These checks exercise engineering behavior, not model quality.
+
+The next W21 work connects remaining relevant AI entry points and freezes a shared observation set to compare current prompting with the new pipeline on invalid-output rate, citation relevance, held-out predictions and runtime. W21's full exit condition remains open until that work passes.

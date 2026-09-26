@@ -28,7 +28,8 @@ export function proposalPreview(p: LanguageProfile, proposal: ResearchProposal):
     // A replacement changes one asserted sense explicitly; it does not retain hidden old senses.
     const value = { id: content.entry_id ?? freshId, created_at: old?.created_at ?? p.updated_at, alien_word: content.form,
       english_meaning: content.meaning, senses: [{ meaning: content.meaning, aliases: [] }], part_of_speech: content.part_of_speech,
-      verb_frame: content.verb_frame, confidence: null, user_asserted_confidence: null, context: '', notes: '', examples: [] };
+      verb_frame: content.verb_frame, confidence: null, user_asserted_confidence: null,
+      context: old?.context ?? '', notes: old?.notes ?? '', examples: old?.examples ?? [] };
     copy.dictionary = old ? copy.dictionary.map(w => w.id === old.id ? value : w) : [...copy.dictionary, value];
   } else if (content.kind === 'grammar') {
     const old = copy.grammar_rules.find(r => r.id === content.rule_id);

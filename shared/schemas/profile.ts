@@ -9,6 +9,7 @@ import { sandboxSessionSchema } from './sandbox.js';
 import { metricSnapshotsSchema } from './metrics.js';
 import { aiHistorySchema } from './ai-history.js';
 import { numeralValueSchema, NUMBER_LIMITS } from './numbers.js';
+import { proposalReviewsSchema } from './proposal-reviews.js';
 
 const manualConfidence = { confidence: confidenceSchema.nullable().default(null), user_asserted_confidence: confidenceSchema.nullable().optional() };
 export const dictionaryEntrySchema = z.strictObject({
@@ -49,7 +50,7 @@ export const profileDataSchema = z.strictObject({
   dictionary: z.array(dictionaryEntrySchema), grammar_rules: z.array(grammarRuleSchema),
   number_system: numberSystemSchema, samples: z.array(sampleSchema), audio_clips: z.array(audioClipSchema),
 });
-const metadataSchema = { compiler_session_id: id.nullable().optional(), metric_snapshots: metricSnapshotsSchema.optional(), id, created_at: timestamp, updated_at: timestamp,
+const metadataSchema = { proposal_reviews: proposalReviewsSchema.optional(), compiler_session_id: id.nullable().optional(), metric_snapshots: metricSnapshotsSchema.optional(), id, created_at: timestamp, updated_at: timestamp,
   schema_version: z.literal(3), revision: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
   recent_mutations: z.array(z.strictObject({ id, digest: z.string().regex(/^[a-f0-9]{64}$/), revision: z.number().int().nonnegative() })).max(128).default([]) };
 export const profileObjectSchema = profileDataSchema.extend(metadataSchema);
@@ -85,7 +86,7 @@ export function parseProfilePatch(input: unknown): Partial<z.infer<typeof profil
   const parsed = inputSchema.safeParse(input);
   if (!parsed.success) throw validationError(parsed.error);
   // Accept validated legacy-client metadata, but never let it change server-owned identity.
-  const { id: _id, created_at: _created, updated_at: _updated, schema_version: _version, revision: _revision, recent_mutations: _ledger, metric_snapshots: _snapshots, compiler_session_id: _compiler, ...data } = parsed.data;
+  const { id: _id, created_at: _created, updated_at: _updated, schema_version: _version, revision: _revision, recent_mutations: _ledger, metric_snapshots: _snapshots, compiler_session_id: _compiler, proposal_reviews: _reviews, ...data } = parsed.data;
   return data;
 }
 export function parseProfile(input: unknown): z.infer<typeof profileSchema> {

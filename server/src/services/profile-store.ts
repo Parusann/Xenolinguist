@@ -15,6 +15,7 @@ import { atomicWrite } from './atomic-file.js';
 import { dataDir } from '../config.js';
 import { AudioStore } from './audio-store.js';
 import { recordMetricSnapshot } from '../../../shared/metrics/workspace-metrics.js';
+import { verifyProposalReviews } from './proposal-review-integrity.js';
 
 const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
 const toIndex = (p: LanguageProfile): ProfileIndex => ({ id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at });
@@ -110,6 +111,7 @@ export class ProfileStore {
       const restored = parseProfile({ ...profile, revision: existing ? Math.max(existing.revision, profile.revision) + 1 : profile.revision,
         recent_mutations: [], updated_at: new Date().toISOString() });
       verifyResearch(restored);
+      verifyProposalReviews(restored);
       await prepare(existing);
       await new AudioStore().verifyProfile(restored);
       await withProfileLock(`recovery:${this.file(restored.id)}`, async () => {
@@ -155,6 +157,23 @@ export class ProfileStore {
       });
       await this.list();
       // Audio and migration backups are retained for later explicit archive/garbage-collection work.
+    });
+  }
+
+  /** Server-owned review metadata and accepted knowledge share the profile's atomic commit point. */
+  async commitProposalReview(id: string, expectedRevision: number | undefined, change: (current: LanguageProfile) => LanguageProfile | null) {
+    if (!SAFE_ID.test(id)) throw new ProfileError('PROFILE_MISSING', 'Project not found', 404);
+    return this.locked(id, async () => {
+      const existing = await this.get(id);
+      if (!existing) throw new ProfileError('PROFILE_MISSING', 'Project not found', 404);
+      const changed = change(existing);
+      if (!changed) return existing; // An already-recorded, identical decision is an idempotent acknowledgement.
+      if (expectedRevision !== undefined) this.checkRevision(existing, expectedRevision);
+      const profile = parseProfile({ ...changed, id: existing.id, created_at: existing.created_at,
+        revision: existing.revision + 1, updated_at: new Date().toISOString() });
+      verifyResearch(profile, existing); verifyProposalReviews(profile, existing);
+      await new AudioStore().verifyProfile(profile, existing);
+      return this.save(profile);
     });
   }
 
