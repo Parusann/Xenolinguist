@@ -1,4 +1,5 @@
 import type { Research } from 'shared/types'
+import { removeSampleKeepingCaptures } from 'shared/profile-operations'
 import { storedForm } from 'engine/text/normalize'
 import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react'
 import type { LanguageProfile, DictionaryEntry, GrammarRule, Sample, AudioClip } from 'shared/types'
@@ -159,13 +160,7 @@ export function ProfileProvider({
   const removeSample = useCallback((id: string) => {
     // Keep shared clips and retain bytes until explicit garbage collection can
     // account for pending edits, conflicts and previous profile snapshots.
-    const audioId = profileRef.current?.samples.find(s => s.id === id)?.audio_id ?? null
-    updateAndSave(prev => ({
-      ...prev,
-      samples: prev.samples.filter(s => s.id !== id),
-      audio_clips: audioId && !prev.samples.some(s => s.id !== id && s.audio_id === audioId)
-        ? prev.audio_clips.filter(c => c.id !== audioId) : prev.audio_clips,
-    }))
+    updateAndSave(prev => removeSampleKeepingCaptures(prev, id))
   }, [updateAndSave])
 
   const addGrammarRule = useCallback((rule: Omit<GrammarRule, 'id' | 'created_at'>) => {

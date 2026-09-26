@@ -15,6 +15,7 @@ import { atomicWrite } from '../services/atomic-file.js';
 import request, { testSession } from './authenticated-request.js';
 import supertest from 'supertest';
 import { createApp } from '../app.js';
+import { removeSampleKeepingCaptures } from '../../../shared/profile-operations.js';
 
 let root: string, wav: Buffer;
 const now = '2026-09-15T10:00:00.000Z';
@@ -86,12 +87,16 @@ describe('portable project archives', () => {
       derived_from: [], audio: { clip_id: clip.id, start: 0, end: 1, asset_sha256: clip.assets!.original.sha256 } }] } }, profile.revision))!;
     await expect(store.update(profile.id, { samples: profile.samples.map(s => ({ ...s, audio_id: null })), audio_clips: [] }, saved.revision))
       .rejects.toMatchObject({ code: 'RESEARCH_AUDIO_MISSING' });
-    const service = new ProjectArchives(), exported = await service.export(profile.id, saved.revision, true);
+    const removed = (await store.update(profile.id, removeSampleKeepingCaptures(saved, profile.samples[0].id), saved.revision))!;
+    expect(removed.samples).toEqual([]);
+    expect(removed.audio_clips[0].id).toBe(clip.id);
+    const service = new ProjectArchives(), exported = await service.export(profile.id, removed.revision, true);
     const bytes = await fs.readFile(exported.file); await exported.dispose();
     const preview = await service.inspect(Readable.from([bytes]));
     const restored = (await service.restore(preview.token, { mode: 'new' })).profile;
     expect(restored.research.observations[0].audio).toEqual({ clip_id: restored.audio_clips[0].id, start: 0, end: 1, asset_sha256: clip.assets!.original.sha256 });
-    expect(restored.research.observations[0].source_id).toBe(restored.samples[0].id);
+    expect(restored.samples).toEqual([]);
+    expect(restored.research.observations[0].source_id).toBe(profile.samples[0].id); // retained historical reference
   });
 
   it('retains executable grammar and lexical frames through mutation and archive ID remapping', async () => {

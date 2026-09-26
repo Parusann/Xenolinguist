@@ -1,7 +1,32 @@
 import { readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { test, expect, preparePage, openProfile } from './fixtures';
+import { test, expect, preparePage, openProfile, wavFixture } from './fixtures';
 test.beforeEach(async ({ page }) => { await preparePage(page); });
+
+test('W20 deleting a notebook sample retains the recording captured as research evidence', async ({ page, server }) => {
+  const p = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Captured recording' } })).json();
+  const read = async () => (await (await page.request.get(`${server.url}/api/profiles/${p.id}`)).json());
+  await openProfile(page, server.url, p.name);
+  await page.locator('input[type="file"]').setInputFiles(wavFixture);
+  await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
+  await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Retained source');
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await expect.poll(async () => (await read()).samples.length).toBe(1);
+  const saved = await read();
+  await page.locator('[data-tour="dashboard"]').click();
+  const panel = page.getByRole('region', { name: 'Research evidence', exact: true });
+  await panel.getByLabel('Capture a saved sample').selectOption(saved.samples[0].id);
+  await panel.getByRole('button', { name: 'Capture observation', exact: true }).click();
+  await expect.poll(async () => (await read()).research.observations.length).toBe(1);
+  await page.locator('[data-tour="samples"]').click();
+  await page.getByRole('button', { name: 'Delete sample Retained source', exact: true }).click();
+  await expect.poll(async () => (await read()).samples.length).toBe(0);
+  const after = await read();
+  expect(after.audio_clips).toEqual(saved.audio_clips);
+  expect(after.research.observations[0].audio.clip_id).toBe(saved.audio_clips[0].id);
+  expect(after.research.observations[0].source_id).toBe(saved.samples[0].id);
+  expect((await page.request.get(`${server.url}/api/audio/${saved.audio_clips[0].id}`)).ok()).toBe(true);
+});
 
 test('W20 traces a translation to contradictory captures, retains corrections and restores research history', async ({ page, server }) => {
   const p = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Research record', dictionary: [{
