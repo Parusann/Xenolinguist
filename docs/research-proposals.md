@@ -53,6 +53,18 @@ Successful responses retain the verified model digest, settings, prompt-template
 
 Twenty-one new unit and HTTP integration cases cover structural authority, exact citations, counterexamples, new/replacement senses, observation requests, ambiguity, profile isolation, annotation/withdrawal propagation, bounded retrieval, tool limits, repair limits, model pinning and cancellation followed by a successful request. HTTP checks compare persisted profile bytes before and after generation.
 
+[Backend verification](verification/w21-proposal-backend.json) records successful Windows/Linux source CI and independent installer regression acceptance at `547edd8`: 371 unit tests, seven tooling tests, 37 workbench checks, eight public checks and 12/60/336 replayed experiment records per platform. Three native unit skips and four reviewed high native-chain audit entries remain. Installer acceptance covers the existing application flows; the separate HTTP and local-model checks below cover proposal generation.
+
 A real local `gemma4:e4b` integration smoke uses the same synthetic tense example. The initial run exposed unsupported Unicode regexes in Ollama's schema grammar; the provider projection fixes that compatibility issue without relaxing server validation. The successful run returns a proposed, compatible rule using tool feedback. This one-case smoke is separate from the scripted falsification/revision test; it does not demonstrate model discovery of an unknown rule or comparative quality.
+
+The [retained local-model response](verification/w21-proposal-local-model.json) comes from the authenticated bundled backend at revision `547edd8`. It completed in 19.836 seconds on this host with three generation calls, two tools and no structural repair. Stored profile bytes were unchanged. These timings include the observed runtime conditions and are not a latency guarantee. The record includes the synthetic starting profile, request, returned tool trace, exact model digest and backend bundle hash.
+
+With locked dependencies installed, run the [deterministic replay](verification/w21-proposal-replay.mts) from the repository root:
+
+```sh
+npx tsx docs/verification/w21-proposal-replay.mts
+```
+
+This rebuilds retrieval and hashes, reruns each tool and the final proposal check, and verifies the separate future-tense counterexample. It does not call the model or claim to replay its generation or timing.
 
 The next W21 unit must persist complete review records and decisions, revalidate and apply explicitly accepted changes through revisioned mutations, provide the evidence/test/change preview in the workbench, and connect relevant AI entry points. Cancellation/restart/conflict and archive behavior need acceptance coverage. Finally, freeze a shared observation set and compare current prompting with the new pipeline on invalid-output rate, citation relevance, held-out predictions and runtime. W21's full exit condition remains open until that work passes.

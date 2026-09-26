@@ -1,0 +1,850 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "547edd8feaa5d643a7f5c7013b87db2da99e3f07",
+  "scope": "W21 first backend unit; full W21 remains in progress",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "547edd8feaa5d643a7f5c7013b87db2da99e3f07",
+    "jobs": [
+      {
+        "completedAt": "2026-09-26T14:11:09Z",
+        "conclusion": "success",
+        "databaseId": 108418094504,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-09-26T14:00:55Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36247060685/job/108418094504"
+      },
+      {
+        "completedAt": "2026-09-26T14:06:44Z",
+        "conclusion": "success",
+        "databaseId": 108418094592,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-09-26T14:00:56Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36247060685/job/108418094592"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36247060685"
+  },
+  "sourceChecks": {
+    "unitTests": 371,
+    "serverSharedEngineEvaluationTests": 340,
+    "clientTests": 31,
+    "newProposalCases": 21,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-09-26T14:03:04.069Z",
+        "duration": 201861.636,
+        "expected": 37,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-26T14:06:27.575Z",
+        "duration": 9567.873,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "c9e40a4448448241e226815acf630d2dc0b26e2a861135bbffb0be91ee4cc6f0"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "dc80a8e465bbad97460d36f1e619a79f099c6989ef1b1c5053fca78a444ef3fb"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "dc80a8e465bbad97460d36f1e619a79f099c6989ef1b1c5053fca78a444ef3fb"
+        }
+      },
+      "sourceLog": {
+        "bytes": 94396,
+        "sha256": "71274aa99b8a4efb21b5c3adb7e94c3bf308c7f55bdbbfec6ba771010589f8f3"
+      },
+      "numberSummaryMatchesW19": true,
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-09-26T14:06:49.355Z",
+        "duration": 237983.417,
+        "expected": 37,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-26T14:10:50.123Z",
+        "duration": 11507.850999999999,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "b92bda624f633c81c7589ea9ec438f98fd7bfc8c82613e2f766b61b160d9e736"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "800688027d3b9cf04241460733ae5334b17f29ebeb1d529fecce0e2d4398e441"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "800688027d3b9cf04241460733ae5334b17f29ebeb1d529fecce0e2d4398e441"
+        }
+      },
+      "sourceLog": {
+        "bytes": 80869,
+        "sha256": "34663f43d95d5f69e4d7f64242236150662cdb3a0739240cc31cc16f65019c20"
+      },
+      "numberSummaryMatchesW19": true,
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "547edd8feaa5d643a7f5c7013b87db2da99e3f07",
+    "jobs": [
+      {
+        "completedAt": "2026-09-26T14:04:27Z",
+        "conclusion": "success",
+        "databaseId": 108418094447,
+        "name": "build",
+        "startedAt": "2026-09-26T14:00:55Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36247060696/job/108418094447"
+      },
+      {
+        "completedAt": "2026-09-26T14:09:21Z",
+        "conclusion": "success",
+        "databaseId": 108418644340,
+        "name": "verify-clean",
+        "startedAt": "2026-09-26T14:04:28Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36247060696/job/108418644340"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36247060696"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-09-26T14:09:18.421Z",
+    "source": {
+      "revision": "547edd8feaa5d643a7f5c7013b87db2da99e3f07",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "04861f0def6c2805818311bd80864f5f5346e50204cec208cb24826a53eb5333"
+    },
+    "appArchive": {
+      "bytes": 2978014,
+      "sha256": "4ad70c30ee0e581826e7a80276f7e211030eac809b5e6c56cf667338f8c56018"
+    },
+    "checks": {
+      "artifactLayout": {
+        "passed": true,
+        "checkedFiles": 3774,
+        "additionalFiles": [
+          "Uninstall Xenolinguist.exe"
+        ],
+        "source": {
+          "revision": "547edd8feaa5d643a7f5c7013b87db2da99e3f07",
+          "branch": "implementation/reliability",
+          "workingFiles": [],
+          "node": "24.21.0",
+          "platform": "win32",
+          "arch": "x64"
+        },
+        "manifest": {
+          "bytes": 825013,
+          "sha256": "3f1374cfb1cb8c2c57bb7fb73960d96af65210a92ab41397e56c5bdcdc47a6c0"
+        },
+        "checks": {
+          "requiredFiles": 9,
+          "nativeGroups": 3,
+          "runtimePackages": 50
+        }
+      },
+      "localBoundary": {
+        "otherWindowStatus": 401,
+        "sandbox": true,
+        "contextIsolation": true,
+        "nodeIntegration": false,
+        "webSecurity": true,
+        "anonymousHealth": 401,
+        "anonymousBinary": 401,
+        "trustedHealth": 200,
+        "foreignNavigationBlocked": true,
+        "popupDenied": true,
+        "syntheticMicrophone": {
+          "audioTracks": 1,
+          "cameraDenied": true
+        },
+        "relaunchAuthenticated": true
+      },
+      "runtimeCapabilities": {
+        "checkedAt": "2026-09-26T14:05:48.044Z",
+        "expiresAt": "2026-09-26T14:05:53.044Z",
+        "storage": {
+          "state": "available",
+          "detail": "Local storage write probe passed"
+        },
+        "tts": {
+          "state": "available",
+          "detail": "Local speech synthesis files present; execution is checked when requested"
+        },
+        "stt": {
+          "state": "available",
+          "detail": "Local transcription files present; execution is checked when requested"
+        },
+        "phones": {
+          "state": "available",
+          "detail": "Phone asset sizes match; hashes and native runtime are checked at inference"
+        },
+        "chat": {
+          "state": "unavailable",
+          "detail": "Start the local Ollama service to use chat"
+        },
+        "resources": {
+          "cpuCount": 4,
+          "freeMemoryBytes": 13425672192,
+          "totalMemoryBytes": 17174360064
+        },
+        "setupModels": [
+          {
+            "name": "gemma4:e4b",
+            "approximateBytes": 9610000000
+          },
+          {
+            "name": "llama3.2:3b",
+            "approximateBytes": 2020000000
+          }
+        ]
+      },
+      "nativeJobCancellation": {
+        "nativeProcessStarted": true,
+        "status": 409,
+        "code": "JOB_CANCELLED"
+      },
+      "ipa": {
+        "status": 200,
+        "body": {
+          "ipa": "h# dh ax l ow w eh l pau dh ah kcl k w ih kcl k pau r aw n dcl f aa kcl k s ah m pau s ow m ah n ah l ey z ih dcl n ao gcl g h#",
+          "segments": [
+            {
+              "phone": "h#",
+              "start": 0,
+              "end": 0.02
+            },
+            {
+              "phone": "dh",
+              "start": 0.04,
+              "end": 0.06
+            },
+            {
+              "phone": "ax",
+              "start": 0.06,
+              "end": 0.08
+            },
+            {
+              "phone": "l",
+              "start": 0.14,
+              "end": 0.16
+            },
+            {
+              "phone": "ow",
+              "start": 0.18,
+              "end": 0.2
+            },
+            {
+              "phone": "w",
+              "start": 0.32,
+              "end": 0.36
+            },
+            {
+              "phone": "eh",
+              "start": 0.38,
+              "end": 0.4
+            },
+            {
+              "phone": "l",
+              "start": 0.52,
+              "end": 0.56
+            },
+            {
+              "phone": "pau",
+              "start": 0.64,
+              "end": 0.66
+            },
+            {
+              "phone": "dh",
+              "start": 0.7,
+              "end": 0.72
+            },
+            {
+              "phone": "ah",
+              "start": 0.72,
+              "end": 0.74
+            },
+            {
+              "phone": "kcl",
+              "start": 0.8,
+              "end": 0.82
+            },
+            {
+              "phone": "k",
+              "start": 0.82,
+              "end": 0.86
+            },
+            {
+              "phone": "w",
+              "start": 0.88,
+              "end": 0.92
+            },
+            {
+              "phone": "ih",
+              "start": 0.92,
+              "end": 0.94
+            },
+            {
+              "phone": "kcl",
+              "start": 1.04,
+              "end": 1.06
+            },
+            {
+              "phone": "k",
+              "start": 1.06,
+              "end": 1.08
+            },
+            {
+              "phone": "pau",
+              "start": 1.12,
+              "end": 1.14
+            },
+            {
+              "phone": "r",
+              "start": 1.16,
+              "end": 1.18
+            },
+            {
+              "phone": "aw",
+              "start": 1.2,
+              "end": 1.22
+            },
+            {
+              "phone": "n",
+              "start": 1.34,
+              "end": 1.36
+            },
+            {
+              "phone": "dcl",
+              "start": 1.38,
+              "end": 1.4
+            },
+            {
+              "phone": "f",
+              "start": 1.44,
+              "end": 1.46
+            },
+            {
+              "phone": "aa",
+              "start": 1.48,
+              "end": 1.5
+            },
+            {
+              "phone": "kcl",
+              "start": 1.58,
+              "end": 1.62
+            },
+            {
+              "phone": "k",
+              "start": 1.62,
+              "end": 1.64
+            },
+            {
+              "phone": "s",
+              "start": 1.7,
+              "end": 1.72
+            },
+            {
+              "phone": "ah",
+              "start": 1.8,
+              "end": 1.82
+            },
+            {
+              "phone": "m",
+              "start": 1.9,
+              "end": 1.94
+            },
+            {
+              "phone": "pau",
+              "start": 2.04,
+              "end": 2.06
+            },
+            {
+              "phone": "s",
+              "start": 2.1,
+              "end": 2.12
+            },
+            {
+              "phone": "ow",
+              "start": 2.16,
+              "end": 2.18
+            },
+            {
+              "phone": "m",
+              "start": 2.28,
+              "end": 2.3
+            },
+            {
+              "phone": "ah",
+              "start": 2.32,
+              "end": 2.34
+            },
+            {
+              "phone": "n",
+              "start": 2.4,
+              "end": 2.44
+            },
+            {
+              "phone": "ah",
+              "start": 2.46,
+              "end": 2.48
+            },
+            {
+              "phone": "l",
+              "start": 2.52,
+              "end": 2.54
+            },
+            {
+              "phone": "ey",
+              "start": 2.56,
+              "end": 2.58
+            },
+            {
+              "phone": "z",
+              "start": 2.7,
+              "end": 2.72
+            },
+            {
+              "phone": "ih",
+              "start": 2.74,
+              "end": 2.76
+            },
+            {
+              "phone": "dcl",
+              "start": 2.82,
+              "end": 2.86
+            },
+            {
+              "phone": "n",
+              "start": 2.88,
+              "end": 2.9
+            },
+            {
+              "phone": "ao",
+              "start": 2.9,
+              "end": 2.92
+            },
+            {
+              "phone": "gcl",
+              "start": 3.06,
+              "end": 3.08
+            },
+            {
+              "phone": "g",
+              "start": 3.08,
+              "end": 3.1
+            },
+            {
+              "phone": "h#",
+              "start": 3.42,
+              "end": 3.44
+            }
+          ],
+          "identity": {
+            "modelId": "wav2vec2-phoneme",
+            "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+            "alphabet": "TIMIT ARPABET",
+            "transformers": "4.2.0",
+            "backend": "onnxruntime-node",
+            "node": "24.19.0"
+          }
+        }
+      },
+      "stt": {
+        "status": 200,
+        "body": {
+          "language": "en",
+          "text": "Hello world, the quick brown fox, dumb, over the lazy dog.",
+          "segments": [
+            {
+              "start": 0,
+              "end": 3.18,
+              "text": "Hello world, the quick brown fox, dumb, over the lazy dog."
+            }
+          ],
+          "languageProb": 0.876527,
+          "mode": "transcription"
+        }
+      },
+      "tts": {
+        "status": 200,
+        "bytes": 86537,
+        "wav": true
+      },
+      "wavUpload": {
+        "status": 200,
+        "body": {
+          "filename": "release-fixture.wav",
+          "size": 110286
+        }
+      },
+      "sampleSave": {
+        "status": 200
+      },
+      "sampleOnDisk": true,
+      "loadedWorkbench": true,
+      "pendingSaveRecovered": true,
+      "desktopDraftRecovered": true,
+      "desktopAudioDraftRecovered": true,
+      "desktopAudioSaved": {
+        "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phoneSegments": 49,
+        "playback": true
+      },
+      "desktopAIHistoryRecovered": {
+        "state": "complete",
+        "task": "conlangGeneration",
+        "fixtureGeneration": true
+      },
+      "desktopSandboxRecovered": {
+        "sameSession": true,
+        "restoredEvents": 2,
+        "afterRetryEvents": 3,
+        "dictionaryEntries": 1,
+        "fixtureGeneration": true
+      },
+      "desktopEvidenceMetrics": {
+        "unratedAssertion": true,
+        "historyVisible": true,
+        "latestSnapshot": {
+          "version": 1,
+          "revision": 4,
+          "recorded_at": "2026-09-26T14:06:46.787Z",
+          "counts": {
+            "observations": 0,
+            "assertedEntries": 1,
+            "grammarNotes": 0,
+            "competingForms": 0,
+            "mappings1To20": 1,
+            "ratedEntries": 0
+          }
+        }
+      },
+      "compilerPractice": {
+        "passed": true,
+        "version": "xeno-generator-1",
+        "observations": 29,
+        "challenges": 5,
+        "sameSessionAfterRelaunch": true,
+        "draftRecovered": true,
+        "reveals": 1,
+        "archiveRestored": true
+      },
+      "unicodeLexicon": {
+        "passed": true,
+        "scripts": [
+          "Han",
+          "Tamil",
+          "Latin decomposed accent"
+        ],
+        "casePolicy": true,
+        "competingHomographs": true,
+        "explicitReverseAlias": true,
+        "archiveRestored": true
+      },
+      "typedGrammar": {
+        "passed": true,
+        "novelPlural": true,
+        "sovRoles": true,
+        "negation": true,
+        "pastAffix": true,
+        "sourceSpans": true,
+        "reverseGeneration": true,
+        "archiveRestored": true
+      },
+      "groundedInduction": {
+        "passed": true,
+        "workerExecuted": true,
+        "independentValidation": true,
+        "explicitAcceptance": true,
+        "acceptedRuleExecuted": true,
+        "archiveRestored": true
+      },
+      "numberGrammar": {
+        "passed": true,
+        "workerExecuted": true,
+        "ambiguityRetained": true,
+        "discriminatingQuestion": true,
+        "validationPersisted": true,
+        "withheldPrediction": true,
+        "compositionTree": true,
+        "archiveRestored": true
+      },
+      "researchEvidence": {
+        "passed": true,
+        "immutableCapture": true,
+        "contradictionVisible": true,
+        "derivationRetained": true,
+        "correctionInvalidates": true,
+        "archiveRestored": true
+      },
+      "portableArchives": {
+        "passed": true,
+        "projects": [
+          {
+            "bytes": 234451,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 3,
+              "recordings": 1,
+              "proposals": 0,
+              "snapshots": 4
+            },
+            "sandboxIncluded": true,
+            "restoredAudioHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+          },
+          {
+            "bytes": 4556,
+            "counts": {
+              "words": 1,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 1,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2553,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2575,
+            "counts": {
+              "words": 5,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2902,
+            "counts": {
+              "words": 3,
+              "rules": 4,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 5334,
+            "counts": {
+              "words": 3,
+              "rules": 1,
+              "samples": 5,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 2544,
+            "counts": {
+              "words": 0,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 2
+            },
+            "sandboxIncluded": true
+          },
+          {
+            "bytes": 5933,
+            "counts": {
+              "words": 1,
+              "rules": 0,
+              "samples": 0,
+              "recordings": 0,
+              "proposals": 0,
+              "snapshots": 1
+            },
+            "sandboxIncluded": true
+          }
+        ]
+      },
+      "missingModel": {
+        "status": 503,
+        "body": {
+          "error": "ipa-unavailable",
+          "code": "IPA_MODEL_MISSING",
+          "requestId": "bdc1c5d3-8e2b-4301-aefc-dbdf895e63f7",
+          "retryable": true
+        }
+      }
+    },
+    "restart": {
+      "firstOrigin": "http://127.0.0.1:51538",
+      "secondOrigin": "http://127.0.0.1:50731",
+      "revision": 2
+    }
+  },
+  "installedCoverageLimit": "Installed acceptance covers the existing application and W20 research/archive flows; W21 proposal generation is covered by HTTP source tests and the separate real local-model bundled-backend smoke.",
+  "localModel": {
+    "file": "w21-proposal-local-model.json",
+    "elapsedMs": 19836,
+    "calls": 3,
+    "tools": 2,
+    "repairAttempts": 0,
+    "validation": "compatible",
+    "deterministicReplay": {
+      "passed": true,
+      "deterministicToolsReplayed": 2,
+      "validation": "compatible",
+      "counterexample": {
+        "sample_id": "past-sample",
+        "source": "ka pa-mok",
+        "expected": "I did speak",
+        "before": {
+          "outcome": "matches",
+          "rendered": "I did speak"
+        },
+        "after": {
+          "outcome": "differs",
+          "rendered": "I will speak"
+        },
+        "regression": true
+      },
+      "modelGenerationReplayed": false,
+      "heldOutEvaluation": false
+    }
+  },
+  "retainedFiles": {
+    "w21-proposal-local-model.json": {
+      "bytes": 15526,
+      "sha256": "20ffccfb5e56274182dc9fd2eff8bb1256e5e7ca72f7f39a438a77c0cbaacd0f"
+    },
+    "w21-proposal-replay.mts": {
+      "bytes": 3532,
+      "sha256": "2f2b31a296ad6d168c2dc343db9120316ba8a3e7f2eef9299ec819eade481a63"
+    }
+  },
+  "limits": [
+    "One synthetic real-model smoke with supplied targets and existing rules; no held-out quality or comparative prompting result.",
+    "Citation checks establish reference integrity, not semantic support or calibrated confidence.",
+    "Proposal records are returned, not durably stored or applied. Review, acceptance, frontend integration and comparative evaluation remain unfinished.",
+    "Three gated native unit skips and four reviewed high native-chain audit entries remain.",
+    "No main merge, installer release or Pages deployment."
+  ]
+}

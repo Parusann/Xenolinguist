@@ -1,0 +1,464 @@
+{
+  "purpose": "Single synthetic local-model integration smoke through the authenticated bundled backend; not a quality benchmark",
+  "status": 200,
+  "elapsed_ms": 19836,
+  "persisted_profile_unchanged": true,
+  "request": {
+    "profile_id": "7f8ce3cd-3847-4aaf-ac43-c531b3140625",
+    "expectedRevision": 0,
+    "query": "Test whether pa- marks past or future in ka pa-mok. Inspect the captured example and test an executable tense rule. Finish with the best supported alternative and cite the exact span. Do not assume the given rule is correct.",
+    "model": "gemma4:e4b",
+    "validation_sample_ids": [
+      "past-sample"
+    ]
+  },
+  "profile": {
+    "research": {
+      "observations": [
+        {
+          "id": "capture",
+          "created_at": "2026-09-26T00:00:00.000Z",
+          "text": "ka pa-mok",
+          "content_sha256": "e276e3e00612643ef6c48a2e5f3560c69aee45be944afa32745476bfb3d97da1",
+          "source": "User supplied example",
+          "origin": "capture",
+          "source_id": "past-sample",
+          "derived_from": [],
+          "audio": null
+        }
+      ],
+      "annotations": [],
+      "hypotheses": [],
+      "links": [],
+      "events": [],
+      "tests": [],
+      "analyses": [],
+      "metrics": []
+    },
+    "name": "Synthetic proposal checks",
+    "description": "",
+    "phonetic_notes": "",
+    "is_sandbox": false,
+    "dictionary": [
+      {
+        "id": "speaker",
+        "alien_word": "ka",
+        "english_meaning": "I",
+        "part_of_speech": "pronoun",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-09-26T00:00:00.000Z"
+      },
+      {
+        "verb_frame": "intransitive",
+        "id": "speak",
+        "alien_word": "mok",
+        "english_meaning": "to speak",
+        "part_of_speech": "verb",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-09-26T00:00:00.000Z"
+      },
+      {
+        "id": "star",
+        "alien_word": "nesh",
+        "english_meaning": "star",
+        "part_of_speech": "noun",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-09-26T00:00:00.000Z"
+      }
+    ],
+    "grammar_rules": [
+      {
+        "id": "order",
+        "rule": "Subject precedes verb",
+        "executable": {
+          "kind": "clause-order",
+          "order": "SVO",
+          "arguments": 1
+        },
+        "evidence": [
+          "capture"
+        ],
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "created_at": "2026-09-26T00:00:00.000Z"
+      },
+      {
+        "id": "tense",
+        "rule": "pa marks past",
+        "executable": {
+          "kind": "tense-affix",
+          "position": "prefix",
+          "affix": "pa-",
+          "tense": "past"
+        },
+        "evidence": [
+          "capture"
+        ],
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "created_at": "2026-09-26T00:00:00.000Z"
+      }
+    ],
+    "number_system": {
+      "base": null,
+      "mappings": {},
+      "operators": {}
+    },
+    "samples": [
+      {
+        "id": "past-sample",
+        "alien_text": "ka pa-mok",
+        "english_translation": "I did speak",
+        "source": "Synthetic supplied target",
+        "phonetic_notes": "",
+        "decoded": false,
+        "audio_id": null,
+        "ipa": null,
+        "created_at": "2026-09-26T00:00:00.000Z"
+      },
+      {
+        "id": "noun-sample",
+        "alien_text": "nesh",
+        "english_translation": "the star",
+        "source": "Synthetic supplied target",
+        "phonetic_notes": "",
+        "decoded": false,
+        "audio_id": null,
+        "ipa": null,
+        "created_at": "2026-09-26T00:00:00.000Z"
+      }
+    ],
+    "audio_clips": [],
+    "metric_snapshots": [
+      {
+        "version": 1,
+        "revision": 0,
+        "recorded_at": "2026-09-26T14:01:01.963Z",
+        "counts": {
+          "observations": 2,
+          "assertedEntries": 3,
+          "grammarNotes": 2,
+          "competingForms": 0,
+          "mappings1To20": 0,
+          "ratedEntries": 0
+        }
+      }
+    ],
+    "id": "7f8ce3cd-3847-4aaf-ac43-c531b3140625",
+    "created_at": "2026-09-26T14:01:01.963Z",
+    "updated_at": "2026-09-26T14:01:01.963Z",
+    "schema_version": 3,
+    "revision": 0,
+    "recent_mutations": []
+  },
+  "result": {
+    "version": "research-proposal-run-1",
+    "state": "proposed",
+    "proposal": {
+      "scope": {
+        "profile_id": "7f8ce3cd-3847-4aaf-ac43-c531b3140625",
+        "revision": 0
+      },
+      "label": "'pa-' marks the past tense in this context.",
+      "explanation": "The test of the hypothesis that 'pa-' marks the past tense was compatible with the provided sample ('ka pa-mok' -> 'I did speak'). Therefore, I conclude that 'pa-' functions as a past tense prefix for the verb root in this language.",
+      "alternatives": [
+        "'pa-' might mark another grammatical feature (e.g., aspect).",
+        "The current evidence is insufficient to generalize beyond this single example."
+      ],
+      "citations": [
+        {
+          "observation_id": "capture",
+          "annotation_id": null,
+          "start": 0,
+          "end": 9,
+          "quote": "ka pa-mok",
+          "relation": "supports"
+        }
+      ],
+      "content": {
+        "kind": "grammar",
+        "rule_id": "tense",
+        "rule": {
+          "kind": "tense-affix",
+          "position": "prefix",
+          "affix": "pa-",
+          "tense": "past"
+        }
+      }
+    },
+    "validation": {
+      "definition": "proposal-checks-1",
+      "status": "compatible",
+      "errors": [],
+      "checks": [
+        {
+          "sample_id": "past-sample",
+          "source": "ka pa-mok",
+          "expected": "I did speak",
+          "before": {
+            "outcome": "matches",
+            "rendered": "I did speak"
+          },
+          "after": {
+            "outcome": "matches",
+            "rendered": "I did speak"
+          },
+          "regression": false
+        }
+      ],
+      "references": {
+        "valid": 1,
+        "total": 1
+      },
+      "input_sha256": "e33502bd9e3b3a560f3de3f5a316c9b305e8ae2759e00990efd9e55d4fdb224b",
+      "changes": [
+        "Replace rule tense: {\"kind\":\"tense-affix\",\"position\":\"prefix\",\"affix\":\"pa-\",\"tense\":\"past\"}"
+      ],
+      "limitations": [
+        "Reference integrity checks locate quoted text; they do not verify that a citation supports the claim.",
+        "User-supplied targets are workspace checks, not held-out accuracy or calibrated confidence.",
+        "Compatibility covers only the selected samples and the bounded typed grammar engine."
+      ]
+    },
+    "provenance": {
+      "origin": "local-model",
+      "model": "gemma4:e4b",
+      "model_digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+      "profile_id": "7f8ce3cd-3847-4aaf-ac43-c531b3140625",
+      "profile_revision": 0,
+      "input_sha256": "e33502bd9e3b3a560f3de3f5a316c9b305e8ae2759e00990efd9e55d4fdb224b",
+      "prompt_template_sha256": "3bb3e0eb9b9df4eefad64c5e5c8fe33cda09622b5a8a78f7285f94c0430a7de9",
+      "context_sha256": "c2471232929dd23dcc8b901ceacf6ef64f4a2d23db6d90b45f41d93ee3017ba5",
+      "context": {
+        "version": "research-context-1",
+        "scope": {
+          "profile_id": "7f8ce3cd-3847-4aaf-ac43-c531b3140625",
+          "revision": 0
+        },
+        "observations": [
+          {
+            "id": "capture",
+            "text": "ka pa-mok",
+            "text_length": 9,
+            "text_truncated": false,
+            "source": "User supplied example",
+            "origin": "capture",
+            "source_id": "past-sample",
+            "annotation": null
+          }
+        ],
+        "words": [
+          {
+            "id": "speaker",
+            "form": "ka",
+            "meaning": "I",
+            "part_of_speech": "pronoun"
+          },
+          {
+            "id": "speak",
+            "form": "mok",
+            "meaning": "to speak",
+            "part_of_speech": "verb"
+          }
+        ],
+        "rules": [
+          {
+            "id": "tense",
+            "description": "pa marks past",
+            "executable": {
+              "kind": "tense-affix",
+              "position": "prefix",
+              "affix": "pa-",
+              "tense": "past"
+            },
+            "evidence": [
+              "capture"
+            ]
+          }
+        ],
+        "hypotheses": [],
+        "links": [],
+        "samples": [
+          {
+            "id": "past-sample",
+            "source": "ka pa-mok",
+            "user_target": "I did speak"
+          },
+          {
+            "id": "noun-sample",
+            "source": "nesh",
+            "user_target": "the star"
+          }
+        ],
+        "limitations": [
+          "Workspace assertions and sample targets are unverified user data. Citations do not establish truth.",
+          "Exact lexical retrieval with bounded records; some evidence or text may be omitted. Use search and span tools to inspect more."
+        ]
+      },
+      "validation_sample_ids": [
+        "past-sample"
+      ],
+      "query": "Test whether pa- marks past or future in ka pa-mok. Inspect the captured example and test an executable tense rule. Finish with the best supported alternative and cite the exact span. Do not assume the given rule is correct.",
+      "settings": {
+        "context": 16384,
+        "output": 1024,
+        "chars": 48000,
+        "deadline": 180000,
+        "temperature": 0.2,
+        "seed": 42,
+        "think": false,
+        "structured_output": true
+      },
+      "budget": {
+        "tools": 4,
+        "calls": 6,
+        "outputPerCall": 1024,
+        "deadlineMs": 180000,
+        "contextChars": 12000,
+        "observations": 12,
+        "words": 16,
+        "rules": 8,
+        "samples": 8,
+        "tests": 12,
+        "total_output_token_ceiling": 6144
+      },
+      "calls": [
+        {
+          "request_sha256": "c2336fdce35d3f0538faeab591bf104e50c0e8645660d7759f8a5ce055b7135d",
+          "response_sha256": "4e44174c6b8d0f9d0317ca0933637555a71cf887dc867563ea390ca3c9bc6e3f",
+          "elapsed_ms": 16452,
+          "valid_structure": true
+        },
+        {
+          "request_sha256": "cffffdce7087c112dc629d2f443213465efd38093810c41379d9dfb323a7a832",
+          "response_sha256": "51f752935b21c0ef0c290e1958cf07cb52f8587f24b1ec7cca1a4cb7b0c93633",
+          "elapsed_ms": 738,
+          "valid_structure": true
+        },
+        {
+          "request_sha256": "8c277113d434ed1a1cbcf25717a91148133eb5c53140cb3b2721444f55f1dc9a",
+          "response_sha256": "b6e12035ba9000262a8f961970da8c9b25679f11c83a5c3256ef97071e19b98b",
+          "elapsed_ms": 2603,
+          "valid_structure": true
+        }
+      ],
+      "tool_calls": [
+        {
+          "action": {
+            "tool": "test-hypothesis",
+            "proposal": {
+              "scope": {
+                "profile_id": "7f8ce3cd-3847-4aaf-ac43-c531b3140625",
+                "revision": 0
+              },
+              "label": "Test tense affix 'pa-' in ka pa-mok",
+              "explanation": "The user wants to test the hypothesis that 'pa-' marks the past tense using the example 'ka pa-mok'. The existing rule suggests this, but I must test it against the provided context.",
+              "alternatives": [
+                "'pa-' marks future tense",
+                "'pa-' is not a tense marker"
+              ],
+              "citations": [
+                {
+                  "observation_id": "capture",
+                  "annotation_id": null,
+                  "start": 0,
+                  "end": 9,
+                  "quote": "ka pa-mok",
+                  "relation": "supports"
+                }
+              ],
+              "content": {
+                "kind": "grammar",
+                "rule_id": "tense",
+                "rule": {
+                  "kind": "tense-affix",
+                  "position": "prefix",
+                  "affix": "pa-",
+                  "tense": "past"
+                }
+              }
+            }
+          },
+          "result": {
+            "definition": "proposal-checks-1",
+            "status": "compatible",
+            "errors": [],
+            "checks": [
+              {
+                "sample_id": "past-sample",
+                "source": "ka pa-mok",
+                "expected": "I did speak",
+                "before": {
+                  "outcome": "matches",
+                  "rendered": "I did speak"
+                },
+                "after": {
+                  "outcome": "matches",
+                  "rendered": "I did speak"
+                },
+                "regression": false
+              }
+            ],
+            "references": {
+              "valid": 1,
+              "total": 1
+            },
+            "input_sha256": "e33502bd9e3b3a560f3de3f5a316c9b305e8ae2759e00990efd9e55d4fdb224b",
+            "changes": [
+              "Replace rule tense: {\"kind\":\"tense-affix\",\"position\":\"prefix\",\"affix\":\"pa-\",\"tense\":\"past\"}"
+            ],
+            "limitations": [
+              "Reference integrity checks locate quoted text; they do not verify that a citation supports the claim.",
+              "User-supplied targets are workspace checks, not held-out accuracy or calibrated confidence.",
+              "Compatibility covers only the selected samples and the bounded typed grammar engine."
+            ]
+          }
+        },
+        {
+          "action": {
+            "tool": "inspect-span",
+            "observation_id": "capture",
+            "start": 0,
+            "end": 9
+          },
+          "result": {
+            "observation_id": "capture",
+            "annotation_id": null,
+            "start": 0,
+            "end": 9,
+            "quote": "ka pa-mok"
+          }
+        }
+      ],
+      "repair_attempts": 0,
+      "elapsed_ms": 19827,
+      "completed_at": "2026-09-26T14:01:21.821Z"
+    },
+    "jobId": "e19b1c3a-3d38-48e0-86f7-08bbf4d36af1"
+  },
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "547edd8feaa5d643a7f5c7013b87db2da99e3f07",
+  "recordedAt": "2026-09-26T14:02:09.061454+00:00",
+  "bundledBackend": {
+    "sha256": "1c240b9c91fe41852aea6af3bb74804932956bb0078a1354de659a11affb5aa0",
+    "bytes": 2355726
+  },
+  "limits": [
+    "One synthetic example with user-supplied targets, not held-out quality or a prompting comparison.",
+    "The model receives the existing rule and selected validation target. Compatibility does not demonstrate independent rule discovery.",
+    "Only deterministic proposal/tool checks can be replayed without the model; timings and generation are observed integration evidence.",
+    "The endpoint returns this record without persisting proposal review or changing workspace knowledge."
+  ]
+}
