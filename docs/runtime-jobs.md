@@ -36,6 +36,9 @@ Task settings are server-owned: fixed context/output budgets, temperature 0.2, s
 | Quick suggestions | 4,096 | 512 | 10,000 | 90 |
 | Number and phonetic analysis | 4,096 | 1,024 | 10,000 | 120 |
 | Generated practice language | 8,192 | 4,096 | 12,000 | 240 |
+| Research proposal preview (W21 backend) | 16,384 per call | 1,024 per call; 6,144 total ceiling | 48,000 per call | 180 for the complete task |
+
+The new [research proposal backend](research-proposals.md) permits four read-only tool actions and one structural repair within at most six generation calls. It returns model-digest, retrieval, tool and timing provenance without persisting a decision. Existing free-text chat retention below is a separate path; workbench review and durable W21 records are still pending.
 
 Chat and task proposals persist in the originating profile through the existing revision-checked save queue. Responses retain their model name, task, timestamp, partial/completed/cancelled/failed state and an error separately from useful text. Partial output is checkpointed at roughly one-second intervals and flushed on completion/cancellation; an abrupt process failure can lose the latest uncheckpointed fragment. A proposal is not automatically accepted as a verified linguistic claim.
 

@@ -3,9 +3,32 @@ import { z } from 'zod';
 import { AIService, TASK_BUDGETS } from '../services/ai-service.js';
 import { jobs } from '../services/job-manager.js';
 import { RuntimeError } from '../services/runtime-error.js';
+import { proposalRequestSchema, PROPOSAL_LIMITS } from '../../../shared/schemas/proposals.js';
+import { ProfileStore } from '../services/profile-store.js';
+import { runResearchProposal } from '../services/research-proposal.js';
 
 export const aiRouter = Router();
 const service = new AIService();
+// Read-only preview endpoint. Review, durable decisions and application are separate operations.
+aiRouter.post('/research/proposal', async (req, res, next) => {
+  const parsed = proposalRequestSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: 'Invalid research proposal request', code: 'PROPOSAL_INPUT_INVALID' });
+  const input = parsed.data, controller = new AbortController();
+  const abort = () => { if (!res.writableEnded) controller.abort(); };
+  res.once('close', abort);
+  try {
+    const job = jobs.submit('llm', 'researchProposal', async signal => {
+      const profile = await new ProfileStore().get(input.profile_id);
+      if (!profile) throw new RuntimeError('PROFILE_MISSING', 'Research project no longer exists', 404);
+      return runResearchProposal(profile, input, signal);
+    }, { signal: controller.signal, deadlineMs: PROPOSAL_LIMITS.deadlineMs });
+    res.setHeader('X-Xeno-Job', job.id);
+    res.setHeader('Cache-Control', 'no-store');
+    const result = await job.promise;
+    if (!res.destroyed) res.json({ ...result, jobId: job.id });
+  } catch (error) { if (!res.destroyed) next(error); }
+  finally { res.off('close', abort); }
+});
 const inputSchema = z.object({ messages: z.array(z.object({ role: z.enum(['user', 'assistant', 'system']), content: z.string().max(20000) })).min(1).max(60),
   system: z.string().max(20000).optional(), model: z.string().min(1).max(200).optional(), task: z.enum(['chat', 'quickSuggest', 'patternAnalysis', 'grammarInference', 'translation', 'conlangGeneration', 'numberAnalysis', 'phoneticAnalysis']).default('chat') });
 for (const streaming of [false, true]) aiRouter.post(streaming ? '/stream' : '/chat', async (req, res, next) => {

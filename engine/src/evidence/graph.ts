@@ -10,11 +10,16 @@ export function observationRoots(r: Research): Map<string, Set<string>> {
     : new Set([o.text.normalize('NFC').toLowerCase().trim().replace(/\s+/gu, ' ')]));
   return roots;
 }
-export function observationUnavailable(r: Research, id: string): boolean {
+export function unavailableObservations(r: Research): Set<string> {
   // Schema validation requires ancestors to precede their descendants, avoiding recursion/cycles.
   const unavailable = new Set<string>();
-  for (const o of r.observations) if (withdrawn(r, o.id) || o.derived_from.some(parent => unavailable.has(parent) || (latestAnnotation(r, parent)?.id ?? null) !== (o.parent_annotations?.[parent] ?? null))) unavailable.add(o.id);
-  return unavailable.has(id) || !r.observations.some(o => o.id === id);
+  const withdrawnIds = new Set(r.events.filter(e => e.kind === 'withdraw-observation').map(e => e.observation_id));
+  const annotations = new Map(r.annotations.map(a => [a.observation_id, a.id]));
+  for (const o of r.observations) if (withdrawnIds.has(o.id) || o.derived_from.some(parent => unavailable.has(parent) || (annotations.get(parent) ?? null) !== (o.parent_annotations?.[parent] ?? null))) unavailable.add(o.id);
+  return unavailable;
+}
+export function observationUnavailable(r: Research, id: string): boolean {
+  return unavailableObservations(r).has(id) || !r.observations.some(o => o.id === id);
 }
 export function hypothesisState(profile: LanguageProfile, h: Hypothesis) {
   const r = profile.research;

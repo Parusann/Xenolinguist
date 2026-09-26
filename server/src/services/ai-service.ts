@@ -4,7 +4,8 @@ import { requireLocalModel, localOllamaUrl } from './ollama-runtime.js';
 import { readNdjson } from './ndjson.js';
 import { RuntimeError } from './runtime-error.js';
 
-export const TASK_BUDGETS: Record<AITask | 'chat', { context: number; output: number; chars: number; deadline: number }> = {
+export const TASK_BUDGETS: Record<AITask | 'chat' | 'researchProposal', { context: number; output: number; chars: number; deadline: number }> = {
+  researchProposal: { context: 16384, output: 1024, chars: 48000, deadline: 180000 },
   chat: { context: 8192, output: 2048, chars: 20000, deadline: 180000 },
   quickSuggest: { context: 4096, output: 512, chars: 10000, deadline: 90000 },
   patternAnalysis: { context: 8192, output: 2048, chars: 20000, deadline: 180000 },
@@ -14,7 +15,8 @@ export const TASK_BUDGETS: Record<AITask | 'chat', { context: number; output: nu
   numberAnalysis: { context: 4096, output: 1024, chars: 10000, deadline: 120000 },
   phoneticAnalysis: { context: 4096, output: 1024, chars: 10000, deadline: 120000 },
 };
-export interface AIOptions { system?: string; model?: string; task?: keyof typeof TASK_BUDGETS; signal?: AbortSignal; }
+export interface AIOptions { system?: string; model?: string; task?: keyof typeof TASK_BUDGETS; signal?: AbortSignal;
+  format?: Record<string, unknown>; expectedDigest?: string; }
 export class AIService {
   public readonly model = defaultModel();
   async chat(messages: AIMessage[], options: AIOptions = {}): Promise<string> {
@@ -24,10 +26,12 @@ export class AIService {
     const budget = TASK_BUDGETS[options.task ?? 'chat'];
     const signal = AbortSignal.any([AbortSignal.timeout(budget.deadline), ...(options.signal ? [options.signal] : [])]);
     const model = await requireLocalModel(options.model || this.model, signal);
+    if (options.expectedDigest && model.digest !== options.expectedDigest) throw new RuntimeError('MODEL_CHANGED', 'The selected model changed during this research task', 409);
     const input = options.system ? [{ role: 'system' as const, content: options.system }, ...messages] : messages;
     if (input.reduce((n, m) => n + m.content.length, 0) > budget.chars) throw new RuntimeError('CONTEXT_LIMIT', 'Context exceeds the task limit. Shorten the input or clear older chat messages.', 413);
     const response = await fetch(localOllamaUrl() + '/api/chat', { method: 'POST', redirect: 'error', headers: { 'Content-Type': 'application/json' }, signal,
       body: JSON.stringify({ model: model.name, messages: input, stream: true, think: false, keep_alive: '2m', truncate: false,
+        ...(options.format ? { format: options.format } : {}),
         options: { num_ctx: budget.context, num_predict: budget.output, temperature: 0.2, seed: 42 } }) });
     let done = false, chars = 0;
     await readNdjson(response, chunk => {
