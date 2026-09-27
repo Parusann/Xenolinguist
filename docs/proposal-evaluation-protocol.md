@@ -1,6 +1,10 @@
 # W21 proposal comparison protocol
 
-Status: design for the remaining W21 experiment. No comparison has run and no superiority claim follows from this document. Freeze the corpus, adapters, prompts, parsers and scoring tests in a source commit before generating reserved evaluation outputs. The existing one-case model integration checks are not this experiment.
+Status: implemented protocol, awaiting frozen real-model runs. No comparison result or superiority claim follows from this document. Freeze the corpus, adapters, prompts, parsers and scoring tests in a source commit before generating reserved evaluation outputs. The existing one-case model integration checks are not this experiment.
+
+The implementation is in `evaluation/src/proposals/`. Its fixed configuration uses development seed 137 and reserved seeds 431/829, two families (one missing noun sense or one missing past-tense prefix), and regular, conflicting-label and withheld-irregular conditions. This yields six development cases and 12 reserved cases, each paired across three methods: 18 and 36 tasks respectively, with one generation attempt per method/case at seed 42. Each case has one withheld compositional target. Clause order, other lexical anchors and the plural suffix are supplied; this experiment does not measure induction of those priors. Duplicate singular lexical examples do not establish independent support.
+
+Regular and irregular conditions have identical model-visible inputs, including profile identity. The irregular condition changes only the withheld surface form. It tests the limits of generalization without supplying an exception. Contradictory labels are visible in the conflicting condition. Sparse cases and grammar families beyond these two remain outside this first comparison. No statistical population-level or natural-language accuracy claim is supported by its size.
 
 ## Question and conditions
 
@@ -14,6 +18,10 @@ Use three conditions so schema compliance is not confused with linguistic improv
 
 Legacy prose is not automatically invalid because it lacks JSON. Report compliance with its own requested sections separately from executable proposal availability. A common, frozen conservative extractor may map an unambiguous explicit claim into the supported representation; retain the exact text span and extraction rule. Ambiguous/unmapped claims abstain. No second model, hand correction after seeing a target, or favorable selection among alternatives may convert prose into a prediction. Report extraction coverage alongside scores. Contract-only and W21 outputs share the strict proposal parser and deterministic validator.
 
+The v1 legacy extractor accepts only standalone `form = meaning (noun)` / `form means meaning (noun)` equations, or `The prefix/suffix "form" marks/indicates/encodes past/future tense.` assertions. Optional bullet markers and quotation marks are permitted. It retains exact line spans, rejects hedged/negated lines, and abstains when multiple distinct supported claims are present. It intentionally leaves most narrative prose unconverted. Its coverage is a practical interoperability limit, not proof that unconverted prose is linguistically wrong.
+
+Raw held-out composition is scored on a private preview even when citations are invalid, to keep semantic scoring distinct from deployment eligibility. `acceptanceEligible` separately requires strict valid references, compatible visible tests and actual use of the candidate in one test. No benchmark record applies a change to a persisted project. A passing candidate remains a user-reviewed proposal.
+
 ## Corpus and separation
 
 Create small synthetic languages covering lexical senses and typed affix/order hypotheses that the current engine can execute. Include regular contrasted evidence, sparse or conflicting evidence, and withheld irregular counterexamples. Ground-truth source annotations must say which observation actually supports or contradicts each candidate; an exact but irrelevant quotation is not positive semantic evidence.
@@ -26,6 +34,8 @@ Separate development and evaluation seeds before prompt/parser tuning. Each case
 - A candidate-independent relevance map and family metadata used only for scoring.
 
 Audit leakage using adversarial sentinel targets and hash the exact model-visible payload for every call. Freeze fixture construction and expected engine derivations before reserved model runs. Keep previously published W15/W18/W19 datasets and results unchanged; this is a separate proposal experiment with its own declared grammar prior.
+
+Semantic citation labels cover the fixture's canonical claim and its explicit rival (past/future or star/moon). The quote must include the complete marked word or target noun. Exact quotes of a pronoun from the same capture are irrelevant. Other candidate meanings are retained as unscored semantic references; report that coverage rather than assigning them guessed labels. Citation precision is therefore conditional on this finite gold map. Reference integrity remains scored for all typed citations.
 
 ## Metrics and denominators
 
@@ -49,6 +59,17 @@ Evaluate candidate changes on a private copy of the visible profile, never throu
 Pin the local model digest and runtime version. Record CPU/GPU/memory, cold/warm protocol, seed, temperature, context/output budgets and exact prompts. Predeclare paired condition order and repetitions; use the same order rule across every case. Report per-condition resource limits, because W21's tool loop uses more calls than a one-shot prompt. Include a one-shot contract-only comparator rather than suggesting that unequal budgets isolate tool effects perfectly.
 
 Retain source snapshots, configuration/corpus hashes, requests, responses, typed actions/results, output extraction traces, timings and every failure. Do not retain private chain-of-thought. A deterministic replay command must re-run extraction, citation/relevance scoring, candidate validation, held-out derivation and summary aggregation without another model call, detect tampered records and refuse to overwrite an existing run.
+
+The shipping `AIService` supplies every call with thinking disabled and normal task budgets. Legacy calls allow 2,048 output tokens; the one-shot control allows 1,024; the full pipeline allows up to six 1,024-token calls under its shared deadline. Provider token counts are unavailable through that interface and remain null. There is no unrecorded warmup: the first scheduled request may load the model, subsequent requests use the normal two-minute keep-alive, and method order rotates by case. CPU, memory, Ollama version and GPU identity when available are retained. Wall time is host-specific and includes those conditions.
+
+```sh
+npm run evaluate:proposals -- development test-results/proposals-development --max-tasks=3
+npm run evaluate:proposals -- development test-results/proposals-development --resume
+npm run evaluate:proposals -- evaluation test-results/proposals-evaluation
+npm run evaluate:proposals -- verify test-results/proposals-evaluation
+```
+
+The first command deliberately pauses after three recorded tasks to exercise restart bookkeeping. Resume requires the exact source revision, configuration and model identity, verifies existing records and never replaces a failed attempt. An atomic outcome orphaned before its manifest update is recovered and replayed instead of generated again. `verify ... --partial` checks a pending archive without calling it complete. Active process locks prevent concurrent writers; a stale lock is recoverable only after its process exits. Generation, external failures and timings are retained observations, not reproduced by deterministic replay.
 
 Before reserved runs, test fabricated IDs, exact-but-irrelevant quotes, contradictory citations, leaked target sentinels, unavailable evidence, unsupported rules, output truncation, cancellation, repeated tool loops and interrupted/resumed experiment bookkeeping. A completed case may be reused only when its input/configuration/model identities match exactly; a retry is an additional retained attempt, not a replacement for a failure.
 
