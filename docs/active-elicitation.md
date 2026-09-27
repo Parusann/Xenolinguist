@@ -42,4 +42,14 @@ Fifteen engine cases cover independent partition arithmetic, a stronger split th
 npm test -w server -- --run ../engine/src/__tests__/elicitation.test.ts
 ```
 
+The [retained selection examples](verification/w22-elicitation-example.json) contain complete inputs and prediction/score records for the equal-cost four-way numeral split, the changed-cost decision and the plural prefix/suffix distinction. They were recorded at `72ee9916e60d5eaa235e675addf380ee367555c1`. With locked dependencies installed at that revision, replay them using the [verification script](verification/w22-elicitation-replay.mts) supplied alongside the JSON:
+
+```sh
+npx tsx docs/verification/w22-elicitation-replay.mts
+```
+
+Replay recomputes all three plans and compares every retained outcome, score and selection. These are deterministic engineering examples with no model calls or recorded human session, not learning-curve results.
+
+[Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/36358519348) at `72ee991` passes 413 unit tests, seven tooling tests, lint, type checks, desktop build, 40 workbench checks and eight public checks per platform. Downloaded 12/60/336 regression/induction/number records replay on both platforms, with number summaries unchanged from W19. [Independent installed Windows acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/36358519418) verifies 3,774 files and passes its existing native/restart/research/eight-archive flows. The new engine is checked by source tests and example replay; it is not yet connected to the installed UI. [Verification metadata](verification/w22-query-selection.json) retains source and artifact identities. Three gated native unit skips and four reviewed high native-chain audit entries remain.
+
 The learning-curve comparison must still freeze a separate corpus and query interface, run active, seeded-random and fixed-curriculum policies under identical observation budgets, retain per-step costs/answers/predictions and replay the resulting traces. Query selection must never receive held-out targets or hidden language rules. Any negative result must remain in the report. W21's exposed reserved cases cannot serve as fresh blind evidence for changes informed by that evaluation. No learning-efficiency, model-quality or calibrated-uncertainty claim follows from the selector's unit tests.

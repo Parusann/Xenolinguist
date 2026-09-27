@@ -1,0 +1,874 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "72ee9916e60d5eaa235e675addf380ee367555c1",
+  "scope": "Deterministic engineering examples, not a learning-efficiency experiment or recorded human session.",
+  "records": [
+    {
+      "id": "four-way-number-split",
+      "family": "number",
+      "input": {
+        "candidates": [
+          {
+            "id": "a",
+            "grammar": {
+              "base": 5,
+              "kind": "multiplicative",
+              "additionOrder": "high-first",
+              "multiplicationOrder": "coefficient-first",
+              "additionJoiner": " ",
+              "multiplicationJoiner": " ",
+              "atoms": {
+                "0": "z",
+                "1": "a",
+                "2": "b",
+                "3": "c",
+                "4": "d",
+                "5": "k"
+              }
+            }
+          },
+          {
+            "id": "b",
+            "grammar": {
+              "base": 5,
+              "kind": "multiplicative",
+              "additionOrder": "high-first",
+              "multiplicationOrder": "base-first",
+              "additionJoiner": " ",
+              "multiplicationJoiner": " ",
+              "atoms": {
+                "0": "z",
+                "1": "a",
+                "2": "b",
+                "3": "c",
+                "4": "d",
+                "5": "k"
+              }
+            }
+          },
+          {
+            "id": "c",
+            "grammar": {
+              "base": 5,
+              "kind": "additive",
+              "additionOrder": "high-first",
+              "multiplicationOrder": "coefficient-first",
+              "additionJoiner": " ",
+              "multiplicationJoiner": " ",
+              "atoms": {
+                "0": "z",
+                "1": "a",
+                "2": "b",
+                "3": "c",
+                "4": "d",
+                "5": "k"
+              }
+            }
+          },
+          {
+            "id": "d",
+            "grammar": {
+              "base": 5,
+              "kind": "additive",
+              "additionOrder": "low-first",
+              "multiplicationOrder": "coefficient-first",
+              "additionJoiner": " ",
+              "multiplicationJoiner": " ",
+              "atoms": {
+                "0": "z",
+                "1": "a",
+                "2": "b",
+                "3": "c",
+                "4": "d",
+                "5": "k"
+              }
+            }
+          }
+        ],
+        "questions": {
+          "available": [
+            {
+              "kind": "number",
+              "value": 6,
+              "cost": 1
+            },
+            {
+              "kind": "number",
+              "value": 10,
+              "cost": 1
+            },
+            {
+              "kind": "number",
+              "value": 11,
+              "cost": 1
+            }
+          ]
+        }
+      },
+      "result": {
+        "version": "version-space-elicitation-1",
+        "status": "selected",
+        "weighting": "uniform-distinct-candidates",
+        "reason": "Maximum uniform version-space disagreement per declared cost; not calibrated information gain.",
+        "candidates": [
+          {
+            "id": "a",
+            "aliases": []
+          },
+          {
+            "id": "b",
+            "aliases": []
+          },
+          {
+            "id": "c",
+            "aliases": []
+          },
+          {
+            "id": "d",
+            "aliases": []
+          }
+        ],
+        "ranked": [
+          {
+            "query": {
+              "kind": "number",
+              "value": 11,
+              "cost": 1
+            },
+            "predictions": [
+              {
+                "candidateId": "a",
+                "status": "predicted",
+                "form": "b k a"
+              },
+              {
+                "candidateId": "b",
+                "status": "predicted",
+                "form": "k b a"
+              },
+              {
+                "candidateId": "c",
+                "status": "predicted",
+                "form": "k k a"
+              },
+              {
+                "candidateId": "d",
+                "status": "predicted",
+                "form": "a k k"
+              }
+            ],
+            "key": "number:0011",
+            "groups": [
+              {
+                "form": "a k k",
+                "candidateIds": [
+                  "d"
+                ]
+              },
+              {
+                "form": "b k a",
+                "candidateIds": [
+                  "a"
+                ]
+              },
+              {
+                "form": "k b a",
+                "candidateIds": [
+                  "b"
+                ]
+              },
+              {
+                "form": "k k a",
+                "candidateIds": [
+                  "c"
+                ]
+              }
+            ],
+            "unavailable": 0,
+            "eligible": true,
+            "disagreementBits": 2,
+            "expectedRemaining": 1,
+            "utility": 2,
+            "redundantWith": null
+          },
+          {
+            "query": {
+              "kind": "number",
+              "value": 10,
+              "cost": 1
+            },
+            "predictions": [
+              {
+                "candidateId": "a",
+                "status": "predicted",
+                "form": "b k"
+              },
+              {
+                "candidateId": "b",
+                "status": "predicted",
+                "form": "k b"
+              },
+              {
+                "candidateId": "c",
+                "status": "predicted",
+                "form": "k k"
+              },
+              {
+                "candidateId": "d",
+                "status": "predicted",
+                "form": "k k"
+              }
+            ],
+            "key": "number:0010",
+            "groups": [
+              {
+                "form": "b k",
+                "candidateIds": [
+                  "a"
+                ]
+              },
+              {
+                "form": "k b",
+                "candidateIds": [
+                  "b"
+                ]
+              },
+              {
+                "form": "k k",
+                "candidateIds": [
+                  "c",
+                  "d"
+                ]
+              }
+            ],
+            "unavailable": 0,
+            "eligible": true,
+            "disagreementBits": 1.5,
+            "expectedRemaining": 1.5,
+            "utility": 1.5,
+            "redundantWith": null
+          },
+          {
+            "query": {
+              "kind": "number",
+              "value": 6,
+              "cost": 1
+            },
+            "predictions": [
+              {
+                "candidateId": "a",
+                "status": "predicted",
+                "form": "k a"
+              },
+              {
+                "candidateId": "b",
+                "status": "predicted",
+                "form": "k a"
+              },
+              {
+                "candidateId": "c",
+                "status": "predicted",
+                "form": "k a"
+              },
+              {
+                "candidateId": "d",
+                "status": "predicted",
+                "form": "a k"
+              }
+            ],
+            "key": "number:0006",
+            "groups": [
+              {
+                "form": "a k",
+                "candidateIds": [
+                  "d"
+                ]
+              },
+              {
+                "form": "k a",
+                "candidateIds": [
+                  "a",
+                  "b",
+                  "c"
+                ]
+              }
+            ],
+            "unavailable": 0,
+            "eligible": true,
+            "disagreementBits": 0.8112781244591328,
+            "expectedRemaining": 2.5,
+            "utility": 0.8112781244591328,
+            "redundantWith": null
+          }
+        ],
+        "selected": {
+          "query": {
+            "kind": "number",
+            "value": 11,
+            "cost": 1
+          },
+          "predictions": [
+            {
+              "candidateId": "a",
+              "status": "predicted",
+              "form": "b k a"
+            },
+            {
+              "candidateId": "b",
+              "status": "predicted",
+              "form": "k b a"
+            },
+            {
+              "candidateId": "c",
+              "status": "predicted",
+              "form": "k k a"
+            },
+            {
+              "candidateId": "d",
+              "status": "predicted",
+              "form": "a k k"
+            }
+          ],
+          "key": "number:0011",
+          "groups": [
+            {
+              "form": "a k k",
+              "candidateIds": [
+                "d"
+              ]
+            },
+            {
+              "form": "b k a",
+              "candidateIds": [
+                "a"
+              ]
+            },
+            {
+              "form": "k b a",
+              "candidateIds": [
+                "b"
+              ]
+            },
+            {
+              "form": "k k a",
+              "candidateIds": [
+                "c"
+              ]
+            }
+          ],
+          "unavailable": 0,
+          "eligible": true,
+          "disagreementBits": 2,
+          "expectedRemaining": 1,
+          "utility": 2,
+          "redundantWith": null
+        }
+      }
+    },
+    {
+      "id": "cost-sensitive-number-split",
+      "family": "number",
+      "input": {
+        "candidates": [
+          {
+            "id": "a",
+            "grammar": {
+              "base": 5,
+              "kind": "multiplicative",
+              "additionOrder": "high-first",
+              "multiplicationOrder": "coefficient-first",
+              "additionJoiner": " ",
+              "multiplicationJoiner": " ",
+              "atoms": {
+                "0": "z",
+                "1": "a",
+                "2": "b",
+                "3": "c",
+                "4": "d",
+                "5": "k"
+              }
+            }
+          },
+          {
+            "id": "b",
+            "grammar": {
+              "base": 5,
+              "kind": "multiplicative",
+              "additionOrder": "high-first",
+              "multiplicationOrder": "base-first",
+              "additionJoiner": " ",
+              "multiplicationJoiner": " ",
+              "atoms": {
+                "0": "z",
+                "1": "a",
+                "2": "b",
+                "3": "c",
+                "4": "d",
+                "5": "k"
+              }
+            }
+          },
+          {
+            "id": "c",
+            "grammar": {
+              "base": 5,
+              "kind": "additive",
+              "additionOrder": "high-first",
+              "multiplicationOrder": "coefficient-first",
+              "additionJoiner": " ",
+              "multiplicationJoiner": " ",
+              "atoms": {
+                "0": "z",
+                "1": "a",
+                "2": "b",
+                "3": "c",
+                "4": "d",
+                "5": "k"
+              }
+            }
+          },
+          {
+            "id": "d",
+            "grammar": {
+              "base": 5,
+              "kind": "additive",
+              "additionOrder": "low-first",
+              "multiplicationOrder": "coefficient-first",
+              "additionJoiner": " ",
+              "multiplicationJoiner": " ",
+              "atoms": {
+                "0": "z",
+                "1": "a",
+                "2": "b",
+                "3": "c",
+                "4": "d",
+                "5": "k"
+              }
+            }
+          }
+        ],
+        "questions": {
+          "available": [
+            {
+              "kind": "number",
+              "value": 6,
+              "cost": 1
+            },
+            {
+              "kind": "number",
+              "value": 11,
+              "cost": 3
+            }
+          ]
+        }
+      },
+      "result": {
+        "version": "version-space-elicitation-1",
+        "status": "selected",
+        "weighting": "uniform-distinct-candidates",
+        "reason": "Maximum uniform version-space disagreement per declared cost; not calibrated information gain.",
+        "candidates": [
+          {
+            "id": "a",
+            "aliases": []
+          },
+          {
+            "id": "b",
+            "aliases": []
+          },
+          {
+            "id": "c",
+            "aliases": []
+          },
+          {
+            "id": "d",
+            "aliases": []
+          }
+        ],
+        "ranked": [
+          {
+            "query": {
+              "kind": "number",
+              "value": 6,
+              "cost": 1
+            },
+            "predictions": [
+              {
+                "candidateId": "a",
+                "status": "predicted",
+                "form": "k a"
+              },
+              {
+                "candidateId": "b",
+                "status": "predicted",
+                "form": "k a"
+              },
+              {
+                "candidateId": "c",
+                "status": "predicted",
+                "form": "k a"
+              },
+              {
+                "candidateId": "d",
+                "status": "predicted",
+                "form": "a k"
+              }
+            ],
+            "key": "number:0006",
+            "groups": [
+              {
+                "form": "a k",
+                "candidateIds": [
+                  "d"
+                ]
+              },
+              {
+                "form": "k a",
+                "candidateIds": [
+                  "a",
+                  "b",
+                  "c"
+                ]
+              }
+            ],
+            "unavailable": 0,
+            "eligible": true,
+            "disagreementBits": 0.8112781244591328,
+            "expectedRemaining": 2.5,
+            "utility": 0.8112781244591328,
+            "redundantWith": null
+          },
+          {
+            "query": {
+              "kind": "number",
+              "value": 11,
+              "cost": 3
+            },
+            "predictions": [
+              {
+                "candidateId": "a",
+                "status": "predicted",
+                "form": "b k a"
+              },
+              {
+                "candidateId": "b",
+                "status": "predicted",
+                "form": "k b a"
+              },
+              {
+                "candidateId": "c",
+                "status": "predicted",
+                "form": "k k a"
+              },
+              {
+                "candidateId": "d",
+                "status": "predicted",
+                "form": "a k k"
+              }
+            ],
+            "key": "number:0011",
+            "groups": [
+              {
+                "form": "a k k",
+                "candidateIds": [
+                  "d"
+                ]
+              },
+              {
+                "form": "b k a",
+                "candidateIds": [
+                  "a"
+                ]
+              },
+              {
+                "form": "k b a",
+                "candidateIds": [
+                  "b"
+                ]
+              },
+              {
+                "form": "k k a",
+                "candidateIds": [
+                  "c"
+                ]
+              }
+            ],
+            "unavailable": 0,
+            "eligible": true,
+            "disagreementBits": 2,
+            "expectedRemaining": 1,
+            "utility": 0.6666666666666666,
+            "redundantWith": null
+          }
+        ],
+        "selected": {
+          "query": {
+            "kind": "number",
+            "value": 6,
+            "cost": 1
+          },
+          "predictions": [
+            {
+              "candidateId": "a",
+              "status": "predicted",
+              "form": "k a"
+            },
+            {
+              "candidateId": "b",
+              "status": "predicted",
+              "form": "k a"
+            },
+            {
+              "candidateId": "c",
+              "status": "predicted",
+              "form": "k a"
+            },
+            {
+              "candidateId": "d",
+              "status": "predicted",
+              "form": "a k"
+            }
+          ],
+          "key": "number:0006",
+          "groups": [
+            {
+              "form": "a k",
+              "candidateIds": [
+                "d"
+              ]
+            },
+            {
+              "form": "k a",
+              "candidateIds": [
+                "a",
+                "b",
+                "c"
+              ]
+            }
+          ],
+          "unavailable": 0,
+          "eligible": true,
+          "disagreementBits": 0.8112781244591328,
+          "expectedRemaining": 2.5,
+          "utility": 0.8112781244591328,
+          "redundantWith": null
+        }
+      }
+    },
+    {
+      "id": "grounded-plural-distinction",
+      "family": "grammar",
+      "input": {
+        "dictionary": [
+          {
+            "id": "star",
+            "alien_word": "nesh",
+            "english_meaning": "star",
+            "part_of_speech": "noun",
+            "confidence": null,
+            "context": "",
+            "examples": [],
+            "notes": "",
+            "created_at": "2026-09-27T00:00:00.000Z"
+          }
+        ],
+        "candidates": [
+          {
+            "id": "prefix",
+            "rules": [
+              {
+                "kind": "plural-affix",
+                "position": "prefix",
+                "affix": "en-"
+              }
+            ]
+          },
+          {
+            "id": "suffix",
+            "rules": [
+              {
+                "kind": "plural-affix",
+                "position": "suffix",
+                "affix": "-en"
+              }
+            ]
+          }
+        ],
+        "questions": {
+          "anchors": [
+            {
+              "kind": "nominal",
+              "nominal": {
+                "head": {
+                  "entryId": "star",
+                  "sense": null,
+                  "lemma": "star",
+                  "pos": "noun"
+                },
+                "plural": false,
+                "adjectives": []
+              }
+            }
+          ],
+          "observed": [
+            {
+              "kind": "nominal",
+              "nominal": {
+                "head": {
+                  "entryId": "star",
+                  "sense": null,
+                  "lemma": "star",
+                  "pos": "noun"
+                },
+                "plural": false,
+                "adjectives": []
+              }
+            }
+          ],
+          "available": [
+            {
+              "kind": "meaning",
+              "meaning": {
+                "kind": "nominal",
+                "nominal": {
+                  "head": {
+                    "entryId": "star",
+                    "sense": null,
+                    "lemma": "star",
+                    "pos": "noun"
+                  },
+                  "plural": true,
+                  "adjectives": []
+                }
+              },
+              "cost": 1
+            }
+          ]
+        }
+      },
+      "result": {
+        "version": "version-space-elicitation-1",
+        "status": "selected",
+        "weighting": "uniform-distinct-candidates",
+        "reason": "Maximum uniform version-space disagreement per declared cost; not calibrated information gain.",
+        "candidates": [
+          {
+            "id": "prefix",
+            "aliases": []
+          },
+          {
+            "id": "suffix",
+            "aliases": []
+          }
+        ],
+        "ranked": [
+          {
+            "query": {
+              "kind": "meaning",
+              "meaning": {
+                "kind": "nominal",
+                "nominal": {
+                  "head": {
+                    "entryId": "star",
+                    "sense": null,
+                    "lemma": "star",
+                    "pos": "noun"
+                  },
+                  "plural": true,
+                  "adjectives": []
+                }
+              },
+              "cost": 1
+            },
+            "predictions": [
+              {
+                "candidateId": "prefix",
+                "status": "predicted",
+                "form": "en-nesh"
+              },
+              {
+                "candidateId": "suffix",
+                "status": "predicted",
+                "form": "nesh-en"
+              }
+            ],
+            "key": "meaning:{\"kind\":\"nominal\",\"nominal\":{\"adjectives\":[],\"head\":{\"entryId\":\"star\",\"lemma\":\"star\",\"pos\":\"noun\",\"sense\":null},\"plural\":true}}",
+            "groups": [
+              {
+                "form": "en-nesh",
+                "candidateIds": [
+                  "prefix"
+                ]
+              },
+              {
+                "form": "nesh-en",
+                "candidateIds": [
+                  "suffix"
+                ]
+              }
+            ],
+            "unavailable": 0,
+            "eligible": true,
+            "disagreementBits": 1,
+            "expectedRemaining": 1,
+            "utility": 1,
+            "redundantWith": null
+          }
+        ],
+        "selected": {
+          "query": {
+            "kind": "meaning",
+            "meaning": {
+              "kind": "nominal",
+              "nominal": {
+                "head": {
+                  "entryId": "star",
+                  "sense": null,
+                  "lemma": "star",
+                  "pos": "noun"
+                },
+                "plural": true,
+                "adjectives": []
+              }
+            },
+            "cost": 1
+          },
+          "predictions": [
+            {
+              "candidateId": "prefix",
+              "status": "predicted",
+              "form": "en-nesh"
+            },
+            {
+              "candidateId": "suffix",
+              "status": "predicted",
+              "form": "nesh-en"
+            }
+          ],
+          "key": "meaning:{\"kind\":\"nominal\",\"nominal\":{\"adjectives\":[],\"head\":{\"entryId\":\"star\",\"lemma\":\"star\",\"pos\":\"noun\",\"sense\":null},\"plural\":true}}",
+          "groups": [
+            {
+              "form": "en-nesh",
+              "candidateIds": [
+                "prefix"
+              ]
+            },
+            {
+              "form": "nesh-en",
+              "candidateIds": [
+                "suffix"
+              ]
+            }
+          ],
+          "unavailable": 0,
+          "eligible": true,
+          "disagreementBits": 1,
+          "expectedRemaining": 1,
+          "utility": 1,
+          "redundantWith": null
+        }
+      }
+    }
+  ]
+}
