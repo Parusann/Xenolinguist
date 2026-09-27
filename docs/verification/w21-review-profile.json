@@ -1,0 +1,263 @@
+{
+  "research": {
+    "observations": [
+      {
+        "id": "capture",
+        "created_at": "2026-09-26T00:00:00.000Z",
+        "text": "ka pa-mok",
+        "content_sha256": "e276e3e00612643ef6c48a2e5f3560c69aee45be944afa32745476bfb3d97da1",
+        "source": "User supplied example",
+        "origin": "capture",
+        "source_id": "past-sample",
+        "derived_from": [],
+        "audio": null
+      }
+    ],
+    "annotations": [],
+    "hypotheses": [
+      {
+        "id": "87796072-5946-4732-a878-c8f49d7a364b",
+        "created_at": "2026-09-26T19:09:01.239Z",
+        "label": "Past tense candidate",
+        "provenance": "model",
+        "content": {
+          "kind": "grammar",
+          "rule_id": "tense",
+          "rule": {
+            "kind": "tense-affix",
+            "position": "prefix",
+            "affix": "pa-",
+            "tense": "past"
+          }
+        },
+        "manual_belief": null,
+        "score_definition": "evidence-counts-1",
+        "supersedes": null
+      }
+    ],
+    "links": [
+      {
+        "id": "98206e7a-02ce-43ff-b730-4de9a9047d20",
+        "created_at": "2026-09-26T19:09:01.239Z",
+        "hypothesis_id": "87796072-5946-4732-a878-c8f49d7a364b",
+        "observation_id": "capture",
+        "annotation_id": null,
+        "relation": "supports",
+        "span": {
+          "start": 0,
+          "end": 9
+        },
+        "note": "Model-proposed evidence relation; reviewed by the user. Proposal 1e43f935-8a21-4f70-b92f-4e272206b5b3."
+      }
+    ],
+    "events": [
+      {
+        "id": "011f1870-aeab-4e9e-bb38-46b801925316",
+        "created_at": "2026-09-26T19:09:01.239Z",
+        "kind": "hypothesis-status",
+        "hypothesis_id": "87796072-5946-4732-a878-c8f49d7a364b",
+        "status": "accepted",
+        "reason": "Reviewed the capture and the executed past-tense check."
+      }
+    ],
+    "tests": [],
+    "analyses": [],
+    "metrics": []
+  },
+  "name": "Proposal review acceptance",
+  "description": "",
+  "phonetic_notes": "",
+  "is_sandbox": false,
+  "dictionary": [
+    {
+      "id": "speaker",
+      "alien_word": "ka",
+      "english_meaning": "I",
+      "part_of_speech": "pronoun",
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "context": "",
+      "examples": [],
+      "notes": "",
+      "created_at": "2026-09-26T00:00:00.000Z"
+    },
+    {
+      "verb_frame": "intransitive",
+      "id": "speak",
+      "alien_word": "mok",
+      "english_meaning": "to speak",
+      "part_of_speech": "verb",
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "context": "",
+      "examples": [],
+      "notes": "",
+      "created_at": "2026-09-26T00:00:00.000Z"
+    },
+    {
+      "id": "star",
+      "alien_word": "nesh",
+      "english_meaning": "star",
+      "part_of_speech": "noun",
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "context": "",
+      "examples": [],
+      "notes": "",
+      "created_at": "2026-09-26T00:00:00.000Z"
+    }
+  ],
+  "grammar_rules": [
+    {
+      "id": "order",
+      "rule": "Subject precedes verb",
+      "executable": {
+        "kind": "clause-order",
+        "order": "SVO",
+        "arguments": 1
+      },
+      "evidence": [
+        "capture"
+      ],
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "created_at": "2026-09-26T00:00:00.000Z"
+    },
+    {
+      "id": "tense",
+      "rule": "Past tense candidate",
+      "executable": {
+        "kind": "tense-affix",
+        "position": "prefix",
+        "affix": "pa-",
+        "tense": "past"
+      },
+      "evidence": [],
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "created_at": "2026-09-26T00:00:00.000Z"
+    }
+  ],
+  "number_system": {
+    "base": null,
+    "mappings": {},
+    "operators": {}
+  },
+  "samples": [
+    {
+      "id": "past-sample",
+      "alien_text": "ka pa-mok",
+      "english_translation": "I did speak",
+      "source": "Synthetic supplied target",
+      "phonetic_notes": "",
+      "decoded": false,
+      "audio_id": null,
+      "ipa": null,
+      "created_at": "2026-09-26T00:00:00.000Z"
+    },
+    {
+      "id": "noun-sample",
+      "alien_text": "nesh",
+      "english_translation": "the star",
+      "source": "Synthetic supplied target",
+      "phonetic_notes": "",
+      "decoded": false,
+      "audio_id": null,
+      "ipa": null,
+      "created_at": "2026-09-26T00:00:00.000Z"
+    }
+  ],
+  "audio_clips": [],
+  "proposal_reviews": [
+    {
+      "id": "d123aafa-1a33-41ff-b0d3-8cc6aff12fda",
+      "created_at": "2026-09-26T19:09:00.681Z",
+      "request": {
+        "profile_id": "409d21ae-9160-45f9-b05e-378e84d56893",
+        "expectedRevision": 0,
+        "query": "Test whether pa marks future or past.",
+        "model": "fixture-model",
+        "validation_sample_ids": [
+          "past-sample"
+        ]
+      },
+      "source_json": "{\"research\":{\"observations\":[{\"id\":\"capture\",\"created_at\":\"2026-09-26T00:00:00.000Z\",\"text\":\"ka pa-mok\",\"content_sha256\":\"e276e3e00612643ef6c48a2e5f3560c69aee45be944afa32745476bfb3d97da1\",\"source\":\"User supplied example\",\"origin\":\"capture\",\"source_id\":\"past-sample\",\"derived_from\":[],\"audio\":null}],\"annotations\":[],\"hypotheses\":[],\"links\":[],\"events\":[],\"tests\":[],\"analyses\":[],\"metrics\":[]},\"name\":\"Proposal review acceptance\",\"description\":\"\",\"phonetic_notes\":\"\",\"is_sandbox\":false,\"dictionary\":[{\"id\":\"speaker\",\"alien_word\":\"ka\",\"english_meaning\":\"I\",\"part_of_speech\":\"pronoun\",\"confidence\":null,\"user_asserted_confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"2026-09-26T00:00:00.000Z\"},{\"verb_frame\":\"intransitive\",\"id\":\"speak\",\"alien_word\":\"mok\",\"english_meaning\":\"to speak\",\"part_of_speech\":\"verb\",\"confidence\":null,\"user_asserted_confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"2026-09-26T00:00:00.000Z\"},{\"id\":\"star\",\"alien_word\":\"nesh\",\"english_meaning\":\"star\",\"part_of_speech\":\"noun\",\"confidence\":null,\"user_asserted_confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"2026-09-26T00:00:00.000Z\"}],\"grammar_rules\":[{\"id\":\"order\",\"rule\":\"Subject precedes verb\",\"executable\":{\"kind\":\"clause-order\",\"order\":\"SVO\",\"arguments\":1},\"evidence\":[\"capture\"],\"confidence\":null,\"user_asserted_confidence\":null,\"created_at\":\"2026-09-26T00:00:00.000Z\"},{\"id\":\"tense\",\"rule\":\"pa marks past\",\"executable\":{\"kind\":\"tense-affix\",\"position\":\"prefix\",\"affix\":\"pa-\",\"tense\":\"past\"},\"evidence\":[\"capture\"],\"confidence\":null,\"user_asserted_confidence\":null,\"created_at\":\"2026-09-26T00:00:00.000Z\"}],\"number_system\":{\"base\":null,\"mappings\":{},\"operators\":{}},\"samples\":[{\"id\":\"past-sample\",\"alien_text\":\"ka pa-mok\",\"english_translation\":\"I did speak\",\"source\":\"Synthetic supplied target\",\"phonetic_notes\":\"\",\"decoded\":false,\"audio_id\":null,\"ipa\":null,\"created_at\":\"2026-09-26T00:00:00.000Z\"},{\"id\":\"noun-sample\",\"alien_text\":\"nesh\",\"english_translation\":\"the star\",\"source\":\"Synthetic supplied target\",\"phonetic_notes\":\"\",\"decoded\":false,\"audio_id\":null,\"ipa\":null,\"created_at\":\"2026-09-26T00:00:00.000Z\"}],\"audio_clips\":[],\"id\":\"409d21ae-9160-45f9-b05e-378e84d56893\",\"created_at\":\"2026-09-26T19:08:59.753Z\",\"updated_at\":\"2026-09-26T19:08:59.753Z\",\"schema_version\":3,\"revision\":0,\"recent_mutations\":[]}",
+      "source_sha256": "455d79fafb11bdddfdb9d2b2c2bbf7efaeccc53f4ecb03293cb1700b51e2625f",
+      "status": "completed",
+      "run_json": "{\"version\":\"research-proposal-run-1\",\"state\":\"proposed\",\"proposal\":{\"scope\":{\"profile_id\":\"409d21ae-9160-45f9-b05e-378e84d56893\",\"revision\":0},\"label\":\"Future tense candidate\",\"explanation\":\"Synthetic model output for browser acceptance.\",\"alternatives\":[\"The marker could have another function.\"],\"citations\":[{\"observation_id\":\"capture\",\"annotation_id\":null,\"start\":0,\"end\":9,\"quote\":\"ka pa-mok\",\"relation\":\"supports\"}],\"content\":{\"kind\":\"grammar\",\"rule_id\":\"tense\",\"rule\":{\"kind\":\"tense-affix\",\"position\":\"prefix\",\"affix\":\"pa-\",\"tense\":\"future\"}}},\"validation\":{\"definition\":\"proposal-checks-1\",\"status\":\"falsified\",\"errors\":[],\"checks\":[{\"sample_id\":\"past-sample\",\"source\":\"ka pa-mok\",\"expected\":\"I did speak\",\"before\":{\"outcome\":\"matches\",\"rendered\":\"I did speak\"},\"after\":{\"outcome\":\"differs\",\"rendered\":\"I will speak\"},\"regression\":true}],\"references\":{\"valid\":1,\"total\":1},\"input_sha256\":\"6c27a55c9b74cd52c5e4f54882b664d9190d0dcd54c271a7e2b6b99492d38006\",\"changes\":[\"Replace rule tense: {\\\"kind\\\":\\\"tense-affix\\\",\\\"position\\\":\\\"prefix\\\",\\\"affix\\\":\\\"pa-\\\",\\\"tense\\\":\\\"future\\\"}\"],\"limitations\":[\"Reference integrity checks locate quoted text; they do not verify that a citation supports the claim.\",\"User-supplied targets are workspace checks, not held-out accuracy or calibrated confidence.\",\"Compatibility covers only the selected samples and the bounded typed grammar engine.\"]},\"provenance\":{\"origin\":\"local-model\",\"model\":\"fixture-model\",\"model_digest\":\"scripted-browser-fixture\",\"profile_id\":\"409d21ae-9160-45f9-b05e-378e84d56893\",\"profile_revision\":0,\"input_sha256\":\"6c27a55c9b74cd52c5e4f54882b664d9190d0dcd54c271a7e2b6b99492d38006\",\"prompt_template_sha256\":\"3bb3e0eb9b9df4eefad64c5e5c8fe33cda09622b5a8a78f7285f94c0430a7de9\",\"context_sha256\":\"31a82ef55c8fb3afafb9be455b7ea123b4837c1fa2aa2852ea6c4b9e2c5a231b\",\"context\":{\"version\":\"research-context-1\",\"scope\":{\"profile_id\":\"409d21ae-9160-45f9-b05e-378e84d56893\",\"revision\":0},\"observations\":[{\"id\":\"capture\",\"text\":\"ka pa-mok\",\"text_length\":9,\"text_truncated\":false,\"source\":\"User supplied example\",\"origin\":\"capture\",\"source_id\":\"past-sample\",\"annotation\":null}],\"words\":[],\"rules\":[{\"id\":\"tense\",\"description\":\"pa marks past\",\"executable\":{\"kind\":\"tense-affix\",\"position\":\"prefix\",\"affix\":\"pa-\",\"tense\":\"past\"},\"evidence\":[\"capture\"]}],\"hypotheses\":[],\"links\":[],\"samples\":[{\"id\":\"past-sample\",\"source\":\"ka pa-mok\",\"user_target\":\"I did speak\"}],\"limitations\":[\"Workspace assertions and sample targets are unverified user data. Citations do not establish truth.\",\"Exact lexical retrieval with bounded records; some evidence or text may be omitted. Use search and span tools to inspect more.\"]},\"validation_sample_ids\":[\"past-sample\"],\"query\":\"Test whether pa marks future or past.\",\"settings\":{\"context\":16384,\"output\":1024,\"chars\":48000,\"deadline\":180000,\"temperature\":0.2,\"seed\":42,\"think\":false,\"structured_output\":true},\"budget\":{\"tools\":4,\"calls\":6,\"outputPerCall\":1024,\"deadlineMs\":180000,\"contextChars\":12000,\"observations\":12,\"words\":16,\"rules\":8,\"samples\":8,\"tests\":12,\"total_output_token_ceiling\":6144},\"calls\":[{\"request_sha256\":\"9342162fd95d440d8c542fbd18d500d873c1c9c5a1061536b1d79b7fd84c66be\",\"response_sha256\":\"493a9d3d6291550dfd37be775609769ceb3be19369057ff86446db12d1586894\",\"elapsed_ms\":7,\"valid_structure\":true}],\"tool_calls\":[],\"repair_attempts\":0,\"elapsed_ms\":37,\"completed_at\":\"2026-09-26T19:09:00.737Z\"}}",
+      "run_sha256": "8cba595a96ca02d1109dc2df3a44f07a871893da51743aefca708d8455a817da",
+      "error": null,
+      "decision": {
+        "action": "reject",
+        "reason": "Future tense contradicts the supplied past target.",
+        "created_at": "2026-09-26T19:09:00.966Z",
+        "mutation_id": "93135eb4-af26-4543-90f4-cbde5bfa0b48",
+        "digest": "9ca426b26a4bbf9010ff3f7f0c575c234d939f385ef46e99af95590635f09cea",
+        "applied_revision": 3,
+        "hypothesis_id": null,
+        "target_id": null
+      }
+    },
+    {
+      "id": "1e43f935-8a21-4f70-b92f-4e272206b5b3",
+      "created_at": "2026-09-26T19:09:01.062Z",
+      "request": {
+        "profile_id": "409d21ae-9160-45f9-b05e-378e84d56893",
+        "expectedRevision": 3,
+        "query": "Test whether pa marks future or past.",
+        "model": "fixture-model",
+        "validation_sample_ids": [
+          "past-sample"
+        ]
+      },
+      "source_json": "{\"research\":{\"observations\":[{\"id\":\"capture\",\"created_at\":\"2026-09-26T00:00:00.000Z\",\"text\":\"ka pa-mok\",\"content_sha256\":\"e276e3e00612643ef6c48a2e5f3560c69aee45be944afa32745476bfb3d97da1\",\"source\":\"User supplied example\",\"origin\":\"capture\",\"source_id\":\"past-sample\",\"derived_from\":[],\"audio\":null}],\"annotations\":[],\"hypotheses\":[],\"links\":[],\"events\":[],\"tests\":[],\"analyses\":[],\"metrics\":[]},\"name\":\"Proposal review acceptance\",\"description\":\"\",\"phonetic_notes\":\"\",\"is_sandbox\":false,\"dictionary\":[{\"id\":\"speaker\",\"alien_word\":\"ka\",\"english_meaning\":\"I\",\"part_of_speech\":\"pronoun\",\"confidence\":null,\"user_asserted_confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"2026-09-26T00:00:00.000Z\"},{\"verb_frame\":\"intransitive\",\"id\":\"speak\",\"alien_word\":\"mok\",\"english_meaning\":\"to speak\",\"part_of_speech\":\"verb\",\"confidence\":null,\"user_asserted_confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"2026-09-26T00:00:00.000Z\"},{\"id\":\"star\",\"alien_word\":\"nesh\",\"english_meaning\":\"star\",\"part_of_speech\":\"noun\",\"confidence\":null,\"user_asserted_confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"2026-09-26T00:00:00.000Z\"}],\"grammar_rules\":[{\"id\":\"order\",\"rule\":\"Subject precedes verb\",\"executable\":{\"kind\":\"clause-order\",\"order\":\"SVO\",\"arguments\":1},\"evidence\":[\"capture\"],\"confidence\":null,\"user_asserted_confidence\":null,\"created_at\":\"2026-09-26T00:00:00.000Z\"},{\"id\":\"tense\",\"rule\":\"pa marks past\",\"executable\":{\"kind\":\"tense-affix\",\"position\":\"prefix\",\"affix\":\"pa-\",\"tense\":\"past\"},\"evidence\":[\"capture\"],\"confidence\":null,\"user_asserted_confidence\":null,\"created_at\":\"2026-09-26T00:00:00.000Z\"}],\"number_system\":{\"base\":null,\"mappings\":{},\"operators\":{}},\"samples\":[{\"id\":\"past-sample\",\"alien_text\":\"ka pa-mok\",\"english_translation\":\"I did speak\",\"source\":\"Synthetic supplied target\",\"phonetic_notes\":\"\",\"decoded\":false,\"audio_id\":null,\"ipa\":null,\"created_at\":\"2026-09-26T00:00:00.000Z\"},{\"id\":\"noun-sample\",\"alien_text\":\"nesh\",\"english_translation\":\"the star\",\"source\":\"Synthetic supplied target\",\"phonetic_notes\":\"\",\"decoded\":false,\"audio_id\":null,\"ipa\":null,\"created_at\":\"2026-09-26T00:00:00.000Z\"}],\"audio_clips\":[],\"id\":\"409d21ae-9160-45f9-b05e-378e84d56893\",\"created_at\":\"2026-09-26T19:08:59.753Z\",\"updated_at\":\"2026-09-26T19:09:00.966Z\",\"schema_version\":3,\"revision\":3,\"recent_mutations\":[{\"id\":\"93135eb4-af26-4543-90f4-cbde5bfa0b48\",\"digest\":\"9ca426b26a4bbf9010ff3f7f0c575c234d939f385ef46e99af95590635f09cea\",\"revision\":3}]}",
+      "source_sha256": "fadb8bd26afa44d1d479d9073a427c5050238021feccf08df54cf5c54dc0aa34",
+      "status": "completed",
+      "run_json": "{\"version\":\"research-proposal-run-1\",\"state\":\"proposed\",\"proposal\":{\"scope\":{\"profile_id\":\"409d21ae-9160-45f9-b05e-378e84d56893\",\"revision\":3},\"label\":\"Past tense candidate\",\"explanation\":\"Synthetic model output for browser acceptance.\",\"alternatives\":[\"The marker could have another function.\"],\"citations\":[{\"observation_id\":\"capture\",\"annotation_id\":null,\"start\":0,\"end\":9,\"quote\":\"ka pa-mok\",\"relation\":\"supports\"}],\"content\":{\"kind\":\"grammar\",\"rule_id\":\"tense\",\"rule\":{\"kind\":\"tense-affix\",\"position\":\"prefix\",\"affix\":\"pa-\",\"tense\":\"past\"}}},\"validation\":{\"definition\":\"proposal-checks-1\",\"status\":\"compatible\",\"errors\":[],\"checks\":[{\"sample_id\":\"past-sample\",\"source\":\"ka pa-mok\",\"expected\":\"I did speak\",\"before\":{\"outcome\":\"matches\",\"rendered\":\"I did speak\"},\"after\":{\"outcome\":\"matches\",\"rendered\":\"I did speak\"},\"regression\":false}],\"references\":{\"valid\":1,\"total\":1},\"input_sha256\":\"491b67952bb54fbbe34ed0184a84699af8dd82f18c9413898a853df5eb33d89f\",\"changes\":[\"Replace rule tense: {\\\"kind\\\":\\\"tense-affix\\\",\\\"position\\\":\\\"prefix\\\",\\\"affix\\\":\\\"pa-\\\",\\\"tense\\\":\\\"past\\\"}\"],\"limitations\":[\"Reference integrity checks locate quoted text; they do not verify that a citation supports the claim.\",\"User-supplied targets are workspace checks, not held-out accuracy or calibrated confidence.\",\"Compatibility covers only the selected samples and the bounded typed grammar engine.\"]},\"provenance\":{\"origin\":\"local-model\",\"model\":\"fixture-model\",\"model_digest\":\"scripted-browser-fixture\",\"profile_id\":\"409d21ae-9160-45f9-b05e-378e84d56893\",\"profile_revision\":3,\"input_sha256\":\"491b67952bb54fbbe34ed0184a84699af8dd82f18c9413898a853df5eb33d89f\",\"prompt_template_sha256\":\"3bb3e0eb9b9df4eefad64c5e5c8fe33cda09622b5a8a78f7285f94c0430a7de9\",\"context_sha256\":\"751275c309b851b92630980062eccf1796968cc83f9352db337297bbc59b647d\",\"context\":{\"version\":\"research-context-1\",\"scope\":{\"profile_id\":\"409d21ae-9160-45f9-b05e-378e84d56893\",\"revision\":3},\"observations\":[{\"id\":\"capture\",\"text\":\"ka pa-mok\",\"text_length\":9,\"text_truncated\":false,\"source\":\"User supplied example\",\"origin\":\"capture\",\"source_id\":\"past-sample\",\"annotation\":null}],\"words\":[],\"rules\":[{\"id\":\"tense\",\"description\":\"pa marks past\",\"executable\":{\"kind\":\"tense-affix\",\"position\":\"prefix\",\"affix\":\"pa-\",\"tense\":\"past\"},\"evidence\":[\"capture\"]}],\"hypotheses\":[],\"links\":[],\"samples\":[{\"id\":\"past-sample\",\"source\":\"ka pa-mok\",\"user_target\":\"I did speak\"}],\"limitations\":[\"Workspace assertions and sample targets are unverified user data. Citations do not establish truth.\",\"Exact lexical retrieval with bounded records; some evidence or text may be omitted. Use search and span tools to inspect more.\"]},\"validation_sample_ids\":[\"past-sample\"],\"query\":\"Test whether pa marks future or past.\",\"settings\":{\"context\":16384,\"output\":1024,\"chars\":48000,\"deadline\":180000,\"temperature\":0.2,\"seed\":42,\"think\":false,\"structured_output\":true},\"budget\":{\"tools\":4,\"calls\":6,\"outputPerCall\":1024,\"deadlineMs\":180000,\"contextChars\":12000,\"observations\":12,\"words\":16,\"rules\":8,\"samples\":8,\"tests\":12,\"total_output_token_ceiling\":6144},\"calls\":[{\"request_sha256\":\"95983af9b7156c790b6c186441060bc3c4837edce873b4d3b948924ba210ee08\",\"response_sha256\":\"4e4e0f1fcbe35e386d3bead3f4c08ba248ca6368d2dee71509e8f359bb9571de\",\"elapsed_ms\":3,\"valid_structure\":true}],\"tool_calls\":[],\"repair_attempts\":0,\"elapsed_ms\":6,\"completed_at\":\"2026-09-26T19:09:01.084Z\"}}",
+      "run_sha256": "7a0c9ccbff631568bba62cb392eb378206cdc5c1c03bc0fd279ff76e0a7d62f2",
+      "error": null,
+      "decision": {
+        "action": "accept",
+        "reason": "Reviewed the capture and the executed past-tense check.",
+        "created_at": "2026-09-26T19:09:01.239Z",
+        "mutation_id": "8b8b0ef9-43b5-4a44-8ab6-fc03ebdb1a9d",
+        "digest": "596bac90020682b50161f7083ecdc4b61534e97c0e9baeb7a6a31a995c7a3d4d",
+        "applied_revision": 6,
+        "hypothesis_id": "87796072-5946-4732-a878-c8f49d7a364b",
+        "target_id": "tense"
+      }
+    }
+  ],
+  "metric_snapshots": [
+    {
+      "version": 1,
+      "revision": 0,
+      "recorded_at": "2026-09-26T19:08:59.753Z",
+      "counts": {
+        "observations": 2,
+        "assertedEntries": 3,
+        "grammarNotes": 2,
+        "competingForms": 0,
+        "mappings1To20": 0,
+        "ratedEntries": 0
+      }
+    }
+  ],
+  "id": "409d21ae-9160-45f9-b05e-378e84d56893",
+  "created_at": "2026-09-26T19:08:59.753Z",
+  "updated_at": "2026-09-26T19:09:01.240Z",
+  "schema_version": 3,
+  "revision": 6,
+  "recent_mutations": [
+    {
+      "id": "93135eb4-af26-4543-90f4-cbde5bfa0b48",
+      "digest": "9ca426b26a4bbf9010ff3f7f0c575c234d939f385ef46e99af95590635f09cea",
+      "revision": 3
+    },
+    {
+      "id": "8b8b0ef9-43b5-4a44-8ab6-fc03ebdb1a9d",
+      "digest": "596bac90020682b50161f7083ecdc4b61534e97c0e9baeb7a6a31a995c7a3d4d",
+      "revision": 6
+    }
+  ]
+}
