@@ -1,6 +1,6 @@
 # Validated research proposals
 
-W21 is in progress. Typed model output, profile-scoped retrieval, bounded tools, citation checks and deterministic counterexamples now feed a durable workbench review. Explicit acceptance applies a tested change with model provenance and a recorded user reason. The comparative evaluation and integration of remaining task-specific AI entry points remain open. Existing conversation and automatic suggestions still use their W10 free-text workflow.
+W21 is in progress. Typed model output, profile-scoped retrieval, bounded tools, citation checks and deterministic counterexamples now feed a durable workbench review. Explicit acceptance applies a tested change with model provenance and a recorded user reason. Sample, vocabulary and grammar research actions open that review; the comparative evaluation remains open. General conversation and number/translation/phonetic commentary retain their W10 free-text workflow and cannot directly apply a structured proposal.
 
 ## Request and response boundary
 
@@ -53,6 +53,8 @@ Successful responses retain the verified model digest, settings, prompt-template
 
 Open the AI panel and select **Review research proposals**. Capture evidence in Field Log, enter a question, and select up to 12 existing samples with supplied targets. The review shows quoted evidence and interpretation IDs, before/after predictions, counterexamples, proposed changes, alternatives, limitations and expandable experiment provenance. Generation and decisions require a saved workspace.
 
+Field Log's **Review sample proposal**, Vocabulary's **Review lexical proposal**, Grammar's **Review grammar proposal**, and the conversation panel's research shortcuts prefill a question in the same review pane. They do not start inference or preselect validation cases. Adding a sample offers **Investigate saved sample** instead of making a background speculative model call. A sample must still be captured as research evidence before it can be cited. These entry points remain accessible without a ready model so existing reviews can be inspected; generation requires model readiness. A requested review waits for active conversation output to finish (or be stopped) and remains scoped to its originating project.
+
 `POST /api/ai/research/runs` accepts the same request as the preview endpoint. Before inference, it saves a source snapshot and pending record under the profile lock. Completion merges the result into the latest profile without overwriting intervening edits. `GET /api/ai/research/runs/:profileId` returns the profile and current review availability. The original `/research/proposal` endpoint remains read-only.
 
 `POST /api/ai/research/runs/:profileId/:reviewId/decision` requires `expectedRevision`, `mutationId`, `action` (`accept` or `reject`) and a reason. Acceptance independently rechecks the input fingerprint and predictions. A lexical or grammar candidate must be compatible, and at least one selected resolved case must actually use its proposed entry or rule. Unrelated passing cases do not qualify. Falsified, invalid, inconclusive, changed-input and restored proposals cannot be applied. Renaming a project or adding review metadata alone does not invalidate its linguistic inputs.
@@ -91,4 +93,4 @@ Run `npx tsx docs/verification/w21-review-replay.mts` to independently check bot
 
 [Review verification](verification/w21-review-acceptance.json) records successful Windows/Linux source CI at `e0bd9e0`: 385 unit tests, seven tooling tests, 38 workbench checks, eight public checks and 12/60/336 replayed experiment records per platform. Independent installed regression acceptance checks 3,774 files and its existing eight archive/native/restart flows. Three gated native unit skips and four reviewed high native-chain audit entries remain.
 
-The next W21 work connects remaining relevant AI entry points and freezes a shared observation set to compare current prompting with the new pipeline on invalid-output rate, citation relevance, held-out predictions and runtime. W21's full exit condition remains open until that work passes.
+The next W21 work freezes a shared observation set to compare legacy prompting with the new pipeline on invalid-output rate, citation relevance, held-out predictions and runtime. Existing prompt templates remain available as the comparison baseline. W21's full exit condition remains open until that work passes.

@@ -6,11 +6,9 @@ import { cleanLexicalFields, validLexicalFields } from '@/lib/lexicalFields'
 import type { LexicalPolicy } from 'shared/types'
 import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
-import { useAI } from '@/hooks/useAI'
-import { useOllama } from '@/stores/ollama-context'
+import { useProposalReview } from '@/stores/proposal-review-context'
 import { useUndo } from '@/stores/undo-context'
 import { VOCABULARY_CATEGORIES, PART_OF_SPEECH_OPTIONS, getConfidenceLevel } from 'shared/constants'
-import { formatDictionaryForPrompt, formatSamplesForPrompt } from 'shared/prompts'
 import type { PartOfSpeech, DictionaryEntry } from 'shared/types'
 import { AudioPlayer } from '@/components/audio/AudioPlayer'
 import { SpeakButton } from '@/components/audio/SpeakButton'
@@ -26,15 +24,13 @@ const BUCKET_COLOR: Record<string, string> = {
 
 export function VocabularyBuilder() {
   const { profile, addDictionaryEntry, addDictionaryEntryRaw, removeDictionaryEntry, updateProfile, updateDictionaryEntry } = useProfile()
-  const { runTask, loading, streamedText } = useAI()
-  const { ready: connected } = useOllama()
+  const openResearch = useProposalReview()
   const { pushAction } = useUndo()
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; entry: DictionaryEntry } | null>(null)
   const [activeCategory, setActiveCategory] = useState<string>('all')
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards')
   const [search, setSearch] = useState('')
   const [showAddForm, setShowAddForm] = useState(false)
-  const [analysisResult, setAnalysisResult] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState<Partial<DictionaryEntry>>({})
@@ -79,15 +75,7 @@ export function VocabularyBuilder() {
     setShowAddForm(false)
   }
 
-  const handleAISuggest = async () => {
-    if (!profile) return
-    const prompt = `Current dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nSamples:\n${formatSamplesForPrompt(profile.samples)}\n\nAnalyze the samples and suggest word meanings for any unmapped words you can identify.`
-    try {
-      setAnalysisResult(await runTask('patternAnalysis', prompt))
-    } catch {
-      /* useAI surfaces/logs the error */
-    }
-  }
+  const handleAISuggest = () => openResearch('Propose one lexical sense supported by captured observations. Cite exact evidence and consider alternative meanings.')
 
   const startEdit = () => {
     if (!sel) return
@@ -160,8 +148,8 @@ export function VocabularyBuilder() {
             </p>
           </div>
           <div className="flex" style={{ gap: 8 }}>
-            <button className="btn sm" onClick={handleAISuggest} disabled={!connected || loading || !profile?.samples.length}>
-              {loading ? 'Analyzing…' : '⌖ AI Suggest'}
+            <button className="btn sm" onClick={handleAISuggest}>
+              Review lexical proposal
             </button>
             <button className="btn primary sm" onClick={() => setShowAddForm((v) => !v)}>+ Add Word</button>
           </div>
@@ -251,7 +239,7 @@ export function VocabularyBuilder() {
         {/* List */}
         {filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--fg-mute)', fontSize: 13 }}>
-            {dictionary.length === 0 ? 'No words mapped yet. Add samples first, then use AI Suggest or add words manually.' : 'No matches found.'}
+            {dictionary.length === 0 ? 'No words mapped yet. Capture evidence for a lexical proposal or add words manually.' : 'No matches found.'}
           </div>
         ) : viewMode === 'cards' ? (
           <div style={{ overflow: 'auto', paddingRight: 4, paddingBottom: 10 }}>
@@ -323,16 +311,6 @@ export function VocabularyBuilder() {
           </div>
         )}
 
-        {/* AI analysis */}
-        {(loading || analysisResult) && (
-          <div className={`glass-card ${loading ? 'scan-overlay' : ''}`} style={{ padding: 16 }}>
-            <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}>
-              <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
-              <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>{loading ? 'Analyzing' : 'AI Suggestions'}</span>
-            </div>
-            <pre style={{ fontSize: 13, color: 'var(--fg-1)', whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)', lineHeight: 1.6, margin: 0 }}>{loading ? streamedText : analysisResult}</pre>
-          </div>
-        )}
       </div>
 
       {/* RIGHT — inspector */}

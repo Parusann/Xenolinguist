@@ -7,9 +7,11 @@ import { getSaveQueue } from '@/stores/save-runtime'
 import { retainAIHistory, type AIRecord } from 'shared/schemas/ai-history'
 import { SYSTEM_PROMPTS, formatDictionaryForPrompt, formatGrammarForPrompt, formatSamplesForPrompt } from 'shared/prompts'
 import { ProposalReview } from '@/components/evidence/ProposalReview'
+import { useProposalReview, type ResearchReviewRequest } from '@/stores/proposal-review-context'
 
-const QUICK_ACTIONS = ['Suggest 5 new words', "What's my next move?", 'Find inconsistencies']
-export function AIChat({ onClose }: { onClose: () => void }) {
+const QUICK_ACTIONS = ['Propose a lexical sense', 'Request a distinguishing observation', 'Investigate contradictory evidence']
+export function AIChat({ onClose, researchRequest, clearResearchRequest }: { onClose: () => void; researchRequest: ResearchReviewRequest | null; clearResearchRequest: () => void }) {
+  const openResearch = useProposalReview()
   const { selectedModel, ready } = useOllama(), { profile } = useProfile()
   const [messages, setMessages] = useState<AIRecord[]>(() => profile?.ai_history ?? [])
   const [input, setInput] = useState(''), [streaming, setStreaming] = useState(false)
@@ -47,8 +49,9 @@ export function AIChat({ onClose }: { onClose: () => void }) {
   }
   return <div className="side-panel" aria-label="Decoder AI">
     <div className="flex" style={{ padding: 16, gap: 10, borderBottom: '1px solid var(--border)' }}><b>Decoder AI</b><span className="dim">{ready ? selectedModel : 'Chat not ready'}</span><div className="flex-1" /><button className="btn xs" onClick={onClose}>Close chat</button></div>
-    <div className="flex" style={{ padding: 12, gap: 8 }}><button className="btn xs" disabled={streaming} onClick={() => setReviewing(false)}>Conversation</button><button className="btn xs" disabled={streaming || !profile} onClick={() => setReviewing(true)}>Review research proposals</button></div>
-    {reviewing && profile ? <ProposalReview key={profile.id} /> : <>
+    <div className="flex" style={{ padding: 12, gap: 8 }}><button className="btn xs" disabled={streaming} onClick={() => { setReviewing(false); clearResearchRequest() }}>Conversation</button><button className="btn xs" disabled={streaming || !profile} onClick={() => setReviewing(true)}>Review research proposals</button></div>
+    {streaming && researchRequest && <p role="status">Research review is ready to open after this conversation finishes. Stop generation to open it now.</p>}
+    {!streaming && (reviewing || researchRequest) && profile ? <ProposalReview key={`${profile.id}:${researchRequest?.id ?? 'manual'}`} initialQuery={researchRequest?.query} /> : <>
     <div ref={scrollRef} style={{ flex: 1, overflow: 'auto', padding: 18 }}>
       <p className="dim">Suggestions are unverified proposals. History stays with this profile; up to 40 records and 120,000 characters are retained. Use Runtime & setup to configure models and inspect jobs.</p>
       {!ready && <p role="status">Select an installed local chat model in Runtime & setup.</p>}
@@ -59,7 +62,7 @@ export function AIChat({ onClose }: { onClose: () => void }) {
       </article>)}
     </div>
     <div style={{ padding: 14, borderTop: '1px solid var(--border)' }}>
-      <div className="flex" style={{ gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>{QUICK_ACTIONS.map(action => <button key={action} className="btn xs" disabled={!ready || streaming} onClick={() => void send(action)}>{action}</button>)}</div>
+      <div className="flex" style={{ gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>{QUICK_ACTIONS.map(action => <button key={action} className="btn xs" disabled={streaming} onClick={() => openResearch(action)}>{action}</button>)}</div>
       <textarea className="textarea" aria-label="Chat message" placeholder="Ask the decoder…" value={input} maxLength={12000} disabled={streaming || !ready} onChange={event => setInput(event.target.value)} onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); void send(input) } }} />
       <div className="flex" style={{ gap: 8, marginTop: 8 }}><button className="btn primary sm" disabled={!ready || streaming || !input.trim()} onClick={() => void send(input)}>Send</button>{streaming && <button className="btn sm" onClick={() => abortRef.current?.abort()}>Stop generation</button>}<button className="btn sm" disabled={streaming || !messages.length} onClick={removeHistory}>Delete AI history</button></div>
     </div>

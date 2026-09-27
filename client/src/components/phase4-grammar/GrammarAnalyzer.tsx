@@ -6,17 +6,13 @@ import { RuleEditor } from './RuleEditor'
 import { SymbolicTranslation } from '@/components/phase5-translation/SymbolicTranslation'
 import { useState } from 'react'
 import { useProfile } from '@/stores/profile-context'
-import { useAI } from '@/hooks/useAI'
-import { useOllama } from '@/stores/ollama-context'
+import { useProposalReview } from '@/stores/proposal-review-context'
 import { EvidenceStatus, BeliefInput } from '@/components/common/EvidenceStatus'
 import { distinctCount } from 'shared/metrics/workspace-metrics'
-import { formatDictionaryForPrompt, formatSamplesForPrompt, formatGrammarForPrompt } from 'shared/prompts'
 
 export function GrammarAnalyzer() {
   const { profile, addGrammarRule, removeGrammarRule, updateGrammarRule } = useProfile()
-  const { runTask, loading, streamedText } = useAI()
-  const { ready: connected } = useOllama()
-  const [analysisResult, setAnalysisResult] = useState('')
+  const openResearch = useProposalReview()
   const [executable, setExecutable] = useState<ExecutableRule | null>(null)
   const [preview, setPreview] = useState('')
   const [selectedPreview, setSelectedPreview] = useState('')
@@ -30,15 +26,7 @@ export function GrammarAnalyzer() {
   const visible = rules.filter((r) => (filter === 'all' ? true : (filter === 'rated' ? r.confidence !== null : r.confidence === null)))
   const sel = rules.find((r) => r.id === selectedId) ?? rules[0] ?? null
 
-  const handleAnalyze = async () => {
-    if (!profile) return
-    const prompt = `Dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nExisting grammar rules:\n${formatGrammarForPrompt(profile.grammar_rules)}\n\nSamples:\n${formatSamplesForPrompt(profile.samples)}`
-    try {
-      setAnalysisResult(await runTask('grammarInference', prompt))
-    } catch {
-      /* useAI already surfaces the error (and logs it); avoid an unhandled rejection */
-    }
-  }
+  const handleAnalyze = () => openResearch('Propose an executable grammar rule supported by captured observations. Check contrasting examples and preserve any counterexample.')
 
   const handleAddRule = () => {
     if (!newRule.trim() || (executable && !executableRuleSchema.safeParse(executable).success)) return
@@ -82,7 +70,7 @@ export function GrammarAnalyzer() {
           <div style={{ marginTop: 14 }}><BeliefInput value={newConfidence} onChange={setNewConfidence} /></div>
           <div className="flex" style={{ gap: 8, marginTop: 14 }}>
             <button className="btn primary sm" onClick={handleAddRule} disabled={!newRule.trim() || !!(executable && !executableRuleSchema.safeParse(executable).success)}>+ Add Rule</button>
-            <button className="btn sm ghost" onClick={handleAnalyze} disabled={!connected || loading || !profile?.dictionary.length}>{loading ? 'Analyzing…' : '⌖ AI Analyze'}</button>
+            <button className="btn sm ghost" onClick={handleAnalyze}>Review grammar proposal</button>
           </div>
         </div>
         {profile && <div className="glass-card" style={{ padding: 12 }}>
@@ -102,7 +90,7 @@ export function GrammarAnalyzer() {
         </div>
         {rules.length === 0 ? (
           <div className="glass-card" style={{ padding: 32, textAlign: 'center', color: 'var(--fg-mute)', fontSize: 13 }}>
-            {profile?.dictionary.length ? 'No rules yet. Add rules manually or use AI Analyze.' : 'Build your vocabulary first to enable grammar analysis.'}
+            {profile?.dictionary.length ? 'No rules yet. Add rules manually or review a grammar proposal.' : 'Build your vocabulary and capture evidence to test grammar proposals.'}
           </div>
         ) : (
           <div style={{ overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 10, paddingRight: 4, paddingBottom: 10 }}>
@@ -164,17 +152,7 @@ export function GrammarAnalyzer() {
           </div>
         )}
 
-        <div className={`glass-card ${loading ? 'scan-overlay' : ''}`} style={{ padding: 16 }}>
-          <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}>
-            <span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} />
-            <span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>{loading ? 'Analyzing Grammar' : 'AI Analysis'}</span>
-          </div>
-          {loading || analysisResult ? (
-            <pre style={{ fontSize: 12.5, color: 'var(--fg-1)', whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)', lineHeight: 1.55, margin: 0 }}>{loading ? streamedText : analysisResult}</pre>
-          ) : (
-            <div style={{ fontSize: 12.5, color: 'var(--fg-dim)', lineHeight: 1.5 }}>Run <span className="font-mono">⌖ AI Analyze</span> to surface candidate rules from your samples and dictionary.</div>
-          )}
-        </div>
+        <p className="dim">Review grammar proposals with citations, selected-target tests and explicit acceptance. Model output never applies a rule automatically.</p>
       </div>
     </div>
   )

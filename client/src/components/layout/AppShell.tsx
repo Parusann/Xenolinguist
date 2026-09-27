@@ -23,6 +23,7 @@ import { useUndo } from '@/stores/undo-context'
 import { useKeyboardShortcuts, type ShortcutDefinition } from '@/hooks/useKeyboardShortcuts'
 import { PHASES, type PhaseId } from '@/lib/phases'
 import { useProfileDraft } from '@/hooks/useProfileDraft'
+import { ProposalReviewContext, type ResearchReviewRequest } from '@/stores/proposal-review-context'
 
 const SANDBOX_PHASE = { id: 'sandbox', label: 'Sandbox', icon: '◈', desc: 'AI-generated language challenge' } as const
 
@@ -38,6 +39,11 @@ export function AppShell() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
+  const [researchRequest, setResearchRequest] = useState<ResearchReviewRequest | null>(null)
+  const openResearch = useCallback((query: string) => {
+    setResearchRequest({ id: crypto.randomUUID(), query: query.slice(0, 1200) })
+    setChatOpen(true)
+  }, [setResearchRequest, setChatOpen])
   const [showTour, setShowTour] = useState(() => !localStorage.getItem('xenolinguist-tour-completed'))
 
   const phaseIds = useMemo(() => PHASES.map((p) => p.id), [])
@@ -123,7 +129,7 @@ export function AppShell() {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden relative">
+    <ProposalReviewContext.Provider value={openResearch}><div className="h-screen flex flex-col overflow-hidden relative">
       {/* Grid background */}
       <div className="fixed inset-0 z-0" style={{
         pointerEvents: 'none',
@@ -202,7 +208,7 @@ export function AppShell() {
         <ShortcutsHelp shortcuts={registered} onClose={() => setShortcutsOpen(false)} />
       )}
 
-      {chatOpen && <AIChat onClose={() => setChatOpen(false)} />}
+      {chatOpen && <AIChat researchRequest={researchRequest} clearResearchRequest={() => setResearchRequest(null)} onClose={() => { setChatOpen(false); setResearchRequest(null) }} />}
 
       <ToastContainer />
 
@@ -217,6 +223,6 @@ export function AppShell() {
       )}
 
       {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
-    </div>
+    </div></ProposalReviewContext.Provider>
   )
 }

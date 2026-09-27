@@ -1,38 +1,14 @@
-import { useCallback, useRef, useEffect } from 'react'
-import { useAI } from './useAI'
-import { useOllama } from '@/stores/ollama-context'
-import { formatDictionaryForPrompt } from 'shared/prompts'
-import type { DictionaryEntry } from 'shared/types'
+import { useState } from 'react'
+import { useProposalReview } from '@/stores/proposal-review-context'
 
-/**
- * Hook that triggers AI pattern analysis when a new sample is added.
- * Uses the selected verified local model for quick suggestions. Debounced to avoid spam.
- */
+/** Offer an explicit research review after sample entry; saving never starts inference. */
 export function useAutoSuggest() {
-  const { runTask, loading } = useAI()
-  const { ready: connected } = useOllama()
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-  useEffect(() => () => clearTimeout(debounceRef.current), [])
-
-  const suggestForSample = useCallback(async (
-    alienText: string,
-    dictionary: DictionaryEntry[],
-    onResult: (result: string) => void
-  ) => {
-    if (!connected || !alienText.trim() || dictionary.length === 0) return
-
-    // Debounce — wait 1.5s after last call
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-    debounceRef.current = setTimeout(async () => {
-      try {
-        const prompt = `Current dictionary:\n${formatDictionaryForPrompt(dictionary)}\n\nNew sample just added:\n"${alienText}"\n\nQuickly identify any words from the dictionary that appear in this sample. For unknown words, suggest possible meanings based on their position and context. Be very concise — 2-3 lines max.`
-        const result = await runTask('quickSuggest', prompt)
-        onResult(result)
-      } catch {
-        // Silently fail — this is a background suggestion
-      }
-    }, 1500)
-  }, [connected, runTask])
-
-  return { suggestForSample, loading }
+  const [sampleText, setSampleText] = useState('')
+  const openResearch = useProposalReview()
+  return {
+    sampleText,
+    suggestForSample: (text: string) => setSampleText(text.trim().slice(0, 1000)),
+    dismiss: () => setSampleText(''),
+    review: () => openResearch(`Investigate this sample using retained captured evidence: ${sampleText}. Propose a lexical sense, executable rule, or distinguishing observation; cite exact evidence.`),
+  }
 }

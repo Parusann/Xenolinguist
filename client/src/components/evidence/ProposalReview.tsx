@@ -8,10 +8,10 @@ import type { ProposalReviewState } from 'shared/schemas/proposal-reviews'
 import { proposalRunSchema } from 'shared/schemas/proposals'
 
 type ReviewResponse = { profile: LanguageProfile; states: ProposalReviewState[] }
-export function ProposalReview() {
+export function ProposalReview({ initialQuery = '' }: { initialQuery?: string }) {
   const { profile, saveStatus } = useProfile(), { selectedModel, ready } = useOllama()
   const id = profile!.id
-  const [query, setQuery] = useState(''), [sampleIds, setSampleIds] = useState<string[]>([]), [states, setStates] = useState<ProposalReviewState[]>([])
+  const [query, setQuery] = useState(initialQuery), [sampleIds, setSampleIds] = useState<string[]>([]), [states, setStates] = useState<ProposalReviewState[]>([])
   const [statesRevision, setStatesRevision] = useState(-1)
   const [selected, setSelected] = useState(''), [reason, setReason] = useState(''), [error, setError] = useState(''), [busy, setBusy] = useState(false)
   const controller = useRef<AbortController | null>(null), alive = useRef(true)

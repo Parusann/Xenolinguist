@@ -6,7 +6,8 @@ import { useAutoSuggest } from '@/hooks/useAutoSuggest'
 import { useUndo } from '@/stores/undo-context'
 import { useSessionLog } from '@/stores/session-log-context'
 import { SOURCE_PRESETS } from 'shared/constants'
-import { formatDictionaryForPrompt, formatSamplesForPrompt } from 'shared/prompts'
+import { formatSamplesForPrompt } from 'shared/prompts'
+import { useProposalReview } from '@/stores/proposal-review-context'
 import { AudioRecorder } from '@/components/audio/AudioRecorder'
 import { AudioPlayer } from '@/components/audio/AudioPlayer'
 import { AudioSegmenter } from '@/components/audio/AudioSegmenter'
@@ -24,14 +25,14 @@ import { useLexicon } from '@/hooks/useLexicon'
 export function SampleInput() {
   const { profile, addSample, removeSample, saveAudioSample, restoreSample, addDictionaryEntry, updateSample } = useProfile()
   const lexicon = useLexicon(profile)
-  const { runTask, loading, streamedText } = useAI()
+  const { runTask, loading, streamedText, error: analysisError } = useAI()
   const { ready: connected } = useOllama()
-  const { suggestForSample } = useAutoSuggest()
+  const sampleReview = useAutoSuggest()
+  const openResearch = useProposalReview()
   const { pushAction } = useUndo()
   const { addEntry } = useSessionLog()
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; sample: Sample } | null>(null)
-  const [autoSuggestion, setAutoSuggestion] = useState('')
   const [alienText, setAlienText] = useProfileDraft<string>('sample.alien', '')
   const [translation, setTranslation] = useProfileDraft<string>('sample.translation', '')
   const [source, setSource] = useProfileDraft<string>('sample.source', SOURCE_PRESETS[0])
@@ -85,7 +86,7 @@ export function SampleInput() {
           source, phonetic_notes: phoneticNotes.trim(), decoded: false, audio_id: null, ipa: null })
       }
       if (!mounted.current) return
-      if (profile.dictionary.length && sampleText !== '[audio sample]') suggestForSample(sampleText, profile.dictionary, setAutoSuggestion)
+      if (sampleText !== '[audio sample]') sampleReview.suggestForSample(sampleText)
       setAlienText(''); setTranslation(''); setPhoneticNotes(''); setPendingSegments([]); setPendingIpa(''); setStageId(''); setPendingMode(''); setShowRecorder(false)
     } catch (error) { if (mounted.current) setAudioError((error as Error).message) }
     finally { if (mounted.current) setAudioSaving(false) }
@@ -131,16 +132,13 @@ export function SampleInput() {
     } catch (error) { if (mounted.current) setAudioError((error as Error).message) }
     finally { if (mounted.current) setAnalyzingAudio(null) }
   }
-  const handleAnalyze = async () => {
-    if (!profile) return
-    const prompt = `Current dictionary:\n${formatDictionaryForPrompt(profile.dictionary)}\n\nSamples:\n${formatSamplesForPrompt(profile.samples)}`
-    setAnalysisResult(await runTask('patternAnalysis', prompt))
-  }
+  const handleAnalyze = () => openResearch('Investigate patterns in captured samples. Propose a lexical sense, executable grammar rule, or observation that distinguishes alternatives. Cite exact evidence.')
 
   const handlePhoneticAnalysis = async () => {
     if (!profile) return
     const prompt = `Samples:\n${formatSamplesForPrompt(profile.samples)}`
-    setAnalysisResult(await runTask('phoneticAnalysis', prompt))
+    try { setAnalysisResult(await runTask('phoneticAnalysis', prompt)) }
+    catch { /* useAI retains and displays the failed analysis. */ }
   }
 
   const getAudioForSample = (audioId: string | null) => (!audioId || !profile ? null : (profile.audio_clips || []).find((c) => c.id === audioId) || null)
@@ -248,7 +246,7 @@ export function SampleInput() {
               <input type="file" accept="audio/wav,audio/webm,.wav,.webm" onChange={handleFileUpload} className="hidden" />
             </label>
             <div className="flex-1" />
-            <button className="btn sm ghost" onClick={handleAnalyze} disabled={!connected || loading || !samples.length}>{loading ? 'Analyzing…' : '⌖ AI Auto-decode'}</button>
+            <button className="btn sm ghost" onClick={handleAnalyze}>Review sample proposal</button>
             <button className="btn sm ghost" onClick={handlePhoneticAnalysis} disabled={!connected || loading || !samples.length}>≈ Phonetic analysis</button>
           </div>
 
@@ -310,19 +308,21 @@ export function SampleInput() {
         {(preparing || audioSaving || analyzingAudio) && <p role="status">{preparing ? 'Preparing audio…' : audioSaving ? 'Saving audio and sample…' : 'Analyzing audio…'}</p>}
         {audioError && <p role="alert" className="text-xs text-amber-300">{audioError}</p>}
         <p className="dim" style={{ fontSize: 11 }}>PCM16 WAV or WebM/Opus · up to 32 MiB and 2 minutes. Original audio is preserved.</p>
-        {autoSuggestion && (
+        {sampleReview.sampleText && (
           <div className="glass-card slide-up" style={{ padding: 14 }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
-              <div className="flex" style={{ gap: 8, alignItems: 'center' }}><span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} /><span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>Quick Analysis</span></div>
-              <button onClick={() => setAutoSuggestion('')} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', fontSize: 11, cursor: 'pointer' }}>Dismiss</button>
+              <span className="label">Sample saved for investigation</span>
+              <button onClick={sampleReview.dismiss} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', fontSize: 11, cursor: 'pointer' }}>Dismiss sample review</button>
             </div>
-            <pre style={{ fontSize: 12, color: 'var(--fg-1)', whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)', lineHeight: 1.6, margin: 0 }}>{autoSuggestion}</pre>
+            <p className="dim">Capture the source evidence, then select supplied targets and review a proposal. Saving a sample does not start model inference.</p>
+            <button className="btn sm" onClick={sampleReview.review}>Investigate saved sample</button>
           </div>
         )}
 
+        {analysisError && <p role="alert">{analysisError}</p>}
         {(loading || analysisResult) && (
           <div className={`glass-card ${loading ? 'scan-overlay' : ''}`} style={{ padding: 14 }}>
-            <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}><span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} /><span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>{loading ? 'Analyzing Patterns' : 'AI Analysis'}</span></div>
+            <div className="flex" style={{ gap: 8, marginBottom: 10, alignItems: 'center' }}><span className="dot" style={{ background: 'var(--ai)', boxShadow: '0 0 6px var(--ai)' }} /><span className="label" style={{ color: 'var(--ai)', marginBottom: 0 }}>{loading ? 'Analyzing text' : 'Unvalidated phonetic commentary'}</span></div>
             <pre style={{ fontSize: 12.5, color: 'var(--fg-1)', whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)', lineHeight: 1.6, margin: 0 }}>{loading ? streamedText : analysisResult}</pre>
           </div>
         )}
