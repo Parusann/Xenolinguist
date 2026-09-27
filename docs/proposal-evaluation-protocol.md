@@ -1,6 +1,6 @@
 # W21 proposal comparison protocol
 
-Status: implemented protocol, awaiting frozen real-model runs. No comparison result or superiority claim follows from this document. Freeze the corpus, adapters, prompts, parsers and scoring tests in a source commit before generating reserved evaluation outputs. The existing one-case model integration checks are not this experiment.
+Status: completed at frozen source revision `21631f82aadc04e176ede9c231bd32fde3fe9ad7`. The [results and raw archives](proposal-results.md) retain 18 development and 36 reserved tasks and successful deterministic replay. No prompt, parser or scoring changes were made between those runs. This document preserves the protocol; the existing one-case integration checks are separate from this experiment.
 
 The implementation is in `evaluation/src/proposals/`. Its fixed configuration uses development seed 137 and reserved seeds 431/829, two families (one missing noun sense or one missing past-tense prefix), and regular, conflicting-label and withheld-irregular conditions. This yields six development cases and 12 reserved cases, each paired across three methods: 18 and 36 tasks respectively, with one generation attempt per method/case at seed 42. Each case has one withheld compositional target. Clause order, other lexical anchors and the plural suffix are supplied; this experiment does not measure induction of those priors. Duplicate singular lexical examples do not establish independent support.
 
@@ -75,4 +75,4 @@ Before reserved runs, test fabricated IDs, exact-but-irrelevant quotes, contradi
 
 ## Completion record
 
-Publish paired case-level outcomes and denominators, examples of both improvement and failure, raw downloadable archives and replay instructions. State the finite grammar prior, supplied anchors, synthetic domain, parser coverage, sample size and any runtime imbalance. Explain whether improvements came from syntax enforcement, evidence selection or successful held-out semantics. W21 remains in progress until this experiment is implemented, frozen, run and independently replayed.
+The [completed report](proposal-results.md) publishes paired case-level records, denominators, concrete failures, downloadable archives and replay instructions. It states the finite grammar prior, supplied anchors, synthetic domain, parser coverage, sample size and runtime imbalance. Both typed methods produced one correct reserved prediction and zero application-eligible candidates; no linguistic-quality advantage is established. W21's experiment is implemented, frozen, run and replayed. Future iterations informed by these outputs require new reserved cases.
