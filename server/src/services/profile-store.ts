@@ -16,6 +16,7 @@ import { dataDir } from '../config.js';
 import { AudioStore } from './audio-store.js';
 import { recordMetricSnapshot } from '../../../shared/metrics/workspace-metrics.js';
 import { verifyProposalReviews } from './proposal-review-integrity.js';
+import { verifyElicitation } from './elicitation-integrity.js';
 
 const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
 const toIndex = (p: LanguageProfile): ProfileIndex => ({ id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at });
@@ -112,6 +113,7 @@ export class ProfileStore {
         recent_mutations: [], updated_at: new Date().toISOString() });
       verifyResearch(restored);
       verifyProposalReviews(restored);
+      verifyElicitation(restored);
       await prepare(existing);
       await new AudioStore().verifyProfile(restored);
       await withProfileLock(`recovery:${this.file(restored.id)}`, async () => {
@@ -162,6 +164,11 @@ export class ProfileStore {
 
   /** Server-owned review metadata and accepted knowledge share the profile's atomic commit point. */
   async commitProposalReview(id: string, expectedRevision: number | undefined, change: (current: LanguageProfile) => LanguageProfile | null) {
+    return this.commitResearchRecord(id, expectedRevision, change);
+  }
+
+  /** Record a server-validated research action together with its evidence under one revision and write. */
+  async commitResearchRecord(id: string, expectedRevision: number | undefined, change: (current: LanguageProfile) => LanguageProfile | null) {
     if (!SAFE_ID.test(id)) throw new ProfileError('PROFILE_MISSING', 'Project not found', 404);
     return this.locked(id, async () => {
       const existing = await this.get(id);
@@ -171,7 +178,7 @@ export class ProfileStore {
       if (expectedRevision !== undefined) this.checkRevision(existing, expectedRevision);
       const profile = parseProfile({ ...changed, id: existing.id, created_at: existing.created_at,
         revision: existing.revision + 1, updated_at: new Date().toISOString() });
-      verifyResearch(profile, existing); verifyProposalReviews(profile, existing);
+      verifyResearch(profile, existing); verifyProposalReviews(profile, existing); verifyElicitation(profile, existing);
       await new AudioStore().verifyProfile(profile, existing);
       return this.save(profile);
     });

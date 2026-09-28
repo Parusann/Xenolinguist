@@ -10,6 +10,7 @@ import { ipaRouter } from './routes/ipa.js';
 import { jobsRouter } from './routes/jobs.js';
 import { archivesRouter } from './routes/archives.js';
 import { compilerRouter } from './routes/compiler.js';
+import { elicitationRouter } from './routes/elicitation.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { clientDist } from './config.js';
 import { localSessionBoundary, createLocalSession, matchesSecret, SESSION_COOKIE, type LocalSession } from './middleware/local-session.js';
@@ -37,6 +38,7 @@ export function createApp(session: LocalSession = createLocalSession()) {
   app.use('/api/ollama', small, ollamaRouter);
   app.use('/api/jobs', small, jobsRouter);
   app.use('/api/compiler', small, compilerRouter);
+  app.use('/api/elicitation', small, elicitationRouter);
   app.use('/api/profiles', express.json({ limit: '10mb' }), profilesRouter);
   app.use('/api/archives', archivesRouter);
   app.use('/api/ai', small, aiRouter);

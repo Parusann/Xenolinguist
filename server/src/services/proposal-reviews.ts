@@ -55,7 +55,7 @@ export class ProposalReviews {
       const started = await this.profiles.commitProposalReview(request.profile_id, request.expectedRevision, current => {
         if ((current.proposal_reviews?.length ?? 0) >= REVIEW_LIMITS.records) throw new ProfileError('PROPOSAL_HISTORY_LIMIT', 'This project has reached its 20-record proposal history limit', 413);
         // Never nest history or copy unrelated private chat/compiler data into a run's input snapshot.
-        const { proposal_reviews: _reviews, ai_history: _chat, metric_snapshots: _metrics, compiler_session_id: _compiler, sandbox_session: _sandbox, ...source } = current;
+        const { proposal_reviews: _reviews, elicitation_history: _elicitation, ai_history: _chat, metric_snapshots: _metrics, compiler_session_id: _compiler, sandbox_session: _sandbox, ...source } = current;
         const source_json = JSON.stringify(source);
         const record = proposalReviewSchema.parse({ id, created_at: new Date().toISOString(), request, source_json,
           source_sha256: reviewHash(source_json), status: 'running', run_json: null, run_sha256: null, error: null, decision: null });

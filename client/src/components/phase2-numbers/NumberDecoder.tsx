@@ -3,6 +3,7 @@ import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
 import { NumberGrammarPanel } from './NumberGrammarPanel'
+import { NextObservation } from '@/components/evidence/NextObservation'
 import { countMappings } from 'shared/metrics/workspace-metrics'
 
 const OPERATORS = ['+', '-', '×', '÷', '=']
@@ -89,6 +90,7 @@ export function NumberDecoder() {
         </div>
 
         {profile && <NumberGrammarPanel profile={profile} />}
+        {profile && <NextObservation key={profile.id} />}
         <div className="glass-card" style={{ padding: 18 }}>
           <h2 className="label">Manual positional notation</h2>
           <p className="dim">This user-selected base controls the visual digit breakdown only. It does not select, accept or validate an inferred language grammar.</p>

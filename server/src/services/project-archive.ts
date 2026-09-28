@@ -1,6 +1,7 @@
 import { remapResearch } from '../../../shared/research-remap.js';
 import { verifyResearch } from './research-integrity.js';
 import { verifyProposalReviews } from './proposal-review-integrity.js';
+import { verifyElicitation } from './elicitation-integrity.js';
 import fs from 'node:fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import path from 'node:path';
@@ -47,6 +48,10 @@ function remap(source: LanguageProfile, targetId: string) {
   for (const records of Object.values(profile.research)) for (const record of records) ids.set(record.id, randomUUID());
   profile.research = remapResearch(profile.research, ids);
   profile.id = targetId; profile.recent_mutations = [];
+  profile.elicitation_history?.forEach(record => {
+    record.archived = true;
+    if (record.decision?.observation_id) record.decision.observation_id = ids.get(record.decision.observation_id) ?? record.decision.observation_id;
+  });
   // Preserve historical source IDs, raw model output and hashes. Imported reviews are audit records,
   // never executable approvals for the newly remapped workspace.
   profile.proposal_reviews?.forEach(record => {
@@ -214,6 +219,7 @@ export class ProjectArchives {
       const profile = migrateProfile(rawProfile), expected = new Set(['profile.json']);
       verifyResearch(profile);
       verifyProposalReviews(profile);
+      verifyElicitation(profile);
       if (profile.id !== manifest.sourceProfileId || profile.revision !== manifest.sourceRevision
         || (!manifest.sandboxIncluded && profile.sandbox_session)) throw invalid('Manifest does not match its project');
       if (profile.compiler_session_id) {
