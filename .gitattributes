@@ -8,3 +8,6 @@ vendor/whisper/win/* binary
 *.wav binary
 vendor/ipa-model/** binary
 *.onnx binary
+# Retained W22 browser captures have published byte hashes; preserve their original bytes.
+docs/verification/w22-number-elicitation-*profile.json -text
+docs/verification/w22-number-elicitation-history.xeno binary
