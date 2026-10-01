@@ -19,7 +19,15 @@ export function numberQueries(raw: unknown): GroundedQuery[] {
 
 /** One supported semantic change at a time; only explicitly answerable meanings survive. */
 export function meaningQueries(raw: unknown): GroundedQuery[] {
-  const input = meaningQueriesSchema.parse(raw), variants = new Set<string>();
+  const input = meaningQueriesSchema.parse(raw);
+  const variants = new Set(meaningVariants(input.anchors as MeaningTree[], input.contrasts).map(stableKey));
+  const excluded = new Set([...input.observed, ...input.declined].map(stableKey));
+  return unique(input.available).filter(q => q.kind === 'meaning' && variants.has(stableKey(q.meaning)) && !excluded.has(stableKey(q.meaning)));
+}
+
+/** Display possible grounded contrasts; none becomes available until the user explicitly selects it. */
+export function meaningVariants(anchors: MeaningTree[], contrasts: ('plurality' | 'tense' | 'negation' | 'roles')[] = ['plurality', 'tense', 'negation', 'roles']): MeaningTree[] {
+  const input = { anchors, contrasts }, variants = new Set<string>();
   for (const anchor of input.anchors as MeaningTree[]) {
     variants.add(stableKey(anchor));
     if (input.contrasts.includes('plurality')) {
@@ -35,6 +43,5 @@ export function meaningQueries(raw: unknown): GroundedQuery[] {
     if (input.contrasts.includes('negation')) variants.add(stableKey({ ...anchor, negated: !anchor.negated }));
     if (input.contrasts.includes('roles') && anchor.object) variants.add(stableKey({ ...anchor, subject: anchor.object, object: anchor.subject }));
   }
-  const excluded = new Set([...input.observed, ...input.declined].map(stableKey));
-  return unique(input.available).filter(q => q.kind === 'meaning' && variants.has(stableKey(q.meaning)) && !excluded.has(stableKey(q.meaning)));
+  return [...variants].map(value => JSON.parse(value) as MeaningTree);
 }

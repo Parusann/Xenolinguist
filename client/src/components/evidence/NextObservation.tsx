@@ -6,7 +6,7 @@ import { getSaveQueue } from '@/stores/save-runtime'
 import { useProfileDraft } from '@/hooks/useProfileDraft'
 import { apiFetch } from '@/services/api'
 
-function DecisionFields({ record, disabled, decide }: { record: ElicitationRecord; disabled: boolean;
+export function DecisionFields({ record, disabled, decide }: { record: ElicitationRecord; disabled: boolean;
   decide: (action: 'answer' | 'decline', answer: string | null, reason: string) => Promise<boolean> }) {
   const [answer, setAnswer] = useProfileDraft<string>(`elicitation.answer.${record.id}`, '')
   const [reason, setReason] = useProfileDraft<string>(`elicitation.reason.${record.id}`, '')
@@ -15,7 +15,7 @@ function DecisionFields({ record, disabled, decide }: { record: ElicitationRecor
   }
   return <fieldset disabled={disabled} style={{ marginTop: 12 }}>
     <legend>Record your observation or decline</legend>
-    <label>Observed numeral form<input className="input" aria-label="Elicitation answer" maxLength={128} value={answer} onChange={e => setAnswer(e.target.value)} /></label>
+    <label>Observed form<input className="input" aria-label="Elicitation answer" maxLength={128} value={answer} onChange={e => setAnswer(e.target.value)} /></label>
     <label>Source or decision reason<textarea className="textarea" aria-label="Elicitation reason" maxLength={1200} value={reason} onChange={e => setReason(e.target.value)} /></label>
     <div className="flex" style={{ gap: 8 }}>
       <button className="btn primary sm" disabled={!answer.trim() || !reason.trim()} onClick={() => void submit('answer')}>Save observed answer</button>

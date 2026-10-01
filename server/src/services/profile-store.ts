@@ -17,6 +17,7 @@ import { AudioStore } from './audio-store.js';
 import { recordMetricSnapshot } from '../../../shared/metrics/workspace-metrics.js';
 import { verifyProposalReviews } from './proposal-review-integrity.js';
 import { verifyElicitation } from './elicitation-integrity.js';
+import { verifyGrammarElicitation } from './grammar-elicitation-integrity.js';
 
 const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
 const toIndex = (p: LanguageProfile): ProfileIndex => ({ id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at });
@@ -114,6 +115,7 @@ export class ProfileStore {
       verifyResearch(restored);
       verifyProposalReviews(restored);
       verifyElicitation(restored);
+      verifyGrammarElicitation(restored);
       await prepare(existing);
       await new AudioStore().verifyProfile(restored);
       await withProfileLock(`recovery:${this.file(restored.id)}`, async () => {
@@ -179,6 +181,7 @@ export class ProfileStore {
       const profile = parseProfile({ ...changed, id: existing.id, created_at: existing.created_at,
         revision: existing.revision + 1, updated_at: new Date().toISOString() });
       verifyResearch(profile, existing); verifyProposalReviews(profile, existing); verifyElicitation(profile, existing);
+      verifyGrammarElicitation(profile, existing);
       await new AudioStore().verifyProfile(profile, existing);
       return this.save(profile);
     });

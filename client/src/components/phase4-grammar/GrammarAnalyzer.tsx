@@ -2,6 +2,7 @@ import { EvidenceInspector } from '@/components/evidence/EvidenceInspector'
 import type { ExecutableRule, GrammarRule } from 'shared/types'
 import { executableRuleSchema } from 'shared/schemas/grammar'
 import { InductionPanel } from './InductionPanel'
+import { GrammarNextObservation } from '@/components/evidence/GrammarNextObservation'
 import { RuleEditor } from './RuleEditor'
 import { SymbolicTranslation } from '@/components/phase5-translation/SymbolicTranslation'
 import { useState } from 'react'
@@ -56,6 +57,7 @@ export function GrammarAnalyzer() {
         </div>
 
         {profile && <InductionPanel profile={profile} />}
+        {profile && <GrammarNextObservation key={profile.id} />}
         <div className="glass-card" style={{ padding: 18 }}>
           <span className="label">Add Grammar Rule</span>
           <div style={{ marginTop: 12 }}>
