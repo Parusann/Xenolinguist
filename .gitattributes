@@ -14,3 +14,7 @@ docs/verification/w22-number-elicitation-history.xeno binary
 docs/verification/w22-grammar-elicitation-*profile.json -text
 docs/verification/w22-grammar-elicitation-history.xeno binary
 docs/verification/w22-grammar-audit-*.json -text
+
+# Retain the exact CI audit bytes referenced by the W22 experiment verification.
+docs/verification/w22-curves-audit-*.json -text
+docs/verification/w22-elicitation-*.svg -text

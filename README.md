@@ -59,6 +59,8 @@ The [number grammar engine](docs/number-grammar.md) compares additive and multip
 
 The [research notebook](docs/research-evidence.md) links immutable source captures to competing hypotheses and retained symbolic derivations. Corrections append annotation revisions, contradictions stay visible, and changed dependencies mark old results stale. Saved derivations are replayed on the server; supplied-target checks and user acceptance are distinct from benchmark accuracy.
 
+The [active elicitation workbench](docs/active-elicitation.md) recommends grounded questions that distinguish supplied number or grammar alternatives, explains predicted answers and declared costs, and records answers or declines through restart and archive restoration. Its [frozen learning curves and raw archives](docs/elicitation-results.md) compare active, seeded-random and fixed-curriculum selection. Regular synthetic cases need fewer active observations, while costly questions, unseen irregular forms and incomplete alternatives expose explicit tradeoffs, errors and abstentions. These are finite query-selection results, not unrestricted language discovery.
+
 ## Setup and offline operation
 
 Windows x64 is the only manifested native target. An independent Windows CI job installs and verifies implementation artifacts on a fresh runner; public release and signing remain pending. macOS/Linux packaging is not supported by the current native manifest.

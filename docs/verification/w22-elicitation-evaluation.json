@@ -1,0 +1,1111 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "af1a197cca74726132ec529e15df8bc274b6c260",
+  "retainedLinuxAuditReports": {
+    "w22-curves-audit-all.json": {
+      "bytes": 14088,
+      "sha256": "c0d309f3e46fdb31b9ca3273a7ac65b3b104168d312173a1b26d4f01e187fedf"
+    },
+    "w22-curves-audit-production.json": {
+      "bytes": 7326,
+      "sha256": "ec8d34b200c915724b9c2bff427495249333cc45ff9dde0de45675277001a0c1"
+    }
+  },
+  "scope": "W22 final unit: frozen active/random/fixed-curriculum learning curves over supplied finite alternatives, independent oracle renderers, selected-answer boundary, source snapshots and complete deterministic replay.",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "af1a197cca74726132ec529e15df8bc274b6c260",
+    "jobs": [
+      {
+        "completedAt": "2026-10-02T03:21:08Z",
+        "conclusion": "success",
+        "databaseId": 110689574551,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-10-02T03:16:18Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36959426454/job/110689574551"
+      },
+      {
+        "completedAt": "2026-10-02T03:28:11Z",
+        "conclusion": "success",
+        "databaseId": 110689574771,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-10-02T03:16:18Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36959426454/job/110689574771"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36959426454"
+  },
+  "sourceChecks": {
+    "unitTests": 450,
+    "serverSharedEngineEvaluationTests": 419,
+    "clientTests": 31,
+    "newExperimentCases": 12,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-10-02T03:18:03.266Z",
+        "duration": 172115.38,
+        "expected": 46,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-02T03:20:56.468Z",
+        "duration": 7176.32,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "66469343b428ef61cde4aaccf313291b8cad093c2f69face655175fcc1cba862"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "c37327cc65f2e6198c4b101d41ccf2a16ed10c544389a02305908afde17f79ce"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "c37327cc65f2e6198c4b101d41ccf2a16ed10c544389a02305908afde17f79ce"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "af1a197cca74726132ec529e15df8bc274b6c260",
+          "sourceSnapshotHash": "2d2b56c6e9b62e70a01d00f4ecb8cbb90f25706a90bc958539125f8296adf529",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 157523,
+        "sha256": "a30524113504dd04abfb38743d49f339db531d6cd8a532c105379a8221d86f65"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 1,
+          "high": 5,
+          "critical": 0,
+          "total": 6
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-10-02T03:22:39.301Z",
+        "duration": 307633.35400000005,
+        "expected": 46,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-02T03:27:49.693Z",
+        "duration": 11791.37,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "425dfdd3ab4443d882498d0815a5dc2d4f7d6bb6b73767d511549b00a1a4e07c"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "9a6d09bf55cd7b718213ff2b26f5ee624091345c8148eaad5ee96792c22d23b2"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "9a6d09bf55cd7b718213ff2b26f5ee624091345c8148eaad5ee96792c22d23b2"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "af1a197cca74726132ec529e15df8bc274b6c260",
+          "sourceSnapshotHash": "e67b291e9e1c1be0f12d3705685ec76af12fd307a202940674aa28f2235357d2",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 135437,
+        "sha256": "70be2eca5f497f6e4924b0376db96e8ebb7fbafcbf8be33a135819155ed4cdb4"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 1,
+          "high": 5,
+          "critical": 0,
+          "total": 6
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "af1a197cca74726132ec529e15df8bc274b6c260",
+    "jobs": [
+      {
+        "completedAt": "2026-10-02T03:19:57Z",
+        "conclusion": "success",
+        "databaseId": 110689574871,
+        "name": "build",
+        "startedAt": "2026-10-02T03:16:19Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36959426438/job/110689574871"
+      },
+      {
+        "completedAt": "2026-10-02T03:25:13Z",
+        "conclusion": "success",
+        "databaseId": 110690431255,
+        "name": "verify-clean",
+        "startedAt": "2026-10-02T03:20:00Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36959426438/job/110690431255"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36959426438"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-10-02T03:25:09.929Z",
+    "source": {
+      "revision": "af1a197cca74726132ec529e15df8bc274b6c260",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "7bdc211036a5c6bc14cfa817b241343dd4c772379f6907570652f5ad57cb462f"
+    },
+    "appArchive": {
+      "bytes": 2993399,
+      "sha256": "3cfbb2bbf1ae4f2ca360c27ace13a203365c613b2ba77129a8fb6c0d0e57d118"
+    }
+  },
+  "installedChecks": {
+    "files": 3774,
+    "archives": 8,
+    "report": {
+      "bytes": 674241,
+      "sha256": "52dea81ac900552833d90fd28d18e538513e6e651503835c0875363bb1315f4e"
+    }
+  },
+  "experiments": {
+    "development": {
+      "archive": "w22-elicitation-development.zip",
+      "bytes": 2467533,
+      "sha256": "f1e54bce3cfc951ea527d205063c6d7d1160b644ee0c055659c2e9fa7069a2bf",
+      "replay": {
+        "passed": true,
+        "records": 336,
+        "cases": 48,
+        "split": "development",
+        "sourceCommit": "af1a197cca74726132ec529e15df8bc274b6c260",
+        "sourceSnapshotHash": "cfd8e802f18e58028e99c77d7c188c87af58c586a6b162b36a607122cd2ff896",
+        "corpusHash": "4adf192a3e132a74ebc6a81075594a7726e72c8109bfb5b3fcea2cb3baef603a",
+        "failures": 0
+      },
+      "summary": {
+        "bytes": 475392,
+        "sha256": "94adb46e24ddb5b91798dc7d25622b7278f0e11198a0e306ecda187fd81ce4eb"
+      },
+      "startedAt": "2026-10-02T03:16:26.401Z",
+      "finalOutcomes": [
+        {
+          "domain": "number",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 6,
+          "failures": 0,
+          "correct": 36,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 1,
+          "meanCost": 1,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 30,
+          "failures": 0,
+          "correct": 180,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 180,
+          "meanQueries": 2.2,
+          "meanCost": 2.2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 6,
+          "failures": 0,
+          "correct": 36,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 4,
+          "meanCost": 4,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 6,
+          "failures": 0,
+          "correct": 36,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 2,
+          "meanCost": 2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 30,
+          "failures": 0,
+          "correct": 180,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 180,
+          "meanQueries": 2.2,
+          "meanCost": 4,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 6,
+          "failures": 0,
+          "correct": 36,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 4,
+          "meanCost": 4,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 6,
+          "failures": 0,
+          "correct": 24,
+          "wrong": 12,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 1,
+          "meanCost": 1,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 30,
+          "failures": 0,
+          "correct": 120,
+          "wrong": 60,
+          "abstained": 0,
+          "total": 180,
+          "meanQueries": 2.2,
+          "meanCost": 2.2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 6,
+          "failures": 0,
+          "correct": 24,
+          "wrong": 12,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 4,
+          "meanCost": 4,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 6,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 36,
+          "total": 36,
+          "meanQueries": 0,
+          "meanCost": 0,
+          "meanRemaining": 7
+        },
+        {
+          "domain": "number",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 30,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 180,
+          "total": 180,
+          "meanQueries": 8,
+          "meanCost": 8,
+          "meanRemaining": 2
+        },
+        {
+          "domain": "number",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 6,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 36,
+          "total": 36,
+          "meanQueries": 8,
+          "meanCost": 8,
+          "meanRemaining": 2
+        },
+        {
+          "domain": "grammar",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 6,
+          "failures": 0,
+          "correct": 36,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 2,
+          "meanCost": 2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 30,
+          "failures": 0,
+          "correct": 162,
+          "wrong": 0,
+          "abstained": 18,
+          "total": 180,
+          "meanQueries": 7,
+          "meanCost": 7,
+          "meanRemaining": 1.2
+        },
+        {
+          "domain": "grammar",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 6,
+          "failures": 0,
+          "correct": 36,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 6,
+          "meanCost": 6,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 6,
+          "failures": 0,
+          "correct": 36,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 3,
+          "meanCost": 6,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 30,
+          "failures": 0,
+          "correct": 144,
+          "wrong": 0,
+          "abstained": 36,
+          "total": 180,
+          "meanQueries": 7,
+          "meanCost": 10,
+          "meanRemaining": 1.4
+        },
+        {
+          "domain": "grammar",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 6,
+          "failures": 0,
+          "correct": 36,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 6,
+          "meanCost": 9,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 6,
+          "failures": 0,
+          "correct": 24,
+          "wrong": 12,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 2,
+          "meanCost": 2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 30,
+          "failures": 0,
+          "correct": 114,
+          "wrong": 48,
+          "abstained": 18,
+          "total": 180,
+          "meanQueries": 7,
+          "meanCost": 7,
+          "meanRemaining": 1.2
+        },
+        {
+          "domain": "grammar",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 6,
+          "failures": 0,
+          "correct": 24,
+          "wrong": 12,
+          "abstained": 0,
+          "total": 36,
+          "meanQueries": 6,
+          "meanCost": 6,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 6,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 36,
+          "total": 36,
+          "meanQueries": 0,
+          "meanCost": 0,
+          "meanRemaining": 9
+        },
+        {
+          "domain": "grammar",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 30,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 180,
+          "total": 180,
+          "meanQueries": 8,
+          "meanCost": 8,
+          "meanRemaining": 2.2
+        },
+        {
+          "domain": "grammar",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 6,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 36,
+          "total": 36,
+          "meanQueries": 8,
+          "meanCost": 8,
+          "meanRemaining": 2
+        }
+      ]
+    },
+    "evaluation": {
+      "archive": "w22-elicitation-evaluation.zip",
+      "bytes": 4643632,
+      "sha256": "d0b6ecce0baaa89e4b1cbf49762bdeaba1d704da935f3825148e6a55ce231856",
+      "replay": {
+        "passed": true,
+        "records": 672,
+        "cases": 96,
+        "split": "evaluation",
+        "sourceCommit": "af1a197cca74726132ec529e15df8bc274b6c260",
+        "sourceSnapshotHash": "cfd8e802f18e58028e99c77d7c188c87af58c586a6b162b36a607122cd2ff896",
+        "corpusHash": "30b8e24589263a19597e91115994b042c635e3ba15541435be80fb719f05fc14",
+        "failures": 0
+      },
+      "summary": {
+        "bytes": 674908,
+        "sha256": "41a11b16a789462727a908a97ab0b7cff4107b8c1f9cdf3d1ff99ac4a27449ac"
+      },
+      "startedAt": "2026-10-02T03:16:37.635Z",
+      "finalOutcomes": [
+        {
+          "domain": "number",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 12,
+          "failures": 0,
+          "correct": 72,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 1,
+          "meanCost": 1,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 60,
+          "failures": 0,
+          "correct": 360,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 360,
+          "meanQueries": 2.2,
+          "meanCost": 2.2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 12,
+          "failures": 0,
+          "correct": 72,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 4,
+          "meanCost": 4,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 12,
+          "failures": 0,
+          "correct": 72,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 2,
+          "meanCost": 2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 60,
+          "failures": 0,
+          "correct": 360,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 360,
+          "meanQueries": 2.2,
+          "meanCost": 4,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 12,
+          "failures": 0,
+          "correct": 72,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 4,
+          "meanCost": 4,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 12,
+          "failures": 0,
+          "correct": 48,
+          "wrong": 24,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 1,
+          "meanCost": 1,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 60,
+          "failures": 0,
+          "correct": 240,
+          "wrong": 120,
+          "abstained": 0,
+          "total": 360,
+          "meanQueries": 2.2,
+          "meanCost": 2.2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 12,
+          "failures": 0,
+          "correct": 48,
+          "wrong": 24,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 4,
+          "meanCost": 4,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "number",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 12,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 72,
+          "total": 72,
+          "meanQueries": 0,
+          "meanCost": 0,
+          "meanRemaining": 7
+        },
+        {
+          "domain": "number",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 60,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 360,
+          "total": 360,
+          "meanQueries": 8,
+          "meanCost": 8,
+          "meanRemaining": 2
+        },
+        {
+          "domain": "number",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 12,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 72,
+          "total": 72,
+          "meanQueries": 8,
+          "meanCost": 8,
+          "meanRemaining": 2
+        },
+        {
+          "domain": "grammar",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 12,
+          "failures": 0,
+          "correct": 72,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 2,
+          "meanCost": 2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 60,
+          "failures": 0,
+          "correct": 324,
+          "wrong": 0,
+          "abstained": 36,
+          "total": 360,
+          "meanQueries": 7,
+          "meanCost": 7,
+          "meanRemaining": 1.2
+        },
+        {
+          "domain": "grammar",
+          "condition": "regular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 12,
+          "failures": 0,
+          "correct": 72,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 6,
+          "meanCost": 6,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 12,
+          "failures": 0,
+          "correct": 72,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 3,
+          "meanCost": 6,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 60,
+          "failures": 0,
+          "correct": 288,
+          "wrong": 0,
+          "abstained": 72,
+          "total": 360,
+          "meanQueries": 7,
+          "meanCost": 10,
+          "meanRemaining": 1.4
+        },
+        {
+          "domain": "grammar",
+          "condition": "costly",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 12,
+          "failures": 0,
+          "correct": 72,
+          "wrong": 0,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 6,
+          "meanCost": 9,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 12,
+          "failures": 0,
+          "correct": 48,
+          "wrong": 24,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 2,
+          "meanCost": 2,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 60,
+          "failures": 0,
+          "correct": 228,
+          "wrong": 96,
+          "abstained": 36,
+          "total": 360,
+          "meanQueries": 7,
+          "meanCost": 7,
+          "meanRemaining": 1.2
+        },
+        {
+          "domain": "grammar",
+          "condition": "withheld-irregular",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 12,
+          "failures": 0,
+          "correct": 48,
+          "wrong": 24,
+          "abstained": 0,
+          "total": 72,
+          "meanQueries": 6,
+          "meanCost": 6,
+          "meanRemaining": 1
+        },
+        {
+          "domain": "grammar",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "active",
+          "traces": 12,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 72,
+          "total": 72,
+          "meanQueries": 0,
+          "meanCost": 0,
+          "meanRemaining": 9
+        },
+        {
+          "domain": "grammar",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "random",
+          "traces": 60,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 360,
+          "total": 360,
+          "meanQueries": 8,
+          "meanCost": 8,
+          "meanRemaining": 2.2
+        },
+        {
+          "domain": "grammar",
+          "condition": "unavailable",
+          "axis": "observations",
+          "budget": 8,
+          "method": "curriculum",
+          "traces": 12,
+          "failures": 0,
+          "correct": 0,
+          "wrong": 0,
+          "abstained": 72,
+          "total": 72,
+          "meanQueries": 8,
+          "meanCost": 8,
+          "meanRemaining": 2
+        }
+      ]
+    }
+  },
+  "extractedEvaluationSourceInstall": {
+    "command": "npm ci; npx tsx evaluation/src/elicitation/run.ts verify ..",
+    "installLog": {
+      "bytes": 1107,
+      "sha256": "564767762382cef801a07ae561495357a441060eb54f428e6e493506365edce4"
+    },
+    "replay": {
+      "passed": true,
+      "records": 672,
+      "cases": 96,
+      "split": "evaluation",
+      "sourceCommit": "af1a197cca74726132ec529e15df8bc274b6c260",
+      "sourceSnapshotHash": "cfd8e802f18e58028e99c77d7c188c87af58c586a6b162b36a607122cd2ff896",
+      "corpusHash": "30b8e24589263a19597e91115994b042c635e3ba15541435be80fb719f05fc14",
+      "failures": 0
+    }
+  },
+  "figures": {
+    "w22-elicitation-cost.png": {
+      "bytes": 147844,
+      "sha256": "40cc3acb2b495e213c8381eab7f939f10079b62dce4a3024dac9a6a8c2fe8fbe"
+    },
+    "w22-elicitation-cost.svg": {
+      "bytes": 86600,
+      "sha256": "f5d8bd70f0d8f063f06e3d7dcbf618b88960a2f967fac113bda375a787c3ce6f"
+    },
+    "w22-elicitation-observations.png": {
+      "bytes": 141242,
+      "sha256": "089f1479505fdba9fb47fd3d7e77d7a2394a3dd185ffb26294167de2aa7cb983"
+    },
+    "w22-elicitation-observations.svg": {
+      "bytes": 73644,
+      "sha256": "e2e3e44a199fd1b74a64df2537e94cdaeff74f6355c2a127243a88cd8974b131"
+    }
+  },
+  "limits": [
+    "Finite supplied priors, known lexical atoms and repeated synthetic structural templates do not measure new rule discovery or natural-language performance.",
+    "The same five random seeds and fixed question order are used across cases. Paired differences are descriptive, not statistical significance or calibrated uncertainty.",
+    "Cost curves are prefixes of a budget-12 run, not separate optimization at each cost. Costs are synthetic effort units.",
+    "Active selection loses to random at one observation under costly conditions. Withheld irregular targets retain wrong regularizations; unavailable alternatives cause abstention.",
+    "Development and evaluation have identical normalized curves on these templates. No policy, corpus or scoring tuning occurred between runs.",
+    "Installed acceptance checks existing native/restart/research/archive flows; source tests and CI experiment replay cover this benchmark.",
+    "Three gated native unit skips remain. Production audit has four high entries; full audit has five high and one moderate entry. No dependency remediation is claimed.",
+    "No main merge, installer release or Pages deployment."
+  ]
+}
