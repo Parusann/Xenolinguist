@@ -96,4 +96,18 @@ npx tsx docs/verification/w22-number-elicitation-replay.mts
 
 Replay verifies both profiles, recomputes question selection and the after-answer report, checks exact historical payloads, decline exclusion, validation assignment and remapped capture links. It makes no model calls. The two decisions are engineering fixtures, not a human study or a learning-curve result.
 
-The learning-curve comparison must still freeze a separate corpus and query interface, run active, seeded-random and fixed-curriculum policies under identical observation budgets, retain per-step costs/answers/predictions and replay the resulting traces. Query selection must never receive held-out targets or hidden language rules. Any negative result must remain in the report. W21's exposed reserved cases cannot serve as fresh blind evidence for changes informed by that evaluation. No learning-efficiency, model-quality or calibrated-uncertainty claim follows from the selector's unit tests.
+## Reopen the recorded grammar example
+
+Import [the retained grammar project](verification/w22-grammar-elicitation-history.xeno) through Dashboard, restore as a new project and open Grammar. The two alternatives predict prefix versus suffix plural forms. The history declines one answerable meaning, then captures the independent answer `nesh-en` for **the stars**, leaving one alternative. All four saved executable rules remain as they were; none is automatically accepted or removed. [The screenshot](verification/w22-grammar-elicitation-answer.png) shows the original completed comparison.
+
+The [original profile](verification/w22-grammar-elicitation-profile.json) and [restored profile](verification/w22-grammar-elicitation-restored-profile.json) retain exact input and result snapshots. With locked dependencies installed, run:
+
+```sh
+npx tsx docs/verification/w22-grammar-elicitation-replay.mts
+```
+
+The script recomputes every recorded selection and after-answer report, checks decline exclusion, the two-to-one comparison, exact historical payloads and remapped capture links. It also confirms restored histories cannot be applied or silently reused under remapped lexical identities. No model is called. [Verification metadata](verification/w22-grammar-elicitation.json) records the exact CI revision, artifacts and coverage boundaries.
+
+At `117f2d3`, [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/36824421316) passes 438 unit tests, seven tooling tests, lint/type/build gates, 46 workbench and eight public checks per platform. Both platforms' downloaded 12/60/336 experiment records replay. [Independent installed acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/36824421178) passes its existing native/restart/research/eight-archive flows and verifies 3,774 files. New grammar elicitation is exercised by source HTTP/browser acceptance. Three native unit skips remain. [Current dependency findings](dependency-review.md#w22-audit-refresh--2026-10-01) are retained separately from functional test results.
+
+The learning-curve comparison must still freeze a separate corpus and query interface, run active, seeded-random and fixed-curriculum policies under identical observation budgets, retain per-step costs/answers/predictions and replay the resulting traces. Query selection must never receive held-out targets or hidden language rules. Any negative result must remain in the report. W21's exposed reserved cases cannot serve as fresh blind evidence for changes informed by that evaluation. No learning-efficiency, model-quality or calibrated-uncertainty claim follows from these engineering examples.
