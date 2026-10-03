@@ -4,6 +4,7 @@ import { readFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { root, sourceIdentity, hashFile, inventory, saveRecord } from './verification-record.mjs';
+import { verifyPhoneAnalysis } from './verify-phone-analysis.mjs';
 const output = path.join(root, 'test-results/phone-service.mjs');
 const fixture = path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav');
 process.env.IPA_MODEL_DIR ||= path.join(root, 'vendor/ipa-model');
@@ -15,6 +16,7 @@ try {
   const { transcribePhones } = await import(pathToFileURL(output).href);
   record.result = await transcribePhones({ wav: await readFile(fixture) });
   if (!record.result.ipa || !record.result.segments.length || !record.result.identity?.modelSha256) throw new Error('Phone output or provenance missing');
+  record.analysisCheck = verifyPhoneAnalysis(record.result, await readFile(fixture));
   record.passed = true;
   console.log(`${record.result.segments.length} ARPABET phone segments; model ${record.result.identity.modelSha256}`);
 } catch (error) { record.passed = false; record.failure = { code: error.code, message: error.message }; process.exitCode = 1; }

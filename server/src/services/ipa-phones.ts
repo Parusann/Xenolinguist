@@ -1,7 +1,10 @@
 import { ipaModelDir } from '../config.js';
-import type { IpaResult, IpaSegment } from '../../../shared/types.js';
+import type { IpaResult } from '../../../shared/types.js';
 import { loadTransformers } from './model-loader.js';
 import { verifyPhoneAssets } from './model-assets.js';
+import { createHash } from 'node:crypto';
+import { decodeCtcPhones } from '../../../engine/src/audio/ctc.js';
+export { decodeCtcPhones } from '../../../engine/src/audio/ctc.js';
 
 /** Thrown when the IPA model is unavailable; the route maps this to HTTP 503. */
 export class IpaUnavailableError extends Error {
@@ -57,10 +60,9 @@ function getModel() {
   return modelPromise;
 }
 
-/** Parse a 16-bit PCM WAV buffer into mono Float32 samples in [-1, 1]. The model expects
- *  16 kHz mono; the fmt chunk is validated so non-16 kHz / multi-channel audio fails loudly
- *  (acoustically wrong phones) instead of being silently mis-decoded. */
-export function wavToFloat32(buf: Buffer): Float32Array {
+/** Inspect container/sample geometry without allocating decoded audio on the server thread.
+ * Unsupported rates and channels fail before creating an inference process. */
+export function inspectPhoneWav(buf: Buffer) {
   if (buf.length < 44 || buf.toString('ascii', 0, 4) !== 'RIFF' || buf.toString('ascii', 8, 12) !== 'WAVE'
     || buf.readUInt32LE(4) + 8 !== buf.length) throw new IpaBadInputError('Invalid RIFF/WAVE size or signature');
   const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
@@ -80,48 +82,15 @@ export function wavToFloat32(buf: Buffer): Float32Array {
   if (off !== buf.length || dataOff < 0 || dataLen < 800 || dataLen % 2 || dataLen > 16000 * 2 * 120) throw new IpaBadInputError('WAV must contain 25 ms to 120 seconds of complete PCM samples');
   if (format !== 1 || bits !== 16 || alignment !== 2 || byteRate !== 32000 || sampleRate !== 16000 || channels !== 1)
     throw new IpaBadInputError('Expected mono PCM16 WAV at 16000 Hz');
-  const n = Math.floor(dataLen / 2);
-  const out = new Float32Array(n);
-  for (let i = 0; i < n; i++) out[i] = dv.getInt16(dataOff + i * 2, true) / 32768;
-  return out;
+  return { sampleCount: dataLen / 2, dataOffset: dataOff, durationSeconds: dataLen / 32000 };
 }
 
-/**
- * Greedy CTC decode of raw frame logits into time-aligned phones: argmax per frame, then collapse
- * runs of the same id and drop the blank (pad) id, mapping frame index → seconds via `stride`.
- * Pure + deterministic — unit-tested without the model.
- */
-export function decodeCtcPhones(
-  logits: Float32Array,
-  frames: number,
-  vocab: number,
-  padId: number,
-  idToPhone: (id: number) => string,
-  stride: number = PHONE_STRIDE_SEC,
-): IpaResult {
-  const segments: IpaSegment[] = [];
-  let prev = -1, startF = 0;
-  for (let f = 0; f <= frames; f++) {
-    let id = -2; // sentinel past the last frame to flush the final run
-    if (f < frames) {
-      let best = 0, bestVal = -Infinity;
-      for (let v = 0; v < vocab; v++) { const val = logits[f * vocab + v]; if (val > bestVal) { bestVal = val; best = v; } }
-      id = best;
-    }
-    if (id !== prev) {
-      if (prev !== -1 && prev !== padId) {
-        const phone = idToPhone(prev).trim();
-        // Skip special tokens: a CTC head can win-argmax on class ids beyond the real
-        // phone set, which tokenizer.decode maps to bracketed markers ([UNK], <unk>, <s>…).
-        // Real ARPABET/IPA phones never contain angle/square brackets, so this is safe.
-        if (phone && !/^[<[].*[>\]]$/.test(phone)) {
-          segments.push({ phone, start: +(startF * stride).toFixed(3), end: +(f * stride).toFixed(3) });
-        }
-      }
-      prev = id; startF = f;
-    }
-  }
-  return { ipa: segments.map((s) => s.phone).join(' ').trim(), segments };
+/** Allocate decoded samples only in the inference process, after header validation. */
+export function wavToFloat32(buf: Buffer): Float32Array {
+  const { sampleCount, dataOffset } = inspectPhoneWav(buf);
+  const out = new Float32Array(sampleCount);
+  for (let i = 0; i < sampleCount; i++) out[i] = buf.readInt16LE(dataOffset + i * 2) / 32768;
+  return out;
 }
 
 export interface IpaInput { wav: Buffer }
@@ -139,9 +108,13 @@ export async function transcribePhones(input: IpaInput): Promise<IpaResult> {
     const inputs = await processor(audio);
     const out = await model(inputs);
     const logits = out.logits;
+    if (!Array.isArray(logits.dims) || logits.dims.length !== 3 || logits.dims[0] !== 1) throw new Error('Expected one CTC batch');
     const [, frames, vocab] = logits.dims as [number, number, number];
+    // The pinned seven-layer convolution has stride 320 and receptive field 400 samples.
+    if (frames !== Math.floor((audio.length - 400) / 320) + 1) throw new Error('CTC frame count does not match pinned model geometry');
     const padId = tokenizer.pad_token_id ?? 0;
-    return { ...decodeCtcPhones(logits.data as Float32Array, frames, vocab, padId, (id: number) => tokenizer.decode([id])), identity };
+    return { ...decodeCtcPhones(logits.data as Float32Array, frames, vocab, padId, (id: number) => tokenizer.decode([id])), identity,
+      audio: { sha256: createHash('sha256').update(input.wav).digest('hex'), sampleRate: 16000, sampleCount: audio.length, durationSeconds: audio.length / 16000 } };
   } catch (err) {
     if (err instanceof IpaUnavailableError) throw err;
     console.error('[ipa:inference]', (err as Error)?.name, (err as Error)?.message?.slice(0, 500));

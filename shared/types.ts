@@ -83,6 +83,31 @@ export interface IpaResult {
   ipa: string;
   segments: IpaSegment[];
   identity?: { modelId: string; modelSha256: string; alphabet: 'TIMIT ARPABET'; transformers: string; backend: string; node: string };
+  audio?: { sha256: string; sampleRate: 16000; sampleCount: number; durationSeconds: number };
+  ctc?: CtcAnalysis;
+}
+
+/** Acoustic scores are uncalibrated model outputs, never semantic confidence. */
+export interface CtcAnalysis {
+  version: 1;
+  decoder: 'greedy';
+  scoreDefinition: 'mean-frame-softmax';
+  timingDefinition: 'frame-bins-not-phonetic-boundaries';
+  frames: number;
+  vocabularySize: number;
+  blankId: number;
+  strideSeconds: number;
+  blankFrames: number;
+  specialFrames: number;
+  runs: {
+    segmentIndex: number;
+    tokenId: number;
+    startFrame: number;
+    endFrameExclusive: number;
+    meanEntropyBits: number;
+    candidates: { tokenId: number; label: string; blank: boolean; special: boolean; meanProbability: number }[];
+    omittedProbability: number;
+  }[];
 }
 export type LexicalPolicy = z.infer<typeof lexicalPolicySchema>;
 export type LexicalSense = z.infer<typeof lexicalSenseSchema>;

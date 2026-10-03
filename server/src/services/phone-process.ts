@@ -1,12 +1,12 @@
 import { fork } from 'node:child_process';
 import path from 'node:path';
 import type { IpaResult } from '../../../shared/types.js';
-import { IpaBadInputError, IpaUnavailableError, wavToFloat32 } from './ipa-phones.js';
+import { IpaBadInputError, IpaUnavailableError, inspectPhoneWav } from './ipa-phones.js';
 import { ipaModelDir } from '../config.js';
 
 /** A disposable native process makes in-flight ONNX work terminable, not merely hidden. */
 export function runPhones(wav: Buffer, signal: AbortSignal, onStarted?: () => void): Promise<IpaResult> {
-  wavToFloat32(wav); signal.throwIfAborted();
+  inspectPhoneWav(wav); signal.throwIfAborted();
   if (!ipaModelDir()) throw new IpaUnavailableError('Phone model is not configured', 'IPA_MODEL_MISSING');
   const source = import.meta.dirname;
   const entry = source ? path.join(source, 'phone-process-entry.ts') : path.join(__dirname.replace(/app\.asar([\\/])/, 'app.asar.unpacked$1'), 'phone-process.cjs');

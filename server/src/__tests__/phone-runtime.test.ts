@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { wavToFloat32, IpaBadInputError } from '../services/ipa-phones.js';
+import { inspectPhoneWav, wavToFloat32, IpaBadInputError } from '../services/ipa-phones.js';
 import { loadTransformers } from '../services/model-loader.js';
 import { verifyPhoneAssets } from '../services/model-assets.js';
 
@@ -14,6 +14,15 @@ function wav() {
   b.write('data', 36); b.writeUInt32LE(800, 40); b.writeInt16LE(-32768, 44); b.writeInt16LE(32767, 46); return b;
 }
 describe('phone input contract', () => {
+  it('inspects bounded sample geometry without decoding a full sample array', () => {
+    expect(inspectPhoneWav(wav())).toEqual({ sampleCount: 400, dataOffset: 44, durationSeconds: .025 });
+    const limit = Buffer.alloc(44 + 16000 * 2 * 120); wav().copy(limit);
+    limit.writeUInt32LE(limit.length - 8, 4); limit.writeUInt32LE(limit.length - 44, 40);
+    expect(inspectPhoneWav(limit).sampleCount).toBe(1_920_000);
+    const over = Buffer.concat([limit, Buffer.alloc(2)]);
+    over.writeUInt32LE(over.length - 8, 4); over.writeUInt32LE(over.length - 44, 40);
+    expect(() => inspectPhoneWav(over)).toThrow(IpaBadInputError);
+  });
   it('decodes mono PCM16 with the correct signed range', () => { expect([...wavToFloat32(wav()).slice(0, 2)]).toEqual([-1, 32767 / 32768]); });
   it.each([
     ['format', 20, 3], ['channels', 22, 2], ['rate', 24, 44100], ['bits', 34, 32], ['alignment', 32, 4],

@@ -1,4 +1,5 @@
 import { verifyArtifact } from './verify-artifact-layout.mjs';
+import { verifyPhoneAnalysis } from './verify-phone-analysis.mjs';
 import { createRequire } from 'node:module';
 import { existsSync } from 'node:fs';
 import { desktopRequest } from './desktop-request.mjs';
@@ -131,6 +132,7 @@ try {
     expect(record.checks.ipa.body.segments.length).toBeGreaterThan(0);
     expect(record.checks.ipa.body.identity.alphabet).toBe('TIMIT ARPABET');
     expect(record.checks.ipa.body.identity.modelSha256).toBe(record.modelFiles.find(file => file.file.endsWith('.onnx')).sha256);
+    record.checks.phoneAnalysis = verifyPhoneAnalysis(record.checks.ipa.body, wav);
   }
   record.checks.stt = await request('/api/stt', { audio: wav.toString('base64') });
   expect(record.checks.stt.status).toBe(200); expect(record.checks.stt.body.text.trim().length).toBeGreaterThan(0);
