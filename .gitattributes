@@ -22,3 +22,7 @@ docs/verification/w22-elicitation-*.svg -text
 # Preserve the byte identities of retained W23 acoustic responses and audit reports.
 docs/verification/w23-ctc-*.json -text whitespace=cr-at-eol
 docs/verification/w23-ctc-replay.mts -text
+
+# Retained W23 windowing responses and reports preserve their recorded bytes.
+docs/verification/w23-chunks-*.json -text whitespace=cr-at-eol
+docs/verification/w23-chunks-replay.mts -text

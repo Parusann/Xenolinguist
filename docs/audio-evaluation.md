@@ -53,8 +53,38 @@ Phone jobs now process one overlapping native window at a time. Each output core
 
 Every window starts on the global 320-sample grid. Its retained core contributes each global logit row exactly once. CTC decoding runs once after assembly, so a phone run crossing a join collapses once, while repeated phones separated by a blank stay distinct. This guarantees deterministic frame ownership, not equality with whole-recording inference: model context and per-window normalization can change predictions. No recognition-quality advantage is claimed without the planned labeled evaluation.
 
+For example, the replay's 810-frame non-quiet synthetic signal has the following ownership (ranges end exclusively):
+
+| Window | Frames supplied to the model | Frames retained for decoding |
+| --- | --- | --- |
+| 0 | 0–425 | 0–400 |
+| 1 | 375–810 | 400–800 |
+| 2 | 775–810 | 800–810 |
+
+Frame 400 appears in two native inputs but is retained only from window 1. A predicted blank at that frame preserves two separate `a` runs spanning frames 0–400 and 401–810. Without the blank, identical adjacent predictions collapse into one run. This checks stitching semantics, not whether a real acoustic boundary is recognized correctly.
+
 The response's `processing` record retains every window's source sample range, global frame range, owned core and boundary reason. A 120-second input has at most 18 windows; each native input is at most 144,399 samples (under 9.025 seconds). The stitched logits remain bounded by the existing 6,000-frame / 256-class ceiling. Native inputs and outputs are disposed after use, and inference runs sequentially in one disposable process. Failure in any window returns an error rather than a partial transcription.
 
 Completed-window progress crosses IPC into the existing Jobs panel. Cancellation kills the native process, and the acoustic queue keeps its slot until that process exits. Unit cases additionally verify cancellation between windows and cleanup after cancellation during a call. This does not add background persistence or a new recording-length tier. Generated analyses still share the old editing flow; separate generated/manual annotation layers remain required.
 
 Twelve new tests cover short-input identity, exact frame coverage and context bounds through the 120-second cap, quiet/fallback boundaries, malformed samples, contradictory overlap rows, cross-join repetition, sequential execution, progress, tensor disposal, corrupt outputs, cancellation and later-window failures. `node scripts/verify-phone-chunks.mjs` exercises the actual model on eight repetitions of the existing fixture (27.5605 seconds). It retains full output, window plan, identities and observed progress timings. Repeated speech is an engineering fixture, not a labeled corpus or cold/warm performance study. The installed harness additionally cancels a 30-repetition request after at least one window completes, polls the authenticated jobs API while inference runs, then requires a new multi-window request to succeed.
+
+## Second-unit verification at the frozen revision
+
+Revision `57703a9c9ebce04fe5feef6fba8b7c030fd14200` passes [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/37232466637): 474 unit tests (443 server/shared/engine/evaluation and 31 client), seven tooling tests, lint/type/build gates, 46 workbench checks and eight public checks per platform. Browser reports contain no skipped, flaky or unexpected results. Downloaded 12/60/336 regression/induction/number records and 56 elicitation traces replay on both platforms; number summaries match W19. The earlier CTC examples still replay. Three native unit checks remain gated.
+
+[Independent installed Windows acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/37232466616) verifies 3,774 files and eight archive round trips alongside native processing and recovery. Its 103.35-second repeated-audio request is cancelled after 1 of 14 windows completes. The response returns `JOB_CANCELLED`; a fresh 27.5605-second request then succeeds with 4 windows and all 1,377 frames accounted for. Its largest native window contains 144,080 samples. These are real installed operations, not mocked model responses.
+
+Observed installed cancellation took 41.7 ms from the cancellation request through receipt of the cancelled response. The 125 authenticated Jobs polls had a maximum observed round trip of 23.7 ms. The subsequent long request completed in 27.806 seconds; the separate local service invocation took 6.673 seconds. These single runs include model startup, and browser measurements include IPC/HTTP overhead. They are not a cold/warm benchmark, a memory measurement or a guarantee for other machines. Emitted phone counts are not accuracy scores.
+
+The local response contains 373 phone runs and the installed response 378, despite matching input/model hashes and window plans. Native prediction equality across these executions is not established, and the cause of the difference has not been isolated. Both responses satisfy the frame-ownership and score-accounting contract; the retained responses expose the difference for the planned recognition and reproducibility evaluation.
+
+An additional [local near-cap run](verification/w23-chunks-near-cap.json) processes 117.132125 seconds through 16 windows, accounting for 5,856 frames in 24.877 seconds. It uses the same compiled implementation; its source record transparently retains pending documentation edits with no runtime source changes. This is one engineering stress fixture, not a broader performance result.
+
+The [local native response](verification/w23-chunks-native.json), [installed response and cancellation observations](verification/w23-chunks-installed.json) and [verification metadata](verification/w23-chunks-verification.json) retain full provenance. To reconstruct the exact repeated WAVs, rebuild all three window plans, validate frame/score identities and exercise a synthetic blank across a chunk boundary:
+
+```sh
+npx tsx docs/verification/w23-chunks-replay.mts
+```
+
+Replay does not rerun native inference, reconstruct unretained native logits or reproduce timing. Production audit retains 4 high entries; full audit reports 6 high and 1 moderate entries. [Dependency review](dependency-review.md) retains unresolved update work. No main merge, installer release or Pages deployment occurred. W23 remains in progress.
