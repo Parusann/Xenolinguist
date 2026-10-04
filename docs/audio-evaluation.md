@@ -30,3 +30,19 @@ The current UI continues consuming the original phone string and timings. The ne
 4. Consider beam decoding or another phone model only if measured errors justify it and its assets, license, alphabet and Windows runtime are verified. Tone, clicks and wider language coverage remain untested.
 
 See [model provenance and runtime limits](ipa-model-notes.md), [audio lifecycle](audio-lifecycle.md) and [implementation progress](implementation-progress.md). W23 cannot be marked complete until its long-audio, annotation-preservation and labeled-evaluation exit conditions are met.
+
+## First-unit verification at the frozen revision
+
+Revision `4342cb672ee8734096a6280b3ee92892e938df98` passes [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/37163472487): 462 unit tests (431 server/shared/engine/evaluation and 31 client), seven tooling tests, lint, type checking, desktop build, 46 workbench checks and eight public checks per platform. Browser reports have no skipped, flaky or unexpected results. Downloaded 12/60/336 regression/induction/number records and 56 elicitation traces replay on both platforms; number summaries match W19. Three native unit checks remain gated.
+
+[Independent installed Windows acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/37163470366) verifies 3,774 application files, native cancellation/recovery and eight project archive round trips. Its new acoustic check verifies the actual installed endpoint's audio/model identities, frame geometry, run links and probability accounting. The local native run retains 46 phone runs; installed acceptance retains 46. Both have 172 frames on the 55,121-sample fixture. These are execution results, not a labeled recognition score.
+
+The [native response](verification/w23-ctc-native.json), [installed response](verification/w23-ctc-installed.json), [synthetic logits and output](verification/w23-ctc-example.json) and [verification metadata](verification/w23-ctc-verification.json) are retained. With locked dependencies installed:
+
+```sh
+npx tsx docs/verification/w23-ctc-replay.mts
+```
+
+This recomputes the synthetic decode and validates both native responses against the fixture hash, geometry and score accounting without loading a model. It does not reproduce native inference or its softmax from raw logits. In the synthetic example, frames zero and one collapse into `aa`: their probability vectors are approximately (0.5, 0.25, 0.125, 0.125) and (0.25, 0.25, 0.25, 0.25). The retained `aa` mean is 0.375 and the mean entropy is 1.875 bits. Later blank and special frames preserve separate phone runs instead of merging them.
+
+Production audit reports 4 high entries; the full audit reports 13 high and 1 moderate entries. [Retained audit reports](verification/w23-ctc-verification.json) preserve these unresolved findings. No dependency remediation, main merge, installer release or Pages deployment occurred. W23 remains in progress.

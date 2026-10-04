@@ -1,0 +1,1740 @@
+{
+  "recordedAt": "2026-10-03T23:58:53.657Z",
+  "source": {
+    "revision": "4342cb672ee8734096a6280b3ee92892e938df98",
+    "branch": "implementation/reliability",
+    "workingFiles": [],
+    "node": "25.8.2",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "fixture": {
+    "bytes": 110286,
+    "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+  },
+  "modelFiles": [
+    {
+      "file": "wav2vec2-phoneme/config.json",
+      "bytes": 2069,
+      "sha256": "f23a4e0a1d7d39ca4133021aebaaaaaac0ce81e9084aab972b24e19642fe8391"
+    },
+    {
+      "file": "wav2vec2-phoneme/onnx/model.onnx",
+      "bytes": 317482069,
+      "sha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935"
+    },
+    {
+      "file": "wav2vec2-phoneme/preprocessor_config.json",
+      "bytes": 214,
+      "sha256": "60ca5a31e13f69ee2fbf147504c8676db5f6398fd7a6b12294341dff838edfcf"
+    },
+    {
+      "file": "wav2vec2-phoneme/tokenizer_config.json",
+      "bytes": 6780,
+      "sha256": "8ec4656ec960b1d077d88b98b17b4096ce4a035f39d64dbfcbf17ec5cd2cad89"
+    },
+    {
+      "file": "wav2vec2-phoneme/tokenizer.json",
+      "bytes": 1336,
+      "sha256": "994013f078669204cf10001d7ce150a7973cb4510b14b7d4aacae20051b92799"
+    }
+  ],
+  "result": {
+    "ipa": "h# dh ax l ow w eh l pau dh ah kcl k w ih kcl k pau r aw n dcl f aa kcl k s ah m pau s ow m ah n ah l ey z ih dcl n ao gcl g h#",
+    "segments": [
+      {
+        "phone": "h#",
+        "start": 0,
+        "end": 0.02
+      },
+      {
+        "phone": "dh",
+        "start": 0.04,
+        "end": 0.06
+      },
+      {
+        "phone": "ax",
+        "start": 0.06,
+        "end": 0.08
+      },
+      {
+        "phone": "l",
+        "start": 0.14,
+        "end": 0.16
+      },
+      {
+        "phone": "ow",
+        "start": 0.18,
+        "end": 0.2
+      },
+      {
+        "phone": "w",
+        "start": 0.32,
+        "end": 0.36
+      },
+      {
+        "phone": "eh",
+        "start": 0.38,
+        "end": 0.4
+      },
+      {
+        "phone": "l",
+        "start": 0.52,
+        "end": 0.56
+      },
+      {
+        "phone": "pau",
+        "start": 0.64,
+        "end": 0.66
+      },
+      {
+        "phone": "dh",
+        "start": 0.7,
+        "end": 0.72
+      },
+      {
+        "phone": "ah",
+        "start": 0.72,
+        "end": 0.74
+      },
+      {
+        "phone": "kcl",
+        "start": 0.8,
+        "end": 0.82
+      },
+      {
+        "phone": "k",
+        "start": 0.82,
+        "end": 0.86
+      },
+      {
+        "phone": "w",
+        "start": 0.88,
+        "end": 0.92
+      },
+      {
+        "phone": "ih",
+        "start": 0.92,
+        "end": 0.94
+      },
+      {
+        "phone": "kcl",
+        "start": 1.04,
+        "end": 1.06
+      },
+      {
+        "phone": "k",
+        "start": 1.06,
+        "end": 1.08
+      },
+      {
+        "phone": "pau",
+        "start": 1.12,
+        "end": 1.14
+      },
+      {
+        "phone": "r",
+        "start": 1.16,
+        "end": 1.18
+      },
+      {
+        "phone": "aw",
+        "start": 1.2,
+        "end": 1.22
+      },
+      {
+        "phone": "n",
+        "start": 1.34,
+        "end": 1.36
+      },
+      {
+        "phone": "dcl",
+        "start": 1.38,
+        "end": 1.4
+      },
+      {
+        "phone": "f",
+        "start": 1.44,
+        "end": 1.46
+      },
+      {
+        "phone": "aa",
+        "start": 1.48,
+        "end": 1.5
+      },
+      {
+        "phone": "kcl",
+        "start": 1.58,
+        "end": 1.62
+      },
+      {
+        "phone": "k",
+        "start": 1.62,
+        "end": 1.64
+      },
+      {
+        "phone": "s",
+        "start": 1.7,
+        "end": 1.72
+      },
+      {
+        "phone": "ah",
+        "start": 1.8,
+        "end": 1.82
+      },
+      {
+        "phone": "m",
+        "start": 1.9,
+        "end": 1.94
+      },
+      {
+        "phone": "pau",
+        "start": 2.04,
+        "end": 2.06
+      },
+      {
+        "phone": "s",
+        "start": 2.1,
+        "end": 2.12
+      },
+      {
+        "phone": "ow",
+        "start": 2.16,
+        "end": 2.18
+      },
+      {
+        "phone": "m",
+        "start": 2.28,
+        "end": 2.3
+      },
+      {
+        "phone": "ah",
+        "start": 2.32,
+        "end": 2.34
+      },
+      {
+        "phone": "n",
+        "start": 2.4,
+        "end": 2.44
+      },
+      {
+        "phone": "ah",
+        "start": 2.46,
+        "end": 2.48
+      },
+      {
+        "phone": "l",
+        "start": 2.52,
+        "end": 2.54
+      },
+      {
+        "phone": "ey",
+        "start": 2.56,
+        "end": 2.58
+      },
+      {
+        "phone": "z",
+        "start": 2.7,
+        "end": 2.72
+      },
+      {
+        "phone": "ih",
+        "start": 2.74,
+        "end": 2.76
+      },
+      {
+        "phone": "dcl",
+        "start": 2.82,
+        "end": 2.86
+      },
+      {
+        "phone": "n",
+        "start": 2.88,
+        "end": 2.9
+      },
+      {
+        "phone": "ao",
+        "start": 2.9,
+        "end": 2.92
+      },
+      {
+        "phone": "gcl",
+        "start": 3.06,
+        "end": 3.08
+      },
+      {
+        "phone": "g",
+        "start": 3.08,
+        "end": 3.1
+      },
+      {
+        "phone": "h#",
+        "start": 3.42,
+        "end": 3.44
+      }
+    ],
+    "ctc": {
+      "version": 1,
+      "decoder": "greedy",
+      "scoreDefinition": "mean-frame-softmax",
+      "timingDefinition": "frame-bins-not-phonetic-boundaries",
+      "frames": 172,
+      "vocabularySize": 56,
+      "blankId": 53,
+      "strideSeconds": 0.02,
+      "blankFrames": 118,
+      "specialFrames": 0,
+      "runs": [
+        {
+          "segmentIndex": 0,
+          "tokenId": 22,
+          "startFrame": 0,
+          "endFrameExclusive": 1,
+          "meanEntropyBits": 0.03199394269305984,
+          "candidates": [
+            {
+              "tokenId": 22,
+              "label": "h#",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9978016015987793
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.0007862631028438303
+            },
+            {
+              "tokenId": 10,
+              "label": "d",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.00012100885902935945
+            }
+          ],
+          "omittedProbability": 0.0012911264393475896
+        },
+        {
+          "segmentIndex": 1,
+          "tokenId": 12,
+          "startFrame": 2,
+          "endFrameExclusive": 3,
+          "meanEntropyBits": 0.19256789663171453,
+          "candidates": [
+            {
+              "tokenId": 12,
+              "label": "dh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9819816556930313
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.008489282138346156
+            },
+            {
+              "tokenId": 44,
+              "label": "th",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0016409451802226224
+            }
+          ],
+          "omittedProbability": 0.007888116988399863
+        },
+        {
+          "segmentIndex": 2,
+          "tokenId": 5,
+          "startFrame": 3,
+          "endFrameExclusive": 4,
+          "meanEntropyBits": 2.232777782025424,
+          "candidates": [
+            {
+              "tokenId": 5,
+              "label": "ax",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.4214053094958637
+            },
+            {
+              "tokenId": 2,
+              "label": "ah",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.323903103879032
+            },
+            {
+              "tokenId": 24,
+              "label": "ih",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.11394872366275657
+            }
+          ],
+          "omittedProbability": 0.14074286296234773
+        },
+        {
+          "segmentIndex": 3,
+          "tokenId": 29,
+          "startFrame": 7,
+          "endFrameExclusive": 8,
+          "meanEntropyBits": 0.08592916827607118,
+          "candidates": [
+            {
+              "tokenId": 29,
+              "label": "l",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9931677200968562
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.002588998701120311
+            },
+            {
+              "tokenId": 15,
+              "label": "el",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0007120150636030463
+            }
+          ],
+          "omittedProbability": 0.0035312661384204747
+        },
+        {
+          "segmentIndex": 4,
+          "tokenId": 33,
+          "startFrame": 9,
+          "endFrameExclusive": 10,
+          "meanEntropyBits": 0.12673167996177007,
+          "candidates": [
+            {
+              "tokenId": 33,
+              "label": "ow",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9902196542439189
+            },
+            {
+              "tokenId": 34,
+              "label": "oy",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0010714705568467592
+            },
+            {
+              "tokenId": 45,
+              "label": "uh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.000984967034512958
+            }
+          ],
+          "omittedProbability": 0.007723908164721349
+        },
+        {
+          "segmentIndex": 5,
+          "tokenId": 48,
+          "startFrame": 16,
+          "endFrameExclusive": 18,
+          "meanEntropyBits": 0.9859412596825272,
+          "candidates": [
+            {
+              "tokenId": 48,
+              "label": "w",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.7186558614130326
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.2253462560495291
+            },
+            {
+              "tokenId": 16,
+              "label": "epi",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.01666952831849803
+            }
+          ],
+          "omittedProbability": 0.03932835421894032
+        },
+        {
+          "segmentIndex": 6,
+          "tokenId": 14,
+          "startFrame": 19,
+          "endFrameExclusive": 20,
+          "meanEntropyBits": 2.7804904835054987,
+          "candidates": [
+            {
+              "tokenId": 14,
+              "label": "eh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.3954311383411444
+            },
+            {
+              "tokenId": 24,
+              "label": "ih",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.27495375027987584
+            },
+            {
+              "tokenId": 2,
+              "label": "ah",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0885896464025545
+            }
+          ],
+          "omittedProbability": 0.2410254649764253
+        },
+        {
+          "segmentIndex": 7,
+          "tokenId": 29,
+          "startFrame": 26,
+          "endFrameExclusive": 28,
+          "meanEntropyBits": 0.22272621585911756,
+          "candidates": [
+            {
+              "tokenId": 29,
+              "label": "l",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9675236590844529
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.028521544192312794
+            },
+            {
+              "tokenId": 15,
+              "label": "el",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0010300087672263278
+            }
+          ],
+          "omittedProbability": 0.0029247879560079237
+        },
+        {
+          "segmentIndex": 8,
+          "tokenId": 36,
+          "startFrame": 32,
+          "endFrameExclusive": 33,
+          "meanEntropyBits": 1.5797432205047683,
+          "candidates": [
+            {
+              "tokenId": 36,
+              "label": "pau",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.7464676629332929
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.08663399052292477
+            },
+            {
+              "tokenId": 16,
+              "label": "epi",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.06467787591327488
+            }
+          ],
+          "omittedProbability": 0.10222047063050743
+        },
+        {
+          "segmentIndex": 9,
+          "tokenId": 12,
+          "startFrame": 35,
+          "endFrameExclusive": 36,
+          "meanEntropyBits": 0.9623677203544528,
+          "candidates": [
+            {
+              "tokenId": 12,
+              "label": "dh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.8354597128905006
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.11992742588546129
+            },
+            {
+              "tokenId": 31,
+              "label": "n",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0172688238436343
+            }
+          ],
+          "omittedProbability": 0.02734403738040392
+        },
+        {
+          "segmentIndex": 10,
+          "tokenId": 2,
+          "startFrame": 36,
+          "endFrameExclusive": 37,
+          "meanEntropyBits": 1.4012444524911878,
+          "candidates": [
+            {
+              "tokenId": 2,
+              "label": "ah",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.7576750004058262
+            },
+            {
+              "tokenId": 5,
+              "label": "ax",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.1351007005246437
+            },
+            {
+              "tokenId": 45,
+              "label": "uh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0412219959005113
+            }
+          ],
+          "omittedProbability": 0.06600230316901867
+        },
+        {
+          "segmentIndex": 11,
+          "tokenId": 28,
+          "startFrame": 40,
+          "endFrameExclusive": 41,
+          "meanEntropyBits": 1.0496339193923918,
+          "candidates": [
+            {
+              "tokenId": 28,
+              "label": "kcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.8558983057122924
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.05906807586383188
+            },
+            {
+              "tokenId": 43,
+              "label": "tcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.03340263816260816
+            }
+          ],
+          "omittedProbability": 0.051630980261267556
+        },
+        {
+          "segmentIndex": 12,
+          "tokenId": 27,
+          "startFrame": 41,
+          "endFrameExclusive": 43,
+          "meanEntropyBits": 0.7796956894602124,
+          "candidates": [
+            {
+              "tokenId": 27,
+              "label": "k",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.7487445354133824
+            },
+            {
+              "tokenId": 28,
+              "label": "kcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.20628494253845148
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.03511626643052313
+            }
+          ],
+          "omittedProbability": 0.009854255617643082
+        },
+        {
+          "segmentIndex": 13,
+          "tokenId": 48,
+          "startFrame": 44,
+          "endFrameExclusive": 46,
+          "meanEntropyBits": 0.5555136302161816,
+          "candidates": [
+            {
+              "tokenId": 48,
+              "label": "w",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9102622660028714
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.07523063463634501
+            },
+            {
+              "tokenId": 16,
+              "label": "epi",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0031990320281852754
+            }
+          ],
+          "omittedProbability": 0.01130806733259826
+        },
+        {
+          "segmentIndex": 14,
+          "tokenId": 24,
+          "startFrame": 46,
+          "endFrameExclusive": 47,
+          "meanEntropyBits": 0.7971897089604264,
+          "candidates": [
+            {
+              "tokenId": 24,
+              "label": "ih",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.8404964491639481
+            },
+            {
+              "tokenId": 25,
+              "label": "iy",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.1409689154988793
+            },
+            {
+              "tokenId": 14,
+              "label": "eh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.003551199730168148
+            }
+          ],
+          "omittedProbability": 0.014983435607004547
+        },
+        {
+          "segmentIndex": 15,
+          "tokenId": 28,
+          "startFrame": 52,
+          "endFrameExclusive": 53,
+          "meanEntropyBits": 0.9262003200446087,
+          "candidates": [
+            {
+              "tokenId": 28,
+              "label": "kcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.8873405760009978
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.03028715843117667
+            },
+            {
+              "tokenId": 43,
+              "label": "tcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.022329469852452617
+            }
+          ],
+          "omittedProbability": 0.060042795715372854
+        },
+        {
+          "segmentIndex": 16,
+          "tokenId": 27,
+          "startFrame": 53,
+          "endFrameExclusive": 54,
+          "meanEntropyBits": 0.14576428368942618,
+          "candidates": [
+            {
+              "tokenId": 27,
+              "label": "k",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9868576785215729
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.005658617677977297
+            },
+            {
+              "tokenId": 28,
+              "label": "kcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0015059750829611602
+            }
+          ],
+          "omittedProbability": 0.005977728717488695
+        },
+        {
+          "segmentIndex": 17,
+          "tokenId": 36,
+          "startFrame": 56,
+          "endFrameExclusive": 57,
+          "meanEntropyBits": 1.6884067300400587,
+          "candidates": [
+            {
+              "tokenId": 36,
+              "label": "pau",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.7295864412600945
+            },
+            {
+              "tokenId": 16,
+              "label": "epi",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.07275709005076875
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.069461691772134
+            }
+          ],
+          "omittedProbability": 0.12819477691700265
+        },
+        {
+          "segmentIndex": 18,
+          "tokenId": 39,
+          "startFrame": 58,
+          "endFrameExclusive": 59,
+          "meanEntropyBits": 0.09939250636423777,
+          "candidates": [
+            {
+              "tokenId": 39,
+              "label": "r",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9919807257084865
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.0028781169212801685
+            },
+            {
+              "tokenId": 17,
+              "label": "er",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0007949883973352225
+            }
+          ],
+          "omittedProbability": 0.004346168972898079
+        },
+        {
+          "segmentIndex": 19,
+          "tokenId": 4,
+          "startFrame": 60,
+          "endFrameExclusive": 61,
+          "meanEntropyBits": 1.2084218728778613,
+          "candidates": [
+            {
+              "tokenId": 4,
+              "label": "aw",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.837601850776437
+            },
+            {
+              "tokenId": 33,
+              "label": "ow",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.05900567291013446
+            },
+            {
+              "tokenId": 0,
+              "label": "aa",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0287003000415157
+            }
+          ],
+          "omittedProbability": 0.07469217627191282
+        },
+        {
+          "segmentIndex": 20,
+          "tokenId": 31,
+          "startFrame": 67,
+          "endFrameExclusive": 68,
+          "meanEntropyBits": 2.023415789177335,
+          "candidates": [
+            {
+              "tokenId": 31,
+              "label": "n",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.5574828054487252
+            },
+            {
+              "tokenId": 30,
+              "label": "m",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.17751801060962466
+            },
+            {
+              "tokenId": 32,
+              "label": "ng",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.14563918091452882
+            }
+          ],
+          "omittedProbability": 0.11936000302712135
+        },
+        {
+          "segmentIndex": 21,
+          "tokenId": 11,
+          "startFrame": 69,
+          "endFrameExclusive": 70,
+          "meanEntropyBits": 1.4638653467211487,
+          "candidates": [
+            {
+              "tokenId": 11,
+              "label": "dcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.6146662675527238
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.32004512824036474
+            },
+            {
+              "tokenId": 10,
+              "label": "d",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.02436225953911474
+            }
+          ],
+          "omittedProbability": 0.040926344667796655
+        },
+        {
+          "segmentIndex": 22,
+          "tokenId": 19,
+          "startFrame": 72,
+          "endFrameExclusive": 73,
+          "meanEntropyBits": 0.2196951263811831,
+          "candidates": [
+            {
+              "tokenId": 19,
+              "label": "f",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9810418171549267
+            },
+            {
+              "tokenId": 16,
+              "label": "epi",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0035581841597942276
+            },
+            {
+              "tokenId": 44,
+              "label": "th",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.003162690001565802
+            }
+          ],
+          "omittedProbability": 0.01223730868371331
+        },
+        {
+          "segmentIndex": 23,
+          "tokenId": 0,
+          "startFrame": 74,
+          "endFrameExclusive": 75,
+          "meanEntropyBits": 1.2433212557559101,
+          "candidates": [
+            {
+              "tokenId": 0,
+              "label": "aa",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.748858894219672
+            },
+            {
+              "tokenId": 3,
+              "label": "ao",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.1748297966834048
+            },
+            {
+              "tokenId": 2,
+              "label": "ah",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.04395476159447279
+            }
+          ],
+          "omittedProbability": 0.03235654750245043
+        },
+        {
+          "segmentIndex": 24,
+          "tokenId": 28,
+          "startFrame": 79,
+          "endFrameExclusive": 81,
+          "meanEntropyBits": 0.9070925188226827,
+          "candidates": [
+            {
+              "tokenId": 28,
+              "label": "kcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.8423712737741504
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.07695770727194845
+            },
+            {
+              "tokenId": 27,
+              "label": "k",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.04771601179862378
+            }
+          ],
+          "omittedProbability": 0.03295500715527733
+        },
+        {
+          "segmentIndex": 25,
+          "tokenId": 27,
+          "startFrame": 81,
+          "endFrameExclusive": 82,
+          "meanEntropyBits": 0.27247696519042947,
+          "candidates": [
+            {
+              "tokenId": 27,
+              "label": "k",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9671029524556009
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.02444299339466422
+            },
+            {
+              "tokenId": 20,
+              "label": "g",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0016583194713417318
+            }
+          ],
+          "omittedProbability": 0.006795734678393117
+        },
+        {
+          "segmentIndex": 26,
+          "tokenId": 40,
+          "startFrame": 85,
+          "endFrameExclusive": 86,
+          "meanEntropyBits": 0.3722047189959911,
+          "candidates": [
+            {
+              "tokenId": 40,
+              "label": "s",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9580275943934204
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.01252899711889685
+            },
+            {
+              "tokenId": 16,
+              "label": "epi",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.010749430004491082
+            }
+          ],
+          "omittedProbability": 0.018693978483191542
+        },
+        {
+          "segmentIndex": 27,
+          "tokenId": 2,
+          "startFrame": 90,
+          "endFrameExclusive": 91,
+          "meanEntropyBits": 1.9690289447979883,
+          "candidates": [
+            {
+              "tokenId": 2,
+              "label": "ah",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.5489075946031559
+            },
+            {
+              "tokenId": 33,
+              "label": "ow",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.29572003809335584
+            },
+            {
+              "tokenId": 0,
+              "label": "aa",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0553808940580417
+            }
+          ],
+          "omittedProbability": 0.09999147324544666
+        },
+        {
+          "segmentIndex": 28,
+          "tokenId": 30,
+          "startFrame": 95,
+          "endFrameExclusive": 97,
+          "meanEntropyBits": 0.33894089851235754,
+          "candidates": [
+            {
+              "tokenId": 30,
+              "label": "m",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9511969931131584
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.03635792863738048
+            },
+            {
+              "tokenId": 31,
+              "label": "n",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0038545692842130224
+            }
+          ],
+          "omittedProbability": 0.008590508965248045
+        },
+        {
+          "segmentIndex": 29,
+          "tokenId": 36,
+          "startFrame": 102,
+          "endFrameExclusive": 103,
+          "meanEntropyBits": 0.9979336225997324,
+          "candidates": [
+            {
+              "tokenId": 36,
+              "label": "pau",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.866916498881597
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.05184112694220813
+            },
+            {
+              "tokenId": 16,
+              "label": "epi",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.027880648620323276
+            }
+          ],
+          "omittedProbability": 0.0533617255558716
+        },
+        {
+          "segmentIndex": 30,
+          "tokenId": 40,
+          "startFrame": 105,
+          "endFrameExclusive": 106,
+          "meanEntropyBits": 0.2460502550840042,
+          "candidates": [
+            {
+              "tokenId": 40,
+              "label": "s",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9760509287131245
+            },
+            {
+              "tokenId": 41,
+              "label": "sh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.008763944382835965
+            },
+            {
+              "tokenId": 50,
+              "label": "z",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.004427887258297838
+            }
+          ],
+          "omittedProbability": 0.010757239645741712
+        },
+        {
+          "segmentIndex": 31,
+          "tokenId": 33,
+          "startFrame": 108,
+          "endFrameExclusive": 109,
+          "meanEntropyBits": 0.552508772035088,
+          "candidates": [
+            {
+              "tokenId": 33,
+              "label": "ow",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9106780621158129
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.07580788104523888
+            },
+            {
+              "tokenId": 2,
+              "label": "ah",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0026848235275076814
+            }
+          ],
+          "omittedProbability": 0.01082923331144059
+        },
+        {
+          "segmentIndex": 32,
+          "tokenId": 30,
+          "startFrame": 114,
+          "endFrameExclusive": 115,
+          "meanEntropyBits": 1.401846365087433,
+          "candidates": [
+            {
+              "tokenId": 30,
+              "label": "m",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.7970490731756202
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.0902639519298076
+            },
+            {
+              "tokenId": 31,
+              "label": "n",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.024757006280220047
+            }
+          ],
+          "omittedProbability": 0.0879299686143521
+        },
+        {
+          "segmentIndex": 33,
+          "tokenId": 2,
+          "startFrame": 116,
+          "endFrameExclusive": 117,
+          "meanEntropyBits": 1.7247576917087417,
+          "candidates": [
+            {
+              "tokenId": 2,
+              "label": "ah",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.6368733607667417
+            },
+            {
+              "tokenId": 5,
+              "label": "ax",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.2072215684340536
+            },
+            {
+              "tokenId": 24,
+              "label": "ih",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.07070815143028136
+            }
+          ],
+          "omittedProbability": 0.08519691936892326
+        },
+        {
+          "segmentIndex": 34,
+          "tokenId": 31,
+          "startFrame": 120,
+          "endFrameExclusive": 122,
+          "meanEntropyBits": 0.7757482132179583,
+          "candidates": [
+            {
+              "tokenId": 31,
+              "label": "n",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.8713152887624123
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.09287544589038577
+            },
+            {
+              "tokenId": 12,
+              "label": "dh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.009095855063490732
+            }
+          ],
+          "omittedProbability": 0.026713410283711214
+        },
+        {
+          "segmentIndex": 35,
+          "tokenId": 2,
+          "startFrame": 123,
+          "endFrameExclusive": 124,
+          "meanEntropyBits": 1.9766866691587965,
+          "candidates": [
+            {
+              "tokenId": 2,
+              "label": "ah",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.4789529395650391
+            },
+            {
+              "tokenId": 5,
+              "label": "ax",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.3293536545951731
+            },
+            {
+              "tokenId": 24,
+              "label": "ih",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.07419947461224914
+            }
+          ],
+          "omittedProbability": 0.1174939312275387
+        },
+        {
+          "segmentIndex": 36,
+          "tokenId": 29,
+          "startFrame": 126,
+          "endFrameExclusive": 127,
+          "meanEntropyBits": 1.7178259829403986,
+          "candidates": [
+            {
+              "tokenId": 29,
+              "label": "l",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.5798946466240382
+            },
+            {
+              "tokenId": 31,
+              "label": "n",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.2942083217155779
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.07449874375657099
+            }
+          ],
+          "omittedProbability": 0.051398287903812845
+        },
+        {
+          "segmentIndex": 37,
+          "tokenId": 18,
+          "startFrame": 128,
+          "endFrameExclusive": 129,
+          "meanEntropyBits": 0.13058211087735724,
+          "candidates": [
+            {
+              "tokenId": 18,
+              "label": "ey",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9898003972856174
+            },
+            {
+              "tokenId": 6,
+              "label": "ay",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0016853536872046904
+            },
+            {
+              "tokenId": 14,
+              "label": "eh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0010429928051321525
+            }
+          ],
+          "omittedProbability": 0.007471256222045697
+        },
+        {
+          "segmentIndex": 38,
+          "tokenId": 50,
+          "startFrame": 135,
+          "endFrameExclusive": 136,
+          "meanEntropyBits": 0.182201070943734,
+          "candidates": [
+            {
+              "tokenId": 50,
+              "label": "z",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.984092384397743
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.004409782666573306
+            },
+            {
+              "tokenId": 40,
+              "label": "s",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0023131585958950556
+            }
+          ],
+          "omittedProbability": 0.009184674339788534
+        },
+        {
+          "segmentIndex": 39,
+          "tokenId": 24,
+          "startFrame": 137,
+          "endFrameExclusive": 138,
+          "meanEntropyBits": 0.7497166681399647,
+          "candidates": [
+            {
+              "tokenId": 24,
+              "label": "ih",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.8291409336792096
+            },
+            {
+              "tokenId": 25,
+              "label": "iy",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.16221038937844864
+            },
+            {
+              "tokenId": 14,
+              "label": "eh",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0011592527245239755
+            }
+          ],
+          "omittedProbability": 0.007489424217817731
+        },
+        {
+          "segmentIndex": 40,
+          "tokenId": 11,
+          "startFrame": 141,
+          "endFrameExclusive": 143,
+          "meanEntropyBits": 0.8483590486864553,
+          "candidates": [
+            {
+              "tokenId": 11,
+              "label": "dcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.8141426155971212
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.15997287322326814
+            },
+            {
+              "tokenId": 10,
+              "label": "d",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.016912722659986196
+            }
+          ],
+          "omittedProbability": 0.008971788519624435
+        },
+        {
+          "segmentIndex": 41,
+          "tokenId": 31,
+          "startFrame": 144,
+          "endFrameExclusive": 145,
+          "meanEntropyBits": 1.6522582810852997,
+          "candidates": [
+            {
+              "tokenId": 31,
+              "label": "n",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.6528824365771132
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.201043743166143
+            },
+            {
+              "tokenId": 30,
+              "label": "m",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.09773109360449364
+            }
+          ],
+          "omittedProbability": 0.048342726652250145
+        },
+        {
+          "segmentIndex": 42,
+          "tokenId": 3,
+          "startFrame": 145,
+          "endFrameExclusive": 146,
+          "meanEntropyBits": 0.2905988779640624,
+          "candidates": [
+            {
+              "tokenId": 3,
+              "label": "ao",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9666943208505416
+            },
+            {
+              "tokenId": 0,
+              "label": "aa",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.022028733357148955
+            },
+            {
+              "tokenId": 33,
+              "label": "ow",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0020362126930662163
+            }
+          ],
+          "omittedProbability": 0.009240733099243226
+        },
+        {
+          "segmentIndex": 43,
+          "tokenId": 21,
+          "startFrame": 153,
+          "endFrameExclusive": 154,
+          "meanEntropyBits": 0.1607087735993537,
+          "candidates": [
+            {
+              "tokenId": 21,
+              "label": "gcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9866416499995821
+            },
+            {
+              "tokenId": 20,
+              "label": "g",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0017641254855695477
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.0015357263826747951
+            }
+          ],
+          "omittedProbability": 0.010058498132173521
+        },
+        {
+          "segmentIndex": 44,
+          "tokenId": 20,
+          "startFrame": 154,
+          "endFrameExclusive": 155,
+          "meanEntropyBits": 0.6024507780677179,
+          "candidates": [
+            {
+              "tokenId": 20,
+              "label": "g",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9108995501340937
+            },
+            {
+              "tokenId": 21,
+              "label": "gcl",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.04882003028401697
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.03060354592427013
+            }
+          ],
+          "omittedProbability": 0.009676873657619156
+        },
+        {
+          "segmentIndex": 45,
+          "tokenId": 22,
+          "startFrame": 171,
+          "endFrameExclusive": 172,
+          "meanEntropyBits": 0.02574370826980931,
+          "candidates": [
+            {
+              "tokenId": 22,
+              "label": "h#",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9983479117245565
+            },
+            {
+              "tokenId": 53,
+              "label": "",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.0003522337545881961
+            },
+            {
+              "tokenId": 10,
+              "label": "d",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.0001104541802214586
+            }
+          ],
+          "omittedProbability": 0.0011894003406338616
+        }
+      ]
+    },
+    "identity": {
+      "modelId": "wav2vec2-phoneme",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "alphabet": "TIMIT ARPABET",
+      "transformers": "4.2.0",
+      "backend": "onnxruntime-node",
+      "node": "25.8.2"
+    },
+    "audio": {
+      "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "sampleRate": 16000,
+      "sampleCount": 55121,
+      "durationSeconds": 3.4450625
+    }
+  },
+  "analysisCheck": {
+    "passed": true,
+    "frames": 172,
+    "phoneRuns": 46,
+    "audioSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+    "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+    "scoreDefinition": "mean-frame-softmax"
+  },
+  "passed": true
+}
