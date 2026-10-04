@@ -22,7 +22,7 @@ ipaRouter.post('/', async (req, res) => {
   const controller = new AbortController();
   const abort = () => { if (!res.writableEnded) controller.abort(); }; res.once('close', abort);
   try {
-    const job = jobs.submit('acoustic', 'Phone analysis', (signal, progress) => runPhones(wav, signal, () => progress({ status: 'Native phone process started' })), { signal: controller.signal });
+    const job = jobs.submit('acoustic', 'Phone analysis', (signal, progress) => runPhones(wav, signal, () => progress({ status: 'Native phone process started' }), value => progress({ status: 'Phone chunks processed', ...value })), { signal: controller.signal });
     res.setHeader('X-Xeno-Job', job.id);
     const result = await job.promise;
     return res.json(result);

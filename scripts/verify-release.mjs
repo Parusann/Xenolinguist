@@ -1,5 +1,5 @@
 import { verifyArtifact } from './verify-artifact-layout.mjs';
-import { verifyPhoneAnalysis } from './verify-phone-analysis.mjs';
+import { verifyPhoneAnalysis, repeatPhoneFixture, verifyPhoneChunks } from './verify-phone-analysis.mjs';
 import { createRequire } from 'node:module';
 import { existsSync } from 'node:fs';
 import { desktopRequest } from './desktop-request.mjs';
@@ -126,6 +126,30 @@ try {
   const cancelled = await page.evaluate(() => window.__phoneCancellation);
   expect(cancelled.status).toBe(409); expect(cancelled.body.code).toBe('JOB_CANCELLED');
   record.checks.nativeJobCancellation = { nativeProcessStarted: true, status: cancelled.status, code: cancelled.body.code };
+  const cancellationWav=repeatPhoneFixture(wav,30),jobPollMs=[];
+  await page.evaluate(audio => {
+    window.__chunkCancellation=fetch('/api/ipa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio})}).then(async response=>({status:response.status,body:await response.json()}));
+  },cancellationWav.toString('base64'));
+  let midChunkJob;
+  await expect.poll(async()=>{
+    const start=performance.now();
+    const response=await desktopRequest(page).get(origin+'/api/jobs');
+    expect(response.status()).toBe(200);
+    jobPollMs.push(performance.now()-start);
+    const current=await response.json();
+    midChunkJob=current.jobs.find(job=>job.state==='running' && job.task==='Phone analysis' && job.progress?.completed>=1 && job.progress.completed<job.progress.total);
+    return Boolean(midChunkJob);
+  },{timeout:120_000,intervals:[100]}).toBe(true);
+  const stopStart=performance.now();
+  expect(await page.evaluate(async id=>(await fetch('/api/jobs/'+id,{method:'DELETE'})).status,midChunkJob.id)).toBe(202);
+  const midCancelled=await page.evaluate(()=>window.__chunkCancellation);
+  expect(midCancelled.status).toBe(409);expect(midCancelled.body.code).toBe('JOB_CANCELLED');
+  record.checks.chunkCancellation={progress:midChunkJob.progress,status:midCancelled.status,code:midCancelled.body.code,cancelMs:performance.now()-stopStart,jobPollMs};
+  const longWav=repeatPhoneFixture(wav,8),longStart=performance.now();
+  const longPhones=await request('/api/ipa',{audio:longWav.toString('base64')});
+  expect(longPhones.status).toBe(200);
+  record.checks.chunkedPhones={repetitions:8,result:longPhones.body,elapsedMs:performance.now()-longStart,check:verifyPhoneChunks(longPhones.body,longWav)};
+  expect(record.checks.chunkedPhones.check.chunks).toBeGreaterThan(1);
   record.checks.ipa = await request('/api/ipa', { audio: wav.toString('base64') });
   if (record.checks.ipa.status === 200) {
     expect(record.checks.ipa.body.ipa.length).toBeGreaterThan(0);

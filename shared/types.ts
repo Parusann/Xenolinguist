@@ -85,6 +85,18 @@ export interface IpaResult {
   identity?: { modelId: string; modelSha256: string; alphabet: 'TIMIT ARPABET'; transformers: string; backend: string; node: string };
   audio?: { sha256: string; sampleRate: 16000; sampleCount: number; durationSeconds: number };
   ctc?: CtcAnalysis;
+  processing?: PhoneProcessing;
+}
+
+export interface PhoneProcessing {
+  version: 1;
+  strategy: 'overlap-frame-ownership';
+  coreFrames: 400;
+  contextFrames: 25;
+  quietRms: 0.01;
+  quietFrameCount: number;
+  chunks: { index: number; startSample: number; endSample: number; startFrame: number; endFrameExclusive: number;
+    keepStartFrame: number; keepEndFrameExclusive: number; boundary: 'low-energy' | 'limit' | 'end' }[];
 }
 
 /** Acoustic scores are uncalibrated model outputs, never semantic confidence. */

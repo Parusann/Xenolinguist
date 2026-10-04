@@ -2,10 +2,11 @@ import { fork } from 'node:child_process';
 import path from 'node:path';
 import type { IpaResult } from '../../../shared/types.js';
 import { IpaBadInputError, IpaUnavailableError, inspectPhoneWav } from './ipa-phones.js';
+import type { PhoneChunkProgress } from './audio-chunks.js';
 import { ipaModelDir } from '../config.js';
 
 /** A disposable native process makes in-flight ONNX work terminable, not merely hidden. */
-export function runPhones(wav: Buffer, signal: AbortSignal, onStarted?: () => void): Promise<IpaResult> {
+export function runPhones(wav: Buffer, signal: AbortSignal, onStarted?: () => void, onProgress?: (value: PhoneChunkProgress) => void): Promise<IpaResult> {
   inspectPhoneWav(wav); signal.throwIfAborted();
   if (!ipaModelDir()) throw new IpaUnavailableError('Phone model is not configured', 'IPA_MODEL_MISSING');
   const source = import.meta.dirname;
@@ -18,7 +19,8 @@ export function runPhones(wav: Buffer, signal: AbortSignal, onStarted?: () => vo
     const abort = () => { child.kill('SIGKILL'); };
     signal.addEventListener('abort', abort, { once: true }); if (signal.aborted) abort();
     child.stderr?.on('data', () => {});
-    child.on('message', (message: { result?: IpaResult; error?: { name: string; code?: string } }) => {
+    child.on('message', (message: { progress?: PhoneChunkProgress; result?: IpaResult; error?: { name: string; code?: string } }) => {
+      if (message.progress) { onProgress?.(message.progress); return; }
       result = message.result;
       if (message.error) failure = message.error.name === 'IpaBadInputError' ? new IpaBadInputError('Unsupported audio') : new IpaUnavailableError('Phone inference unavailable', message.error.code);
     });

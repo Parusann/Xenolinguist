@@ -3,6 +3,7 @@ import type { IpaResult } from '../../../shared/types.js';
 import { loadTransformers } from './model-loader.js';
 import { verifyPhoneAssets } from './model-assets.js';
 import { createHash } from 'node:crypto';
+import { inferPhoneChunks, type PhoneChunkProgress } from './audio-chunks.js';
 import { decodeCtcPhones } from '../../../engine/src/audio/ctc.js';
 export { decodeCtcPhones } from '../../../engine/src/audio/ctc.js';
 
@@ -93,7 +94,7 @@ export function wavToFloat32(buf: Buffer): Float32Array {
   return out;
 }
 
-export interface IpaInput { wav: Buffer }
+export interface IpaInput { wav: Buffer; onProgress?: (value: PhoneChunkProgress) => void }
 
 /** Transcribe 16 kHz mono WAV bytes into English-trained ARPABET phones + frame timings. */
 export async function transcribePhones(input: IpaInput): Promise<IpaResult> {
@@ -105,15 +106,17 @@ export async function transcribePhones(input: IpaInput): Promise<IpaResult> {
   }
   const { processor, tokenizer, model, identity } = await getModel();
   try {
-    const inputs = await processor(audio);
-    const out = await model(inputs);
-    const logits = out.logits;
-    if (!Array.isArray(logits.dims) || logits.dims.length !== 3 || logits.dims[0] !== 1) throw new Error('Expected one CTC batch');
-    const [, frames, vocab] = logits.dims as [number, number, number];
-    // The pinned seven-layer convolution has stride 320 and receptive field 400 samples.
-    if (frames !== Math.floor((audio.length - 400) / 320) + 1) throw new Error('CTC frame count does not match pinned model geometry');
+    const { logits, frames, vocab, processing } = await inferPhoneChunks(audio, async samples => {
+      const inputs = await processor(samples);
+      try {
+        const out = await model(inputs);
+        return out.logits;
+      } finally {
+        for (const tensor of Object.values(inputs) as { dispose?: () => void }[]) tensor.dispose?.();
+      }
+    }, { onProgress: input.onProgress });
     const padId = tokenizer.pad_token_id ?? 0;
-    return { ...decodeCtcPhones(logits.data as Float32Array, frames, vocab, padId, (id: number) => tokenizer.decode([id])), identity,
+    return { ...decodeCtcPhones(logits, frames, vocab, padId, (id: number) => tokenizer.decode([id])), identity, processing,
       audio: { sha256: createHash('sha256').update(input.wav).digest('hex'), sampleRate: 16000, sampleCount: audio.length, durationSeconds: audio.length / 16000 } };
   } catch (err) {
     if (err instanceof IpaUnavailableError) throw err;
