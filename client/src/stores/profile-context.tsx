@@ -8,6 +8,8 @@ import { apiFetch } from '@/services/api'
 import { getSaveQueue } from './save-runtime'
 import type { DraftValue } from 'shared/schemas/save-queue'
 import type { SaveStatus } from './save-queue'
+import type { PhoneAnalysis } from 'shared/schemas/phone-analysis'
+import { appendPhoneAnalysis } from 'shared/phone-annotations'
 
 interface ProfileContextValue {
   profile: LanguageProfile | null
@@ -31,6 +33,7 @@ interface ProfileContextValue {
   updateAudioClip: (id: string, updates: Partial<AudioClip>) => void
   removeAudioClip: (id: string) => void
   saveAudioSample: (profileId: string, sample: Sample, clip: AudioClip) => Promise<void>
+  retainPhoneAnalysis: (profileId: string, clipId: string, analysis: PhoneAnalysis) => Promise<void>
   restoreSample: (profileId: string, sample: Sample, clip?: AudioClip) => void
   closeProfile: () => void
   saving: boolean
@@ -227,6 +230,15 @@ export function ProfileProvider({
     await queue.retry(id)
     if (queue.status(id).phase !== 'saved' || !queue.status(id).durable) throw new Error('Audio sample is pending. Resolve the save error or retry; the original is retained.')
   }, [queue])
+  const retainPhoneAnalysis = useCallback(async (id: string, clipId: string, analysis: PhoneAnalysis) => {
+    const before = queue.view(id)
+    const clip = before?.audio_clips.find(entry => entry.id === clipId)
+    if (!before || !clip) throw new Error('The recording was removed before analysis finished')
+    const next = appendPhoneAnalysis(clip, analysis)
+    queue.edit(before, { ...before, audio_clips: before.audio_clips.map(entry => entry.id === clipId ? next : entry) })
+    await queue.retry(id)
+    if (queue.status(id).phase !== 'saved' || !queue.status(id).durable) throw new Error('Phone analysis is pending. Resolve the save error or retry.')
+  }, [queue])
   const restoreSample = useCallback((id: string, sample: Sample, clip?: AudioClip) => {
     const previous = queue.view(id)
     if (!previous) return
@@ -260,6 +272,7 @@ export function ProfileProvider({
       updateAudioClip,
       removeAudioClip,
       saveAudioSample,
+      retainPhoneAnalysis,
       restoreSample,
       closeProfile,
       saving: saveStatus.phase === 'saving',

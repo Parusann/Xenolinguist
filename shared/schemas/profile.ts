@@ -5,6 +5,8 @@ import { executableRuleSchema } from './grammar.js';
 import { entityIdSchema as id, timestampSchema as timestamp, confidenceSchema, noteSchema as text } from './common.js';
 import { ProfileError, validationError } from './errors.js';
 import { audioAssetsSchema } from './audio.js';
+import { phoneHistorySchema } from './phone-analysis.js';
+import { phoneAnnotationIssues } from '../phone-annotations.js';
 import { sandboxSessionSchema } from './sandbox.js';
 import { metricSnapshotsSchema } from './metrics.js';
 import { aiHistorySchema } from './ai-history.js';
@@ -37,6 +39,8 @@ export const audioClipSchema = z.strictObject({
   id, filename: text, duration: z.number().finite().positive(),
   waveform: z.array(z.number().finite().min(0).max(1)), segments: z.array(audioSegmentSchema), created_at: timestamp,
   assets: audioAssetsSchema.optional(),
+  phone_analyses: phoneHistorySchema.optional(),
+  manual_source_analysis_id: id.optional(),
 });
 export const sampleSchema = z.strictObject({
   id, alien_text: text, english_translation: text.nullable(), source: text, phonetic_notes: text,
@@ -72,6 +76,9 @@ export const profileSchema = profileObjectSchema.superRefine((profile, ctx) => {
   profile.samples.forEach((sample, i) => {
     if (sample.audio_id !== null && !clipIds.has(sample.audio_id))
       ctx.addIssue({ code: 'custom', path: ['samples', i, 'audio_id'], message: 'Referenced audio clip is missing' });
+  });
+  profile.audio_clips.forEach((clip, i) => {
+    for (const message of phoneAnnotationIssues(clip)) ctx.addIssue({ code: 'custom', path: ['audio_clips', i, 'phone_analyses'], message });
   });
   profile.audio_clips.forEach((clip, i) => clip.segments.forEach((segment, j) => {
     const at = ['audio_clips', i, 'segments', j];

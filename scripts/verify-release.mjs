@@ -264,7 +264,13 @@ try {
   await expect(reopened.getByPlaceholder('IPA, tone markers')).toHaveValue('Native audio draft');
   record.checks.desktopAudioDraftRecovered = true;
   await reopened.getByRole('button', { name: 'Analyze phones', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Copy analysis 1 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
+  await reopened.getByRole('button', { name: 'Copy analysis 1 to manual segments', exact: true }).click();
   await expect(reopened.getByPlaceholder('Label this word...').first()).toBeVisible({ timeout: 120_000 });
+  await reopened.getByPlaceholder('Label this word...').first().fill('retained manual correction');
+  await reopened.getByRole('button', { name: 'Analyze phones', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Copy analysis 2 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
+  await expect(reopened.getByPlaceholder('Label this word...').first()).toHaveValue('retained manual correction');
   await reopened.getByRole('button', { name: 'Add Sample', exact: true }).click();
   await expect(reopened.getByRole('button', { name: 'Discard audio draft' })).toHaveCount(0);
   const withAudio = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
@@ -273,11 +279,20 @@ try {
   const originalHash = createHash('sha256').update(await original.body()).digest('hex');
   expect(originalHash).toBe(record.fixture.sha256);
   expect(clip.assets.original.sha256).toBe(originalHash);
+  expect(clip.phone_analyses.length).toBe(2);
+  expect(clip.segments[0].label).toBe('retained manual correction');
+  expect(clip.manual_source_analysis_id).toBe(clip.phone_analyses[0].id);
+  const prepared = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${clip.id}/analysis`);
+  for (const analysis of clip.phone_analyses) {
+    expect(analysis.originalSha256).toBe(originalHash);
+    verifyPhoneChunks(analysis.result, await prepared.body());
+  }
   expect(withAudio.samples.find(sample => sample.audio_id === clip.id).ipa.length).toBeGreaterThan(0);
   await reopened.getByRole('button', { name: 'Play audio', exact: true }).click();
   await expect(reopened.getByRole('button', { name: 'Pause audio', exact: true })).toBeVisible();
   await reopened.getByRole('button', { name: 'Pause audio', exact: true }).click();
-  record.checks.desktopAudioSaved = { originalHash, assets: clip.assets, phoneSegments: clip.segments.length, playback: true };
+  record.checks.desktopAudioSaved = { originalHash, assets: clip.assets, phoneSegments: clip.segments.length, playback: true,
+    generatedAnalyses: clip.phone_analyses.length, manualCorrection: clip.segments[0].label, manualSourceAnalysisId: clip.manual_source_analysis_id };
   await reopened.getByTitle('Back to profiles', { exact: true }).click();
   await reopened.getByRole('button').filter({ has: reopened.getByText('Native practice', { exact: true }) }).click();
   const recoveredNumber = reopened.locator('[data-challenge="number-0"]');

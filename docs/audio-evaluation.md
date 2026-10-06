@@ -25,7 +25,7 @@ The current UI continues consuming the original phone string and timings. The ne
 ## Remaining W23 work
 
 1. Extend the queued phone windowing below into a separate workflow for recordings beyond the existing 120-second cap, including storage/preparation limits and measured responsiveness. Whisper still uses its existing transcription path. The energy heuristic is not a validated voice-activity model.
-2. Store generated analyses separately from manual corrections, linked to exact original/prepared audio and model hashes. Exercise re-analysis, edits, restart and portable archives through the workbench.
+2. Complete annotation preservation across audio paths. The third unit below retains phone analyses separately from manual segments; Whisper still uses its existing transcript/notes path and has no equivalent versioned provenance layer.
 3. Curate a licensed labeled corpus within the current model's English ARPABET domain. Before evaluating it, freeze inventory normalization, silence handling, word/phone edit-distance denominators, alignment tolerance, failure accounting and cold/warm timing procedure. No labeled-corpus accuracy, latency target or calibrated uncertainty is established yet.
 4. Consider beam decoding or another phone model only if measured errors justify it and its assets, license, alphabet and Windows runtime are verified. Tone, clicks and wider language coverage remain untested.
 
@@ -88,3 +88,17 @@ npx tsx docs/verification/w23-chunks-replay.mts
 ```
 
 Replay does not rerun native inference, reconstruct unretained native logits or reproduce timing. Production audit retains 4 high entries; full audit reports 6 high and 1 moderate entries. [Dependency review](dependency-review.md) retains unresolved update work. No main merge, installer release or Pages deployment occurred. W23 remains in progress.
+
+## Retained phone analyses: third implementation unit
+
+Phone analysis now creates an independent record instead of replacing editable segments. Each recording can retain up to eight results and 4 MiB of compact JSON, with no silent pruning. Every record contains its ID, capture time, original-audio hash and the complete phone response: prepared-audio identity, model/runtime identity, generated text/timings, CTC scores and window plan. These are structurally validated client-submitted records, not signed inference receipts or proof of the original acoustic content. Scores remain uncalibrated and timings approximate.
+
+Draft phone analysis stages the recording first and analyzes the retained prepared WAV. This also avoids associating a new device's regenerated derivative with an older retained hash after recovery. Draft history survives through the existing durable save queue, then joins the sample and clip in their atomic revision-checked save. Retention failures are visible and preserve earlier analyses. Desktop/browser storage quotas still apply; a 4 MiB recording history does not guarantee that a large project fits its separate draft or archive limits.
+
+The Samples workbench displays generated history separately from manual segments, with expandable audio/model provenance. An explicit **Copy analysis N to manual segments** action creates independent editable segments and records their source analysis. Copying replaces the current manual segments and dictionary links; re-analysis never performs that copy automatically. Existing manual labels, boundaries and dictionary links survive later phone results. Saved recordings expose the same history, re-analysis and editing controls. Manual segment edits replace the current editable layer; this is not an append-only edit log or a calibrated score viewer.
+
+Server validation binds each result to both clip asset hashes and the analyzed duration, checks frame/run/score/window consistency, and verifies stored audio bytes when appending a result. Previously retained analyses cannot be edited, omitted or reordered while the clip remains present. Re-analysis reads the latest queued clip before appending, preserving manual edits made while inference ran; stale server revisions remain conflicts. Removing an entire recording/project is still an explicit deletion, not a permanent audit archive.
+
+Portable archives retain generated records byte-equivalently as JSON values, including clip-local analysis IDs and manual-source links, while remapping editable segment and dictionary identities. Old clips remain readable without inventing generated history. Legacy clips lacking verified original/prepared assets must be imported as a new recording before retaining analyses. Imports validate structure and asset identities; they do not authenticate who produced a submitted result.
+
+Transcription no longer overwrites existing pending segments or replaces a note merely because it starts with `Transcript:`. It still appends transcript text to notes, and its generated output lacks the separate provenance/history contract above. Whisper integration, recordings beyond 120 seconds, labeled recognition/reproducibility evaluation and the full W23 exit conditions remain open.

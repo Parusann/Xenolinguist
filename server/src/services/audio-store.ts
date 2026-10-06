@@ -9,6 +9,7 @@ import { ProfileError } from '../../../shared/schemas/errors.js';
 import { stagedAudioSchema, MAX_AUDIO_BYTES, type StagedAudio } from '../../../shared/schemas/audio.js';
 import { inspectPcmWav } from '../../../shared/audio-container.js';
 import type { LanguageProfile } from '../../../shared/types.js';
+import { preservePhoneHistory } from '../../../shared/phone-annotations.js';
 const SAFE = /^[A-Za-z0-9_-]{1,128}$/;
 const digest = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
 export function originalMime(bytes: Buffer): 'audio/wav' | 'audio/webm' {
@@ -71,8 +72,10 @@ export class AudioStore {
   async verifyProfile(next: LanguageProfile, before?: LanguageProfile) {
     for (const clip of next.audio_clips) {
       const old = before?.audio_clips.find(entry => entry.id === clip.id);
+      preservePhoneHistory(clip, old);
       const newReference = next.samples.some(sample => sample.audio_id === clip.id && before?.samples.find(previous => previous.id === sample.id)?.audio_id !== clip.id);
-      if (old && !newReference && JSON.stringify(old.assets) === JSON.stringify(clip.assets)) continue;
+      const newAnalysis = (clip.phone_analyses?.length ?? 0) > (old?.phone_analyses?.length ?? 0);
+      if (old && !newReference && !newAnalysis && JSON.stringify(old.assets) === JSON.stringify(clip.assets)) continue;
       if (!clip.assets) {
         const legacy = await Promise.all(['wav', 'webm'].map(ext => fs.stat(path.join(dataDir(), 'audio', `${clip.id}.${ext}`)).then(() => true, () => false)));
         if (!legacy.some(Boolean)) throw new ProfileError('AUDIO_ASSET_MISSING', 'Imported audio metadata has no local file', 409);

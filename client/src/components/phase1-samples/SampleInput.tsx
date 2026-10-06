@@ -18,6 +18,11 @@ import { useProfileDraft } from '@/hooks/useProfileDraft'
 import { useAudioImport } from '@/hooks/useAudioImport'
 import { audioDraftStore } from '@/stores/audio-draft-store'
 import { stageAudio } from '@/services/audio-import'
+import { PhoneAnalysisHistory } from '@/components/audio/PhoneAnalysisHistory'
+import { SavedPhoneAnnotations } from '@/components/audio/SavedPhoneAnnotations'
+import { PHONE_HISTORY_LIMIT, type PhoneAnalysis } from 'shared/schemas/phone-analysis'
+import { retainablePhoneAnalysis, retainablePhoneHistory } from '@/services/phone-annotations'
+import { manualPhoneSegments } from 'shared/phone-annotations'
 
 import { normalize } from 'engine/text/normalize'
 import { useLexicon } from '@/hooks/useLexicon'
@@ -50,6 +55,9 @@ export function SampleInput() {
   const [segmentVersion, setSegmentVersion] = useState(0)
   const [stageId, setStageId] = useProfileDraft<string>('sample.stage', '')
   const [segmentsJson, setSegmentsJson] = useProfileDraft<string>('sample.segments', '[]')
+  const [phoneHistoryJson, setPhoneHistoryJson] = useProfileDraft<string>('sample.phoneHistory', '[]')
+  const [manualSource, setManualSource] = useProfileDraft<string>('sample.manualSource', '')
+  const phoneHistory: PhoneAnalysis[] = JSON.parse(phoneHistoryJson)
   type Segment = { id: string; start: number; end: number; label: string; dictionary_entry_id?: string | null }
   const pendingSegments: Segment[] = JSON.parse(segmentsJson)
   const setPendingSegments = (next: SetStateAction<Segment[]>) => setSegmentsJson(previous => JSON.stringify(typeof next === 'function' ? next(JSON.parse(previous)) : next))
@@ -60,7 +68,7 @@ export function SampleInput() {
   const samples = profile?.samples || []
 
   const handleAdd = async () => {
-    if (audioSaving || preparing || (!alienText.trim() && !pendingAudio) || !profile) return
+    if (audioSaving || preparing || analyzingAudio || (!alienText.trim() && !pendingAudio) || !profile) return
     setAudioError('')
     setAudioSaving(true)
     try {
@@ -78,7 +86,8 @@ export function SampleInput() {
           source, phonetic_notes: phoneticNotes.trim(), decoded: false, audio_id: staged.id, ipa: pendingIpa || null,
         }, { id: staged.id, created_at: metadata.createdAt, filename: metadata.name, duration: staged.duration,
           waveform: pendingAudio.peaks, segments: pendingSegments.map(s => ({ ...s, dictionary_entry_id: s.dictionary_entry_id ?? null })),
-          assets: { original: staged.original, analysis: staged.analysis } })
+          assets: { original: staged.original, analysis: staged.analysis }, phone_analyses: phoneHistory,
+          ...(manualSource ? { manual_source_analysis_id: manualSource } : {}) })
         if (!mounted.current) return
         await discard()
       } else {
@@ -88,6 +97,7 @@ export function SampleInput() {
       if (!mounted.current) return
       if (sampleText !== '[audio sample]') sampleReview.suggestForSample(sampleText)
       setAlienText(''); setTranslation(''); setPhoneticNotes(''); setPendingSegments([]); setPendingIpa(''); setStageId(''); setPendingMode(''); setShowRecorder(false)
+      setPhoneHistoryJson('[]'); setManualSource('')
     } catch (error) { if (mounted.current) setAudioError((error as Error).message) }
     finally { if (mounted.current) setAudioSaving(false) }
   }
@@ -95,6 +105,7 @@ export function SampleInput() {
   const acceptAudio = async (blob: Blob, name: string) => {
     if (await selectAudio(blob, name) && mounted.current) {
       setPendingSegments([]); setPendingIpa(''); setStageId(''); setPendingMode(''); setSource('Audio recording')
+      setPhoneHistoryJson('[]'); setManualSource('')
     }
   }
   const handleRecordingComplete = (blob: Blob) => { void acceptAudio(blob, 'recording.webm') }
@@ -114,19 +125,25 @@ export function SampleInput() {
         if (!mounted.current) return
         setPendingMode(result.mode)
         setPhoneticNotes(previous => [previous, `Transcript: ${result.text}`].filter(Boolean).join('\n'))
-        setPendingSegments(result.segments.filter(s => s.end > s.start && s.start < pendingAudio.duration).map((s, index) => ({
+        if (!pendingSegments.length) setPendingSegments(result.segments.filter(s => s.end > s.start && s.start < pendingAudio.duration).map((s, index) => ({
           id: `${pendingAudio.draft.metadata.sampleId}-seg-${index}`, start: s.start, end: Math.min(s.end, pendingAudio.duration), label: s.text,
         })))
       } else {
+        if (phoneHistory.length >= PHONE_HISTORY_LIMIT) throw new Error('This recording already has eight retained analyses. Existing results are preserved.')
+        const staged = await stageAudio(pendingAudio, stageId || undefined)
+        if (!mounted.current) return
+        setStageId(staged.id)
+        // Always analyze the retained derivative, including after recovery on another audio device.
+        const response = await fetch(`/api/audio/${staged.id}/analysis`)
+        if (!response.ok) throw new Error('Could not load the prepared recording')
         const { transcribePhones } = await import('@/services/ipa')
         let failure = 'Phone analysis is unavailable. Your original audio is retained.'
-        const result = await transcribePhones(pendingAudio.analysis, message => { failure = message })
+        const result = await transcribePhones(await response.blob(), message => { failure = message })
         if (!result) throw new Error(failure)
         if (!mounted.current) return
-        setPendingIpa(result.ipa); setPendingMode('phones')
-        setPendingSegments(result.segments.filter(s => s.end > s.start && s.start < pendingAudio.duration).map((s, index) => ({
-          id: `${pendingAudio.draft.metadata.sampleId}-seg-${index}`, start: s.start, end: Math.min(s.end, pendingAudio.duration), label: s.phone,
-        })))
+        const analysis = retainablePhoneAnalysis(staged.original.sha256, result)
+        if (result.audio?.sha256 !== staged.analysis?.sha256) throw new Error('Phone analysis does not match the prepared recording')
+        setPhoneHistoryJson(previous => retainablePhoneHistory([...JSON.parse(previous), analysis]))
       }
       setSegmentVersion(previous => previous + 1)
     } catch (error) { if (mounted.current) setAudioError((error as Error).message) }
@@ -158,9 +175,8 @@ export function SampleInput() {
       const label = stt.mode === 'transcription' ? 'Transcript' : 'Phonetic guess'
       const line = `${label}: ${stt.text}`
       const prev = sample.phonetic_notes?.trim() ?? ''
-      // Replace a prior auto-generated line, but never clobber notes the user typed — append instead.
-      const isAuto = /^(Transcript|Phonetic guess):/.test(prev)
-      updateSample(sample.id, { phonetic_notes: !prev || isAuto ? line : `${prev}\n${line}` })
+      // A user may have edited a transcript-prefixed note; preserve it verbatim.
+      updateSample(sample.id, { phonetic_notes: !prev ? line : `${prev}\n${line}` })
       addEntry('info', `Re-transcribed sample (${stt.mode})`)
     } catch {
       addEntry('warning', 'Re-transcription failed; saved audio and notes are retained')
@@ -256,14 +272,19 @@ export function SampleInput() {
             <div className="glass-inner" style={{ padding: 12, marginTop: 12 }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
                 <span className="font-mono" style={{ fontSize: 10, color: 'var(--accent)' }}>{pendingAudio.draft.metadata.name} · {pendingAudio.duration.toFixed(1)}s</span>
-                <button aria-label="Discard audio draft" onClick={() => { void discard().then(() => { setPendingSegments([]); setStageId(''); setPendingIpa('') }).catch(error => setAudioError(error.message)) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
+                <button aria-label="Discard audio draft" disabled={Boolean(analyzingAudio)} onClick={() => { void discard().then(() => { setPendingSegments([]); setStageId(''); setPendingIpa(''); setPhoneHistoryJson('[]'); setManualSource('') }).catch(error => setAudioError(error.message)) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
               </div>
               <AudioPlayer src={pendingAudio.blobUrl} peaks={pendingAudio.peaks} duration={pendingAudio.duration} compact />
               <div className="flex" style={{ gap: 8, marginTop: 8, marginBottom: 8 }}>
-                <button className="btn sm ghost" onClick={() => { void handleAudioAnalysis('transcribe') }}>Transcribe audio</button>
-                <button className="btn sm ghost" onClick={() => { void handleAudioAnalysis('phones') }}>Analyze phones</button>
+                <button className="btn sm ghost" disabled={Boolean(analyzingAudio)} onClick={() => { void handleAudioAnalysis('transcribe') }}>Transcribe audio</button>
+                <button className="btn sm ghost" disabled={Boolean(analyzingAudio)} onClick={() => { void handleAudioAnalysis('phones') }}>Analyze phones</button>
                 <a className="btn sm ghost" href={pendingAudio.blobUrl} download={pendingAudio.draft.metadata.name}>Download original</a>
               </div>
+              <PhoneAnalysisHistory history={phoneHistory} onCopy={analysis => {
+                setPendingSegments(manualPhoneSegments(analysis, () => crypto.randomUUID())); setPendingIpa(analysis.result.ipa)
+                setManualSource(analysis.id); setSegmentVersion(previous => previous + 1)
+              }} />
+              <p className="label">Manual segments</p>
               <AudioSegmenter key={`${pendingAudio.blobUrl}-${segmentVersion}`} src={pendingAudio.blobUrl} peaks={pendingAudio.peaks}
                 duration={pendingAudio.duration}
                 initialSegments={pendingSegments.map(s => ({ ...s, start: s.start / pendingAudio.duration, end: s.end / pendingAudio.duration }))}
@@ -378,6 +399,7 @@ export function SampleInput() {
                       {clip && <div onClick={e => e.stopPropagation()} style={{ marginTop: 8 }}>
                         <AudioPlayer src={`/api/audio/${clip.id}`} peaks={clip.waveform} duration={clip.duration} compact />
                         <a href={`/api/audio/${clip.id}`} download={clip.filename} className="btn xs ghost">Download original</a>
+                        <SavedPhoneAnnotations key={clip.id} clip={clip} profileId={profile!.id} />
                       </div>}
                       {(sample.phonetic_notes || clip) && (
                         <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
