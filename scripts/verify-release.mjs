@@ -293,6 +293,7 @@ try {
   await reopened.getByRole('button', { name: 'Pause audio', exact: true }).click();
   record.checks.desktopAudioSaved = { originalHash, assets: clip.assets, phoneSegments: clip.segments.length, playback: true,
     generatedAnalyses: clip.phone_analyses.length, manualCorrection: clip.segments[0].label, manualSourceAnalysisId: clip.manual_source_analysis_id };
+  record.checks.phoneAnnotations = { source: clip, passed: false };
   await reopened.getByTitle('Back to profiles', { exact: true }).click();
   await reopened.getByRole('button').filter({ has: reopened.getByText('Native practice', { exact: true }) }).click();
   const recoveredNumber = reopened.locator('[data-challenge="number-0"]');
@@ -530,6 +531,11 @@ try {
     let restoredAudioHash;
     if (sourceProfile.audio_clips.length) {
       const restoredClip = restored.profile.audio_clips[0];
+      expect(restoredClip.phone_analyses).toEqual(sourceProfile.audio_clips[0].phone_analyses);
+      expect(restoredClip.manual_source_analysis_id).toBe(sourceProfile.audio_clips[0].manual_source_analysis_id);
+      expect(restoredClip.segments.map(({ id: _id, ...segment }) => segment)).toEqual(sourceProfile.audio_clips[0].segments.map(({ id: _id, ...segment }) => segment));
+      record.checks.phoneAnnotations.restored = restoredClip;
+      record.checks.phoneAnnotations.passed = true;
       expect(restored.profile.samples.some(sample => sample.audio_id === restoredClip.id)).toBe(true);
       const response = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${restoredClip.id}`);
       restoredAudioHash = createHash('sha256').update(await response.body()).digest('hex');
