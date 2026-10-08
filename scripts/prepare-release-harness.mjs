@@ -5,7 +5,7 @@ const output = path.resolve(process.argv[2] || 'test-results/release-harness');
 const mainPackage = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 const harnessPackage = JSON.parse(await readFile(path.join(root, 'scripts/release-harness/package.json'), 'utf8'));
 if (harnessPackage.dependencies['@playwright/test'] !== mainPackage.devDependencies['@playwright/test']) throw Error('Release harness Playwright must match source lock');
-for (const file of ['verify-release.mjs', 'desktop-request.mjs', 'verification-record.mjs', 'verify-artifact-layout.mjs', 'verify-phone-analysis.mjs']) {
+for (const file of ['verify-release.mjs', 'desktop-request.mjs', 'verification-record.mjs', 'verify-artifact-layout.mjs', 'verify-phone-analysis.mjs', 'verify-transcription.mjs']) {
   await mkdir(path.join(output, 'scripts'), { recursive: true }); await copyFile(path.join(root, 'scripts', file), path.join(output, 'scripts', file));
 }
 for (const file of ['package.json', 'package-lock.json']) await copyFile(path.join(root, 'scripts/release-harness', file), path.join(output, file));

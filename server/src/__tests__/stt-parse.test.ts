@@ -19,10 +19,13 @@ describe('parseWhisperJson', () => {
     expect(r.segments[1]).toEqual({ start: 1.2, end: 2, text: 'world' });
   });
 
-  it('is defensive about missing fields', () => {
-    const r = parseWhisperJson({});
-    expect(r.language).toBe('');
-    expect(r.text).toBe('');
-    expect(r.segments).toEqual([]);
+  it('rejects missing and malformed native fields', () => {
+    for (const raw of [{}, { ...FIXTURE, transcription: [{ text: 'missing offsets' }] },
+      { ...FIXTURE, transcription: [{ offsets: { from: 200, to: 100 }, text: 'backwards' }] },
+      { ...FIXTURE, transcription: [{ offsets: { from: 0, to: NaN }, text: 'invalid' }] }])
+      expect(() => parseWhisperJson(raw)).toThrow();
+  });
+  it('accepts an empty transcript without inventing segments', () => {
+    expect(parseWhisperJson({ result: { language: 'en' }, transcription: [] })).toEqual({ language: 'en', text: '', segments: [] });
   });
 });

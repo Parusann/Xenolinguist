@@ -1,3 +1,5 @@
+import { transcriptionFixture } from '../../shared/testing/transcription';
+import { inspectAudioWav } from '../../server/src/services/audio-wav';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { test, expect, preparePage, openProfile, wavFixture, attachJson } from './fixtures';
@@ -126,7 +128,10 @@ test('W06 decodes a real WebM/Opus recording and keeps audio when explicit analy
   await page.getByRole('button', { name: 'Analyze phones', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Phone model is missing');
   await expect(page.getByText(/recorded.webm ·/)).toBeVisible();
-  await page.route('**/api/stt', route => route.fulfill({ json: { language: 'English', text: 'test', mode: 'transcription', segments: [{ start: 0, end: 0.2, text: 'test' }] } }));
+  await page.route('**/api/stt', route => {
+    const wav = Buffer.from(route.request().postDataJSON().audio, 'base64');
+    return route.fulfill({ json: transcriptionFixture(createHash('sha256').update(wav).digest('hex'), inspectAudioWav(wav).sampleCount) });
+  });
   await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
   await expect(page.getByPlaceholder('Label this word...')).toHaveValue('test');
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
@@ -177,4 +182,29 @@ test('W06 rejects unsupported, truncated and oversized imports without replacing
     await page.locator('input[type="file"]').setInputFiles({ name, mimeType: 'audio/wav', buffer: bytes });
     await expect(page.getByRole('alert')).toBeVisible(); await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
   }
+});
+
+
+test('W23 rejects transcription with mismatched audio without overwriting annotations', async ({ page, server }) => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Transcription identity' } })).json();
+  await openProfile(page, server.url, profile.name);
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
+  await page.locator('input[type="file"]').setInputFiles(wavFixture);
+  await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
+  await page.getByPlaceholder('IPA, tone markers').fill('Original manual note');
+  let mismatch = false;
+  await page.route('**/api/stt', route => {
+    const wav = Buffer.from(route.request().postDataJSON().audio, 'base64');
+    return route.fulfill({ json: transcriptionFixture(mismatch ? 'f'.repeat(64) : createHash('sha256').update(wav).digest('hex'), inspectAudioWav(wav).sampleCount) });
+  });
+  await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await expect(page.getByPlaceholder('Label this word...')).toHaveValue('test');
+  await page.getByPlaceholder('Label this word...').fill('Manual correction');
+  const notes = await page.getByPlaceholder('IPA, tone markers').inputValue();
+  mismatch = true;
+  await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('original audio is retained');
+  await expect(page.getByPlaceholder('Label this word...')).toHaveValue('Manual correction');
+  await expect(page.getByPlaceholder('IPA, tone markers')).toHaveValue(notes);
+  await attachJson('transcription-boundary.json', { passed: true, synthetic: true, manualLabel: 'Manual correction', notes });
 });

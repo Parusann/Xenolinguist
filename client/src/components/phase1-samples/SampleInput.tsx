@@ -120,7 +120,7 @@ export function SampleInput() {
     try {
       if (kind === 'transcribe') {
         const { transcribe } = await import('@/services/stt')
-        const result = await transcribe(pendingAudio.analysis)
+        const result = await transcribe(pendingAudio.analysis, { preparedWav: true })
         if (!result) throw new Error('Transcription is unavailable. Your original audio is retained.')
         if (!mounted.current) return
         setPendingMode(result.mode)
@@ -169,10 +169,10 @@ export function SampleInput() {
       if (!res.ok) { addEntry('warning', 'Could not load the stored audio to re-transcribe'); return }
       const blob = await res.blob()
       const { transcribe } = await import('@/services/stt')
-      const stt = await transcribe(blob)
+      const stt = await transcribe(blob, { preparedWav: Boolean(clip?.assets) })
       if (!mounted.current) return
       if (!stt) { addEntry('warning', 'Speech-to-text is unavailable on this platform'); return }
-      const label = stt.mode === 'transcription' ? 'Transcript' : 'Phonetic guess'
+      const label = stt.mode === 'transcription' ? 'Transcript' : 'Uncertain transcript'
       const line = `${label}: ${stt.text}`
       const prev = sample.phonetic_notes?.trim() ?? ''
       // A user may have edited a transcript-prefixed note; preserve it verbatim.

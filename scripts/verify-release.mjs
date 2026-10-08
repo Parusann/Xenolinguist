@@ -1,3 +1,4 @@
+import { verifyTranscription } from './verify-transcription.mjs';
 import { verifyArtifact } from './verify-artifact-layout.mjs';
 import { verifyPhoneAnalysis, repeatPhoneFixture, verifyPhoneChunks } from './verify-phone-analysis.mjs';
 import { createRequire } from 'node:module';
@@ -160,6 +161,11 @@ try {
   }
   record.checks.stt = await request('/api/stt', { audio: wav.toString('base64') });
   expect(record.checks.stt.status).toBe(200); expect(record.checks.stt.body.text.trim().length).toBeGreaterThan(0);
+  record.checks.transcriptionProvenance = verifyTranscription(record.checks.stt.body, wav, record.whisperFiles);
+  record.checks.sttExplicit = await request('/api/stt', { audio: wav.toString('base64'), language: 'en' });
+  expect(record.checks.sttExplicit.status).toBe(200);
+  record.checks.explicitTranscriptionProvenance = verifyTranscription(record.checks.sttExplicit.body, wav, record.whisperFiles, 'en');
+
   const speech = await desktopRequest(page).post(origin + '/api/tts', { data: { text: 'Hello from the local workbench' } });
   const speechBytes = await speech.body();
   expect(speech.status()).toBe(200); expect(speechBytes.subarray(0, 4).toString()).toBe('RIFF'); expect(speechBytes.length).toBeGreaterThan(44);

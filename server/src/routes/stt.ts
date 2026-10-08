@@ -1,3 +1,4 @@
+import { inspectAudioWav, IpaBadInputError } from '../services/audio-wav.js';
 import { Router } from 'express';
 import { transcribe, SttUnavailableError } from '../services/stt-whisper.js';
 import { jobs } from '../services/job-manager.js';
@@ -10,16 +11,15 @@ sttRouter.post('/', async (req, res) => {
   if (!audio || typeof audio !== 'string') {
     return res.status(400).json({ error: 'audio (base64 wav) required' });
   }
-  // Buffer.from(...,'base64') never throws; validate the decoded bytes instead.
-  // A 44-byte RIFF header is the minimum real WAV, so this rejects empty/garbage
-  // payloads (e.g. whitespace base64 like '====') before spawning whisper.
   const wav = Buffer.from(audio, 'base64');
-  if (wav.length < 44 || wav.toString('ascii', 0, 4) !== 'RIFF') {
-    return res.status(400).json({ error: 'invalid audio' });
+  try { inspectAudioWav(wav); }
+  catch (error) {
+    if (error instanceof IpaBadInputError) return res.status(400).json({ error: 'invalid audio', code: 'STT_UNSUPPORTED_INPUT' });
+    throw error;
   }
-
-  // Guard the language passed to the whisper CLI: only a 2-letter code or 'auto'; else auto-detect.
-  const lang = typeof language === 'string' && /^(auto|[a-z]{2})$/.test(language) ? language : undefined;
+  if (language !== undefined && (typeof language !== 'string' || !/^(auto|[a-z]{2})$/.test(language)))
+    return res.status(400).json({ error: 'invalid language', code: 'STT_UNSUPPORTED_LANGUAGE' });
+  const lang = language as string | undefined;
 
   const controller = new AbortController();
   const abort = () => { if (!res.writableEnded) controller.abort(); }; res.once('close', abort);

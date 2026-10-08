@@ -63,13 +63,7 @@ export interface SttSegment {
 
 export type SttMode = 'transcription' | 'phonetic-guess';
 
-export interface SttResult {
-  language: string;     // ISO code from whisper, e.g. "en"
-  languageProb: number; // 0-1; 0 when unknown (not emitted)
-  text: string;
-  segments: SttSegment[];
-  mode: SttMode;
-}
+export type SttResult = import('./schemas/transcription.js').TranscriptionResult;
 
 /** One phone from the IPA recognizer, time-aligned to the audio via CTC. */
 export interface IpaSegment {
