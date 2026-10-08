@@ -102,3 +102,21 @@ Server validation binds each result to both clip asset hashes and the analyzed d
 Portable archives retain generated records byte-equivalently as JSON values, including clip-local analysis IDs and manual-source links, while remapping editable segment and dictionary identities. Old clips remain readable without inventing generated history. Legacy clips lacking verified original/prepared assets must be imported as a new recording before retaining analyses. Imports validate structure and asset identities; they do not authenticate who produced a submitted result.
 
 Transcription no longer overwrites existing pending segments or replaces a note merely because it starts with `Transcript:`. It still appends transcript text to notes, and its generated output lacks the separate provenance/history contract above. Whisper integration, recordings beyond 120 seconds, labeled recognition/reproducibility evaluation and the full W23 exit conditions remain open.
+
+## Third-unit verification
+
+Runtime revision `eafd0ee` and extended acceptance revision `9192533f2051f8996a35cb20909215651511476c` pass [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/37420477303): 485 unit tests (454 server/shared/engine/evaluation and 31 client), seven tooling tests, lint/type/build gates, 48 workbench checks and eight public checks per platform. Browser reports have no skipped, flaky or unexpected results; three native unit checks remain gated. Downloaded 12/60/336 regression/induction/number records and 56 elicitation traces replay per platform, with unchanged W19 number summaries.
+
+Eleven new unit cases cover independent copying, append-only history, provenance/geometry validation, count/byte limits, tampered audio, write failure/revision conflicts, restart and archive identity mapping. The two new browser scenarios exercise corrections with dictionary links, re-analysis, failed-save retry, reload/restart, actual archive restoration, malformed model responses and navigation during a delayed response. Their generated results are synthetic fixtures, not inference measurements. Retained [Linux](verification/w23-layers-browser-linux.json) and [Windows](verification/w23-layers-browser-windows.json) records expose saved, re-analyzed and restored projects; a [Windows capture](verification/w23-layers-browser-windows.png) shows the separate layers.
+
+[Clean installed Windows acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/37420477395) verifies 3,772 files and eight archive round trips. It executes two real bundled phone analyses, retains a manual correction between them, validates both against the prepared WAV, and compares the complete generated histories and manual source links after archive restore. The [native source/restored clips](verification/w23-layers-installed.json) and [verification metadata](verification/w23-layers-verification.json) retain the evidence. Native cancellation and multi-window recovery also pass.
+
+The inventory drops from 3,774 to 3,772 files because the phone service and WAV encoder now share the main frontend bundle instead of separate lazy chunks. The compared manifests have the same lockfile hash, 50 runtime packages and three native asset groups; the file-count change is not removal of a native dependency.
+
+```sh
+npx tsx docs/verification/w23-layers-replay.mts
+```
+
+Replay validates saved schema/identity/accounting, archive remapping, immutable history and independent manual copying. It does not rerun inference or reconstruct native logits, timing or recognition accuracy. The compatibility `sample.ipa` field remains the text copied during draft editing; subsequent manual segment edits do not regenerate that legacy snapshot. Current manual segments and retained generated records are the separate layers described above.
+
+The October 6 CI audit reports 1 critical, 7 high and 9 moderate entries overall; production reports 1 critical, 5 high and 3 moderate entries. These findings are unresolved; the lockfile is unchanged. W23 still requires Whisper provenance, extended recording workflows and labeled recognition/reproducibility evaluation. No main merge, public installer release or Pages deployment occurred.

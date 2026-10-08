@@ -1,0 +1,566 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "9192533f2051f8996a35cb20909215651511476c",
+  "runtimeRevision": "eafd0ee52c49eb7bfbccafe33542b6e23fcb8a9c",
+  "scope": "Independent retained phone analyses and manual segments, draft/saved re-analysis, revisioned persistence, provenance validation and portable archives.",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "9192533f2051f8996a35cb20909215651511476c",
+    "jobs": [
+      {
+        "completedAt": "2026-10-06T06:02:41Z",
+        "conclusion": "success",
+        "databaseId": 112128700607,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-10-06T05:50:30Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37420477303/job/112128700607"
+      },
+      {
+        "completedAt": "2026-10-06T05:55:42Z",
+        "conclusion": "success",
+        "databaseId": 112128700704,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-10-06T05:50:30Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37420477303/job/112128700704"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37420477303"
+  },
+  "sourceChecks": {
+    "unitTests": 485,
+    "serverSharedEngineEvaluationTests": 454,
+    "clientTests": 31,
+    "newLayerCases": 11,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-10-06T05:52:01.478Z",
+        "duration": 209005.784,
+        "expected": 48,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-06T05:55:31.461Z",
+        "duration": 6480.978,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "0e50a894bf76f6a867fdc5ab3ad6827d3cee5445780e371c6e3f1cd0cb5ec44f"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "62cd69345e724f2c72210cfa27b8a991891e5a9dba0f8d80f972fe5a57652c9e"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "62cd69345e724f2c72210cfa27b8a991891e5a9dba0f8d80f972fe5a57652c9e"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "9192533f2051f8996a35cb20909215651511476c",
+          "sourceSnapshotHash": "e3eb383296bfc41261d35a2a6abf78202e385da2c01b47acdba0f4448d4a6eb0",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 141714,
+        "sha256": "6ec979e221988e122bd9cf00f4af4d60f4224709e933aee1be02dc507da1926e"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 9,
+          "high": 7,
+          "critical": 1,
+          "total": 17
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 3,
+          "high": 5,
+          "critical": 1,
+          "total": 9
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-10-06T05:56:52.287Z",
+        "duration": 324574.032,
+        "expected": 48,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-06T06:02:19.623Z",
+        "duration": 11936.042,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "45962353c5c19527144881895b7faefc77e1fd603c3ebb520f3185b2fb7fd64c"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "a0cbc664cab50abdb8baadaf10078070ea26f6cf0575054a0dd1568f00185c0d"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "a0cbc664cab50abdb8baadaf10078070ea26f6cf0575054a0dd1568f00185c0d"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "9192533f2051f8996a35cb20909215651511476c",
+          "sourceSnapshotHash": "02cc3cea1a2dc8e47287664cddec22f481c185864c85298a9f7ad1cdca25b9bd",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 124145,
+        "sha256": "97105ba1446207f3c53c85ba232187922ccfc3998266df79aae1fbcd371c551a"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 9,
+          "high": 7,
+          "critical": 1,
+          "total": 17
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 3,
+          "high": 5,
+          "critical": 1,
+          "total": 9
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "9192533f2051f8996a35cb20909215651511476c",
+    "jobs": [
+      {
+        "completedAt": "2026-10-06T05:54:14Z",
+        "conclusion": "success",
+        "databaseId": 112128698792,
+        "name": "build",
+        "startedAt": "2026-10-06T05:50:30Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37420477395/job/112128698792"
+      },
+      {
+        "completedAt": "2026-10-06T06:00:11Z",
+        "conclusion": "success",
+        "databaseId": 112129700294,
+        "name": "verify-clean",
+        "startedAt": "2026-10-06T05:54:16Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37420477395/job/112129700294"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37420477395"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-10-06T06:00:08.495Z",
+    "source": {
+      "revision": "9192533f2051f8996a35cb20909215651511476c",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "26d31415cbe49d7194ef583a5f8f257f4174a64c98f84c9db225417640d6dc91"
+    },
+    "appArchive": {
+      "bytes": 3001402,
+      "sha256": "42f7bfc254b17324445aae8f06363830459872f9878e37b7a0d4c0427f200f9b"
+    }
+  },
+  "installedChecks": {
+    "files": 3772,
+    "archives": 8,
+    "report": {
+      "bytes": 1451877,
+      "sha256": "fa0eeed1de85d80704d8837947fde837b9a8c9895055a9a62444f5bc3ee214af"
+    },
+    "phoneLayersPassed": true,
+    "nativeReanalysisComparison": {
+      "sameInputHash": true,
+      "sameModelHash": true,
+      "sameText": true,
+      "sameSegments": true,
+      "sameScores": true,
+      "phoneRuns": [
+        49,
+        49
+      ],
+      "scope": "Two observed installed executions only; no general determinism or accuracy claim."
+    },
+    "desktopAudioSaved": {
+      "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "assets": {
+        "original": {
+          "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+          "bytes": 110286,
+          "mime": "audio/wav"
+        },
+        "analysis": {
+          "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+          "bytes": 110286,
+          "mime": "audio/wav"
+        }
+      },
+      "phoneSegments": 49,
+      "playback": true,
+      "generatedAnalyses": 2,
+      "manualCorrection": "retained manual correction",
+      "manualSourceAnalysisId": "eee2eed3-db31-498d-90a9-0845d2813bcd"
+    },
+    "chunkedPhones": {
+      "passed": true,
+      "frames": 1377,
+      "phoneRuns": 378,
+      "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax",
+      "chunks": 4,
+      "maxInputSamples": 144080
+    },
+    "chunkCancellation": {
+      "progress": {
+        "status": "Phone chunks processed",
+        "completed": 1,
+        "total": 14
+      },
+      "status": 409,
+      "code": "JOB_CANCELLED",
+      "cancelMs": 38.379400000001624,
+      "jobPollMs": [
+        7.990200000000186,
+        5.7762000000002445,
+        5.969200000001365,
+        5.94760000000133,
+        6.195599999999104,
+        5.886100000001534,
+        5.366799999999785,
+        5.774999999999636,
+        5.6533999999992375,
+        5.109700000000885,
+        5.299800000000687,
+        5.330299999999625,
+        5.902799999999843,
+        5.15060000000085,
+        5.147699999999531,
+        7.046599999999671,
+        5.304000000000087,
+        5.1966999999986,
+        6.732899999999063,
+        6.516700000000128,
+        6.162099999999555,
+        5.796399999999267,
+        5.65480000000025,
+        7.258100000000923,
+        6.076500000001033,
+        5.419799999999668,
+        5.5164999999997235,
+        5.3048000000017055,
+        5.945600000000923,
+        5.41359999999986,
+        5.695600000000923,
+        5.167500000001382,
+        5.342500000000655,
+        5.544899999998961,
+        5.061100000000806,
+        5.051899999998568,
+        5.309100000000399,
+        4.978300000000672,
+        5.6137999999991735,
+        6.921700000000783,
+        8.220400000000154,
+        6.135000000000218,
+        6.47229999999945,
+        8.234000000000378,
+        7.082900000001246,
+        8.653299999999945,
+        6.610000000000582,
+        5.654199999997218,
+        5.7458000000005995,
+        5.395400000001246,
+        7.259099999999307,
+        6.825199999999313,
+        6.46849999999904,
+        7.329200000000128,
+        6.220700000001671,
+        5.99909999999727,
+        5.844300000000658,
+        5.906100000000151,
+        5.425699999999779,
+        5.801400000000285,
+        5.600099999999657,
+        5.686200000000099,
+        5.871899999998277,
+        5.6762999999991735,
+        10.716100000001461,
+        6.299599999998463,
+        5.646099999998114,
+        5.770700000000943,
+        6.13130000000092,
+        6.037500000002183,
+        7.017099999997299,
+        6.978299999998853,
+        6.327000000001135,
+        6.154200000000856,
+        6.822500000002037,
+        6.230599999998958,
+        27.98779999999897,
+        6.366799999999785,
+        6.928299999999581,
+        7.568599999998696,
+        6.530699999999342,
+        6.026799999999639,
+        8.52889999999752,
+        6.380599999996775,
+        6.144399999997404,
+        6.196599999999307,
+        6.1108000000022,
+        6.468199999999342,
+        7.017300000003161,
+        6.473599999997532,
+        6.5666999999994005,
+        7.531800000000658,
+        6.903200000000652,
+        5.475299999998242,
+        6.192699999999604,
+        5.789700000001176,
+        6.183400000001711,
+        6.6481000000021595,
+        6.426600000002509,
+        7.608400000000984,
+        6.59860000000117,
+        5.5887000000002445,
+        6.901299999997718,
+        6.125700000000506,
+        20.463599999999133,
+        5.5591999999996915,
+        6.282999999999447,
+        5.786000000000058,
+        5.847200000000157,
+        5.73949999999968,
+        6.085900000001857,
+        5.726200000000972,
+        5.822800000001735,
+        5.449400000001333,
+        35.723699999998644,
+        5.458999999998923,
+        8.077799999999115,
+        5.871299999998882,
+        7.780899999997928,
+        23.332299999998213,
+        7.813900000001013,
+        7.576300000000629,
+        7.4958000000005995,
+        7.5679999999993015,
+        24.891899999998714,
+        7.6599999999998545,
+        6.967899999999645,
+        7.366700000002311,
+        7.610499999998865,
+        9.59100000000035,
+        7.336299999999028,
+        6.863499999999476
+      ]
+    }
+  },
+  "artifacts": {
+    "w23-layers-browser-linux.json": {
+      "bytes": 55621,
+      "sha256": "2e467cff6e6e7d08fb0ea465f9825cd6dbb0cd41b1907e7c1589e9e86686c241"
+    },
+    "w23-layers-browser-linux.png": {
+      "bytes": 292086,
+      "sha256": "6ee8c3ef8b7778619e9e2db920a3c37455a347a97f9bd70442b9cb40ee9b3c02"
+    },
+    "w23-layers-browser-windows.json": {
+      "bytes": 55621,
+      "sha256": "4e9bc7c85a90b026ba0a7393fd055cc375a5368fb4af4d818f347947b405b351"
+    },
+    "w23-layers-browser-windows.png": {
+      "bytes": 319813,
+      "sha256": "837489b407493ef1e3cca913e20ff13e06515c5b9af3c5bfcd40a5fca80ed57c"
+    },
+    "w23-layers-installed.json": {
+      "bytes": 276535,
+      "sha256": "ad1dff3e467c23e5271354e651ed2787ecd29aa10d7b393ca8f9925a4f6b009b"
+    },
+    "w23-layers-audit-all.json": {
+      "bytes": 20962,
+      "sha256": "438d5c878559f3b0cf9b0d47a700fb37c6b5dbf69cfefce8f308f430e3e00a17"
+    },
+    "w23-layers-audit-production.json": {
+      "bytes": 10513,
+      "sha256": "8df621656b49c2fa76395f6a4f7cf7eb498f1352cc25857603f05afd593efc82"
+    },
+    "w23-layers-replay.mts": {
+      "bytes": 3645,
+      "sha256": "c5a7f936754dd8aeacf8be100e7b22a1f14af61ca7b1bd15b1f05d2db6b049cf"
+    }
+  },
+  "limits": [
+    "Browser model responses are synthetic; independent installed acceptance uses real bundled inference.",
+    "Replay validates saved metadata and retention semantics. It does not reproduce native inference, softmax from raw logits, timing or recognition accuracy.",
+    "Submitted provenance is structurally validated, not signed or independently attested.",
+    "Phone histories are bounded to eight records and 4 MiB per clip. Global draft/archive quotas still apply. Explicit whole-recording deletion remains available.",
+    "Current manual segments remain editable rather than an append-only manual revision log. Legacy records gain no invented provenance.",
+    "Whisper has no equivalent generated provenance layer. Longer recordings, labeled recognition/reproducibility evaluation and the rest of W23 remain unfinished.",
+    "Three native unit skips and dependency audit findings remain unresolved. No main merge, release or deployment."
+  ],
+  "priorAcousticReplays": {
+    "chunks": {
+      "passed": true,
+      "revision": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+      "nativeCheck": {
+        "passed": true,
+        "frames": 1377,
+        "phoneRuns": 373,
+        "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 4,
+        "maxInputSamples": 144080
+      },
+      "installedCheck": {
+        "passed": true,
+        "frames": 1377,
+        "phoneRuns": 378,
+        "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 4,
+        "maxInputSamples": 144080
+      },
+      "nearCapCheck": {
+        "passed": true,
+        "frames": 5856,
+        "phoneRuns": 1587,
+        "audioSha256": "750737af2007b633e83f4c8d103e00c5f377d3e57261f848065897992ac75299",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 16,
+        "maxInputSamples": 144080
+      },
+      "syntheticRuns": 2,
+      "scope": "Recomputed real-audio window plans and synthetic overlap/CTC decoding; verified native response identities and accounting. Native logits, recognition accuracy and timings are not reproduced."
+    },
+    "ctc": {
+      "passed": true,
+      "sourceRevision": "4342cb672ee8734096a6280b3ee92892e938df98",
+      "syntheticRuns": 3,
+      "nativeRuns": 46,
+      "installedRuns": 46,
+      "scope": "Synthetic logits recomputed; native/installed response identities, frame geometry and score mass verified. Native logits and inference are not replayed."
+    }
+  },
+  "exampleReplay": {
+    "passed": true,
+    "revision": "9192533f2051f8996a35cb20909215651511476c",
+    "browserPlatforms": 2,
+    "browserAnalysesPerPlatform": 3,
+    "installedAnalyses": 2,
+    "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+    "manualCorrection": "retained manual correction",
+    "scope": "Validates retained browser/native metadata, archive identity mapping, immutable history and independent manual copying. Does not rerun inference or reproduce native logits, timing or accuracy."
+  },
+  "layoutComparison": {
+    "priorManifest": {
+      "bytes": 825013,
+      "sha256": "85d546d19d20176edad7b8703a47c6cd44d05fcf5ad4d70ae8791b7dbf3c3c8f"
+    },
+    "manifest": {
+      "bytes": 824648,
+      "sha256": "8e2779f1a05c0f472d2970cf32098b8d5c86cd5f4d1a464f0d8f60b48430e5d5"
+    },
+    "sameLockHash": "9d41c59998b756dc557aea44b8ebb9266dd1e24f7c9df7acec8c9c28cd5d53ee",
+    "priorFiles": 3774,
+    "files": 3772,
+    "removedNames": [
+      "resources/client/dist/assets/index-CCzz5No4.js",
+      "resources/client/dist/assets/induction.worker-s3JX80Gc.js",
+      "resources/client/dist/assets/ipa-BOGIKFHa.js",
+      "resources/client/dist/assets/stt-Rs-UN5UF.js",
+      "resources/client/dist/assets/wav-encode-D6AXBX8S.js"
+    ],
+    "addedNames": [
+      "resources/client/dist/assets/index-DQE7uENx.js",
+      "resources/client/dist/assets/induction.worker-MqR3WZPi.js",
+      "resources/client/dist/assets/stt-B604MYvS.js"
+    ],
+    "checks": {
+      "requiredFiles": 9,
+      "nativeGroups": 3,
+      "runtimePackages": 50
+    },
+    "scope": "Changed frontend bundle inventory; native group and runtime dependency counts remain unchanged."
+  },
+  "dependencyReachabilityObservation": {
+    "date": "2026-10-08",
+    "trustProxy": false,
+    "method": "Local createApp().get('trust proxy') read; source search found no override or req.ip authorization path.",
+    "scope": "Not a complete reachability assessment or remediation; dependency findings remain unresolved."
+  }
+}

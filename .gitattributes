@@ -26,3 +26,8 @@ docs/verification/w23-ctc-replay.mts -text
 # Retained W23 windowing responses and reports preserve their recorded bytes.
 docs/verification/w23-chunks-*.json -text whitespace=cr-at-eol
 docs/verification/w23-chunks-replay.mts -text
+
+# Preserve the byte identities of W23 annotation records and replay source.
+docs/verification/w23-layers-*.json -text whitespace=cr-at-eol
+docs/verification/w23-layers-replay.mts -text
+docs/verification/w23-layers-*.png binary

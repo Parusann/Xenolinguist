@@ -37,3 +37,7 @@ Browser acceptance exercises failed audio upload and failed profile mutation, dr
 The packaged acceptance script additionally exercises the desktop close handshake, relaunch on a new origin, recovery of an original audio draft and notes, real bundled phone inference, saving the resulting sample, playback and original checksum verification. The [retained Windows result](verification/w06-windows-audio.json) passed these checks, including 48 phone segments from the prepared fixture and the missing-model negative check.
 
 These checks do not certify power-loss behavior on every filesystem, all microphone hardware or all valid WebM encoders. Browser storage quotas and disabled media permissions remain environmental failure modes with visible errors.
+
+## Independent phone-analysis layers
+
+Phone analysis now stages the original and prepared audio before inference, retaining generated responses independently from manual segments. Draft history uses the durable save queue; re-analysis of saved clips appends against the latest queued clip. An explicit copy action transfers a selected generated result into editable segments with a source-analysis link. Re-analysis preserves manual corrections and dictionary links. Portable archives retain the complete history and remap editable segment links. See [the W23 retention contract and verification](audio-evaluation.md#retained-phone-analyses-third-implementation-unit) for limits, old-record compatibility and the unfinished Whisper provenance path.
