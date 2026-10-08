@@ -1,0 +1,342 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "44deb8764b9d716e5ee12fd850eecf3b3e0e6c35",
+  "baselineRevision": "6fd87feb31c7bb4f5e2cc2c6458f06034adec4ef",
+  "scope": "Compatible dependency remediation; native inference versions and model bytes remain unchanged.",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "44deb8764b9d716e5ee12fd850eecf3b3e0e6c35",
+    "jobs": [
+      {
+        "completedAt": "2026-10-08T05:52:21Z",
+        "conclusion": "success",
+        "databaseId": 113169260607,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-10-08T05:45:33Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37733986164/job/113169260607"
+      },
+      {
+        "completedAt": "2026-10-08T05:58:24Z",
+        "conclusion": "success",
+        "databaseId": 113169260836,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-10-08T05:45:33Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37733986164/job/113169260836"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37733986164"
+  },
+  "sourceChecks": {
+    "unitTests": 485,
+    "toolingTests": 9,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-10-08T05:47:46.118Z",
+        "duration": 253357.187,
+        "expected": 48,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-08T05:52:01.034Z",
+        "duration": 9383.902999999998,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "98015b83f18f2f8a43719dd14ad63c1d099dff3982007dd7cd5c004bd6a87a58"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "d8494fd8d92fe1ed4bfa9641815a9baef571ba343c2f84eedb21533319dca100"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "d8494fd8d92fe1ed4bfa9641815a9baef571ba343c2f84eedb21533319dca100"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "44deb8764b9d716e5ee12fd850eecf3b3e0e6c35",
+          "sourceSnapshotHash": "bfd3464b425a7dc0d427882617438ea1712d8a2735f7ebff9de1b758fd9da471",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 158032,
+        "sha256": "4fd8d3b59d86e383e696d18973f1d7ef57bf63969834a574c916caf3ce792dc0"
+      },
+      "audit": {
+        "all": {
+          "lockfile": {
+            "bytes": 363736,
+            "sha256": "78892796552d362123cda53570a8890c8211641dec493742605805aa797ff9d5"
+          },
+          "counts": {
+            "info": 0,
+            "low": 0,
+            "moderate": 8,
+            "high": 4,
+            "critical": 0,
+            "total": 12
+          }
+        },
+        "production": {
+          "lockfile": {
+            "bytes": 363736,
+            "sha256": "78892796552d362123cda53570a8890c8211641dec493742605805aa797ff9d5"
+          },
+          "counts": {
+            "info": 0,
+            "low": 0,
+            "moderate": 3,
+            "high": 4,
+            "critical": 0,
+            "total": 7
+          }
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-10-08T05:52:33.096Z",
+        "duration": 322291.52,
+        "expected": 48,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-08T05:57:58.285Z",
+        "duration": 12276.859,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "7cbd9a1a4d7582d62427cc470933b848d424d58c221a629f2c90e960162351d2"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "34c61bd6f1f05a0a2d8010668fae03a1bf61533823364ffd5e1a1c6e6649eec7"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "34c61bd6f1f05a0a2d8010668fae03a1bf61533823364ffd5e1a1c6e6649eec7"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "44deb8764b9d716e5ee12fd850eecf3b3e0e6c35",
+          "sourceSnapshotHash": "51884a8c0745d30a35f383745fd9aa895dfb54655ebc44f73e778772ba59aab8",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 138190,
+        "sha256": "ed9f9b66df5d6eb48203b5956410ba001d2496f601842851183967ece1277719"
+      },
+      "audit": {
+        "all": {
+          "lockfile": {
+            "bytes": 374125,
+            "sha256": "ae2cfb5fdfa673813ae405c6608d1c608ee683fc0e264567fd95be71fb6b81ad"
+          },
+          "counts": {
+            "info": 0,
+            "low": 0,
+            "moderate": 8,
+            "high": 4,
+            "critical": 0,
+            "total": 12
+          }
+        },
+        "production": {
+          "lockfile": {
+            "bytes": 374125,
+            "sha256": "ae2cfb5fdfa673813ae405c6608d1c608ee683fc0e264567fd95be71fb6b81ad"
+          },
+          "counts": {
+            "info": 0,
+            "low": 0,
+            "moderate": 3,
+            "high": 4,
+            "critical": 0,
+            "total": 7
+          }
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "44deb8764b9d716e5ee12fd850eecf3b3e0e6c35",
+    "jobs": [
+      {
+        "completedAt": "2026-10-08T05:49:42Z",
+        "conclusion": "success",
+        "databaseId": 113169259974,
+        "name": "build",
+        "startedAt": "2026-10-08T05:45:32Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37733986171/job/113169259974"
+      },
+      {
+        "completedAt": "2026-10-08T05:56:07Z",
+        "conclusion": "success",
+        "databaseId": 113170370838,
+        "name": "verify-clean",
+        "startedAt": "2026-10-08T05:49:44Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37733986171/job/113170370838"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37733986171"
+  },
+  "beforeAudit": {
+    "all": {
+      "info": 0,
+      "low": 0,
+      "moderate": 9,
+      "high": 7,
+      "critical": 3,
+      "total": 19
+    },
+    "production": {
+      "info": 0,
+      "low": 0,
+      "moderate": 3,
+      "high": 5,
+      "critical": 1,
+      "total": 9
+    }
+  },
+  "priorAcousticReplays": {
+    "layers": {
+      "passed": true,
+      "revision": "9192533f2051f8996a35cb20909215651511476c",
+      "browserPlatforms": 2,
+      "browserAnalysesPerPlatform": 3,
+      "installedAnalyses": 2,
+      "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "manualCorrection": "retained manual correction",
+      "scope": "Validates retained browser/native metadata, archive identity mapping, immutable history and independent manual copying. Does not rerun inference or reproduce native logits, timing or accuracy."
+    },
+    "chunks": {
+      "passed": true,
+      "revision": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+      "nativeCheck": {
+        "passed": true,
+        "frames": 1377,
+        "phoneRuns": 373,
+        "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 4,
+        "maxInputSamples": 144080
+      },
+      "installedCheck": {
+        "passed": true,
+        "frames": 1377,
+        "phoneRuns": 378,
+        "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 4,
+        "maxInputSamples": 144080
+      },
+      "nearCapCheck": {
+        "passed": true,
+        "frames": 5856,
+        "phoneRuns": 1587,
+        "audioSha256": "750737af2007b633e83f4c8d103e00c5f377d3e57261f848065897992ac75299",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 16,
+        "maxInputSamples": 144080
+      },
+      "syntheticRuns": 2,
+      "scope": "Recomputed real-audio window plans and synthetic overlap/CTC decoding; verified native response identities and accounting. Native logits, recognition accuracy and timings are not reproduced."
+    },
+    "ctc": {
+      "passed": true,
+      "sourceRevision": "4342cb672ee8734096a6280b3ee92892e938df98",
+      "syntheticRuns": 3,
+      "nativeRuns": 46,
+      "installedRuns": 46,
+      "scope": "Synthetic logits recomputed; native/installed response identities, frame geometry and score mass verified. Native logits and inference are not replayed."
+    }
+  },
+  "artifacts": {
+    "w23-deps-audit-all.json": {
+      "bytes": 12131,
+      "sha256": "52cd260b5dad2a4c091118a6664fdfa93d7aa4cbd79d3987ff9582dbaac59d85"
+    },
+    "w23-deps-audit-production.json": {
+      "bytes": 9297,
+      "sha256": "1dab9c4863d8a78730cc9f42d2fcc1d7fecb4754c955c070fb551ce4e39355b1"
+    },
+    "w23-deps-installed.json": {
+      "bytes": 317470,
+      "sha256": "10a17cb1367392a95021cf008f59ac41266d291c2407e63cd1d60fe9927b438a"
+    },
+    "w23-deps-lock-changes.json": {
+      "bytes": 1913,
+      "sha256": "7a767b94f9d024ffb2e62785a36a4841d38b70fcc2807e01b8911d46c4c85d44"
+    },
+    "w23-deps-before-all.json": {
+      "bytes": 23072,
+      "sha256": "31ae896004f4bba5e546b7396955cca54b0eda0a2f9dc57943c59c2e8cc832da"
+    },
+    "w23-deps-before-production.json": {
+      "bytes": 11224,
+      "sha256": "2bfc81d72a3ccd633a127dea1268209ded4dc29cf27cfddfdafb1c5e899b023b"
+    }
+  },
+  "limits": [
+    "Audit entries include propagated parent packages, not independent demonstrated application defects.",
+    "High native-family and moderate logging/proxy-family findings remain unresolved.",
+    "Browser phone responses are synthetic; installed acceptance uses actual bundled native inference.",
+    "Retained acoustic replay checks metadata, not recognition accuracy or broad determinism.",
+    "No main merge, public release or deployment. W23 remains in progress."
+  ]
+}

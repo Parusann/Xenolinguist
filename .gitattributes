@@ -31,3 +31,6 @@ docs/verification/w23-chunks-replay.mts -text
 docs/verification/w23-layers-*.json -text whitespace=cr-at-eol
 docs/verification/w23-layers-replay.mts -text
 docs/verification/w23-layers-*.png binary
+
+# Preserve the dependency checkpoint's audit bytes and verification identities.
+docs/verification/w23-deps-*.json -text whitespace=cr-at-eol
