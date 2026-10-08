@@ -2,12 +2,12 @@
 
 Reviewed 2026-09-13 for W12. The source lockfile is the version authority. Run `npm ci`, `npm run check:source`, `npm run test:e2e:run`, `npm run test:public` and `npm run audit:record` to reproduce the source checks and current audit. Advisory data changes independently of the lockfile.
 
-The initial audit contained 39 affected package entries (4 critical, 25 high, 8 moderate, 2 low). After the W12 updates, both the complete and production-only audits contained four high entries, representing two dependency families and their parent dependency propagation. The newer W22 audit below supersedes those counts. Counts are not counts of independently exploitable application defects. CI retains both JSON reports with the lockfile hash. Audit service/format failures fail the audit step; known advisory counts remain a review signal, not a claim that CI certifies a vulnerability-free application.
+The initial audit contained 39 affected package entries (4 critical, 25 high, 8 moderate, 2 low). After the W12 updates, both the complete and production-only audits contained four high entries, representing two dependency families and their parent dependency propagation. The dated reviews below supersede those historical counts. Counts are not counts of independently exploitable application defects. CI retains both JSON reports with the lockfile hash. Audit service/format failures fail the audit step; known advisory counts remain a review signal, not a claim that CI certifies a vulnerability-free application.
 
 | Group | Change and verification scope |
 | --- | --- |
 | Tests and bundling | Both workspaces use Vitest 4.1.11; Vite resolves to 8.3.0, esbuild to 0.28.2 and tsx to 4.23.13. This removes the old Vitest/Vite development-server chain. Unit suites, TypeScript, production builds and browser flows are checked after the update. |
-| HTTP server | Express 4.22.2 and Express 4 type definitions 4.17.25 now use the same major API. The root override pins qs 6.16.0, including Express's narrower declared tilde range. HTTP contract tests and browser requests verify the selected parser with the bundled backend. npm 11's workspace `npm ls qs` may still label Express's declared range invalid; the explicit override and lockfile intentionally select 6.16.0, and locked installation is checked in CI. Revisit the override when Express accepts the patched range. |
+| HTTP server | W12 aligned Express 4.22.2 and Express 4 type definitions 4.17.25. The October 8 update below moves Express to 4.22.3, whose qs range accepts the existing 6.16.0 override. The prior invalid-range warning is resolved; HTTP contract tests and browser requests verify the selected parser with the bundled backend. |
 | Desktop packaging | Electron stays on major 42 and resolves to 42.11.3; electron-builder resolves to 26.15.3 and electron-updater to 6.8.9. `7zip-bin` 5.2.0 is an explicit development dependency because manifest provisioning invokes its Windows extractor directly; it is no longer inherited from the builder. Native acceptance uses the resulting executable, not the development Electron executable. |
 | Native inference | Transformers.js 4.2.0, onnxruntime-node 1.24.3, sharp 0.34.5 and the manifest-pinned model bytes remain paired. No unverified major native-library override is used to suppress audit findings. |
 
@@ -54,3 +54,21 @@ Frozen revision `9192533` changes no locked dependency. The October 6 CI audit r
 The critical entry is `proxy-addr` 2.0.7, with the audit reporting IPv4-mapped IPv6 trust-subnet spoofing ([GHSA-jqcg-44mw-7w3h](https://github.com/advisories/GHSA-jqcg-44mw-7w3h)). Newly reported production findings also include `source-map-js` and the `sprintf-js` / `roarr` / `global-agent` chain. These are current audit observations against unchanged dependencies, not vulnerabilities introduced or fixed by this annotation unit. Compatible update validation and an application-specific reachability assessment remain required before claiming remediation.
 
 The advisory identifies 2.0.8 as patched and describes exploitation through incorrectly configured trusted proxy subnets. A local read of `createApp().get('trust proxy')` returns `false`; source inspection found no `trust proxy` override or `req.ip` authorization path. This does not remove the vulnerable dependency or establish a complete reachability assessment. Prioritize the compatible update and repeat source/installed validation before the next release.
+
+## W23 compatible dependency remediation — 2026-10-08
+
+A fresh audit before this update reported 3 critical, 7 high and 9 moderate affected-package entries overall; production reported 1 critical, 5 high and 3 moderate. In addition to proxy-addr, the full audit now identifies shell-quote and its concurrently parent as critical. These counts are a fresh baseline, not the October 6 snapshot.
+
+| Dependency | Locked change | Reason |
+| --- | --- | --- |
+| proxy-addr | 2.0.7 → 2.0.8 | Fix IPv4-mapped trust-subnet handling (GHSA-jqcg-44mw-7w3h). The app still disables trust proxy. |
+| shell-quote | 1.9.0 → 1.11.0 | Fix line terminators after comment tokens (GHSA-pqg4-j6r4-53mv). concurrently 9.2.4 pins 1.9.0, so an explicit root override selects the patched version. Revisit this override when upstream adopts a patched range. |
+| Express | 4.22.2 → 4.22.3 | Accept the existing patched qs 6.16.0 range; prevent installation of a nested older parser and remove the invalid dependency-tree edge. |
+| source-map-js | 1.2.1 → 1.2.2 | Apply the compatible patch selected by the current audit. |
+| brace-expansion | 1.1.18 / 2.1.4 / 5.0.9 → 1.1.21 / 2.1.7 / 5.0.12 | Update all five locked build/lint copies. |
+| fast-uri | 3.1.7 → 3.1.8 | Update the builder's URI parser. |
+| http-cache-semantics | 4.2.0 → 4.3.0 | Update the builder's cache policy implementation. |
+
+Two behavior regressions exercise malformed mapped trust subnets and all four shell line terminators after a comment, plus ordinary quoting round trips. The shell test never executes constructed commands. Local checks pass 485 unit tests, nine tooling tests, lint/type/build gates and nine browser cases covering session boundaries, audio lifecycle and retained annotations. Three native unit cases remain gated. Cross-platform source and independent installed acceptance are pending at this implementation checkpoint.
+
+The final local audit reports **0 critical, 4 high and 8 moderate** entries overall and **0 critical, 4 high and 3 moderate** in production. No audited entry remains for the updated dependency families. The four high entries remain in Transformers/ONNX/adm-zip/sharp; their native versions and model bytes are unchanged. The moderate sprintf-js → roarr → global-agent chain remains, with additional propagated builder entries in the full audit. The registry still lists sprintf-js 1.1.3 as latest, while the audit suggests a breaking builder downgrade rather than a verified patch. Native compatibility work and review of that logging/proxy chain remain open. Audit counts are dated observations, not proof of application exploitability or a clean security certification.
