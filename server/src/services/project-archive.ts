@@ -19,7 +19,7 @@ import type { LanguageProfile } from '../../../shared/types.js';
 import { dataDir } from '../config.js';
 import { ProfileStore } from './profile-store.js';
 import { AudioStore, originalMime } from './audio-store.js';
-import { wavToFloat32 } from './ipa-phones.js';
+import { inspectPhoneWav } from './ipa-phones.js';
 import { inspectPcmWav } from '../../../shared/audio-container.js';
 import { atomicWrite } from './atomic-file.js';
 import { readCompilerRecord, writeCompilerRecord, validateCompilerRecord } from './compiler-sandbox.js';
@@ -241,7 +241,7 @@ export class ProjectArchives {
           }
           const original = await fs.readFile(members.get(`audio/${clip.id}/original`)!.file);
           const analysis = await fs.readFile(members.get(`audio/${clip.id}/analysis`)!.file);
-          const duration = wavToFloat32(analysis).length / 16000;
+          const duration = inspectPhoneWav(analysis).durationSeconds;
           if (originalMime(original) !== clip.assets.original.mime || clip.assets.analysis.mime !== 'audio/wav'
             || duration !== clip.duration || (clip.assets.original.mime === 'audio/wav' && Math.abs(inspectPcmWav(original).duration - duration) > 0.001))
             throw invalid('Recording format or duration does not match its metadata');

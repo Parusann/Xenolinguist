@@ -10,7 +10,7 @@ const fixture=path.join(root,'server/src/__tests__/fixtures/hello-16k.wav');
 process.env.IPA_MODEL_DIR ||= path.join(root,'vendor/ipa-model');
 await mkdir(path.dirname(output),{recursive:true});
 await build({entryPoints:[path.join(root,'server/src/services/ipa-phones.ts')],outfile:output,bundle:true,platform:'node',format:'esm',target:'node22',external:['@huggingface/transformers']});
-const record={source:sourceIdentity(),fixture:await hashFile(fixture),repetitions:8,progress:[]};
+const record={source:sourceIdentity(),fixture:await hashFile(fixture),repetitions:Number(process.env.XENO_PHONE_REPETITIONS ?? 8),progress:[]};
 try {
   const {transcribePhones}=await import(pathToFileURL(output).href);
   const wav=repeatPhoneFixture(await readFile(fixture),record.repetitions),start=performance.now();

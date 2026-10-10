@@ -52,7 +52,7 @@ export function repeatPhoneFixture(wav, repetitions) {
     if(wav.toString('ascii',offset,offset+4)==='data')data=wav.subarray(offset+8,offset+8+size);
     offset+=8+size+(size&1);
   }
-  assert.ok(data && Number.isInteger(repetitions) && repetitions>0 && data.length*repetitions<=3_840_000);
+  assert.ok(data && Number.isInteger(repetitions) && repetitions>0 && data.length*repetitions<=9_600_000);
   const output=Buffer.alloc(44+data.length*repetitions);
   output.write('RIFF');output.writeUInt32LE(output.length-8,4);output.write('WAVEfmt ',8);output.writeUInt32LE(16,16);
   output.writeUInt16LE(1,20);output.writeUInt16LE(1,22);output.writeUInt32LE(16000,24);output.writeUInt32LE(32000,28);
@@ -67,7 +67,7 @@ export function verifyPhoneChunks(result, wav) {
   assert.equal(p.coreFrames,400);assert.equal(p.contextFrames,25);assert.equal(p.quietRms,.01);
   assert.ok(Number.isInteger(p.quietFrameCount) && p.quietFrameCount>=0 && p.quietFrameCount<=acoustic.frames);
   let next=0,maxInputSamples=0;
-  assert.ok(p.chunks.length>0 && p.chunks.length<=18);
+  assert.ok(p.chunks.length>0 && p.chunks.length<=43);
   for(const [i,c] of p.chunks.entries()) {
     assert.equal(c.index,i);assert.equal(c.keepStartFrame,next);
     assert.ok(c.keepEndFrameExclusive>next && c.keepEndFrameExclusive-next<=400);

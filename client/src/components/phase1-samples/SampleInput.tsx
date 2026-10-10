@@ -1,3 +1,4 @@
+import { AUDIO_LIMITS } from 'shared/audio-limits'
 import { TRANSCRIPTION_HISTORY_LIMIT, type TranscriptionAnalysis } from 'shared/schemas/transcription'
 import { retainableTranscriptionAnalysis, retainableTranscriptionHistory } from '@/services/transcription-annotations'
 import { manualTranscriptionSegments } from 'shared/transcription-annotations'
@@ -127,6 +128,7 @@ export function SampleInput() {
     setAnalyzingAudio(kind); setAudioError('')
     try {
       if (kind === 'transcribe') {
+        if (pendingAudio.duration > AUDIO_LIMITS.transcriptionSeconds) throw new Error('Transcription supports recordings up to 2 minutes. Phone analysis supports up to 5 minutes.')
         if (transcriptionHistory.length >= TRANSCRIPTION_HISTORY_LIMIT) throw new Error('This recording already has eight retained transcriptions. Existing results are preserved.')
         const staged = await stageAudio(pendingAudio, stageId || undefined)
         if (!mounted.current) return
@@ -176,6 +178,7 @@ export function SampleInput() {
     if (!sample.audio_id || !profile || reTranscribing) return
     const owner = profile.id, clip = getAudioForSample(sample.audio_id)
     if (!clip?.assets) { addEntry('warning', 'Import legacy audio as a new recording to retain verified transcription history'); return }
+    if (clip.duration > AUDIO_LIMITS.transcriptionSeconds) { addEntry('warning', 'Transcription supports recordings up to 2 minutes'); return }
     if ((clip.transcriptions?.length ?? 0) >= TRANSCRIPTION_HISTORY_LIMIT) { addEntry('warning', 'This recording already has eight retained transcriptions'); return }
     setReTranscribing(sample.id)
     try {
@@ -282,10 +285,11 @@ export function SampleInput() {
               </div>
               <AudioPlayer src={pendingAudio.blobUrl} peaks={pendingAudio.peaks} duration={pendingAudio.duration} compact />
               <div className="flex" style={{ gap: 8, marginTop: 8, marginBottom: 8 }}>
-                <button className="btn sm ghost" disabled={Boolean(analyzingAudio)} onClick={() => { void handleAudioAnalysis('transcribe') }}>Transcribe audio</button>
-                <button className="btn sm ghost" disabled={Boolean(analyzingAudio)} onClick={() => { void handleAudioAnalysis('phones') }}>Analyze phones</button>
+                <button className="btn sm ghost" disabled={Boolean(analyzingAudio) || pendingAudio.duration > AUDIO_LIMITS.transcriptionSeconds} onClick={() => { void handleAudioAnalysis('transcribe') }}>Transcribe audio</button>
+                <button className="btn sm ghost" disabled={Boolean(analyzingAudio)} onClick={() => { void handleAudioAnalysis('phones') }}>{pendingAudio.duration > AUDIO_LIMITS.transcriptionSeconds ? 'Queue long phone analysis' : 'Analyze phones'}</button>
                 <a className="btn sm ghost" href={pendingAudio.blobUrl} download={pendingAudio.draft.metadata.name}>Download original</a>
               </div>
+              {pendingAudio.duration > AUDIO_LIMITS.transcriptionSeconds && <p className="dim">Long recording: phone analysis uses the shared queue. Follow progress or cancel in Runtime &amp; setup. Transcription supports up to 2 minutes.</p>}
               <TranscriptionHistory history={transcriptionHistory} onCopy={analysis => {
                 setPendingSegments(manualTranscriptionSegments(analysis, () => crypto.randomUUID()))
                 setManualTranscriptionSource(analysis.id); setManualSource(''); setSegmentVersion(previous => previous + 1)
@@ -338,7 +342,7 @@ export function SampleInput() {
 
         {(preparing || audioSaving || analyzingAudio) && <p role="status">{preparing ? 'Preparing audio…' : audioSaving ? 'Saving audio and sample…' : 'Analyzing audio…'}</p>}
         {audioError && <p role="alert" className="text-xs text-amber-300">{audioError}</p>}
-        <p className="dim" style={{ fontSize: 11 }}>PCM16 WAV or WebM/Opus · up to 32 MiB and 2 minutes. Original audio is preserved.</p>
+        <p className="dim" style={{ fontSize: 11 }}>PCM16 WAV or WebM/Opus · imports up to 32 MiB and 5 minutes. Microphone recording and transcription: up to 2 minutes. Original audio is preserved.</p>
         {sampleReview.sampleText && (
           <div className="glass-card slide-up" style={{ padding: 14 }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
@@ -395,7 +399,7 @@ export function SampleInput() {
                           {sample.audio_id && (
                             <button
                               onClick={(e) => { e.stopPropagation(); void handleReTranscribe(sample) }}
-                              title="Re-transcribe audio" disabled={Boolean(reTranscribing)}
+                              title="Re-transcribe audio" disabled={Boolean(reTranscribing) || (getAudioForSample(sample.audio_id)?.duration ?? 0) > AUDIO_LIMITS.transcriptionSeconds}
                               style={{ background: 'none', border: 0, color: 'var(--fg-faint)', cursor: 'pointer', fontSize: 12 }}
                             >
                               {reTranscribing === sample.id ? '…' : '↻'}

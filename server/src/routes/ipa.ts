@@ -1,5 +1,6 @@
+import { AUDIO_LIMITS } from '../../../shared/audio-limits.js';
 import { Router } from 'express';
-import { IpaUnavailableError, IpaBadInputError } from '../services/ipa-phones.js';
+import { IpaUnavailableError, IpaBadInputError, inspectPhoneWav } from '../services/ipa-phones.js';
 import { runPhones } from '../services/phone-process.js';
 import { jobs } from '../services/job-manager.js';
 import { RuntimeError } from '../services/runtime-error.js';
@@ -22,7 +23,8 @@ ipaRouter.post('/', async (req, res) => {
   const controller = new AbortController();
   const abort = () => { if (!res.writableEnded) controller.abort(); }; res.once('close', abort);
   try {
-    const job = jobs.submit('acoustic', 'Phone analysis', (signal, progress) => runPhones(wav, signal, () => progress({ status: 'Native phone process started' }), value => progress({ status: 'Phone chunks processed', ...value })), { signal: controller.signal });
+    const long = inspectPhoneWav(wav).durationSeconds > AUDIO_LIMITS.transcriptionSeconds;
+    const job = jobs.submit('acoustic', long ? 'Long recording phone analysis' : 'Phone analysis', (signal, progress) => runPhones(wav, signal, () => progress({ status: 'Native phone process started' }), value => progress({ status: 'Phone chunks processed', ...value })), { signal: controller.signal, ...(long ? { deadlineMs: AUDIO_LIMITS.longPhoneDeadlineMs } : {}) });
     res.setHeader('X-Xeno-Job', job.id);
     const result = await job.promise;
     return res.json(result);

@@ -5,7 +5,7 @@ import { randomUUID, createHash } from 'node:crypto';
 import { dataDir } from '../config.js';
 import { atomicWrite } from './atomic-file.js';
 import { withProfileLock } from './profile-locks.js';
-import { wavToFloat32 } from './ipa-phones.js';
+import { inspectPhoneWav } from './ipa-phones.js';
 import { ProfileError } from '../../../shared/schemas/errors.js';
 import { stagedAudioSchema, MAX_AUDIO_BYTES, type StagedAudio } from '../../../shared/schemas/audio.js';
 import { inspectPcmWav } from '../../../shared/audio-container.js';
@@ -42,7 +42,7 @@ export class AudioStore {
   }
   async complete(id: string, analysis: Buffer) {
     let duration: number;
-    try { duration = wavToFloat32(analysis).length / 16000; } catch { throw new ProfileError('AUDIO_ANALYSIS_INVALID', 'Analysis must be mono PCM16 at 16 kHz, 25 ms–120 seconds'); }
+    try { duration = inspectPhoneWav(analysis).durationSeconds; } catch { throw new ProfileError('AUDIO_ANALYSIS_INVALID', 'Analysis must be mono PCM16 at 16 kHz, 25 ms–300 seconds'); }
     return withProfileLock(`audio:${this.directory(id)}`, async () => {
       const record = await this.metadata(id);
       if (!record) throw new ProfileError('AUDIO_STAGE_MISSING', 'Audio staging expired; upload the original again', 404);

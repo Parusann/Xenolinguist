@@ -4,7 +4,7 @@ export class IpaBadInputError extends Error {
 
 /** Inspect container/sample geometry without allocating decoded audio on the server thread.
  * Unsupported rates and channels fail before creating an inference process. */
-export function inspectAudioWav(buf: Buffer) {
+export function inspectAudioWav(buf: Buffer, maxSeconds = 120) {
   if (buf.length < 44 || buf.toString('ascii', 0, 4) !== 'RIFF' || buf.toString('ascii', 8, 12) !== 'WAVE'
     || buf.readUInt32LE(4) + 8 !== buf.length) throw new IpaBadInputError('Invalid RIFF/WAVE size or signature');
   const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
@@ -21,7 +21,7 @@ export function inspectAudioWav(buf: Buffer) {
     if (id === 'data') { if (dataOff >= 0) throw new IpaBadInputError('Repeated WAV data'); dataOff = off + 8; dataLen = sz; }
     off += 8 + sz + (sz & 1);
   }
-  if (off !== buf.length || dataOff < 0 || dataLen < 800 || dataLen % 2 || dataLen > 16000 * 2 * 120) throw new IpaBadInputError('WAV must contain 25 ms to 120 seconds of complete PCM samples');
+  if (off !== buf.length || dataOff < 0 || dataLen < 800 || dataLen % 2 || dataLen > 16000 * 2 * maxSeconds) throw new IpaBadInputError(`WAV must contain 25 ms to ${maxSeconds} seconds of complete PCM samples`);
   if (format !== 1 || bits !== 16 || alignment !== 2 || byteRate !== 32000 || sampleRate !== 16000 || channels !== 1)
     throw new IpaBadInputError('Expected mono PCM16 WAV at 16000 Hz');
   return { sampleCount: dataLen / 2, dataOffset: dataOff, durationSeconds: dataLen / 32000 };

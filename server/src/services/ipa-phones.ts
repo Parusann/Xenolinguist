@@ -12,8 +12,10 @@ export class IpaUnavailableError extends Error {
   constructor(message: string, public readonly code = 'IPA_MODEL_LOAD_FAILED') { super(message); this.name = 'IpaUnavailableError'; }
 }
 
-import { inspectAudioWav as inspectPhoneWav, IpaBadInputError } from './audio-wav.js';
-export { inspectAudioWav as inspectPhoneWav, IpaBadInputError } from './audio-wav.js';
+import { inspectAudioWav, IpaBadInputError } from './audio-wav.js';
+import { AUDIO_LIMITS } from '../../../shared/audio-limits.js';
+export { IpaBadInputError } from './audio-wav.js';
+export const inspectPhoneWav = (wav: Buffer) => inspectAudioWav(wav, AUDIO_LIMITS.recordingSeconds);
 
 // The folder name under the model dir (see docs/ipa-model-notes.md). Keep in sync with
 // scripts/verify-ipa.mjs and the vendored vendor/ipa-model/<MODEL_ID>/ layout.

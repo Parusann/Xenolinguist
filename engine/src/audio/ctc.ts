@@ -1,7 +1,8 @@
+import { AUDIO_LIMITS } from '../../../shared/audio-limits.js';
 import type { CtcAnalysis, IpaResult } from '../../../shared/types.js';
 
-// 120 seconds at 50 frames/second, with a bounded acoustic alphabet.
-export const CTC_LIMITS = { frames: 6000, vocabulary: 256, candidates: 3 } as const;
+// Five minutes at 50 frames/second, with a bounded acoustic alphabet.
+export const CTC_LIMITS = { frames: AUDIO_LIMITS.phoneFrames, vocabulary: 256, candidates: 3 } as const;
 
 /** Stable softmax summaries over each greedy run; blanks still split repeated phones. */
 export function decodeCtcPhones(logits: Float32Array, frames: number, vocab: number, padId: number,

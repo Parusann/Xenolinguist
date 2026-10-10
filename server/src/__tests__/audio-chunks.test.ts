@@ -15,9 +15,9 @@ describe('bounded phone windows and global CTC ownership', () => {
     }
   });
   it('assigns every frame once with aligned context and bounded native inputs', () => {
-    for (const n of [128081,128400,240000,800000,1920000]) {
+    for (const n of [128081,128400,240000,800000,1920000,4800000]) {
       const samples=new Float32Array(n).fill(.5), plan=planPhoneChunks(samples), owned=new Uint8Array(framesIn(samples));
-      expect(plan.chunks.length).toBeLessThanOrEqual(18);
+      expect(plan.chunks.length).toBeLessThanOrEqual(43);
       for (const c of plan.chunks) {
         expect(c.startSample).toBe(c.startFrame*320);
         expect(framesIn(samples.subarray(c.startSample,c.endSample))).toBe(c.endFrameExclusive-c.startFrame);
@@ -43,7 +43,7 @@ describe('bounded phone windows and global CTC ownership', () => {
     expect(planPhoneChunks(audio(1000,0)).chunks.map(c=>c.keepEndFrameExclusive)).toEqual([400,800,1000]);
   });
   it('rejects malformed, oversized and non-finite decoded audio', () => {
-    for (const a of [new Float32Array(399),new Float32Array(1920001),new Float32Array(400).fill(NaN),new Float32Array(400).fill(1.01)]) expect(()=>planPhoneChunks(a)).toThrow();
+    for (const a of [new Float32Array(399),new Float32Array(4800001),new Float32Array(400).fill(NaN),new Float32Array(400).fill(1.01)]) expect(()=>planPhoneChunks(a)).toThrow();
   });
   it('stitches owned logits exactly and never uses contradictory overlap context', async () => {
     const samples=audio(901), plan=planPhoneChunks(samples);let call=0;

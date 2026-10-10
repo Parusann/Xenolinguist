@@ -1,3 +1,4 @@
+import { AUDIO_LIMITS } from '../audio-limits.js';
 import { z } from 'zod';
 import { entityIdSchema, timestampSchema } from './common.js';
 export const MAX_AUDIO_BYTES = 32 * 1024 * 1024;
@@ -8,6 +9,6 @@ export const audioDraftMetadataSchema = z.strictObject({ profileId: entityIdSche
   name: z.string().max(255), mime: z.string().max(100), createdAt: timestampSchema });
 export type AudioDraftMetadata = z.infer<typeof audioDraftMetadataSchema>;
 export const stagedAudioSchema = z.strictObject({ id: entityIdSchema, createdAt: timestampSchema,
-  original: audioFileSchema, analysis: audioFileSchema.optional(), duration: z.number().positive().max(120).optional(),
+  original: audioFileSchema, analysis: audioFileSchema.optional(), duration: z.number().positive().max(AUDIO_LIMITS.recordingSeconds).optional(),
   state: z.enum(['staged', 'retained']) });
 export type StagedAudio = z.infer<typeof stagedAudioSchema>;

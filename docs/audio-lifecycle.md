@@ -6,7 +6,7 @@ Audio import and microphone capture use one preparation and save flow. The accep
 
 - PCM16 RIFF/WAVE, one or two channels, 8–96 kHz. Chunk lengths, format, alignment, byte rate and duration are validated before decoding. Ancillary RIFF chunks are supported.
 - WebM/Opus, decoded by the browser's media implementation. The server checks container/codec markers, size and the derived WAV; it does not independently decode compressed originals or prove that a submitted derivative represents their acoustic content.
-- Originals are limited to 32 MiB; decoded audio must be 25 ms–120 seconds. The recorder stops around 119 seconds to stay inside this boundary. Other formats are rejected explicitly.
+- Originals are limited to 32 MiB; decoded imports must be 25 ms–300 seconds. The recorder still stops around 119 seconds; Whisper transcription remains limited to 120 seconds. Longer imports offer queued phone analysis. Other formats are rejected explicitly.
 
 Browser decoding receives a temporary ArrayBuffer, so buffer detachment cannot consume the original Blob. A Web Worker mixes decoded channels, extracts peaks, and applies a 64-tap Hann-windowed sinc filter before resampling to 16 kHz. The numerical test verifies a 1 kHz tone's amplitude and at least 40 dB suppression of a 12 kHz tone when converting 48 kHz audio. This is a regression measurement, not a complete resampler quality benchmark. Already prepared analysis WAVs are passed directly to model services without another decode/resample cycle.
 

@@ -16,9 +16,9 @@ function wav() {
 describe('phone input contract', () => {
   it('inspects bounded sample geometry without decoding a full sample array', () => {
     expect(inspectPhoneWav(wav())).toEqual({ sampleCount: 400, dataOffset: 44, durationSeconds: .025 });
-    const limit = Buffer.alloc(44 + 16000 * 2 * 120); wav().copy(limit);
+    const limit = Buffer.alloc(44 + 16000 * 2 * 300); wav().copy(limit);
     limit.writeUInt32LE(limit.length - 8, 4); limit.writeUInt32LE(limit.length - 44, 40);
-    expect(inspectPhoneWav(limit).sampleCount).toBe(1_920_000);
+    expect(inspectPhoneWav(limit).sampleCount).toBe(4_800_000);
     const over = Buffer.concat([limit, Buffer.alloc(2)]);
     over.writeUInt32LE(over.length - 8, 4); over.writeUInt32LE(over.length - 44, 40);
     expect(() => inspectPhoneWav(over)).toThrow(IpaBadInputError);

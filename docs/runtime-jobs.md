@@ -17,7 +17,7 @@ The existing default remains `gemma4:e4b`, overridable with `OLLAMA_MODEL` when 
 | Lane | Execution limit | Waiting limit | Total deadline |
 | --- | --- | --- | --- |
 | Language generation | 1 | 4 | 90–240 seconds, task dependent |
-| Acoustic analysis: phones and whisper | 1 shared | 4 | 180 seconds; whisper also has its existing process timeout |
+| Acoustic analysis: phones and whisper | 1 shared | 4 | 180 seconds; phone recordings over 120 seconds use 600 seconds total, including queue wait. Whisper also has its existing process timeout |
 | Model download | 1 | No concurrent second download | 30 minutes |
 
 Jobs move through queued, running and succeeded/failed/cancelled states. Up to 100 recent metadata records remain in memory; prompts, audio and generated output are not stored in that job list. A restart clears the list and does not resume inference. Deadlines include queue wait. A cancellation request shows stopping while execution exits; the lane remains occupied until cleanup finishes. Queue overflow returns HTTP 429.

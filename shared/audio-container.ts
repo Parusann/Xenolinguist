@@ -1,3 +1,4 @@
+import { AUDIO_LIMITS } from './audio-limits.js';
 /** Validate the supported original PCM container without decoding or transferring its bytes. */
 export function inspectPcmWav(bytes: Uint8Array) {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
@@ -22,6 +23,6 @@ export function inspectPcmWav(bytes: Uint8Array) {
   }
   if (!channels || !dataBytes || offset !== bytes.length || dataBytes % (channels * 2)) throw new Error('Incomplete WAV');
   const duration = dataBytes / (channels * 2 * rate);
-  if (duration < 0.025 || duration > 120) throw new Error('Audio must be 25 ms–120 seconds');
+  if (duration < 0.025 || duration > AUDIO_LIMITS.recordingSeconds) throw new Error('Audio must be 25 ms–300 seconds');
   return { channels, rate, duration };
 }

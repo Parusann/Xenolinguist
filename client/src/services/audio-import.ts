@@ -1,3 +1,4 @@
+import { AUDIO_LIMITS } from 'shared/audio-limits'
 import { MAX_AUDIO_BYTES, stagedAudioSchema, type StagedAudio } from 'shared/schemas/audio'
 import { inspectPcmWav } from 'shared/audio-container'
 export interface PreparedAudio { blob: Blob; analysis: Blob; peaks: number[]; duration: number }
@@ -12,7 +13,7 @@ export async function prepareAudio(original: Blob, onValidated?: (mime: string) 
   const context = new AudioContext()
   try {
     const decoded = await context.decodeAudioData(bytes)
-    if (decoded.duration < 0.025 || decoded.duration > 120 || decoded.numberOfChannels > 2) throw new Error('Audio must be 25 ms–120 seconds, mono or stereo.')
+    if (decoded.duration < 0.025 || decoded.duration > AUDIO_LIMITS.recordingSeconds || decoded.numberOfChannels > 2) throw new Error('Audio must be 25 ms–300 seconds, mono or stereo.')
     await onValidated?.(wav ? 'audio/wav' : 'audio/webm')
     const channels = Array.from({ length: decoded.numberOfChannels }, (_, c) => new Float32Array(decoded.getChannelData(c)))
     const worker = new Worker(new URL('../workers/audio-analysis.worker.ts', import.meta.url), { type: 'module' })

@@ -52,16 +52,16 @@ describe('bounded greedy CTC acoustic summaries', () => {
     expect(()=>decodeCtcPhones(new Float32Array(4),1,4,2,()=> 'x'.repeat(81))).toThrow();
   });
   it('bounds a maximum-sized output and conserves frame accounting and score mass', () => {
-    const values=Float32Array.from({length:6000*4},(_,i)=>i%4===Math.floor(i/4)%4 ? 1:0);
-    const r=decodeCtcPhones(values,6000,4,2,id=>labels[id]);
-    expect(r.segments).toHaveLength(3000);
-    expect(r.ctc.runs.reduce((n,r)=>n+r.endFrameExclusive-r.startFrame,0)+r.ctc.blankFrames+r.ctc.specialFrames).toBe(6000);
+    const values=Float32Array.from({length:15000*4},(_,i)=>i%4===Math.floor(i/4)%4 ? 1:0);
+    const r=decodeCtcPhones(values,15000,4,2,id=>labels[id]);
+    expect(r.segments).toHaveLength(7500);
+    expect(r.ctc.runs.reduce((n,r)=>n+r.endFrameExclusive-r.startFrame,0)+r.ctc.blankFrames+r.ctc.specialFrames).toBe(15000);
     for (const run of r.ctc.runs) {
       expect(run.candidates).toHaveLength(3);
       expect(run.candidates.reduce((n,c)=>n+c.meanProbability,0)+run.omittedProbability).toBeCloseTo(1,12);
       expect(run.segmentIndex).toBeLessThan(r.segments.length);
     }
-    expect(r.segments.at(-1)!.end).toBeLessThanOrEqual(120);
-    expect(JSON.stringify(r).length).toBeLessThan(2_500_000);
+    expect(r.segments.at(-1)!.end).toBeLessThanOrEqual(300);
+    expect(JSON.stringify(r).length).toBeLessThan(6_000_000);
   });
 });

@@ -103,8 +103,8 @@ try {
   });
   expect(media).toEqual({ audioTracks: 1, cameraDenied: true });
   record.checks.localBoundary.syntheticMicrophone = media;
-  const request = async (route, body) => {
-    const response = await desktopRequest(page).post(origin + route, { data: body, timeout: 180_000 });
+  const request = async (route, body, timeout = 180_000) => {
+    const response = await desktopRequest(page).post(origin + route, { data: body, timeout });
     return { status: response.status(), body: await response.json() };
   };
   const wav = await readFile(path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav'));
@@ -127,7 +127,7 @@ try {
   const cancelled = await page.evaluate(() => window.__phoneCancellation);
   expect(cancelled.status).toBe(409); expect(cancelled.body.code).toBe('JOB_CANCELLED');
   record.checks.nativeJobCancellation = { nativeProcessStarted: true, status: cancelled.status, code: cancelled.body.code };
-  const cancellationWav=repeatPhoneFixture(wav,30),jobPollMs=[];
+  const cancellationWav=repeatPhoneFixture(wav,86),jobPollMs=[];
   await page.evaluate(audio => {
     window.__chunkCancellation=fetch('/api/ipa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio})}).then(async response=>({status:response.status,body:await response.json()}));
   },cancellationWav.toString('base64'));
@@ -138,7 +138,7 @@ try {
     expect(response.status()).toBe(200);
     jobPollMs.push(performance.now()-start);
     const current=await response.json();
-    midChunkJob=current.jobs.find(job=>job.state==='running' && job.task==='Phone analysis' && job.progress?.completed>=1 && job.progress.completed<job.progress.total);
+    midChunkJob=current.jobs.find(job=>job.state==='running' && job.task==='Long recording phone analysis' && job.progress?.completed>=1 && job.progress.completed<job.progress.total);
     return Boolean(midChunkJob);
   },{timeout:120_000,intervals:[100]}).toBe(true);
   const stopStart=performance.now();
@@ -146,11 +146,36 @@ try {
   const midCancelled=await page.evaluate(()=>window.__chunkCancellation);
   expect(midCancelled.status).toBe(409);expect(midCancelled.body.code).toBe('JOB_CANCELLED');
   record.checks.chunkCancellation={progress:midChunkJob.progress,status:midCancelled.status,code:midCancelled.body.code,cancelMs:performance.now()-stopStart,jobPollMs};
-  const longWav=repeatPhoneFixture(wav,8),longStart=performance.now();
-  const longPhones=await request('/api/ipa',{audio:longWav.toString('base64')});
+  await page.evaluate(() => {
+    const gaps = []; let previous = performance.now();
+    const timer = setInterval(() => { const now = performance.now(); gaps.push(now - previous); previous = now; }, 100);
+    window.__finishLongHeartbeat = () => { clearInterval(timer); return gaps; };
+  });
+  const longWav=repeatPhoneFixture(wav,86),longStart=performance.now();
+  let longPhones, heartbeatGapsMs;
+  try { longPhones=await request('/api/ipa',{audio:longWav.toString('base64')}, 610_000); }
+  finally { heartbeatGapsMs = await page.evaluate(() => window.__finishLongHeartbeat()); }
   expect(longPhones.status).toBe(200);
-  record.checks.chunkedPhones={repetitions:8,result:longPhones.body,elapsedMs:performance.now()-longStart,check:verifyPhoneChunks(longPhones.body,longWav)};
+  expect(heartbeatGapsMs.length).toBeGreaterThan(0);
+  record.checks.chunkedPhones={repetitions:86,result:longPhones.body,elapsedMs:performance.now()-longStart,heartbeatGapsMs,check:verifyPhoneChunks(longPhones.body,longWav)};
   expect(record.checks.chunkedPhones.check.chunks).toBeGreaterThan(1);
+  expect(longPhones.body.audio.durationSeconds).toBeGreaterThan(290);
+  const longStageResponse = await desktopRequest(page).post(origin + '/api/audio/stages', { data: longWav, headers: { 'Content-Type': 'application/octet-stream' } });
+  expect(longStageResponse.status()).toBe(201);
+  const longStage = await longStageResponse.json();
+  const longCompleteResponse = await desktopRequest(page).put(`${origin}/api/audio/stages/${longStage.id}/analysis`, { data: longWav, headers: { 'Content-Type': 'application/octet-stream' } });
+  expect(longCompleteResponse.status()).toBe(200);
+  const longComplete = await longCompleteResponse.json();
+  const longClip = { id: longComplete.id, filename: 'long-native.wav', duration: longComplete.duration, created_at: longComplete.createdAt,
+    waveform: [], segments: [{ id: 'long-manual', start: 240, end: 290, label: 'retained long correction', dictionary_entry_id: null }],
+    assets: { original: longComplete.original, analysis: longComplete.analysis }, manual_source_analysis_id: 'long-native-analysis',
+    phone_analyses: [{ version: 1, id: 'long-native-analysis', created_at: longComplete.createdAt, originalSha256: longComplete.original.sha256, result: longPhones.body }] };
+  const longProfileResponse = await request('/api/profiles', { name: 'Long native recording', audio_clips: [longClip], samples: [{ id: 'long-sample',
+    alien_text: 'Long native recording', english_translation: null, source: 'Audio recording', phonetic_notes: '', decoded: false,
+    audio_id: longClip.id, ipa: null, created_at: longClip.created_at }] });
+  expect(longProfileResponse.status).toBe(201);
+  const longProfile = longProfileResponse.body;
+  record.checks.longAudio = { source: longClip, passed: false };
   record.checks.ipa = await request('/api/ipa', { audio: wav.toString('base64') });
   if (record.checks.ipa.status === 200) {
     expect(record.checks.ipa.body.ipa.length).toBeGreaterThan(0);
@@ -256,6 +281,9 @@ try {
   reopened.setDefaultTimeout(20_000);
   await reopened.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
   const newOrigin = new URL(reopened.url()).origin;
+  const longRecovered = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${longProfile.id}`)).json();
+  expect(longRecovered.audio_clips[0]).toEqual(longClip);
+  record.checks.longAudio.restartRecovered = true;
   expect((await desktopRequest(reopened).get(`${newOrigin}/api/health`)).status()).toBe(200);
   expect((await reopened.request.get(`${newOrigin}/api/health`)).status()).toBe(401);
   record.checks.localBoundary.relaunchAuthenticated = true;
@@ -492,7 +520,7 @@ try {
   // Export response bytes can arrive before the exclusive staging cleanup finishes.
   await reopened.exposeFunction('waitForArchiveCleanup', async () => { await expect.poll(() => readdir(path.join(dir,'data','archive-staging'))).toEqual([]); });
   const archiveChecks = [];
-  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile, inductionProfile, numberProfile, researchProfile]) {
+  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile, inductionProfile, numberProfile, researchProfile, longRecovered]) {
     const restored = await reopened.evaluate(async source => {
       const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
       if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
@@ -552,16 +580,21 @@ try {
       expect(restoredClip.phone_analyses).toEqual(sourceProfile.audio_clips[0].phone_analyses);
       expect(restoredClip.manual_source_analysis_id).toBe(sourceProfile.audio_clips[0].manual_source_analysis_id);
       expect(restoredClip.segments.map(({ id: _id, ...segment }) => segment)).toEqual(sourceProfile.audio_clips[0].segments.map(({ id: _id, ...segment }) => segment));
-      record.checks.phoneAnnotations.restored = restoredClip;
-      record.checks.phoneAnnotations.passed = true;
       expect(restoredClip.transcriptions).toEqual(sourceProfile.audio_clips[0].transcriptions);
       expect(restoredClip.manual_source_transcription_id).toBe(sourceProfile.audio_clips[0].manual_source_transcription_id);
-      record.checks.transcriptionAnnotations.restored = restoredClip;
-      record.checks.transcriptionAnnotations.passed = true;
+      if (sourceProfile.id === longProfile.id) {
+        record.checks.longAudio.restored = restoredClip;
+        record.checks.longAudio.passed = true;
+      } else {
+        record.checks.phoneAnnotations.restored = restoredClip;
+        record.checks.phoneAnnotations.passed = true;
+        record.checks.transcriptionAnnotations.restored = restoredClip;
+        record.checks.transcriptionAnnotations.passed = true;
+      }
       expect(restored.profile.samples.some(sample => sample.audio_id === restoredClip.id)).toBe(true);
       const response = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${restoredClip.id}`);
       restoredAudioHash = createHash('sha256').update(await response.body()).digest('hex');
-      expect(restoredAudioHash).toBe(record.fixture.sha256);
+      expect(restoredAudioHash).toBe(sourceProfile.audio_clips[0].assets.original.sha256);
       expect(restoredClip.assets).toEqual(sourceProfile.audio_clips[0].assets);
     }
     archiveChecks.push({ bytes: restored.bytes, counts: restored.preview.counts, sandboxIncluded: true, restoredAudioHash });

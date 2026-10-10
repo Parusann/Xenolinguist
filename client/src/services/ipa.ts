@@ -1,12 +1,13 @@
 import { blobToWav16k } from '../components/audio/wav-encode';
 import type { IpaResult } from 'shared/types';
+import { audioBase64 } from './audio-base64';
 
 /** Transcribe an audio Blob to phones + per-phone timings; null when unavailable. */
 export async function transcribePhones(blob: Blob, onUnavailable?: (message: string) => void): Promise<IpaResult | null> {
   try {
     const wav = await blobToWav16k(blob);
     const bytes = new Uint8Array(await wav.arrayBuffer());
-    const base64 = btoa(bytes.reduce((data, byte) => data + String.fromCharCode(byte), ''));
+    const base64 = await audioBase64(bytes);
     const res = await fetch('/api/ipa', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -19,7 +20,7 @@ export async function transcribePhones(blob: Blob, onUnavailable?: (message: str
         IPA_MODEL_INVALID: 'Phone model files failed verification. Restore the bundled model files.',
         IPA_PACKAGE_MISSING: 'The phone runtime is incomplete. Reinstall the application.',
         IPA_NATIVE_LOAD_FAILED: 'The native phone runtime could not start. Restart or reinstall the application.',
-        IPA_UNSUPPORTED_INPUT: 'Phone analysis requires mono 16 kHz PCM audio between 25 ms and 120 seconds.',
+        IPA_UNSUPPORTED_INPUT: 'Phone analysis requires mono 16 kHz PCM audio between 25 ms and 300 seconds.',
       };
       onUnavailable?.(messages[error.code] ?? 'Phone analysis failed. Your recording is still available; try again.');
       return null;

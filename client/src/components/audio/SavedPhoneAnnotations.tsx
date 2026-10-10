@@ -1,3 +1,4 @@
+import { AUDIO_LIMITS } from 'shared/audio-limits'
 import { TranscriptionHistory } from './TranscriptionHistory'
 import { manualTranscriptionSegments } from 'shared/transcription-annotations'
 import { useEffect, useRef, useState } from 'react'
@@ -37,8 +38,9 @@ export function SavedPhoneAnnotations({ clip, profileId }: { clip: AudioClip; pr
   return <details aria-label="Recording annotation layers">
     <summary>Generated analyses and manual segments</summary>
     <button className="btn sm ghost" disabled={busy || !clip.assets || (clip.phone_analyses?.length ?? 0) >= PHONE_HISTORY_LIMIT} onClick={() => { void analyze() }}>
-      {busy ? 'Analyzing saved phones…' : 'Analyze saved phones'}
+      {busy ? 'Analyzing saved phones…' : clip.duration > AUDIO_LIMITS.transcriptionSeconds ? 'Queue long phone analysis' : 'Analyze saved phones'}
     </button>
+    {clip.duration > AUDIO_LIMITS.transcriptionSeconds && <p className="dim">Long recording: phone analysis uses the shared queue. Follow progress or cancel in Runtime &amp; setup. Transcription supports up to 2 minutes.</p>}
     {!clip.assets && <p>Legacy recording: verified prepared audio is required to retain phone analysis. Import the original as a new recording.</p>}
     <p className="dim">Up to eight analyses and 4 MiB per recording. Existing results are never silently pruned.</p>
     {error && <p role="alert">{error}</p>}
