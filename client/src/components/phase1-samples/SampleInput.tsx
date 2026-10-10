@@ -1,3 +1,7 @@
+import { TRANSCRIPTION_HISTORY_LIMIT, type TranscriptionAnalysis } from 'shared/schemas/transcription'
+import { retainableTranscriptionAnalysis, retainableTranscriptionHistory } from '@/services/transcription-annotations'
+import { manualTranscriptionSegments } from 'shared/transcription-annotations'
+import { TranscriptionHistory } from '@/components/audio/TranscriptionHistory'
 import { useEffect, useRef, useState, type SetStateAction } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
@@ -28,7 +32,7 @@ import { normalize } from 'engine/text/normalize'
 import { useLexicon } from '@/hooks/useLexicon'
 
 export function SampleInput() {
-  const { profile, addSample, removeSample, saveAudioSample, restoreSample, addDictionaryEntry, updateSample } = useProfile()
+  const { profile, addSample, removeSample, saveAudioSample, restoreSample, addDictionaryEntry, retainTranscriptionAnalysis } = useProfile()
   const lexicon = useLexicon(profile)
   const { runTask, loading, streamedText, error: analysisError } = useAI()
   const { ready: connected } = useOllama()
@@ -57,6 +61,9 @@ export function SampleInput() {
   const [segmentsJson, setSegmentsJson] = useProfileDraft<string>('sample.segments', '[]')
   const [phoneHistoryJson, setPhoneHistoryJson] = useProfileDraft<string>('sample.phoneHistory', '[]')
   const [manualSource, setManualSource] = useProfileDraft<string>('sample.manualSource', '')
+  const [transcriptionHistoryJson, setTranscriptionHistoryJson] = useProfileDraft<string>('sample.transcriptionHistory', '[]')
+  const [manualTranscriptionSource, setManualTranscriptionSource] = useProfileDraft<string>('sample.manualTranscriptionSource', '')
+  const transcriptionHistory: TranscriptionAnalysis[] = JSON.parse(transcriptionHistoryJson)
   const phoneHistory: PhoneAnalysis[] = JSON.parse(phoneHistoryJson)
   type Segment = { id: string; start: number; end: number; label: string; dictionary_entry_id?: string | null }
   const pendingSegments: Segment[] = JSON.parse(segmentsJson)
@@ -86,7 +93,8 @@ export function SampleInput() {
           source, phonetic_notes: phoneticNotes.trim(), decoded: false, audio_id: staged.id, ipa: pendingIpa || null,
         }, { id: staged.id, created_at: metadata.createdAt, filename: metadata.name, duration: staged.duration,
           waveform: pendingAudio.peaks, segments: pendingSegments.map(s => ({ ...s, dictionary_entry_id: s.dictionary_entry_id ?? null })),
-          assets: { original: staged.original, analysis: staged.analysis }, phone_analyses: phoneHistory,
+          assets: { original: staged.original, analysis: staged.analysis }, phone_analyses: phoneHistory, transcriptions: transcriptionHistory,
+          ...(manualTranscriptionSource ? { manual_source_transcription_id: manualTranscriptionSource } : {}),
           ...(manualSource ? { manual_source_analysis_id: manualSource } : {}) })
         if (!mounted.current) return
         await discard()
@@ -97,7 +105,7 @@ export function SampleInput() {
       if (!mounted.current) return
       if (sampleText !== '[audio sample]') sampleReview.suggestForSample(sampleText)
       setAlienText(''); setTranslation(''); setPhoneticNotes(''); setPendingSegments([]); setPendingIpa(''); setStageId(''); setPendingMode(''); setShowRecorder(false)
-      setPhoneHistoryJson('[]'); setManualSource('')
+      setPhoneHistoryJson('[]'); setManualSource(''); setTranscriptionHistoryJson('[]'); setManualTranscriptionSource('')
     } catch (error) { if (mounted.current) setAudioError((error as Error).message) }
     finally { if (mounted.current) setAudioSaving(false) }
   }
@@ -105,7 +113,7 @@ export function SampleInput() {
   const acceptAudio = async (blob: Blob, name: string) => {
     if (await selectAudio(blob, name) && mounted.current) {
       setPendingSegments([]); setPendingIpa(''); setStageId(''); setPendingMode(''); setSource('Audio recording')
-      setPhoneHistoryJson('[]'); setManualSource('')
+      setPhoneHistoryJson('[]'); setManualSource(''); setTranscriptionHistoryJson('[]'); setManualTranscriptionSource('')
     }
   }
   const handleRecordingComplete = (blob: Blob) => { void acceptAudio(blob, 'recording.webm') }
@@ -119,15 +127,19 @@ export function SampleInput() {
     setAnalyzingAudio(kind); setAudioError('')
     try {
       if (kind === 'transcribe') {
+        if (transcriptionHistory.length >= TRANSCRIPTION_HISTORY_LIMIT) throw new Error('This recording already has eight retained transcriptions. Existing results are preserved.')
+        const staged = await stageAudio(pendingAudio, stageId || undefined)
+        if (!mounted.current) return
+        setStageId(staged.id)
+        const response = await fetch(`/api/audio/${staged.id}/analysis`)
+        if (!response.ok) throw new Error('Could not load the prepared recording')
         const { transcribe } = await import('@/services/stt')
-        const result = await transcribe(pendingAudio.analysis, { preparedWav: true })
+        const result = await transcribe(await response.blob(), { preparedWav: true })
         if (!result) throw new Error('Transcription is unavailable. Your original audio is retained.')
         if (!mounted.current) return
-        setPendingMode(result.mode)
-        setPhoneticNotes(previous => [previous, `Transcript: ${result.text}`].filter(Boolean).join('\n'))
-        if (!pendingSegments.length) setPendingSegments(result.segments.filter(s => s.end > s.start && s.start < pendingAudio.duration).map((s, index) => ({
-          id: `${pendingAudio.draft.metadata.sampleId}-seg-${index}`, start: s.start, end: Math.min(s.end, pendingAudio.duration), label: s.text,
-        })))
+        if (result.audio.sha256 !== staged.analysis?.sha256) throw new Error('Transcription does not match the prepared recording')
+        const analysis = retainableTranscriptionAnalysis(staged.original.sha256, result)
+        setTranscriptionHistoryJson(previous => retainableTranscriptionHistory([...JSON.parse(previous), analysis]))
       } else {
         if (phoneHistory.length >= PHONE_HISTORY_LIMIT) throw new Error('This recording already has eight retained analyses. Existing results are preserved.')
         const staged = await stageAudio(pendingAudio, stageId || undefined)
@@ -161,28 +173,22 @@ export function SampleInput() {
   const getAudioForSample = (audioId: string | null) => (!audioId || !profile ? null : (profile.audio_clips || []).find((c) => c.id === audioId) || null)
 
   const handleReTranscribe = async (sample: Sample) => {
-    if (!sample.audio_id) return
+    if (!sample.audio_id || !profile || reTranscribing) return
+    const owner = profile.id, clip = getAudioForSample(sample.audio_id)
+    if (!clip?.assets) { addEntry('warning', 'Import legacy audio as a new recording to retain verified transcription history'); return }
+    if ((clip.transcriptions?.length ?? 0) >= TRANSCRIPTION_HISTORY_LIMIT) { addEntry('warning', 'This recording already has eight retained transcriptions'); return }
     setReTranscribing(sample.id)
     try {
-      const clip = getAudioForSample(sample.audio_id)
-      const res = await fetch(`/api/audio/${sample.audio_id}${clip?.assets ? '/analysis' : ''}`)
-      if (!res.ok) { addEntry('warning', 'Could not load the stored audio to re-transcribe'); return }
-      const blob = await res.blob()
+      const res = await fetch(`/api/audio/${clip.id}/analysis`)
+      if (!res.ok) throw new Error('Could not load the prepared recording')
       const { transcribe } = await import('@/services/stt')
-      const stt = await transcribe(blob, { preparedWav: Boolean(clip?.assets) })
+      const result = await transcribe(await res.blob(), { preparedWav: true })
       if (!mounted.current) return
-      if (!stt) { addEntry('warning', 'Speech-to-text is unavailable on this platform'); return }
-      const label = stt.mode === 'transcription' ? 'Transcript' : 'Uncertain transcript'
-      const line = `${label}: ${stt.text}`
-      const prev = sample.phonetic_notes?.trim() ?? ''
-      // A user may have edited a transcript-prefixed note; preserve it verbatim.
-      updateSample(sample.id, { phonetic_notes: !prev ? line : `${prev}\n${line}` })
-      addEntry('info', `Re-transcribed sample (${stt.mode})`)
-    } catch {
-      addEntry('warning', 'Re-transcription failed; saved audio and notes are retained')
-    } finally {
-      setReTranscribing(null)
-    }
+      if (!result) throw new Error('Transcription failed; saved audio and notes are retained')
+      await retainTranscriptionAnalysis(owner, clip.id, retainableTranscriptionAnalysis(clip.assets.original.sha256, result))
+      if (mounted.current) addEntry('info', 'Transcription retained separately from manual annotations')
+    } catch (error) { if (mounted.current) addEntry('warning', (error as Error).message) }
+    finally { if (mounted.current) setReTranscribing(null) }
   }
 
   const handleDeleteWithUndo = (sample: Sample) => {
@@ -272,7 +278,7 @@ export function SampleInput() {
             <div className="glass-inner" style={{ padding: 12, marginTop: 12 }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
                 <span className="font-mono" style={{ fontSize: 10, color: 'var(--accent)' }}>{pendingAudio.draft.metadata.name} · {pendingAudio.duration.toFixed(1)}s</span>
-                <button aria-label="Discard audio draft" disabled={Boolean(analyzingAudio)} onClick={() => { void discard().then(() => { setPendingSegments([]); setStageId(''); setPendingIpa(''); setPhoneHistoryJson('[]'); setManualSource('') }).catch(error => setAudioError(error.message)) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
+                <button aria-label="Discard audio draft" disabled={Boolean(analyzingAudio)} onClick={() => { void discard().then(() => { setPendingSegments([]); setStageId(''); setPendingIpa(''); setPhoneHistoryJson('[]'); setManualSource(''); setTranscriptionHistoryJson('[]'); setManualTranscriptionSource('') }).catch(error => setAudioError(error.message)) }} style={{ background: 'none', border: 0, color: 'var(--fg-mute)', cursor: 'pointer' }}>×</button>
               </div>
               <AudioPlayer src={pendingAudio.blobUrl} peaks={pendingAudio.peaks} duration={pendingAudio.duration} compact />
               <div className="flex" style={{ gap: 8, marginTop: 8, marginBottom: 8 }}>
@@ -280,9 +286,13 @@ export function SampleInput() {
                 <button className="btn sm ghost" disabled={Boolean(analyzingAudio)} onClick={() => { void handleAudioAnalysis('phones') }}>Analyze phones</button>
                 <a className="btn sm ghost" href={pendingAudio.blobUrl} download={pendingAudio.draft.metadata.name}>Download original</a>
               </div>
+              <TranscriptionHistory history={transcriptionHistory} onCopy={analysis => {
+                setPendingSegments(manualTranscriptionSegments(analysis, () => crypto.randomUUID()))
+                setManualTranscriptionSource(analysis.id); setManualSource(''); setSegmentVersion(previous => previous + 1)
+              }} />
               <PhoneAnalysisHistory history={phoneHistory} onCopy={analysis => {
                 setPendingSegments(manualPhoneSegments(analysis, () => crypto.randomUUID())); setPendingIpa(analysis.result.ipa)
-                setManualSource(analysis.id); setSegmentVersion(previous => previous + 1)
+                setManualSource(analysis.id); setManualTranscriptionSource(''); setSegmentVersion(previous => previous + 1)
               }} />
               <p className="label">Manual segments</p>
               <AudioSegmenter key={`${pendingAudio.blobUrl}-${segmentVersion}`} src={pendingAudio.blobUrl} peaks={pendingAudio.peaks}
@@ -385,7 +395,7 @@ export function SampleInput() {
                           {sample.audio_id && (
                             <button
                               onClick={(e) => { e.stopPropagation(); void handleReTranscribe(sample) }}
-                              title="Re-transcribe audio"
+                              title="Re-transcribe audio" disabled={Boolean(reTranscribing)}
                               style={{ background: 'none', border: 0, color: 'var(--fg-faint)', cursor: 'pointer', fontSize: 12 }}
                             >
                               {reTranscribing === sample.id ? '…' : '↻'}

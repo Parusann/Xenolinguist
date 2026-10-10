@@ -1,3 +1,5 @@
+import type { TranscriptionAnalysis } from 'shared/schemas/transcription'
+import { appendTranscriptionAnalysis } from 'shared/transcription-annotations'
 import type { Research } from 'shared/types'
 import { removeSampleKeepingCaptures } from 'shared/profile-operations'
 import { storedForm } from 'engine/text/normalize'
@@ -34,6 +36,7 @@ interface ProfileContextValue {
   removeAudioClip: (id: string) => void
   saveAudioSample: (profileId: string, sample: Sample, clip: AudioClip) => Promise<void>
   retainPhoneAnalysis: (profileId: string, clipId: string, analysis: PhoneAnalysis) => Promise<void>
+  retainTranscriptionAnalysis: (profileId: string, clipId: string, analysis: TranscriptionAnalysis) => Promise<void>
   restoreSample: (profileId: string, sample: Sample, clip?: AudioClip) => void
   closeProfile: () => void
   saving: boolean
@@ -239,6 +242,15 @@ export function ProfileProvider({
     await queue.retry(id)
     if (queue.status(id).phase !== 'saved' || !queue.status(id).durable) throw new Error('Phone analysis is pending. Resolve the save error or retry.')
   }, [queue])
+  const retainTranscriptionAnalysis = useCallback(async (id: string, clipId: string, analysis: TranscriptionAnalysis) => {
+    const before = queue.view(id)
+    const clip = before?.audio_clips.find(entry => entry.id === clipId)
+    if (!before || !clip) throw new Error('The recording was removed before analysis finished')
+    const next = appendTranscriptionAnalysis(clip, analysis)
+    queue.edit(before, { ...before, audio_clips: before.audio_clips.map(entry => entry.id === clipId ? next : entry) })
+    await queue.retry(id)
+    if (queue.status(id).phase !== 'saved' || !queue.status(id).durable) throw new Error('Transcription is pending. Resolve the save error or retry.')
+  }, [queue])
   const restoreSample = useCallback((id: string, sample: Sample, clip?: AudioClip) => {
     const previous = queue.view(id)
     if (!previous) return
@@ -273,6 +285,7 @@ export function ProfileProvider({
       removeAudioClip,
       saveAudioSample,
       retainPhoneAnalysis,
+      retainTranscriptionAnalysis,
       restoreSample,
       closeProfile,
       saving: saveStatus.phase === 'saving',

@@ -1,3 +1,5 @@
+import { TranscriptionHistory } from './TranscriptionHistory'
+import { manualTranscriptionSegments } from 'shared/transcription-annotations'
 import { useEffect, useRef, useState } from 'react'
 import type { AudioClip } from 'shared/types'
 import { PHONE_HISTORY_LIMIT, type PhoneAnalysis } from 'shared/schemas/phone-analysis'
@@ -29,17 +31,22 @@ export function SavedPhoneAnnotations({ clip, profileId }: { clip: AudioClip; pr
     finally { if (mounted.current) setBusy(false) }
   }
   function copy(analysis: PhoneAnalysis) {
-    updateAudioClip(clip.id, { segments: manualPhoneSegments(analysis, () => crypto.randomUUID()), manual_source_analysis_id: analysis.id })
+    updateAudioClip(clip.id, { segments: manualPhoneSegments(analysis, () => crypto.randomUUID()), manual_source_analysis_id: analysis.id, manual_source_transcription_id: undefined })
     setVersion(value => value + 1)
   }
-  return <details aria-label="Phone annotation layers">
-    <summary>Phone analyses and manual segments</summary>
+  return <details aria-label="Recording annotation layers">
+    <summary>Generated analyses and manual segments</summary>
     <button className="btn sm ghost" disabled={busy || !clip.assets || (clip.phone_analyses?.length ?? 0) >= PHONE_HISTORY_LIMIT} onClick={() => { void analyze() }}>
       {busy ? 'Analyzing saved phones…' : 'Analyze saved phones'}
     </button>
     {!clip.assets && <p>Legacy recording: verified prepared audio is required to retain phone analysis. Import the original as a new recording.</p>}
     <p className="dim">Up to eight analyses and 4 MiB per recording. Existing results are never silently pruned.</p>
     {error && <p role="alert">{error}</p>}
+    <TranscriptionHistory history={clip.transcriptions ?? []} onCopy={analysis => {
+      updateAudioClip(clip.id, { segments: manualTranscriptionSegments(analysis, () => crypto.randomUUID()),
+        manual_source_transcription_id: analysis.id, manual_source_analysis_id: undefined })
+      setVersion(value => value + 1)
+    }} />
     <PhoneAnalysisHistory history={clip.phone_analyses ?? []} onCopy={copy} />
     <p className="label">Manual segments</p>
     <AudioSegmenter key={version} src={`/api/audio/${clip.id}`} peaks={clip.waveform} duration={clip.duration}

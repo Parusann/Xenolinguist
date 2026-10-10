@@ -196,6 +196,8 @@ try {
   await page.locator('input[type="file"]').setInputFiles({ name: 'desktop-original.wav', mimeType: 'audio/wav', buffer: wav });
   await expect(page.getByText(/desktop-original.wav/)).toBeVisible();
   await page.getByPlaceholder('IPA, tone markers').fill('Native audio draft');
+  await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Copy transcription 1 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
   await page.locator('[data-tour="translation"]').click();
   await page.getByPlaceholder('Enter unknown language text to translate…').fill('Draft across desktop origins');
   await expect.poll(async () => {
@@ -268,6 +270,7 @@ try {
   await reopened.locator('[data-tour="samples"]').click();
   await expect(reopened.getByText(/desktop-original.wav ·/)).toBeVisible();
   await expect(reopened.getByPlaceholder('IPA, tone markers')).toHaveValue('Native audio draft');
+  await expect(reopened.getByRole('button', { name: 'Copy transcription 1 to manual segments', exact: true })).toBeVisible();
   record.checks.desktopAudioDraftRecovered = true;
   await reopened.getByRole('button', { name: 'Analyze phones', exact: true }).click();
   await expect(reopened.getByRole('button', { name: 'Copy analysis 1 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
@@ -276,6 +279,9 @@ try {
   await reopened.getByPlaceholder('Label this word...').first().fill('retained manual correction');
   await reopened.getByRole('button', { name: 'Analyze phones', exact: true }).click();
   await expect(reopened.getByRole('button', { name: 'Copy analysis 2 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
+  await expect(reopened.getByPlaceholder('Label this word...').first()).toHaveValue('retained manual correction');
+  await reopened.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Copy transcription 2 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
   await expect(reopened.getByPlaceholder('Label this word...').first()).toHaveValue('retained manual correction');
   await reopened.getByRole('button', { name: 'Add Sample', exact: true }).click();
   await expect(reopened.getByRole('button', { name: 'Discard audio draft' })).toHaveCount(0);
@@ -300,6 +306,12 @@ try {
   record.checks.desktopAudioSaved = { originalHash, assets: clip.assets, phoneSegments: clip.segments.length, playback: true,
     generatedAnalyses: clip.phone_analyses.length, manualCorrection: clip.segments[0].label, manualSourceAnalysisId: clip.manual_source_analysis_id };
   record.checks.phoneAnnotations = { source: clip, passed: false };
+  expect(clip.transcriptions.length).toBe(2);
+  for (const analysis of clip.transcriptions) {
+    expect(analysis.originalSha256).toBe(originalHash);
+    verifyTranscription(analysis.result, await prepared.body(), record.whisperFiles);
+  }
+  record.checks.transcriptionAnnotations = { source: clip, passed: false };
   await reopened.getByTitle('Back to profiles', { exact: true }).click();
   await reopened.getByRole('button').filter({ has: reopened.getByText('Native practice', { exact: true }) }).click();
   const recoveredNumber = reopened.locator('[data-challenge="number-0"]');
@@ -542,6 +554,10 @@ try {
       expect(restoredClip.segments.map(({ id: _id, ...segment }) => segment)).toEqual(sourceProfile.audio_clips[0].segments.map(({ id: _id, ...segment }) => segment));
       record.checks.phoneAnnotations.restored = restoredClip;
       record.checks.phoneAnnotations.passed = true;
+      expect(restoredClip.transcriptions).toEqual(sourceProfile.audio_clips[0].transcriptions);
+      expect(restoredClip.manual_source_transcription_id).toBe(sourceProfile.audio_clips[0].manual_source_transcription_id);
+      record.checks.transcriptionAnnotations.restored = restoredClip;
+      record.checks.transcriptionAnnotations.passed = true;
       expect(restored.profile.samples.some(sample => sample.audio_id === restoredClip.id)).toBe(true);
       const response = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${restoredClip.id}`);
       restoredAudioHash = createHash('sha256').update(await response.body()).digest('hex');

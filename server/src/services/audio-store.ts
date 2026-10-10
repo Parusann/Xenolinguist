@@ -1,3 +1,4 @@
+import { preserveTranscriptionHistory } from '../../../shared/transcription-annotations.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID, createHash } from 'node:crypto';
@@ -73,8 +74,10 @@ export class AudioStore {
     for (const clip of next.audio_clips) {
       const old = before?.audio_clips.find(entry => entry.id === clip.id);
       preservePhoneHistory(clip, old);
+      preserveTranscriptionHistory(clip, old);
       const newReference = next.samples.some(sample => sample.audio_id === clip.id && before?.samples.find(previous => previous.id === sample.id)?.audio_id !== clip.id);
-      const newAnalysis = (clip.phone_analyses?.length ?? 0) > (old?.phone_analyses?.length ?? 0);
+      const newAnalysis = (clip.phone_analyses?.length ?? 0) > (old?.phone_analyses?.length ?? 0)
+        || (clip.transcriptions?.length ?? 0) > (old?.transcriptions?.length ?? 0);
       if (old && !newReference && !newAnalysis && JSON.stringify(old.assets) === JSON.stringify(clip.assets)) continue;
       if (!clip.assets) {
         const legacy = await Promise.all(['wav', 'webm'].map(ext => fs.stat(path.join(dataDir(), 'audio', `${clip.id}.${ext}`)).then(() => true, () => false)));

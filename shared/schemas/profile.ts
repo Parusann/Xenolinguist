@@ -1,3 +1,5 @@
+import { transcriptionHistorySchema } from './transcription.js';
+import { transcriptionAnnotationIssues } from '../transcription-annotations.js';
 import { z } from 'zod';
 import { emptyResearch, researchSchema, researchIssues } from './research.js';
 import { lexicalPolicySchema, lexicalSenseSchema } from './lexicon.js';
@@ -40,6 +42,8 @@ export const audioClipSchema = z.strictObject({
   waveform: z.array(z.number().finite().min(0).max(1)), segments: z.array(audioSegmentSchema), created_at: timestamp,
   assets: audioAssetsSchema.optional(),
   phone_analyses: phoneHistorySchema.optional(),
+  transcriptions: transcriptionHistorySchema.optional(),
+  manual_source_transcription_id: id.optional(),
   manual_source_analysis_id: id.optional(),
 });
 export const sampleSchema = z.strictObject({
@@ -78,6 +82,7 @@ export const profileSchema = profileObjectSchema.superRefine((profile, ctx) => {
       ctx.addIssue({ code: 'custom', path: ['samples', i, 'audio_id'], message: 'Referenced audio clip is missing' });
   });
   profile.audio_clips.forEach((clip, i) => {
+    for (const message of transcriptionAnnotationIssues(clip)) ctx.addIssue({ code: 'custom', path: ['audio_clips', i, 'transcriptions'], message });
     for (const message of phoneAnnotationIssues(clip)) ctx.addIssue({ code: 'custom', path: ['audio_clips', i, 'phone_analyses'], message });
   });
   profile.audio_clips.forEach((clip, i) => clip.segments.forEach((segment, j) => {

@@ -1,3 +1,4 @@
+import { entityIdSchema, timestampSchema } from './common.js';
 import { z } from 'zod';
 
 const hash = z.string().regex(/^[a-f0-9]{64}$/);
@@ -40,3 +41,14 @@ export const transcriptionResultSchema = z.strictObject({
     || !p.runtimeFiles.some(f => f.file === 'whisper-cli.exe' && f.sha256 === p.executableSha256)) fail('Missing or inconsistent runtime identity');
 });
 export type TranscriptionResult = z.infer<typeof transcriptionResultSchema>;
+
+export const TRANSCRIPTION_HISTORY_LIMIT = 8;
+export const TRANSCRIPTION_HISTORY_BYTES = 4 * 1024 * 1024;
+export const transcriptionAnalysisSchema = z.strictObject({ version: z.literal(1), id: entityIdSchema,
+  created_at: timestampSchema, originalSha256: hash, result: transcriptionResultSchema });
+export const transcriptionHistorySchema = z.array(transcriptionAnalysisSchema).max(TRANSCRIPTION_HISTORY_LIMIT).superRefine((history, ctx) => {
+  if (new Set(history.map(a => a.id)).size !== history.length) ctx.addIssue({ code: 'custom', message: 'Duplicate transcription identifier' });
+  if (new TextEncoder().encode(JSON.stringify(history)).length > TRANSCRIPTION_HISTORY_BYTES)
+    ctx.addIssue({ code: 'custom', message: 'Transcription history exceeds 4 MiB; existing results are retained' });
+});
+export type TranscriptionAnalysis = z.infer<typeof transcriptionAnalysisSchema>;

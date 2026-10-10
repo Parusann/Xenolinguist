@@ -1,31 +1,40 @@
 import { test, expect, wavFixture, openProfile, attachJson, preparePage } from './fixtures';
-import { phoneFixture } from '../../server/src/__tests__/helpers/phone-analysis';
+import { transcriptionFixture } from '../../shared/testing/transcription';
+import { createHash } from 'node:crypto';
+import { inspectAudioWav } from '../../server/src/services/audio-wav';
+function transcript(wav: Buffer, text = 'aa') {
+  const result = transcriptionFixture(createHash('sha256').update(wav).digest('hex'), inspectAudioWav(wav).sampleCount);
+  result.text = text; result.segments[0].text = text; return result;
+}
 import type { LanguageProfile } from '../../shared/types';
 test.beforeEach(async ({ page }) => { await preparePage(page); });
 
-test('W23 phone histories preserve manual corrections through re-analysis, retry, restart and archive restore', async ({ page, server }) => {
+test('W23 transcription histories preserve manual corrections through re-analysis, retry, restart and archive restore', async ({ page, server }) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Phone annotation layers' } })).json();
-  let runs = 0;
-  await page.route('**/api/ipa', async route => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Transcription annotation layers' } })).json();
+  let runs = 0, finishThird!: () => void;
+  const third = new Promise<void>(resolve => { finishThird = resolve; });
+  await page.route('**/api/stt', async route => {
     const wav = Buffer.from(route.request().postDataJSON().audio, 'base64');
-    await route.fulfill({ json: phoneFixture(wav, ['aa', 'bb', 'cc'][runs++] ?? 'dd') });
+    const result = transcript(wav, ['aa', 'bb', 'cc'][runs++] ?? 'dd');
+    if (runs === 3) await third;
+    await route.fulfill({ json: result });
   });
   await openProfile(page, server.url, profile.name);
   await page.locator('input[type="file"]').setInputFiles(wavFixture);
   await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
   await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Layered recording');
-  await page.getByRole('button', { name: 'Analyze phones', exact: true }).click();
-  await page.getByRole('button', { name: 'Copy analysis 1 to manual segments', exact: true }).click();
+  await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await page.getByRole('button', { name: 'Copy transcription 1 to manual segments', exact: true }).click();
   await page.getByPlaceholder('Label this word...').fill('manual-aa');
   await page.getByRole('button', { name: '+ manual-aa', exact: true }).click();
-  await page.getByRole('button', { name: 'Analyze phones', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Copy analysis 2 to manual segments', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Copy transcription 2 to manual segments', exact: true })).toBeVisible();
   await expect(page.getByPlaceholder('Label this word...')).toHaveValue('manual-aa');
   await expect(page.getByText('Saved', { exact: true })).toBeVisible();
   await openProfile(page, server.url, profile.name);
   await expect(page.getByPlaceholder('Label this word...')).toHaveValue('manual-aa');
-  await expect(page.getByRole('button', { name: 'Copy analysis 2 to manual segments', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Copy transcription 2 to manual segments', exact: true })).toBeVisible();
   await page.route('**/api/profiles/*/mutations', route => route.fulfill({ status: 500, json: { error: 'Injected annotation save failure' } }));
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Audio sample is pending');
@@ -34,19 +43,22 @@ test('W23 phone histories preserve manual corrections through re-analysis, retry
   await expect(page.getByRole('button', { name: 'Discard audio draft' })).toHaveCount(0);
   const read = async (): Promise<LanguageProfile> => (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
   const saved = await read();
-  expect(saved.audio_clips[0].phone_analyses!.map(a => a.result.ipa)).toEqual(['aa', 'bb']);
+  expect(saved.audio_clips[0].transcriptions!.map(a => a.result.text)).toEqual(['aa', 'bb']);
   expect(saved.audio_clips[0].segments[0]).toMatchObject({ label: 'manual-aa', dictionary_entry_id: saved.dictionary[0].id });
-  expect(saved.audio_clips[0].manual_source_analysis_id).toBe(saved.audio_clips[0].phone_analyses![0].id);
+  expect(saved.audio_clips[0].manual_source_transcription_id).toBe(saved.audio_clips[0].transcriptions![0].id);
   const panel = page.getByLabel('Recording annotation layers');
   await panel.locator('summary').first().click();
+  await panel.getByPlaceholder('Label this word...').fill('before delayed response');
+  await page.getByTitle('Re-transcribe audio', { exact: true }).click();
+  await expect.poll(() => runs).toBe(3);
   await panel.getByPlaceholder('Label this word...').fill('saved correction');
-  await panel.getByRole('button', { name: 'Analyze saved phones', exact: true }).click();
-  await expect(panel.getByRole('button', { name: 'Copy analysis 3 to manual segments', exact: true })).toBeVisible();
+  finishThird();
+  await expect(panel.getByRole('button', { name: 'Copy transcription 3 to manual segments', exact: true })).toBeVisible();
   await expect(panel.getByPlaceholder('Label this word...')).toHaveValue('saved correction');
   await expect(page.getByText('Saved', { exact: true })).toBeVisible();
   const analyzed = await read();
-  expect(analyzed.audio_clips[0].phone_analyses!.slice(0, 2)).toEqual(saved.audio_clips[0].phone_analyses);
-  await page.screenshot({ path: test.info().outputPath('phone-layers.png') });
+  expect(analyzed.audio_clips[0].transcriptions!.slice(0, 2)).toEqual(saved.audio_clips[0].transcriptions);
+  await page.screenshot({ path: test.info().outputPath('transcription-layers.png') });
   await server.restart(); await openProfile(page, server.url, profile.name);
   const restarted = await read(); expect(restarted.audio_clips).toEqual(analyzed.audio_clips);
   const archive = await page.request.get(`${server.url}/api/archives/export/${profile.id}?revision=${restarted.revision}&sandbox=true`);
@@ -57,41 +69,41 @@ test('W23 phone histories preserve manual corrections through re-analysis, retry
   const restoredResponse = await page.request.post(`${server.url}/api/archives/${preview.token}/restore`, { data: { mode: 'new' } });
   expect(restoredResponse.status()).toBe(201);
   const restored: LanguageProfile = (await restoredResponse.json()).profile;
-  expect(restored.audio_clips[0].phone_analyses).toEqual(analyzed.audio_clips[0].phone_analyses);
+  expect(restored.audio_clips[0].transcriptions).toEqual(analyzed.audio_clips[0].transcriptions);
   expect(restored.audio_clips[0].segments[0].label).toBe('saved correction');
   expect(restored.audio_clips[0].segments[0].dictionary_entry_id).toBe(restored.dictionary[0].id);
-  await attachJson('phone-annotation-layers.json', { saved, analyzed, restored, errors, scope: 'Synthetic model responses; actual storage, browser edits, restart and portable archive operations.' });
+  await attachJson('transcription-annotation-layers.json', { saved, analyzed, restored, errors, scope: 'Synthetic model responses; actual storage, browser edits, restart and portable archive operations.' });
   expect(errors).toEqual([]);
 });
 
-test('W23 malformed and delayed phone responses never replace manual edits or cross projects', async ({ page, server }) => {
+test('W23 malformed and delayed transcription responses never replace manual edits or cross projects', async ({ page, server }) => {
   const first = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'First audio owner' } })).json();
   const second = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Second audio owner' } })).json();
   await openProfile(page, server.url, first.name);
   await page.locator('input[type="file"]').setInputFiles(wavFixture);
   await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
-  await page.route('**/api/ipa', route => route.fulfill({ json: { ipa: 'forged', segments: [] } }));
-  await page.getByRole('button', { name: 'Analyze phones', exact: true }).click();
+  await page.route('**/api/stt', route => route.fulfill({ json: { text: 'forged', segments: [] } }));
+  await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
   await expect(page.getByRole('alert')).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Generated phone analyses' })).toHaveCount(0);
-  await page.unroute('**/api/ipa');
+  await expect(page.getByRole('region', { name: 'Generated transcriptions' })).toHaveCount(0);
+  await page.unroute('**/api/stt');
   let finish!: () => void;
   const delayed = new Promise<void>(resolve => { finish = resolve; });
   let requested = false;
-  await page.route('**/api/ipa', async route => {
-    requested = true; const result = phoneFixture(Buffer.from(route.request().postDataJSON().audio, 'base64'));
+  await page.route('**/api/stt', async route => {
+    requested = true; const result = transcript(Buffer.from(route.request().postDataJSON().audio, 'base64'));
     await delayed; await route.fulfill({ json: result }).catch(() => {});
   });
-  await page.getByRole('button', { name: 'Analyze phones', exact: true }).click();
+  await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
   await expect.poll(() => requested).toBe(true);
   await page.getByTitle('Back to profiles', { exact: true }).click();
   await page.getByRole('button').filter({ has: page.getByText(second.name, { exact: true }) }).click();
   finish();
   await page.locator('[data-tour="samples"]').click();
-  await expect(page.getByRole('region', { name: 'Generated phone analyses' })).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Generated transcriptions' })).toHaveCount(0);
   const saved = await (await page.request.get(`${server.url}/api/profiles/${second.id}`)).json();
   expect(saved.audio_clips).toEqual([]);
   await openProfile(page, server.url, first.name);
   await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Generated phone analyses' })).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Generated transcriptions' })).toHaveCount(0);
 });

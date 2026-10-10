@@ -133,6 +133,7 @@ test('W06 decodes a real WebM/Opus recording and keeps audio when explicit analy
     return route.fulfill({ json: transcriptionFixture(createHash('sha256').update(wav).digest('hex'), inspectAudioWav(wav).sampleCount) });
   });
   await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await page.getByRole('button', { name: 'Copy transcription 1 to manual segments', exact: true }).click();
   await expect(page.getByPlaceholder('Label this word...')).toHaveValue('test');
   await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Discard audio draft' })).toHaveCount(0);
@@ -142,7 +143,7 @@ test('W06 decodes a real WebM/Opus recording and keeps audio when explicit analy
   const original = await page.request.get(`${server.url}/api/audio/${saved.samples[0].audio_id}`);
   expect(await original.body()).toEqual(Buffer.from(bytes));
   await page.getByTitle('Re-transcribe audio').click();
-  await expect(page.getByText('Transcript: test', { exact: true })).toBeVisible();
+  await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).audio_clips[0].transcriptions.length).toBe(2);
 });
 
 test('W06 microphone capture uses the same durable draft and save flow without automatic model calls', async ({ page, server }) => {
@@ -198,6 +199,7 @@ test('W23 rejects transcription with mismatched audio without overwriting annota
     return route.fulfill({ json: transcriptionFixture(mismatch ? 'f'.repeat(64) : createHash('sha256').update(wav).digest('hex'), inspectAudioWav(wav).sampleCount) });
   });
   await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await page.getByRole('button', { name: 'Copy transcription 1 to manual segments', exact: true }).click();
   await expect(page.getByPlaceholder('Label this word...')).toHaveValue('test');
   await page.getByPlaceholder('Label this word...').fill('Manual correction');
   const notes = await page.getByPlaceholder('IPA, tone markers').inputValue();

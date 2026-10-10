@@ -252,3 +252,10 @@ Local lint/type/build gates pass with 499 unit tests and nine tooling tests; thr
 
 
 At frozen revision `e33c030`, [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/37834881248) passes 499 unit tests, nine tooling tests, lint/type/build gates and all 49 workbench plus eight public checks on each platform. No browser cases are skipped, flaky or unexpected. All downloaded 12/60/336 evaluation records and 56 elicitation traces replay, with unchanged number summaries. [Independent installed acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/37834881340) verifies 3,772 files, eight archive round trips and native Whisper provenance for automatic and explicit language selection. [Retained evidence and replay](audio-evaluation.md#fourth-unit-verification-at-the-frozen-revision) distinguish execution/identity checks from labeled recognition accuracy. Three native unit checks remain gated; full audit retains four high/eight moderate entries and production four high/three moderate, with zero critical entries in either. Transcription-history persistence is next; W23 remains in progress.
+
+
+## W23 retained transcriptions: fifth implementation unit
+
+Generated Whisper results now append to bounded draft/saved histories with original/prepared audio identities and complete provenance. Transcribing preserves manual notes and segments; copying is explicit and records one generated-source link. Server checks reject changed history and altered audio, and portable archives preserve the generated records. [The contract](audio-evaluation.md#retained-transcriptions-fifth-implementation-unit) documents bounds, legacy behavior and the distinction from an append-only manual edit log.
+
+Local source checks pass 510 unit tests and nine tooling tests; 11 focused browser checks pass, including delayed-response/manual-edit preservation and project isolation. Three native unit cases remain gated. Cross-platform source and expanded installed acceptance are pending at this checkpoint. W23 remains in progress: longer recordings and labeled recognition/reproducibility evaluation are unfinished.
