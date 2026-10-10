@@ -38,3 +38,8 @@ docs/verification/w23-deps-*.json -text whitespace=cr-at-eol
 # Preserve native Whisper responses and the audit/replay checkpoint byte identities.
 docs/verification/w23-stt-*.json -text whitespace=cr-at-eol
 docs/verification/w23-stt-replay.mts -text
+
+# Preserve retained transcription histories and verification evidence.
+docs/verification/w23-transcripts-*.json -text whitespace=cr-at-eol
+docs/verification/w23-transcripts-replay.mts -text
+docs/verification/w23-transcripts-*.png binary

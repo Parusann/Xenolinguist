@@ -85,3 +85,7 @@ At frozen revision `44deb8764b9d716e5ee12fd850eecf3b3e0e6c35`, [Windows/Linux so
 ## W23 Whisper provenance checkpoint — verified 2026-10-09
 
 Revision `e33c030` changes no dependency or native model bytes. Its October 8 [full audit](verification/w23-stt-audit-all.json) retains zero critical, four high and eight moderate affected-package entries; [production](verification/w23-stt-audit-production.json) retains zero critical, four high and three moderate. Windows and Linux agree. [Source and independent installed verification](verification/w23-stt-verification.json) passes the new transcription-provenance contract and existing regressions; it does not remediate the remaining findings documented above.
+
+## W23 retained-transcription checkpoint — October 10 UTC CI
+
+Revision `dd472e0` changes no dependency or model bytes. Its [full audit](verification/w23-transcripts-audit-all.json) retains zero critical, four high and eight moderate affected-package entries; [production](verification/w23-transcripts-audit-production.json) retains zero critical, four high and three moderate. Windows and Linux agree. Audit lockfile identities match the respective LF and CRLF checkouts. [Source and independent installed verification](verification/w23-transcripts-verification.json) passes transcription retention, restart and archive checks; it does not remediate the remaining native and logging/proxy findings.

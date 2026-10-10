@@ -1,0 +1,1409 @@
+{
+  "saved": {
+    "research": {
+      "observations": [],
+      "annotations": [],
+      "hypotheses": [],
+      "links": [],
+      "events": [],
+      "tests": [],
+      "analyses": [],
+      "metrics": []
+    },
+    "name": "Transcription annotation layers",
+    "description": "",
+    "phonetic_notes": "",
+    "is_sandbox": false,
+    "dictionary": [
+      {
+        "id": "word-bf0646ca-b73b-439c-9ede-2e2eae5b39d2",
+        "alien_word": "manual-aa",
+        "english_meaning": "",
+        "part_of_speech": "unknown",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "From audio transcript",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-10-10T02:48:02.181Z"
+      }
+    ],
+    "grammar_rules": [],
+    "number_system": {
+      "base": null,
+      "mappings": {},
+      "operators": {}
+    },
+    "samples": [
+      {
+        "id": "sample-50a5a67f-f772-4ce2-a1e4-ab7bdda69b27",
+        "alien_text": "Layered recording",
+        "english_translation": null,
+        "source": "Audio recording",
+        "phonetic_notes": "",
+        "decoded": false,
+        "audio_id": "fafe8c5d-2bc8-4740-accf-d5c9429c0d18",
+        "ipa": null,
+        "created_at": "2026-10-10T02:48:01.489Z"
+      }
+    ],
+    "audio_clips": [
+      {
+        "id": "fafe8c5d-2bc8-4740-accf-d5c9429c0d18",
+        "filename": "hello-16k.wav",
+        "duration": 3.4450625,
+        "waveform": [
+          0.01563306897878647,
+          0.03513248264789581,
+          0.04696999490261078,
+          0.24168264865875244,
+          0.35866180062294006,
+          0.5676102638244629,
+          0.4061722457408905,
+          0.1354195475578308,
+          0.23309771716594696,
+          0.3283904790878296,
+          0.6519532799720764,
+          0.8413568139076233,
+          0.6894721984863281,
+          0.5245014429092407,
+          0.391621470451355,
+          0.30411097407341003,
+          0.21682654321193695,
+          0.1492437869310379,
+          0.07088759541511536,
+          0.08949935436248779,
+          0.14578016102313995,
+          0.2248355746269226,
+          0.3016388416290283,
+          0.4012635350227356,
+          0.5863480567932129,
+          0.6209065318107605,
+          0.4926051199436188,
+          0.34987398982048035,
+          0.40837714076042175,
+          0.4885729253292084,
+          0.37192225456237793,
+          0.22287996113300323,
+          0.18210525810718536,
+          0.16713207960128784,
+          0.0039586154744029045,
+          0.05577882379293442,
+          0.04710311442613602,
+          0.015745293349027634,
+          0.05840383842587471,
+          0.06721958518028259,
+          0.06512975692749023,
+          0.06818483024835587,
+          0.3447955548763275,
+          0.5437607169151306,
+          0.5089923143386841,
+          0.3594769835472107,
+          0,
+          0,
+          0.19203506410121918,
+          0.12365880608558655,
+          0.09216347336769104,
+          0.0669323056936264,
+          0.11648839712142944,
+          0.29085013270378113,
+          0.29764363169670105,
+          0.3056037127971649,
+          0.5427466630935669,
+          0.5819075703620911,
+          0.3792842924594879,
+          0.09773119539022446,
+          0,
+          0.0000061198761613923125,
+          0.11832288652658463,
+          0.03246665000915527,
+          0.02807261049747467,
+          0,
+          0.08586959540843964,
+          0.24393026530742645,
+          0.24504303932189941,
+          0.31257468461990356,
+          0.6370393633842468,
+          0.6832156777381897,
+          0.5768749713897705,
+          0.4826887249946594,
+          0.482273131608963,
+          0.3383190631866455,
+          0.20289866626262665,
+          0.1582641452550888,
+          0.15990014374256134,
+          0.15209373831748962,
+          0.12889492511749268,
+          0.024219533428549767,
+          0.027745364233851433,
+          0.03332918882369995,
+          0.04650671035051346,
+          0.07240711897611618,
+          0.2610098421573639,
+          0.40060046315193176,
+          0.5999860763549805,
+          0.5993871092796326,
+          0.37886759638786316,
+          0.13000792264938354,
+          0,
+          0,
+          0.11726946383714676,
+          0.03340376168489456,
+          0.07095322012901306,
+          0.1039152443408966,
+          0.13358351588249207,
+          0.1885903924703598,
+          0.23828081786632538,
+          0.09783138334751129,
+          0.026074673980474472,
+          0.13837340474128723,
+          0.26183152198791504,
+          0.64438796043396,
+          0.7943398356437683,
+          0.731979250907898,
+          0.3953380584716797,
+          0.14892175793647766,
+          0.14521199464797974,
+          0.14471934735774994,
+          0.12468759715557098,
+          0.09692759066820145,
+          0,
+          0.01991407386958599,
+          0.05525593087077141,
+          0.024494828656315804,
+          0.022081507369875908,
+          0.01883346028625965,
+          0.09250689297914505,
+          0.1386028379201889,
+          0.14464138448238373,
+          0.2539384961128235,
+          0.21143391728401184,
+          0.528152346611023,
+          0.7524656057357788,
+          0.5493971109390259,
+          0.40030837059020996,
+          0.3216002285480499,
+          0.2817763686180115,
+          0.17210954427719116,
+          0.05134713277220726,
+          0.05988036468625069,
+          0.20586995780467987,
+          0.3000424802303314,
+          0.532910168170929,
+          0.4897204637527466,
+          0.07674634456634521,
+          0.06113673374056816,
+          0.07394329458475113,
+          0.07517117261886597,
+          0.3102479577064514,
+          0.4673134386539459,
+          0.5324376225471497,
+          0.17437054216861725,
+          0.15694037079811096,
+          0.3053932189941406,
+          0.42347997426986694,
+          0.5853295922279358,
+          0.6871305108070374,
+          0.4349621534347534,
+          0.338663786649704,
+          0.2679063081741333,
+          0.272947758436203,
+          0.16306735575199127,
+          0.10860186070203781,
+          0.12969961762428284,
+          0.1354827731847763,
+          0.21924033761024475,
+          0.4471820592880249,
+          0.4507790803909302,
+          0.41514813899993896,
+          0.1884559988975525,
+          0.03686642274260521,
+          0.03698235750198364,
+          0.037026021629571915,
+          0.1154879629611969,
+          0.20566603541374207,
+          0.26657962799072266,
+          0.4145529866218567,
+          0.5648878812789917,
+          0.5659066438674927,
+          0.5490044355392456,
+          0.42698734998703003,
+          0.4154190719127655,
+          0.23921321332454681,
+          0.07178252935409546,
+          0.055727843195199966,
+          0.11180012673139572,
+          0.06329534202814102,
+          0.02159058302640915,
+          0.014506593346595764,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "segments": [
+          {
+            "id": "e6baf3f3-87a4-4600-a372-172debfae630",
+            "start": 0,
+            "end": 0.02,
+            "label": "manual-aa",
+            "dictionary_entry_id": "word-bf0646ca-b73b-439c-9ede-2e2eae5b39d2"
+          }
+        ],
+        "created_at": "2026-10-10T02:48:01.489Z",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phone_analyses": [],
+        "transcriptions": [
+          {
+            "version": 1,
+            "id": "9fc87318-9a30-40b9-86a4-d779a93463a4",
+            "created_at": "2026-10-10T02:48:01.989Z",
+            "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "result": {
+              "language": "en",
+              "languageProb": 0.9,
+              "text": "aa",
+              "segments": [
+                {
+                  "start": 0,
+                  "end": 0.02,
+                  "text": "aa"
+                }
+              ],
+              "mode": "transcription",
+              "audio": {
+                "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+                "sampleRate": 16000,
+                "sampleCount": 55121,
+                "durationSeconds": 3.4450625
+              },
+              "provenance": {
+                "version": 1,
+                "engine": "whisper.cpp",
+                "engineRevision": "synthetic-test",
+                "modelId": "ggml-base-q5_1",
+                "modelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "executableSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "runtimeFiles": [
+                  {
+                    "file": "ggml-base-q5_1.bin",
+                    "bytes": 1,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  },
+                  {
+                    "file": "whisper-cli.exe",
+                    "bytes": 1,
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                  }
+                ],
+                "node": "test",
+                "platform": "test",
+                "arch": "test",
+                "requestedLanguage": "auto",
+                "threads": 2,
+                "decoding": "pinned-cli-defaults",
+                "timing": "model-segments-not-word-alignment",
+                "languageSelection": "detected"
+              }
+            }
+          },
+          {
+            "version": 1,
+            "id": "3335b556-a3ba-4a86-a5d1-663a53e4364f",
+            "created_at": "2026-10-10T02:48:02.386Z",
+            "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "result": {
+              "language": "en",
+              "languageProb": 0.9,
+              "text": "bb",
+              "segments": [
+                {
+                  "start": 0,
+                  "end": 0.02,
+                  "text": "bb"
+                }
+              ],
+              "mode": "transcription",
+              "audio": {
+                "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+                "sampleRate": 16000,
+                "sampleCount": 55121,
+                "durationSeconds": 3.4450625
+              },
+              "provenance": {
+                "version": 1,
+                "engine": "whisper.cpp",
+                "engineRevision": "synthetic-test",
+                "modelId": "ggml-base-q5_1",
+                "modelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "executableSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "runtimeFiles": [
+                  {
+                    "file": "ggml-base-q5_1.bin",
+                    "bytes": 1,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  },
+                  {
+                    "file": "whisper-cli.exe",
+                    "bytes": 1,
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                  }
+                ],
+                "node": "test",
+                "platform": "test",
+                "arch": "test",
+                "requestedLanguage": "auto",
+                "threads": 2,
+                "decoding": "pinned-cli-defaults",
+                "timing": "model-segments-not-word-alignment",
+                "languageSelection": "detected"
+              }
+            }
+          }
+        ],
+        "manual_source_transcription_id": "9fc87318-9a30-40b9-86a4-d779a93463a4"
+      }
+    ],
+    "metric_snapshots": [
+      {
+        "version": 1,
+        "revision": 0,
+        "recorded_at": "2026-10-10T02:47:59.416Z",
+        "counts": {
+          "observations": 0,
+          "assertedEntries": 0,
+          "grammarNotes": 0,
+          "competingForms": 0,
+          "mappings1To20": 0,
+          "ratedEntries": 0
+        }
+      },
+      {
+        "version": 1,
+        "revision": 2,
+        "recorded_at": "2026-10-10T02:48:05.376Z",
+        "counts": {
+          "observations": 1,
+          "assertedEntries": 0,
+          "grammarNotes": 0,
+          "competingForms": 0,
+          "mappings1To20": 0,
+          "ratedEntries": 0
+        }
+      }
+    ],
+    "id": "8ac573d7-6753-45a7-8d5d-21b4c888c4f4",
+    "created_at": "2026-10-10T02:47:59.416Z",
+    "updated_at": "2026-10-10T02:48:05.376Z",
+    "schema_version": 3,
+    "revision": 2,
+    "recent_mutations": [
+      {
+        "id": "795f3a61-e3ef-4bf5-82db-af5ce5b47ff8",
+        "digest": "45fb814aa310e3298af0c3cd98201598e5642fb0b3f79108041ffd543b6ebe61",
+        "revision": 1
+      },
+      {
+        "id": "92a43717-024f-43b1-b528-97911484b314",
+        "digest": "84348d7fa0ac8d5d771208c6a417943226577aaa70f1c05cd37bbbc9186ec0d4",
+        "revision": 2
+      }
+    ]
+  },
+  "analyzed": {
+    "research": {
+      "observations": [],
+      "annotations": [],
+      "hypotheses": [],
+      "links": [],
+      "events": [],
+      "tests": [],
+      "analyses": [],
+      "metrics": []
+    },
+    "name": "Transcription annotation layers",
+    "description": "",
+    "phonetic_notes": "",
+    "is_sandbox": false,
+    "dictionary": [
+      {
+        "id": "word-bf0646ca-b73b-439c-9ede-2e2eae5b39d2",
+        "alien_word": "manual-aa",
+        "english_meaning": "",
+        "part_of_speech": "unknown",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "From audio transcript",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-10-10T02:48:02.181Z"
+      }
+    ],
+    "grammar_rules": [],
+    "number_system": {
+      "base": null,
+      "mappings": {},
+      "operators": {}
+    },
+    "samples": [
+      {
+        "id": "sample-50a5a67f-f772-4ce2-a1e4-ab7bdda69b27",
+        "alien_text": "Layered recording",
+        "english_translation": null,
+        "source": "Audio recording",
+        "phonetic_notes": "",
+        "decoded": false,
+        "audio_id": "fafe8c5d-2bc8-4740-accf-d5c9429c0d18",
+        "ipa": null,
+        "created_at": "2026-10-10T02:48:01.489Z"
+      }
+    ],
+    "audio_clips": [
+      {
+        "id": "fafe8c5d-2bc8-4740-accf-d5c9429c0d18",
+        "filename": "hello-16k.wav",
+        "duration": 3.4450625,
+        "waveform": [
+          0.01563306897878647,
+          0.03513248264789581,
+          0.04696999490261078,
+          0.24168264865875244,
+          0.35866180062294006,
+          0.5676102638244629,
+          0.4061722457408905,
+          0.1354195475578308,
+          0.23309771716594696,
+          0.3283904790878296,
+          0.6519532799720764,
+          0.8413568139076233,
+          0.6894721984863281,
+          0.5245014429092407,
+          0.391621470451355,
+          0.30411097407341003,
+          0.21682654321193695,
+          0.1492437869310379,
+          0.07088759541511536,
+          0.08949935436248779,
+          0.14578016102313995,
+          0.2248355746269226,
+          0.3016388416290283,
+          0.4012635350227356,
+          0.5863480567932129,
+          0.6209065318107605,
+          0.4926051199436188,
+          0.34987398982048035,
+          0.40837714076042175,
+          0.4885729253292084,
+          0.37192225456237793,
+          0.22287996113300323,
+          0.18210525810718536,
+          0.16713207960128784,
+          0.0039586154744029045,
+          0.05577882379293442,
+          0.04710311442613602,
+          0.015745293349027634,
+          0.05840383842587471,
+          0.06721958518028259,
+          0.06512975692749023,
+          0.06818483024835587,
+          0.3447955548763275,
+          0.5437607169151306,
+          0.5089923143386841,
+          0.3594769835472107,
+          0,
+          0,
+          0.19203506410121918,
+          0.12365880608558655,
+          0.09216347336769104,
+          0.0669323056936264,
+          0.11648839712142944,
+          0.29085013270378113,
+          0.29764363169670105,
+          0.3056037127971649,
+          0.5427466630935669,
+          0.5819075703620911,
+          0.3792842924594879,
+          0.09773119539022446,
+          0,
+          0.0000061198761613923125,
+          0.11832288652658463,
+          0.03246665000915527,
+          0.02807261049747467,
+          0,
+          0.08586959540843964,
+          0.24393026530742645,
+          0.24504303932189941,
+          0.31257468461990356,
+          0.6370393633842468,
+          0.6832156777381897,
+          0.5768749713897705,
+          0.4826887249946594,
+          0.482273131608963,
+          0.3383190631866455,
+          0.20289866626262665,
+          0.1582641452550888,
+          0.15990014374256134,
+          0.15209373831748962,
+          0.12889492511749268,
+          0.024219533428549767,
+          0.027745364233851433,
+          0.03332918882369995,
+          0.04650671035051346,
+          0.07240711897611618,
+          0.2610098421573639,
+          0.40060046315193176,
+          0.5999860763549805,
+          0.5993871092796326,
+          0.37886759638786316,
+          0.13000792264938354,
+          0,
+          0,
+          0.11726946383714676,
+          0.03340376168489456,
+          0.07095322012901306,
+          0.1039152443408966,
+          0.13358351588249207,
+          0.1885903924703598,
+          0.23828081786632538,
+          0.09783138334751129,
+          0.026074673980474472,
+          0.13837340474128723,
+          0.26183152198791504,
+          0.64438796043396,
+          0.7943398356437683,
+          0.731979250907898,
+          0.3953380584716797,
+          0.14892175793647766,
+          0.14521199464797974,
+          0.14471934735774994,
+          0.12468759715557098,
+          0.09692759066820145,
+          0,
+          0.01991407386958599,
+          0.05525593087077141,
+          0.024494828656315804,
+          0.022081507369875908,
+          0.01883346028625965,
+          0.09250689297914505,
+          0.1386028379201889,
+          0.14464138448238373,
+          0.2539384961128235,
+          0.21143391728401184,
+          0.528152346611023,
+          0.7524656057357788,
+          0.5493971109390259,
+          0.40030837059020996,
+          0.3216002285480499,
+          0.2817763686180115,
+          0.17210954427719116,
+          0.05134713277220726,
+          0.05988036468625069,
+          0.20586995780467987,
+          0.3000424802303314,
+          0.532910168170929,
+          0.4897204637527466,
+          0.07674634456634521,
+          0.06113673374056816,
+          0.07394329458475113,
+          0.07517117261886597,
+          0.3102479577064514,
+          0.4673134386539459,
+          0.5324376225471497,
+          0.17437054216861725,
+          0.15694037079811096,
+          0.3053932189941406,
+          0.42347997426986694,
+          0.5853295922279358,
+          0.6871305108070374,
+          0.4349621534347534,
+          0.338663786649704,
+          0.2679063081741333,
+          0.272947758436203,
+          0.16306735575199127,
+          0.10860186070203781,
+          0.12969961762428284,
+          0.1354827731847763,
+          0.21924033761024475,
+          0.4471820592880249,
+          0.4507790803909302,
+          0.41514813899993896,
+          0.1884559988975525,
+          0.03686642274260521,
+          0.03698235750198364,
+          0.037026021629571915,
+          0.1154879629611969,
+          0.20566603541374207,
+          0.26657962799072266,
+          0.4145529866218567,
+          0.5648878812789917,
+          0.5659066438674927,
+          0.5490044355392456,
+          0.42698734998703003,
+          0.4154190719127655,
+          0.23921321332454681,
+          0.07178252935409546,
+          0.055727843195199966,
+          0.11180012673139572,
+          0.06329534202814102,
+          0.02159058302640915,
+          0.014506593346595764,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "segments": [
+          {
+            "id": "e6baf3f3-87a4-4600-a372-172debfae630",
+            "start": 0,
+            "end": 0.02,
+            "label": "saved correction",
+            "dictionary_entry_id": "word-bf0646ca-b73b-439c-9ede-2e2eae5b39d2"
+          }
+        ],
+        "created_at": "2026-10-10T02:48:01.489Z",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phone_analyses": [],
+        "transcriptions": [
+          {
+            "version": 1,
+            "id": "9fc87318-9a30-40b9-86a4-d779a93463a4",
+            "created_at": "2026-10-10T02:48:01.989Z",
+            "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "result": {
+              "language": "en",
+              "languageProb": 0.9,
+              "text": "aa",
+              "segments": [
+                {
+                  "start": 0,
+                  "end": 0.02,
+                  "text": "aa"
+                }
+              ],
+              "mode": "transcription",
+              "audio": {
+                "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+                "sampleRate": 16000,
+                "sampleCount": 55121,
+                "durationSeconds": 3.4450625
+              },
+              "provenance": {
+                "version": 1,
+                "engine": "whisper.cpp",
+                "engineRevision": "synthetic-test",
+                "modelId": "ggml-base-q5_1",
+                "modelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "executableSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "runtimeFiles": [
+                  {
+                    "file": "ggml-base-q5_1.bin",
+                    "bytes": 1,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  },
+                  {
+                    "file": "whisper-cli.exe",
+                    "bytes": 1,
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                  }
+                ],
+                "node": "test",
+                "platform": "test",
+                "arch": "test",
+                "requestedLanguage": "auto",
+                "threads": 2,
+                "decoding": "pinned-cli-defaults",
+                "timing": "model-segments-not-word-alignment",
+                "languageSelection": "detected"
+              }
+            }
+          },
+          {
+            "version": 1,
+            "id": "3335b556-a3ba-4a86-a5d1-663a53e4364f",
+            "created_at": "2026-10-10T02:48:02.386Z",
+            "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "result": {
+              "language": "en",
+              "languageProb": 0.9,
+              "text": "bb",
+              "segments": [
+                {
+                  "start": 0,
+                  "end": 0.02,
+                  "text": "bb"
+                }
+              ],
+              "mode": "transcription",
+              "audio": {
+                "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+                "sampleRate": 16000,
+                "sampleCount": 55121,
+                "durationSeconds": 3.4450625
+              },
+              "provenance": {
+                "version": 1,
+                "engine": "whisper.cpp",
+                "engineRevision": "synthetic-test",
+                "modelId": "ggml-base-q5_1",
+                "modelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "executableSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "runtimeFiles": [
+                  {
+                    "file": "ggml-base-q5_1.bin",
+                    "bytes": 1,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  },
+                  {
+                    "file": "whisper-cli.exe",
+                    "bytes": 1,
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                  }
+                ],
+                "node": "test",
+                "platform": "test",
+                "arch": "test",
+                "requestedLanguage": "auto",
+                "threads": 2,
+                "decoding": "pinned-cli-defaults",
+                "timing": "model-segments-not-word-alignment",
+                "languageSelection": "detected"
+              }
+            }
+          },
+          {
+            "version": 1,
+            "id": "c0453731-38a4-4399-a797-19cbbbfd331a",
+            "created_at": "2026-10-10T02:48:05.698Z",
+            "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "result": {
+              "language": "en",
+              "languageProb": 0.9,
+              "text": "cc",
+              "segments": [
+                {
+                  "start": 0,
+                  "end": 0.02,
+                  "text": "cc"
+                }
+              ],
+              "mode": "transcription",
+              "audio": {
+                "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+                "sampleRate": 16000,
+                "sampleCount": 55121,
+                "durationSeconds": 3.4450625
+              },
+              "provenance": {
+                "version": 1,
+                "engine": "whisper.cpp",
+                "engineRevision": "synthetic-test",
+                "modelId": "ggml-base-q5_1",
+                "modelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "executableSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "runtimeFiles": [
+                  {
+                    "file": "ggml-base-q5_1.bin",
+                    "bytes": 1,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  },
+                  {
+                    "file": "whisper-cli.exe",
+                    "bytes": 1,
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                  }
+                ],
+                "node": "test",
+                "platform": "test",
+                "arch": "test",
+                "requestedLanguage": "auto",
+                "threads": 2,
+                "decoding": "pinned-cli-defaults",
+                "timing": "model-segments-not-word-alignment",
+                "languageSelection": "detected"
+              }
+            }
+          }
+        ],
+        "manual_source_transcription_id": "9fc87318-9a30-40b9-86a4-d779a93463a4"
+      }
+    ],
+    "metric_snapshots": [
+      {
+        "version": 1,
+        "revision": 0,
+        "recorded_at": "2026-10-10T02:47:59.416Z",
+        "counts": {
+          "observations": 0,
+          "assertedEntries": 0,
+          "grammarNotes": 0,
+          "competingForms": 0,
+          "mappings1To20": 0,
+          "ratedEntries": 0
+        }
+      },
+      {
+        "version": 1,
+        "revision": 2,
+        "recorded_at": "2026-10-10T02:48:05.376Z",
+        "counts": {
+          "observations": 1,
+          "assertedEntries": 0,
+          "grammarNotes": 0,
+          "competingForms": 0,
+          "mappings1To20": 0,
+          "ratedEntries": 0
+        }
+      }
+    ],
+    "id": "8ac573d7-6753-45a7-8d5d-21b4c888c4f4",
+    "created_at": "2026-10-10T02:47:59.416Z",
+    "updated_at": "2026-10-10T02:48:05.758Z",
+    "schema_version": 3,
+    "revision": 3,
+    "recent_mutations": [
+      {
+        "id": "795f3a61-e3ef-4bf5-82db-af5ce5b47ff8",
+        "digest": "45fb814aa310e3298af0c3cd98201598e5642fb0b3f79108041ffd543b6ebe61",
+        "revision": 1
+      },
+      {
+        "id": "92a43717-024f-43b1-b528-97911484b314",
+        "digest": "84348d7fa0ac8d5d771208c6a417943226577aaa70f1c05cd37bbbc9186ec0d4",
+        "revision": 2
+      },
+      {
+        "id": "964d5575-b8ad-48cb-9a85-e5fafd13f71f",
+        "digest": "7420436500a7839afc19173c80c889056c0b8ad0bedd68c7803138fa693d3100",
+        "revision": 3
+      }
+    ]
+  },
+  "restored": {
+    "research": {
+      "observations": [],
+      "annotations": [],
+      "hypotheses": [],
+      "links": [],
+      "events": [],
+      "tests": [],
+      "analyses": [],
+      "metrics": []
+    },
+    "name": "Transcription annotation layers",
+    "description": "",
+    "phonetic_notes": "",
+    "is_sandbox": false,
+    "dictionary": [
+      {
+        "id": "86062028-be96-48ea-894d-39b9cd25b4e6",
+        "alien_word": "manual-aa",
+        "english_meaning": "",
+        "part_of_speech": "unknown",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "From audio transcript",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-10-10T02:48:02.181Z"
+      }
+    ],
+    "grammar_rules": [],
+    "number_system": {
+      "base": null,
+      "mappings": {},
+      "operators": {}
+    },
+    "samples": [
+      {
+        "id": "d20ce8d8-4bdf-4eca-9dec-1a67947c4032",
+        "alien_text": "Layered recording",
+        "english_translation": null,
+        "source": "Audio recording",
+        "phonetic_notes": "",
+        "decoded": false,
+        "audio_id": "90033e25-9451-4816-8efc-454bf0b0fb70",
+        "ipa": null,
+        "created_at": "2026-10-10T02:48:01.489Z"
+      }
+    ],
+    "audio_clips": [
+      {
+        "id": "90033e25-9451-4816-8efc-454bf0b0fb70",
+        "filename": "hello-16k.wav",
+        "duration": 3.4450625,
+        "waveform": [
+          0.01563306897878647,
+          0.03513248264789581,
+          0.04696999490261078,
+          0.24168264865875244,
+          0.35866180062294006,
+          0.5676102638244629,
+          0.4061722457408905,
+          0.1354195475578308,
+          0.23309771716594696,
+          0.3283904790878296,
+          0.6519532799720764,
+          0.8413568139076233,
+          0.6894721984863281,
+          0.5245014429092407,
+          0.391621470451355,
+          0.30411097407341003,
+          0.21682654321193695,
+          0.1492437869310379,
+          0.07088759541511536,
+          0.08949935436248779,
+          0.14578016102313995,
+          0.2248355746269226,
+          0.3016388416290283,
+          0.4012635350227356,
+          0.5863480567932129,
+          0.6209065318107605,
+          0.4926051199436188,
+          0.34987398982048035,
+          0.40837714076042175,
+          0.4885729253292084,
+          0.37192225456237793,
+          0.22287996113300323,
+          0.18210525810718536,
+          0.16713207960128784,
+          0.0039586154744029045,
+          0.05577882379293442,
+          0.04710311442613602,
+          0.015745293349027634,
+          0.05840383842587471,
+          0.06721958518028259,
+          0.06512975692749023,
+          0.06818483024835587,
+          0.3447955548763275,
+          0.5437607169151306,
+          0.5089923143386841,
+          0.3594769835472107,
+          0,
+          0,
+          0.19203506410121918,
+          0.12365880608558655,
+          0.09216347336769104,
+          0.0669323056936264,
+          0.11648839712142944,
+          0.29085013270378113,
+          0.29764363169670105,
+          0.3056037127971649,
+          0.5427466630935669,
+          0.5819075703620911,
+          0.3792842924594879,
+          0.09773119539022446,
+          0,
+          0.0000061198761613923125,
+          0.11832288652658463,
+          0.03246665000915527,
+          0.02807261049747467,
+          0,
+          0.08586959540843964,
+          0.24393026530742645,
+          0.24504303932189941,
+          0.31257468461990356,
+          0.6370393633842468,
+          0.6832156777381897,
+          0.5768749713897705,
+          0.4826887249946594,
+          0.482273131608963,
+          0.3383190631866455,
+          0.20289866626262665,
+          0.1582641452550888,
+          0.15990014374256134,
+          0.15209373831748962,
+          0.12889492511749268,
+          0.024219533428549767,
+          0.027745364233851433,
+          0.03332918882369995,
+          0.04650671035051346,
+          0.07240711897611618,
+          0.2610098421573639,
+          0.40060046315193176,
+          0.5999860763549805,
+          0.5993871092796326,
+          0.37886759638786316,
+          0.13000792264938354,
+          0,
+          0,
+          0.11726946383714676,
+          0.03340376168489456,
+          0.07095322012901306,
+          0.1039152443408966,
+          0.13358351588249207,
+          0.1885903924703598,
+          0.23828081786632538,
+          0.09783138334751129,
+          0.026074673980474472,
+          0.13837340474128723,
+          0.26183152198791504,
+          0.64438796043396,
+          0.7943398356437683,
+          0.731979250907898,
+          0.3953380584716797,
+          0.14892175793647766,
+          0.14521199464797974,
+          0.14471934735774994,
+          0.12468759715557098,
+          0.09692759066820145,
+          0,
+          0.01991407386958599,
+          0.05525593087077141,
+          0.024494828656315804,
+          0.022081507369875908,
+          0.01883346028625965,
+          0.09250689297914505,
+          0.1386028379201889,
+          0.14464138448238373,
+          0.2539384961128235,
+          0.21143391728401184,
+          0.528152346611023,
+          0.7524656057357788,
+          0.5493971109390259,
+          0.40030837059020996,
+          0.3216002285480499,
+          0.2817763686180115,
+          0.17210954427719116,
+          0.05134713277220726,
+          0.05988036468625069,
+          0.20586995780467987,
+          0.3000424802303314,
+          0.532910168170929,
+          0.4897204637527466,
+          0.07674634456634521,
+          0.06113673374056816,
+          0.07394329458475113,
+          0.07517117261886597,
+          0.3102479577064514,
+          0.4673134386539459,
+          0.5324376225471497,
+          0.17437054216861725,
+          0.15694037079811096,
+          0.3053932189941406,
+          0.42347997426986694,
+          0.5853295922279358,
+          0.6871305108070374,
+          0.4349621534347534,
+          0.338663786649704,
+          0.2679063081741333,
+          0.272947758436203,
+          0.16306735575199127,
+          0.10860186070203781,
+          0.12969961762428284,
+          0.1354827731847763,
+          0.21924033761024475,
+          0.4471820592880249,
+          0.4507790803909302,
+          0.41514813899993896,
+          0.1884559988975525,
+          0.03686642274260521,
+          0.03698235750198364,
+          0.037026021629571915,
+          0.1154879629611969,
+          0.20566603541374207,
+          0.26657962799072266,
+          0.4145529866218567,
+          0.5648878812789917,
+          0.5659066438674927,
+          0.5490044355392456,
+          0.42698734998703003,
+          0.4154190719127655,
+          0.23921321332454681,
+          0.07178252935409546,
+          0.055727843195199966,
+          0.11180012673139572,
+          0.06329534202814102,
+          0.02159058302640915,
+          0.014506593346595764,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "segments": [
+          {
+            "id": "6b4b0a2a-367e-46bb-83f6-21b47c12a6ba",
+            "start": 0,
+            "end": 0.02,
+            "label": "saved correction",
+            "dictionary_entry_id": "86062028-be96-48ea-894d-39b9cd25b4e6"
+          }
+        ],
+        "created_at": "2026-10-10T02:48:01.489Z",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phone_analyses": [],
+        "transcriptions": [
+          {
+            "version": 1,
+            "id": "9fc87318-9a30-40b9-86a4-d779a93463a4",
+            "created_at": "2026-10-10T02:48:01.989Z",
+            "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "result": {
+              "language": "en",
+              "languageProb": 0.9,
+              "text": "aa",
+              "segments": [
+                {
+                  "start": 0,
+                  "end": 0.02,
+                  "text": "aa"
+                }
+              ],
+              "mode": "transcription",
+              "audio": {
+                "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+                "sampleRate": 16000,
+                "sampleCount": 55121,
+                "durationSeconds": 3.4450625
+              },
+              "provenance": {
+                "version": 1,
+                "engine": "whisper.cpp",
+                "engineRevision": "synthetic-test",
+                "modelId": "ggml-base-q5_1",
+                "modelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "executableSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "runtimeFiles": [
+                  {
+                    "file": "ggml-base-q5_1.bin",
+                    "bytes": 1,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  },
+                  {
+                    "file": "whisper-cli.exe",
+                    "bytes": 1,
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                  }
+                ],
+                "node": "test",
+                "platform": "test",
+                "arch": "test",
+                "requestedLanguage": "auto",
+                "threads": 2,
+                "decoding": "pinned-cli-defaults",
+                "timing": "model-segments-not-word-alignment",
+                "languageSelection": "detected"
+              }
+            }
+          },
+          {
+            "version": 1,
+            "id": "3335b556-a3ba-4a86-a5d1-663a53e4364f",
+            "created_at": "2026-10-10T02:48:02.386Z",
+            "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "result": {
+              "language": "en",
+              "languageProb": 0.9,
+              "text": "bb",
+              "segments": [
+                {
+                  "start": 0,
+                  "end": 0.02,
+                  "text": "bb"
+                }
+              ],
+              "mode": "transcription",
+              "audio": {
+                "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+                "sampleRate": 16000,
+                "sampleCount": 55121,
+                "durationSeconds": 3.4450625
+              },
+              "provenance": {
+                "version": 1,
+                "engine": "whisper.cpp",
+                "engineRevision": "synthetic-test",
+                "modelId": "ggml-base-q5_1",
+                "modelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "executableSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "runtimeFiles": [
+                  {
+                    "file": "ggml-base-q5_1.bin",
+                    "bytes": 1,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  },
+                  {
+                    "file": "whisper-cli.exe",
+                    "bytes": 1,
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                  }
+                ],
+                "node": "test",
+                "platform": "test",
+                "arch": "test",
+                "requestedLanguage": "auto",
+                "threads": 2,
+                "decoding": "pinned-cli-defaults",
+                "timing": "model-segments-not-word-alignment",
+                "languageSelection": "detected"
+              }
+            }
+          },
+          {
+            "version": 1,
+            "id": "c0453731-38a4-4399-a797-19cbbbfd331a",
+            "created_at": "2026-10-10T02:48:05.698Z",
+            "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "result": {
+              "language": "en",
+              "languageProb": 0.9,
+              "text": "cc",
+              "segments": [
+                {
+                  "start": 0,
+                  "end": 0.02,
+                  "text": "cc"
+                }
+              ],
+              "mode": "transcription",
+              "audio": {
+                "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+                "sampleRate": 16000,
+                "sampleCount": 55121,
+                "durationSeconds": 3.4450625
+              },
+              "provenance": {
+                "version": 1,
+                "engine": "whisper.cpp",
+                "engineRevision": "synthetic-test",
+                "modelId": "ggml-base-q5_1",
+                "modelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "executableSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "runtimeFiles": [
+                  {
+                    "file": "ggml-base-q5_1.bin",
+                    "bytes": 1,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  },
+                  {
+                    "file": "whisper-cli.exe",
+                    "bytes": 1,
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                  }
+                ],
+                "node": "test",
+                "platform": "test",
+                "arch": "test",
+                "requestedLanguage": "auto",
+                "threads": 2,
+                "decoding": "pinned-cli-defaults",
+                "timing": "model-segments-not-word-alignment",
+                "languageSelection": "detected"
+              }
+            }
+          }
+        ],
+        "manual_source_transcription_id": "9fc87318-9a30-40b9-86a4-d779a93463a4"
+      }
+    ],
+    "metric_snapshots": [
+      {
+        "version": 1,
+        "revision": 0,
+        "recorded_at": "2026-10-10T02:47:59.416Z",
+        "counts": {
+          "observations": 0,
+          "assertedEntries": 0,
+          "grammarNotes": 0,
+          "competingForms": 0,
+          "mappings1To20": 0,
+          "ratedEntries": 0
+        }
+      },
+      {
+        "version": 1,
+        "revision": 2,
+        "recorded_at": "2026-10-10T02:48:05.376Z",
+        "counts": {
+          "observations": 1,
+          "assertedEntries": 0,
+          "grammarNotes": 0,
+          "competingForms": 0,
+          "mappings1To20": 0,
+          "ratedEntries": 0
+        }
+      }
+    ],
+    "id": "3c705afb-0c88-45cc-9879-e480f82cb119",
+    "created_at": "2026-10-10T02:47:59.416Z",
+    "updated_at": "2026-10-10T02:48:08.326Z",
+    "schema_version": 3,
+    "revision": 3,
+    "recent_mutations": []
+  },
+  "errors": [],
+  "scope": "Synthetic model responses; actual storage, browser edits, restart and portable archive operations."
+}
