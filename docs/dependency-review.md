@@ -89,3 +89,8 @@ Revision `e33c030` changes no dependency or native model bytes. Its October 8 [f
 ## W23 retained-transcription checkpoint — October 10 UTC CI
 
 Revision `dd472e0` changes no dependency or model bytes. Its [full audit](verification/w23-transcripts-audit-all.json) retains zero critical, four high and eight moderate affected-package entries; [production](verification/w23-transcripts-audit-production.json) retains zero critical, four high and three moderate. Windows and Linux agree. Audit lockfile identities match the respective LF and CRLF checkouts. [Source and independent installed verification](verification/w23-transcripts-verification.json) passes transcription retention, restart and archive checks; it does not remediate the remaining native and logging/proxy findings.
+
+
+## W23 five-minute recording checkpoint — 2026-10-10
+
+Runtime revision `ff85424` and acceptance revision `448ddb3` change no locked dependency or native model bytes. The [full audit](verification/w23-long-audit-all.json) reports 0 critical, 4 high and 8 moderate entries; [production](verification/w23-long-audit-production.json) reports 0 critical, 4 high and 3 moderate. Windows and Linux agree. [Passing source/installed verification](verification/w23-long-verification.json) covers the longer recording workflow and corrected acceptance transport; it does not remediate the remaining native and logging/proxy findings.

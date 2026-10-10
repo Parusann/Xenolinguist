@@ -1,6 +1,6 @@
 # Acoustic analysis and evaluation
 
-W23 is in progress. Its first unit adds bounded greedy CTC summaries to the existing phone endpoint. Inference remains in a disposable process in the acoustic queue; cancellation waits for that process to exit. WAV header validation on the server now checks container and sample geometry without allocating a decoded Float32 copy. The inference process performs sample conversion and native processing.
+W23 is in progress. Six implementation units now provide bounded greedy CTC summaries, windowed native inference, independent generated/manual histories, Whisper provenance and retained transcriptions, and queued phone analysis for imported recordings up to five minutes. Inference remains in a disposable process in the acoustic queue; cancellation waits for that process to exit. WAV header validation on the server checks container and sample geometry without allocating a decoded Float32 copy. The inference process performs sample conversion and native processing. Labeled recognition and reproducibility evaluation remain unfinished.
 
 ## Current output contract
 
@@ -12,7 +12,7 @@ For each frame, the decoder computes stable softmax over the full vocabulary aft
 
 Timings preserve the existing frame-bin convention: frame index multiplied by 20 ms. They are approximate model bins, not measured phonetic boundaries. The pinned model's seven convolution layers imply a 320-sample stride and 400-sample receptive field. The service checks that the output frame count is `floor((samples - 400) / 320) + 1` and that the batch size is one. Receptive-field centers, phonetic boundary adjustment and forced alignment are not implemented.
 
-The decoder rejects non-finite logits, invalid tensor sizes/blank IDs/strides, more than 6,000 frames or more than 256 output classes. Candidate retention is capped at three per run. It never returns a plausible partial transcript from corrupt logits. Input remains mono PCM16 WAV at 16 kHz, 25 ms–120 seconds (400–1,920,000 samples). This is a resource ceiling, not a latency guarantee. The second unit below bounds each native phone window; overall native memory and recognition accuracy still require measurement.
+The decoder rejects non-finite logits, invalid tensor sizes/blank IDs/strides, more than 15,000 frames or more than 256 output classes. Candidate retention is capped at three per run. It never returns a plausible partial transcript from corrupt logits. Phone input is mono PCM16 WAV at 16 kHz, 25 ms–300 seconds (400–4,800,000 samples); Whisper retains its 120-second ceiling. These are resource ceilings, not latency guarantees. Native phone windows remain bounded as described below; overall native memory and recognition accuracy still require measurement.
 
 ## Verification and limits
 
@@ -20,11 +20,11 @@ The decoder rejects non-finite logits, invalid tensor sizes/blank IDs/strides, m
 
 Run the actual native service with `node scripts/verify-ipa.mjs`. It validates input identity, frame geometry, complete frame accounting, run/segment links, score mass and model identity through an independent acceptance helper. The clean installed-app harness applies the same checks to the actual authenticated endpoint after verifying native cancellation. This tests execution and metadata integrity, not phone recognition accuracy. Raw native logits are not retained, so a saved response alone cannot reproduce the softmax calculation; deterministic numerical correctness is tested using explicit synthetic tensors.
 
-The current UI continues consuming the original phone string and timings. The new summaries are API output, not yet a saved annotation layer or a score viewer. No new persistence claim or preservation of manual corrections across re-analysis is made by this first unit.
+The UI displays generated phone strings, timings and provenance in retained histories, independently of manual annotations. Copying a generated result into the manual layer is explicit. The complete CTC summaries persist with each analysis, but a detailed score viewer remains unimplemented. The unit-by-unit sections below distinguish earlier checkpoints from the current storage and UI behavior.
 
 ## Remaining W23 work
 
-1. Verify the five-minute phone workflow described below on both source platforms and the independent Windows installer. Whisper transcription and microphone capture retain the two-minute ceiling. The energy heuristic is not a validated voice-activity model.
+1. The five-minute phone workflow below is verified on both source platforms and the independent Windows installer. Whisper transcription and microphone capture retain the two-minute ceiling. The energy heuristic is not a validated voice-activity model.
 2. Generated phone and transcription histories now preserve independent manual annotations through restart and archives. Manual edits remain a mutable layer rather than an append-only edit log.
 3. Curate a licensed labeled corpus within the current model's English ARPABET domain. Before evaluating it, freeze inventory normalization, silence handling, word/phone edit-distance denominators, alignment tolerance, failure accounting and cold/warm timing procedure. No labeled-corpus accuracy, latency target or calibrated uncertainty is established yet.
 4. Consider beam decoding or another phone model only if measured errors justify it and its assets, license, alphabet and Windows runtime are verified. Tone, clicks and wider language coverage remain untested.
@@ -187,3 +187,22 @@ Local source checks pass 514 unit tests (480 server/shared/engine/evaluation and
 
 
 The first five-minute CI attempt at `ff85424` passed Linux but exposed two acceptance-harness limits on Windows. The transcription browser case attempted import before export cleanup released the archive lock (HTTP 429). The clean-installer harness passed a multi-megabyte Buffer through a JSON-only browser request helper, exhausting the automation process heap before a result was written. The helper now sends binary bodies as compact base64 transport values decoded to raw request bytes, supports PUT, and encodes responses in bounded chunks. Two tooling regressions verify exact 9.6 MB POST/PUT round trips plus unchanged JSON/GET behavior. The three audio-history browser cases await export staging cleanup before inspection. No application limit is loosened to hide these failures; rerun verification remains required.
+
+
+## Sixth-unit verification at the frozen revisions
+
+Runtime revision `ff85424` and corrected acceptance revision `448ddb33d633ab784ed67e8fd975237f8f757c34` pass [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/38067706094): 514 unit tests (480 server/shared/engine/evaluation and 34 client), 11 tooling tests, lint/type/build gates, 53 workbench checks and eight public checks per platform. No browser checks are skipped, flaky or unexpected. Downloaded 12 regression, 60 induction, 336 number and 56 elicitation records replay per platform, with unchanged W19 number summaries. Three native unit cases remain gated. The [Linux](verification/w23-long-browser-linux.json) and [Windows](verification/w23-long-browser-windows.json) records retain five-minute synthetic recording histories, manual corrections and archive mappings; the [Windows capture](verification/w23-long-browser-windows.png) shows the explicit long-analysis workflow.
+
+[Independent installed Windows acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/38067706122) passes on a separate runner, verifying 3,772 files and nine archive round trips. It cancels a 296.275375-second native request after 1 of 39 windows, then successfully processes the same recording in a new job. The successful request accounts for all 14,813 frames through 39 windows, with at most 144,080 samples in a native call. Its saved generated history, correction at 240–290 seconds, source link and original/prepared bytes survive a real desktop restart and archive restoration. Existing short recording, phone history and transcription checks still pass.
+
+The installed long request took 270.415 seconds; the local service run took 50.669 seconds. Installed cancellation took 46.2 ms from cancellation request to cancelled response. The maximum observed authenticated Jobs poll was 44.6 ms. A renderer timer requested every 100 ms recorded 2697 ticks during the successful run, with a maximum observed gap of 745.1 ms. These are single-run observations on their respective hosts, including startup/transport overhead, not cold/warm benchmarks, total memory measurements, editing-latency certification or guarantees for other machines.
+
+The local response emits 4,008 phone runs and the installed response 4,002. Both retain the same input/model identities and deterministic window plan; these counts are not recognition scores or proof of prediction reproducibility. [Local native response](verification/w23-long-native.json), [installed response, cancellation and restored clips](verification/w23-long-installed.json), and [verification metadata](verification/w23-long-verification.json) preserve raw results. The local run is frozen at the runtime revision; the later acceptance correction changes no client/server/shared/engine source.
+
+```sh
+npx tsx docs/verification/w23-long-replay.mts
+```
+
+Replay verifies evidence hashes, reconstructs the repeated WAV and window plan, checks generated frame/score accounting and validates saved/restored manual links. It does not rerun inference, reconstruct native logits, reproduce timing or assess acoustic accuracy. Existing phone-layer and transcription evidence replays also pass. The first failed attempts remain documented above and in the verification metadata; the final results come from fresh runs after the harness corrections.
+
+The October 10 [full audit](verification/w23-long-audit-all.json) reports 0 critical, 4 high and 8 moderate affected-package entries; [production](verification/w23-long-audit-production.json) reports 0 critical, 4 high and 3 moderate. No dependency or model-byte change is included. Labeled recognition/reproducibility evaluation remains W23 work. Whisper and microphone capture retain their two-minute ceiling; imports and phone analysis stop at five minutes. No main merge, public release or deployment occurred.

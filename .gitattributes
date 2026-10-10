@@ -43,3 +43,8 @@ docs/verification/w23-stt-replay.mts -text
 docs/verification/w23-transcripts-*.json -text whitespace=cr-at-eol
 docs/verification/w23-transcripts-replay.mts -text
 docs/verification/w23-transcripts-*.png binary
+
+# Preserve long-recording responses and reproducible verification bytes.
+docs/verification/w23-long-*.json -text whitespace=cr-at-eol
+docs/verification/w23-long-replay.mts -text
+docs/verification/w23-long-*.png binary
