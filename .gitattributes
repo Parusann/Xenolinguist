@@ -54,3 +54,4 @@ evaluation/fixtures/audio/l2-arctic-pilot/*.wav binary
 evaluation/fixtures/audio/l2-arctic-pilot/*.TextGrid -text -whitespace
 evaluation/fixtures/audio/l2-arctic-pilot/corpus.json -text whitespace=cr-at-eol
 evaluation/fixtures/audio/l2-arctic-pilot/LICENSE -text -whitespace
+docs/verification/w23-acoustic-pilot/*.json -text

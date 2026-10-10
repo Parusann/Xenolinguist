@@ -1,5 +1,7 @@
 # Acoustic analysis and evaluation
 
+Current completion: W23's selected implementation and English pilot evaluation are delivered. [Labeled results and unresolved limits](acoustic-results.md) supersede the pending-evaluation status in the historical unit checkpoints below. Detailed score visualization and an append-only manual edit log are future extensions, not shipped claims.
+
 W23 is in progress. Six implementation units now provide bounded greedy CTC summaries, windowed native inference, independent generated/manual histories, Whisper provenance and retained transcriptions, and queued phone analysis for imported recordings up to five minutes. Inference remains in a disposable process in the acoustic queue; cancellation waits for that process to exit. WAV header validation on the server checks container and sample geometry without allocating a decoded Float32 copy. The inference process performs sample conversion and native processing. Labeled recognition and reproducibility evaluation remain unfinished.
 
 ## Current output contract
