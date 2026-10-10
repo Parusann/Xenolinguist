@@ -48,3 +48,9 @@ docs/verification/w23-transcripts-*.png binary
 docs/verification/w23-long-*.json -text whitespace=cr-at-eol
 docs/verification/w23-long-replay.mts -text
 docs/verification/w23-long-*.png binary
+
+# Keep externally licensed acoustic corpus hashes stable across checkouts.
+evaluation/fixtures/audio/l2-arctic-pilot/*.wav binary
+evaluation/fixtures/audio/l2-arctic-pilot/*.TextGrid -text -whitespace
+evaluation/fixtures/audio/l2-arctic-pilot/corpus.json -text whitespace=cr-at-eol
+evaluation/fixtures/audio/l2-arctic-pilot/LICENSE -text -whitespace
