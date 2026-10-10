@@ -39,6 +39,24 @@ beforeEach(() => vi.useFakeTimers())
 afterEach(() => { vi.clearAllTimers(); vi.useRealTimers() })
 
 describe('durable save queue', () => {
+  it('snapshots mutable queue containers while later drafts and edits change', async () => {
+    const a = profile(), remote = backend(a), writes: SaveQueueRecord[] = []
+    let release!: () => void
+    const gate = new Promise<void>(resolve => { release = resolve })
+    const store: DraftStore = { list: async () => [], put: async record => { await gate; writes.push(clone(record)) } }
+    const queue = new SaveQueue(remote.api, store, 60_000); await queue.load(a)
+    queue.setDraft(a.id, 'translation.alien', 'first')
+    queue.edit(a, { ...a, description: 'first edit' })
+    queue.setDraft(a.id, 'translation.alien', 'second')
+    queue.edit(queue.view(a.id)!, { ...queue.view(a.id)!, description: 'second edit' })
+    expect(queue.status(a.id).durable).toBe(false)
+    release(); expect(await queue.flush()).toBe(true)
+    expect(writes[0].drafts['translation.alien']).toBe('first')
+    expect(writes[0].batches).toEqual([])
+    expect(writes[1].batches[0].after.description).toBe('first edit')
+    expect(writes.at(-1)?.drafts['translation.alien']).toBe('second')
+    expect(remote.data.get(a.id)?.description).toBe('second edit')
+  })
   it('keeps competing research histories as a conflict instead of overwriting the remote audit trail', async () => {
     const a = profile(), store = new MemoryStore(), remote = backend(a)
     const capture = (id: string) => ({ id, created_at: a.created_at, text: id, source: 'manual', source_id: null,

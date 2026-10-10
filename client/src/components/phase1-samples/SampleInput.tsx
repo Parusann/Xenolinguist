@@ -3,7 +3,7 @@ import { TRANSCRIPTION_HISTORY_LIMIT, type TranscriptionAnalysis } from 'shared/
 import { retainableTranscriptionAnalysis, retainableTranscriptionHistory } from '@/services/transcription-annotations'
 import { manualTranscriptionSegments } from 'shared/transcription-annotations'
 import { TranscriptionHistory } from '@/components/audio/TranscriptionHistory'
-import { useEffect, useRef, useState, type SetStateAction } from 'react'
+import { useEffect, useRef, useState, useMemo, type SetStateAction } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
@@ -29,8 +29,11 @@ import { PHONE_HISTORY_LIMIT, type PhoneAnalysis } from 'shared/schemas/phone-an
 import { retainablePhoneAnalysis, retainablePhoneHistory } from '@/services/phone-annotations'
 import { manualPhoneSegments } from 'shared/phone-annotations'
 
+import { usePagination } from '@/hooks/usePagination'
+import { Pagination } from '@/components/common/Pagination'
 import { normalize } from 'engine/text/normalize'
 import { useLexicon } from '@/hooks/useLexicon'
+const EMPTY_SAMPLES: Sample[] = []
 
 export function SampleInput() {
   const { profile, addSample, removeSample, saveAudioSample, restoreSample, addDictionaryEntry, retainTranscriptionAnalysis } = useProfile()
@@ -73,7 +76,7 @@ export function SampleInput() {
   useEffect(() => { mounted.current = true; return () => { mounted.current = false } }, [])
   const [reTranscribing, setReTranscribing] = useState<string | null>(null)
 
-  const samples = profile?.samples || []
+  const samples = profile?.samples ?? EMPTY_SAMPLES
 
   const handleAdd = async () => {
     if (audioSaving || preparing || analyzingAudio || (!alienText.trim() && !pendingAudio) || !profile) return
@@ -213,15 +216,16 @@ export function SampleInput() {
   ]
 
   const decodedCount = samples.filter((s) => s.decoded).length
-  const visible = samples.filter((s) => {
+  const visible = useMemo(() => samples.filter((s) => {
     if (filter === 'decoded' && !s.decoded) return false
     if (filter === 'audio' && !s.audio_id) return false
     if (search && !normalize(s.alien_text, lexicon.policy).includes(normalize(search, lexicon.policy)) && !normalize(s.english_translation || '', lexicon.policy).includes(normalize(search, lexicon.policy))) return false
     return true
-  })
+  }), [samples, filter, search, lexicon.policy])
+  const pagination = usePagination(visible, `${filter}:${search}`)
 
   return (
-    <div className="phase-enter" style={{ display: 'grid', gridTemplateColumns: 'minmax(420px, 560px) 1fr', gap: 20, height: '100%', overflow: 'hidden' }}>
+    <div className="phase-enter phase-columns" style={{ display: 'grid', gridTemplateColumns: 'minmax(420px, 560px) 1fr', gap: 20, height: '100%', overflow: 'hidden' }}>
       {/* LEFT — capture */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, overflow: 'auto', paddingRight: 4 }}>
         <div>
@@ -241,22 +245,22 @@ export function SampleInput() {
             </label>
           </div>
 
-          <textarea className="textarea" value={alienText} onChange={(e) => setAlienText(e.target.value)} placeholder="Enter unknown language text… e.g. nesh tor krash." style={{ marginTop: 12, minHeight: 96, fontSize: 15 }} />
+          <textarea aria-label="Unknown language sample" className="textarea" value={alienText} onChange={(e) => setAlienText(e.target.value)} placeholder="Enter unknown language text… e.g. nesh tor krash." style={{ marginTop: 12, minHeight: 96, fontSize: 15 }} />
           {parallelMode && (
-            <textarea className="textarea" value={translation} onChange={(e) => setTranslation(e.target.value)} placeholder="Known English translation…" style={{ marginTop: 10, minHeight: 60, fontFamily: 'var(--font-sans)' }} />
+            <textarea aria-label="Known English translation" className="textarea" value={translation} onChange={(e) => setTranslation(e.target.value)} placeholder="Known English translation…" style={{ marginTop: 10, minHeight: 60, fontFamily: 'var(--font-sans)' }} />
           )}
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 12 }}>
             <div>
               <label className="label">Source</label>
-              <select className="input" value={source} onChange={(e) => setSource(e.target.value)}>
+              <select aria-label="Sample source" className="input" value={source} onChange={(e) => setSource(e.target.value)}>
                 {SOURCE_PRESETS.map((s) => <option key={s} value={s}>{s}</option>)}
                 <option value="Audio recording">Audio recording</option>
               </select>
             </div>
             <div>
               <label className="label">Phonetic Notes</label>
-              <input className="input" value={phoneticNotes} onChange={(e) => setPhoneticNotes(e.target.value)} placeholder="IPA, tone markers" />
+              <input aria-label="Phonetic notes" className="input" value={phoneticNotes} onChange={(e) => setPhoneticNotes(e.target.value)} placeholder="IPA, tone markers" />
             </div>
           </div>
 
@@ -373,23 +377,24 @@ export function SampleInput() {
               <span className="label" style={{ marginBottom: 0 }}>Samples</span>
               <span className="font-mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>{samples.length} total · {decodedCount} decoded</span>
               <div className="flex-1" />
-              <input className="input" placeholder="Search…" value={search} onChange={(e) => setSearch(e.target.value)} style={{ maxWidth: 180, padding: '6px 10px' }} />
+              <input aria-label="Search samples" className="input" placeholder="Search…" value={search} onChange={(e) => setSearch(e.target.value)} style={{ maxWidth: 180, padding: '6px 10px' }} />
               {(['all', 'decoded', 'audio'] as const).map((f) => (
                 <button key={f} className="btn xs ghost" onClick={() => setFilter(f)} style={{ background: filter === f ? 'rgba(0,230,118,0.10)' : 'transparent', color: filter === f ? 'var(--accent)' : 'var(--fg-dim)', textTransform: 'capitalize' }}>{f === 'audio' ? 'With audio' : f}</button>
               ))}
             </div>
 
+            <Pagination {...pagination} label="samples" />
             {samples.length === 0 ? (
               <div className="glass-card" style={{ padding: 32, textAlign: 'center', color: 'var(--fg-mute)', fontSize: 13 }}>No samples yet. Capture your first sample using the form.</div>
             ) : (
               <div style={{ overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 10, paddingRight: 4, paddingBottom: 10 }}>
-                {visible.map((sample, i) => {
+                {pagination.items.map((sample, i) => {
                   const clip = getAudioForSample(sample.audio_id)
                   return (
                     <div key={sample.id} className="glass-card" style={{ padding: 14, cursor: 'pointer' }} onClick={() => setSelectedSample(sample)} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setContextMenu({ x: e.clientX, y: e.clientY, sample }) }}>
                       <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 8, alignItems: 'center', gap: 8 }}>
                         <div className="flex" style={{ gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
-                          <span className="badge" style={{ fontSize: 9 }}>S{String(i + 1).padStart(2, '0')}</span>
+                          <span className="badge" style={{ fontSize: 9 }}>S{String(pagination.page * pagination.size + i + 1).padStart(2, '0')}</span>
                           <span className={'badge ' + (sample.decoded ? 'confirmed' : 'unknown')}>{sample.decoded ? 'decoded' : 'raw'}</span>
                           <span className="badge" style={{ fontSize: 9 }}>{sample.source}</span>
                           {sample.audio_id && <span className="badge" style={{ fontSize: 9 }}>♪ audio</span>}
@@ -408,7 +413,7 @@ export function SampleInput() {
                           <button aria-label={`Delete sample ${sample.alien_text}`} onClick={(e) => { e.stopPropagation(); handleDeleteWithUndo(sample) }} style={{ background: 'none', border: 0, color: 'var(--fg-faint)', cursor: 'pointer', fontSize: 13 }}>×</button>
                         </div>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 17, color: 'var(--fg)', letterSpacing: '-0.005em', lineHeight: 1.4 }}>{sample.alien_text}</div>
+                      <button type="button" className="sample-open" onClick={e => { e.stopPropagation(); setSelectedSample(sample) }} style={{ textAlign: 'left', background: 'none', border: 0, padding: 0, cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: 17, color: 'var(--fg)', letterSpacing: '-0.005em', lineHeight: 1.4 }}>{sample.alien_text}</button>
                       {sample.english_translation && <div style={{ fontSize: 13, fontStyle: 'italic', color: 'var(--fg-dim)', marginTop: 4 }}>→ {sample.english_translation}</div>}
                       {clip && <div onClick={e => e.stopPropagation()} style={{ marginTop: 8 }}>
                         <AudioPlayer src={`/api/audio/${clip.id}`} peaks={clip.waveform} duration={clip.duration} compact />

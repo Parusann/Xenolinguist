@@ -133,13 +133,14 @@ export function TranslationEngine() {
       </div>
 
       {!reverseMode ? (
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: showInspector ? '1fr 1fr 340px' : '1fr 1fr', gap: 16, overflow: 'hidden' }}>
+        <div className="phase-columns" style={{ flex: 1, display: 'grid', gridTemplateColumns: showInspector ? '1fr 1fr 340px' : '1fr 1fr', gap: 16, overflow: 'hidden' }}>
           {/* SOURCE */}
           <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
               <span className="label" style={{ marginBottom: 0 }}>Source · {profile?.name || 'Unknown'}</span>
             </div>
             <textarea
+              aria-label="Translation source"
               value={alienInput}
               onChange={(e) => { setAlienInput(e.target.value); setPinned(null); setHover(null); setEditing(false) }}
               placeholder="Enter unknown language text to translate…"
@@ -159,7 +160,7 @@ export function TranslationEngine() {
               <span className="label" style={{ marginBottom: 0 }}>Lexical gloss · English</span>
               <span className="dim">{mappedCount}/{realTokens.length} regions have candidate meanings</span>
             </div>
-            <div data-testid="lexical-translation" className="expr-color" style={{ whiteSpace: 'pre-wrap', flex: 1, overflow: 'auto', fontSize: 22, lineHeight: 1.9, letterSpacing: '-0.005em' }}>
+            <div data-testid="lexical-translation" role="region" aria-label="Lexical translation" tabIndex={0} className="expr-color" style={{ whiteSpace: 'pre-wrap', flex: 1, overflow: 'auto', fontSize: 22, lineHeight: 1.9, letterSpacing: '-0.005em' }}>
               {translatedWords.length === 0 ? (
                 <span style={{ fontSize: 14, color: 'var(--fg-faint)' }}>Translation will appear here…</span>
               ) : (
@@ -248,7 +249,7 @@ export function TranslationEngine() {
                   )}
                 </>
               ) : (
-                <div style={{ flex: 1, display: 'grid', placeItems: 'center', textAlign: 'center', color: 'var(--fg-mute)' }}>
+                <div className="phase-columns" style={{ flex: 1, display: 'grid', placeItems: 'center', textAlign: 'center', color: 'var(--fg-mute)' }}>
                   <div>
                     <div style={{ fontSize: 36, opacity: 0.3, marginBottom: 8 }}>◌</div>
                     <div style={{ fontSize: 12.5 }}>Hover or click any word to inspect</div>
@@ -259,7 +260,7 @@ export function TranslationEngine() {
           )}
         </div>
       ) : (
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, overflow: 'hidden' }}>
+        <div className="phase-columns" style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, overflow: 'hidden' }}>
           <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column' }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
               <span className="label" style={{ marginBottom: 0 }}>English</span>

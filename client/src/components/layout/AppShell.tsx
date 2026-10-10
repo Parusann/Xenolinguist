@@ -73,6 +73,7 @@ export function AppShell() {
       {
         key: 'k',
         ctrl: true,
+        allowInInput: true,
         handler: () => setCommandPaletteOpen(prev => !prev),
         description: 'Search everything',
         category: 'Actions' as const,

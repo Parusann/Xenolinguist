@@ -14,15 +14,19 @@ import { withProfileLock } from './profile-locks.js';
 import { atomicWrite } from './atomic-file.js';
 import { dataDir } from '../config.js';
 import { AudioStore } from './audio-store.js';
-import { recordMetricSnapshot } from '../../../shared/metrics/workspace-metrics.js';
+import { recordMetricSnapshot, workspaceMetrics } from '../../../shared/metrics/workspace-metrics.js';
 import { verifyProposalReviews } from './proposal-review-integrity.js';
 import { verifyElicitation } from './elicitation-integrity.js';
 import { verifyGrammarElicitation } from './grammar-elicitation-integrity.js';
 
 const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
-const toIndex = (p: LanguageProfile): ProfileIndex => ({ id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at });
+const toIndex = (p: LanguageProfile): ProfileIndex => {
+  const counts = workspaceMetrics(p);
+  return { id: p.id, name: p.name, created_at: p.created_at, updated_at: p.updated_at, words: counts.assertedEntries, observations: counts.observations };
+};
 
 export class ProfileStore {
+  private summaries = new Map<string, { signature: string; value: ProfileIndex }>();
   constructor(private readonly write = atomicWrite) {}
   private directory() { return path.join(dataDir(), 'profiles'); }
   private file(id: string) { return path.join(this.directory(), `${id}.json`); }
@@ -37,7 +41,24 @@ export class ProfileStore {
       const names = await fs.readdir(this.directory());
       const ids = new Set(names.filter(name => /\.json(?:\.prev)?$/.test(name)).map(name => name.replace(/\.json(?:\.prev)?$/, '')).filter(id => SAFE_ID.test(id)));
       for (const id of ids) {
-        try { const profile = await this.get(id); if (profile) entries.push(toIndex(profile)); }
+        try {
+          const file = this.file(id);
+          const signature = async () => JSON.stringify(await Promise.all([file, file + '.prev'].map(async p => {
+            try { const s = await fs.stat(p, { bigint: true }); return [s.ino, s.size, s.mtimeNs, s.ctimeNs].map(String); }
+            catch (e) { if ((e as NodeJS.ErrnoException).code === 'ENOENT') return null; throw e; }
+          })));
+          const before = await signature(), cached = this.summaries.get(file);
+          if (cached?.signature === before) { entries.push(cached.value); continue; }
+          const profile = await this.get(id);
+          if (profile) {
+            const value = toIndex(profile); entries.push(value);
+            // A concurrent commit or recovery must never cache counts against different bytes.
+            if (before === await signature()) {
+              if (this.summaries.size >= 512) this.summaries.delete(this.summaries.keys().next().value!);
+              this.summaries.set(file, { signature: before, value });
+            }
+          }
+        }
         catch (error) {
           // A damaged file remains visible alongside usable profiles, without inventing recovered content.
           const epoch = '1970-01-01T00:00:00.000Z';

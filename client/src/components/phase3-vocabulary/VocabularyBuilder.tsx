@@ -1,4 +1,6 @@
 import { EvidenceInspector } from '@/components/evidence/EvidenceInspector'
+import { usePagination } from '@/hooks/usePagination'
+import { Pagination } from '@/components/common/Pagination'
 import { useLexicon } from '@/hooks/useLexicon'
 import { DEFAULT_LEXICAL_POLICY, storedForm } from 'engine/text/normalize'
 import { LexicalFields } from './LexicalFields'
@@ -50,7 +52,8 @@ export function VocabularyBuilder() {
   const changePolicy = (patch: Partial<LexicalPolicy>) => updateProfile({ lexical_policy: { ...policy, ...patch } })
   const counts = profile ? getConfidenceCounts(profile) : { rated: 0, unrated: 0, total: 0 }
 
-  const filtered = lexicon.search(search).filter(entry => activeCategory === 'all' || entry.part_of_speech === activeCategory)
+  const filtered = useMemo(() => lexicon.search(search).filter(entry => activeCategory === 'all' || entry.part_of_speech === activeCategory), [lexicon, search, activeCategory])
+  const pagination = usePagination(filtered, `${activeCategory}:${search}`)
 
   const sel = dictionary.find((e) => e.id === selectedId) ?? dictionary[0] ?? null
 
@@ -134,7 +137,7 @@ export function VocabularyBuilder() {
   ]
 
   return (
-    <div className="phase-enter" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 20, height: '100%', overflow: 'hidden' }}>
+    <div className="phase-enter phase-columns" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 20, height: '100%', overflow: 'hidden' }}>
       {/* LEFT — list */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, overflow: 'hidden' }}>
         <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -180,7 +183,7 @@ export function VocabularyBuilder() {
 
         {/* Search + view toggle */}
         <div className="flex" style={{ gap: 8 }}>
-          <input className="input" placeholder="Search dictionary…" value={search} onChange={(e) => setSearch(e.target.value)} style={{ maxWidth: 360 }} />
+          <input aria-label="Search dictionary" className="input" placeholder="Search dictionary…" value={search} onChange={(e) => setSearch(e.target.value)} style={{ maxWidth: 360 }} />
           <div className="flex-1" />
           <div className="glass-inner" style={{ padding: 2, display: 'flex' }}>
             <button className="btn xs ghost" style={{ background: viewMode === 'cards' ? 'rgba(0,230,118,0.10)' : 'transparent', color: viewMode === 'cards' ? 'var(--accent)' : 'var(--fg-dim)' }} onClick={() => setViewMode('cards')}>Cards</button>
@@ -216,7 +219,7 @@ export function VocabularyBuilder() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
               <div>
                 <label className="label">Part of Speech</label>
-                <select value={newPos} onChange={(e) => setNewPos(e.target.value as PartOfSpeech)} className="input">
+                <select aria-label="New word part of speech" value={newPos} onChange={(e) => setNewPos(e.target.value as PartOfSpeech)} className="input">
                   {PART_OF_SPEECH_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </div>
@@ -225,7 +228,7 @@ export function VocabularyBuilder() {
               </div>
               <div>
                 <label className="label">Context</label>
-                <input value={newContext} onChange={(e) => setNewContext(e.target.value)} placeholder="Where first encountered" className="input" />
+                <input aria-label="New word context" value={newContext} onChange={(e) => setNewContext(e.target.value)} placeholder="Where first encountered" className="input" />
               </div>
             </div>
             <LexicalFields value={newLexical} onChange={setNewLexical} />
@@ -236,6 +239,7 @@ export function VocabularyBuilder() {
           </div>
         )}
 
+        <Pagination {...pagination} label="words" />
         {/* List */}
         {filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--fg-mute)', fontSize: 13 }}>
@@ -244,7 +248,7 @@ export function VocabularyBuilder() {
         ) : viewMode === 'cards' ? (
           <div style={{ overflow: 'auto', paddingRight: 4, paddingBottom: 10 }}>
             <div className="expr-color" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12, alignItems: 'stretch' }}>
-              {filtered.map((entry) => {
+              {pagination.items.map((entry) => {
                 const level = getConfidenceLevel(entry.confidence)
                 const audio = audioMap.get(entry.id)
                 const isSel = sel?.id === entry.id
@@ -261,7 +265,7 @@ export function VocabularyBuilder() {
                       <EvidenceStatus value={entry.confidence} />
                     </div>
                     <div className="flex" style={{ alignItems: 'center', gap: 6 }}>
-                      <div className={'word-token wt-' + level} style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 500, marginBottom: 2, padding: 0 }}>{entry.alien_word}</div>
+                      <button type="button" onClick={() => { setSelectedId(entry.id); setEditing(false) }} className={'word-token wt-' + level} style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 500, marginBottom: 2, padding: 0 }}>{entry.alien_word}</button>
                       <SpeakButton text={entry.alien_word} />
                     </div>
                     <div className="dim" style={{ fontSize: 13, marginBottom: 8 }}>{entry.english_meaning || <span style={{ fontStyle: 'italic' }}>unknown meaning</span>}</div>
@@ -287,13 +291,13 @@ export function VocabularyBuilder() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((entry) => {
+                {pagination.items.map((entry) => {
                   const level = getConfidenceLevel(entry.confidence)
                   return (
                     <tr key={entry.id} onClick={() => { setSelectedId(entry.id); setEditing(false) }} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setContextMenu({ x: e.clientX, y: e.clientY, entry }) }} style={{ background: sel?.id === entry.id ? 'rgba(0,230,118,0.05)' : 'transparent', cursor: 'pointer' }}>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
                         <span className="flex" style={{ alignItems: 'center', gap: 6 }}>
-                          <span className={'word-token wt-' + level} style={{ padding: 0, fontSize: 13 }}>{entry.alien_word}</span>
+                          <button type="button" onClick={() => { setSelectedId(entry.id); setEditing(false) }} className={'word-token wt-' + level} style={{ padding: 0, fontSize: 13 }}>{entry.alien_word}</button>
                           <SpeakButton text={entry.alien_word} />
                         </span>
                       </td>
@@ -345,7 +349,7 @@ export function VocabularyBuilder() {
                 </div>
                 <div>
                   <label className="label">Part of Speech</label>
-                  <select className="input" value={draft.part_of_speech} onChange={(e) => setDraft((d) => ({ ...d, part_of_speech: e.target.value as PartOfSpeech }))}>
+                  <select aria-label="Word part of speech" className="input" value={draft.part_of_speech} onChange={(e) => setDraft((d) => ({ ...d, part_of_speech: e.target.value as PartOfSpeech }))}>
                     {PART_OF_SPEECH_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
                 </div>
@@ -354,7 +358,7 @@ export function VocabularyBuilder() {
                 </div>
                 <div>
                   <label className="label">Context</label>
-                  <input className="input" value={draft.context ?? ''} onChange={(e) => setDraft((d) => ({ ...d, context: e.target.value }))} />
+                  <input aria-label="Word context" className="input" value={draft.context ?? ''} onChange={(e) => setDraft((d) => ({ ...d, context: e.target.value }))} />
                 </div>
                 <div>
                   <label className="label">Notes</label>

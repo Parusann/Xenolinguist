@@ -53,7 +53,9 @@ export class SaveQueue {
   status(id: string): SaveStatus { return this.states.get(id)?.status ?? { phase: 'saved', durable: true } }
   pending() { return [...this.states].filter(([, state]) => state.status.phase !== 'saved' || !state.status.durable).map(([id, state]) => ({ id, name: state.record.base.name, ...state.status })) }
   private persist(state: State): Promise<void> {
-    const snapshot = structuredClone(state.record)
+    // Validated profiles and sealed mutations are replaced, never edited in place.
+    // Copy the mutable queue containers without cloning the corpus on each keystroke.
+    const snapshot: SaveQueueRecord = { ...state.record, drafts: { ...state.record.drafts }, batches: state.record.batches.map(batch => ({ ...batch })) }
     state.status = { ...state.status, durable: false }
     const write = state.writes.catch(() => {}).then(() => this.store.put(snapshot))
     state.writes = write

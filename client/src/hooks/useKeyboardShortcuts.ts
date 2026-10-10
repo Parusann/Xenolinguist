@@ -5,6 +5,7 @@ export interface ShortcutDefinition {
   ctrl?: boolean
   shift?: boolean
   alt?: boolean
+  allowInInput?: boolean
   handler: () => void
   description: string
   category?: 'Navigation' | 'Actions' | 'Other'
@@ -41,10 +42,8 @@ function matchesShortcut(e: KeyboardEvent, shortcut: ShortcutDefinition): boolea
 export function useKeyboardShortcuts(shortcuts: ShortcutDefinition[]) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (isInputFocused()) return
-
       for (const shortcut of shortcuts) {
-        if (matchesShortcut(e, shortcut)) {
+        if ((!isInputFocused() || shortcut.allowInInput) && matchesShortcut(e, shortcut)) {
           e.preventDefault()
           shortcut.handler()
           return

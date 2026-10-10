@@ -7,7 +7,6 @@ import { PHONE_HISTORY_LIMIT, type PhoneAnalysis } from 'shared/schemas/phone-an
 import { retainablePhoneAnalysis } from '@/services/phone-annotations'
 import { manualPhoneSegments } from 'shared/phone-annotations'
 import { useProfile } from '@/stores/profile-context'
-import { transcribePhones } from '@/services/ipa'
 import { PhoneAnalysisHistory } from './PhoneAnalysisHistory'
 import { AudioSegmenter } from './AudioSegmenter'
 
@@ -23,6 +22,7 @@ export function SavedPhoneAnnotations({ clip, profileId }: { clip: AudioClip; pr
       const response = await fetch(`/api/audio/${clip.id}/analysis`)
       if (!response.ok) throw new Error('Could not load the prepared recording')
       let failure = 'Phone analysis is unavailable'
+      const { transcribePhones } = await import('@/services/ipa')
       const result = await transcribePhones(await response.blob(), message => { failure = message })
       if (!result) throw new Error(failure)
       if (!mounted.current) return

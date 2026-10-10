@@ -1,4 +1,11 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+for (const width of [390, 768]) test(`public accessibility at ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 }); await page.goto('./');
+  const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  expect(result.violations).toEqual([]);
+});
 
 test('public dictionary uses canonical meanings without model or API requests', async ({ page }) => {
   const unexpected: string[] = [];

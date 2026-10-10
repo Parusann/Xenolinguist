@@ -47,8 +47,8 @@
   --fg: #f4f5f7;
   --fg-1: #cdd0d6;
   --fg-dim: #8a8e98;
-  --fg-mute: #5f6470;
-  --fg-faint: #3e424b;
+  --fg-mute: #969dab;
+  --fg-faint: #9098a5;
 
   /* Accent */
   --accent: #00E676;
@@ -579,3 +579,19 @@ canvas.stars { position: absolute; inset: 0; pointer-events: auto; }
 .log-entry .kind { color: var(--fg-faint); text-align: center; }
 .log-entry .body { color: var(--fg-1); }
 .log-entry.kind-milestone .body { color: var(--accent); }
+/* Keyboard navigation and narrow/zoomed workbench reflow. */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+main, .phase-columns > * { min-width: 0; }
+@media (max-width: 1100px) {
+  .phase-columns { grid-template-columns: minmax(0, 1fr) !important; height: auto !important; overflow: visible !important; }
+  .phase-columns > * { overflow: visible !important; }
+}
+@media (max-width: 760px) {
+  .phase-columns .flex { flex-wrap: wrap; }
+  .status-bar { height: auto; min-height: 28px; flex-wrap: wrap; gap: 8px; padding: 6px; }
+  .side-panel { width: min(420px, 100vw); }
+  header { flex-wrap: wrap; height: auto !important; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

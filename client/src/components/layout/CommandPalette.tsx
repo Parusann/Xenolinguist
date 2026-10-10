@@ -39,7 +39,11 @@ export function CommandPalette({ onClose, onNavigate, onOpenAIChat, onShowShortc
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => { inputRef.current?.focus() }, [])
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    inputRef.current?.focus()
+    return () => previous?.focus()
+  }, [])
 
   const go = (phaseId: string) => { onNavigate?.(phaseId); onClose() }
 
@@ -81,7 +85,8 @@ export function CommandPalette({ onClose, onNavigate, onOpenAIChat, onShowShortc
   useEffect(() => { listRef.current?.querySelector('[data-sel="true"]')?.scrollIntoView({ block: 'nearest' }) }, [selected])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') { e.preventDefault(); onClose() }
+    if (e.key === 'Tab') { e.preventDefault() }
+    else if (e.key === 'Escape') { e.preventDefault(); onClose() }
     else if (e.key === 'ArrowDown') { e.preventDefault(); setSelected((p) => (p + 1) % Math.max(results.length, 1)) }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setSelected((p) => (p - 1 + Math.max(results.length, 1)) % Math.max(results.length, 1)) }
     else if (e.key === 'Enter') { e.preventDefault(); results[selected]?.run() }
@@ -100,17 +105,20 @@ export function CommandPalette({ onClose, onNavigate, onOpenAIChat, onShowShortc
       <div className="popover cmd-box" role="dialog" aria-modal="true" aria-label="Command palette" onClick={(e) => e.stopPropagation()}>
         <div className="flex" style={{ gap: 10, padding: '14px 16px', borderBottom: '1px solid var(--border)', alignItems: 'center' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: 'var(--accent)' }}>⌘</span>
-          <input ref={inputRef} value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={handleKeyDown} placeholder="Search commands, words, samples…" aria-label="Search commands, words, samples" style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'var(--font-sans)', color: 'var(--fg)' }} />
+          <input ref={inputRef} role="combobox" aria-expanded="true" aria-controls="command-results" aria-activedescendant={results[selected] ? `command-result-${selected}` : undefined} value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={handleKeyDown} placeholder="Search commands, words, samples…" aria-label="Search commands, words, samples" style={{ flex: 1, background: 'transparent', border: 'none', fontSize: 15, fontFamily: 'var(--font-sans)', color: 'var(--fg)' }} />
           <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-faint)' }}>ESC</span>
         </div>
 
-        <div ref={listRef} style={{ maxHeight: '50vh', overflow: 'auto', padding: 8 }}>
+        <div ref={listRef} id="command-results" role="listbox" aria-label="Commands and matches" style={{ maxHeight: '50vh', overflow: 'auto', padding: 8 }}>
           {results.length === 0 ? (
             <div style={{ padding: '32px 0', textAlign: 'center', color: 'var(--fg-mute)', fontSize: 13 }}>No matches{query ? ` for “${query}”` : ''}</div>
           ) : (
             results.map((item, i) => (
               <div
                 key={item.id}
+                id={`command-result-${i}`}
+                role="option"
+                aria-selected={i === selected}
                 data-sel={i === selected}
                 onClick={() => item.run()}
                 onMouseEnter={() => setSelected(i)}

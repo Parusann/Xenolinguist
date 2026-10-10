@@ -6,12 +6,11 @@ import { ProfileSetup } from './ProfileSetup'
 import { ProjectArchive } from '@/components/phase6-dashboard/ProjectArchive'
 import { VantaTopology } from '@/components/common/VantaTopology'
 import { XenoMark } from '@/components/common/XenoMark'
-import { workspaceMetrics } from 'shared/metrics/workspace-metrics'
 import { apiFetch } from '@/services/api'
 import type { LanguageProfile, ProfileIndex } from 'shared/types'
 
 /** Saved profiles with current distinct content counts; unavailable counts stay unknown. */
-interface ProfileRow extends ProfileIndex {
+interface ProfileRow extends Omit<ProfileIndex, 'words' | 'observations'> {
   words: number | null
   observations: number | null
   active: boolean
@@ -28,7 +27,7 @@ function ParticleField() {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const ctx = canvas.getContext('2d')!
     let animId: number
 
@@ -154,13 +153,12 @@ export function LandingScreen() {
   const [profiles, setProfiles] = useState<ProfileRow[]>([])
   const [showSetup, setShowSetup] = useState(false)
   const [setupMode, setSetupMode] = useState<'new' | 'sandbox'>('new')
-  const [ready, setReady] = useState(false)
   const [loadingDemo, setLoadingDemo] = useState(false)
   const { loadProfile } = useProfile()
   const { addEntry } = useSessionLog()
   const { ready: connected } = useOllama()
 
-  // Hydrate current counts from each saved profile.
+  // Render summary counts without fetching every full project.
   useEffect(() => {
     let cancelled = false
     ;(async () => {
@@ -169,23 +167,13 @@ export function LandingScreen() {
         const sorted = [...index].sort(
           (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
         )
-        const rows = await Promise.all(
-          sorted.map(async (p, i): Promise<ProfileRow> => {
-            try {
-              const full = await apiFetch<LanguageProfile>(`/profiles/${p.id}`)
-              return { ...p, words: workspaceMetrics(full).assertedEntries, observations: workspaceMetrics(full).observations, active: i === 0 }
-            } catch {
-              return { ...p, words: null, observations: null, active: i === 0 }
-            }
-          }),
-        )
+        const rows = sorted.map((p, i): ProfileRow => ({ ...p, words: p.words ?? null, observations: p.observations ?? null, active: i === 0 }))
         if (!cancelled) setProfiles(rows)
       } catch {
         /* offline or no profiles yet — leave the list empty */
       }
     })()
-    const t = setTimeout(() => setReady(true), 100)
-    return () => { cancelled = true; clearTimeout(t) }
+    return () => { cancelled = true }
   }, [])
 
   if (showSetup) {
@@ -232,9 +220,6 @@ export function LandingScreen() {
           gridTemplateColumns: '1fr minmax(0, 520px) 1fr',
           gridTemplateRows: 'minmax(0, 1fr) auto minmax(0, 1fr)',
           alignItems: 'center',
-          transition: 'opacity 1s ease, transform 1s ease',
-          opacity: ready ? 1 : 0,
-          transform: ready ? 'none' : 'translateY(16px)',
         }}
       >
         {/* Center column */}

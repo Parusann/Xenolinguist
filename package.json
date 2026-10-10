@@ -43,6 +43,7 @@
     "audit:record": "node scripts/audit-dependencies.mjs"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "7zip-bin": "5.2.0",
     "concurrently": "^9.1.0",

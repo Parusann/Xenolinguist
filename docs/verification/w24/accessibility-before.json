@@ -1,0 +1,2711 @@
+[
+  {
+    "size": {
+      "width": 1280,
+      "height": 800
+    },
+    "phase": "samples",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".item:nth-child(5)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": [
+          {
+            "target": [
+              "select"
+            ],
+            "summary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .name"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .name"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .glyph"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .name"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            ".kicker"
+          ],
+          [
+            ".p-5 > .phase-enter > div:nth-child(1) > div > p"
+          ],
+          [
+            "fieldset > .flex:nth-child(1) > .label"
+          ],
+          [
+            ".flex:nth-child(1) > label"
+          ],
+          [
+            "textarea"
+          ],
+          [
+            "div:nth-child(3) > div:nth-child(1) > label"
+          ],
+          [
+            "select"
+          ],
+          [
+            "div:nth-child(2) > label"
+          ],
+          [
+            "input[placeholder=\"IPA, tone markers\"]"
+          ],
+          [
+            ".sm.ghost.btn:nth-child(2)"
+          ],
+          [
+            ".flex:nth-child(4) > label"
+          ],
+          [
+            ".sm.ghost.btn:nth-child(5)"
+          ],
+          [
+            ".sm.ghost.btn:nth-child(6)"
+          ],
+          [
+            ".phase-enter > div:nth-child(1) > p"
+          ],
+          [
+            "div:nth-child(2) > .flex > .label"
+          ],
+          [
+            ".phase-enter > div:nth-child(2) > .flex > .font-mono"
+          ],
+          [
+            "input[placeholder=\"Search\u2026\"]"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(5)"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(6)"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(7)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample ka nesh lor\"]"
+          ],
+          [
+            ".glass-card:nth-child(1) > div:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(1) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample vel tor krash\"]"
+          ],
+          [
+            ".glass-card:nth-child(2) > div:nth-child(2)"
+          ],
+          [
+            "div:nth-child(2) > .glass-card:nth-child(2) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample ka ix mok\"]"
+          ],
+          [
+            ".glass-card:nth-child(3) > div:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(3) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample nesh-en shu\"]"
+          ],
+          [
+            ".glass-card:nth-child(4) > div:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(4) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample ka ven zo\"]"
+          ],
+          [
+            ".glass-card:nth-child(5) > div:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 800
+    },
+    "phase": "vocabulary",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".item:nth-child(5)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".crumb > span:nth-child(4)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .name"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            ".active > .glyph"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .name"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .glyph"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .name"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            ".kicker"
+          ],
+          [
+            "div:nth-child(1) > p"
+          ],
+          [
+            ".flex:nth-child(1) > .flex > .sm.btn:nth-child(1)"
+          ],
+          [
+            ".primary"
+          ],
+          [
+            ".xs.btn:nth-child(1) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(1) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(2) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(2) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(3) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(3) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(4) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(4) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(5) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(5) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(6) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(6) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(7) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(7) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(8) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(8) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(9) > span"
+          ],
+          [
+            "input[placeholder=\"Search dictionary\u2026\"]"
+          ],
+          [
+            ".ghost.xs.btn:nth-child(1)"
+          ],
+          [
+            ".glass-inner > .ghost.xs.btn:nth-child(2)"
+          ],
+          [
+            "summary"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(2) > .wt-confirmed.word-token"
+          ],
+          [
+            ".glass-card:nth-child(1) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(1) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(2) > .wt-confirmed.word-token"
+          ],
+          [
+            ".glass-card:nth-child(2) > .dim"
+          ],
+          [
+            ".expr-color > .glass-card:nth-child(2) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(2) > .wt-confirmed.word-token"
+          ],
+          [
+            ".glass-card:nth-child(3) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(3) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(2) > .wt-confirmed.word-token"
+          ],
+          [
+            ".glass-card:nth-child(4) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(4) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(5) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(5) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(6) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(6) > div:nth-child(4)"
+          ],
+          [
+            "h3"
+          ],
+          [
+            "section > p"
+          ],
+          [
+            ".flex:nth-child(2) > .label"
+          ],
+          [
+            ".flex:nth-child(2) > .ghost.xs.btn"
+          ],
+          [
+            ".flex:nth-child(3) > div:nth-child(1)"
+          ],
+          [
+            ".flex:nth-child(3) > .badge"
+          ],
+          [
+            ".phase-enter > .glass-card > div:nth-child(4)"
+          ],
+          [
+            ".flex:nth-child(5) > .badge:nth-child(1)"
+          ],
+          [
+            ".flex:nth-child(5) > .badge:nth-child(2)"
+          ],
+          [
+            "div:nth-child(6) > p"
+          ],
+          [
+            "div:nth-child(8) > .label"
+          ],
+          [
+            ".glass-card > div:nth-child(8) > div:nth-child(2)"
+          ],
+          [
+            "div:nth-child(9) > .label"
+          ],
+          [
+            "div:nth-child(9) > div:nth-child(2) > .glass-inner"
+          ],
+          [
+            "div:nth-child(10) > .label"
+          ],
+          [
+            ".glass-card > div:nth-child(10) > div:nth-child(2)"
+          ],
+          [
+            ".glass-inner > .flex > .label"
+          ],
+          [
+            ".glass-inner > div:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "#root > div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 800
+    },
+    "phase": "translation",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".item:nth-child(5)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".crumb > span:nth-child(4)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .name"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .name"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            ".active > .glyph"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .glyph"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .name"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            ".kicker"
+          ],
+          [
+            ".flex > div:nth-child(1) > p"
+          ],
+          [
+            ".flex > .flex:nth-child(1) > .dim"
+          ],
+          [
+            ".flex:nth-child(2) > .dim"
+          ],
+          [
+            ".flex:nth-child(3) > .dim"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(1)"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .label"
+          ],
+          [
+            "textarea"
+          ],
+          [
+            ".font-mono"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .label"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .dim"
+          ],
+          [
+            ".expr-color > span"
+          ],
+          [
+            ".flex:nth-child(3) > .sm.ghost.btn:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(3) > div > div > div:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(3) > div > div > div:nth-child(2)"
+          ],
+          [
+            "section > div > .flex > .label"
+          ],
+          [
+            "section > div > p"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "size": {
+      "width": 1440,
+      "height": 900
+    },
+    "phase": "samples",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".item:nth-child(5)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": [
+          {
+            "target": [
+              "select"
+            ],
+            "summary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .name"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .name"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .glyph"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .name"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            ".kicker"
+          ],
+          [
+            ".p-5 > .phase-enter > div:nth-child(1) > div > p"
+          ],
+          [
+            "fieldset > .flex:nth-child(1) > .label"
+          ],
+          [
+            ".flex:nth-child(1) > label"
+          ],
+          [
+            "textarea"
+          ],
+          [
+            "div:nth-child(3) > div:nth-child(1) > label"
+          ],
+          [
+            "select"
+          ],
+          [
+            "div:nth-child(2) > label"
+          ],
+          [
+            "input[placeholder=\"IPA, tone markers\"]"
+          ],
+          [
+            ".sm.ghost.btn:nth-child(2)"
+          ],
+          [
+            ".flex:nth-child(4) > label"
+          ],
+          [
+            ".sm.ghost.btn:nth-child(5)"
+          ],
+          [
+            ".sm.ghost.btn:nth-child(6)"
+          ],
+          [
+            ".phase-enter > div:nth-child(1) > p"
+          ],
+          [
+            "div:nth-child(2) > .flex > .label"
+          ],
+          [
+            ".phase-enter > div:nth-child(2) > .flex > .font-mono"
+          ],
+          [
+            "input[placeholder=\"Search\u2026\"]"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(5)"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(6)"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(7)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample ka nesh lor\"]"
+          ],
+          [
+            ".glass-card:nth-child(1) > div:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(1) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample vel tor krash\"]"
+          ],
+          [
+            ".glass-card:nth-child(2) > div:nth-child(2)"
+          ],
+          [
+            "div:nth-child(2) > .glass-card:nth-child(2) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample ka ix mok\"]"
+          ],
+          [
+            ".glass-card:nth-child(3) > div:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(3) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample nesh-en shu\"]"
+          ],
+          [
+            ".glass-card:nth-child(4) > div:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(4) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample ka ven zo\"]"
+          ],
+          [
+            ".glass-card:nth-child(5) > div:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(5) > div:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(4) > .font-mono"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(1) > .flex:nth-child(1) > .confirmed.badge"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(1) > .flex:nth-child(2) > .font-mono"
+          ],
+          [
+            "button[aria-label=\"Delete sample sa ren ku vol\"]"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "size": {
+      "width": 1440,
+      "height": 900
+    },
+    "phase": "vocabulary",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".item:nth-child(5)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".crumb > span:nth-child(4)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .name"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            ".active > .glyph"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .name"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .glyph"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .name"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            ".kicker"
+          ],
+          [
+            "div:nth-child(1) > p"
+          ],
+          [
+            ".flex:nth-child(1) > .flex > .sm.btn:nth-child(1)"
+          ],
+          [
+            ".primary"
+          ],
+          [
+            ".xs.btn:nth-child(1) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(1) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(2) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(2) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(3) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(3) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(4) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(4) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(5) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(5) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(6) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(6) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(7) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(7) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(8) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(8) > span:nth-child(2)"
+          ],
+          [
+            ".xs.btn:nth-child(9) > span"
+          ],
+          [
+            "input[placeholder=\"Search dictionary\u2026\"]"
+          ],
+          [
+            ".ghost.xs.btn:nth-child(1)"
+          ],
+          [
+            ".glass-inner > .ghost.xs.btn:nth-child(2)"
+          ],
+          [
+            "summary"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(2) > .wt-confirmed.word-token"
+          ],
+          [
+            ".glass-card:nth-child(1) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(1) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(2) > .wt-confirmed.word-token"
+          ],
+          [
+            ".glass-card:nth-child(2) > .dim"
+          ],
+          [
+            ".expr-color > .glass-card:nth-child(2) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(3) > .flex:nth-child(2) > .wt-confirmed.word-token"
+          ],
+          [
+            ".glass-card:nth-child(3) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(3) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(4) > .flex:nth-child(2) > .wt-confirmed.word-token"
+          ],
+          [
+            ".glass-card:nth-child(4) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(4) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(5) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(5) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(5) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(6) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(6) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(6) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(7) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(7) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(7) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(7) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(7) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(8) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(8) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(8) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(8) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(8) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(9) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(9) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(9) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(9) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(9) > div:nth-child(4)"
+          ],
+          [
+            ".glass-card:nth-child(10) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(10) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(10) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(11) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(11) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(11) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            ".glass-card:nth-child(12) > .flex:nth-child(1) > .badge:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(12) > .flex:nth-child(1) > .badge:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(12) > .flex:nth-child(2) > .wt-probable.word-token"
+          ],
+          [
+            "h3"
+          ],
+          [
+            "section > p"
+          ],
+          [
+            ".flex:nth-child(2) > .label"
+          ],
+          [
+            ".flex:nth-child(2) > .ghost.xs.btn"
+          ],
+          [
+            ".flex:nth-child(3) > div:nth-child(1)"
+          ],
+          [
+            ".flex:nth-child(3) > .badge"
+          ],
+          [
+            ".phase-enter > .glass-card > div:nth-child(4)"
+          ],
+          [
+            ".flex:nth-child(5) > .badge:nth-child(1)"
+          ],
+          [
+            ".flex:nth-child(5) > .badge:nth-child(2)"
+          ],
+          [
+            "div:nth-child(6) > p"
+          ],
+          [
+            "div:nth-child(8) > .label"
+          ],
+          [
+            ".glass-card > div:nth-child(8) > div:nth-child(2)"
+          ],
+          [
+            "div:nth-child(9) > .label"
+          ],
+          [
+            "div:nth-child(9) > div:nth-child(2) > .glass-inner"
+          ],
+          [
+            "div:nth-child(10) > .label"
+          ],
+          [
+            ".glass-card > div:nth-child(10) > div:nth-child(2)"
+          ],
+          [
+            ".glass-inner > .flex > .label"
+          ],
+          [
+            ".glass-inner > div:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "#root > div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "size": {
+      "width": 1440,
+      "height": 900
+    },
+    "phase": "translation",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".item:nth-child(5)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 2 (foreground color: #3e424b, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".crumb > span:nth-child(4)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .name"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .name"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            ".active > .glyph"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .glyph"
+          ],
+          [
+            "div:nth-child(3) > .sidebar-item > .name"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            ".kicker"
+          ],
+          [
+            ".flex > div:nth-child(1) > p"
+          ],
+          [
+            ".flex > .flex:nth-child(1) > .dim"
+          ],
+          [
+            ".flex:nth-child(2) > .dim"
+          ],
+          [
+            ".flex:nth-child(3) > .dim"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(1)"
+          ],
+          [
+            ".xs.ghost.btn:nth-child(2)"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .label"
+          ],
+          [
+            "textarea"
+          ],
+          [
+            ".font-mono"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .label"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .dim"
+          ],
+          [
+            ".expr-color > span"
+          ],
+          [
+            ".flex:nth-child(3) > .sm.ghost.btn:nth-child(3)"
+          ],
+          [
+            ".glass-card:nth-child(3) > div > div > div:nth-child(1)"
+          ],
+          [
+            ".glass-card:nth-child(3) > div > div > div:nth-child(2)"
+          ],
+          [
+            "section > div > .flex > .label"
+          ],
+          [
+            "section > div > p"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "size": {
+      "width": 640,
+      "height": 400
+    },
+    "phase": "samples",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": [
+          {
+            "target": [
+              "select"
+            ],
+            "summary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .name"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .name"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            ".kicker"
+          ],
+          [
+            ".p-5 > .phase-enter > div:nth-child(1) > div > p"
+          ],
+          [
+            "fieldset > .flex:nth-child(1) > .label"
+          ],
+          [
+            ".flex:nth-child(1) > label"
+          ],
+          [
+            "textarea"
+          ],
+          [
+            "div:nth-child(3) > div:nth-child(1) > label"
+          ],
+          [
+            "select"
+          ],
+          [
+            "div:nth-child(2) > label"
+          ],
+          [
+            "input[placeholder=\"IPA, tone markers\"]"
+          ],
+          [
+            ".item:nth-child(1) > span:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".item:nth-child(5)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+          ],
+          [
+            "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+          ],
+          [
+            "div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "size": {
+      "width": 640,
+      "height": 400
+    },
+    "phase": "vocabulary",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".crumb > span:nth-child(4)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .name"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            ".active > .glyph"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .name"
+          ],
+          [
+            "button[data-tour=\"translation\"] > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            "div:nth-child(1) > p"
+          ],
+          [
+            ".xs.btn:nth-child(1) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(2) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(3) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(4) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(5) > span:nth-child(1)"
+          ],
+          [
+            ".xs.btn:nth-child(6) > span:nth-child(1)"
+          ],
+          [
+            "h3"
+          ],
+          [
+            "section > p"
+          ],
+          [
+            ".flex:nth-child(2) > .label"
+          ],
+          [
+            ".flex:nth-child(2) > .ghost.xs.btn"
+          ],
+          [
+            ".flex:nth-child(3) > div:nth-child(1)"
+          ],
+          [
+            ".flex:nth-child(3) > .badge"
+          ],
+          [
+            ".phase-enter > .glass-card > div:nth-child(4)"
+          ],
+          [
+            ".flex:nth-child(5) > .badge:nth-child(1)"
+          ],
+          [
+            ".flex:nth-child(5) > .badge:nth-child(2)"
+          ],
+          [
+            "div:nth-child(6) > p"
+          ],
+          [
+            ".item:nth-child(1) > span:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".item:nth-child(5)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+          ],
+          [
+            "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+          ],
+          [
+            "#root > div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "size": {
+      "width": 640,
+      "height": 400
+    },
+    "phase": "translation",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".item:nth-child(3)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(2)"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #5f6470, background color: #06070a, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      },
+      {
+        "id": "scrollable-region-focusable",
+        "impact": "serious",
+        "nodes": [
+          {
+            "target": [
+              ".expr-color"
+            ],
+            "summary": "Fix any of the following:\n  Element should have focusable content\n  Element should be focusable"
+          }
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".cur:nth-child(2)"
+          ],
+          [
+            ".crumb > span:nth-child(4)"
+          ],
+          [
+            ".cur:nth-child(5)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(2)"
+          ],
+          [
+            "button[title=\"Toggle AI chat (Shift+A)\"] > span:nth-child(3)"
+          ],
+          [
+            ".gap-1\\.5 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(2)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3)"
+          ],
+          [
+            ".gap-3 > span:nth-child(3) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(4)"
+          ],
+          [
+            ".gap-3 > span:nth-child(5)"
+          ],
+          [
+            "span:nth-child(5) > b"
+          ],
+          [
+            ".gap-3 > span:nth-child(6)"
+          ],
+          [
+            "span:nth-child(7)"
+          ],
+          [
+            "span:nth-child(7) > b"
+          ],
+          [
+            ".word"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .name"
+          ],
+          [
+            "button[data-tour=\"samples\"] > .num"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .name"
+          ],
+          [
+            "button[data-tour=\"numbers\"] > .num"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .name"
+          ],
+          [
+            "button[data-tour=\"vocabulary\"] > .num"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .name"
+          ],
+          [
+            "button[data-tour=\"grammar\"] > .num"
+          ],
+          [
+            ".active > .glyph"
+          ],
+          [
+            ".active > .name"
+          ],
+          [
+            ".active > .num"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .glyph"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .name"
+          ],
+          [
+            "button[data-tour=\"dashboard\"] > .num"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "em"
+          ],
+          [
+            ".kicker"
+          ],
+          [
+            ".flex > div:nth-child(1) > p"
+          ],
+          [
+            ".flex > .flex:nth-child(1) > .dim"
+          ],
+          [
+            ".flex:nth-child(2) > .dim"
+          ],
+          [
+            ".flex:nth-child(3) > .dim"
+          ],
+          [
+            ".glass-card:nth-child(1) > .flex:nth-child(1) > .label"
+          ],
+          [
+            ".glass-card:nth-child(2) > .flex:nth-child(1) > .label"
+          ],
+          [
+            ".item:nth-child(1) > span:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(4)"
+          ],
+          [
+            ".item:nth-child(5)"
+          ],
+          [
+            ".sep:nth-child(6)"
+          ],
+          [
+            "button[title=\"Toggle session log (L)\"] > span:nth-child(1)"
+          ],
+          [
+            "button[title=\"Toggle session log (L)\"] > span:nth-child(2)"
+          ],
+          [
+            ".sep:nth-child(10)"
+          ],
+          [
+            "button[title=\"Keyboard shortcuts (?)\"] > span:nth-child(1)"
+          ],
+          [
+            "div:nth-child(2) > .sm.btn"
+          ]
+        ]
+      }
+    ]
+  }
+]
