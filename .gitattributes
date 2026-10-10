@@ -34,3 +34,7 @@ docs/verification/w23-layers-*.png binary
 
 # Preserve the dependency checkpoint's audit bytes and verification identities.
 docs/verification/w23-deps-*.json -text whitespace=cr-at-eol
+
+# Preserve native Whisper responses and the audit/replay checkpoint byte identities.
+docs/verification/w23-stt-*.json -text whitespace=cr-at-eol
+docs/verification/w23-stt-replay.mts -text
