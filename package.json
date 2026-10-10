@@ -26,7 +26,7 @@
     "stage:runtime": "node scripts/stage-runtime.mjs",
     "test:public": "node scripts/build-public.mjs && playwright test --config playwright.public.config.ts",
     "lint": "npm run lint -w client && node scripts/check-scripts.mjs",
-    "test:tooling": "node --test tests/tooling/artifact-layout.test.mjs tests/tooling/dependency-security.test.mjs",
+    "test:tooling": "node --test tests/tooling/artifact-layout.test.mjs tests/tooling/dependency-security.test.mjs tests/tooling/desktop-request.test.mjs",
     "dataset:export": "tsx evaluation/src/export.ts",
     "evaluate": "tsx evaluation/src/runner.ts",
     "evaluate:induction": "tsx evaluation/src/induction/run.ts",

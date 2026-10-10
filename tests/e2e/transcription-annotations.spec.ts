@@ -63,7 +63,9 @@ test('W23 transcription histories preserve manual corrections through re-analysi
   const restarted = await read(); expect(restarted.audio_clips).toEqual(analyzed.audio_clips);
   const archive = await page.request.get(`${server.url}/api/archives/export/${profile.id}?revision=${restarted.revision}&sandbox=true`);
   expect(archive.ok()).toBe(true);
-  const previewResponse = await page.request.post(`${server.url}/api/archives/inspect`, { data: await archive.body(), headers: { 'Content-Type': 'application/octet-stream' } });
+  const archiveBytes = await archive.body();
+  await server.waitForArchiveCleanup();
+  const previewResponse = await page.request.post(`${server.url}/api/archives/inspect`, { data: archiveBytes, headers: { 'Content-Type': 'application/octet-stream' } });
   expect(previewResponse.status()).toBe(201);
   const preview = await previewResponse.json();
   const restoredResponse = await page.request.post(`${server.url}/api/archives/${preview.token}/restore`, { data: { mode: 'new' } });

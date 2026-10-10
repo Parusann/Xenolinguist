@@ -38,7 +38,9 @@ test('five-minute recording survives draft recovery, phone analysis, manual edit
   await page.screenshot({ path: test.info().outputPath('long-audio.png') });
   const exported = await page.request.get(`${server.url}/api/archives/export/${profile.id}?revision=${saved.revision}&sandbox=true`);
   expect(exported.ok()).toBe(true);
-  const inspected = await page.request.post(`${server.url}/api/archives/inspect`, { data: await exported.body(), headers: { 'Content-Type': 'application/octet-stream' } });
+  const archiveBytes = await exported.body();
+  await server.waitForArchiveCleanup();
+  const inspected = await page.request.post(`${server.url}/api/archives/inspect`, { data: archiveBytes, headers: { 'Content-Type': 'application/octet-stream' } });
   expect(inspected.status()).toBe(201);
   const preview = await inspected.json();
   const response = await page.request.post(`${server.url}/api/archives/${preview.token}/restore`, { data: { mode: 'new' } });

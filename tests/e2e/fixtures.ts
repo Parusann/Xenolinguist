@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { test as base, expect, type Page } from '@playwright/test';
 import { fork, type ChildProcess } from 'node:child_process';
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdtemp, writeFile, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
@@ -49,6 +49,9 @@ class IsolatedServer {
     });
   }
   async restart() { await this.stop(); await this.start(); }
+  async waitForArchiveCleanup() {
+    await expect.poll(() => readdir(path.join(this.dataDir, 'archive-staging'))).toEqual([]);
+  }
 }
 
 export const test = base.extend<{ server: IsolatedServer }>({
