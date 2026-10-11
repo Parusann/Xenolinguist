@@ -1,4 +1,5 @@
 import { verifyTranscription } from './verify-transcription.mjs';
+import { verifyDesktopRecovery } from './verify-desktop-recovery.mjs';
 import { verifyArtifact } from './verify-artifact-layout.mjs';
 import { verifyPhoneAnalysis, repeatPhoneFixture, verifyPhoneChunks } from './verify-phone-analysis.mjs';
 import { createRequire } from 'node:module';
@@ -622,7 +623,9 @@ try {
     await app.close(); app = undefined;
     await rename(hiddenModel.hidden, model); hiddenModel = undefined;
   }
-  record.acceptancePassed = record.checks.ipa.status === 200 && record.checks.stt.status === 200 && record.checks.tts.status === 200
+  if (app) { await app.close(); app = undefined; }
+  record.checks.desktopRecovery = await verifyDesktopRecovery(resolved, wav);
+  record.acceptancePassed = record.checks.desktopRecovery.passed && record.checks.ipa.status === 200 && record.checks.stt.status === 200 && record.checks.tts.status === 200
     && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
     && record.checks.sampleOnDisk && record.checks.loadedWorkbench
     && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed

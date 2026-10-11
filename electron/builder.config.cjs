@@ -2,6 +2,7 @@
 module.exports = {
   appId: 'sh.xenolinguist.app',
   productName: 'Xenolinguist',
+  forceCodeSigning: process.env.XENO_REQUIRE_SIGNING === '1',
   directories: { output: 'release' },
   beforePack: async context => {
     if (context.electronPlatformName !== 'win32' || context.arch !== 1) throw new Error('Native asset manifest currently supports Windows x64 only');

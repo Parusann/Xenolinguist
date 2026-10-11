@@ -99,3 +99,33 @@ jobs:
             ${{ runner.temp }}/release-harness/*.png
             ${{ runner.temp }}/release-harness/artifact-manifest.json
           retention-days: 30
+  verify-upgrade:
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-installer
+          path: ${{ runner.temp }}/installer
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-harness
+          path: ${{ runner.temp }}/release-harness
+      - run: npm ci --ignore-scripts
+        working-directory: ${{ runner.temp }}/release-harness
+      - name: Upgrade published installer and verify migration, recovery and uninstall
+        shell: pwsh
+        run: |
+          $installer = @(Get-ChildItem -LiteralPath "$env:RUNNER_TEMP/installer" -Filter '*.exe')
+          if ($installer.Count -ne 1) { throw 'Expected one candidate installer' }
+          & "$env:RUNNER_TEMP/release-harness/scripts/verify-upgrade.ps1" -Installer $installer[0].FullName -Harness "$env:RUNNER_TEMP/release-harness"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: upgrade-acceptance-result
+          path: ${{ runner.temp }}/release-harness/upgrade-*.json
+          retention-days: 30

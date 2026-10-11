@@ -4,7 +4,7 @@
 
 The latest published installer verified through GitHub release metadata on September 13, 2026 is [v1.0.0](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0), published June 14, 2026. Its asset is [Xenolinguist-Setup-1.0.0.exe](https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe), 440,684,361 bytes, SHA256 `5974906a74a11eb7d4e14c0923ec5ff870e5669ad050b832b10b773e8491c6b5`. The release is unsigned. Metadata/HTTP reachability checks are not installer execution tests.
 
-The `implementation/reliability` preview contains W01–W11 changes that are absent from that installer. The package version is still 1.0.0; identify preview builds by source revision, working-file hashes and artifact hashes in [verification records](verification/), not by the package version alone. The published tag's startup code can pull the default Ollama model automatically. W10 removed that behavior from the preview.
+The `implementation/reliability` candidate contains W01–W25 changes absent from that installer. The package version is 1.1.0-rc.1; identify preview builds by source revision, working-file hashes and artifact hashes in [verification records](verification/), not by the package version alone. The published tag's startup code can pull the default Ollama model automatically. W10 removed that behavior from the preview.
 
 The old installer predates the repaired native dependency layout, durable saves and audio drafts, authenticated local API, verified local model selection and cancellable jobs. The [pre-implementation baseline](testing-baseline.json) reproduced phone-loading failure in a separately packaged artifact. Later successful Windows probes verify their own artifacts; they do not retroactively certify the old installer.
 
@@ -49,10 +49,18 @@ A commit/push to the implementation branch does not publish an installer. Before
 4. Publish the exact checked artifact and updater metadata through the release workflow with the required GitHub credentials. Never put credentials into source or logs.
 5. Update `client/src/lib/site.ts` release version, date, size and URL together, and update its corresponding limitations, README and release notes. Verify the actual asset destination before deploying Pages.
 
-The desktop calls `electron-updater.checkForUpdatesAndNotify()` in packaged operation. This uses the network; successful update/rollback behavior is not certified by the local runtime tests. W12/W25 contain the broader release gates.
+The candidate never checks for or downloads updates automatically. **Desktop → Check for updates** performs an explicit metadata request and downloads nothing. Launch `Xenolinguist.exe --strict-offline` to block update checks, model downloads, non-loopback Chromium requests and OS voice fallback. See the [release checklist](release-checklist.md) for tested boundaries and exclusions.
 
 ## Native maintenance
 
 `vendor/model-manifest.json` and `vendor/THIRD_PARTY.md` are authoritative for shipped bytes and notices. Upgrade the whisper binary, dependent DLLs and model as a coherent set; update hashes and rerun native verification. Do not copy arbitrary latest binaries over manifested assets or claim reproducibility of a conversion whose original tool/model revision is unknown.
 
 Windows packaging can require privileges for electron-builder's helper symlinks. Use an appropriately configured Windows build environment and record failures; do not bypass failed asset or runtime checks. No signed or cross-platform release is produced by this documentation update.
+
+## W25 recovery and candidate acceptance
+
+The desktop opens the workbench directly. A backend exit invalidates its port/credential while the trusted renderer can still retain local drafts. **Restart local backend** first makes the window inert, waits for text/audio draft storage, and refuses recovery if local persistence fails. A single explicit attempt obtains a fresh port and secret, updates existing security handlers, and reopens the selector. There is no automatic crash loop. Recovered mutations use the existing persisted idempotency ledger. Startup timeout kills the stalled child; a first-launch failure remains a visible restart-the-app page.
+
+The local packaged recovery probe passes legacy read/write/backup-conflict checks, forced backend termination, post-crash typing and credential rejection, actual Electron 200% zoom/keyboard navigation and strict-offline phone/transcription execution. The final installed workflow additionally requires native synthesis offline. Windows/Linux source gates pass locally with 528 unit tests, 11 tooling checks and three gated native unit cases. Fresh installer and published-v1 upgrade/uninstall CI results must be attached to the candidate; this paragraph does not predeclare those outcomes.
+
+The upgrade job uses disposable GitHub Windows machines, verifies the original v1.0.0 installer checksum, installs it and then the candidate in the same non-ASCII directory, runs controlled legacy migration/recovery checks, and uninstalls. It never touches the owner's installed application or projects. `scripts/release-manifest.mjs` binds the retained installer/payload and successful installed/upgrade records to source/lock identities and workflow links. Current local executable inspection reports **NotSigned**.

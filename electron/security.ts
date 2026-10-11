@@ -14,8 +14,15 @@ export function trustedSender(event: IpcMainInvokeEvent, win: BrowserWindow | nu
   return !!win && event.sender === win.webContents && event.senderFrame === win.webContents.mainFrame
     && sameOrigin(event.senderFrame.url, origin);
 }
-export function secureWindow(win: BrowserWindow, origin: string, secret?: string) {
+export function localNetworkUrl(value: string) {
+  try { const url = new URL(value); return ['http:', 'https:', 'ws:', 'wss:'].includes(url.protocol) && ['127.0.0.1', '[::1]', 'localhost'].includes(url.hostname) && !url.username && !url.password; } catch { return false; }
+}
+export function secureWindow(win: BrowserWindow, origin: string, secret?: string, strictOffline = false) {
   const contents = win.webContents, session = contents.session;
+  if (strictOffline) session.webRequest.onBeforeRequest((details, callback) => {
+    const network = /^(https?|wss?):/i.test(details.url);
+    callback({ cancel: network && !localNetworkUrl(details.url) });
+  });
   session.webRequest.onBeforeSendHeaders((details, callback) => {
     const headers = { ...details.requestHeaders };
     for (const key of Object.keys(headers)) if (key.toLowerCase() === 'x-xeno-session') delete headers[key];
@@ -25,7 +32,7 @@ export function secureWindow(win: BrowserWindow, origin: string, secret?: string
     callback({ requestHeaders: headers });
   });
   const external = (url: string) => {
-    if (sameOrigin(contents.getURL(), origin) && allowedExternal(url)) void shell.openExternal(url).catch(() => {});
+    if (!strictOffline && sameOrigin(contents.getURL(), origin) && allowedExternal(url)) void shell.openExternal(url).catch(() => {});
   };
   contents.on('will-navigate', (event, url) => { if (!sameOrigin(url, origin)) { event.preventDefault(); external(url); } });
   contents.on('will-redirect', (event, url) => { if (!sameOrigin(url, origin)) event.preventDefault(); });
@@ -38,4 +45,5 @@ export function secureWindow(win: BrowserWindow, origin: string, secret?: string
   session.setPermissionRequestHandler((sender, permission, callback, details) => callback(
     sender === contents && permission === 'media' && details.isMainFrame && sameOrigin(details.requestingUrl, origin)
       && sameOrigin(contents.getURL(), origin) && 'mediaTypes' in details && details.mediaTypes?.length === 1 && details.mediaTypes[0] === 'audio'));
+  return { update(nextOrigin: string, nextSecret?: string) { origin = nextOrigin; secret = nextSecret; } };
 }

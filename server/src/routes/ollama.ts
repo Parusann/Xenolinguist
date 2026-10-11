@@ -11,6 +11,7 @@ ollamaRouter.get('/status', async (_req, res, next) => { try { res.json(await ge
 ollamaRouter.get('/models', async (_req, res, next) => { try { res.json(await getModelInventory(true)); } catch (error) { next(error); } });
 ollamaRouter.get('/capabilities', async (_req, res, next) => { try { res.json({ ...await runtimeCapabilities(), setupModels }); } catch (error) { next(error); } });
 ollamaRouter.post('/pull', (req, res, next) => {
+  if (process.env.XENO_STRICT_OFFLINE === '1') return res.status(403).json({ error: 'Model downloads are disabled in strict offline mode', code: 'STRICT_OFFLINE' });
   const model = setupModels.find(item => item.name === req.body?.model);
   if (!model || req.body?.confirmed !== true) return res.status(400).json({ error: 'Choose a supported local model and confirm its download' });
   if (jobs.list().some(job => job.lane === 'download' && ['queued', 'running'].includes(job.state))) return res.status(409).json({ error: 'A model download is already active' });

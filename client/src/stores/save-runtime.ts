@@ -22,7 +22,8 @@ desktop?.onFlushRequest?.(request => {
   const requestId = (request as { requestId?: unknown })?.requestId
   if (typeof requestId !== 'string') return
   document.documentElement.inert = true
-  void Promise.all([getSaveQueue().flush(), flushAudioDrafts()]).then(results => desktop.reportFlushResult?.({ requestId, saved: results.every(Boolean) })).catch(() => { document.documentElement.inert = false })
+  const localOnly = (request as { localOnly?: unknown }).localOnly === true
+  void Promise.all([localOnly ? getSaveQueue().flushLocal() : getSaveQueue().flush(), flushAudioDrafts()]).then(results => desktop.reportFlushResult?.({ requestId, saved: results.every(Boolean) })).catch(() => { document.documentElement.inert = false })
 })
 desktop?.onCloseCancelled?.(() => { document.documentElement.inert = false })
 window.addEventListener('online', () => { if (queue) void queue.flush() })

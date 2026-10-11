@@ -1,6 +1,6 @@
 {
   "name": "xenolinguist",
-  "version": "1.0.0",
+  "version": "1.1.0-rc.1",
   "private": true,
   "main": "electron/dist/main.cjs",
   "workspaces": [
@@ -57,5 +57,7 @@
   "overrides": {
     "qs": "6.16.0",
     "shell-quote": "1.11.0"
-  }
+  },
+  "author": "Parusan Natheeswaran",
+  "description": "Local linguistic research workbench with traceable symbolic inference"
 }

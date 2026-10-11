@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest';
 vi.mock('electron', () => ({ shell: { openExternal: vi.fn(async () => {}) } }));
-import { allowedExternal, sameOrigin, secureWindow, trustedSender } from '../../../electron/security.js';
+import { allowedExternal, localNetworkUrl, sameOrigin, secureWindow, trustedSender } from '../../../electron/security.js';
 import type { BrowserWindow, IpcMainInvokeEvent } from 'electron';
 
 it('validates origins and external URLs without prefix matching', () => {
@@ -16,7 +16,7 @@ it('restricts IPC, credential injection, navigation and permissions to the trust
     session: { webRequest: { onBeforeSendHeaders: (fn: any) => { handlers.headers = fn; } }, setPermissionCheckHandler: (fn: any) => { handlers.check = fn; }, setPermissionRequestHandler: (fn: any) => { handlers.permission = fn; } } };
   const win = { webContents: contents } as unknown as BrowserWindow;
   const origin = 'http://127.0.0.1:3001', secret = 'a'.repeat(64);
-  secureWindow(win, origin, secret);
+  const security = secureWindow(win, origin, secret);
   const event = { sender: contents, senderFrame: contents.mainFrame } as unknown as IpcMainInvokeEvent;
   expect(trustedSender(event, win, origin)).toBe(true);
   expect(trustedSender({ ...event, senderFrame: { url: contents.mainFrame.url } } as IpcMainInvokeEvent, win, origin)).toBe(false);
@@ -38,4 +38,19 @@ it('restricts IPC, credential injection, navigation and permissions to the trust
     expect(result).toHaveBeenCalledWith(Object.keys(patch).length === 0);
   }
   const result = vi.fn(); handlers.permission(null, 'media', result, permission); expect(result).toHaveBeenCalledWith(false);
+  security.update('http://127.0.0.1:4001', 'b'.repeat(64));
+  const stale = vi.fn(); handlers.headers(details, stale);
+  expect(Object.values(stale.mock.calls[0][0].requestHeaders)).not.toContain(secret);
+  const moved = { preventDefault: vi.fn() }; handlers['will-navigate'](moved, 'http://127.0.0.1:4001/app');
+  expect(moved.preventDefault).not.toHaveBeenCalled();
+  contents.mainFrame.url = 'http://127.0.0.1:4001/app';
+  const fresh = vi.fn(); handlers.headers({ ...details, url: 'http://127.0.0.1:4001/api/health' }, fresh);
+  expect(Object.values(fresh.mock.calls[0][0].requestHeaders)).toContain('b'.repeat(64));
+  security.update('http://127.0.0.1:4001');
+  const dead = vi.fn(); handlers.headers({ ...details, url: 'http://127.0.0.1:4001/api/health' }, dead);
+  expect(Object.values(dead.mock.calls[0][0].requestHeaders)).not.toContain('b'.repeat(64));
+});
+it('restricts strict-offline network URLs to explicit loopback hosts', () => {
+  for (const url of ['http://127.0.0.1:4/api', 'http://localhost:11434', 'ws://[::1]:3']) expect(localNetworkUrl(url)).toBe(true);
+  for (const url of ['https://example.com', 'http://127.0.0.1.evil', 'http://user@localhost', 'file:///tmp/data', 'data:text/plain,x']) expect(localNetworkUrl(url)).toBe(false);
 });

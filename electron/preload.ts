@@ -9,6 +9,11 @@ const subscribe = (channel: string) => (cb: (data: unknown) => void) => {
 
 contextBridge.exposeInMainWorld('xeno', {
   platform: process.platform,
+  strictOffline: process.argv.includes('--xeno-strict-offline'),
+  backendStatus: () => ipcRenderer.invoke('backend:status'),
+  restartBackend: () => ipcRenderer.invoke('backend:restart'),
+  onBackendState: subscribe('backend:state'),
+  checkUpdates: () => ipcRenderer.invoke('updates:check'),
   versions: {
     electron: process.versions.electron,
     node: process.versions.node,

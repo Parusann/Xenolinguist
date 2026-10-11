@@ -120,6 +120,13 @@ export class SaveQueue {
       return [...this.states.values()].every(state => !state.record.batches.length && state.status.durable)
     } catch { return false }
   }
+  async flushLocal(): Promise<boolean> {
+    try {
+      await this.start();
+      await Promise.all([...this.states.values()].map(state => state.writes));
+      return [...this.states.values()].every(state => state.status.durable);
+    } catch { return false }
+  }
   private pump(id: string): Promise<void> {
     const state = this.states.get(id)!
     if (state.busy) return state.busy

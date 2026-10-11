@@ -39,6 +39,17 @@ beforeEach(() => vi.useFakeTimers())
 afterEach(() => { vi.clearAllTimers(); vi.useRealTimers() })
 
 describe('durable save queue', () => {
+  it('retains drafts and pending mutations locally for a backend restart without replaying them', async () => {
+    const a = profile(), store = new MemoryStore(), remote = backend(a)
+    const queue = new SaveQueue(remote.api, store, 60_000); await queue.load(a)
+    queue.edit(a, { ...a, description: 'pending across crash' }); queue.setDraft(a.id, 'translation.alien', 'retained')
+    expect(await queue.flushLocal()).toBe(true); expect(remote.api.mutate).not.toHaveBeenCalled()
+    const restored = new SaveQueue(remote.api, store, 60_000); await restored.start()
+    expect(restored.drafts(a.id)['translation.alien']).toBe('retained'); expect(await restored.flush()).toBe(true)
+    expect(remote.data.get(a.id)?.description).toBe('pending across crash')
+    store.fail = true; queue.setDraft(a.id, 'translation.alien', 'must not reload')
+    expect(await queue.flushLocal()).toBe(false)
+  })
   it('snapshots mutable queue containers while later drafts and edits change', async () => {
     const a = profile(), remote = backend(a), writes: SaveQueueRecord[] = []
     let release!: () => void
