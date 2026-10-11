@@ -1,6 +1,6 @@
 # Xenolinguist feature reference
 
-This document describes the `implementation/reliability` development preview through W11. The published v1.0.0 installer from June 14, 2026 predates the reliability work. Package version alone does not identify the tested source: use [implementation progress](implementation-progress.md) and the hashes in [verification records](verification/). The public website deploys from `main` separately.
+This document describes the `implementation/reliability` 1.1.0-rc.1 candidate through W26. The published v1.0.0 installer from June 14, 2026 predates the reliability work. Package version alone does not identify the tested source: use [implementation progress](implementation-progress.md) and the hashes in [verification records](verification/). The public website deploys from `main` separately.
 
 ## Architecture
 
@@ -32,7 +32,7 @@ The workbench provides profile selection/creation, a shared demo, six phases, a 
 | Samples | Add/edit source text, translation notes and phonetic notes; attach recordings; retain failed saves and drafts | A transcription or decoded flag is not verification of a meaning |
 | Numbers | Infer arithmetic grammars, predict number forms/trees, retain alternatives and supply distinguishing observations | Fit and validation counts are separate; no calibrated confidence or automatic acceptance |
 | Vocabulary | Edit words, explicit senses, accepted aliases, examples, parts of speech and optional 0–100 user belief | Repeated assertions do not become independent evidence |
-| Grammar | Record rule text and evidence strings; request advisory model analysis | Rule text is not compiled or automatically validated |
+| Grammar | Record prose or typed executable rules, inspect derivations, compare candidates and review proposals | Prose never executes; supplied priors and bounded grammar remain explicit |
 | Translation | Dictionary lookup in source order with candidates and unresolved tokens; optional model analysis | Typed morphology and one-clause composition are bounded; notebook prose never executes. General syntax and script-specific segmentation are unsupported |
 | Dashboard | Separate observation/assertion counts, user-belief counts, saved metric history and guidance | No defensible “language decoded” percentage or evaluated coverage |
 
@@ -40,7 +40,7 @@ The workbench provides profile selection/creation, a shared demo, six phases, a 
 
 ## Audio lifecycle
 
-Original bytes are staged as immutable assets and identified by SHA256. A browser worker prepares a separate mono 16 kHz PCM16 analysis copy. Sample/clip references are saved atomically with the profile mutation. Draft recording/preparation state survives interruption; analysis is explicit and can be retried without losing the original. Saved assets support playback, original download, segment/word linking and delete/undo. Physical file garbage collection and a complete audio archive are unfinished.
+Original bytes are staged as immutable assets and identified by SHA256. A browser worker prepares a separate mono 16 kHz PCM16 analysis copy. Sample/clip references are saved atomically with the profile mutation. Draft recording/preparation state survives interruption; analysis is explicit and can be retried without losing the original. Saved assets support playback, original download, segment/word linking and delete/undo. Portable archives retain saved audio and annotations. Physical file garbage collection remains unfinished.
 
 Tested paths include a PCM16 WAV fixture and browser-prepared WebM recording. Browser decoding depends on codec support; arbitrary audio formats are not guaranteed. The phone API strictly validates RIFF/WAVE mono PCM16 at 16 kHz, 25 ms–300 seconds. Imports retain the 32 MiB cap; microphone capture and Whisper remain limited to two minutes. Longer phone requests use the shared cancellable queue with a ten-minute total deadline. Phone output is approximate **TIMIT ARPABET**, not strict IPA, from an English-trained model with roughly 20 ms timing resolution. No universal phoneme or click-consonant accuracy claim is supported.
 
@@ -106,7 +106,7 @@ See [Unicode lexicon](unicode-lexicon.md) for normalization, source offsets, pro
 [Executable typed grammar](typed-grammar.md) describes rule editing, bounded parsing, meaning trees, generation and manual-demo provenance.
 
 
-[Grounded rule learning](grounded-induction.md) adds known-meaning sample annotation, fit-only description-length search, independent validation, reviewable proposals and explicit acceptance. It executes in a cancellable worker and retains alternative rules, support and rejection reasons. Accepted rules/evidence survive `.xeno` restoration; pending grounding annotations remain local drafts until the W20 evidence model.
+[Grounded rule learning](grounded-induction.md) adds known-meaning sample annotation, fit-only description-length search, independent validation, reviewable proposals and explicit acceptance. It executes in a cancellable worker and retains alternative rules, support and rejection reasons. Accepted rules/evidence survive `.xeno` restoration; pending grounding annotations remain local drafts; committed W20 source captures have separate provenance.
 
 
 [Number grammar inference](number-grammar.md) uses a bounded worker, explicit atoms/addition/multiplication, independently selected validation mappings and disagreement questions. Predicted forms are never silently added as observed evidence.
@@ -115,3 +115,9 @@ See [Unicode lexicon](unicode-lexicon.md) for normalization, source offsets, pro
 ## Research evidence
 
 Field Log can retain immutable source captures, append interpretation corrections, compare typed hypotheses, and link supporting, contradicting or ambiguous evidence. Vocabulary, grammar and translation inspectors expose these links. Saved symbolic derivations retain their rules, source spans and meaning trees; dependency changes mark old results stale. The server checks exact replay and supplied-target outcomes. Research records survive portable archives, including reference remapping. See [research evidence](research-evidence.md) for migration, score definitions and limitations.
+
+## Candidate engineering and evidence
+
+[Active elicitation](active-elicitation.md) retains grounded questions, answers and declines. [Research proposals](research-proposals.md) validates bounded model suggestions before review. [Acoustic results](acoustic-results.md) records the separately licensed 24-recording English pilot, including failures. [Performance](performance.md) records 100/1,000/10,000-item measurements, pagination and accessibility scope.
+
+The desktop supports explicit backend recovery after locally retaining drafts, rotated credentials and manual update checks without automatic downloads. `--strict-offline` blocks app network features and browser/OS voice fallback. Actual installer upgrade/uninstall and exclusions belong to the [release checklist](release-checklist.md). See [architecture](architecture.md), [benchmark map](benchmarks.md) and [demo](demo-script.md) for review entry points.

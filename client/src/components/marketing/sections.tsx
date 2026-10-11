@@ -5,11 +5,11 @@ import { PRIMARY_LABEL, REPO_URL, SOURCE_URL, SOURCE_REVISION } from '@/lib/site
 
 const PHASE_DEFS = [
   { num: '01', glyph: '{ }', name: 'Samples', desc: 'Save text, context and original recordings. Request audio analysis when needed.' },
-  { num: '02', glyph: '#', name: 'Numbers', desc: 'Map words to integers. Explore candidate bases with visible support and ties.' },
+  { num: '02', glyph: '#', name: 'Numbers', desc: 'Test bounded arithmetic grammars, inspect composition trees and ask distinguishing questions.' },
   { num: '03', glyph: 'Aa', name: 'Vocabulary', desc: 'Record meanings, examples and optional user belief. A rating is not measured accuracy.' },
-  { num: '04', glyph: '⟨⟩', name: 'Grammar', desc: 'Write grammar notes and supporting examples. Review local-model suggestions yourself.' },
-  { num: '05', glyph: '⇄', name: 'Translation', desc: 'Look up known words in source order. Unknown forms remain unresolved; grammar is not applied automatically.' },
-  { num: '06', glyph: '◈', name: 'Dashboard', desc: 'Review content counts and saved metric history. Export profile JSON or dictionary CSV; audio files are separate.' },
+  { num: '04', glyph: '⟨⟩', name: 'Grammar', desc: 'Compare typed rules, learn from grounded examples and review proposed changes with evidence.' },
+  { num: '05', glyph: '⇄', name: 'Translation', desc: 'Keep lexical glosses, symbolic meaning trees and optional model output separate. Inspect each derivation.' },
+  { num: '06', glyph: '◈', name: 'Dashboard', desc: 'Review saved metrics and export verified .xeno archives with recordings. Counts are not accuracy.' },
 ]
 
 export function PhasesSection() {
@@ -65,8 +65,9 @@ export function PrivacySection() {
     <div className="big-quote">Keep your corpus<br /><em>on your own machine.</em></div>
     <p className="section-sub">Profiles and recordings are stored locally. In the implementation preview, generation accepts verified local completion models and rejects cloud-backed metadata. This depends on an accurately reporting local Ollama daemon.</p>
     <p className="download-note">Offline work requires installed application assets and, for AI, a downloaded model and running Ollama. Installation, model downloads, external links and desktop update checks use the network. OS/browser speech fallback depends on the selected voice. The static website is hosted on GitHub Pages; its dictionary widget does not send your text to a server.</p>
-    <p className="download-note">JSON exports contain profile data and audio references, not recording bytes. A complete portable archive, reproducible language benchmarks and a deterministic language compiler are roadmap work.</p>
+    <p className="download-note">The candidate includes portable .xeno archives, a deterministic compiler and frozen benchmarks with retained failures. Strict offline mode disables update checks, model downloads and OS voice fallback. The public installer remains the older version identified below.</p>
     <a href={`${SOURCE_URL}/docs/limitations.md`} target="_blank" rel="noreferrer">Read the current limitations →</a>
+    <p><a href={`${SOURCE_URL}/docs/technical-case-study.md`} target="_blank" rel="noreferrer">Technical case study</a> · <a href={`${SOURCE_URL}/docs/benchmarks.md`} target="_blank" rel="noreferrer">Reproduce the benchmarks</a> · <a href={`${SOURCE_URL}/docs/demo-script.md`} target="_blank" rel="noreferrer">Three-minute demonstration</a></p>
   </div></section>
 }
 

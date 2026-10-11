@@ -8,11 +8,15 @@ A local desktop workbench for constructed-language exploration: collect text and
 
 **Published installer:** [v1.0.0 for Windows x64](https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe), published June 14, 2026, 440,684,361 bytes, unsigned. [Release details](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0).
 
-**Current development:** [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). The implementation improvements described below are **not in that published installer**. The package version remains 1.0.0 during development; source revision and retained verification records identify the tested builds. No new installer has been released as part of these changes.
+**Current development:** [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). The implementation improvements described below are **not in that published installer**. The candidate package version is 1.1.0-rc.1; source revision and retained verification records identify the tested builds. No new installer has been released as part of these changes.
 
 The old installer predates the repaired phone runtime, revision-checked saves, recovery, authenticated local API and controlled model setup. It can attempt an automatic Ollama model download. The pre-implementation packaged baseline failed phone analysis; that baseline is a separate artifact and does not certify the published installer. Windows may identify the unsigned installer as an unknown publisher. Review the [release boundary](docs/desktop-release.md) before installing.
 
 [Public website](https://parusann.github.io/Xenolinguist/) is deployed from `main`; changes on the implementation branch appear there only after deployment. Its browser dictionary demonstration needs no backend or model.
+
+## Inspect the project in three minutes
+
+Start with the [recorded demonstration and reproducible command](docs/demo-script.md), then inspect the [architecture/source map](docs/architecture.md), [technical case study](docs/technical-case-study.md) and [benchmark index](docs/benchmarks.md). The useful evidence includes both successful symbolic composition and failed model proposals; they are not combined into an accuracy claim. [Release readiness](docs/release-checklist.md) separates the candidate from the public installer.
 
 ## What the implementation does
 
@@ -31,9 +35,7 @@ Deterministic practice uses an executable, bounded language compiler with privat
 
 The Eridian seed is a versioned fictional teaching corpus. The app, public dictionary widget and illustrative hero examples derive their meanings from the same source. Existing saved demo profiles are not overwritten by a seed update.
 
-![Eridian workbench with chat unavailable](docs/screenshots/w11-workbench.png)
-
-*W11 browser workbench: the shared fictional demo with manual work available and chat not ready. This is the implementation preview, not the published installer.*
+[Watch the reproducible three-minute demonstration](docs/demo-script.md): compare plural hypotheses, record one discriminating answer, review the rule and derive a withheld form. The run retains its seed and result manifest.
 
 ## Engineering behind the interface
 
@@ -67,9 +69,9 @@ Windows x64 is the only manifested native target. An independent Windows CI job 
 
 Manual text, dictionary and grammar work do not require Ollama. For model assistance, install/start [Ollama](https://ollama.com), then use **Runtime & setup** to select an installed, verified local completion model. Downloads require an explicit click in the preview. The default `gemma4:e4b` is about 9.61 GB; optional `llama3.2:3b` is about 2.02 GB. Allow additional temporary disk space. Model speed and memory requirements depend on hardware; no broad quality ranking is established.
 
-Native audio uses bundled eSpeak NG, whisper.cpp and a wav2vec2 CTC model. The phone endpoint accepts mono PCM16 RIFF/WAVE at 16 kHz, 25 ms–120 seconds, and emits approximate **TIMIT ARPABET** from an English-trained model. It is not strict IPA or a universal/click-consonant recognizer. Browser-decodable WAV/WebM recordings are prepared for analysis; codec support varies. See [phone model notes](docs/ipa-model-notes.md) and [third-party provenance](vendor/THIRD_PARTY.md).
+Native audio uses bundled eSpeak NG, whisper.cpp and a wav2vec2 CTC model. The phone endpoint accepts mono PCM16 RIFF/WAVE at 16 kHz, 25 ms–300 seconds (Whisper and microphone capture remain limited to two minutes), and emits approximate **TIMIT ARPABET** from an English-trained model. It is not strict IPA or a universal/click-consonant recognizer. Browser-decodable WAV/WebM recordings are prepared for analysis; codec support varies. See [phone model notes](docs/ipa-model-notes.md) and [third-party provenance](vendor/THIRD_PARTY.md).
 
-Local work can run offline once assets and any selected model are installed. Installation, downloads, external links and desktop update checks use the network. Browser/OS speech fallback depends on the selected voice. Local-model checks rely on accurate Ollama metadata. This is not an absolute guarantee against all network activity on the host.
+Local work can run offline once assets and any selected model are installed. Launch the candidate with `--strict-offline` to disable model downloads, manual update checks, non-loopback Chromium requests and OS voice fallback. Updates never download automatically. Local-model checks rely on accurate Ollama metadata; this is an application policy, not a host firewall. See [release scope](docs/release-checklist.md).
 
 ## Build and verify
 
