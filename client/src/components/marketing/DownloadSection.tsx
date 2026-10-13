@@ -12,12 +12,12 @@ export function DownloadSection() {
       <div className="download-links"><a href={`${REPO_URL}/releases/tag/${RELEASE.tag}`} target="_blank" rel="noreferrer">v{RELEASE.version} release details →</a><a href={`${SOURCE_URL}/docs/desktop-release.md`} target="_blank" rel="noreferrer">Build and verification guide →</a></div>
       <h3>Implementation preview · source {SOURCE_REVISION}</h3>
       <ul className="download-list">
-        <li>Verified locally as an unpacked Windows x64 app; a new installer is still pending.</li>
+        <li>Windows x64 candidate: independent installer and upgrade checks are linked in the build guide. The public download remains v1.0.0.</li>
         <li>Manual text, dictionary and grammar work require no language model.</li>
         <li>AI needs a running local Ollama service and an eligible completion model. Downloads are explicit: default gemma4:e4b is about 9.61 GB; optional llama3.2:3b is about 2.02 GB, with additional temporary disk space needed.</li>
         <li>Native audio needs the manifested Windows assets. Phones are approximate TIMIT ARPABET, not universal IPA.</li>
         <li>Offline operation begins after setup. Downloads and update checks require a network connection.</li>
-        <li>Profile JSON does not contain recording bytes; keep original audio separately.</li>
+        <li>Use .xeno archives to back up projects with saved recordings. Standalone profile JSON does not contain recording bytes.</li>
       </ul>
       <p className="download-note">Install Ollama from <a href="https://ollama.com" target="_blank" rel="noreferrer">its official website</a>. Model performance depends on available memory and hardware; the smaller option has not passed a broad quality benchmark.</p>
     </div>
