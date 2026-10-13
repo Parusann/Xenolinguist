@@ -1,9 +1,14 @@
 name: Deploy public site to Pages
 
 on:
-  push:
-    branches: [main]
+  # Deploy from main (the protected Pages environment) while the reviewed
+  # application source remains on the implementation branch.
   workflow_dispatch:
+    inputs:
+      source_sha:
+        description: 'Full reviewed implementation commit SHA to build and publish'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -18,31 +23,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Require an immutable source revision
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+        run: '[[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]'
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.source_sha }}
       - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: '24'
           cache: npm
+      - name: Record deployed source
+        run: git rev-parse HEAD >> "$GITHUB_STEP_SUMMARY"
       - run: npm ci
-      - name: Resolve latest installer URL
-        id: dl
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          URL=$(gh api repos/${{ github.repository }}/releases/latest \
-            --jq '.assets[] | select(.name|endswith(".exe")) | .browser_download_url' \
-            2>/dev/null | head -1 || true)
-          echo "url=$URL" >> "$GITHUB_OUTPUT"
-      - name: Build public site
-        env:
-          VITE_PUBLIC_SITE: "true"
-          VITE_DOWNLOAD_URL: ${{ steps.dl.outputs.url }}
-        run: npm run build -w client -- --base=/Xenolinguist/
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:public
       - name: SPA fallback (404 = index)
-        run: cp client/dist/index.html client/dist/404.html
+        run: cp test-results/public-site/index.html test-results/public-site/404.html
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: client/dist
+          path: test-results/public-site
   deploy:
     needs: build
     runs-on: ubuntu-latest
