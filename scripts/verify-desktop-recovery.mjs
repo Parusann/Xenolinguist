@@ -83,8 +83,8 @@ export async function verifyDesktopRecovery(executablePath, wav) {
     const download = await desktopRequest(page).post(secondOrigin + '/api/ollama/pull', { data: { model: 'gemma4:e4b', confirmed: true } }); expect(download.status()).toBe(403);
     const capabilities = await (await desktopRequest(page).get(secondOrigin + '/api/ollama/capabilities')).json();
     // Execute bundled speech while offline; do not infer success from file existence.
-    const phones = await desktopRequest(page).post(secondOrigin + '/api/ipa', { data: { audio: wav.toString('base64') }, timeout: 120000 }); expect(phones.status()).toBe(200);
-    const stt = await desktopRequest(page).post(secondOrigin + '/api/stt', { data: { audio: wav.toString('base64') }, timeout: 120000 }); expect(stt.status()).toBe(200);
+    const phones = await desktopRequest(page).post(secondOrigin + '/api/ipa', { data: { audio: wav.toString('base64') }, timeout: 120000 }); expect(phones.status(), await phones.text()).toBe(200);
+    const stt = await desktopRequest(page).post(secondOrigin + '/api/stt', { data: { audio: wav.toString('base64') }, timeout: 120000 }); expect(stt.status(), await stt.text()).toBe(200);
     const tts = await desktopRequest(page).post(secondOrigin + '/api/tts', { data: { text: 'Offline speech verification' } }); expect(tts.status()).toBe(200);
     expect((await tts.body()).subarray(0, 4).toString()).toBe('RIFF');
     nativeRequests.push(...await app.evaluate(() => globalThis.__xenoNetwork));

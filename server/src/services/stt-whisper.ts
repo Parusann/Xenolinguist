@@ -92,7 +92,9 @@ export async function transcribe(input: SttInput): Promise<SttResult> {
     input.signal?.throwIfAborted();
     const stderr = await new Promise<string>((resolve, reject) => {
       // -oj writes <outBase>.json; -l auto enables language detection (default is English).
-      const args = ['-m', model, '-f', inPath, '-oj', '-of', outBase, '-l', requestedLanguage, '-t', '2'];
+      // The pinned Windows CLI uses narrow file APIs. Its bundled model name is
+      // ASCII; resolve it relative to the wide-character process working directory.
+      const args = ['-m', path.relative(path.dirname(bin), model), '-f', inPath, '-oj', '-of', outBase, '-l', requestedLanguage, '-t', '2'];
       const proc = spawn(bin, args, { cwd: path.dirname(bin), windowsHide: true });
       const cancel = () => { proc.kill('SIGKILL'); };
       input.signal?.addEventListener('abort', cancel, { once: true });

@@ -18,10 +18,13 @@ $installedExe = Join-Path $taskRoot 'Xenolinguist.exe'
 $env:XENO_UPGRADE_EXE = $installedExe
 Push-Location $Harness
 try {
-  node --input-type=module -e "import {verifyDesktopRecovery} from './scripts/verify-desktop-recovery.mjs'; import {readFile,writeFile} from 'node:fs/promises'; const r=await verifyDesktopRecovery(process.env.XENO_UPGRADE_EXE,await readFile('server/src/__tests__/fixtures/hello-16k.wav')); await writeFile('upgrade-runtime.json',JSON.stringify(r,null,2));"
+  node scripts/verify-artifact-layout.mjs $taskRoot artifact-manifest.json
+  if ($LASTEXITCODE -ne 0) { throw 'Upgraded payload differs from the candidate inventory.' }
+  node --input-type=module -e "import {verifyDesktopRecovery} from './scripts/verify-desktop-recovery.mjs'; import {readFile,writeFile} from 'node:fs/promises'; try { const r=await verifyDesktopRecovery(process.env.XENO_UPGRADE_EXE,await readFile('server/src/__tests__/fixtures/hello-16k.wav')); await writeFile('upgrade-runtime.json',JSON.stringify(r,null,2)); } catch (error) { await writeFile('upgrade-runtime.json',JSON.stringify({passed:false,error:error.message,stack:error.stack},null,2)); throw error; }"
   if ($LASTEXITCODE -ne 0) { throw 'Upgraded runtime verification failed.' }
 } finally { Pop-Location }
 $signature = Get-AuthenticodeSignature -LiteralPath $installedExe
+$installerSignature = Get-AuthenticodeSignature -LiteralPath $Installer
 $uninstaller = Join-Path $taskRoot 'Uninstall Xenolinguist.exe'
 if (!(Test-Path -LiteralPath $uninstaller)) { throw 'Uninstaller missing.' }
 $process = Start-Process -FilePath $uninstaller -ArgumentList '/S' -WindowStyle Hidden -Wait -PassThru
@@ -29,4 +32,4 @@ if ($process.ExitCode -ne 0) { throw 'Uninstaller failed.' }
 $deadline = (Get-Date).AddSeconds(30)
 while ((Test-Path -LiteralPath $installedExe) -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 250 }
 if (Test-Path -LiteralPath $installedExe) { throw 'Application executable remains after uninstall.' }
-@{ passed=$true; fromVersion='1.0.0'; upgradeInstalled=$true; nonAsciiInstallPath=$true; uninstallRemovedExecutable=$true; signatureStatus=$signature.Status.ToString(); limits=@('Old application not launched; controlled legacy data tested in upgraded runtime.', 'Power-loss interruption of NSIS is not certified; automatic update application is excluded.') } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $Harness 'upgrade-install.json') -Encoding utf8
+@{ passed=$true; fromVersion='1.0.0'; upgradeInstalled=$true; payloadVerified=$true; nonAsciiInstallPath=$true; uninstallRemovedExecutable=$true; signatureStatus=$signature.Status.ToString(); installerSignatureStatus=$installerSignature.Status.ToString(); limits=@('Old application not launched; controlled legacy data tested in upgraded runtime.', 'Power-loss interruption of NSIS is not certified; automatic update application is excluded.') } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $Harness 'upgrade-install.json') -Encoding utf8

@@ -38,10 +38,10 @@ export function synthesize(input: TtsInput): Promise<Buffer> {
   }
   // espeak-ng finds its data via --path (the dir CONTAINING espeak-ng-data), which is
   // bundled next to the binary; this build won't auto-locate it otherwise.
-  const args = ['--path', path.dirname(bin), '-v', voice, '--stdout', '--', spoken];
+  const args = ['--path', '.', '-v', voice, '--stdout', '--', spoken];
 
   return new Promise<Buffer>((resolve, reject) => {
-    const proc = spawn(bin, args);
+    const proc = spawn(bin, args, { cwd: path.dirname(bin), windowsHide: true });
     const chunks: Buffer[] = [];
     let err = '';
     let timedOut = false;

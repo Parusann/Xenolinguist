@@ -16,7 +16,7 @@ export function desktopRequest(page) {
       headers: { ...(data === undefined ? {} : { 'Content-Type': binaryBody ? 'application/octet-stream' : 'application/json' }), ...options.headers },
       timeout: options.timeout ?? 180_000 });
     const body = Buffer.from(result.base64, 'base64');
-    return { status: () => result.status, json: async () => JSON.parse(body.toString()), body: async () => body, headers: () => result.headers };
+    return { status: () => result.status, text: async () => body.toString(), json: async () => JSON.parse(body.toString()), body: async () => body, headers: () => result.headers };
   };
   return { get: (url, options) => send('GET', url, options), post: (url, options) => send('POST', url, options), put: (url, options) => send('PUT', url, options) };
 }

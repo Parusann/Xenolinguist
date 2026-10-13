@@ -32,6 +32,13 @@ beforeEach(async () => {
 });
 afterEach(() => { vi.unstubAllEnvs(); vi.resetAllMocks(); });
 
+it('uses a relative model name from a Unicode installation directory', async () => {
+  vi.stubEnv('WHISPER_BIN', 'fixture/édition/whisper-cli.exe'); vi.stubEnv('WHISPER_MODEL', 'fixture/édition/model.bin');
+  await transcribe({ wav });
+  expect(cliArgs[cliArgs.indexOf('-m') + 1]).toBe('model.bin');
+  expect(spawn).toHaveBeenCalledWith('fixture/édition/whisper-cli.exe', expect.any(Array), { cwd: 'fixture/édition', windowsHide: true });
+});
+
 it('binds native output to exact submitted audio and verified runtime and cleans temporary files', async () => {
   const r = await transcribe({ wav });
   expect(r.audio).toEqual({ sha256: createHash('sha256').update(wav).digest('hex'), sampleRate: 16000, sampleCount: 55121, durationSeconds: 55121 / 16000 });

@@ -14,5 +14,5 @@ if (installed.artifact?.sha256 && installed.artifact.sha256 !== installerHash.sh
 await writeFile(output, JSON.stringify({ schemaVersion: 1, version: '1.1.0-rc.1', author: 'Parusan Natheeswaran',
   source: payload.source, lockSha256: payload.lockSha256, installer: installerHash, payload: await fingerprint(payloadFile),
   installedEvidence: await fingerprint(installedFile), upgradeEvidence: await fingerprint(upgradeFile), reports,
-  signing: upgrade.signatureStatus, target: 'Windows x64', publication: 'draft', limitations: 'docs/release-checklist.md',
+  signing: { executable: upgrade.signatureStatus, installer: upgrade.installerSignatureStatus }, target: 'Windows x64', publication: 'draft', limitations: 'docs/release-checklist.md',
   integrityScope: 'Checksums bind retained files; not a reproducible-build or publisher-authentication claim.' }, null, 2) + '\n');
