@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { test, expect, preparePage, openProfile, attachJson } from './fixtures';
+import { test, expect, openProfile, attachJson } from './fixtures';
 import { corpusCase, config } from '../../evaluation/src/elicitation/corpus';
 import { queryKey } from '../../engine/src/elicitation/contracts';
 import { derive } from '../../engine/src/translation/derive';
@@ -8,7 +8,9 @@ import { derive } from '../../engine/src/translation/derive';
 const recording = process.env.XENO_RECORD_DEMO === '1';
 test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce', video: recording ? { mode: 'on', size: { width: 1440, height: 900 } } : 'off' });
 test('W26 demonstrates a reserved plural question, withheld form and recovered derivation', async ({ page, server }) => {
-  test.setTimeout(recording ? 240000 : 60000); await preparePage(page);
+  test.setTimeout(recording ? 240000 : 60000);
+  await page.addInitScript(() => localStorage.setItem('xenolinguist-tour-completed', '1'));
+  const sourceRevision = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
   const start = Date.now(), seed = 104729, data = corpusCase(seed, 'grammar', 'regular');
   expect([...config.developmentSeeds, ...config.evaluationSeeds, ...config.ciSeeds] as number[]).not.toContain(seed);
   if (data.visible.domain !== 'grammar') throw Error('Expected grammar corpus');
@@ -77,8 +79,11 @@ test('W26 demonstrates a reserved plural question, withheld form and recovered d
   await symbolic.getByRole('button', { name: 'Analyze symbolically', exact: true }).click();
   await expect(symbolic.getByTestId('symbolic-result')).toContainText('the rocks');
   await symbolic.getByText('Meaning tree', { exact: true }).click();
-  await symbolic.screenshot({ path: test.info().outputPath('derivation.png') });
   await show('Symbolic parsing produces the rocks, with a meaning tree, source spans and the exact plural rule used. No language model generated this result.');
+  await page.screenshot({ path: test.info().outputPath('derivation.png') });
+  await symbolic.locator('ol').scrollIntoViewIfNeeded();
+  await show('Inspect the derivation: the stem provides the noun meaning, and the retained plural rule composes the unseen form.');
+  await page.screenshot({ path: test.info().outputPath('derivation-steps.png') });
   const saved = await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json();
   const result = derive(held.form, saved); expect(result.status).toBe('resolved');
   expect(saved.research.observations).toHaveLength(1);
@@ -92,7 +97,7 @@ test('W26 demonstrates a reserved plural question, withheld form and recovered d
   await expect(panel).toContainText('Independent reserved corpus observation');
   await show('The retained question, answer and review explain the outcome. This narrow regular-plural success does not establish general language-decipherment accuracy.');
   expect(modelCalls).toBe(0);
-  await attachJson('demo-manifest.json', { version: 'recruiter-demo-1', seed, corpusVersion: config.version, sourceRevision: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+  await attachJson('demo-manifest.json', { version: 'recruiter-demo-1', seed, corpusVersion: config.version, sourceRevision,
     corpusSha256: createHash('sha256').update(JSON.stringify(data)).digest('hex'), modelCalls, inputBudget: { knownDictionaryEntries: 3, suppliedPluralHypotheses: 2, observedAnswers: 1 },
     observed, heldOutForm: held.form, expected: 'the rocks', derivation: result, project: saved, narration,
     limits: ['Seed-disjoint vocabulary; reused structural family.', 'Oracle answers retained for audit, not supplied as learner context.', 'Captioned automation recording, no voiceover.'] });
