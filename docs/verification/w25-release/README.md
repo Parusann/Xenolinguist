@@ -25,6 +25,10 @@ The first upgrade attempt at `09810ef` failed Whisper execution in an accented i
 
 The [recorded demonstration](../w26-demo/demo.mp4) uses the same source revision, reserved seed 104729, three supplied word meanings, two candidate plural rules and one observed answer. The [manifest](../w26-demo/demo-manifest.json) retains withheld truth for post-run audit, the derivation and the saved project. No model calls or readiness/output mocks are used. The video is captioned automation, not a human study.
 
+## Checking retained bytes
+
+The candidate and demo directories contain 14 JSON records. Git text normalization is disabled for them so their SHA-256 values remain stable across Windows and Linux checkouts. Compare each downloaded asset with its digest in `draft-release.json`; the installer hash must also match the candidate stage in `upgrade-attempts.json` and `release-manifest.json`. These identity checks do not substitute for publisher signing.
+
 ## Limits
 
 Review [release exclusions](../../release-checklist.md) and [known limitations](../../limitations.md). This is an unsigned candidate; hashes establish file identity, not publisher authentication or bit-for-bit reproducible builds. Human screen-reader use, physical audio devices, arbitrary Unicode temporary paths, every historical profile, NSIS power-loss recovery and automatic update application are not certified. Strict offline checks cover application behavior and Chromium requests, not all OS or external Ollama traffic. Research results retain their individual datasets and failure rates.
