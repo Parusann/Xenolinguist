@@ -14,7 +14,7 @@ export function SymbolicTranslation({ profile, source, label = 'Symbolic transla
   const [submitted, setSubmitted] = useState<string | null>(null)
   const result = useMemo(() => submitted !== null ? derive(submitted, profile) : null, [submitted, profile])
   return <section className="glass-inner" aria-label={label} style={{ padding: 12 }}>
-    <div style={{ position: 'sticky', top: 0, background: 'var(--bg)', zIndex: 1, paddingBottom: 4 }}>
+    <div style={{ position: 'sticky', top: 0, background: 'var(--bg-base)', zIndex: 1, paddingBottom: 4 }}>
     <div className="flex" style={{ gap: 12, alignItems: 'center' }}>
       <span className="label" style={{ margin: 0 }}>{label}</span>
       <button className="btn sm" disabled={!source.trim()} onClick={() => setSubmitted(source)}>Analyze symbolically</button>
