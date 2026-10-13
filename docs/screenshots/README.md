@@ -1,5 +1,12 @@
 # Screenshot provenance
 
+The `w26-*` public captures refresh the 1440 × 1000 implementation preview on October 13, 2026. The recorded workbench demonstration uses 1440 × 900; its source, information budget and exact result are in [the demo manifest](../verification/w26-demo/demo-manifest.json). Current image checksums are retained with the final release verification. The page still offers the earlier public installer.
+
+- [Public hero](w26-hero.png), [dictionary](w26-dictionary.png), and [download distinction](w26-download.png).
+- [Reserved-form derivation](../verification/w26-demo/derivation.png) and [computation steps](../verification/w26-demo/derivation-steps.png). These use a real isolated backend with no mocked model readiness or output.
+
+## Historical W11 captures
+
 The `w11-*` captures show the W11 implementation preview at 1440 × 1000 on September 13, 2026. They were produced by passing Playwright flows and visually reviewed. Source and image hashes are in [W11 evidence](../verification/w11-presentation.json).
 
 - [Public hero](w11-hero.png), [dictionary widget](w11-dictionary.png) and [download distinction](w11-download.png): the public build at `/Xenolinguist/`, with reduced-motion preference enabled. The widget uses the shared fictional corpus and no model/API calls.

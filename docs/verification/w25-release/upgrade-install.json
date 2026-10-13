@@ -1,0 +1,14 @@
+{
+  "fromVersion": "1.0.0",
+  "passed": true,
+  "upgradeInstalled": true,
+  "signatureStatus": "NotSigned",
+  "limits": [
+    "Old application not launched; controlled legacy data tested in upgraded runtime.",
+    "Power-loss interruption of NSIS is not certified; automatic update application is excluded."
+  ],
+  "installerSignatureStatus": "NotSigned",
+  "nonAsciiInstallPath": true,
+  "payloadVerified": true,
+  "uninstallRemovedExecutable": true
+}

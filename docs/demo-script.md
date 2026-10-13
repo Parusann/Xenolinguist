@@ -4,6 +4,8 @@ Author: Parusan Natheeswaran
 
 The demonstration uses reserved synthetic seed **104729** from `elicitation-experiment-1`. It is disjoint from the existing development/evaluation/CI seed lists but reuses a regular plural family. Three known word meanings and two competing plural hypotheses are supplied. Only one requested answer is revealed. The plural of a different noun is withheld until the final translation.
 
+[Watch the retained three-minute recording](verification/w26-demo/demo.mp4). [The result manifest](verification/w26-demo/demo-manifest.json) and [recording checksums](verification/w26-demo/recording.json) identify the exact run.
+
 The recording is a captioned automation run of the actual workbench, without voiceover. Captions are a recording overlay, not a product feature. The raw manifest retains source revision, corpus hash, information budget, observed answer, withheld form, project and symbolic result. It must not be called a blinded human study or unrestricted language discovery.
 
 | Approximate time | On-screen action | Technical point |

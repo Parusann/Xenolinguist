@@ -24,7 +24,7 @@ Evaluation uses frozen source, versioned corpora, disjoint lexical seeds, indepe
 
 ## Result
 
-- **Reliability:** independent installed Windows acceptance verifies payload hashes, native execution, cancellation, drafts and archive restoration. A separate candidate gate exercises upgrade from the checksum-pinned v1.0.0 installer, migration failure and uninstall. See the final retained release evidence for actual gate outcomes.
+- **Reliability:** independent installed Windows acceptance verifies payload hashes, native execution, cancellation, drafts and archive restoration. A separate candidate gate exercises upgrade from the checksum-pinned v1.0.0 installer, migration failure and uninstall. See the [final retained release evidence](verification/w25-release/README.md) for actual gate outcomes.
 - **Symbolic composition:** the frozen W15 constrained learner reaches 150/150 withheld meanings at 29 observations; model-only reaches 0/300 and the successful hybrid makes zero model calls at that budget. This supports a supplied-grammar composition result, not an AI quality win.
 - **Grounded learning:** regular reserved affix cases reach 48/48; sparse evidence reaches 0/48 and hidden irregular plurals only 24/48. The failure conditions prevent the success from being read as general decipherment.
 - **Model proposals:** the W21 pipeline has zero application-eligible reserved proposals. Valid citation offsets do not imply evidential support. Blocking those proposals is useful system behavior; linguistic-quality improvement remains unproved.

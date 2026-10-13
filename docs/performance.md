@@ -38,3 +38,6 @@ npm run test:public
 ```
 
 The performance test is excluded from ordinary CI unless explicitly enabled, avoiding misleading skipped performance gates. Functional pagination, summary recovery, queue snapshots and automated accessibility remain required source gates. Results use isolated synthetic data and never open the owner's projects.
+
+
+W25 final installed acceptance also passes actual Electron 200% zoom and keyboard navigation after backend recovery. [Both-platform source audits](verification/w25-release/verification.json) cover nine core states each; this supplements the earlier viewport proxy without asserting human screen-reader certification.

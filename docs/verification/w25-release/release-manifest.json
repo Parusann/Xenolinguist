@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "version": "1.1.0-rc.1",
+  "author": "Parusan Natheeswaran",
+  "source": {
+    "revision": "00a25d525dcc0c713b25ed244e391ad84e1454e8",
+    "branch": "implementation/reliability",
+    "workingFiles": [],
+    "node": "24.21.0",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "lockSha256": "05d035f9fc9a5f5405d17e4b6604f4118894f9c48f2d60a07970e83f29c5677c",
+  "installer": {
+    "bytes": 405501373,
+    "sha256": "6f9c54ba2a73e8986a7cb3c196baa0f4f5bca79b5b0fbbf5aaaab03d90e6fedf"
+  },
+  "payload": {
+    "bytes": 825944,
+    "sha256": "dab7d02538f7e844c79434f96d76b6cf24d96826ac42b61dca77968f7dd83003"
+  },
+  "installedEvidence": {
+    "bytes": 16659697,
+    "sha256": "b744c1c8e86b13924143ef024fec017a9f7bcfd18d465d49eef38010cd222633"
+  },
+  "upgradeEvidence": {
+    "bytes": 467,
+    "sha256": "50089ee159721339ef1d5e4891ea88882a7ccc3555c74f213440768061667a5c"
+  },
+  "reports": [
+    "https://github.com/Parusann/Xenolinguist/actions/runs/38364842606",
+    "https://github.com/Parusann/Xenolinguist/actions/runs/38364842792"
+  ],
+  "signing": {
+    "executable": "NotSigned",
+    "installer": "NotSigned"
+  },
+  "target": "Windows x64",
+  "publication": "draft",
+  "limitations": "docs/release-checklist.md",
+  "integrityScope": "Checksums bind retained files; not a reproducible-build or publisher-authentication claim."
+}

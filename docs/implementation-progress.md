@@ -1,6 +1,6 @@
 # Implementation progress
 
-The implementation follows the 26-work-package review plan. This log distinguishes implemented boundaries from remaining release and research work.
+The implementation follows the 26-work-package review plan. The selected scope of W01–W26 is implemented and verified. The table is the current status; narrative entries below retain historical checkpoints and their then-open work. [Final candidate evidence](verification/w25-release/README.md) defines tested boundaries and explicit exclusions.
 
 | Package | Status | Delivered scope |
 | --- | --- | --- |
@@ -27,8 +27,9 @@ The implementation follows the 26-work-package review plan. This log distinguish
 | W21 | Implemented; frozen comparison, replay and Windows/Linux/installer CI passed | Typed proposals, bounded retrieval/tools, durable review, revision-checked application and archived provenance. 54 model tasks retain failures and show no application-eligible reserved candidates. See [research proposals](research-proposals.md) and [comparison results](proposal-results.md). |
 | W22 | Implemented; frozen learning curves, replay and Windows/Linux/installer CI passed | Bounded grounded questions, uniform disagreement/cost ranking, recorded answers/declines, candidate filtering and archive history. Paired synthetic curves retain gains, cost tradeoffs, irregular errors and unavailable abstentions. See [active elicitation](active-elicitation.md) and [results](elicitation-results.md). |
 | W23 | Implemented within the declared English pilot scope | Bounded cancellable five-minute phone jobs, retained generated/manual histories, provenance and a frozen 24-recording labeled pilot with failures and repeated-run results. See [acoustic results](acoustic-results.md). No universal-phone or calibrated-confidence claim. |
-| W24 | Implemented with measured limits; final release accessibility checks remain | Paginated large lists, bounded summary cache, route/audio splitting, durable snapshot optimization, keyboard fixes and automated accessibility. See [performance](performance.md). |
-| W25–W26 | In progress | Desktop recovery, final installer verification and technical presentation. |
+| W24 | Implemented with measured limits; installed zoom/keyboard checks passed | Paginated large lists, bounded summary cache, route/audio splitting, durable snapshot optimization, keyboard fixes and automated accessibility. See [performance](performance.md). |
+| W25 | Implemented within the declared Windows candidate scope | Independent fresh install, v1 upgrade/uninstall, accented paths, forced backend recovery, exact legacy backups, strict offline native speech and source/lock/payload evidence. Unsigned draft; [release limits](release-checklist.md) remain explicit. |
+| W26 | Implemented; reproducible demonstration recorded and checked | Architecture/source map, decision records, benchmark guide, technical case study, refreshed public screenshots and reserved-seed three-minute demo with explicit review, derivation and reload. See [demo](demo-script.md). |
 
 W23's final pilot freezes 24 separately licensed L2-ARCTIC recordings before inference. [The protocol](acoustic-protocol.md) declares normalization, denominators, tolerance, failures and timing. [Results](acoustic-results.md) retain 29.72% evaluation PER, 33.33% WER including three failed transcriptions, and limited boundary coverage. This completes the selected evaluation scope without asserting a recognition improvement or broader domain.
 
@@ -277,3 +278,16 @@ The first five-minute CI attempt at `ff85424` passed Linux but exposed two accep
 
 
 At runtime revision `ff85424` and acceptance revision `448ddb3`, [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/38067706094) passes 514 unit tests, 11 tooling tests, lint/type/build gates and 53 workbench plus eight public checks per platform, with no browser skips, flakes or unexpected results. All 464 evaluation records replay on each platform. [Independent installed acceptance](https://github.com/Parusann/Xenolinguist/actions/runs/38067706122) verifies 3,772 files, nine archives, long native cancellation/recovery and long-recording history/manual links through restart and restoration. [Retained results and measured limits](audio-evaluation.md#sixth-unit-verification-at-the-frozen-revisions) distinguish engineering fixtures from acoustic accuracy. Three native unit cases and existing dependency findings remain. W23 continues with labeled recognition/reproducibility evaluation; no release or deployment occurred.
+
+
+## Final W24–W26 candidate — 2026-10-13
+
+Runtime and acceptance revision `00a25d525dcc0c713b25ed244e391ad84e1454e8` passes [Windows/Linux source CI](https://github.com/Parusann/Xenolinguist/actions/runs/38364842606): **529 unit tests, 11 tooling checks, 56 workbench and 10 public checks per platform**, with no browser skips, flakes or unexpected results. Three native unit cases remain environment-gated. Downloaded 12 regression, 60 induction, 336 number and 56 elicitation records replay per platform. The separate acoustic replay verifies 24 records and 72 retained attempts.
+
+[Independent Windows installer CI](https://github.com/Parusann/Xenolinguist/actions/runs/38364842792) passes all three jobs: build, fresh installation and upgrade/uninstall. The installed harness verifies 3,779 payload files, nine archive round trips, native execution and cancellation, legacy backup/conflict handling, forced backend recovery with new credentials and retained post-crash drafts, actual Electron 200% keyboard interaction and strict-offline speech. The old and candidate installers both return zero during the final accented-path upgrade; their recorded SHA-256 values bind the tested files. Both executable and installer are **NotSigned**.
+
+The [retained evidence](verification/w25-release/README.md) includes earlier failures: the accented-path Whisper bug was repaired; an intermediate native installer crash did not recur in the final runner and its cause remains undetermined. Audits retain four high/eight moderate affected-package entries overall and four high/three moderate in production, with zero critical entries. Passing CI is not a vulnerability-free claim.
+
+The [three-minute recording](verification/w26-demo/demo.mp4), [manifest](verification/w26-demo/demo-manifest.json), [case study](technical-case-study.md), [architecture](architecture.md) and [benchmarks](benchmarks.md) complete the technical presentation. The demo has one observed answer, an explicit rule decision, a withheld plural derivation and saved/reloaded state, with zero model calls and no mocked model readiness. It reuses a regular family with a reserved lexical seed.
+
+Completion applies to the declared scope, not the excluded capabilities. Human screen-reader certification, physical audio-device coverage, exhaustive power-loss/first-launch interruption recovery, automatic update application, signing and broader linguistic generalization remain outside this candidate. The release stays a draft; main and the public website have not been deployed by this work.

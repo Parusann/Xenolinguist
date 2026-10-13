@@ -17,9 +17,13 @@ Candidate: **1.1.0-rc.1**, Windows x64, implementation branch. This is a release
 | Signing | Inspect actual executable/installer Authenticode state. Candidate is unsigned unless a verified signature result says otherwise |
 | Evidence | Installer SHA-256, complete payload manifest, source/lock/model identities, test links and explicit scope exclusions |
 
+All required candidate gates passed for `00a25d5`. [Retained outcomes and hashes](verification/w25-release/README.md) include both platforms, fresh installation, upgrade/uninstall and earlier failures. The candidate is unsigned and remains a draft.
+
 ## Selected scope and exclusions
 
 Automatic update download/application and recovery from power loss inside NSIS are **not supported release claims**. The app only checks manually, never downloads automatically. The upgrade gate tests the actual old/new installers and controlled legacy project data; it does not launch the old app or certify every historical profile. A backup-conflict failure tests a failed migration write, not an interrupted NSIS transaction. On failed installation, preserve user data, reinstall the chosen version, and use a compatible pre-migration backup for an older app. Never ask an older app to read a new schema.
+
+The accented installation-directory check does not certify every Unicode path accepted by third-party native tools, including arbitrary system temporary-file paths. First-launch interruption and recovery are not exhaustively certified; the forced-crash gate covers a running backend.
 
 Uninstall is not a secure data-erasure feature. Acceptance user data is intentionally separate and retained for diagnosis. Physical microphone/speaker behavior, human screen-reader usability, arbitrary codecs, non-Windows packages, general unknown-language decipherment and publisher authentication are excluded. Automated accessibility and keyboard evidence is not a screen-reader certification. Three existing native unit checks remain environment-gated; native behavior is separately required in installed acceptance.
 

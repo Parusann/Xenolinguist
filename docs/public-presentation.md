@@ -34,6 +34,6 @@ The public test build uses `/Xenolinguist/`, checks assets and internal anchors,
 
 ## Screenshots and publication
 
-[Current screenshots](screenshots/README.md) were captured only after the associated browser flows passed. They are preview screenshots, not representations of the published installer. The workbench capture uses a real isolated backend and no model-status fixture; chat is unavailable and manual work is visible. Screenshot bytes and source hashes are retained in [W11 evidence](verification/w11-presentation.json).
+[Current W26 screenshots](screenshots/README.md) refresh the public preview and reserved-language demonstration. They were captured only after the associated browser flows passed. They are preview screenshots, not representations of the published installer. The workbench capture uses a real isolated backend and no model-status fixture; chat is unavailable and manual work is visible. Current screenshot bytes and source identity are retained in [final verification](verification/w25-release/verification.json); [W11 evidence](verification/w11-presentation.json) retains the historical captures.
 
 The live Pages site deploys from `main`. This package updates the implementation branch and does not publish the website or an installer. CI/release gates, portable archives, a deterministic compiler and scientifically scored model comparisons remain the roadmap.

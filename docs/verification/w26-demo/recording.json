@@ -1,0 +1,48 @@
+{
+  "author": "Parusan Natheeswaran",
+  "sourceRevision": "00a25d525dcc0c713b25ed244e391ad84e1454e8",
+  "recordedAt": "2026-10-13",
+  "passed": true,
+  "rawWebm": {
+    "bytes": 14479436,
+    "sha256": "7cebe043a3b69f42cf7f468383ef4bb8640b9d82fa5e85fd396ffdeeffa2d0a6"
+  },
+  "mp4": {
+    "bytes": 5671663,
+    "sha256": "4f48644f7a5236d415b51e0950d6958e4713eddbdafb715863b17769498b37df"
+  },
+  "media": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1440,
+        "height": 900
+      }
+    ],
+    "format": {
+      "duration": "182.200000"
+    }
+  },
+  "conversion": "ffmpeg libx264 CRF 23, yuv420p, faststart; complete recording retained without cuts; no audio track",
+  "artifacts": {
+    "demo-manifest.json": {
+      "bytes": 12014,
+      "sha256": "04d6e1680bace3faa8fe769e14b4105aa26eefdcf60ce447845408771fc99f6b"
+    },
+    "derivation-steps.png": {
+      "bytes": 240101,
+      "sha256": "5afcb4b411233374d7d1a2cc29163bc3b9c7fa292d60df4bd04384f618dd8c46"
+    },
+    "derivation.png": {
+      "bytes": 238101,
+      "sha256": "80305500f7e9b6e642476663c0db3b1c5ebdc0a563587696fbc29bd21a81ffa2"
+    },
+    "elicitation.png": {
+      "bytes": 138418,
+      "sha256": "0f2f31b7b7b43044dc9deeeba418f75943537f9836f188eff4220c0d9a7c1834"
+    }
+  },
+  "review": "Reviewed result and scrolled computation captures; real readiness endpoint; no model-output fixtures.",
+  "scope": "Captioned automation on an isolated real backend; reserved lexical seed, reused regular plural family."
+}

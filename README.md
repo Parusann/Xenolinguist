@@ -8,7 +8,7 @@ A local desktop workbench for constructed-language exploration: collect text and
 
 **Published installer:** [v1.0.0 for Windows x64](https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe), published June 14, 2026, 440,684,361 bytes, unsigned. [Release details](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0).
 
-**Current development:** [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). The implementation improvements described below are **not in that published installer**. The candidate package version is 1.1.0-rc.1; source revision and retained verification records identify the tested builds. No new installer has been released as part of these changes.
+**Current development:** [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). The implementation improvements described below are **not in that published installer**. The candidate package version is 1.1.0-rc.1; source revision and retained verification records identify the tested builds. The verified Windows candidate remains an unsigned draft; [final installer, upgrade and source evidence](docs/verification/w25-release/README.md) identifies its exact bytes. No new public installer has been released as part of these changes.
 
 The old installer predates the repaired phone runtime, revision-checked saves, recovery, authenticated local API and controlled model setup. It can attempt an automatic Ollama model download. The pre-implementation packaged baseline failed phone analysis; that baseline is a separate artifact and does not certify the published installer. Windows may identify the unsigned installer as an unknown publisher. Review the [release boundary](docs/desktop-release.md) before installing.
 
@@ -104,9 +104,9 @@ Source CI requires unit/tooling tests, workbench and public-site checks, and a d
 
 Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only), `OLLAMA_MODEL`, `WHISPER_TIMEOUT_MS`, `TTS_TIMEOUT_MS` and the native asset paths. Context/output budgets and generation deadlines are server-owned; the former `OLLAMA_TIMEOUT_MS` setting does not control the current generation service.
 
-![Public dictionary demonstration](docs/screenshots/w11-dictionary.png)
+![Public dictionary demonstration](docs/screenshots/w26-dictionary.png)
 
-*W11 public-page preview: exact lookup using the app’s Eridian seed, with no model requests. [Screenshot provenance](docs/screenshots/README.md).*
+*W26 public-page preview: exact lookup using the app’s Eridian seed, with no model requests. [Screenshot provenance](docs/screenshots/README.md).*
 
 ## Export and remaining work
 
