@@ -7,13 +7,21 @@ if (!$taskRoot.StartsWith($runnerRoot, [StringComparison]::OrdinalIgnoreCase)) {
 $oldInstaller = Join-Path $env:RUNNER_TEMP 'xeno-v1-original.exe'
 Invoke-WebRequest 'https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe' -OutFile $oldInstaller
 if ((Get-FileHash -LiteralPath $oldInstaller -Algorithm SHA256).Hash.ToLowerInvariant() -ne '5974906a74a11eb7d4e14c0923ec5ff870e5669ad050b832b10b773e8491c6b5') { throw 'Published installer hash mismatch.' }
-function Install-Candidate([string]$File) {
+$installAttempts = [Collections.Generic.List[object]]::new()
+function Install-Candidate([string]$File, [string]$Stage) {
+  $attempt = [ordered]@{ stage=$Stage; installerSha256=(Get-FileHash -LiteralPath $File -Algorithm SHA256).Hash.ToLowerInvariant(); startedAt=(Get-Date).ToUniversalTime().ToString('o'); exitCode=$null; passed=$false }
+  $installAttempts.Add($attempt)
+  $installAttempts.ToArray() | ConvertTo-Json -Depth 4 -AsArray | Set-Content -LiteralPath (Join-Path $Harness 'upgrade-attempts.json') -Encoding utf8
+  Write-Host "Installing $Stage into the disposable accented directory"
   $process = Start-Process -FilePath $File -ArgumentList "/S /D=$taskRoot" -WindowStyle Hidden -Wait -PassThru
-  if ($process.ExitCode -ne 0) { throw "Installer failed: $($process.ExitCode)" }
+  $attempt.exitCode = $process.ExitCode
+  $attempt.passed = $process.ExitCode -eq 0 -and (Test-Path -LiteralPath (Join-Path $taskRoot 'Xenolinguist.exe'))
+  $installAttempts.ToArray() | ConvertTo-Json -Depth 4 -AsArray | Set-Content -LiteralPath (Join-Path $Harness 'upgrade-attempts.json') -Encoding utf8
+  if ($process.ExitCode -ne 0) { throw "$Stage installer failed: $($process.ExitCode)" }
   if (!(Test-Path -LiteralPath (Join-Path $taskRoot 'Xenolinguist.exe'))) { throw 'Installed executable missing.' }
 }
-Install-Candidate $oldInstaller
-Install-Candidate ([IO.Path]::GetFullPath($Installer))
+Install-Candidate $oldInstaller 'published-v1.0.0'
+Install-Candidate ([IO.Path]::GetFullPath($Installer)) 'candidate'
 $installedExe = Join-Path $taskRoot 'Xenolinguist.exe'
 $env:XENO_UPGRADE_EXE = $installedExe
 Push-Location $Harness
