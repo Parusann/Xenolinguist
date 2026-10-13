@@ -55,3 +55,8 @@ evaluation/fixtures/audio/l2-arctic-pilot/*.TextGrid -text -whitespace
 evaluation/fixtures/audio/l2-arctic-pilot/corpus.json -text whitespace=cr-at-eol
 evaluation/fixtures/audio/l2-arctic-pilot/LICENSE -text -whitespace
 docs/verification/w23-acoustic-pilot/*.json -text
+
+# Keep final candidate evidence identical to the checksummed release assets.
+docs/verification/w25-release/*.json -text whitespace=cr-at-eol
+docs/verification/w26-demo/*.json -text whitespace=cr-at-eol
+docs/verification/w26-demo/*.mp4 binary
