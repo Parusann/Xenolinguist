@@ -16,7 +16,7 @@ export function PhasesSection() {
   return <section id="method" className="section">
     <div className="section-eyebrow"><span className="acc">02</span><span className="ln" /><span>The workflow · implementation preview</span></div>
     <h2 className="section-title">Six phases.<br /><em>Build an interpretation.</em></h2>
-    <p className="section-sub">Move between observations, vocabulary and hypotheses as your corpus grows. These tools organize an investigation; they do not establish that an unknown language has been decoded. Keys 1–6 switch phases when you are not typing.</p>
+    <p className="section-sub">Move between observations, vocabulary and executable hypotheses as your corpus grows. Ask discriminating questions, inspect derivations and retain the decisions behind them. Keys 1–6 switch phases when you are not typing.</p>
     <div className="phases-ribbon">{PHASE_DEFS.map(phase => <div key={phase.num} className="phase-card"><div className="num">PHASE {phase.num}</div><div className="glyph">{phase.glyph}</div><div className="pname">{phase.name}</div><div className="pdesc">{phase.desc}</div></div>)}</div>
   </section>
 }
@@ -50,13 +50,13 @@ export function DemoSection() {
 }
 
 const FEATURES = [
-  { ico: '⌂', title: 'Controlled local inference', text: 'The preview verifies local completion-model metadata, shows setup status and supports cancelling queued or running jobs. Chat requires a separately installed Ollama model.' },
-  { ico: '♪', title: 'Recordings with provenance', text: 'Keep original audio alongside a prepared analysis copy. Windows checks cover PCM16 WAV, browser-prepared recordings, whisper transcription and approximate TIMIT ARPABET phones from an English-trained model.' },
-  { ico: '△', title: 'Evidence and user belief', text: 'Keep observed samples, asserted dictionary entries and optional belief ratings distinct. No probability of correctness or independently evaluated language coverage is claimed.' },
-  { ico: '◈', title: 'Creative practice', text: 'Generate a practice language with an eligible local model. Sessions and answers are saved. The generated answer key can be inconsistent, so practice scores are not scientific evaluation.' },
+  { ico: '⌂', title: 'Controlled local inference', text: 'Bounded context and tools produce typed proposals. Citation and execution checks precede explicit, revision-aware review. Jobs are cancellable; model access requires a separately installed eligible Ollama model.' },
+  { ico: '♪', title: 'Recordings with provenance', text: 'Retain original and prepared audio identities, generated results and manual corrections. Windowed native phone analysis supports recordings up to five minutes; transcription is capped at two. Phones are approximate English-trained TIMIT ARPABET.' },
+  { ico: '△', title: 'A durable evidence notebook', text: 'Link immutable captures, annotation revisions, competing hypotheses and replayable derivations. Changed dependencies mark analyses stale. Revisioned saves, retained drafts and complete .xeno archives protect the research history.' },
+  { ico: '◈', title: 'Executable language compiler', text: 'Deterministic practice uses versioned generated languages and private server grading. A separate creative mode uses local-model generation; its practice scores remain distinct from the controlled research evaluations.' },
 ]
 export function FeaturesSection() {
-  return <section className="section" aria-label="Preview capabilities" style={{ paddingTop: 24 }}><div className="features">{FEATURES.map(feature => <div key={feature.title} className="feature"><div className="ico">{feature.ico}</div><h3>{feature.title}</h3><p>{feature.text}</p></div>)}</div></section>
+  return <section className="section" aria-label="Implementation capabilities" style={{ paddingTop: 24 }}><div className="features">{FEATURES.map(feature => <div key={feature.title} className="feature"><div className="ico">{feature.ico}</div><h3>{feature.title}</h3><p>{feature.text}</p></div>)}</div></section>
 }
 
 export function PrivacySection() {

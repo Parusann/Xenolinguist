@@ -58,11 +58,13 @@ for (const width of [320, 390, 768, 1440]) test(`public page fits ${width}px and
   const failed: string[] = []; page.on('response', response => { if (response.status() >= 400) failed.push(response.url()); });
   await page.goto('./'); await page.evaluate(() => document.fonts.ready);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  for (const selector of ['.hero-nav', '.hero-headline', '.demo-moment', '#proof textarea', '.demo-frame', '.download-panel', '.hero-footer']) {
+  for (const selector of ['.hero-nav', '.hero-headline', '.demo-moment', '.research-recording', '.verification-strip', '.result-grid', '#proof textarea', '.demo-frame', '.download-panel', '.hero-footer']) {
     const bounds = await page.locator(selector).boundingBox(); expect(bounds).not.toBeNull();
     expect(bounds!.x, selector).toBeGreaterThanOrEqual(-1); expect(bounds!.x + bounds!.width, selector).toBeLessThanOrEqual(width + 1);
   }
   await page.screenshot({ path: info.outputPath('hero.png') });
+  await page.locator('#research').evaluate(element => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 88)); await page.screenshot({ path: info.outputPath('research.png') });
+  await page.locator('#results').evaluate(element => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 88)); await page.screenshot({ path: info.outputPath('results.png') });
   await page.locator('#proof').evaluate(element => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 88)); await page.screenshot({ path: info.outputPath('dictionary.png') });
   await page.locator('#download').evaluate(element => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 88)); await page.screenshot({ path: info.outputPath('download.png') });
   expect(failed).toEqual([]);
@@ -78,4 +80,21 @@ test('automatic examples pause and resume without starting inference', async ({ 
   await page.getByRole('button', { name: 'Resume examples' }).click();
   await page.clock.fastForward(7000);
   await expect(page.getByRole('button', { name: 'Show example 2', exact: true })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('recorded research demonstration loads and plays under the Pages base path', async ({ page }) => {
+  await page.goto('./');
+  const video = page.getByLabel('Recorded symbolic research demonstration');
+  await video.evaluate(async (element: HTMLVideoElement) => { element.muted = true; await element.play(); });
+  await expect.poll(() => video.evaluate((element: HTMLVideoElement) => element.currentTime)).toBeGreaterThan(0);
+  const media = await video.evaluate((element: HTMLVideoElement) => {
+    element.pause();
+    return { duration: element.duration, width: element.videoWidth, source: element.currentSrc };
+  });
+  expect(media.duration).toBeGreaterThan(180);
+  expect(media.duration).toBeLessThan(185);
+  expect(media.width).toBeGreaterThan(1000);
+  expect(new URL(media.source).pathname).toBe('/Xenolinguist/research/demo.mp4');
+  await page.getByText('Read the demonstration and its information budget').click();
+  await expect(page.locator('.research-transcript')).toContainText('Reserved synthetic seed 104729');
 });

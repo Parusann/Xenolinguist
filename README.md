@@ -1,121 +1,149 @@
-<p align="center"><img src="client/public/logo.svg" alt="Xenolinguist" width="84" /></p>
+<p align="center"><img src="client/public/logo.svg" alt="Xenolinguist" width="76" /></p>
+<h1 align="center">Xenolinguist</h1>
+<p align="center"><strong>From observations to executable explanations.</strong><br />A local linguistic research workbench with symbolic inference, controlled AI assistance, and reproducible experiments.</p>
+<p align="center">
+  <a href="https://parusann.github.io/Xenolinguist/">Website</a> ·
+  <a href="https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/demo-script.md">Three-minute demonstration</a> ·
+  <a href="https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/architecture.md">Architecture</a> ·
+  <a href="https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/benchmarks.md">Benchmarks</a> ·
+  <a href="https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/technical-case-study.md">Case study</a>
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/TypeScript-engine_%2B_workbench-3178C6" alt="TypeScript engine and workbench" />
+  <img src="https://img.shields.io/badge/Windows_x64-verified_candidate-00a86b" alt="Windows x64 verified candidate" />
+  <img src="https://img.shields.io/badge/License-Proprietary-64748b" alt="Proprietary license" />
+</p>
 
-# Xenolinguist
+Xenolinguist connects a research notebook to an executable language engine. Collect text and recordings, compare grammar hypotheses, ask a question that separates them, and inspect how a reviewed rule produces a translation. Observations, model proposals, user decisions, and evaluated results retain their own identities.
 
-A local desktop workbench for constructed-language exploration: collect text and recordings, build a dictionary, record grammar hypotheses and review local-model suggestions. The project combines typed data contracts, recoverable storage, native audio processing and controlled inference. It does not autonomously decipher arbitrary unknown languages.
+The engineering spans **bounded morphology and parsing, grounded rule search, arithmetic grammars, active elicitation, native speech processing, durable storage, and an authenticated desktop runtime**. A frozen evaluation harness makes the successes and failure cases reproducible.
 
-## Download versus implementation preview
+> **Build status:** the capabilities below describe the verified **1.1.0-rc.1 implementation**, available in [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). Its Windows installer remains an **unsigned draft**. The public v1.0.0 download is an earlier build. [Version and installation guide](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/desktop-release.md).
 
-**Published installer:** [v1.0.0 for Windows x64](https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe), published June 14, 2026, 440,684,361 bytes, unsigned. [Release details](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0).
+## See the research loop
 
-**Current development:** [implementation/reliability](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability). The implementation improvements described below are **not in that published installer**. The candidate package version is 1.1.0-rc.1; source revision and retained verification records identify the tested builds. The verified Windows candidate remains an unsigned draft; [final installer, upgrade and source evidence](docs/verification/w25-release/README.md) identifies its exact bytes. No new public installer has been released as part of these changes.
+[![A real symbolic derivation in Xenolinguist](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w26-demo/derivation-steps.png)](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/demo-script.md)
 
-The old installer predates the repaired phone runtime, revision-checked saves, recovery, authenticated local API and controlled model setup. It can attempt an automatic Ollama model download. The pre-implementation packaged baseline failed phone analysis; that baseline is a separate artifact and does not certify the published installer. Windows may identify the unsigned installer as an unknown publisher. Review the [release boundary](docs/desktop-release.md) before installing.
+**One observation. A reviewed rule. An unseen form explained.** The [182-second recorded run](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w26-demo/demo.mp4) uses reserved synthetic seed `104729`: three supplied word meanings, two competing plural rules, and one revealed answer.
 
-[Public website](https://parusann.github.io/Xenolinguist/) is deployed from `main`; changes on the implementation branch appear there only after deployment. Its browser dictionary demonstration needs no backend or model.
+1. Compare prefix and suffix hypotheses; select a question whose predicted answers disagree.
+2. Record the observed form for **“the stars”**. Two alternatives become one.
+3. Explicitly disable the contradicted rule; preserve the question, answer and notebook history.
+4. Translate the withheld form for **“the rocks”**. Inspect the lexical stem, plural rule, source spans and meaning tree.
+5. Reload the project and reproduce the result from retained state.
 
-## Inspect the project in three minutes
+The demonstration uses the real workbench and isolated backend, with **zero model calls**. It tests a reserved lexical seed within a supplied regular grammar family. [Executable demonstration](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/tests/e2e/recruiter-demo.spec.ts) · [Result manifest and information budget](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/verification/w26-demo/demo-manifest.json).
 
-Start with the [recorded demonstration and reproducible command](docs/demo-script.md), then inspect the [architecture/source map](docs/architecture.md), [technical case study](docs/technical-case-study.md) and [benchmark index](docs/benchmarks.md). The useful evidence includes both successful symbolic composition and failed model proposals; they are not combined into an accuracy claim. [Release readiness](docs/release-checklist.md) separates the candidate from the public installer.
+## What makes it technically interesting
 
-## What the implementation does
-
-| Phase | Behavior | Interpretation limit |
+| System | Implementation | Inspect |
 | --- | --- | --- |
-| Samples | Retains text drafts, original audio, prepared analysis copies and saved clip/word links | Recordings are observations; transcriptions can be wrong |
-| Numbers | Infers bounded arithmetic grammars, predicts forms with composition trees and suggests distinguishing observations | Fit and validation remain separate; ambiguous candidates remain visible |
-| Vocabulary | Stores display glosses, explicit senses, accepted aliases, examples and optional user belief | User belief is not calibrated confidence |
-| Grammar | Stores notebook prose or typed affix, negation, adjective and clause rules with previews | Executable rules are manual assertions, not discovered facts |
-| Translation | Separate lexical glosses, bounded symbolic meaning trees with derivations, and optional model output | Symbolic mode supports one typed clause or noun phrase; general syntax and script-specific segmentation remain unsupported |
-| Dashboard | Shows content counts and server-recorded metric history | Counts are not decoding accuracy or evaluated coverage |
+| **Explainable language engine** | Unicode-aware lexical indexes; bounded affix analysis and span-chart parsing; typed semantic trees, explicit ambiguity, source spans and reverse generation | [Typed grammar](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/typed-grammar.md) · [Parser source](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/engine/src/grammar/parser.ts) |
+| **Grounded grammar learning** | Search over affix and word-order candidates using a description-length objective, separate fit/validation observations, ablations and explicit acceptance | [Grounded induction](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/grounded-induction.md) · [Search objective](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/engine/src/induction/mdl.ts) |
+| **Number-system inference** | Bounded additive/multiplicative grammar enumeration, composition trees, independent validation and competing predictions | [Number grammars](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/number-grammar.md) |
+| **Active elicitation** | Rank grounded questions by finite-candidate disagreement and declared cost; retain predicted answers, observations, declines and surviving alternatives | [Query selection](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/engine/src/elicitation/select.ts) · [Learning curves](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/elicitation-results.md) |
+| **Controlled local AI** | Eligible Ollama models, bounded context/tools, typed proposals, citation and execution checks, revision-aware review and cancellable jobs | [Proposal boundary](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/research-proposals.md) · [Validator](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/server/src/services/proposal-validator.ts) |
+| **Traceable acoustic processing** | Original/analysis audio identities, windowed native CTC inference, transcription provenance, generated/manual histories and process-level cancellation | [Audio contract](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/audio-evaluation.md) · [CTC implementation](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/engine/src/audio/ctc.ts) |
 
-Creative practice generates a language with a selected local model, validates its structure, saves the session and grades against the generated answer key. The key can be linguistically inconsistent. Practice scores are separate from scientific evaluation, and assistance is accounted for separately.
+The evidence notebook links immutable captures, annotation revisions, hypotheses and saved derivations. Changed dependencies mark earlier analyses stale; server-side replay checks saved symbolic results. [Evidence model](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/research-evidence.md).
 
-Deterministic practice uses an executable, bounded language compiler with private server grading, explicit answer reveals and recoverable sessions. Its versioned corpus supplies 90 seed-disjoint languages for research. See [compiler behavior and limits](docs/deterministic-compiler.md).
+## Architecture
 
-The Eridian seed is a versioned fictional teaching corpus. The app, public dictionary widget and illustrative hero examples derive their meanings from the same source. Existing saved demo profiles are not overwritten by a seed update.
+```mermaid
+flowchart LR
+    UI[React workbench] --> Q[Durable mutation queue]
+    Q --> API[Authenticated local API]
+    API --> S[Revisioned snapshots and audio]
+    UI --> E[Pure TypeScript engine]
+    E --> D[Source-linked derivation]
+    API --> J[Bounded cancellable jobs]
+    J --> N[Whisper / ONNX / eSpeak]
+    J --> M[Local Ollama model]
+    M --> V[Typed proposal and validation]
+    V --> R[Explicit review]
+    R --> Q
+```
 
-[Watch the reproducible three-minute demonstration](docs/demo-script.md): compare plural hypotheses, record one discriminating answer, review the rule and derive a withheld form. The run retains its seed and result manifest.
+The pure engine is separate from the UI and model service. An independent corpus/scorer supplies benchmark truth. A model cannot directly write project files or approve its own suggestions. Schema and citation validity alone do not establish that a proposed linguistic rule is supported.
 
-## Engineering behind the interface
+**Storage is designed around interrupted work:** expected revisions and idempotency receipts; serialized mutations and atomic replacement; durable text/audio drafts; exact migration backups; staged, checksummed `.xeno` archives; and backend recovery that rotates credentials while retaining post-crash edits. [Architecture and trust boundaries](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/architecture.md) · [Design decisions](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/docs/decisions).
 
-- **Typed grammar:** bounded morphology and span-chart parsing, explicit argument frames, traceable semantic roles and reverse generation. Every derivation cites rules and original spans; incomplete searches remain unresolved. See [typed grammar](docs/typed-grammar.md).
-- **Lexical processing:** NFC comparison, original Unicode source spans, profile-controlled case/boundaries, cached lookup tries and explicit sense/alias contracts. Ambiguous lexical matches remain visible. See [Unicode lexicon](docs/unicode-lexicon.md).
-- **Persistence:** shared Zod schemas, guarded legacy migration, revision conflicts, serialized typed mutations, idempotency receipts, atomic replacement and recovery snapshots. A durable client queue retains pending work through restart.
-- **Audio:** immutable staged originals with SHA256 identities, a worker-prepared analysis copy, explicit inference/retry and atomic sample/clip saves. Phone inference uses overlapping native windows with explicit frame ownership, progress and cancellation. Windows packaging checks manifested native assets and isolated runtime dependencies. The phone API retains [bounded CTC scores and frame provenance](docs/audio-evaluation.md); these are uncalibrated acoustic outputs, not semantic confidence.
-- **Inference:** local-model eligibility checks, explicit downloads, task-specific context/output budgets, deadlines, bounded queues and NDJSON validation. Cancellation propagates to Ollama, whisper and a disposable phone process; capacity is released after cleanup.
-- **Security boundary:** a per-launch desktop credential delivered through IPC, trusted-main-frame API access, Host/Origin checks, sandboxed rendering, restricted navigation and permissions. See [local security](docs/local-security.md).
-- **Retained proposals:** profile-scoped chat and task output, including partial text, model name, task and errors. Retention is bounded; proposals remain advisory.
+## Measured results
 
-Architecture and behavior: [feature reference](docs/FEATURES.md), [audio lifecycle](docs/audio-lifecycle.md), [runtime jobs](docs/runtime-jobs.md), [workspace evidence](docs/workspace-evidence.md), [sandbox sessions](docs/sandbox-sessions.md).
+Each row is a separate experiment, with its own inputs and denominator. These are bounded synthetic results and a small acoustic pilot, not a general language-decipherment score.
 
-## Reproducible language-learning experiments
+| Experiment | Observed result | Conditions and limits |
+| --- | --- | --- |
+| **Symbolic composition** | **150/150** withheld meanings at 29 observations | 30 reserved languages; supplied grammar prior. Model-only: **0/300**. [Protocol and raw results](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/evaluation-results.md) |
+| **Grounded affix learning** | **48/48** regular reserved compositions | Seven lexical anchors, 14 fit and six validation observations. Sparse: **0/48**; hidden irregulars: **24/48**. [Ablations](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/induction-results.md) |
+| **Active questions** | **72/72** regular grammar predictions after two active answers | Supplied finite alternatives; seeded-random and fixed-curriculum controls. Irregularity and unavailable predictions retain errors/abstentions. [Learning curves](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/elicitation-results.md) |
+| **Large-profile UI** | Vocabulary view: **5,998 → 261 ms** | 10,000 words and samples on one Windows host. Editing: 857–982 → 102–196 ms; small-profile startup regressed. [Measurements](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/performance.md) |
 
-The offline evaluation harness compares frozen word lookup, a constrained symbolic learner, local-model inference and a hybrid fallback. Each receives the same observations; the scorer keeps target meanings separate. The symbolic method eliminates inconsistent structural hypotheses and learns lexical bindings from examples. Its supplied grammar assumptions are explicit, so success is not presented as unrestricted language discovery.
+The AI comparison retains **zero application-eligible reserved proposals**; a linguistic-quality advantage has not been demonstrated. The English acoustic pilot retains **29.72% evaluation phone error rate** and **33.33% word error rate**, including three recurring transcription failures. Keeping these results is part of the evaluation design. [AI comparison](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/proposal-results.md) · [Acoustic pilot](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/acoustic-results.md) · [Complete benchmark guide](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/benchmarks.md).
 
-`npm run evaluate:full` produces per-item predictions, model digests/settings, source and corpus hashes, paired language-level uncertainty intervals and standalone figures. The initial configuration uses 30 evaluation languages, three observation budgets and two model sampling seeds. [The measured results and downloadable raw archives](docs/evaluation-results.md) retain successful, invalid and incomplete predictions. `npm run evaluate:verify -- RESULT_DIRECTORY` replays scoring and checks retained artifacts without model inference. Setup, method definitions and interpretation limits are in the [evaluation protocol](docs/evaluation-protocol.md). This research harness is separate from the workbench's dictionary translator.
+## Verification beyond unit tests
 
-The [grounded induction engine](docs/grounded-induction.md) learns bounded affix and word-order proposals from supplied lexical anchors and distinct grounded observations. Fit-only description-length search, independent validation, manual acceptance and retained ablations make its assumptions inspectable. It does not discover arbitrary languages or silently use model output as ground truth. The [W18 results and raw archives](docs/induction-results.md) report regular generalization and explicit failure cases.
+At frozen revision [`00a25d5`](https://github.com/Parusann/Xenolinguist/commit/00a25d525dcc0c713b25ed244e391ad84e1454e8), **Windows and Linux each passed**:
 
-The [number grammar engine](docs/number-grammar.md) compares additive and multiplicative forms, preserves competing candidates, and exposes predicted arithmetic trees with independent validation. [Measured results and raw archives](docs/number-results.md) retain successful predictions, irregular errors and abstentions.
+| Unit tests | Tooling checks | Workbench browser checks | Public-page checks |
+| :---: | :---: | :---: | :---: |
+| **529** | **11** | **56** | **10** |
 
-The [research notebook](docs/research-evidence.md) links immutable source captures to competing hypotheses and retained symbolic derivations. Corrections append annotation revisions, contradictions stay visible, and changed dependencies mark old results stale. Saved derivations are replayed on the server; supplied-target checks and user acceptance are distinct from benchmark accuracy.
+A separate Windows runner installs the built artifact without a source checkout or Ollama. Acceptance verifies **3,779 packaged files**, real native inference and cancellation, **nine archive round trips**, draft recovery, migrated backups, and strict-offline speech. Another runner upgrades the published v1 installer in an accented path, forces a backend crash, checks 200% keyboard zoom and uninstalls. Downloaded evaluation records replay: **464 per platform**.
 
-The [active elicitation workbench](docs/active-elicitation.md) recommends grounded questions that distinguish supplied number or grammar alternatives, explains predicted answers and declared costs, and records answers or declines through restart and archive restoration. Its [frozen learning curves and raw archives](docs/elicitation-results.md) compare active, seeded-random and fixed-curriculum selection. Regular synthetic cases need fewer active observations, while costly questions, unseen irregular forms and incomplete alternatives expose explicit tradeoffs, errors and abstentions. These are finite query-selection results, not unrestricted language discovery.
+Three native unit cases remain environment-gated; installed native execution is required and passed. Known dependency advisories and an intermediate native installer crash remain documented. [Source CI](https://github.com/Parusann/Xenolinguist/actions/runs/38364842606) · [Installer/upgrade CI](https://github.com/Parusann/Xenolinguist/actions/runs/38364842792) · [Permanent evidence and exclusions](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/verification/w25-release/README.md).
 
-## Setup and offline operation
+## Explore the code
 
-Windows x64 is the only manifested native target. An independent Windows CI job installs and verifies implementation artifacts on a fresh runner; public release and signing remain pending. macOS/Linux packaging is not supported by the current native manifest.
+| Directory | Responsibility |
+| --- | --- |
+| [`engine/`](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/engine) | Pure lexical, grammar, induction, number, elicitation and acoustic algorithms |
+| [`evaluation/`](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/evaluation) | Deterministic corpora, independent scorers, baselines, ablations and replay |
+| [`shared/`](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/shared) | Versioned types, schemas and data contracts |
+| [`server/`](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/server) | Authenticated API, revisioned persistence, jobs, proposal validation and archives |
+| [`client/`](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/client) | React workbench, durable save queues, evidence inspectors and audio preparation |
+| [`electron/`](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/electron) | Process lifecycle, restricted IPC, credentials, draft storage and recovery |
+| [`tests/`](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/tests) | Browser workflows, packaging integrity and tooling regressions |
 
-Manual text, dictionary and grammar work do not require Ollama. For model assistance, install/start [Ollama](https://ollama.com), then use **Runtime & setup** to select an installed, verified local completion model. Downloads require an explicit click in the preview. The default `gemma4:e4b` is about 9.61 GB; optional `llama3.2:3b` is about 2.02 GB. Allow additional temporary disk space. Model speed and memory requirements depend on hardware; no broad quality ranking is established.
+Built with **TypeScript, React, Electron, Node/Express, Zod, Vitest and Playwright**, with Ollama, whisper.cpp, eSpeak NG and ONNX/Transformers.js for local inference. [Role-specific source tour](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/technical-case-study.md).
 
-Native audio uses bundled eSpeak NG, whisper.cpp and a wav2vec2 CTC model. The phone endpoint accepts mono PCM16 RIFF/WAVE at 16 kHz, 25 ms–300 seconds (Whisper and microphone capture remain limited to two minutes), and emits approximate **TIMIT ARPABET** from an English-trained model. It is not strict IPA or a universal/click-consonant recognizer. Browser-decodable WAV/WebM recordings are prepared for analysis; codec support varies. See [phone model notes](docs/ipa-model-notes.md) and [third-party provenance](vendor/THIRD_PARTY.md).
+## Run and reproduce
 
-Local work can run offline once assets and any selected model are installed. Launch the candidate with `--strict-offline` to disable model downloads, manual update checks, non-loopback Chromium requests and OS voice fallback. Updates never download automatically. Local-model checks rely on accurate Ollama metadata; this is an application policy, not a host firewall. See [release scope](docs/release-checklist.md).
-
-## Build and verify
-
-Use Node 24 and `npm ci` to match CI. Local W12 checks also passed on Node 25.8.2; the tested Electron 42.11.3 artifact embeds Node 24.19.0. See the lockfile and [CI/release guide](docs/ci-release-gates.md).
+Use **Node 24** and the implementation branch. Manual research and symbolic translation work without Ollama; AI assistance requires a separately installed eligible local model.
 
 ```sh
 git clone --branch implementation/reliability https://github.com/Parusann/Xenolinguist.git
 cd Xenolinguist
 npm ci
-npm run provision:models
-# If the ignored native model is absent, explicitly download its pinned distribution:
-npm run provision:models -- --download
 npm run build:desktop
 npm run dev
 ```
 
-Direct development browser use requires the one-time local pairing code printed by the backend. Open the Vite URL, choose the workbench and enter that code. `npm run electron:dev` starts the desktop development flow. Voice paths must be configured for direct development; the packaged app resolves its bundled resources. Model downloads are optional and separate from native asset provisioning.
+Open the Vite URL and enter the backend's one-time local pairing code. For native audio or Windows packaging, run `npm run provision:models -- --download` to retrieve and verify the pinned assets. `npm run electron:dev` starts the desktop development flow. [Native setup and build guide](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/desktop-release.md).
 
 ```sh
 npm run check:source
 npx playwright install chromium
 npm run test:e2e:run
 npm run test:public
-npm run audit:record
-# Build the Windows artifact locally; this command does not publish a release:
-npm run dist
+npm run evaluate:ci
+npm run evaluate:induction -- evaluation
+npm run evaluate:numbers -- evaluation
+npm run evaluate:elicitation -- ci
 ```
 
-Source CI requires unit/tooling tests, workbench and public-site checks, and a deterministic evaluation subset. A separate installed-application CI workflow requires native audio, access boundaries, archive round trips and restart recovery on a fresh Windows runner. Three gated native unit skips remain explicit; the former expected Unicode workbench failure now passes. Real local-model experiments require an available host with installed models. Current counts and verification records are in [implementation progress](docs/implementation-progress.md); commands are in [testing](docs/testing.md), and unresolved advisories are in the [dependency review](docs/dependency-review.md). Application checks do not establish linguistic quality or certify the old installer.
+[Full experiment and replay commands](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/benchmarks.md) · [Testing guide](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/testing.md) · [Configuration](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/.env.example).
 
-Configuration includes `DATA_DIR`, `PORT`, `OLLAMA_BASE_URL` (loopback HTTP only), `OLLAMA_MODEL`, `WHISPER_TIMEOUT_MS`, `TTS_TIMEOUT_MS` and the native asset paths. Context/output budgets and generation deadlines are server-owned; the former `OLLAMA_TIMEOUT_MS` setting does not control the current generation service.
+## Release, data and scope
 
-![Public dictionary demonstration](docs/screenshots/w26-dictionary.png)
+**Current candidate:** 1.1.0-rc.1, Windows x64, unsigned, verified and retained as a draft. **Public legacy release:** [v1.0.0](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0), June 14, 2026, unsigned. It predates the implementation described here and may automatically attempt a model download. [Compare builds before installing](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/desktop-release.md).
 
-*W26 public-page preview: exact lookup using the app’s Eridian seed, with no model requests. [Screenshot provenance](docs/screenshots/README.md).*
+Projects and recordings are local. After assets and optional models are installed, `--strict-offline` disables downloads, update checks, non-loopback Chromium requests and OS voice fallback. It is an application policy, not a host firewall. The website's dictionary widget runs in the browser without model/API requests. Use **`.xeno` archives** for project backups with recordings; standalone JSON and CSV do not contain the complete project.
 
-## Export and remaining work
+The engine supports declared grammar families; the phone model emits approximate English-trained **TIMIT ARPABET**, not universal IPA. Broad linguistic generalization, arbitrary codecs, physical audio-device coverage, human screen-reader certification, exhaustive power-loss recovery and non-Windows native packages are outside the verified scope. [Known limitations](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/limitations.md) · [Release checklist](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/release-checklist.md).
 
-The Field Log exports portable **.xeno project archives**, including saved data, AI/metric history and recording bytes. Sandbox answers and progress are an explicit option. Import from the profile selector or Field Log; preview verified content, create a new project by default, or explicitly replace a project after an automatic complete backup. See [archive format, limits and recovery](docs/project-archives.md).
+## Author and license
 
-Profile JSON contains metadata and audio references, **not recording bytes**. Dashboard JSON import replaces selected data fields in the active profile; it does not restore chat, sandbox sessions, metric history or missing audio files. Dictionary CSV is a limited interchange format. Neither is a full project backup.
+**Parusan Natheeswaran** · Copyright © 2026. All Rights Reserved.
 
-The deterministic compiler, reproducible evaluation harness, Unicode lexicon and typed interpreter now support grounded affix/order induction. Number grammar inference now adds bounded composition and disagreement queries. First-class evidence relationships and validated model research proposals remain roadmap work. Read the [limitations](docs/limitations.md) and [implementation progress](docs/implementation-progress.md).
-
-## License
-
-Copyright (c) 2026 Parusan Natheeswaran. All Rights Reserved. The repository is publicly viewable, but the project is proprietary and the [LICENSE](LICENSE) grants no general reuse rights. Third-party dependencies and native assets retain their own [licenses and notices](vendor/THIRD_PARTY.md).
+This repository is publicly viewable under a **proprietary license**. The [LICENSE](LICENSE) grants no general reuse rights. Third-party software, native assets and the separately licensed acoustic corpus retain their own [licenses and provenance](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/vendor/THIRD_PARTY.md).

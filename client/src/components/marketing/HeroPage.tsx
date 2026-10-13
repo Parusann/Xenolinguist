@@ -5,6 +5,7 @@ import { HeroMark } from './HeroMark'
 import { DecodeMoment } from './DecodeMoment'
 import { PhasesSection, DemoSection, FeaturesSection, PrivacySection, FinalCTA, HeroFooter } from './sections'
 import { DownloadSection } from './DownloadSection'
+import { ResearchSection, ResultsSection } from './ResearchSection'
 import { isPublicSite, PRIMARY_LABEL, SOURCE_REVISION } from '@/lib/site'
 import '@/marketing.css'
 
@@ -74,9 +75,9 @@ export function HeroPage() {
                 Local workbench
               </span>
               <div className="links">
-                <a href="#method">Method</a>
+                <a href="#research">Research demo</a>
                 <a href="#proof">Dictionary demo</a>
-                <a href="#privacy">Privacy</a>
+                <a href="#results">Results</a>
                 <a href="#open">Source & license</a>
               </div>
               <button className="btn-hero primary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={onPrimary}>
@@ -88,18 +89,15 @@ export function HeroPage() {
             <div />
             <div className="hero-center">
               <h1 className="hero-headline float-up">
-                Decode<br />
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.18em' }}>
-                  <span className="indent-2">the</span><em>unknown.</em>
-                </span>
+                Find patterns.<br /><em>Show your work.</em>
               </h1>
 
-              <div style={{ marginTop: 56, width: '100%' }}>
+              <div style={{ marginTop: 32, width: '100%' }}>
                 <DecodeMoment />
               </div>
 
               <p className="hero-sub float-up" style={{ animationDelay: '180ms' }}>
-                A local workbench for <b>constructed-language exploration</b>. Collect samples, build a dictionary, record grammar ideas and review model suggestions. A tool for investigation, with explicit limits on what it can infer.
+                A local <b>linguistic research workbench</b>. Turn observations into executable grammar, compare hypotheses, and trace a translation back to its evidence. Symbolic inference, controlled AI assistance and reproducible experiments in one workspace.
               </p>
 
               <div className="hero-cta float-up" style={{ animationDelay: '260ms' }}>
@@ -125,17 +123,19 @@ export function HeroPage() {
                 <span>Development preview · source {SOURCE_REVISION}</span>
               </span>
               <span style={{ color: 'var(--fg-faint)' }}>·</span>
-              <span>Built for conlangers, sci-fi worldbuilders, linguistics nerds</span>
+              <span>Built for language exploration and research engineering</span>
               <span style={{ flex: 1 }} />
               <span>scroll ↓</span>
             </div>
           </section>
 
           <div className="scroll-veil" />
-          <section className="section release-context" aria-label="Version status"><p>This page describes the implementation preview. The published v1.0.0 installer predates the reliability improvements shown here. See download details before installing.</p></section>
+          <section className="section release-context" aria-label="Version status"><p>Explore the verified 1.1.0-rc.1 implementation. Its installer remains an unsigned draft; the public v1.0.0 download is an earlier build. Source, measurements and the recorded demonstration are available now.</p></section>
+          <ResearchSection />
           <PhasesSection />
           <DemoSection />
           <FeaturesSection />
+          <ResultsSection />
           <PrivacySection />
           {isPublicSite && <DownloadSection />}
           <FinalCTA onEnterApp={onPrimary} />

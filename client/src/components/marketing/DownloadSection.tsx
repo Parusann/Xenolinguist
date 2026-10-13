@@ -10,15 +10,16 @@ export function DownloadSection() {
       <p className="download-note"><b>v1.0.0 limitations:</b> the published build predates the verified phone-runtime repair, save recovery, local API authentication and controlled inference jobs. It may automatically attempt the default Ollama model download. Later phone-runtime checks do not certify this installer; the separate pre-implementation packaged baseline failed phone analysis. It is not the preview shown above.</p>
       <p className="download-note">Windows may report an unknown publisher because this installer is unsigned. Review the release and its limitations before deciding to run it.</p>
       <div className="download-links"><a href={`${REPO_URL}/releases/tag/${RELEASE.tag}`} target="_blank" rel="noreferrer">v{RELEASE.version} release details →</a><a href={`${SOURCE_URL}/docs/desktop-release.md`} target="_blank" rel="noreferrer">Build and verification guide →</a></div>
-      <h3>Implementation preview · source {SOURCE_REVISION}</h3>
+      <h3>Verified candidate · 1.1.0-rc.1</h3>
       <ul className="download-list">
-        <li>Windows x64 candidate: independent installer and upgrade checks are linked in the build guide. The public download remains v1.0.0.</li>
+        <li>The unsigned Windows x64 candidate passed independent installer and upgrade checks and remains a draft. The public download remains v1.0.0.</li>
         <li>Manual text, dictionary and grammar work require no language model.</li>
         <li>AI needs a running local Ollama service and an eligible completion model. Downloads are explicit: default gemma4:e4b is about 9.61 GB; optional llama3.2:3b is about 2.02 GB, with additional temporary disk space needed.</li>
         <li>Native audio needs the manifested Windows assets. Phones are approximate TIMIT ARPABET, not universal IPA.</li>
         <li>Offline operation begins after setup. Downloads and update checks require a network connection.</li>
         <li>Use .xeno archives to back up projects with saved recordings. Standalone profile JSON does not contain recording bytes.</li>
       </ul>
+      <p className="download-note">Website / implementation source: {SOURCE_REVISION}. <a href={`${SOURCE_URL}/docs/verification/w25-release/README.md`} target="_blank" rel="noreferrer">Inspect the frozen candidate verification →</a></p>
       <p className="download-note">Install Ollama from <a href="https://ollama.com" target="_blank" rel="noreferrer">its official website</a>. Model performance depends on available memory and hardware; the smaller option has not passed a broad quality benchmark.</p>
     </div>
   </section>

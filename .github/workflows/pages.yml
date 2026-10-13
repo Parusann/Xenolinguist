@@ -1,9 +1,14 @@
 name: Deploy public site to Pages
 
 on:
-  push:
-    branches: [main]
+  # Deploy from main (the protected Pages environment) while the reviewed
+  # application source remains on the implementation branch.
   workflow_dispatch:
+    inputs:
+      source_sha:
+        description: 'Full reviewed implementation commit SHA to build and publish'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -18,11 +23,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Require an immutable source revision
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+        run: '[[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]'
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.source_sha }}
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: npm
+      - name: Record deployed source
+        run: git rev-parse HEAD >> "$GITHUB_STEP_SUMMARY"
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
