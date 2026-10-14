@@ -14,6 +14,8 @@
   <img src="https://img.shields.io/badge/License-Proprietary-64748b" alt="Proprietary license" />
 </p>
 
+[![Xenolinguist website with its cinematic translation replay](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/screenshots/presentation-hero.png)](https://parusann.github.io/Xenolinguist/)
+
 Xenolinguist connects a research notebook to an executable language engine. Collect text and recordings, compare grammar hypotheses, ask a question that separates them, and inspect how a reviewed rule produces a translation. Observations, model proposals, user decisions, and evaluated results retain their own identities.
 
 The engineering spans **bounded morphology and parsing, grounded rule search, arithmetic grammars, active elicitation, native speech processing, durable storage, and an authenticated desktop runtime**. A frozen evaluation harness makes the successes and failure cases reproducible.
@@ -33,6 +35,25 @@ The engineering spans **bounded morphology and parsing, grounded rule search, ar
 5. Reload the project and reproduce the result from retained state.
 
 The demonstration uses the real workbench and isolated backend, with **zero model calls**. It tests a reserved lexical seed within a supplied regular grammar family. [Executable demonstration](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/tests/e2e/recruiter-demo.spec.ts) · [Result manifest and information budget](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/verification/w26-demo/demo-manifest.json).
+
+## Inside the workbench
+
+Real application captures from retained feature-verification runs. Click a picture to inspect it at full resolution. The small datasets and fixture-model labels in these captures describe test scenarios; the measured research results are reported separately below.
+
+| **Language samples & audio history** | **Number-system inference** |
+| --- | --- |
+| [![Language samples & audio history](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w23-transcripts-browser-windows.png)](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w23-transcripts-browser-windows.png) | [![Number-system inference](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w19-number-composition.png)](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w19-number-composition.png) |
+| Original recordings, generated transcripts and manual segments retain their own histories. | Inspect a base-five candidate and the arithmetic composition tree behind an unseen value. |
+
+| **Grounded grammar learning** | **Competing lexical meanings** |
+| --- | --- |
+| [![Grounded grammar learning](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w18-grounded-proposal.png)](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w18-grounded-proposal.png) | [![Competing lexical meanings](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w16-competing-senses.png)](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w16-competing-senses.png) |
+| Review an affix proposal against separate fit and validation observations before accepting it. | Keep ambiguity visible and inspect the source span behind each candidate sense. |
+
+| **Active grammar questions** | **Evidence corrections** |
+| --- | --- |
+| [![Active grammar questions](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w26-demo/elicitation.png)](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w26-demo/elicitation.png) | [![Evidence corrections](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w20-research-correction.png)](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w20-research-correction.png) |
+| One recorded answer separates prefix and suffix alternatives; acceptance remains explicit. | A newer interpretation invalidates dependent evidence without erasing the earlier decision. |
 
 ## What makes it technically interesting
 
@@ -69,6 +90,8 @@ The pure engine is separate from the UI and model service. An independent corpus
 **Storage is designed around interrupted work:** expected revisions and idempotency receipts; serialized mutations and atomic replacement; durable text/audio drafts; exact migration backups; staged, checksummed `.xeno` archives; and backend recovery that rotates credentials while retaining post-crash edits. [Architecture and trust boundaries](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/architecture.md) · [Design decisions](https://github.com/Parusann/Xenolinguist/tree/implementation/reliability/docs/decisions).
 
 ## Measured results
+
+[![Measured learning curves across symbolic, model-only and hybrid baselines](https://raw.githubusercontent.com/Parusann/Xenolinguist/refs/heads/implementation/reliability/docs/verification/w15-baseline-figures.png)](https://github.com/Parusann/Xenolinguist/blob/implementation/reliability/docs/evaluation-results.md)
 
 Each row is a separate experiment, with its own inputs and denominator. These are bounded synthetic results and a small acoustic pilot, not a general language-decipherment score.
 
