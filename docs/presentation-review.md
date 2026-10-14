@@ -33,3 +33,13 @@ gh workflow run pages.yml --ref main -f source_sha=<full-reviewed-implementation
 ```
 
 Only README and this deployment workflow are copied to main. This is a presentation update, not a merge of the application or an installer release. The verified `1.1.0-rc.1` installer remains a draft at its frozen revision; the public download remains the older `v1.0.0`. New website checks do not recertify a new native package. The historical release manifests, benchmark records and measured denominators remain unchanged.
+
+## Visual restoration — 2026-10-14
+
+Restored the original word-by-word scan, underline glow, decoded hold, fade and phrase advance using the canonical saved dictionary. Pause/resume freezes the sequence; sample selection remains keyboard accessible and reduced-motion users receive a stable display. This is an illustrative replay, not a live model request.
+
+The original “Decode the unknown” headline, Method/Privacy navigation, sample pips, phase stamps, three-dot demo bar, visual privacy summary, first-contact closing heading, GitHub star link and author link return. Confidence-aware views and sandbox practice are explicitly described again with their current implementation boundaries. Correct license, release status and benchmark evidence remain in place.
+
+The README adds a current website capture, six feature-verification screenshots and the retained benchmark chart alongside its existing derivation capture. Captions distinguish fixture scenarios from measured evaluations; original screenshots and provenance remain unchanged.
+
+Validation adds a deterministic browser check for scan, pause, decoded hold, fade and automatic phrase advance with no API calls, alongside the existing reduced-motion, keyboard, responsive and accessibility checks. The fade check observes its transition target rather than requiring an exact instantaneous computed opacity.

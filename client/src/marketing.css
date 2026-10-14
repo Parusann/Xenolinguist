@@ -819,3 +819,19 @@ html.marketing-active #root { height: auto !important; min-height: 100vh; }
 .hero-footer .word .light { color: var(--fg-mute); }
 .hero-page p a { text-decoration: underline; text-underline-offset: 3px; }
 .hero-nav { background: rgba(3, 5, 6, .94); }
+
+/* Restore the cinematic presentation while keeping motion controls accessible. */
+.hero-title-ending { white-space: nowrap; }
+.demo-moment .tok.is-alien { color: var(--fg-mute); filter: blur(.7px); }
+.demo-moment .tok.is-scanning { color: var(--fg); }
+.sample-choice .pip { display: inline-block; margin-right: 6px; }
+.sample-label { font-size: 10px; color: var(--fg-mute); }
+.privacy-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 36px; }
+.privacy-facts strong { display: block; font: 36px/1.2 var(--font-display); color: var(--accent); margin-bottom: 8px; }
+.privacy-facts span { color: var(--fg-1); font-size: 14px; line-height: 1.6; }
+.phase-card .stamp { color: var(--fg-mute); }
+@media (min-width: 961px) { .hero-nav { gap: 18px; } .hero-nav .links { gap: 16px; } }
+@media (max-width: 1200px) { .hero-nav .privacy-chip { display: none; } }
+@media (max-width: 720px) { .privacy-facts { grid-template-columns: 1fr; gap: 20px; } }
+
+@media (min-width: 1101px) { .features { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

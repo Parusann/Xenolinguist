@@ -73,12 +73,12 @@ for (const width of [320, 390, 768, 1440]) test(`public page fits ${width}px and
 
 test('automatic examples pause and resume without starting inference', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
-  await page.goto('./'); await page.clock.install();
+  await page.clock.install(); await page.goto('./');
   await page.getByRole('button', { name: 'Pause examples' }).click();
   await page.clock.fastForward(7000);
   await expect(page.getByRole('button', { name: 'Show example 1', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Resume examples' }).click();
-  await page.clock.fastForward(7000);
+  await page.clock.runFor(7000);
   await expect(page.getByRole('button', { name: 'Show example 2', exact: true })).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -97,4 +97,27 @@ test('recorded research demonstration loads and plays under the Pages base path'
   expect(new URL(media.source).pathname).toBe('/Xenolinguist/research/demo.mp4');
   await page.getByText('Read the demonstration and its information budget').click();
   await expect(page.locator('.research-transcript')).toContainText('Reserved synthetic seed 104729');
+});
+
+
+test('cinematic replay scans each word, holds, fades and advances', async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const apiCalls: string[] = [];
+  page.on('request', request => { if (request.url().includes('/api/')) apiCalls.push(request.url()); });
+  await page.clock.install(); await page.goto('./');
+  await expect(page.locator('.hero-cinematic .is-alien')).toHaveCount(3);
+  await page.clock.runFor(300);
+  await expect(page.locator('.hero-cinematic .is-scanning')).toHaveText('I / me');
+  await page.getByRole('button', { name: 'Pause examples' }).click();
+  await page.clock.runFor(1200);
+  await expect(page.locator('.hero-cinematic .is-scanning')).toHaveText('I / me');
+  await page.screenshot({ path: info.outputPath('cinematic-scan.png') });
+  await page.getByRole('button', { name: 'Resume examples' }).click();
+  await page.clock.runFor(2200);
+  await expect(page.locator('.hero-cinematic .is-decoded')).toHaveCount(3);
+  await page.clock.runFor(2200);
+  await expect(page.locator('.hero-cinematic')).toHaveAttribute('style', /opacity: 0;/);
+  await page.clock.runFor(500);
+  await expect(page.getByRole('button', { name: 'Show example 2', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  expect(apiCalls).toEqual([]);
 });

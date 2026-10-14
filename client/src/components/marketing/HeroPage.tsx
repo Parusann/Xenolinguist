@@ -75,9 +75,11 @@ export function HeroPage() {
                 Local workbench
               </span>
               <div className="links">
+                <a href="#method">Method</a>
                 <a href="#research">Research demo</a>
                 <a href="#proof">Dictionary demo</a>
                 <a href="#results">Results</a>
+                <a href="#privacy">Privacy</a>
                 <a href="#open">Source & license</a>
               </div>
               <button className="btn-hero primary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={onPrimary}>
@@ -89,7 +91,7 @@ export function HeroPage() {
             <div />
             <div className="hero-center">
               <h1 className="hero-headline float-up">
-                Find patterns.<br /><em>Show your work.</em>
+                Decode<br /><span className="hero-title-ending">the <em>unknown.</em></span>
               </h1>
 
               <div style={{ marginTop: 32, width: '100%' }}>
