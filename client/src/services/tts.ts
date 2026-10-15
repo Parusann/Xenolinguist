@@ -20,6 +20,7 @@ export function cancel(): void {
 /** Speak via the browser's built-in voice (always-available fallback). */
 export function speakBrowser(text: string): void {
   if (typeof window === 'undefined' || !window.speechSynthesis) return;
+  if ((window as unknown as { xeno?: { strictOffline?: boolean } }).xeno?.strictOffline) return;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 }

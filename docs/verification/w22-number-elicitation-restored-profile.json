@@ -1,0 +1,140 @@
+{
+  "research": {
+    "observations": [
+      {
+        "id": "768b757e-3ac0-4b2b-9dce-511f87e4131e",
+        "created_at": "2026-09-28T05:59:50.222Z",
+        "text": "ru ka ra",
+        "content_sha256": "8d4d579add174cb934e94f114ffd5b3351c240b553a244bf49df70b087054e05",
+        "source": "Observed form for integer 11. Independent numeral observation.",
+        "origin": "capture",
+        "source_id": null,
+        "derived_from": [],
+        "audio": null
+      }
+    ],
+    "annotations": [
+      {
+        "id": "07999a7c-08d2-4761-a75d-2394589f0c2c",
+        "created_at": "2026-09-28T05:59:50.222Z",
+        "observation_id": "768b757e-3ac0-4b2b-9dce-511f87e4131e",
+        "revision": 1,
+        "interpretation": "Integer 11",
+        "supersedes": null,
+        "provenance": "user"
+      }
+    ],
+    "hypotheses": [],
+    "links": [],
+    "events": [],
+    "tests": [],
+    "analyses": [],
+    "metrics": []
+  },
+  "name": "Elicitation history",
+  "description": "",
+  "phonetic_notes": "",
+  "is_sandbox": false,
+  "dictionary": [],
+  "grammar_rules": [],
+  "number_system": {
+    "base": null,
+    "validation_values": [
+      11
+    ],
+    "mappings": {
+      "1": "ra",
+      "2": "ru",
+      "3": "ri",
+      "5": "ka",
+      "6": "ka ra",
+      "7": "ka ru",
+      "11": "ru ka ra"
+    },
+    "operators": {}
+  },
+  "samples": [],
+  "audio_clips": [],
+  "elicitation_history": [
+    {
+      "id": "02b06746-dfad-4f13-8423-27c985c19df4",
+      "request_id": "a4f54448-6a08-4364-bf69-4265516040b2",
+      "created_at": "2026-09-28T05:59:47.406Z",
+      "source_json": "{\"profile_id\":\"92f434e9-db41-4c2e-a378-2a36301cd9b1\",\"profile_revision\":0,\"input\":{\"fit\":[{\"value\":1,\"form\":\"ra\"},{\"value\":2,\"form\":\"ru\"},{\"value\":3,\"form\":\"ri\"},{\"value\":5,\"form\":\"ka\"},{\"value\":6,\"form\":\"ka ra\"},{\"value\":7,\"form\":\"ka ru\"}],\"validation\":[],\"caseSensitive\":false},\"declined\":[]}",
+      "source_sha256": "4221646c886554483d8a1655a1c7e3628ba9b622fcb3df0768e37a46ee0e6b14",
+      "input_sha256": "0c5105af256b75436f094f4a5dd18eddb559c8e9a97845f0a1ca7a7f92463ea5",
+      "report_json": "{\"version\":\"number-elicitation-session-1\",\"status\":\"selected\",\"reason\":\"Maximum uniform version-space disagreement per declared cost; not calibrated information gain.\",\"inferenceStatus\":\"ambiguous\",\"inferenceReason\":\"7 grammars remain indistinguishable on the ranked evidence. Complexity is a display preference, not proof.\",\"leaderIds\":[\"number-100\",\"number-102\",\"number-104\",\"number-98\",\"number-99\",\"number-101\",\"number-103\"],\"candidates\":7,\"fitCount\":6,\"validationCount\":0,\"considered\":58,\"eligible\":36,\"unavailable\":21,\"selection\":{\"value\":10,\"cost\":1,\"disagreementBits\":2.807354922057604,\"expectedRemaining\":0.9999999999999998,\"groups\":[{\"form\":\"ka ka\",\"candidateIds\":[\"number-98\"]},{\"form\":\"ka ru\",\"candidateIds\":[\"number-102\"]},{\"form\":\"ka-ru\",\"candidateIds\":[\"number-104\"]},{\"form\":\"karu\",\"candidateIds\":[\"number-100\"]},{\"form\":\"ru ka\",\"candidateIds\":[\"number-101\"]},{\"form\":\"ru-ka\",\"candidateIds\":[\"number-103\"]},{\"form\":\"ruka\",\"candidateIds\":[\"number-99\"]}]}}",
+      "report_sha256": "447a682f5bf56da311947eb064328f71055d4675655d7a65a5b1f832bc7e78c8",
+      "archived": true,
+      "decision": {
+        "action": "decline",
+        "answer": null,
+        "reason": "Cannot observe this numeral today.",
+        "mutation_id": "8b024e86-3a04-466d-97ef-0e3f8f5ea5d1",
+        "digest": "75bcc4bf4345925dd740336463c318179d64a09717734e9694a1e45bdc46a528",
+        "created_at": "2026-09-28T05:59:47.641Z",
+        "applied_revision": 2,
+        "observation_id": null,
+        "after_json": null,
+        "after_sha256": null
+      }
+    },
+    {
+      "id": "ffee67f4-614e-4f5a-99fe-c4434aa857bd",
+      "request_id": "94e75ce3-ec83-4cfa-a7a3-affa9c4be704",
+      "created_at": "2026-09-28T05:59:47.772Z",
+      "source_json": "{\"profile_id\":\"92f434e9-db41-4c2e-a378-2a36301cd9b1\",\"profile_revision\":2,\"input\":{\"fit\":[{\"value\":1,\"form\":\"ra\"},{\"value\":2,\"form\":\"ru\"},{\"value\":3,\"form\":\"ri\"},{\"value\":5,\"form\":\"ka\"},{\"value\":6,\"form\":\"ka ra\"},{\"value\":7,\"form\":\"ka ru\"}],\"validation\":[],\"caseSensitive\":false},\"declined\":[10]}",
+      "source_sha256": "ae442556b5950e96804f053e03c5a8056c962acd4bc8e7e710dc2ec5222aa42a",
+      "input_sha256": "0c5105af256b75436f094f4a5dd18eddb559c8e9a97845f0a1ca7a7f92463ea5",
+      "report_json": "{\"version\":\"number-elicitation-session-1\",\"status\":\"selected\",\"reason\":\"Maximum uniform version-space disagreement per declared cost; not calibrated information gain.\",\"inferenceStatus\":\"ambiguous\",\"inferenceReason\":\"7 grammars remain indistinguishable on the ranked evidence. Complexity is a display preference, not proof.\",\"leaderIds\":[\"number-100\",\"number-102\",\"number-104\",\"number-98\",\"number-99\",\"number-101\",\"number-103\"],\"candidates\":7,\"fitCount\":6,\"validationCount\":0,\"considered\":57,\"eligible\":35,\"unavailable\":21,\"selection\":{\"value\":11,\"cost\":1,\"disagreementBits\":2.807354922057604,\"expectedRemaining\":0.9999999999999998,\"groups\":[{\"form\":\"ka ka ra\",\"candidateIds\":[\"number-98\"]},{\"form\":\"ka ru ra\",\"candidateIds\":[\"number-102\"]},{\"form\":\"ka-ru ra\",\"candidateIds\":[\"number-104\"]},{\"form\":\"karu ra\",\"candidateIds\":[\"number-100\"]},{\"form\":\"ru ka ra\",\"candidateIds\":[\"number-101\"]},{\"form\":\"ru-ka ra\",\"candidateIds\":[\"number-103\"]},{\"form\":\"ruka ra\",\"candidateIds\":[\"number-99\"]}]}}",
+      "report_sha256": "d07e07f252e085846d4515d2c61a53360951088431973db323969e16ce324a62",
+      "archived": true,
+      "decision": {
+        "action": "answer",
+        "answer": "ru ka ra",
+        "reason": "Independent numeral observation.",
+        "mutation_id": "887ccd88-8b43-4992-8e0d-b888f11b0464",
+        "digest": "ce2f26ce30eb39301c6da6671650ad27293de1821af48e83f877799658469e5a",
+        "created_at": "2026-09-28T05:59:50.222Z",
+        "applied_revision": 4,
+        "observation_id": "768b757e-3ac0-4b2b-9dce-511f87e4131e",
+        "after_json": "{\"version\":\"number-elicitation-session-1\",\"status\":\"none\",\"reason\":\"No fully predicted disagreement in the supplied available query set. This does not establish equivalent hypotheses.\",\"inferenceStatus\":\"validated\",\"inferenceReason\":\"One candidate predicts every supplied validation mapping. Validation was used for selection; this is not a blind test or confirmed linguistic truth.\",\"leaderIds\":[\"number-101\"],\"candidates\":7,\"fitCount\":6,\"validationCount\":1,\"considered\":57,\"eligible\":0,\"unavailable\":21,\"selection\":null}",
+        "after_sha256": "2f431a0f2a743306fc6f8df0e043c59c295ed502c0e74472aab8f2aca69738c4"
+      }
+    }
+  ],
+  "metric_snapshots": [
+    {
+      "version": 1,
+      "revision": 0,
+      "recorded_at": "2026-09-28T05:59:46.393Z",
+      "counts": {
+        "observations": 0,
+        "assertedEntries": 0,
+        "grammarNotes": 0,
+        "competingForms": 0,
+        "mappings1To20": 6,
+        "ratedEntries": 0
+      }
+    },
+    {
+      "version": 1,
+      "revision": 4,
+      "recorded_at": "2026-09-28T05:59:50.226Z",
+      "counts": {
+        "observations": 0,
+        "assertedEntries": 0,
+        "grammarNotes": 0,
+        "competingForms": 0,
+        "mappings1To20": 7,
+        "ratedEntries": 0
+      }
+    }
+  ],
+  "id": "f7cea690-9057-45c9-abea-23179a1d6c87",
+  "created_at": "2026-09-28T05:59:46.393Z",
+  "updated_at": "2026-09-28T05:59:53.773Z",
+  "schema_version": 3,
+  "revision": 4,
+  "recent_mutations": []
+}

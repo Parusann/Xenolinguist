@@ -1,9 +1,21 @@
+import type { TranscriptionAnalysis } from 'shared/schemas/transcription'
+import { appendTranscriptionAnalysis } from 'shared/transcription-annotations'
+import type { Research } from 'shared/types'
+import { removeSampleKeepingCaptures } from 'shared/profile-operations'
+import { storedForm } from 'engine/text/normalize'
 import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react'
 import type { LanguageProfile, DictionaryEntry, GrammarRule, Sample, AudioClip } from 'shared/types'
 import { useSessionLog } from './session-log-context'
+import { apiFetch } from '@/services/api'
+import { getSaveQueue } from './save-runtime'
+import type { DraftValue } from 'shared/schemas/save-queue'
+import type { SaveStatus } from './save-queue'
+import type { PhoneAnalysis } from 'shared/schemas/phone-analysis'
+import { appendPhoneAnalysis } from 'shared/phone-annotations'
 
 interface ProfileContextValue {
   profile: LanguageProfile | null
+  editResearch: (profileId: string, edit: (research: Research) => Research) => void
   loadProfile: (id: string) => Promise<void>
   createProfile: (data: { name: string; description: string; phonetic_notes: string; is_sandbox?: boolean }) => Promise<LanguageProfile>
   updateProfile: (updates: Partial<LanguageProfile>) => void
@@ -22,15 +34,24 @@ interface ProfileContextValue {
   addAudioClip: (clip: Omit<AudioClip, 'id' | 'created_at'>) => string
   updateAudioClip: (id: string, updates: Partial<AudioClip>) => void
   removeAudioClip: (id: string) => void
+  saveAudioSample: (profileId: string, sample: Sample, clip: AudioClip) => Promise<void>
+  retainPhoneAnalysis: (profileId: string, clipId: string, analysis: PhoneAnalysis) => Promise<void>
+  retainTranscriptionAnalysis: (profileId: string, clipId: string, analysis: TranscriptionAnalysis) => Promise<void>
+  restoreSample: (profileId: string, sample: Sample, clip?: AudioClip) => void
   closeProfile: () => void
   saving: boolean
+  saveStatus: SaveStatus
+  pendingSaves: { id: string; name: string; phase: SaveStatus['phase']; durable: boolean; message?: string }[]
+  retrySave: (id: string) => Promise<void>
+  resolveSave: (id: string, keepLocal: boolean) => Promise<void>
+  drafts: Record<string, DraftValue>
+  setDraft: (key: string, value: DraftValue) => void
 }
 
 const ProfileContext = createContext<ProfileContextValue | null>(null)
 
-let idCounter = 0
 function genId(prefix: string) {
-  return `${prefix}-${Date.now()}-${++idCounter}`
+  return `${prefix}-${crypto.randomUUID()}`
 }
 
 export function ProfileProvider({
@@ -41,65 +62,61 @@ export function ProfileProvider({
   onProfileChange?: (profile: LanguageProfile | null) => void
 }) {
   const [profile, setProfile] = useState<LanguageProfile | null>(null)
-  const [saving, setSaving] = useState(false)
+  const [queue] = useState(getSaveQueue)
+  const [, refresh] = useState(0)
+  const [recoveryError, setRecoveryError] = useState('')
   const { addEntry } = useSessionLog()
-  const saveTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const profileRef = useRef(profile)
+  const loadGeneration = useRef(0)
 
   useEffect(() => {
-    profileRef.current = profile
-  }, [profile])
+    const unsubscribe = queue.subscribe(() => {
+      const id = profileRef.current?.id
+      if (id) {
+        const view = queue.view(id)
+        if (view) { profileRef.current = view; setProfile(view) }
+      }
+      refresh(value => value + 1)
+    })
+    void queue.start().catch(error => setRecoveryError(`Draft recovery failed: ${(error as Error).message}. Stored drafts have been preserved.`))
+    return unsubscribe
+  }, [queue])
 
   useEffect(() => {
     onProfileChange?.(profile)
   }, [profile, onProfileChange])
 
-  const persistProfile = useCallback((updated: LanguageProfile) => {
-    if (saveTimeout.current) clearTimeout(saveTimeout.current)
-    saveTimeout.current = setTimeout(async () => {
-      setSaving(true)
-      try {
-        await fetch(`/api/profiles/${updated.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updated),
-        })
-      } catch (err) {
-        console.error('Failed to save profile:', err)
-      }
-      setSaving(false)
-    }, 500)
-  }, [])
-
   const updateAndSave = useCallback((updater: (prev: LanguageProfile) => LanguageProfile) => {
-    setProfile(prev => {
-      if (!prev) return prev
-      const updated = updater(prev)
-      persistProfile(updated)
-      return updated
-    })
-  }, [persistProfile])
+    const previous = profileRef.current
+    if (!previous) return
+    queue.edit(previous, updater(previous))
+    const view = queue.view(previous.id)!
+    profileRef.current = view; setProfile(view)
+  }, [queue])
 
   const loadProfile = useCallback(async (id: string) => {
-    const res = await fetch(`/api/profiles/${id}`)
-    if (!res.ok) throw new Error(`Failed to load profile (${res.status})`)
-    const data = await res.json()
-    setProfile(data)
+    const generation = ++loadGeneration.current
+    const data = await queue.load(await apiFetch<LanguageProfile>(`/profiles/${encodeURIComponent(id)}`))
+    if (generation !== loadGeneration.current) return
+    profileRef.current = data; setProfile(data)
     addEntry('info', `Loaded profile: ${data.name}`)
-  }, [addEntry])
+  }, [addEntry, queue])
 
   const createProfile = useCallback(async (data: { name: string; description: string; phonetic_notes: string; is_sandbox?: boolean }) => {
-    const res = await fetch('/api/profiles', {
+    const created = await queue.load(await apiFetch<LanguageProfile>('/profiles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
-    })
-    if (!res.ok) throw new Error(`Failed to create profile (${res.status})`)
-    const created: LanguageProfile = await res.json()
-    setProfile(created)
+    }))
+    ++loadGeneration.current
+    profileRef.current = created; setProfile(created)
     addEntry('success', `Created new profile: ${created.name}`)
     return created
-  }, [addEntry])
+  }, [addEntry, queue])
+
+  const editResearch = useCallback((profileId: string, edit: (research: Research) => Research) => {
+    updateAndSave(prev => prev.id === profileId ? { ...prev, research: edit(prev.research) } : prev)
+  }, [updateAndSave])
 
   const updateProfile = useCallback((updates: Partial<LanguageProfile>) => {
     updateAndSave(prev => ({ ...prev, ...updates }))
@@ -107,7 +124,7 @@ export function ProfileProvider({
 
   const addDictionaryEntry = useCallback((entry: Omit<DictionaryEntry, 'id' | 'created_at'>): string => {
     const id = genId('word')
-    const newEntry: DictionaryEntry = { ...entry, id, created_at: new Date().toISOString() }
+    const newEntry: DictionaryEntry = { ...entry, alien_word: storedForm(entry.alien_word), id, created_at: new Date().toISOString() }
     updateAndSave(prev => ({ ...prev, dictionary: [...prev.dictionary, newEntry] }))
     addEntry('success', `Mapped: "${entry.alien_word}" → "${entry.english_meaning}"`)
     return id
@@ -128,6 +145,8 @@ export function ProfileProvider({
     updateAndSave(prev => ({
       ...prev,
       dictionary: prev.dictionary.filter(e => e.id !== id),
+      audio_clips: prev.audio_clips.map(clip => ({ ...clip, segments: clip.segments.map(segment =>
+        segment.dictionary_entry_id === id ? { ...segment, dictionary_entry_id: null } : segment) })),
     }))
   }, [updateAndSave])
 
@@ -145,15 +164,9 @@ export function ProfileProvider({
   }, [updateAndSave])
 
   const removeSample = useCallback((id: string) => {
-    // If the sample owns an audio clip, drop the clip too and delete its blob server-side,
-    // so removing a sample doesn't orphan audio files/records.
-    const audioId = profileRef.current?.samples.find(s => s.id === id)?.audio_id ?? null
-    updateAndSave(prev => ({
-      ...prev,
-      samples: prev.samples.filter(s => s.id !== id),
-      audio_clips: audioId ? (prev.audio_clips || []).filter(c => c.id !== audioId) : (prev.audio_clips || []),
-    }))
-    if (audioId) fetch(`/api/audio/${audioId}`, { method: 'DELETE' }).catch(() => {})
+    // Keep shared clips and retain bytes until explicit garbage collection can
+    // account for pending edits, conflicts and previous profile snapshots.
+    updateAndSave(prev => removeSampleKeepingCaptures(prev, id))
   }, [updateAndSave])
 
   const addGrammarRule = useCallback((rule: Omit<GrammarRule, 'id' | 'created_at'>) => {
@@ -198,19 +211,62 @@ export function ProfileProvider({
       // Also unlink from any samples
       samples: prev.samples.map(s => s.audio_id === id ? { ...s, audio_id: null } : s),
     }))
-    // Delete from server
-    fetch(`/api/audio/${id}`, { method: 'DELETE' }).catch(() => {})
+    // Bytes remain available if this edit fails or the saved version is restored.
     addEntry('info', 'Audio clip removed')
   }, [updateAndSave, addEntry])
 
   const closeProfile = useCallback(() => {
-    setProfile(null)
+    ++loadGeneration.current
+    profileRef.current = null; setProfile(null)
     addEntry('info', 'Profile closed')
   }, [addEntry])
+
+  const saveAudioSample = useCallback(async (id: string, sample: Sample, clip: AudioClip) => {
+    const before = queue.view(id)
+    if (!before) throw new Error('Profile is not loaded')
+    const existingSample = before.samples.find(entry => entry.id === sample.id)
+    const existingClip = before.audio_clips.find(entry => entry.id === clip.id)
+    queue.edit(before, { ...before,
+      samples: [...before.samples.filter(entry => entry.id !== sample.id), { ...sample, created_at: existingSample?.created_at ?? sample.created_at }],
+      audio_clips: [...before.audio_clips.filter(entry => entry.id !== clip.id), { ...clip, created_at: existingClip?.created_at ?? clip.created_at }],
+    })
+    await queue.retry(id)
+    if (queue.status(id).phase !== 'saved' || !queue.status(id).durable) throw new Error('Audio sample is pending. Resolve the save error or retry; the original is retained.')
+  }, [queue])
+  const retainPhoneAnalysis = useCallback(async (id: string, clipId: string, analysis: PhoneAnalysis) => {
+    const before = queue.view(id)
+    const clip = before?.audio_clips.find(entry => entry.id === clipId)
+    if (!before || !clip) throw new Error('The recording was removed before analysis finished')
+    const next = appendPhoneAnalysis(clip, analysis)
+    queue.edit(before, { ...before, audio_clips: before.audio_clips.map(entry => entry.id === clipId ? next : entry) })
+    await queue.retry(id)
+    if (queue.status(id).phase !== 'saved' || !queue.status(id).durable) throw new Error('Phone analysis is pending. Resolve the save error or retry.')
+  }, [queue])
+  const retainTranscriptionAnalysis = useCallback(async (id: string, clipId: string, analysis: TranscriptionAnalysis) => {
+    const before = queue.view(id)
+    const clip = before?.audio_clips.find(entry => entry.id === clipId)
+    if (!before || !clip) throw new Error('The recording was removed before analysis finished')
+    const next = appendTranscriptionAnalysis(clip, analysis)
+    queue.edit(before, { ...before, audio_clips: before.audio_clips.map(entry => entry.id === clipId ? next : entry) })
+    await queue.retry(id)
+    if (queue.status(id).phase !== 'saved' || !queue.status(id).durable) throw new Error('Transcription is pending. Resolve the save error or retry.')
+  }, [queue])
+  const restoreSample = useCallback((id: string, sample: Sample, clip?: AudioClip) => {
+    const previous = queue.view(id)
+    if (!previous) return
+    queue.edit(previous, { ...previous, samples: [...previous.samples.filter(entry => entry.id !== sample.id), sample],
+      audio_clips: clip ? [...previous.audio_clips.filter(entry => entry.id !== clip.id), clip] : previous.audio_clips })
+  }, [queue])
+
+  const setDraft = useCallback((key: string, value: DraftValue) => {
+    if (profileRef.current) queue.setDraft(profileRef.current.id, key, value)
+  }, [queue])
+  const saveStatus = profile ? queue.status(profile.id) : { phase: 'saved' as const, durable: true }
 
   return (
     <ProfileContext.Provider value={{
       profile,
+      editResearch,
       loadProfile,
       createProfile,
       updateProfile,
@@ -227,9 +283,20 @@ export function ProfileProvider({
       addAudioClip,
       updateAudioClip,
       removeAudioClip,
+      saveAudioSample,
+      retainPhoneAnalysis,
+      retainTranscriptionAnalysis,
+      restoreSample,
       closeProfile,
-      saving,
+      saving: saveStatus.phase === 'saving',
+      saveStatus,
+      pendingSaves: queue.pending(),
+      retrySave: id => queue.retry(id),
+      resolveSave: (id, keepLocal) => queue.resolve(id, keepLocal),
+      drafts: profile ? queue.drafts(profile.id) : {},
+      setDraft,
     }}>
+      {recoveryError && <div role="alert" style={{ background: '#321b1b', color: '#fff', padding: 12 }}>{recoveryError}</div>}
       {children}
     </ProfileContext.Provider>
   )

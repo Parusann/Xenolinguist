@@ -1,0 +1,431 @@
+{
+  "author": "Parusan Natheeswaran",
+  "recordedAt": "2026-10-13",
+  "revision": "00a25d525dcc0c713b25ed244e391ad84e1454e8",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "00a25d525dcc0c713b25ed244e391ad84e1454e8",
+    "jobs": [
+      {
+        "name": "regression (windows-latest)",
+        "databaseId": 115187526384,
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/38364842606/job/115187526384",
+        "startedAt": "2026-10-13T07:47:10Z",
+        "completedAt": "2026-10-13T07:57:17Z",
+        "conclusion": "success"
+      },
+      {
+        "name": "regression (ubuntu-latest)",
+        "databaseId": 115187526795,
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/38364842606/job/115187526795",
+        "startedAt": "2026-10-13T07:47:08Z",
+        "completedAt": "2026-10-13T07:55:18Z",
+        "conclusion": "success"
+      }
+    ],
+    "updatedAt": "2026-10-13T07:57:18Z",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/38364842606"
+  },
+  "installerCi": {
+    "conclusion": "success",
+    "headSha": "00a25d525dcc0c713b25ed244e391ad84e1454e8",
+    "jobs": [
+      {
+        "name": "build",
+        "databaseId": 115187651520,
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/38364842792/job/115187651520",
+        "startedAt": "2026-10-13T07:47:29Z",
+        "completedAt": "2026-10-13T07:50:15Z",
+        "conclusion": "success"
+      },
+      {
+        "name": "verify-clean",
+        "databaseId": 115188656100,
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/38364842792/job/115188656100",
+        "startedAt": "2026-10-13T07:50:17Z",
+        "completedAt": "2026-10-13T08:00:48Z",
+        "conclusion": "success"
+      },
+      {
+        "name": "verify-upgrade",
+        "databaseId": 115188656159,
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/38364842792/job/115188656159",
+        "startedAt": "2026-10-13T07:50:17Z",
+        "completedAt": "2026-10-13T07:53:22Z",
+        "conclusion": "success"
+      }
+    ],
+    "updatedAt": "2026-10-13T08:00:48Z",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/38364842792"
+  },
+  "platforms": {
+    "windows": {
+      "unitPassed": 529,
+      "nativeUnitGated": 3,
+      "toolingPassed": 11,
+      "workbench": {
+        "startTime": "2026-10-13T07:51:56.953Z",
+        "duration": 299135.615,
+        "expected": 56,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-13T07:56:57.880Z",
+        "duration": 10823.941,
+        "expected": 10,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "accessibilityStates": 9,
+      "sourceReports": {
+        "browser-report.json": {
+          "bytes": 114179,
+          "sha256": "dda3e7cccdc43f2f9d425410c0991d6fc9ab249ec256d79a3c5a23259d6f9e91"
+        },
+        "public-browser-report.json": {
+          "bytes": 15934,
+          "sha256": "d10a72026d491e561ee37b21ae4b33c3ffd7a7db1e4e5dc243eb6c1b4da3f9b5"
+        }
+      },
+      "audits": {
+        "all": {
+          "counts": {
+            "info": 0,
+            "low": 0,
+            "moderate": 8,
+            "high": 4,
+            "critical": 0,
+            "total": 12
+          },
+          "lockfile": {
+            "bytes": 375031,
+            "sha256": "05d035f9fc9a5f5405d17e4b6604f4118894f9c48f2d60a07970e83f29c5677c"
+          }
+        },
+        "production": {
+          "counts": {
+            "info": 0,
+            "low": 0,
+            "moderate": 3,
+            "high": 4,
+            "critical": 0,
+            "total": 7
+          },
+          "lockfile": {
+            "bytes": 375031,
+            "sha256": "05d035f9fc9a5f5405d17e4b6604f4118894f9c48f2d60a07970e83f29c5677c"
+          }
+        }
+      }
+    },
+    "linux": {
+      "unitPassed": 529,
+      "nativeUnitGated": 3,
+      "toolingPassed": 11,
+      "workbench": {
+        "startTime": "2026-10-13T07:49:40.459Z",
+        "duration": 313484.898,
+        "expected": 56,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-13T07:54:55.569Z",
+        "duration": 14014.189,
+        "expected": 10,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "accessibilityStates": 9,
+      "sourceReports": {
+        "browser-report.json": {
+          "bytes": 111631,
+          "sha256": "e436c11de564670b6306d7cb45be09927c8529079f6884d69ec33ee4c9a59d9b"
+        },
+        "public-browser-report.json": {
+          "bytes": 15972,
+          "sha256": "ee8a4d643012becf807396e8dac95be72c518ee68d1491d96af07812a9bc3634"
+        }
+      },
+      "audits": {
+        "all": {
+          "counts": {
+            "info": 0,
+            "low": 0,
+            "moderate": 8,
+            "high": 4,
+            "critical": 0,
+            "total": 12
+          },
+          "lockfile": {
+            "bytes": 364618,
+            "sha256": "0beca489661679f9ddd8768c49ff4f6d8692f06e2ae80b82b89dbe151bd1695d"
+          }
+        },
+        "production": {
+          "counts": {
+            "info": 0,
+            "low": 0,
+            "moderate": 3,
+            "high": 4,
+            "critical": 0,
+            "total": 7
+          },
+          "lockfile": {
+            "bytes": 364618,
+            "sha256": "0beca489661679f9ddd8768c49ff4f6d8692f06e2ae80b82b89dbe151bd1695d"
+          }
+        }
+      }
+    }
+  },
+  "replay": {
+    "windows": {
+      "evaluation-ci-": {
+        "passed": true,
+        "records": 12,
+        "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+        "sourceSnapshotHash": "ac68788453f6602db1c228beabba69db59b54a7b6852d035b8de5e3e9727c172"
+      },
+      "induction-evaluation-": {
+        "passed": true,
+        "records": 60,
+        "split": "evaluation",
+        "sourceSnapshotHash": "bbda11495584037470febe5f746ee026ec38eb51eae2b16b57f922963dcf4489"
+      },
+      "numbers-evaluation-": {
+        "passed": true,
+        "records": 336,
+        "split": "evaluation",
+        "sourceSnapshotHash": "bbda11495584037470febe5f746ee026ec38eb51eae2b16b57f922963dcf4489"
+      },
+      "elicitation-ci-": {
+        "passed": true,
+        "records": 56,
+        "cases": 8,
+        "split": "ci",
+        "sourceCommit": "00a25d525dcc0c713b25ed244e391ad84e1454e8",
+        "sourceSnapshotHash": "df1891ab7c6845a7f5de368a97058740b79bc72f6cc25254f101c1ae568ab026",
+        "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+        "failures": 0
+      }
+    },
+    "linux": {
+      "evaluation-ci-": {
+        "passed": true,
+        "records": 12,
+        "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+        "sourceSnapshotHash": "4618763e5a9c64b797767f77ea4bd3300e829b2799e249dc585e4024a1c55914"
+      },
+      "induction-evaluation-": {
+        "passed": true,
+        "records": 60,
+        "split": "evaluation",
+        "sourceSnapshotHash": "25da9378b466f71540bfc3c9398ff4ead8e9a2d8f8ddf7d1a1a5f8349168177d"
+      },
+      "numbers-evaluation-": {
+        "passed": true,
+        "records": 336,
+        "split": "evaluation",
+        "sourceSnapshotHash": "25da9378b466f71540bfc3c9398ff4ead8e9a2d8f8ddf7d1a1a5f8349168177d"
+      },
+      "elicitation-ci-": {
+        "passed": true,
+        "records": 56,
+        "cases": 8,
+        "split": "ci",
+        "sourceCommit": "00a25d525dcc0c713b25ed244e391ad84e1454e8",
+        "sourceSnapshotHash": "c81002cd3acf03c4e481e6cb5a86b746bb38d127af0c124a408ba067c09d309b",
+        "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+        "failures": 0
+      }
+    }
+  },
+  "acousticReplay": {
+    "passed": true,
+    "records": 24,
+    "attempts": 72,
+    "corpusHash": "b1f3cbdbedf609fbe1483ba35de78c4acb52b278b0c16e5a1ffb53ae69b2a672",
+    "summary": {
+      "bytes": 409082,
+      "sha256": "918eab11c55e256b292ba86807ace04b5cad2a18c4e2c48f044cb194ac64edd1"
+    },
+    "scope": "Replays retained scores, not native inference or timing."
+  },
+  "installed": {
+    "acceptancePassed": true,
+    "payloadFiles": 3779,
+    "archives": 9,
+    "desktopRecovery": {
+      "passed": true,
+      "nonAsciiUserData": true,
+      "migratedSchema": 3,
+      "originalReadPreserved": true,
+      "conflictingBackupRejected": true,
+      "backupSha256": "7fe006ec24d0805845d29307890b655d1805039ed187bf604b990b1374e782d0",
+      "backendKilled": true,
+      "credentialRotated": true,
+      "retainedDraftAfterCrash": true,
+      "zoomFactor": 2,
+      "keyboardAtZoom": true,
+      "strictOffline": {
+        "updateRejected": true,
+        "remoteRejected": true,
+        "downloadsRejected": true,
+        "phones": 200,
+        "stt": 200,
+        "tts": 200,
+        "completedChromiumOrigins": [
+          "http://127.0.0.1:57532",
+          "http://127.0.0.1:61168"
+        ],
+        "scope": "Chromium completed requests; external Ollama and OS traffic are not captured."
+      },
+      "capabilities": {
+        "checkedAt": "2026-10-13T08:00:34.300Z",
+        "expiresAt": "2026-10-13T08:00:39.300Z",
+        "storage": {
+          "state": "available",
+          "detail": "Local storage write probe passed"
+        },
+        "tts": {
+          "state": "available",
+          "detail": "Local speech synthesis files present; execution is checked when requested"
+        },
+        "stt": {
+          "state": "available",
+          "detail": "Local transcription files present; execution is checked when requested"
+        },
+        "phones": {
+          "state": "available",
+          "detail": "Phone asset sizes match; hashes and native runtime are checked at inference"
+        },
+        "chat": {
+          "state": "unavailable",
+          "detail": "Start the local Ollama service to use chat"
+        },
+        "resources": {
+          "cpuCount": 4,
+          "freeMemoryBytes": 13848236032,
+          "totalMemoryBytes": 17174360064
+        },
+        "setupModels": [
+          {
+            "name": "gemma4:e4b",
+            "approximateBytes": 9610000000
+          },
+          {
+            "name": "llama3.2:3b",
+            "approximateBytes": 2020000000
+          }
+        ]
+      }
+    }
+  },
+  "upgrade": {
+    "fromVersion": "1.0.0",
+    "passed": true,
+    "upgradeInstalled": true,
+    "signatureStatus": "NotSigned",
+    "limits": [
+      "Old application not launched; controlled legacy data tested in upgraded runtime.",
+      "Power-loss interruption of NSIS is not certified; automatic update application is excluded."
+    ],
+    "installerSignatureStatus": "NotSigned",
+    "nonAsciiInstallPath": true,
+    "payloadVerified": true,
+    "uninstallRemovedExecutable": true
+  },
+  "upgradeAttempts": [
+    {
+      "stage": "published-v1.0.0",
+      "installerSha256": "5974906a74a11eb7d4e14c0923ec5ff870e5669ad050b832b10b773e8491c6b5",
+      "startedAt": "2026-10-13T07:50:53.6526569Z",
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "stage": "candidate",
+      "installerSha256": "6f9c54ba2a73e8986a7cb3c196baa0f4f5bca79b5b0fbbf5aaaab03d90e6fedf",
+      "startedAt": "2026-10-13T07:51:47.5171604Z",
+      "exitCode": 0,
+      "passed": true
+    }
+  ],
+  "retainedEvidence": {
+    "accessibility-linux.json": {
+      "bytes": 55620,
+      "sha256": "0e173a40ca81c20754617ef12f2acfe90bb67a3ddaae3cc3e351f905727163ed"
+    },
+    "accessibility-windows.json": {
+      "bytes": 55620,
+      "sha256": "0e173a40ca81c20754617ef12f2acfe90bb67a3ddaae3cc3e351f905727163ed"
+    },
+    "audit-all.json": {
+      "bytes": 12131,
+      "sha256": "79dde03f636f6b8a21eb9fdd2ac5ef6c5dcbc569cbe33fd8aac0d348acfe6c9e"
+    },
+    "audit-production.json": {
+      "bytes": 9297,
+      "sha256": "0af08d6062ca730dda17e134a6df913524cdf2964ab7ca6148a065fdabdf07fd"
+    },
+    "installed.json": {
+      "bytes": 16659697,
+      "sha256": "b744c1c8e86b13924143ef024fec017a9f7bcfd18d465d49eef38010cd222633"
+    },
+    "payload-manifest.json": {
+      "bytes": 825944,
+      "sha256": "dab7d02538f7e844c79434f96d76b6cf24d96826ac42b61dca77968f7dd83003"
+    },
+    "release-manifest.json": {
+      "bytes": 1353,
+      "sha256": "cb17b0669c65591b66cddb6af336eaee4f29478e1820f5b0a1fddb230f4c3b8a"
+    },
+    "upgrade-attempts.json": {
+      "bytes": 452,
+      "sha256": "942f068a37c5f011d4dba95663a9332ef99509cc6a91a492e19595c8aac3c71a"
+    },
+    "upgrade-install.json": {
+      "bytes": 467,
+      "sha256": "50089ee159721339ef1d5e4891ea88882a7ccc3555c74f213440768061667a5c"
+    },
+    "upgrade-runtime.json": {
+      "bytes": 1796,
+      "sha256": "c3dd1848e3db3afa0542e843ebacf40a09fc743014169600e5c5c868a0933556"
+    }
+  },
+  "presentation": {
+    "docs\\screenshots\\w26-dictionary.png": {
+      "bytes": 352864,
+      "sha256": "78ef03b81672a4ecbe9a33cb0a8a53b05e60253490ca0935de43826261edf979"
+    },
+    "docs\\screenshots\\w26-download.png": {
+      "bytes": 446421,
+      "sha256": "759c6a87d5f175214ed3a4c7ce24b33b746dd41c0a04edf20a963fb693d3802c"
+    },
+    "docs\\screenshots\\w26-hero.png": {
+      "bytes": 1661602,
+      "sha256": "ff87c700965f47fd8b8e8aafb75e15c724d07f6734a2b338b618bcc0045cf880"
+    },
+    "docs\\verification\\w26-demo\\recording.json": {
+      "bytes": 1575,
+      "sha256": "decbd6b5abd1b3493647c1aa5c370732b774c1cb0f506d81612a0e85b67a3352"
+    }
+  },
+  "priorFailures": [
+    {
+      "run": 38098011560,
+      "finding": "Whisper failed in accented installation path; relative native asset resolution repaired the observed runtime failure."
+    },
+    {
+      "run": 38363997467,
+      "finding": "Native installer exited -1073741819 before runtime acceptance; old log did not identify the stage. Final runner passed both installers. Cause remains undetermined."
+    }
+  ],
+  "limits": "Three native unit cases remain gated; actual installed native probes are required and passed. Dependency findings remain. See release-checklist.md for excluded capabilities. No new public release, main merge or Pages deployment."
+}

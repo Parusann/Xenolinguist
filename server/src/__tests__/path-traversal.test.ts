@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import request from 'supertest';
+import request, { testSession } from './authenticated-request.js';
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
@@ -29,7 +29,7 @@ function minimalWavBase64(): string {
 describe('audio route id validation', () => {
   it('rejects an upload id containing path separators (400)', async () => {
     const { createApp } = await import('../app.js?pt=1');
-    const res = await request(createApp())
+    const res = await request(createApp(testSession))
       .post('/api/audio/upload')
       .send({ id: '../../evil', data: minimalWavBase64(), mimeType: 'audio/wav' });
     expect(res.status).toBe(400);
@@ -40,7 +40,7 @@ describe('audio route id validation', () => {
     tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'xeno-pt-'));
     process.env.DATA_DIR = tmp;
     const { createApp } = await import('../app.js?pt=5');
-    const res = await request(createApp())
+    const res = await request(createApp(testSession))
       .post('/api/audio/upload')
       .send({ id: 'clip_ABC-123', data: Buffer.from('not audio at all').toString('base64'), mimeType: 'audio/wav' });
     expect(res.status).toBe(400);
@@ -51,7 +51,7 @@ describe('audio route id validation', () => {
     tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'xeno-pt-'));
     process.env.DATA_DIR = tmp;
     const { createApp } = await import('../app.js?pt=2');
-    const res = await request(createApp())
+    const res = await request(createApp(testSession))
       .post('/api/audio/upload')
       .send({ id: 'clip_ABC-123', data: minimalWavBase64(), mimeType: 'audio/wav' });
     expect(res.status).toBe(200);

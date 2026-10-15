@@ -1,58 +1,56 @@
+import { EvidenceInspector } from '@/components/evidence/EvidenceInspector'
+import { SymbolicTranslation } from './SymbolicTranslation'
+import { EvidenceStatus } from '@/components/common/EvidenceStatus'
 import { useState, useMemo } from 'react'
 import { useProfile } from '@/stores/profile-context'
 import { useAI } from '@/hooks/useAI'
 import { useOllama } from '@/stores/ollama-context'
 import { getConfidenceLevel } from 'shared/constants'
 import { formatDictionaryForPrompt, formatGrammarForPrompt, formatSamplesForPrompt } from 'shared/prompts'
-import type { DictionaryEntry } from 'shared/types'
+import { useLexicon } from '@/hooks/useLexicon'
+import { renderToken, type LexicalAnalysis } from 'engine/lexicon/index'
+import { storedForm } from 'engine/text/normalize'
 import { SpeakButton } from '@/components/audio/SpeakButton'
+import { useProfileDraft } from '@/hooks/useProfileDraft'
 
 interface TranslatedWord {
   alien: string
   english: string | null
-  confidence: number
-  entry: DictionaryEntry | null
+  confidence: number | null
+  entry: LexicalAnalysis['entry'] | null
+  candidates: LexicalAnalysis[]
+  output: string
   punctuation: boolean
 }
 
-const bucketOf = (conf: number) => getConfidenceLevel(conf)
+const bucketOf = (conf: number | null) => getConfidenceLevel(conf)
 
 export function TranslationEngine() {
   const { profile, updateDictionaryEntry, addDictionaryEntry } = useProfile()
   const { runTask, loading, streamedText } = useAI()
-  const { connected } = useOllama()
-  const [alienInput, setAlienInput] = useState('')
+  const { ready: connected } = useOllama()
+  const [alienInput, setAlienInput] = useProfileDraft<string>('translation.alien', '')
   const [aiTranslation, setAiTranslation] = useState('')
-  const [reverseMode, setReverseMode] = useState(false)
-  const [reverseInput, setReverseInput] = useState('')
-  const [reverseOutput, setReverseOutput] = useState('')
+  const [reverseMode, setReverseMode] = useProfileDraft<boolean>('translation.reverseMode', false)
+  const [reverseInput, setReverseInput] = useProfileDraft<string>('translation.reverse', '')
+  const [reverseSubmitted, setReverseSubmitted] = useState('')
   const [showInspector, setShowInspector] = useState(true)
   const [hover, setHover] = useState<number | null>(null)
   const [pinned, setPinned] = useState<number | null>(null)
   const [editing, setEditing] = useState(false)
   const [editMeaning, setEditMeaning] = useState('')
 
-  const dictionary = useMemo(() => profile?.dictionary || [], [profile?.dictionary])
-
-  const translatedWords: TranslatedWord[] = useMemo(() => {
-    if (!alienInput.trim()) return []
-    return alienInput.trim().split(/\s+/).map((word) => {
-      const clean = word.toLowerCase().replace(/[^a-zA-ZÀ-ɏ'-]/g, '')
-      const punctuation = clean.length === 0
-      const entry = dictionary.find((e) => e.alien_word.toLowerCase() === clean) || null
-      return {
-        alien: word,
-        english: entry ? entry.english_meaning : null,
-        confidence: entry ? entry.confidence : 0,
-        entry,
-        punctuation,
-      }
-    })
-  }, [alienInput, dictionary])
+  const lexicon = useLexicon(profile)
+  const translatedWords: TranslatedWord[] = useMemo(() => lexicon.analyze(alienInput).map(token => {
+    const unique = token.candidates.length === 1 ? token.candidates[0] : null
+    return { alien: token.text, english: unique?.meaning || null, confidence: unique?.entry.confidence ?? null,
+      entry: unique?.entry ?? null, candidates: token.candidates, punctuation: token.kind !== 'word', output: renderToken(token) }
+  }), [alienInput, lexicon])
+  const reverseOutput = useMemo(() => lexicon.analyze(reverseSubmitted, 'reverse').map(token => renderToken(token, 'reverse')).join(''), [lexicon, reverseSubmitted])
 
   const realTokens = translatedWords.filter((t) => !t.punctuation)
-  const mappedCount = realTokens.filter((t) => t.english).length
-  const avgConf = mappedCount > 0 ? Math.round(realTokens.filter((t) => t.english).reduce((s, t) => s + t.confidence, 0) / mappedCount) : 0
+  const mappedCount = realTokens.filter((t) => t.candidates.some(candidate => candidate.meaning.trim())).length
+
 
   const activeIdx = pinned ?? hover
   const active = activeIdx != null ? translatedWords[activeIdx] : null
@@ -73,20 +71,7 @@ export function TranslationEngine() {
 
   const handleReverseTranslate = () => {
     if (!reverseInput.trim()) return
-    // Index every whitespace/slash-separated token of each gloss → alien word, so multi-word
-    // meanings ("to run", "star / light") match on any of their words, not just the whole string.
-    const reverseIndex = new Map<string, string>()
-    for (const e of dictionary) {
-      for (const tok of e.english_meaning.toLowerCase().split(/[\s/]+/)) {
-        const t = tok.replace(/[^a-zà-ɏ'-]/g, '')
-        if (t && !reverseIndex.has(t)) reverseIndex.set(t, e.alien_word)
-      }
-    }
-    const out = reverseInput.trim().split(/\s+/).map((word) => {
-      const clean = word.toLowerCase().replace(/[^a-zà-ɏ'-]/g, '')
-      return reverseIndex.get(clean) ?? `[${word}]`
-    })
-    setReverseOutput(out.join(' '))
+    setReverseSubmitted(reverseInput)
   }
 
   const pinForEdit = () => {
@@ -97,15 +82,18 @@ export function TranslationEngine() {
   }
 
   const saveCorrection = () => {
-    if (!active || !editMeaning.trim()) return
+    if (!active || !editMeaning.trim() || active.candidates.length > 1) return
     if (active.entry) {
-      updateDictionaryEntry(active.entry.id, { english_meaning: editMeaning.trim() })
+      const sense = active.candidates[0].sense
+      updateDictionaryEntry(active.entry.id, sense === null
+        ? { english_meaning: editMeaning.trim() }
+        : { senses: active.entry.senses!.map((value, i) => i === sense ? { ...value, meaning: editMeaning.trim() } : value) })
     } else {
       addDictionaryEntry({
-        alien_word: active.alien.toLowerCase().replace(/[^a-zA-ZÀ-ɏ'-]/g, ''),
+        alien_word: storedForm(active.alien),
         english_meaning: editMeaning.trim(),
         part_of_speech: 'unknown',
-        confidence: 60,
+        confidence: null,
         context: 'Added via translation',
         examples: [],
         notes: '',
@@ -115,17 +103,13 @@ export function TranslationEngine() {
     setPinned(null)
   }
 
-  const lockIn = () => {
-    if (active?.entry) updateDictionaryEntry(active.entry.id, { confidence: Math.max(76, active.entry.confidence) })
-  }
-
-  const copyTranslation = () => navigator.clipboard.writeText(translatedWords.map((t) => (t.punctuation ? t.alien : t.english || `[${t.alien}]`)).join(' '))
+  const copyTranslation = () => navigator.clipboard.writeText(translatedWords.map((t) => t.output).join(''))
 
   const Legend = (
     <div className="flex" style={{ gap: 12, fontSize: 12 }}>
-      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot confirmed" /><span className="dim">Confirmed</span></span>
-      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot probable" /><span className="dim">Probable</span></span>
-      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot unknown" /><span className="dim">Unknown</span></span>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot confirmed" /><span className="dim">High user belief</span></span>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot probable" /><span className="dim">Moderate user belief</span></span>
+      <span className="flex" style={{ gap: 6, alignItems: 'center' }}><span className="dot unknown" /><span className="dim">Low / unrated / unmapped</span></span>
     </div>
   )
 
@@ -137,7 +121,7 @@ export function TranslationEngine() {
             <h1 className="h-display" style={{ margin: 0, fontSize: 30 }}>Translation <em>Engine</em></h1>
             <span className="kicker">PHASE 05</span>
           </div>
-          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Live decoding using your dictionary and AI inference. Each word is colored by confidence — hover to inspect.</p>
+          <p className="dim" style={{ marginTop: 6, fontSize: 13 }}>Lexical glosses preserve source order. Symbolic translation uses typed rules; AI Full Translation runs separately. Colors show user belief only.</p>
         </div>
         <div className="flex" style={{ gap: 12, alignItems: 'center' }}>
           {Legend}
@@ -149,15 +133,16 @@ export function TranslationEngine() {
       </div>
 
       {!reverseMode ? (
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: showInspector ? '1fr 1fr 340px' : '1fr 1fr', gap: 16, overflow: 'hidden' }}>
+        <div className="phase-columns" style={{ flex: 1, display: 'grid', gridTemplateColumns: showInspector ? '1fr 1fr 340px' : '1fr 1fr', gap: 16, overflow: 'hidden' }}>
           {/* SOURCE */}
           <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
               <span className="label" style={{ marginBottom: 0 }}>Source · {profile?.name || 'Unknown'}</span>
             </div>
             <textarea
+              aria-label="Translation source"
               value={alienInput}
-              onChange={(e) => setAlienInput(e.target.value)}
+              onChange={(e) => { setAlienInput(e.target.value); setPinned(null); setHover(null); setEditing(false) }}
               placeholder="Enter unknown language text to translate…"
               style={{ flex: 1, resize: 'none', background: 'transparent', border: 0, outline: 'none', fontFamily: 'var(--font-mono)', fontSize: 22, lineHeight: 1.7, color: 'var(--fg)', letterSpacing: '-0.005em' }}
             />
@@ -172,31 +157,28 @@ export function TranslationEngine() {
           {/* TRANSLATION */}
           <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
-              <span className="label" style={{ marginBottom: 0 }}>Translation · English</span>
-              {mappedCount > 0 && (
-                <span className="flex" style={{ gap: 8, alignItems: 'center' }}>
-                  <span className="font-mono" style={{ fontSize: 10, color: 'var(--fg-mute)' }}>avg conf</span>
-                  <span className={'font-mono c-' + bucketOf(avgConf)} style={{ fontSize: 12 }}>{avgConf}%</span>
-                </span>
-              )}
+              <span className="label" style={{ marginBottom: 0 }}>Lexical gloss · English</span>
+              <span className="dim">{mappedCount}/{realTokens.length} regions have candidate meanings</span>
             </div>
-            <div className="expr-color" style={{ flex: 1, overflow: 'auto', fontSize: 22, lineHeight: 1.9, letterSpacing: '-0.005em' }}>
+            <div data-testid="lexical-translation" role="region" aria-label="Lexical translation" tabIndex={0} className="expr-color" style={{ whiteSpace: 'pre-wrap', flex: 1, overflow: 'auto', fontSize: 22, lineHeight: 1.9, letterSpacing: '-0.005em' }}>
               {translatedWords.length === 0 ? (
                 <span style={{ fontSize: 14, color: 'var(--fg-faint)' }}>Translation will appear here…</span>
               ) : (
                 translatedWords.map((tw, i) => {
-                  if (tw.punctuation) return <span key={i} style={{ color: 'var(--fg-mute)' }}>{tw.alien}{' '}</span>
+                  if (tw.punctuation) return <span key={i} style={{ color: 'var(--fg-mute)' }}>{tw.alien}</span>
                   const c = tw.english ? bucketOf(tw.confidence) : 'unknown'
                   return (
                     <span
                       key={i}
+                      role="button" tabIndex={0}
+                      onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setPinned(i); setEditing(false) } }}
                       className={'word-token wt-' + c}
                       onMouseEnter={() => setHover(i)}
                       onMouseLeave={() => setHover((h) => (h === i ? null : h))}
                       onClick={() => { setPinned(i); setEditing(false) }}
                       style={{ background: activeIdx === i ? 'rgba(0,230,118,0.08)' : undefined, outline: activeIdx === i ? '1px solid rgba(0,230,118,0.3)' : undefined }}
                     >
-                      {tw.english || `?${tw.alien}`}{' '}
+                      {tw.output}
                     </span>
                   )
                 })
@@ -221,17 +203,16 @@ export function TranslationEngine() {
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 28, fontWeight: 500, color: `var(--conf-${active.english ? bucketOf(active.confidence) : 'unknown'})`, margin: '12px 0 6px' }}>{active.alien}</div>
 
                   <div className="label" style={{ marginTop: 10, marginBottom: 8 }}>Candidates</div>
-                  {active.entry ? (
-                    <div className="glass-inner" style={{ padding: '8px 10px', background: 'rgba(0,230,118,0.04)', borderColor: 'rgba(0,230,118,0.25)' }}>
-                      <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 6 }}>
-                        <span style={{ fontSize: 13, color: 'var(--fg)', fontWeight: 500 }}>{active.entry.english_meaning}</span>
-                        <span className={'font-mono c-' + bucketOf(active.confidence)} style={{ fontSize: 11 }}>{active.confidence}%</span>
-                      </div>
-                      <div className={'cbar ' + bucketOf(active.confidence)}><span style={{ width: active.confidence + '%' }} /></div>
+                  {active.candidates.length ? active.candidates.map((candidate, i) => (
+                    <div key={i} className="glass-inner" style={{ padding: '8px 10px', marginBottom: 6 }}>
+                      <div style={{ fontSize: 13 }}>{candidate.text} → {candidate.meaning || 'No meaning recorded'}</div>
+                      <div className="dim" style={{ fontSize: 11 }}>Source [{candidate.start}, {candidate.end}) · {candidate.sense === null ? 'display gloss' : `sense ${candidate.sense + 1}`}</div>
+                      <EvidenceStatus value={candidate.entry.confidence} />
+                      {profile && <EvidenceInspector profile={profile} targetId={candidate.entry.id} />}
                     </div>
-                  ) : (
-                    <div style={{ fontSize: 12.5, color: 'var(--fg-dim)' }}>Not in dictionary — define it below.</div>
-                  )}
+                  )) : <div style={{ fontSize: 12.5, color: 'var(--fg-dim)' }}>Not in dictionary — define it below.</div>}
+                  {active.candidates.length > 1 && <p className="dim">Competing analyses remain unresolved. Edit individual entries in Vocabulary.</p>}
+
 
                   {active.entry?.part_of_speech && active.entry.part_of_speech !== 'unknown' && (
                     <div className="flex" style={{ gap: 8, marginTop: 10 }}><span className="badge">{active.entry.part_of_speech}</span></div>
@@ -257,19 +238,18 @@ export function TranslationEngine() {
                     <div style={{ marginTop: 14 }}>
                       <div className="label" style={{ marginBottom: 6 }}>{active.entry ? 'Correct translation' : 'Define meaning'}</div>
                       <div className="flex" style={{ gap: 8 }}>
-                        <input className="input" value={editMeaning} autoFocus onChange={(e) => setEditMeaning(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && saveCorrection()} style={{ fontSize: 12 }} />
+                        <input aria-label="Translation meaning" className="input" value={editMeaning} maxLength={active.candidates[0]?.sense != null ? 512 : undefined} autoFocus onChange={(e) => setEditMeaning(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && saveCorrection()} style={{ fontSize: 12 }} />
                         <button className="btn sm primary" onClick={saveCorrection} disabled={!editMeaning.trim()}>{active.entry ? 'Save' : 'Add'}</button>
                       </div>
                     </div>
                   ) : (
                     <div className="flex" style={{ gap: 8, marginTop: 'auto', paddingTop: 12 }}>
-                      <button className="btn sm primary" onClick={lockIn} disabled={!active.entry}>↓ Lock in</button>
-                      <button className="btn sm ghost" onClick={pinForEdit}>{active.entry ? 'Edit' : 'Define'}</button>
+                      <button className="btn sm ghost" onClick={pinForEdit} disabled={active.candidates.length > 1}>{active.entry ? 'Edit' : 'Define'}</button>
                     </div>
                   )}
                 </>
               ) : (
-                <div style={{ flex: 1, display: 'grid', placeItems: 'center', textAlign: 'center', color: 'var(--fg-mute)' }}>
+                <div className="phase-columns" style={{ flex: 1, display: 'grid', placeItems: 'center', textAlign: 'center', color: 'var(--fg-mute)' }}>
                   <div>
                     <div style={{ fontSize: 36, opacity: 0.3, marginBottom: 8 }}>◌</div>
                     <div style={{ fontSize: 12.5 }}>Hover or click any word to inspect</div>
@@ -280,7 +260,7 @@ export function TranslationEngine() {
           )}
         </div>
       ) : (
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, overflow: 'hidden' }}>
+        <div className="phase-columns" style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, overflow: 'hidden' }}>
           <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column' }}>
             <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
               <span className="label" style={{ marginBottom: 0 }}>English</span>
@@ -290,12 +270,16 @@ export function TranslationEngine() {
           </div>
           <div className="glass-card" style={{ padding: 22, display: 'flex', flexDirection: 'column' }}>
             <span className="label">Alien Output</span>
-            <div style={{ flex: 1, overflow: 'auto', fontFamily: 'var(--font-mono)', fontSize: 20, lineHeight: 1.7, color: reverseOutput ? 'var(--accent)' : 'var(--fg-faint)' }}>
+            <div data-testid="reverse-translation" style={{ whiteSpace: 'pre-wrap', flex: 1, overflow: 'auto', fontFamily: 'var(--font-mono)', fontSize: 20, lineHeight: 1.7, color: reverseOutput ? 'var(--accent)' : 'var(--fg-faint)' }}>
               {reverseOutput || 'Alien translation will appear here…'}
             </div>
           </div>
         </div>
       )}
+
+      {!reverseMode && profile && <div style={{ maxHeight: 290, overflow: 'auto', flexShrink: 0 }}>
+        <SymbolicTranslation profile={profile} source={alienInput} />
+      </div>}
 
       {/* AI full-translation result */}
       {(loading || aiTranslation) && !reverseMode && (

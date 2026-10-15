@@ -1,0 +1,16 @@
+[
+  {
+    "stage": "published-v1.0.0",
+    "installerSha256": "5974906a74a11eb7d4e14c0923ec5ff870e5669ad050b832b10b773e8491c6b5",
+    "startedAt": "2026-10-13T07:50:53.6526569Z",
+    "exitCode": 0,
+    "passed": true
+  },
+  {
+    "stage": "candidate",
+    "installerSha256": "6f9c54ba2a73e8986a7cb3c196baa0f4f5bca79b5b0fbbf5aaaab03d90e6fedf",
+    "startedAt": "2026-10-13T07:51:47.5171604Z",
+    "exitCode": 0,
+    "passed": true
+  }
+]

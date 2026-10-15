@@ -1,0 +1,20 @@
+{
+  "version": "unicode-lexical-1",
+  "scope": "Hand-authored lexical regression probes with supplied dictionaries; not language induction or held-out semantic accuracy.",
+  "cases": [
+    {"id":"ascii","input":"tal","dictionary":[{"alien_word":"tal","english_meaning":"water"}],"expected":["water"]},
+    {"id":"han","input":"水","dictionary":[{"alien_word":"水","english_meaning":"water"}],"expected":["water"]},
+    {"id":"tamil","input":"தமிழ்","dictionary":[{"alien_word":"தமிழ்","english_meaning":"Tamil"}],"expected":["Tamil"]},
+    {"id":"cyrillic","input":"ВОДА","dictionary":[{"alien_word":"вода","english_meaning":"water"}],"expected":["water"]},
+    {"id":"decomposed-accent","input":"café","dictionary":[{"alien_word":"café","english_meaning":"coffee"}],"expected":["coffee"]},
+    {"id":"precomposed-accent","input":"café","dictionary":[{"alien_word":"café","english_meaning":"coffee"}],"expected":["coffee"]},
+    {"id":"ipa-tie","input":"t͡ʃaː","dictionary":[{"alien_word":"t͡ʃaː","english_meaning":"tea"}],"expected":["tea"]},
+    {"id":"smart-apostrophe","input":"l’eau","dictionary":[{"alien_word":"l’eau","english_meaning":"water"}],"expected":["water"]},
+    {"id":"ascii-apostrophe","input":"can't","dictionary":[{"alien_word":"can't","english_meaning":"cannot"}],"expected":["cannot"]},
+    {"id":"hyphen","input":"red-blue","dictionary":[{"alien_word":"red-blue","english_meaning":"purple"}],"expected":["purple"]},
+    {"id":"astral-letter","input":"𐐀","dictionary":[{"alien_word":"𐐀","english_meaning":"astral letter"}],"expected":["astral letter"]},
+    {"id":"homographs","input":"tal","dictionary":[{"alien_word":"tal","english_meaning":"water"},{"alien_word":"tal","english_meaning":"sky"}],"expected":["water","sky"]},
+    {"id":"accepted-form","input":"tál","dictionary":[{"alien_word":"tal","english_meaning":"water","form_aliases":["tál"]}],"expected":["water"]},
+    {"id":"unknown","input":"未知","dictionary":[{"alien_word":"水","english_meaning":"water"}],"expected":[]}
+  ]
+}

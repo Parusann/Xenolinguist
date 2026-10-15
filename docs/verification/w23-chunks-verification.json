@@ -1,0 +1,535 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+  "retainedLinuxAuditReports": {
+    "w23-chunks-audit-all.json": {
+      "bytes": 14941,
+      "sha256": "34df33fa639b63e8c748fd618fcc979df53941d06552469e741724b2341d2134"
+    },
+    "w23-chunks-audit-production.json": {
+      "bytes": 7326,
+      "sha256": "9ed22b954be523792c6d15c5c22761a3c147df58ecb76732d94342030b442cbc"
+    }
+  },
+  "scope": "W23 second unit: bounded sequential overlapping native phone windows, energy-only boundary hints, global frame ownership and CTC decoding, explicit tensor cleanup and completed-window progress/cancellation.",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+    "jobs": [
+      {
+        "completedAt": "2026-10-04T20:38:48Z",
+        "conclusion": "success",
+        "databaseId": 111524890732,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-10-04T20:32:09Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37232466637/job/111524890732"
+      },
+      {
+        "completedAt": "2026-10-04T20:43:23Z",
+        "conclusion": "success",
+        "databaseId": 111524890950,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-10-04T20:32:09Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37232466637/job/111524890950"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37232466637"
+  },
+  "sourceChecks": {
+    "unitTests": 474,
+    "serverSharedEngineEvaluationTests": 443,
+    "clientTests": 31,
+    "newChunkCases": 12,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-10-04T20:34:24.900Z",
+        "duration": 245135.396,
+        "expected": 46,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-04T20:38:31.610Z",
+        "duration": 9603.401,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "0e50a894bf76f6a867fdc5ab3ad6827d3cee5445780e371c6e3f1cd0cb5ec44f"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "6ecca2bbf6d5532aab076fcb8b58459f7446f7299eb46b8d2254c3da7b0a46fb"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "6ecca2bbf6d5532aab076fcb8b58459f7446f7299eb46b8d2254c3da7b0a46fb"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+          "sourceSnapshotHash": "959e53d408c6dc3eb3fe226806d4e10b0a09a90b0239158971b773f1a5700107",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 160217,
+        "sha256": "f43e190bd9850ae6336de40208f67e63ca3db08834420785c2a4142993fd1b38"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 1,
+          "high": 6,
+          "critical": 0,
+          "total": 7
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-10-04T20:38:08.431Z",
+        "duration": 290289.707,
+        "expected": 46,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-04T20:43:01.350Z",
+        "duration": 11896.708999999999,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "45962353c5c19527144881895b7faefc77e1fd603c3ebb520f3185b2fb7fd64c"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "638707e2d094045d95e7cc8f0eb93ae380b01ea7dec5c3141bbce7df1631c84c"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "638707e2d094045d95e7cc8f0eb93ae380b01ea7dec5c3141bbce7df1631c84c"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+          "sourceSnapshotHash": "935335a8738f3efd73e306e18636d427bd570898065d6daf53e139aca17e8337",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 135005,
+        "sha256": "75e7827f107714a0fda6d308094789c4a3c00c037ec7873f1e4b77e119064344"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 1,
+          "high": 6,
+          "critical": 0,
+          "total": 7
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+    "jobs": [
+      {
+        "completedAt": "2026-10-04T20:36:16Z",
+        "conclusion": "success",
+        "databaseId": 111524890842,
+        "name": "build",
+        "startedAt": "2026-10-04T20:32:09Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37232466616/job/111524890842"
+      },
+      {
+        "completedAt": "2026-10-04T20:42:11Z",
+        "conclusion": "success",
+        "databaseId": 111525676727,
+        "name": "verify-clean",
+        "startedAt": "2026-10-04T20:36:19Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37232466616/job/111525676727"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37232466616"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-10-04T20:42:08.361Z",
+    "source": {
+      "revision": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "295f19584d16f57f0eefc2f78b3ce27883a7316838c80bd5f28f59a3e2e07844"
+    },
+    "appArchive": {
+      "bytes": 2993399,
+      "sha256": "3fa4f17bed5cb41a410bb764428d73ea5ef2a24c2c4a0972a83f587e3e6b38d9"
+    }
+  },
+  "installedChecks": {
+    "files": 3774,
+    "archives": 8,
+    "report": {
+      "bytes": 1150019,
+      "sha256": "6e6b6707c77ac68be85d4a27b6188b87404ac01389313a248591c5cff4c6dcc2"
+    },
+    "chunkedPhones": {
+      "passed": true,
+      "frames": 1377,
+      "phoneRuns": 378,
+      "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax",
+      "chunks": 4,
+      "maxInputSamples": 144080
+    },
+    "nativeCancellation": {
+      "nativeProcessStarted": true,
+      "status": 409,
+      "code": "JOB_CANCELLED"
+    },
+    "chunkCancellation": {
+      "progress": {
+        "status": "Phone chunks processed",
+        "completed": 1,
+        "total": 14
+      },
+      "status": 409,
+      "code": "JOB_CANCELLED",
+      "cancelMs": 41.72239999999874,
+      "jobPollMs": [
+        9.37750000000051,
+        6.833300000000236,
+        7.0900000000001455,
+        7.526999999998225,
+        9.837900000000445,
+        6.929899999999179,
+        6.866500000000087,
+        6.806500000000597,
+        6.640300000000934,
+        7.401299999999537,
+        6.833199999999124,
+        6.568699999999808,
+        6.540999999999258,
+        6.378600000000006,
+        6.5384999999987485,
+        6.751299999999901,
+        6.77139999999963,
+        6.737499999999272,
+        6.582000000000335,
+        6.554199999998673,
+        7.1119999999991705,
+        6.88760000000002,
+        6.655099999999948,
+        6.733900000001086,
+        7.391400000000431,
+        6.904499999998734,
+        6.897399999999834,
+        6.911400000000867,
+        6.9266999999999825,
+        6.63379999999961,
+        7.114799999999377,
+        6.658199999999852,
+        6.6445999999996275,
+        6.793899999998757,
+        6.862100000000282,
+        7.246900000000096,
+        6.795700000000579,
+        7.418900000000576,
+        6.727500000000873,
+        7.375500000000102,
+        7.037099999999555,
+        6.567799999998897,
+        6.559999999997672,
+        7.342700000001059,
+        6.703600000000733,
+        7.187799999999697,
+        6.821599999999307,
+        6.940899999997782,
+        6.963400000000547,
+        6.628999999997177,
+        6.712599999998929,
+        6.519899999999325,
+        6.662799999998242,
+        7.485499999998865,
+        7.347099999999045,
+        6.877199999998993,
+        6.629300000000512,
+        6.5218000000022585,
+        7.72729999999865,
+        6.629700000001321,
+        6.792499999999563,
+        6.668300000001182,
+        6.622100000000501,
+        8.273299999997107,
+        6.569800000001123,
+        7.195999999999913,
+        7.65679999999702,
+        7.3879999999990105,
+        8.409200000001874,
+        8.805799999998271,
+        7.575199999999313,
+        7.728100000000268,
+        8.6987999999983,
+        7.28269999999975,
+        7.690699999999197,
+        7.9297999999980675,
+        7.764500000001135,
+        7.720600000000559,
+        7.027600000001257,
+        7.559300000000803,
+        7.646499999998923,
+        7.326700000001438,
+        8.042499999999563,
+        9.433199999999488,
+        7.175899999998364,
+        7.997100000000501,
+        7.787000000000262,
+        7.1129000000000815,
+        11.755600000000413,
+        7.458800000000338,
+        7.66019999999844,
+        7.589499999998225,
+        6.746900000001915,
+        7.803300000003219,
+        6.969800000002579,
+        6.734400000001187,
+        7.750499999998283,
+        7.735000000000582,
+        23.657999999999447,
+        7.440200000000914,
+        8.156599999998434,
+        7.5473000000019965,
+        7.297099999999773,
+        7.475600000001577,
+        7.750099999997474,
+        7.299800000000687,
+        7.123399999996764,
+        7.663800000002084,
+        7.364099999998871,
+        7.596199999999953,
+        8.708800000000338,
+        7.563099999999395,
+        7.756000000001222,
+        16.567699999999604,
+        7.4751000000032946,
+        8.095699999998033,
+        8.58469999999943,
+        8.19919999999911,
+        7.546299999998155,
+        7.548899999997957,
+        9.034700000000157,
+        8.25630000000092,
+        7.66189999999915,
+        17.89429999999993,
+        8.83060000000114
+      ]
+    }
+  },
+  "native": {
+    "source": {
+      "revision": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "25.8.2",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "check": {
+      "passed": true,
+      "frames": 1377,
+      "phoneRuns": 373,
+      "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax",
+      "chunks": 4,
+      "maxInputSamples": 144080
+    },
+    "elapsedMs": 6673.364100000001,
+    "artifact": {
+      "bytes": 365467,
+      "sha256": "9e844fa834d06d0e28fe84caaf7c2ff03806a98d2cb3da967b57026ee8b45e87"
+    }
+  },
+  "nearCap": {
+    "source": {
+      "revision": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+      "branch": "implementation/reliability",
+      "workingFiles": [
+        {
+          "file": "docs/audio-evaluation.md",
+          "sha256": "1df89bfe52f80968389f1fc7fe1d0b828ef312f0bbebc8490ebc3ab5241a5478"
+        },
+        {
+          "file": "docs/implementation-progress.md",
+          "sha256": "5b65a644239196b34bf4b32205221998fad97c079368b17e24cb5fce5338576e"
+        }
+      ],
+      "node": "25.8.2",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "check": {
+      "passed": true,
+      "frames": 5856,
+      "phoneRuns": 1587,
+      "audioSha256": "750737af2007b633e83f4c8d103e00c5f377d3e57261f848065897992ac75299",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax",
+      "chunks": 16,
+      "maxInputSamples": 144080
+    },
+    "elapsedMs": 24876.833599999998,
+    "durationSeconds": 117.132125,
+    "artifact": {
+      "bytes": 1552645,
+      "sha256": "522d40788adbee721ed4f5ff5e5d8658e542ce0558b8c63c16b0335e7f691c4f"
+    },
+    "scope": "Additional local run using the same compiled implementation; source identity retains pending documentation edits, with no runtime source changes."
+  },
+  "retainedExamples": {
+    "w23-chunks-installed.json": {
+      "bytes": 387064,
+      "sha256": "b888e16a476179485580a5e533bf019ca30267c561f48450e31e66c660c8e2b7"
+    },
+    "w23-chunks-replay.mts": {
+      "bytes": 2512,
+      "sha256": "40751c8318d8139b56c9343a0539d05e5351f9d0c01a0d651efadffaa2a29cd3"
+    }
+  },
+  "timingScope": {
+    "fixtureSeconds": 27.5605,
+    "installedTotalMs": 27806.2817,
+    "jobsPollMaxMs": 23.657999999999447,
+    "jobsPollCount": 125,
+    "description": "One local invocation and one clean-installed invocation, including model initialization. Poll timings include the authenticated browser/IPC round trip. No cold/warm benchmark, memory certification or recognition score."
+  },
+  "limits": [
+    "All original frames remain covered. Energy-only boundary hints do not establish speech activity or remove quiet audio.",
+    "Context and per-window normalization can change recognition; exact ownership does not establish equivalence to full-recording logits or phonetic accuracy.",
+    "Each native window is bounded, but the total process memory and latency are not certified across machines. The input cap remains 120 seconds.",
+    "Native logits are not retained. Replay rebuilds real-audio plans and synthetic overlap decoding, and checks saved response identity/accounting; it does not reproduce native inference or timings.",
+    "Whisper, the existing resampler and saved editing flow are unchanged. Longer-recording storage/workflows, separate generated/manual layers and labeled recognition evaluation remain W23 work.",
+    "Three native unit skips and retained dependency audit findings remain unresolved.",
+    "No main merge, installer release or Pages deployment."
+  ],
+  "exampleReplay": {
+    "passed": true,
+    "revision": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+    "nativeCheck": {
+      "passed": true,
+      "frames": 1377,
+      "phoneRuns": 373,
+      "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax",
+      "chunks": 4,
+      "maxInputSamples": 144080
+    },
+    "installedCheck": {
+      "passed": true,
+      "frames": 1377,
+      "phoneRuns": 378,
+      "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax",
+      "chunks": 4,
+      "maxInputSamples": 144080
+    },
+    "nearCapCheck": {
+      "passed": true,
+      "frames": 5856,
+      "phoneRuns": 1587,
+      "audioSha256": "750737af2007b633e83f4c8d103e00c5f377d3e57261f848065897992ac75299",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax",
+      "chunks": 16,
+      "maxInputSamples": 144080
+    },
+    "syntheticRuns": 2,
+    "scope": "Recomputed real-audio window plans and synthetic overlap/CTC decoding; verified native response identities and accounting. Native logits, recognition accuracy and timings are not reproduced."
+  },
+  "priorCtcReplay": {
+    "passed": true,
+    "sourceRevision": "4342cb672ee8734096a6280b3ee92892e938df98",
+    "syntheticRuns": 3,
+    "nativeRuns": 46,
+    "installedRuns": 46,
+    "scope": "Synthetic logits recomputed; native/installed response identities, frame geometry and score mass verified. Native logits and inference are not replayed."
+  }
+}

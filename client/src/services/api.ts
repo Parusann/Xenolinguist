@@ -1,22 +1,33 @@
 import type { AIMessage } from 'shared/types'
 
+// Desktop credentials are injected by main; development uses an HttpOnly pairing cookie.
+// Never store or expose the session credential to application JavaScript.
 const BASE = '/api'
 
+export class ApiError extends Error {
+  status: number
+  code?: string
+  currentRevision?: number
+  constructor(message: string, status: number, code?: string, currentRevision?: number) {
+    super(message); this.status = status; this.code = code; this.currentRevision = currentRevision
+  }
+}
+
 export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options,
-  })
+  const headers = new Headers({ 'Content-Type': 'application/json' })
+  new Headers(options?.headers).forEach((value, key) => headers.set(key, value))
+  const res = await fetch(`${BASE}${path}`, { ...options, headers, credentials: 'same-origin',
+    signal: options?.signal ?? AbortSignal.timeout(15_000) })
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }))
-    throw new Error(err.error || 'API request failed')
+    throw new ApiError(typeof err.error === 'string' ? err.error : err.message || 'API request failed', res.status, err.code, err.currentRevision)
   }
-  return res.json()
+  return res.status === 204 ? undefined as T : res.json()
 }
 
 export async function streamAI(
   messages: AIMessage[],
-  options: { system?: string; model?: string; signal?: AbortSignal },
+  options: { system?: string; model?: string; task?: string; signal?: AbortSignal },
   onToken: (token: string) => void,
 ): Promise<void> {
   const { signal, ...opts } = options
@@ -24,7 +35,7 @@ export async function streamAI(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ messages, ...opts }),
-    signal,
+    signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(250000)]) : AbortSignal.timeout(250000),
   })
 
   // Surface a non-2xx (e.g. a 400 validation error) instead of trying to read an error body as a stream.
@@ -39,7 +50,7 @@ export async function streamAI(
   const decoder = new TextDecoder()
   let buffer = ''
 
-  while (true) {
+  try { while (true) {
     const { done, value } = await reader.read()
     if (done) break
 
@@ -65,4 +76,6 @@ export async function streamAI(
       if (parsed.token) onToken(parsed.token)
     }
   }
+  throw new Error('AI connection ended before completion; the partial answer is retained')
+  } finally { await reader.cancel().catch(() => {}); reader.releaseLock() }
 }

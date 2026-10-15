@@ -14,28 +14,36 @@ import { VocabularyBuilder } from '@/components/phase3-vocabulary/VocabularyBuil
 import { GrammarAnalyzer } from '@/components/phase4-grammar/GrammarAnalyzer'
 import { TranslationEngine } from '@/components/phase5-translation/TranslationEngine'
 import { Dashboard } from '@/components/phase6-dashboard/Dashboard'
-import { SandboxSetup, type ConlangData } from '@/components/sandbox/SandboxSetup'
+import { SandboxSetup } from '@/components/sandbox/SandboxSetup'
 import { SandboxController } from '@/components/sandbox/SandboxController'
+import { CompilerSandbox } from '@/components/sandbox/CompilerSandbox'
 import { useProfile } from '@/stores/profile-context'
 import { useOllama } from '@/stores/ollama-context'
 import { useUndo } from '@/stores/undo-context'
 import { useKeyboardShortcuts, type ShortcutDefinition } from '@/hooks/useKeyboardShortcuts'
 import { PHASES, type PhaseId } from '@/lib/phases'
+import { useProfileDraft } from '@/hooks/useProfileDraft'
+import { ProposalReviewContext, type ResearchReviewRequest } from '@/stores/proposal-review-context'
 
 const SANDBOX_PHASE = { id: 'sandbox', label: 'Sandbox', icon: '◈', desc: 'AI-generated language challenge' } as const
 
 export function AppShell() {
   const { profile } = useProfile()
-  const { connected, selectedModel } = useOllama()
+  const { ready: connected, selectedModel } = useOllama()
   const { undo } = useUndo()
   const isSandbox = profile?.is_sandbox
   const phases = isSandbox ? [SANDBOX_PHASE, ...PHASES] : PHASES
-  const [activePhase, setActivePhase] = useState<PhaseId>(isSandbox ? 'sandbox' : 'samples')
+  const [storedPhase, setActivePhase] = useProfileDraft<PhaseId>('activePhase', isSandbox ? 'sandbox' : 'samples')
+  const activePhase = phases.some(phase => phase.id === storedPhase) ? storedPhase : isSandbox ? 'sandbox' : 'samples'
   const [logOpen, setLogOpen] = useState(false)
-  const [conlangData, setConlangData] = useState<ConlangData | null>(null)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
+  const [researchRequest, setResearchRequest] = useState<ResearchReviewRequest | null>(null)
+  const openResearch = useCallback((query: string) => {
+    setResearchRequest({ id: crypto.randomUUID(), query: query.slice(0, 1200) })
+    setChatOpen(true)
+  }, [setResearchRequest, setChatOpen])
   const [showTour, setShowTour] = useState(() => !localStorage.getItem('xenolinguist-tour-completed'))
 
   const phaseIds = useMemo(() => PHASES.map((p) => p.id), [])
@@ -65,6 +73,7 @@ export function AppShell() {
       {
         key: 'k',
         ctrl: true,
+        allowInInput: true,
         handler: () => setCommandPaletteOpen(prev => !prev),
         description: 'Search everything',
         category: 'Actions' as const,
@@ -108,9 +117,9 @@ export function AppShell() {
   const renderPhase = () => {
     switch (activePhase) {
       case 'sandbox':
-        return conlangData
-          ? <SandboxController conlang={conlangData} onPlayAgain={() => setConlangData(null)} />
-          : <SandboxSetup onGenerated={setConlangData} />
+        return profile?.compiler_session_id ? <CompilerSandbox /> : profile?.sandbox_session
+          ? <SandboxController />
+          : <SandboxSetup />
       case 'samples': return <SampleInput />
       case 'numbers': return <NumberDecoder />
       case 'vocabulary': return <VocabularyBuilder />
@@ -121,9 +130,10 @@ export function AppShell() {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden relative">
+    <ProposalReviewContext.Provider value={openResearch}><div className="h-screen flex flex-col overflow-hidden relative">
       {/* Grid background */}
       <div className="fixed inset-0 z-0" style={{
+        pointerEvents: 'none',
         backgroundImage: `
           linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
           linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)
@@ -153,12 +163,12 @@ export function AppShell() {
 
         {/* Status pills */}
         <div className="flex items-center gap-3" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-mute)' }}>
-          <div className="flex items-center gap-1.5" title={connected ? `Primary: ${selectedModel}` : 'Ollama offline'}>
+          <div className="flex items-center gap-1.5" title={connected ? `Primary: ${selectedModel}` : 'Local chat not ready'}>
             <span
               className="dot"
               style={{ width: 5, height: 5, ...(connected ? {} : { background: 'var(--conf-unknown)', boxShadow: '0 0 8px var(--conf-unknown)' }) }}
             />
-            <span style={{ color: 'var(--fg-1)' }}>{connected ? selectedModel?.split(':')[0] || 'Ollama' : 'Offline'}</span>
+            <span style={{ color: 'var(--fg-1)' }}>{connected ? selectedModel?.split(':')[0] || 'Ollama' : 'Not ready'}</span>
           </div>
           <span style={{ color: 'var(--fg-faint)' }}>·</span>
           <span><b style={{ color: 'var(--fg)' }}>{profile?.dictionary.length || 0}</b> words</span>
@@ -199,7 +209,7 @@ export function AppShell() {
         <ShortcutsHelp shortcuts={registered} onClose={() => setShortcutsOpen(false)} />
       )}
 
-      {chatOpen && <AIChat onClose={() => setChatOpen(false)} />}
+      {chatOpen && <AIChat researchRequest={researchRequest} clearResearchRequest={() => setResearchRequest(null)} onClose={() => { setChatOpen(false); setResearchRequest(null) }} />}
 
       <ToastContainer />
 
@@ -214,6 +224,6 @@ export function AppShell() {
       )}
 
       {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
-    </div>
+    </div></ProposalReviewContext.Provider>
   )
 }

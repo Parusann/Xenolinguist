@@ -1,6 +1,7 @@
 import { useProfile } from '@/stores/profile-context'
 import { useOllama } from '@/stores/ollama-context'
-import { getConfidenceCounts, getDecodingProgress } from '@/lib/profileStats'
+import { workspaceMetrics } from 'shared/metrics/workspace-metrics'
+import { SaveStatus } from './SaveStatus'
 
 interface StatusBarProps {
   logOpen: boolean
@@ -9,13 +10,10 @@ interface StatusBarProps {
 }
 
 export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarProps) {
-  const { profile, saving } = useProfile()
-  const { connected } = useOllama()
+  const { profile } = useProfile()
+  const { ready: connected } = useOllama()
 
-  const counts = profile
-    ? getConfidenceCounts(profile)
-    : { confirmed: 0, probable: 0, unknown: 0, total: 0 }
-  const decode = profile ? getDecodingProgress(profile) : 0
+  const metrics = profile ? workspaceMetrics(profile) : null
 
   return (
     <div className="status-bar">
@@ -24,25 +22,19 @@ export function StatusBar({ logOpen, onToggleLog, onShowShortcuts }: StatusBarPr
           className="dot"
           style={{ width: 5, height: 5, ...(connected ? {} : { background: 'var(--conf-unknown)', boxShadow: '0 0 8px var(--conf-unknown)' }) }}
         />
-        <span style={{ color: 'var(--fg-dim)' }}>{connected ? 'Ollama connected' : 'Ollama offline'}</span>
+        <span style={{ color: 'var(--fg-dim)' }}>{connected ? 'Ollama connected' : 'Local chat not ready'}</span>
       </span>
       <span className="sep">·</span>
       <span className="item">
-        DECODE <b style={{ color: 'var(--accent)' }}>{decode}%</b>
+        OBSERVATIONS <b style={{ color: 'var(--accent)' }}>{metrics?.observations ?? 0}</b>
       </span>
       <span className="sep">·</span>
       <span className="item">
-        CONF · {counts.confirmed} confirmed / {counts.probable} probable / {counts.unknown} unknown
+        {metrics?.assertedEntries ?? 0} assertions · evaluation unavailable
       </span>
 
-      {saving && (
-        <>
-          <span className="sep">·</span>
-          <span className="item" style={{ color: 'var(--accent)' }}>
-            <span className="dot pulse-soft" style={{ width: 4, height: 4 }} /> Saving
-          </span>
-        </>
-      )}
+      <span className="sep">·</span>
+      <SaveStatus />
 
       <div className="flex-1" />
 

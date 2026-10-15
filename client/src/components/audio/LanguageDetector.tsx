@@ -22,10 +22,10 @@ export function LanguageBadge({ result, detecting }: {
   return (
     <div className="glass-inner rounded-lg px-3 py-2 border border-white/[0.04] space-y-1.5">
       <div className="flex items-center gap-2">
-        <span className="text-[10px] font-mono text-gray-600">{isGuess ? 'PHONETIC GUESS' : 'TRANSCRIPTION'}</span>
+        <span className="text-[10px] font-mono text-gray-600">{isGuess ? 'UNCERTAIN TRANSCRIPT' : 'TRANSCRIPTION'}</span>
         <span className={`text-xs font-medium ${confidenceColor}`}>{result.language}</span>
-        <span className="badge badge-confirmed text-[10px]">{Math.round(result.confidence * 100)}%</span>
-        {isGuess && <span className="text-[10px] font-mono text-amber-400/80">low confidence</span>}
+        <span className="badge badge-confirmed text-[10px]">{result.confidence === null ? 'Language score unavailable' : `Language score ${Math.round(result.confidence * 100)}%`}</span>
+        {isGuess && <span className="text-[10px] font-mono text-amber-400/80">uncalibrated language detection</span>}
       </div>
       {result.transcript && (
         <p className="text-[11px] font-mono text-gray-500 truncate">"{result.transcript}"</p>

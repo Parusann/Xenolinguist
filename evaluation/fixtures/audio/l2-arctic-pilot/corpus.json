@@ -1,0 +1,6597 @@
+{
+  "version": "l2-arctic-pilot-v1",
+  "source": "https://psi.engr.tamu.edu/l2-arctic-corpus/",
+  "mirror": "https://huggingface.co/datasets/chikingsley/l2-arctic-release-v5.0/resolve/cc02fd37197966e5de11ad737f7affd577c61992/",
+  "archiveSha256": {
+    "ASI": "302dc53af870acb8378c2c8205062fb7af1b3ad8ebc61826f87faf7d3dc4e8ff",
+    "LXC": "3030bd78995f59e9b4af5da17836ad9f00573d3b4f8d79c7cd10ea8d40c79bc0"
+  },
+  "license": "CC-BY-NC-4.0",
+  "licenseSha256": "b1d636fddd729d8185d89af1e41e21a311866fcf3d4040cc4906a64837d0f218",
+  "selection": "First 12 sorted manual annotations from ASI; first 12 from LXC excluding ASI prompt IDs. No inference-based selection or exclusion.",
+  "cases": [
+    {
+      "id": "ASI-arctic_a0003",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0003.wav",
+        "sha256": "df7614a5aae9da0bda980c5dc05794500a34de95a90a3896e5a293ff07f1564e"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0003.TextGrid",
+        "sha256": "48da328d6dd7e28b8a595091e09daf32e453c0b0c1bd3c6abb6e17dc3b3a812d"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.1,
+          "label": "F"
+        },
+        {
+          "start": 0.1,
+          "end": 0.13,
+          "label": "AO1"
+        },
+        {
+          "start": 0.13,
+          "end": 0.17,
+          "label": "R"
+        },
+        {
+          "start": 0.17,
+          "end": 0.22,
+          "label": "DH,D,s"
+        },
+        {
+          "start": 0.22,
+          "end": 0.28,
+          "label": "AH1"
+        },
+        {
+          "start": 0.28,
+          "end": 0.34,
+          "label": "T,T*,s"
+        },
+        {
+          "start": 0.34,
+          "end": 0.39,
+          "label": "W"
+        },
+        {
+          "start": 0.39,
+          "end": 0.44,
+          "label": "EH1"
+        },
+        {
+          "start": 0.44,
+          "end": 0.51,
+          "label": "N,N*,s "
+        },
+        {
+          "start": 0.51,
+          "end": 0.59,
+          "label": "T"
+        },
+        {
+          "start": 0.59,
+          "end": 0.66,
+          "label": "IY0"
+        },
+        {
+          "start": 0.66,
+          "end": 0.77,
+          "label": "IH0"
+        },
+        {
+          "start": 0.77,
+          "end": 0.97,
+          "label": "TH,T*,s"
+        },
+        {
+          "start": 0.97,
+          "end": 1.13,
+          "label": "sp"
+        },
+        {
+          "start": 1.13,
+          "end": 1.21,
+          "label": "T,T*,s"
+        },
+        {
+          "start": 1.21,
+          "end": 1.42,
+          "label": "AY1"
+        },
+        {
+          "start": 1.42,
+          "end": 1.52,
+          "label": "M"
+        },
+        {
+          "start": 1.52,
+          "end": 1.55,
+          "label": "sp"
+        },
+        {
+          "start": 1.55,
+          "end": 1.68,
+          "label": "DH,D,s "
+        },
+        {
+          "start": 1.68,
+          "end": 1.79,
+          "label": "AE1"
+        },
+        {
+          "start": 1.79,
+          "end": 1.88,
+          "label": "T,T*,s "
+        },
+        {
+          "start": 1.88,
+          "end": 2.02,
+          "label": "IY1"
+        },
+        {
+          "start": 2.02,
+          "end": 2.08,
+          "label": "V"
+        },
+        {
+          "start": 2.08,
+          "end": 2.13,
+          "label": "N"
+        },
+        {
+          "start": 2.13,
+          "end": 2.17,
+          "label": "IH0"
+        },
+        {
+          "start": 2.17,
+          "end": 2.27,
+          "label": "NG"
+        },
+        {
+          "start": 2.27,
+          "end": 2.32,
+          "label": "DH,D,s "
+        },
+        {
+          "start": 2.32,
+          "end": 2.45,
+          "label": "AH0"
+        },
+        {
+          "start": 2.45,
+          "end": 2.49,
+          "label": "T,T*,s"
+        },
+        {
+          "start": 2.49,
+          "end": 2.6,
+          "label": "UW1"
+        },
+        {
+          "start": 2.6,
+          "end": 2.72,
+          "label": "M"
+        },
+        {
+          "start": 2.72,
+          "end": 2.77,
+          "label": "EH1"
+        },
+        {
+          "start": 2.77,
+          "end": 2.85,
+          "label": "N,N*,s "
+        },
+        {
+          "start": 2.85,
+          "end": 2.99,
+          "label": "SH"
+        },
+        {
+          "start": 2.99,
+          "end": 3.04,
+          "label": "UH1"
+        },
+        {
+          "start": 3.04,
+          "end": 3.12,
+          "label": "K"
+        },
+        {
+          "start": 3.12,
+          "end": 3.19,
+          "label": "HH"
+        },
+        {
+          "start": 3.19,
+          "end": 3.31,
+          "label": "AE1,AA*,s"
+        },
+        {
+          "start": 3.31,
+          "end": 3.41,
+          "label": "N"
+        },
+        {
+          "start": 3.41,
+          "end": 3.66,
+          "label": "Z,S,s "
+        },
+        {
+          "start": 3.66,
+          "end": 3.7,
+          "label": "sp"
+        },
+        {
+          "start": 3.7,
+          "end": 3.718888888888889,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.17,
+          "label": "for"
+        },
+        {
+          "start": 0.17,
+          "end": 0.28,
+          "label": "the"
+        },
+        {
+          "start": 0.28,
+          "end": 0.97,
+          "label": "twentieth"
+        },
+        {
+          "start": 0.97,
+          "end": 1.13,
+          "label": ""
+        },
+        {
+          "start": 1.13,
+          "end": 1.52,
+          "label": "time"
+        },
+        {
+          "start": 1.52,
+          "end": 1.55,
+          "label": ""
+        },
+        {
+          "start": 1.55,
+          "end": 1.88,
+          "label": "that"
+        },
+        {
+          "start": 1.88,
+          "end": 2.27,
+          "label": "evening"
+        },
+        {
+          "start": 2.27,
+          "end": 2.45,
+          "label": "the"
+        },
+        {
+          "start": 2.45,
+          "end": 2.6,
+          "label": "two"
+        },
+        {
+          "start": 2.6,
+          "end": 2.85,
+          "label": "men"
+        },
+        {
+          "start": 2.85,
+          "end": 3.12,
+          "label": "shook"
+        },
+        {
+          "start": 3.12,
+          "end": 3.66,
+          "label": "hands"
+        },
+        {
+          "start": 3.66,
+          "end": 3.718888888888889,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0005",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0005.wav",
+        "sha256": "9f3f29672a9531af3b90e974d51942414f83a6873cef4df43f67b26aef99ad03"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0005.TextGrid",
+        "sha256": "acf1eca923d83247ed013a545c6592896f8ddb615a58e85145ec4e9c63b1ec60"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.12,
+          "label": "W"
+        },
+        {
+          "start": 0.12,
+          "end": 0.17,
+          "label": "IH1"
+        },
+        {
+          "start": 0.17,
+          "end": 0.2,
+          "label": "L,L*,s "
+        },
+        {
+          "start": 0.2,
+          "end": 0.23,
+          "label": "W"
+        },
+        {
+          "start": 0.23,
+          "end": 0.39,
+          "label": "IY1"
+        },
+        {
+          "start": 0.39,
+          "end": 0.47,
+          "label": "EH1,AE,s"
+        },
+        {
+          "start": 0.47,
+          "end": 0.51,
+          "label": "V,W,s"
+        },
+        {
+          "start": 0.51,
+          "end": 0.62,
+          "label": "ER0"
+        },
+        {
+          "start": 0.62,
+          "end": 0.69,
+          "label": "F"
+        },
+        {
+          "start": 0.69,
+          "end": 0.72,
+          "label": "AO0"
+        },
+        {
+          "start": 0.72,
+          "end": 0.77,
+          "label": "R"
+        },
+        {
+          "start": 0.77,
+          "end": 0.84,
+          "label": "G"
+        },
+        {
+          "start": 0.84,
+          "end": 0.94,
+          "label": "EH1"
+        },
+        {
+          "start": 0.94,
+          "end": 1.01,
+          "label": "T,T*,s "
+        },
+        {
+          "start": 1.01,
+          "end": 1.06,
+          "label": "IH0"
+        },
+        {
+          "start": 1.06,
+          "end": 1.21,
+          "label": "T"
+        },
+        {
+          "start": 1.21,
+          "end": 1.4,
+          "label": "sp"
+        },
+        {
+          "start": 1.4,
+          "end": 1.4224036281179138,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.2,
+          "label": "will"
+        },
+        {
+          "start": 0.2,
+          "end": 0.39,
+          "label": "we"
+        },
+        {
+          "start": 0.39,
+          "end": 0.62,
+          "label": "ever"
+        },
+        {
+          "start": 0.62,
+          "end": 1.01,
+          "label": "forget"
+        },
+        {
+          "start": 1.01,
+          "end": 1.21,
+          "label": "it"
+        },
+        {
+          "start": 1.21,
+          "end": 1.4224036281179138,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0006",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0006.wav",
+        "sha256": "28a5c9de1c23acdbaad22d835f7aeaa9abb00a9b54b093b02d0853c3450ba06e"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0006.TextGrid",
+        "sha256": "3efe13e1bb3a53b5fa7d05068678abed5f28cb49ca84f89f1b3b02eb4b3a1caf"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.19,
+          "label": "G"
+        },
+        {
+          "start": 0.19,
+          "end": 0.32,
+          "label": "AA1"
+        },
+        {
+          "start": 0.32,
+          "end": 0.41,
+          "label": "D,D*,s "
+        },
+        {
+          "start": 0.41,
+          "end": 0.45,
+          "label": "B"
+        },
+        {
+          "start": 0.45,
+          "end": 0.49,
+          "label": "L"
+        },
+        {
+          "start": 0.49,
+          "end": 0.57,
+          "label": "EH1"
+        },
+        {
+          "start": 0.57,
+          "end": 0.6764456230144925,
+          "label": "S"
+        },
+        {
+          "start": 0.6764456230144925,
+          "end": 0.7360083436958572,
+          "label": "AH0"
+        },
+        {
+          "start": 0.7360083436958572,
+          "end": 0.79,
+          "label": "M"
+        },
+        {
+          "start": 0.79,
+          "end": 1.03,
+          "label": "sp"
+        },
+        {
+          "start": 1.03,
+          "end": 1.28,
+          "label": "AY1"
+        },
+        {
+          "start": 1.28,
+          "end": 1.35,
+          "label": "HH"
+        },
+        {
+          "start": 1.35,
+          "end": 1.46,
+          "label": "OW1"
+        },
+        {
+          "start": 1.46,
+          "end": 1.54,
+          "label": "P"
+        },
+        {
+          "start": 1.54,
+          "end": 1.7,
+          "label": "AY1"
+        },
+        {
+          "start": 1.7,
+          "end": 1.73,
+          "label": "L,L*,s "
+        },
+        {
+          "start": 1.73,
+          "end": 1.81,
+          "label": "G"
+        },
+        {
+          "start": 1.81,
+          "end": 1.97,
+          "label": "OW1"
+        },
+        {
+          "start": 1.97,
+          "end": 2.1,
+          "label": "AO1"
+        },
+        {
+          "start": 2.1,
+          "end": 2.2,
+          "label": "N"
+        },
+        {
+          "start": 2.2,
+          "end": 2.32,
+          "label": "S"
+        },
+        {
+          "start": 2.32,
+          "end": 2.37,
+          "label": "IY1"
+        },
+        {
+          "start": 2.37,
+          "end": 2.42,
+          "label": "IH0"
+        },
+        {
+          "start": 2.42,
+          "end": 2.51,
+          "label": "NG"
+        },
+        {
+          "start": 2.51,
+          "end": 2.56,
+          "label": "DH,D,s "
+        },
+        {
+          "start": 2.56,
+          "end": 2.63,
+          "label": "AH0"
+        },
+        {
+          "start": 2.63,
+          "end": 2.68,
+          "label": "M"
+        },
+        {
+          "start": 2.68,
+          "end": 2.76,
+          "label": "F"
+        },
+        {
+          "start": 2.76,
+          "end": 2.9,
+          "label": "ER0"
+        },
+        {
+          "start": 2.9,
+          "end": 3.02,
+          "label": "EH1"
+        },
+        {
+          "start": 3.02,
+          "end": 3.07,
+          "label": "V,W,s"
+        },
+        {
+          "start": 3.07,
+          "end": 3.21,
+          "label": "ER0"
+        },
+        {
+          "start": 3.21,
+          "end": 3.36,
+          "label": "sp"
+        },
+        {
+          "start": 3.36,
+          "end": 3.3793197278911564,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.41,
+          "label": "god"
+        },
+        {
+          "start": 0.41,
+          "end": 0.6764456230144925,
+          "label": "bless"
+        },
+        {
+          "start": 0.6764456230144925,
+          "end": 0.79,
+          "label": "em"
+        },
+        {
+          "start": 0.79,
+          "end": 1.03,
+          "label": ""
+        },
+        {
+          "start": 1.03,
+          "end": 1.28,
+          "label": "i"
+        },
+        {
+          "start": 1.28,
+          "end": 1.54,
+          "label": "hope"
+        },
+        {
+          "start": 1.54,
+          "end": 1.73,
+          "label": "i'll"
+        },
+        {
+          "start": 1.73,
+          "end": 1.97,
+          "label": "go"
+        },
+        {
+          "start": 1.97,
+          "end": 2.2,
+          "label": "on"
+        },
+        {
+          "start": 2.2,
+          "end": 2.51,
+          "label": "seeing"
+        },
+        {
+          "start": 2.51,
+          "end": 2.68,
+          "label": "them"
+        },
+        {
+          "start": 2.68,
+          "end": 3.21,
+          "label": "forever"
+        },
+        {
+          "start": 3.21,
+          "end": 3.3793197278911564,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0007",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0007.wav",
+        "sha256": "b920efdf01fe7f1a4ea1210bd50df7b8132817a94bc62d7e621077a98c854b06"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0007.TextGrid",
+        "sha256": "71aa143b48d7b13502c86e387710061583e62f72d19cea0cf3e35f0258b22b01"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.18,
+          "label": "AE1"
+        },
+        {
+          "start": 0.18,
+          "end": 0.24,
+          "label": "N,N*,s "
+        },
+        {
+          "start": 0.24,
+          "end": 0.27,
+          "label": "D"
+        },
+        {
+          "start": 0.27,
+          "end": 0.3,
+          "label": "Y"
+        },
+        {
+          "start": 0.3,
+          "end": 0.46,
+          "label": "UW1"
+        },
+        {
+          "start": 0.46,
+          "end": 0.56,
+          "label": "AO1"
+        },
+        {
+          "start": 0.56,
+          "end": 0.67,
+          "label": "L,L*,s"
+        },
+        {
+          "start": 0.67,
+          "end": 0.72,
+          "label": "W"
+        },
+        {
+          "start": 0.72,
+          "end": 0.78,
+          "label": "IY0"
+        },
+        {
+          "start": 0.78,
+          "end": 0.87,
+          "label": "Z"
+        },
+        {
+          "start": 0.87,
+          "end": 0.95,
+          "label": "W"
+        },
+        {
+          "start": 0.95,
+          "end": 1.0,
+          "label": "AA1"
+        },
+        {
+          "start": 1.0,
+          "end": 1.05,
+          "label": "N,N*,s "
+        },
+        {
+          "start": 1.05,
+          "end": 1.08,
+          "label": "T"
+        },
+        {
+          "start": 1.08,
+          "end": 1.11,
+          "label": "T"
+        },
+        {
+          "start": 1.11,
+          "end": 1.18,
+          "label": "UW1"
+        },
+        {
+          "start": 1.18,
+          "end": 1.3,
+          "label": "S"
+        },
+        {
+          "start": 1.3,
+          "end": 1.42,
+          "label": "IY1"
+        },
+        {
+          "start": 1.42,
+          "end": 1.5,
+          "label": "IH1"
+        },
+        {
+          "start": 1.5,
+          "end": 1.6,
+          "label": "T"
+        },
+        {
+          "start": 1.6,
+          "end": 1.63,
+          "label": "sp"
+        },
+        {
+          "start": 1.63,
+          "end": 1.71,
+          "label": "IH0"
+        },
+        {
+          "start": 1.71,
+          "end": 1.76,
+          "label": "N"
+        },
+        {
+          "start": 1.76,
+          "end": 1.8,
+          "label": "DH,D,s "
+        },
+        {
+          "start": 1.8,
+          "end": 1.87,
+          "label": "AH0"
+        },
+        {
+          "start": 1.87,
+          "end": 1.94,
+          "label": "S"
+        },
+        {
+          "start": 1.94,
+          "end": 2.0,
+          "label": "UH0"
+        },
+        {
+          "start": 2.0,
+          "end": 2.1,
+          "label": "P,P*,s"
+        },
+        {
+          "start": 2.1,
+          "end": 2.13,
+          "label": "ER1"
+        },
+        {
+          "start": 2.13,
+          "end": 2.21,
+          "label": "L"
+        },
+        {
+          "start": 2.21,
+          "end": 2.31,
+          "label": "AH0,EY,s"
+        },
+        {
+          "start": 2.31,
+          "end": 2.38,
+          "label": "T"
+        },
+        {
+          "start": 2.38,
+          "end": 2.44,
+          "label": "IH0"
+        },
+        {
+          "start": 2.44,
+          "end": 2.52,
+          "label": "V"
+        },
+        {
+          "start": 2.52,
+          "end": 2.56,
+          "label": "D"
+        },
+        {
+          "start": 2.56,
+          "end": 2.62,
+          "label": "IH0"
+        },
+        {
+          "start": 2.62,
+          "end": 2.69,
+          "label": "G"
+        },
+        {
+          "start": 2.69,
+          "end": 2.77,
+          "label": "R,R*,s"
+        },
+        {
+          "start": 2.77,
+          "end": 2.88,
+          "label": "IY1"
+        },
+        {
+          "start": 2.88,
+          "end": 3.04,
+          "label": "sp"
+        },
+        {
+          "start": 3.04,
+          "end": 3.0574603174603174,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.27,
+          "label": "and"
+        },
+        {
+          "start": 0.27,
+          "end": 0.46,
+          "label": "you"
+        },
+        {
+          "start": 0.46,
+          "end": 0.87,
+          "label": "always"
+        },
+        {
+          "start": 0.87,
+          "end": 1.08,
+          "label": "want"
+        },
+        {
+          "start": 1.08,
+          "end": 1.18,
+          "label": "to"
+        },
+        {
+          "start": 1.18,
+          "end": 1.42,
+          "label": "see"
+        },
+        {
+          "start": 1.42,
+          "end": 1.6,
+          "label": "it"
+        },
+        {
+          "start": 1.6,
+          "end": 1.63,
+          "label": ""
+        },
+        {
+          "start": 1.63,
+          "end": 1.76,
+          "label": "in"
+        },
+        {
+          "start": 1.76,
+          "end": 1.87,
+          "label": "the"
+        },
+        {
+          "start": 1.87,
+          "end": 2.52,
+          "label": "superlative"
+        },
+        {
+          "start": 2.52,
+          "end": 2.88,
+          "label": "degree"
+        },
+        {
+          "start": 2.88,
+          "end": 3.0574603174603174,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0008",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0008.wav",
+        "sha256": "552dcd5a5d36c987398731c0342ed5fb4f36d9bb1c21866f57e927e6753d5dc1"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0008.TextGrid",
+        "sha256": "6f40cbe1e716e87f247b0e57ee64145d5d456a1ea6b2978676555f5381a2cc6f"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.19,
+          "label": "G"
+        },
+        {
+          "start": 0.19,
+          "end": 0.42,
+          "label": "AE1"
+        },
+        {
+          "start": 0.42,
+          "end": 0.5,
+          "label": "D,D*,s "
+        },
+        {
+          "start": 0.5,
+          "end": 0.67,
+          "label": "sp"
+        },
+        {
+          "start": 0.67,
+          "end": 0.77,
+          "label": "Y"
+        },
+        {
+          "start": 0.77,
+          "end": 0.83,
+          "label": "UH1"
+        },
+        {
+          "start": 0.83,
+          "end": 0.86,
+          "label": "R"
+        },
+        {
+          "start": 0.86,
+          "end": 0.93,
+          "label": "L"
+        },
+        {
+          "start": 0.93,
+          "end": 1.02,
+          "label": "EH1"
+        },
+        {
+          "start": 1.02,
+          "end": 1.09,
+          "label": "T"
+        },
+        {
+          "start": 1.09,
+          "end": 1.22,
+          "label": "ER0"
+        },
+        {
+          "start": 1.22,
+          "end": 1.36,
+          "label": "K,K*,s"
+        },
+        {
+          "start": 1.36,
+          "end": 1.46,
+          "label": "EY1"
+        },
+        {
+          "start": 1.46,
+          "end": 1.53,
+          "label": "M"
+        },
+        {
+          "start": 1.53,
+          "end": 1.62,
+          "label": "JH"
+        },
+        {
+          "start": 1.62,
+          "end": 1.68,
+          "label": "AH1"
+        },
+        {
+          "start": 1.68,
+          "end": 1.75,
+          "label": "S"
+        },
+        {
+          "start": 1.75,
+          "end": 1.82,
+          "label": "T"
+        },
+        {
+          "start": 1.82,
+          "end": 1.86,
+          "label": "IH0"
+        },
+        {
+          "start": 1.86,
+          "end": 1.93,
+          "label": "N"
+        },
+        {
+          "start": 1.93,
+          "end": 2.03,
+          "label": "T,T*,s"
+        },
+        {
+          "start": 2.03,
+          "end": 2.1,
+          "label": "AY1"
+        },
+        {
+          "start": 2.1,
+          "end": 2.13,
+          "label": "M"
+        },
+        {
+          "start": 2.13,
+          "end": 2.28,
+          "label": "sp"
+        },
+        {
+          "start": 2.28,
+          "end": 2.302063492063492,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.5,
+          "label": "gad"
+        },
+        {
+          "start": 0.5,
+          "end": 0.67,
+          "label": ""
+        },
+        {
+          "start": 0.67,
+          "end": 0.86,
+          "label": "your"
+        },
+        {
+          "start": 0.86,
+          "end": 1.22,
+          "label": "letter"
+        },
+        {
+          "start": 1.22,
+          "end": 1.53,
+          "label": "came"
+        },
+        {
+          "start": 1.53,
+          "end": 1.82,
+          "label": "just"
+        },
+        {
+          "start": 1.82,
+          "end": 1.93,
+          "label": "in"
+        },
+        {
+          "start": 1.93,
+          "end": 2.13,
+          "label": "time"
+        },
+        {
+          "start": 2.13,
+          "end": 2.302063492063492,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0010",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0010.wav",
+        "sha256": "87fc2af188c5e10068fec22bc41985e27d52c60185a1be6bb76f7a108ca0444a"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0010.TextGrid",
+        "sha256": "db23cd6a2fa763615e077cfd72c19af773c4f3348f36c2a52b8ba2b7e9fc1cc6"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.21,
+          "label": "AY1"
+        },
+        {
+          "start": 0.21,
+          "end": 0.3,
+          "label": "M"
+        },
+        {
+          "start": 0.3,
+          "end": 0.37,
+          "label": "P,P*,s"
+        },
+        {
+          "start": 0.37,
+          "end": 0.42,
+          "label": "L"
+        },
+        {
+          "start": 0.42,
+          "end": 0.51,
+          "label": "EY1"
+        },
+        {
+          "start": 0.51,
+          "end": 0.55,
+          "label": "IH0"
+        },
+        {
+          "start": 0.55,
+          "end": 0.64,
+          "label": "NG"
+        },
+        {
+          "start": 0.64,
+          "end": 0.71,
+          "label": "AH0"
+        },
+        {
+          "start": 0.71,
+          "end": 0.8,
+          "label": "S"
+        },
+        {
+          "start": 0.8,
+          "end": 0.84,
+          "label": "IH1"
+        },
+        {
+          "start": 0.84,
+          "end": 0.92,
+          "label": "NG"
+        },
+        {
+          "start": 0.92,
+          "end": 0.97,
+          "label": "G"
+        },
+        {
+          "start": 0.97,
+          "end": 1.01,
+          "label": "AH0"
+        },
+        {
+          "start": 1.01,
+          "end": 1.08,
+          "label": "L,L*,s "
+        },
+        {
+          "start": 1.08,
+          "end": 1.13,
+          "label": "HH"
+        },
+        {
+          "start": 1.13,
+          "end": 1.26,
+          "label": "AE1"
+        },
+        {
+          "start": 1.26,
+          "end": 1.3,
+          "label": "N,N*,s "
+        },
+        {
+          "start": 1.3,
+          "end": 1.35,
+          "label": "D"
+        },
+        {
+          "start": 1.35,
+          "end": 1.4,
+          "label": "IH0"
+        },
+        {
+          "start": 1.4,
+          "end": 1.47,
+          "label": "N"
+        },
+        {
+          "start": 1.47,
+          "end": 1.58,
+          "label": "W"
+        },
+        {
+          "start": 1.58,
+          "end": 1.67,
+          "label": "AH1"
+        },
+        {
+          "start": 1.67,
+          "end": 1.71,
+          "label": "T,T*,s "
+        },
+        {
+          "start": 1.71,
+          "end": 1.8,
+          "label": "L"
+        },
+        {
+          "start": 1.8,
+          "end": 1.86,
+          "label": "UH1"
+        },
+        {
+          "start": 1.86,
+          "end": 1.93,
+          "label": "K"
+        },
+        {
+          "start": 1.93,
+          "end": 2.02,
+          "label": "S"
+        },
+        {
+          "start": 2.02,
+          "end": 2.09,
+          "label": "L"
+        },
+        {
+          "start": 2.09,
+          "end": 2.21,
+          "label": "AY1"
+        },
+        {
+          "start": 2.21,
+          "end": 2.31,
+          "label": "K"
+        },
+        {
+          "start": 2.31,
+          "end": 2.34,
+          "label": "sp"
+        },
+        {
+          "start": 2.34,
+          "end": 2.45,
+          "label": "AH0"
+        },
+        {
+          "start": 2.45,
+          "end": 2.5,
+          "label": "L"
+        },
+        {
+          "start": 2.5,
+          "end": 2.62,
+          "label": "UW1"
+        },
+        {
+          "start": 2.62,
+          "end": 2.7,
+          "label": "Z"
+        },
+        {
+          "start": 2.7,
+          "end": 2.74,
+          "label": "IH0"
+        },
+        {
+          "start": 2.74,
+          "end": 2.83,
+          "label": "NG"
+        },
+        {
+          "start": 2.83,
+          "end": 2.9,
+          "label": "G"
+        },
+        {
+          "start": 2.9,
+          "end": 3.0,
+          "label": "EY1"
+        },
+        {
+          "start": 3.0,
+          "end": 3.12,
+          "label": "M"
+        },
+        {
+          "start": 3.12,
+          "end": 3.2,
+          "label": "sp"
+        },
+        {
+          "start": 3.2,
+          "end": 3.2188662131519274,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.3,
+          "label": "i'm"
+        },
+        {
+          "start": 0.3,
+          "end": 0.64,
+          "label": "playing"
+        },
+        {
+          "start": 0.64,
+          "end": 0.71,
+          "label": "a"
+        },
+        {
+          "start": 0.71,
+          "end": 1.08,
+          "label": "single"
+        },
+        {
+          "start": 1.08,
+          "end": 1.35,
+          "label": "hand"
+        },
+        {
+          "start": 1.35,
+          "end": 1.47,
+          "label": "in"
+        },
+        {
+          "start": 1.47,
+          "end": 1.71,
+          "label": "what"
+        },
+        {
+          "start": 1.71,
+          "end": 2.02,
+          "label": "looks"
+        },
+        {
+          "start": 2.02,
+          "end": 2.31,
+          "label": "like"
+        },
+        {
+          "start": 2.31,
+          "end": 2.34,
+          "label": ""
+        },
+        {
+          "start": 2.34,
+          "end": 2.45,
+          "label": "a"
+        },
+        {
+          "start": 2.45,
+          "end": 2.83,
+          "label": "losing"
+        },
+        {
+          "start": 2.83,
+          "end": 3.12,
+          "label": "game"
+        },
+        {
+          "start": 3.12,
+          "end": 3.2188662131519274,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0011",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0011.wav",
+        "sha256": "e2c451bfd52d4028617787c3b50c8620d58ea5db629ac6ab7950812831bffe63"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0011.TextGrid",
+        "sha256": "9b490e29e894c70f05e58077d68ef7f8da530f055469b0b3a56ba47e617ace5a"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.14,
+          "label": "IH1"
+        },
+        {
+          "start": 0.14,
+          "end": 0.21,
+          "label": "F"
+        },
+        {
+          "start": 0.21,
+          "end": 0.3,
+          "label": "AY1"
+        },
+        {
+          "start": 0.3,
+          "end": 0.43,
+          "label": "EH1,AE,s"
+        },
+        {
+          "start": 0.43,
+          "end": 0.49,
+          "label": "V,W,s"
+        },
+        {
+          "start": 0.49,
+          "end": 0.56,
+          "label": "ER0"
+        },
+        {
+          "start": 0.56,
+          "end": 0.65,
+          "label": "N"
+        },
+        {
+          "start": 0.65,
+          "end": 0.76,
+          "label": "IY1"
+        },
+        {
+          "start": 0.76,
+          "end": 0.83,
+          "label": "D,D*,s "
+        },
+        {
+          "start": 0.83,
+          "end": 0.91,
+          "label": "AH0"
+        },
+        {
+          "start": 0.91,
+          "end": 0.95,
+          "label": "D"
+        },
+        {
+          "start": 0.95,
+          "end": 1.07,
+          "label": "AH0"
+        },
+        {
+          "start": 1.07,
+          "end": 1.16,
+          "label": "F"
+        },
+        {
+          "start": 1.16,
+          "end": 1.29,
+          "label": "AY1"
+        },
+        {
+          "start": 1.29,
+          "end": 1.36,
+          "label": "T,T*,s "
+        },
+        {
+          "start": 1.36,
+          "end": 1.45,
+          "label": "ER0"
+        },
+        {
+          "start": 1.45,
+          "end": 1.53,
+          "label": "IH1"
+        },
+        {
+          "start": 1.53,
+          "end": 1.58,
+          "label": "N"
+        },
+        {
+          "start": 1.58,
+          "end": 1.65,
+          "label": "M"
+        },
+        {
+          "start": 1.65,
+          "end": 1.75,
+          "label": "AY1"
+        },
+        {
+          "start": 1.75,
+          "end": 1.83,
+          "label": "L"
+        },
+        {
+          "start": 1.83,
+          "end": 1.98,
+          "label": "AY1"
+        },
+        {
+          "start": 1.98,
+          "end": 2.14,
+          "label": "F"
+        },
+        {
+          "start": 2.14,
+          "end": 2.17,
+          "label": "sp"
+        },
+        {
+          "start": 2.17,
+          "end": 2.32,
+          "label": "AY1"
+        },
+        {
+          "start": 2.32,
+          "end": 2.4,
+          "label": "N,N*,s "
+        },
+        {
+          "start": 2.4,
+          "end": 2.5,
+          "label": "IY1"
+        },
+        {
+          "start": 2.5,
+          "end": 2.58,
+          "label": "D"
+        },
+        {
+          "start": 2.58,
+          "end": 2.65,
+          "label": "W"
+        },
+        {
+          "start": 2.65,
+          "end": 2.72,
+          "label": "AH1"
+        },
+        {
+          "start": 2.72,
+          "end": 2.82,
+          "label": "N"
+        },
+        {
+          "start": 2.82,
+          "end": 2.89,
+          "label": "N"
+        },
+        {
+          "start": 2.89,
+          "end": 3.11,
+          "label": "AW1"
+        },
+        {
+          "start": 3.11,
+          "end": 3.14,
+          "label": "sp"
+        },
+        {
+          "start": 3.14,
+          "end": 3.1609523809523807,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.21,
+          "label": "if"
+        },
+        {
+          "start": 0.21,
+          "end": 0.3,
+          "label": "i"
+        },
+        {
+          "start": 0.3,
+          "end": 0.56,
+          "label": "ever"
+        },
+        {
+          "start": 0.56,
+          "end": 0.95,
+          "label": "needed"
+        },
+        {
+          "start": 0.95,
+          "end": 1.07,
+          "label": "a"
+        },
+        {
+          "start": 1.07,
+          "end": 1.45,
+          "label": "fighter"
+        },
+        {
+          "start": 1.45,
+          "end": 1.58,
+          "label": "in"
+        },
+        {
+          "start": 1.58,
+          "end": 1.75,
+          "label": "my"
+        },
+        {
+          "start": 1.75,
+          "end": 2.14,
+          "label": "life"
+        },
+        {
+          "start": 2.14,
+          "end": 2.17,
+          "label": ""
+        },
+        {
+          "start": 2.17,
+          "end": 2.32,
+          "label": "i"
+        },
+        {
+          "start": 2.32,
+          "end": 2.58,
+          "label": "need"
+        },
+        {
+          "start": 2.58,
+          "end": 2.82,
+          "label": "one"
+        },
+        {
+          "start": 2.82,
+          "end": 3.11,
+          "label": "now"
+        },
+        {
+          "start": 3.11,
+          "end": 3.1609523809523807,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0013",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0013.wav",
+        "sha256": "bd7f105bc1a2f931b1995c369d3acec42da8f0263440557febc779b22b0e814f"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0013.TextGrid",
+        "sha256": "ab561294acbf668813a5d8e1911ab858f04f4900b17543984d4dd7e013d721ba"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.1,
+          "label": "HH"
+        },
+        {
+          "start": 0.1,
+          "end": 0.15,
+          "label": "IY1"
+        },
+        {
+          "start": 0.15,
+          "end": 0.2,
+          "label": "W"
+        },
+        {
+          "start": 0.2,
+          "end": 0.27,
+          "label": "AH1"
+        },
+        {
+          "start": 0.27,
+          "end": 0.33,
+          "label": "Z"
+        },
+        {
+          "start": 0.33,
+          "end": 0.41,
+          "label": "AH0"
+        },
+        {
+          "start": 0.41,
+          "end": 0.46,
+          "label": "HH"
+        },
+        {
+          "start": 0.46,
+          "end": 0.55,
+          "label": "EH1"
+        },
+        {
+          "start": 0.55,
+          "end": 0.62,
+          "label": "D,D*,s "
+        },
+        {
+          "start": 0.62,
+          "end": 0.73,
+          "label": "SH"
+        },
+        {
+          "start": 0.73,
+          "end": 0.79,
+          "label": "AO1"
+        },
+        {
+          "start": 0.79,
+          "end": 0.86,
+          "label": "R"
+        },
+        {
+          "start": 0.86,
+          "end": 0.91,
+          "label": "T"
+        },
+        {
+          "start": 0.91,
+          "end": 1.0,
+          "label": "ER0"
+        },
+        {
+          "start": 1.0,
+          "end": 1.09,
+          "label": "DH,D,s "
+        },
+        {
+          "start": 1.09,
+          "end": 1.14,
+          "label": "AE1"
+        },
+        {
+          "start": 1.14,
+          "end": 1.19,
+          "label": "N"
+        },
+        {
+          "start": 1.19,
+          "end": 1.22,
+          "label": "HH"
+        },
+        {
+          "start": 1.22,
+          "end": 1.25,
+          "label": "IH0"
+        },
+        {
+          "start": 1.25,
+          "end": 1.33,
+          "label": "Z,S,s "
+        },
+        {
+          "start": 1.33,
+          "end": 1.38,
+          "label": "K"
+        },
+        {
+          "start": 1.38,
+          "end": 1.46,
+          "label": "AH0"
+        },
+        {
+          "start": 1.46,
+          "end": 1.51,
+          "label": "M"
+        },
+        {
+          "start": 1.51,
+          "end": 1.6,
+          "label": "P,P*,s"
+        },
+        {
+          "start": 1.6,
+          "end": 1.7,
+          "label": "AE1"
+        },
+        {
+          "start": 1.7,
+          "end": 1.79,
+          "label": "N"
+        },
+        {
+          "start": 1.79,
+          "end": 1.86,
+          "label": "Y"
+        },
+        {
+          "start": 1.86,
+          "end": 1.91,
+          "label": "AH0"
+        },
+        {
+          "start": 1.91,
+          "end": 2.03,
+          "label": "N"
+        },
+        {
+          "start": 2.03,
+          "end": 2.23,
+          "label": "sp"
+        },
+        {
+          "start": 2.23,
+          "end": 2.41,
+          "label": "AH1,AO,s"
+        },
+        {
+          "start": 2.41,
+          "end": 2.52,
+          "label": "V"
+        },
+        {
+          "start": 2.52,
+          "end": 2.55,
+          "label": "sp"
+        },
+        {
+          "start": 2.55,
+          "end": 2.66,
+          "label": "AO1"
+        },
+        {
+          "start": 2.66,
+          "end": 2.81,
+          "label": "L,L*,s "
+        },
+        {
+          "start": 2.81,
+          "end": 2.87,
+          "label": "M"
+        },
+        {
+          "start": 2.87,
+          "end": 2.95,
+          "label": "OW2"
+        },
+        {
+          "start": 2.95,
+          "end": 3.03,
+          "label": "S"
+        },
+        {
+          "start": 3.03,
+          "end": 3.08,
+          "label": "T"
+        },
+        {
+          "start": 3.08,
+          "end": 3.13,
+          "label": "D"
+        },
+        {
+          "start": 3.13,
+          "end": 3.16,
+          "label": "EH1"
+        },
+        {
+          "start": 3.16,
+          "end": 3.22,
+          "label": "L"
+        },
+        {
+          "start": 3.22,
+          "end": 3.29,
+          "label": "AH0"
+        },
+        {
+          "start": 3.29,
+          "end": 3.36,
+          "label": "K"
+        },
+        {
+          "start": 3.36,
+          "end": 3.44,
+          "label": "AH0"
+        },
+        {
+          "start": 3.44,
+          "end": 3.53,
+          "label": "T,T*,s "
+        },
+        {
+          "start": 3.53,
+          "end": 3.62,
+          "label": "F"
+        },
+        {
+          "start": 3.62,
+          "end": 3.67,
+          "label": "AH0"
+        },
+        {
+          "start": 3.67,
+          "end": 3.78,
+          "label": "Z,S,s "
+        },
+        {
+          "start": 3.78,
+          "end": 3.85,
+          "label": "IY1"
+        },
+        {
+          "start": 3.85,
+          "end": 4.11,
+          "label": "K"
+        },
+        {
+          "start": 4.11,
+          "end": 4.19,
+          "label": "sp"
+        },
+        {
+          "start": 4.19,
+          "end": 4.210680272108844,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.15,
+          "label": "he"
+        },
+        {
+          "start": 0.15,
+          "end": 0.33,
+          "label": "was"
+        },
+        {
+          "start": 0.33,
+          "end": 0.41,
+          "label": "a"
+        },
+        {
+          "start": 0.41,
+          "end": 0.62,
+          "label": "head"
+        },
+        {
+          "start": 0.62,
+          "end": 1.0,
+          "label": "shorter"
+        },
+        {
+          "start": 1.0,
+          "end": 1.19,
+          "label": "than"
+        },
+        {
+          "start": 1.19,
+          "end": 1.33,
+          "label": "his"
+        },
+        {
+          "start": 1.33,
+          "end": 2.03,
+          "label": "companion"
+        },
+        {
+          "start": 2.03,
+          "end": 2.23,
+          "label": ""
+        },
+        {
+          "start": 2.23,
+          "end": 2.52,
+          "label": "of"
+        },
+        {
+          "start": 2.52,
+          "end": 2.55,
+          "label": ""
+        },
+        {
+          "start": 2.55,
+          "end": 3.08,
+          "label": "almost"
+        },
+        {
+          "start": 3.08,
+          "end": 3.53,
+          "label": "delicate"
+        },
+        {
+          "start": 3.53,
+          "end": 4.11,
+          "label": "physique"
+        },
+        {
+          "start": 4.11,
+          "end": 4.210680272108844,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0018",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0018.wav",
+        "sha256": "56a76e73806485bc8c10a3c377ac163be5b2957a4d78553036b6f0a2e24cc4c5"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0018.TextGrid",
+        "sha256": "a9d5789f2feb130f601ab07ba5f6574b1dc32dc0465d65dedcd2f38a6df5086e"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.15,
+          "label": "DH,D,s "
+        },
+        {
+          "start": 0.15,
+          "end": 0.2,
+          "label": "EH1"
+        },
+        {
+          "start": 0.2,
+          "end": 0.26,
+          "label": "R,R*,s "
+        },
+        {
+          "start": 0.26,
+          "end": 0.31,
+          "label": "W,W*,s"
+        },
+        {
+          "start": 0.31,
+          "end": 0.39,
+          "label": "AO1"
+        },
+        {
+          "start": 0.39,
+          "end": 0.47,
+          "label": "Z"
+        },
+        {
+          "start": 0.47,
+          "end": 0.56,
+          "label": "AH0"
+        },
+        {
+          "start": 0.56,
+          "end": 0.66,
+          "label": "CH"
+        },
+        {
+          "start": 0.66,
+          "end": 0.81,
+          "label": "EY1"
+        },
+        {
+          "start": 0.81,
+          "end": 0.87,
+          "label": "N"
+        },
+        {
+          "start": 0.87,
+          "end": 0.95,
+          "label": "JH"
+        },
+        {
+          "start": 0.95,
+          "end": 1.04,
+          "label": "N"
+        },
+        {
+          "start": 1.04,
+          "end": 1.24,
+          "label": "AW1"
+        },
+        {
+          "start": 1.24,
+          "end": 1.27,
+          "label": "sp"
+        },
+        {
+          "start": 1.27,
+          "end": 1.29,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.26,
+          "label": "there"
+        },
+        {
+          "start": 0.26,
+          "end": 0.47,
+          "label": "was"
+        },
+        {
+          "start": 0.47,
+          "end": 0.56,
+          "label": "a"
+        },
+        {
+          "start": 0.56,
+          "end": 0.95,
+          "label": "change"
+        },
+        {
+          "start": 0.95,
+          "end": 1.24,
+          "label": "now"
+        },
+        {
+          "start": 1.24,
+          "end": 1.29,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0019",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0019.wav",
+        "sha256": "d8601a86795c5f24c6d5fa2fa930f0536febfdc1995636525d0674e21bc80183"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0019.TextGrid",
+        "sha256": "861532a4e1f1699bf0fe2bcaa143afbdefbd0c91950f6e5e07fda32f13ebe5d1"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.22,
+          "label": "AY1"
+        },
+        {
+          "start": 0.22,
+          "end": 0.34,
+          "label": "F"
+        },
+        {
+          "start": 0.34,
+          "end": 0.4,
+          "label": "AA1"
+        },
+        {
+          "start": 0.4,
+          "end": 0.47,
+          "label": "L"
+        },
+        {
+          "start": 0.47,
+          "end": 0.55,
+          "label": "OW0"
+        },
+        {
+          "start": 0.55,
+          "end": 0.61,
+          "label": "D,D*,s "
+        },
+        {
+          "start": 0.61,
+          "end": 0.64,
+          "label": "DH,D,s "
+        },
+        {
+          "start": 0.64,
+          "end": 0.69,
+          "label": "AH0"
+        },
+        {
+          "start": 0.69,
+          "end": 0.8,
+          "label": "L"
+        },
+        {
+          "start": 0.8,
+          "end": 0.93,
+          "label": "AY1"
+        },
+        {
+          "start": 0.93,
+          "end": 1.05,
+          "label": "N"
+        },
+        {
+          "start": 1.05,
+          "end": 1.1,
+          "label": "AH1"
+        },
+        {
+          "start": 1.1,
+          "end": 1.17,
+          "label": "V"
+        },
+        {
+          "start": 1.17,
+          "end": 1.21,
+          "label": "DH,D,s "
+        },
+        {
+          "start": 1.21,
+          "end": 1.25,
+          "label": "AH1"
+        },
+        {
+          "start": 1.25,
+          "end": 1.33,
+          "label": "P,P*,s"
+        },
+        {
+          "start": 1.33,
+          "end": 1.37,
+          "label": "R,R*,s "
+        },
+        {
+          "start": 1.37,
+          "end": 1.43,
+          "label": "AH0"
+        },
+        {
+          "start": 1.43,
+          "end": 1.53,
+          "label": "P,P*,s"
+        },
+        {
+          "start": 1.53,
+          "end": 1.64,
+          "label": "OW1"
+        },
+        {
+          "start": 1.64,
+          "end": 1.74,
+          "label": "Z,S,s "
+        },
+        {
+          "start": 1.74,
+          "end": 1.8,
+          "label": "D"
+        },
+        {
+          "start": 1.8,
+          "end": 1.88,
+          "label": "R"
+        },
+        {
+          "start": 1.88,
+          "end": 2.0,
+          "label": "EY1"
+        },
+        {
+          "start": 2.0,
+          "end": 2.03,
+          "label": "L,sil,d"
+        },
+        {
+          "start": 2.03,
+          "end": 2.18,
+          "label": "R"
+        },
+        {
+          "start": 2.18,
+          "end": 2.31,
+          "label": "OW2"
+        },
+        {
+          "start": 2.31,
+          "end": 2.37,
+          "label": "D,D*,s "
+        },
+        {
+          "start": 2.37,
+          "end": 2.55,
+          "label": "sp"
+        },
+        {
+          "start": 2.55,
+          "end": 2.64,
+          "label": "L"
+        },
+        {
+          "start": 2.64,
+          "end": 2.71,
+          "label": "UH1"
+        },
+        {
+          "start": 2.71,
+          "end": 2.77,
+          "label": "K"
+        },
+        {
+          "start": 2.77,
+          "end": 2.82,
+          "label": "IH0"
+        },
+        {
+          "start": 2.82,
+          "end": 2.9,
+          "label": "NG"
+        },
+        {
+          "start": 2.9,
+          "end": 2.96,
+          "label": "F"
+        },
+        {
+          "start": 2.96,
+          "end": 2.99,
+          "label": "R"
+        },
+        {
+          "start": 2.99,
+          "end": 3.06,
+          "label": "ER0"
+        },
+        {
+          "start": 3.06,
+          "end": 3.19,
+          "label": "CH"
+        },
+        {
+          "start": 3.19,
+          "end": 3.29,
+          "label": "AE1"
+        },
+        {
+          "start": 3.29,
+          "end": 3.38,
+          "label": "N"
+        },
+        {
+          "start": 3.38,
+          "end": 3.49,
+          "label": "S"
+        },
+        {
+          "start": 3.49,
+          "end": 3.52,
+          "label": "IH0"
+        },
+        {
+          "start": 3.52,
+          "end": 3.83,
+          "label": "Z"
+        },
+        {
+          "start": 3.83,
+          "end": 3.86,
+          "label": "sp"
+        },
+        {
+          "start": 3.86,
+          "end": 3.8796598639455784,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.22,
+          "label": "i"
+        },
+        {
+          "start": 0.22,
+          "end": 0.61,
+          "label": "followed"
+        },
+        {
+          "start": 0.61,
+          "end": 0.69,
+          "label": "the"
+        },
+        {
+          "start": 0.69,
+          "end": 1.05,
+          "label": "line"
+        },
+        {
+          "start": 1.05,
+          "end": 1.17,
+          "label": "of"
+        },
+        {
+          "start": 1.17,
+          "end": 1.25,
+          "label": "the"
+        },
+        {
+          "start": 1.25,
+          "end": 1.8,
+          "label": "proposed"
+        },
+        {
+          "start": 1.8,
+          "end": 2.37,
+          "label": "railroad"
+        },
+        {
+          "start": 2.37,
+          "end": 2.55,
+          "label": ""
+        },
+        {
+          "start": 2.55,
+          "end": 2.9,
+          "label": "looking"
+        },
+        {
+          "start": 2.9,
+          "end": 3.06,
+          "label": "for"
+        },
+        {
+          "start": 3.06,
+          "end": 3.83,
+          "label": "chances"
+        },
+        {
+          "start": 3.83,
+          "end": 3.8796598639455784,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0020",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0020.wav",
+        "sha256": "a44c6026a84e59f349906e2eb375b5127e7a6c77bfb81098b1489416c9f6b654"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0020.TextGrid",
+        "sha256": "bb036ac02aa5ed1243f3e7a8bab46b3b14cc792929b3ecac9105986b81ced4a2"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.1,
+          "label": "K"
+        },
+        {
+          "start": 0.1,
+          "end": 0.17,
+          "label": "L"
+        },
+        {
+          "start": 0.17,
+          "end": 0.22,
+          "label": "AH1"
+        },
+        {
+          "start": 0.22,
+          "end": 0.3,
+          "label": "B"
+        },
+        {
+          "start": 0.3,
+          "end": 0.36,
+          "label": "Z"
+        },
+        {
+          "start": 0.36,
+          "end": 0.39,
+          "label": "AE1"
+        },
+        {
+          "start": 0.39,
+          "end": 0.46,
+          "label": "N,N*,s "
+        },
+        {
+          "start": 0.46,
+          "end": 0.52,
+          "label": "D"
+        },
+        {
+          "start": 0.52,
+          "end": 0.57,
+          "label": "B"
+        },
+        {
+          "start": 0.57,
+          "end": 0.68,
+          "label": "AO1"
+        },
+        {
+          "start": 0.68,
+          "end": 0.82,
+          "label": "L"
+        },
+        {
+          "start": 0.82,
+          "end": 0.9,
+          "label": "Z,S,s "
+        },
+        {
+          "start": 0.9,
+          "end": 0.97,
+          "label": "AE1"
+        },
+        {
+          "start": 0.97,
+          "end": 1.01,
+          "label": "N"
+        },
+        {
+          "start": 1.01,
+          "end": 1.08,
+          "label": "D"
+        },
+        {
+          "start": 1.08,
+          "end": 1.14,
+          "label": "S"
+        },
+        {
+          "start": 1.14,
+          "end": 1.19,
+          "label": "IH1"
+        },
+        {
+          "start": 1.19,
+          "end": 1.27,
+          "label": "T,T*,s "
+        },
+        {
+          "start": 1.27,
+          "end": 1.38,
+          "label": "IY0"
+        },
+        {
+          "start": 1.38,
+          "end": 1.49,
+          "label": "Z"
+        },
+        {
+          "start": 1.49,
+          "end": 1.56,
+          "label": "G"
+        },
+        {
+          "start": 1.56,
+          "end": 1.62,
+          "label": "R,R*,s"
+        },
+        {
+          "start": 1.62,
+          "end": 1.7536769018114198,
+          "label": "UW1,IY,s"
+        },
+        {
+          "start": 1.7536769018114198,
+          "end": 1.81,
+          "label": "W"
+        },
+        {
+          "start": 1.81,
+          "end": 1.85,
+          "label": "T,T*,s"
+        },
+        {
+          "start": 1.85,
+          "end": 2.08,
+          "label": "UW1"
+        },
+        {
+          "start": 2.08,
+          "end": 2.3,
+          "label": "sp"
+        },
+        {
+          "start": 2.3,
+          "end": 2.41,
+          "label": "B"
+        },
+        {
+          "start": 2.41,
+          "end": 2.53,
+          "label": "IY0"
+        },
+        {
+          "start": 2.53,
+          "end": 2.64,
+          "label": "OW1"
+        },
+        {
+          "start": 2.64,
+          "end": 2.68,
+          "label": "N"
+        },
+        {
+          "start": 2.68,
+          "end": 2.75,
+          "label": "L"
+        },
+        {
+          "start": 2.75,
+          "end": 2.82,
+          "label": "IY0"
+        },
+        {
+          "start": 2.82,
+          "end": 2.91,
+          "label": "M"
+        },
+        {
+          "start": 2.91,
+          "end": 2.97,
+          "label": "EH1"
+        },
+        {
+          "start": 2.97,
+          "end": 3.08,
+          "label": "M"
+        },
+        {
+          "start": 3.08,
+          "end": 3.17,
+          "label": "ER0"
+        },
+        {
+          "start": 3.17,
+          "end": 3.25,
+          "label": "IY0"
+        },
+        {
+          "start": 3.25,
+          "end": 3.51,
+          "label": "Z,S,s "
+        },
+        {
+          "start": 3.51,
+          "end": 3.59,
+          "label": "sp"
+        },
+        {
+          "start": 3.59,
+          "end": 3.6079591836734695,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.36,
+          "label": "clubs"
+        },
+        {
+          "start": 0.36,
+          "end": 0.52,
+          "label": "and"
+        },
+        {
+          "start": 0.52,
+          "end": 0.9,
+          "label": "balls"
+        },
+        {
+          "start": 0.9,
+          "end": 1.08,
+          "label": "and"
+        },
+        {
+          "start": 1.08,
+          "end": 1.49,
+          "label": "cities"
+        },
+        {
+          "start": 1.49,
+          "end": 1.81,
+          "label": "grew"
+        },
+        {
+          "start": 1.81,
+          "end": 2.08,
+          "label": "to"
+        },
+        {
+          "start": 2.08,
+          "end": 2.3,
+          "label": ""
+        },
+        {
+          "start": 2.3,
+          "end": 2.53,
+          "label": "be"
+        },
+        {
+          "start": 2.53,
+          "end": 2.82,
+          "label": "only"
+        },
+        {
+          "start": 2.82,
+          "end": 3.51,
+          "label": "memories"
+        },
+        {
+          "start": 3.51,
+          "end": 3.6079591836734695,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "ASI-arctic_a0021",
+      "speaker": "ASI",
+      "split": "development",
+      "original": {
+        "file": "ASI-arctic_a0021.wav",
+        "sha256": "1d9ef5fc807ec118cc2e070604bb9c2bdf545995721ad185087c9a0f14b53ea0"
+      },
+      "annotation": {
+        "file": "ASI-arctic_a0021.TextGrid",
+        "sha256": "6a72d3f18bafe702f3abc1a3f502459cba42754a856a7ac9e0d2eef4f37c17b3"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.15,
+          "label": "IH1"
+        },
+        {
+          "start": 0.15,
+          "end": 0.2,
+          "label": "T,T*,s "
+        },
+        {
+          "start": 0.2,
+          "end": 0.29,
+          "label": "F"
+        },
+        {
+          "start": 0.29,
+          "end": 0.39,
+          "label": "EH1"
+        },
+        {
+          "start": 0.39,
+          "end": 0.43,
+          "label": "R,R*,s "
+        },
+        {
+          "start": 0.43,
+          "end": 0.52,
+          "label": "L"
+        },
+        {
+          "start": 0.52,
+          "end": 0.6,
+          "label": "IY0"
+        },
+        {
+          "start": 0.6,
+          "end": 0.68,
+          "label": "K,K*,s"
+        },
+        {
+          "start": 0.68,
+          "end": 0.74,
+          "label": "L"
+        },
+        {
+          "start": 0.74,
+          "end": 0.83,
+          "label": "AH1,AA*,s"
+        },
+        {
+          "start": 0.83,
+          "end": 0.9,
+          "label": "B"
+        },
+        {
+          "start": 0.9,
+          "end": 0.93,
+          "label": "D"
+        },
+        {
+          "start": 0.93,
+          "end": 0.99,
+          "label": "M"
+        },
+        {
+          "start": 0.99,
+          "end": 1.09,
+          "label": "IY1"
+        },
+        {
+          "start": 1.09,
+          "end": 1.18,
+          "label": "IH1"
+        },
+        {
+          "start": 1.18,
+          "end": 1.24,
+          "label": "N,N*,s "
+        },
+        {
+          "start": 1.24,
+          "end": 1.27,
+          "label": "T"
+        },
+        {
+          "start": 1.27,
+          "end": 1.34,
+          "label": "UW0"
+        },
+        {
+          "start": 1.34,
+          "end": 1.37,
+          "label": "R,R*,s "
+        },
+        {
+          "start": 1.37,
+          "end": 1.41,
+          "label": "EH1"
+        },
+        {
+          "start": 1.41,
+          "end": 1.49,
+          "label": "K"
+        },
+        {
+          "start": 1.49,
+          "end": 1.52,
+          "label": "AH0"
+        },
+        {
+          "start": 1.52,
+          "end": 1.55,
+          "label": "G"
+        },
+        {
+          "start": 1.55,
+          "end": 1.66,
+          "label": "N"
+        },
+        {
+          "start": 1.66,
+          "end": 1.77,
+          "label": "AY2"
+        },
+        {
+          "start": 1.77,
+          "end": 1.88,
+          "label": "Z"
+        },
+        {
+          "start": 1.88,
+          "end": 1.93,
+          "label": "IH0"
+        },
+        {
+          "start": 1.93,
+          "end": 2.04,
+          "label": "NG"
+        },
+        {
+          "start": 2.04,
+          "end": 2.12,
+          "label": "IH0"
+        },
+        {
+          "start": 2.12,
+          "end": 2.39,
+          "label": "T"
+        },
+        {
+          "start": 2.39,
+          "end": 2.48,
+          "label": "sp"
+        },
+        {
+          "start": 2.48,
+          "end": 2.501609977324263,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.2,
+          "label": "it"
+        },
+        {
+          "start": 0.2,
+          "end": 0.6,
+          "label": "fairly"
+        },
+        {
+          "start": 0.6,
+          "end": 0.93,
+          "label": "clubbed"
+        },
+        {
+          "start": 0.93,
+          "end": 1.09,
+          "label": "me"
+        },
+        {
+          "start": 1.09,
+          "end": 1.34,
+          "label": "into"
+        },
+        {
+          "start": 1.34,
+          "end": 2.04,
+          "label": "recognizing"
+        },
+        {
+          "start": 2.04,
+          "end": 2.39,
+          "label": "it"
+        },
+        {
+          "start": 2.39,
+          "end": 2.501609977324263,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0022",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0022.wav",
+        "sha256": "2726c97215b2415c677b5ebbd564b2a8f3b72821c134602bda1ad1f10a2a4280"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0022.TextGrid",
+        "sha256": "a706e70131b478635d4298a0f8a1b180554c9c7788bb579811e9ed9fbb97551e"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.18,
+          "label": "HH,HH*,s"
+        },
+        {
+          "start": 0.18,
+          "end": 0.21,
+          "label": "AA1"
+        },
+        {
+          "start": 0.21,
+          "end": 0.25,
+          "label": "R"
+        },
+        {
+          "start": 0.25,
+          "end": 0.30497487976052495,
+          "label": "D"
+        },
+        {
+          "start": 0.30497487976052495,
+          "end": 0.34734754455933486,
+          "label": "sil,AH0,a"
+        },
+        {
+          "start": 0.34734754455933486,
+          "end": 0.39264246210289033,
+          "label": "L"
+        },
+        {
+          "start": 0.39264246210289033,
+          "end": 0.5,
+          "label": "IY0"
+        },
+        {
+          "start": 0.5,
+          "end": 0.66,
+          "label": "W"
+        },
+        {
+          "start": 0.66,
+          "end": 0.7,
+          "label": "ER1,AH0,s"
+        },
+        {
+          "start": 0.7,
+          "end": 0.96,
+          "label": "AW1"
+        },
+        {
+          "start": 0.96,
+          "end": 1.02,
+          "label": "R,AH0,s"
+        },
+        {
+          "start": 1.02,
+          "end": 1.11,
+          "label": "P"
+        },
+        {
+          "start": 1.11,
+          "end": 1.19,
+          "label": "L"
+        },
+        {
+          "start": 1.19,
+          "end": 1.32,
+          "label": "AE1"
+        },
+        {
+          "start": 1.32,
+          "end": 1.36,
+          "label": "N"
+        },
+        {
+          "start": 1.36,
+          "end": 1.48,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 1.48,
+          "end": 1.59,
+          "label": "M"
+        },
+        {
+          "start": 1.59,
+          "end": 1.67,
+          "label": "EY1"
+        },
+        {
+          "start": 1.67,
+          "end": 1.71,
+          "label": "D"
+        },
+        {
+          "start": 1.71,
+          "end": 1.86,
+          "label": "P"
+        },
+        {
+          "start": 1.86,
+          "end": 1.93,
+          "label": "AH1"
+        },
+        {
+          "start": 1.93,
+          "end": 1.98,
+          "label": "B"
+        },
+        {
+          "start": 1.98,
+          "end": 2.04,
+          "label": "L"
+        },
+        {
+          "start": 2.04,
+          "end": 2.12,
+          "label": "IH0,IY0,s"
+        },
+        {
+          "start": 2.12,
+          "end": 2.2,
+          "label": "K"
+        },
+        {
+          "start": 2.2,
+          "end": 2.25,
+          "label": "B"
+        },
+        {
+          "start": 2.25,
+          "end": 2.32,
+          "label": "IY2"
+        },
+        {
+          "start": 2.32,
+          "end": 2.44,
+          "label": "F"
+        },
+        {
+          "start": 2.44,
+          "end": 2.52,
+          "label": "AO1"
+        },
+        {
+          "start": 2.52,
+          "end": 2.55,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 2.55,
+          "end": 2.58,
+          "label": "W"
+        },
+        {
+          "start": 2.58,
+          "end": 2.68,
+          "label": "IY1"
+        },
+        {
+          "start": 2.68,
+          "end": 2.79,
+          "label": "W"
+        },
+        {
+          "start": 2.79,
+          "end": 2.86,
+          "label": "ER1,AH0,s"
+        },
+        {
+          "start": 2.86,
+          "end": 2.97,
+          "label": "M"
+        },
+        {
+          "start": 2.97,
+          "end": 3.05,
+          "label": "EH1"
+        },
+        {
+          "start": 3.05,
+          "end": 3.16,
+          "label": "T"
+        },
+        {
+          "start": 3.16,
+          "end": 3.22,
+          "label": "B"
+        },
+        {
+          "start": 3.22,
+          "end": 3.46,
+          "label": "AY1"
+        },
+        {
+          "start": 3.46,
+          "end": 3.52,
+          "label": "sp"
+        },
+        {
+          "start": 3.52,
+          "end": 3.67,
+          "label": "P"
+        },
+        {
+          "start": 3.67,
+          "end": 3.86,
+          "label": "AW1"
+        },
+        {
+          "start": 3.86,
+          "end": 3.9,
+          "label": "ER0,AH0,s"
+        },
+        {
+          "start": 3.9,
+          "end": 3.99,
+          "label": "F"
+        },
+        {
+          "start": 3.99,
+          "end": 4.05,
+          "label": "AH0,OW0,s"
+        },
+        {
+          "start": 4.05,
+          "end": 4.15,
+          "label": "L,sil,d"
+        },
+        {
+          "start": 4.15,
+          "end": 4.22,
+          "label": "AA2"
+        },
+        {
+          "start": 4.22,
+          "end": 4.29,
+          "label": "P"
+        },
+        {
+          "start": 4.29,
+          "end": 4.32,
+          "label": "AH0,sil,d"
+        },
+        {
+          "start": 4.32,
+          "end": 4.44,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 4.44,
+          "end": 4.56,
+          "label": "IH1,IY1,s"
+        },
+        {
+          "start": 4.56,
+          "end": 4.67,
+          "label": "SH"
+        },
+        {
+          "start": 4.67,
+          "end": 4.7,
+          "label": "AH0"
+        },
+        {
+          "start": 4.7,
+          "end": 4.73,
+          "label": "N"
+        },
+        {
+          "start": 4.73,
+          "end": 4.78,
+          "label": "sp"
+        },
+        {
+          "start": 4.78,
+          "end": 4.803832199546485,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.5,
+          "label": "hardly"
+        },
+        {
+          "start": 0.5,
+          "end": 0.7,
+          "label": "were"
+        },
+        {
+          "start": 0.7,
+          "end": 1.02,
+          "label": "our"
+        },
+        {
+          "start": 1.02,
+          "end": 1.48,
+          "label": "plans"
+        },
+        {
+          "start": 1.48,
+          "end": 1.71,
+          "label": "made"
+        },
+        {
+          "start": 1.71,
+          "end": 2.2,
+          "label": "public"
+        },
+        {
+          "start": 2.2,
+          "end": 2.55,
+          "label": "before"
+        },
+        {
+          "start": 2.55,
+          "end": 2.68,
+          "label": "we"
+        },
+        {
+          "start": 2.68,
+          "end": 2.86,
+          "label": "were"
+        },
+        {
+          "start": 2.86,
+          "end": 3.16,
+          "label": "met"
+        },
+        {
+          "start": 3.16,
+          "end": 3.46,
+          "label": "by"
+        },
+        {
+          "start": 3.46,
+          "end": 3.52,
+          "label": ""
+        },
+        {
+          "start": 3.52,
+          "end": 4.15,
+          "label": "powerful"
+        },
+        {
+          "start": 4.15,
+          "end": 4.73,
+          "label": "opposition"
+        },
+        {
+          "start": 4.73,
+          "end": 4.803832199546485,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0023",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0023.wav",
+        "sha256": "fb58ec51d473776ff745856f4854bbeaa5755ab6273e4a236fd1824b1ee66222"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0023.TextGrid",
+        "sha256": "adf0e4a3ba0df63d4a70622ee0ea23341760231081895c6592e114c36cae7b82"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.15,
+          "label": "AH0"
+        },
+        {
+          "start": 0.15,
+          "end": 0.27,
+          "label": "K"
+        },
+        {
+          "start": 0.27,
+          "end": 0.32,
+          "label": "AA2"
+        },
+        {
+          "start": 0.32,
+          "end": 0.35,
+          "label": "M"
+        },
+        {
+          "start": 0.35,
+          "end": 0.38,
+          "label": "B"
+        },
+        {
+          "start": 0.38,
+          "end": 0.41,
+          "label": "AH0,sil,d"
+        },
+        {
+          "start": 0.41,
+          "end": 0.47,
+          "label": "N"
+        },
+        {
+          "start": 0.47,
+          "end": 0.59,
+          "label": "EY1"
+        },
+        {
+          "start": 0.59,
+          "end": 0.68,
+          "label": "SH"
+        },
+        {
+          "start": 0.68,
+          "end": 0.72,
+          "label": "AH0"
+        },
+        {
+          "start": 0.72,
+          "end": 0.75,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 0.75,
+          "end": 0.88,
+          "label": "AH1,AO1,s"
+        },
+        {
+          "start": 0.88,
+          "end": 0.94,
+          "label": "V"
+        },
+        {
+          "start": 0.94,
+          "end": 1.04,
+          "label": "K"
+        },
+        {
+          "start": 1.04,
+          "end": 1.11,
+          "label": "AH0"
+        },
+        {
+          "start": 1.11,
+          "end": 1.19,
+          "label": "N"
+        },
+        {
+          "start": 1.19,
+          "end": 1.29,
+          "label": "EY1"
+        },
+        {
+          "start": 1.29,
+          "end": 1.39,
+          "label": "D"
+        },
+        {
+          "start": 1.39,
+          "end": 1.44,
+          "label": "IY0"
+        },
+        {
+          "start": 1.44,
+          "end": 1.5,
+          "label": "AH0"
+        },
+        {
+          "start": 1.5,
+          "end": 1.57,
+          "label": "N"
+        },
+        {
+          "start": 1.57,
+          "end": 1.71,
+          "label": "K"
+        },
+        {
+          "start": 1.71,
+          "end": 1.81,
+          "label": "AE1"
+        },
+        {
+          "start": 1.81,
+          "end": 1.86,
+          "label": "P"
+        },
+        {
+          "start": 1.86,
+          "end": 1.89,
+          "label": "AH0,sil,d"
+        },
+        {
+          "start": 1.89,
+          "end": 1.93,
+          "label": "T"
+        },
+        {
+          "start": 1.93,
+          "end": 2.02,
+          "label": "AH0"
+        },
+        {
+          "start": 2.02,
+          "end": 2.07,
+          "label": "L,W,s"
+        },
+        {
+          "start": 2.07,
+          "end": 2.19,
+          "label": "K"
+        },
+        {
+          "start": 2.19,
+          "end": 2.24,
+          "label": "W"
+        },
+        {
+          "start": 2.24,
+          "end": 2.33,
+          "label": "IH1"
+        },
+        {
+          "start": 2.33,
+          "end": 2.43,
+          "label": "K"
+        },
+        {
+          "start": 2.43,
+          "end": 2.48,
+          "label": "L"
+        },
+        {
+          "start": 2.48,
+          "end": 2.61,
+          "label": "IY0"
+        },
+        {
+          "start": 2.61,
+          "end": 2.64,
+          "label": "AO1"
+        },
+        {
+          "start": 2.64,
+          "end": 2.68,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 2.68,
+          "end": 2.73,
+          "label": "G"
+        },
+        {
+          "start": 2.73,
+          "end": 2.77,
+          "label": "AH0"
+        },
+        {
+          "start": 2.77,
+          "end": 2.88,
+          "label": "N"
+        },
+        {
+          "start": 2.88,
+          "end": 3.03,
+          "label": "AY2"
+        },
+        {
+          "start": 3.03,
+          "end": 3.09,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 3.09,
+          "end": 3.13,
+          "label": "D,sil,d"
+        },
+        {
+          "start": 3.13,
+          "end": 3.24,
+          "label": "AE1"
+        },
+        {
+          "start": 3.24,
+          "end": 3.37,
+          "label": "N"
+        },
+        {
+          "start": 3.37,
+          "end": 3.454118921351706,
+          "label": "D"
+        },
+        {
+          "start": 3.454118921351706,
+          "end": 3.53,
+          "label": "sil,AH0,a"
+        },
+        {
+          "start": 3.53,
+          "end": 3.88,
+          "label": "sp"
+        },
+        {
+          "start": 3.88,
+          "end": 4.01,
+          "label": "P"
+        },
+        {
+          "start": 4.01,
+          "end": 4.1,
+          "label": "AH0,AE1,s"
+        },
+        {
+          "start": 4.1,
+          "end": 4.16,
+          "label": "T"
+        },
+        {
+          "start": 4.16,
+          "end": 4.19,
+          "label": "IH1"
+        },
+        {
+          "start": 4.19,
+          "end": 4.34,
+          "label": "SH"
+        },
+        {
+          "start": 4.34,
+          "end": 4.43,
+          "label": "AH0"
+        },
+        {
+          "start": 4.43,
+          "end": 4.47,
+          "label": "N"
+        },
+        {
+          "start": 4.47,
+          "end": 4.57,
+          "label": "D,sil,d"
+        },
+        {
+          "start": 4.57,
+          "end": 4.69,
+          "label": "F"
+        },
+        {
+          "start": 4.69,
+          "end": 4.88,
+          "label": "AO1"
+        },
+        {
+          "start": 4.88,
+          "end": 4.92,
+          "label": "R,AH0,s"
+        },
+        {
+          "start": 4.92,
+          "end": 4.98,
+          "label": "DH"
+        },
+        {
+          "start": 4.98,
+          "end": 5.07,
+          "label": "AH0"
+        },
+        {
+          "start": 5.07,
+          "end": 5.23,
+          "label": "S"
+        },
+        {
+          "start": 5.23,
+          "end": 5.32,
+          "label": "EY1,IY1,s"
+        },
+        {
+          "start": 5.32,
+          "end": 5.41,
+          "label": "M"
+        },
+        {
+          "start": 5.41,
+          "end": 5.53,
+          "label": "P"
+        },
+        {
+          "start": 5.53,
+          "end": 5.58,
+          "label": "R"
+        },
+        {
+          "start": 5.58,
+          "end": 5.74,
+          "label": "IH1"
+        },
+        {
+          "start": 5.74,
+          "end": 5.87,
+          "label": "V"
+        },
+        {
+          "start": 5.87,
+          "end": 5.94,
+          "label": "IH0,IY0,s"
+        },
+        {
+          "start": 5.94,
+          "end": 5.98,
+          "label": "L"
+        },
+        {
+          "start": 5.98,
+          "end": 6.08,
+          "label": "IH0,IY0,s"
+        },
+        {
+          "start": 6.08,
+          "end": 6.21,
+          "label": "JH"
+        },
+        {
+          "start": 6.21,
+          "end": 6.33,
+          "label": "IH0,IY0,s"
+        },
+        {
+          "start": 6.33,
+          "end": 6.47,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 6.47,
+          "end": 6.5,
+          "label": "sp"
+        },
+        {
+          "start": 6.5,
+          "end": 6.52124716553288,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.15,
+          "label": "a"
+        },
+        {
+          "start": 0.15,
+          "end": 0.75,
+          "label": "combination"
+        },
+        {
+          "start": 0.75,
+          "end": 0.94,
+          "label": "of"
+        },
+        {
+          "start": 0.94,
+          "end": 1.57,
+          "label": "canadian"
+        },
+        {
+          "start": 1.57,
+          "end": 2.07,
+          "label": "capital"
+        },
+        {
+          "start": 2.07,
+          "end": 2.61,
+          "label": "quickly"
+        },
+        {
+          "start": 2.61,
+          "end": 3.13,
+          "label": "organized"
+        },
+        {
+          "start": 3.13,
+          "end": 3.53,
+          "label": "and"
+        },
+        {
+          "start": 3.53,
+          "end": 3.88,
+          "label": ""
+        },
+        {
+          "start": 3.88,
+          "end": 4.57,
+          "label": "petitioned"
+        },
+        {
+          "start": 4.57,
+          "end": 4.92,
+          "label": "for"
+        },
+        {
+          "start": 4.92,
+          "end": 5.07,
+          "label": "the"
+        },
+        {
+          "start": 5.07,
+          "end": 5.41,
+          "label": "same"
+        },
+        {
+          "start": 5.41,
+          "end": 6.47,
+          "label": "privileges"
+        },
+        {
+          "start": 6.47,
+          "end": 6.52124716553288,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0024",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0024.wav",
+        "sha256": "ccaffaaf8a40ae8a93acf97b7aec40b7155829273c7e82653c9a06000f234f76"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0024.TextGrid",
+        "sha256": "44ef13a05236166a6f42d858179acd828a76b2ddd12acf6e1e874894325c6dfd"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.09,
+          "label": "IH1"
+        },
+        {
+          "start": 0.09,
+          "end": 0.15,
+          "label": "T"
+        },
+        {
+          "start": 0.15,
+          "end": 0.24,
+          "label": "W"
+        },
+        {
+          "start": 0.24,
+          "end": 0.31,
+          "label": "AH1"
+        },
+        {
+          "start": 0.31,
+          "end": 0.4,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 0.4,
+          "end": 0.5,
+          "label": "M"
+        },
+        {
+          "start": 0.5,
+          "end": 0.59,
+          "label": "AY1"
+        },
+        {
+          "start": 0.59,
+          "end": 0.68,
+          "label": "R"
+        },
+        {
+          "start": 0.68,
+          "end": 0.75,
+          "label": "IH0"
+        },
+        {
+          "start": 0.75,
+          "end": 0.88,
+          "label": "P"
+        },
+        {
+          "start": 0.88,
+          "end": 0.94,
+          "label": "AO1"
+        },
+        {
+          "start": 0.94,
+          "end": 0.99,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 0.99,
+          "end": 1.05,
+          "label": "T"
+        },
+        {
+          "start": 1.05,
+          "end": 1.1,
+          "label": "S"
+        },
+        {
+          "start": 1.1,
+          "end": 1.22,
+          "label": "F"
+        },
+        {
+          "start": 1.22,
+          "end": 1.27,
+          "label": "R"
+        },
+        {
+          "start": 1.27,
+          "end": 1.37,
+          "label": "AH1"
+        },
+        {
+          "start": 1.37,
+          "end": 1.45,
+          "label": "M"
+        },
+        {
+          "start": 1.45,
+          "end": 1.5,
+          "label": "DH"
+        },
+        {
+          "start": 1.5,
+          "end": 1.58,
+          "label": "AH0"
+        },
+        {
+          "start": 1.58,
+          "end": 1.72,
+          "label": "N"
+        },
+        {
+          "start": 1.72,
+          "end": 1.84,
+          "label": "AO1"
+        },
+        {
+          "start": 1.84,
+          "end": 1.91,
+          "label": "R"
+        },
+        {
+          "start": 1.91,
+          "end": 1.99,
+          "label": "TH,S,s"
+        },
+        {
+          "start": 1.99,
+          "end": 2.02,
+          "label": "sp"
+        },
+        {
+          "start": 2.02,
+          "end": 2.13,
+          "label": "W"
+        },
+        {
+          "start": 2.13,
+          "end": 2.26,
+          "label": "IH1,IY1,s"
+        },
+        {
+          "start": 2.26,
+          "end": 2.45,
+          "label": "CH"
+        },
+        {
+          "start": 2.45,
+          "end": 2.58,
+          "label": "CH"
+        },
+        {
+          "start": 2.58,
+          "end": 2.73,
+          "label": "IY1"
+        },
+        {
+          "start": 2.73,
+          "end": 2.81,
+          "label": "F"
+        },
+        {
+          "start": 2.81,
+          "end": 2.91,
+          "label": "L"
+        },
+        {
+          "start": 2.91,
+          "end": 3.17,
+          "label": "IY0"
+        },
+        {
+          "start": 3.17,
+          "end": 3.26,
+          "label": "sp"
+        },
+        {
+          "start": 3.26,
+          "end": 3.44,
+          "label": "IH1,IY1,s"
+        },
+        {
+          "start": 3.44,
+          "end": 3.65,
+          "label": "N"
+        },
+        {
+          "start": 3.65,
+          "end": 3.73,
+          "label": "D"
+        },
+        {
+          "start": 3.73,
+          "end": 3.87,
+          "label": "UW1"
+        },
+        {
+          "start": 3.87,
+          "end": 3.9,
+          "label": "S"
+        },
+        {
+          "start": 3.9,
+          "end": 4.01,
+          "label": "T"
+        },
+        {
+          "start": 4.01,
+          "end": 4.07,
+          "label": "P"
+        },
+        {
+          "start": 4.07,
+          "end": 4.17,
+          "label": "IY1"
+        },
+        {
+          "start": 4.17,
+          "end": 4.27,
+          "label": "P"
+        },
+        {
+          "start": 4.27,
+          "end": 4.31,
+          "label": "AH0"
+        },
+        {
+          "start": 4.31,
+          "end": 4.37,
+          "label": "L,W,s"
+        },
+        {
+          "start": 4.37,
+          "end": 4.48,
+          "label": "T"
+        },
+        {
+          "start": 4.48,
+          "end": 4.55,
+          "label": "UW1"
+        },
+        {
+          "start": 4.55,
+          "end": 4.67,
+          "label": "B"
+        },
+        {
+          "start": 4.67,
+          "end": 4.95,
+          "label": "AY1"
+        },
+        {
+          "start": 4.95,
+          "end": 4.98,
+          "label": "sp"
+        },
+        {
+          "start": 4.98,
+          "end": 4.996303854875284,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.15,
+          "label": "it"
+        },
+        {
+          "start": 0.15,
+          "end": 0.4,
+          "label": "was"
+        },
+        {
+          "start": 0.4,
+          "end": 0.59,
+          "label": "my"
+        },
+        {
+          "start": 0.59,
+          "end": 1.1,
+          "label": "reports"
+        },
+        {
+          "start": 1.1,
+          "end": 1.45,
+          "label": "from"
+        },
+        {
+          "start": 1.45,
+          "end": 1.58,
+          "label": "the"
+        },
+        {
+          "start": 1.58,
+          "end": 1.99,
+          "label": "north"
+        },
+        {
+          "start": 1.99,
+          "end": 2.02,
+          "label": ""
+        },
+        {
+          "start": 2.02,
+          "end": 2.45,
+          "label": "which"
+        },
+        {
+          "start": 2.45,
+          "end": 3.17,
+          "label": "chiefly"
+        },
+        {
+          "start": 3.17,
+          "end": 3.26,
+          "label": ""
+        },
+        {
+          "start": 3.26,
+          "end": 4.01,
+          "label": "induced"
+        },
+        {
+          "start": 4.01,
+          "end": 4.37,
+          "label": "people"
+        },
+        {
+          "start": 4.37,
+          "end": 4.55,
+          "label": "to"
+        },
+        {
+          "start": 4.55,
+          "end": 4.95,
+          "label": "buy"
+        },
+        {
+          "start": 4.95,
+          "end": 4.996303854875284,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0025",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0025.wav",
+        "sha256": "886c18be25a017c0f00d9dc26e88eef73e4c57f21248685e0e5c9127eab3e114"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0025.TextGrid",
+        "sha256": "5a45485e8dc5dad856d4dab83903e03c5963edb7887427bc07aa132d36dc80b9"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.15,
+          "label": "AY1"
+        },
+        {
+          "start": 0.15,
+          "end": 0.21,
+          "label": "W"
+        },
+        {
+          "start": 0.21,
+          "end": 0.28,
+          "label": "AH1"
+        },
+        {
+          "start": 0.28,
+          "end": 0.38,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 0.38,
+          "end": 0.45,
+          "label": "AH0"
+        },
+        {
+          "start": 0.45,
+          "end": 0.55,
+          "label": "B"
+        },
+        {
+          "start": 0.55,
+          "end": 0.68,
+          "label": "AW1"
+        },
+        {
+          "start": 0.68,
+          "end": 0.75,
+          "label": "T"
+        },
+        {
+          "start": 0.75,
+          "end": 0.8,
+          "label": "T"
+        },
+        {
+          "start": 0.8,
+          "end": 0.86,
+          "label": "AH0"
+        },
+        {
+          "start": 0.86,
+          "end": 0.98,
+          "label": "D"
+        },
+        {
+          "start": 0.98,
+          "end": 1.11,
+          "label": "UW1"
+        },
+        {
+          "start": 1.11,
+          "end": 1.17,
+          "label": "DH,L,s"
+        },
+        {
+          "start": 1.17,
+          "end": 1.3,
+          "label": "IH1,IY1,s"
+        },
+        {
+          "start": 1.3,
+          "end": 1.39,
+          "label": "S"
+        },
+        {
+          "start": 1.39,
+          "end": 1.51,
+          "label": "W"
+        },
+        {
+          "start": 1.51,
+          "end": 1.65,
+          "label": "EH1,AE1,s"
+        },
+        {
+          "start": 1.65,
+          "end": 1.75,
+          "label": "N"
+        },
+        {
+          "start": 1.75,
+          "end": 1.8,
+          "label": "sp"
+        },
+        {
+          "start": 1.8,
+          "end": 1.99,
+          "label": "K"
+        },
+        {
+          "start": 1.99,
+          "end": 2.21,
+          "label": "UW1"
+        },
+        {
+          "start": 2.21,
+          "end": 2.27,
+          "label": "L"
+        },
+        {
+          "start": 2.27,
+          "end": 2.42,
+          "label": "ER0,AH0,s"
+        },
+        {
+          "start": 2.42,
+          "end": 2.53,
+          "label": "JH"
+        },
+        {
+          "start": 2.53,
+          "end": 2.63,
+          "label": "AH1"
+        },
+        {
+          "start": 2.63,
+          "end": 2.76,
+          "label": "JH,CH,s"
+        },
+        {
+          "start": 2.76,
+          "end": 2.85,
+          "label": "M"
+        },
+        {
+          "start": 2.85,
+          "end": 2.91,
+          "label": "AH0"
+        },
+        {
+          "start": 2.91,
+          "end": 3.0,
+          "label": "N"
+        },
+        {
+          "start": 3.0,
+          "end": 3.03,
+          "label": "T,sil,d"
+        },
+        {
+          "start": 3.03,
+          "end": 3.33,
+          "label": "sp"
+        },
+        {
+          "start": 3.33,
+          "end": 3.41,
+          "label": "P"
+        },
+        {
+          "start": 3.41,
+          "end": 3.49,
+          "label": "R"
+        },
+        {
+          "start": 3.49,
+          "end": 3.56,
+          "label": "IY0"
+        },
+        {
+          "start": 3.56,
+          "end": 3.7,
+          "label": "V,W,s"
+        },
+        {
+          "start": 3.7,
+          "end": 3.85,
+          "label": "EY1"
+        },
+        {
+          "start": 3.85,
+          "end": 3.89,
+          "label": "L"
+        },
+        {
+          "start": 3.89,
+          "end": 3.97,
+          "label": "D"
+        },
+        {
+          "start": 3.97,
+          "end": 4.14,
+          "label": "sp"
+        },
+        {
+          "start": 4.14,
+          "end": 4.156848072562358,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.15,
+          "label": "i"
+        },
+        {
+          "start": 0.15,
+          "end": 0.38,
+          "label": "was"
+        },
+        {
+          "start": 0.38,
+          "end": 0.75,
+          "label": "about"
+        },
+        {
+          "start": 0.75,
+          "end": 0.86,
+          "label": "to"
+        },
+        {
+          "start": 0.86,
+          "end": 1.11,
+          "label": "do"
+        },
+        {
+          "start": 1.11,
+          "end": 1.39,
+          "label": "this"
+        },
+        {
+          "start": 1.39,
+          "end": 1.75,
+          "label": "when"
+        },
+        {
+          "start": 1.75,
+          "end": 1.8,
+          "label": ""
+        },
+        {
+          "start": 1.8,
+          "end": 2.42,
+          "label": "cooler"
+        },
+        {
+          "start": 2.42,
+          "end": 3.03,
+          "label": "judgment"
+        },
+        {
+          "start": 3.03,
+          "end": 3.33,
+          "label": ""
+        },
+        {
+          "start": 3.33,
+          "end": 3.97,
+          "label": "prevailed"
+        },
+        {
+          "start": 3.97,
+          "end": 4.156848072562358,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0026",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0026.wav",
+        "sha256": "47d0b15365307a82c193ecc206d47bbc6e7e65a18d871f95c9a4586af6ca3636"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0026.TextGrid",
+        "sha256": "17c4f51f9a23541a5bf7f031147ebe4d8fa4f1315e93d3427c43dfc334fefc5a"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.12,
+          "label": "IH1,IY1,s"
+        },
+        {
+          "start": 0.12,
+          "end": 0.26,
+          "label": "T"
+        },
+        {
+          "start": 0.26,
+          "end": 0.35,
+          "label": "AH0"
+        },
+        {
+          "start": 0.35,
+          "end": 0.49,
+          "label": "K"
+        },
+        {
+          "start": 0.49,
+          "end": 0.61,
+          "label": "ER1,AH0,s"
+        },
+        {
+          "start": 0.61,
+          "end": 0.7,
+          "label": "D"
+        },
+        {
+          "start": 0.7,
+          "end": 0.77,
+          "label": "T"
+        },
+        {
+          "start": 0.77,
+          "end": 0.87,
+          "label": "UW1"
+        },
+        {
+          "start": 0.87,
+          "end": 0.95,
+          "label": "M"
+        },
+        {
+          "start": 0.95,
+          "end": 1.15,
+          "label": "IY1"
+        },
+        {
+          "start": 1.15,
+          "end": 1.27,
+          "label": "DH"
+        },
+        {
+          "start": 1.27,
+          "end": 1.41,
+          "label": "AE1"
+        },
+        {
+          "start": 1.41,
+          "end": 1.45,
+          "label": "T"
+        },
+        {
+          "start": 1.45,
+          "end": 1.52,
+          "label": "sp"
+        },
+        {
+          "start": 1.52,
+          "end": 1.69,
+          "label": "DH,D,s"
+        },
+        {
+          "start": 1.69,
+          "end": 1.82,
+          "label": "EH1"
+        },
+        {
+          "start": 1.82,
+          "end": 1.97,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 1.97,
+          "end": 2.14,
+          "label": "W"
+        },
+        {
+          "start": 2.14,
+          "end": 2.19,
+          "label": "UH1"
+        },
+        {
+          "start": 2.19,
+          "end": 2.45,
+          "label": "D"
+        },
+        {
+          "start": 2.45,
+          "end": 2.48,
+          "label": "sp"
+        },
+        {
+          "start": 2.48,
+          "end": 2.66,
+          "label": "HH"
+        },
+        {
+          "start": 2.66,
+          "end": 2.73,
+          "label": "AE1"
+        },
+        {
+          "start": 2.73,
+          "end": 2.81,
+          "label": "V,F,s"
+        },
+        {
+          "start": 2.81,
+          "end": 2.85,
+          "label": "sp"
+        },
+        {
+          "start": 2.85,
+          "end": 2.98,
+          "label": "T"
+        },
+        {
+          "start": 2.98,
+          "end": 3.13,
+          "label": "UW1"
+        },
+        {
+          "start": 3.13,
+          "end": 3.17,
+          "label": "sp"
+        },
+        {
+          "start": 3.17,
+          "end": 3.23,
+          "label": "B"
+        },
+        {
+          "start": 3.23,
+          "end": 3.37,
+          "label": "IY0"
+        },
+        {
+          "start": 3.37,
+          "end": 3.64,
+          "label": "AH0"
+        },
+        {
+          "start": 3.64,
+          "end": 3.79,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 3.79,
+          "end": 4.06,
+          "label": "sp"
+        },
+        {
+          "start": 4.06,
+          "end": 4.21,
+          "label": "AH0"
+        },
+        {
+          "start": 4.21,
+          "end": 4.33,
+          "label": "K"
+        },
+        {
+          "start": 4.33,
+          "end": 4.41,
+          "label": "AW1,AH1,s"
+        },
+        {
+          "start": 4.41,
+          "end": 4.5,
+          "label": "N"
+        },
+        {
+          "start": 4.5,
+          "end": 4.62,
+          "label": "T"
+        },
+        {
+          "start": 4.62,
+          "end": 4.65,
+          "label": "IH0"
+        },
+        {
+          "start": 4.65,
+          "end": 4.75,
+          "label": "NG"
+        },
+        {
+          "start": 4.75,
+          "end": 4.78,
+          "label": "sp"
+        },
+        {
+          "start": 4.78,
+          "end": 4.798480725623583,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.26,
+          "label": "it"
+        },
+        {
+          "start": 0.26,
+          "end": 0.7,
+          "label": "occurred"
+        },
+        {
+          "start": 0.7,
+          "end": 0.87,
+          "label": "to"
+        },
+        {
+          "start": 0.87,
+          "end": 1.15,
+          "label": "me"
+        },
+        {
+          "start": 1.15,
+          "end": 1.45,
+          "label": "that"
+        },
+        {
+          "start": 1.45,
+          "end": 1.52,
+          "label": ""
+        },
+        {
+          "start": 1.52,
+          "end": 1.97,
+          "label": "there"
+        },
+        {
+          "start": 1.97,
+          "end": 2.45,
+          "label": "would"
+        },
+        {
+          "start": 2.45,
+          "end": 2.48,
+          "label": ""
+        },
+        {
+          "start": 2.48,
+          "end": 2.81,
+          "label": "have"
+        },
+        {
+          "start": 2.81,
+          "end": 2.85,
+          "label": ""
+        },
+        {
+          "start": 2.85,
+          "end": 3.13,
+          "label": "to"
+        },
+        {
+          "start": 3.13,
+          "end": 3.17,
+          "label": ""
+        },
+        {
+          "start": 3.17,
+          "end": 3.37,
+          "label": "be"
+        },
+        {
+          "start": 3.37,
+          "end": 3.79,
+          "label": "an"
+        },
+        {
+          "start": 3.79,
+          "end": 4.06,
+          "label": ""
+        },
+        {
+          "start": 4.06,
+          "end": 4.75,
+          "label": "accounting"
+        },
+        {
+          "start": 4.75,
+          "end": 4.798480725623583,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0027",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0027.wav",
+        "sha256": "b231794163157dd3b424809f0be3df76f5b8a83e77de90f5b81598cca83fb51c"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0027.TextGrid",
+        "sha256": "2cc713458983229dc2a35502baf2b4995116562755de3f9ce0b42442054a1e44"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.15,
+          "label": "T"
+        },
+        {
+          "start": 0.15,
+          "end": 0.19,
+          "label": "UW1"
+        },
+        {
+          "start": 0.19,
+          "end": 0.27,
+          "label": "M"
+        },
+        {
+          "start": 0.27,
+          "end": 0.38,
+          "label": "AY1"
+        },
+        {
+          "start": 0.38,
+          "end": 0.49,
+          "label": "S"
+        },
+        {
+          "start": 0.49,
+          "end": 0.55,
+          "label": "AH0"
+        },
+        {
+          "start": 0.55,
+          "end": 0.66,
+          "label": "P"
+        },
+        {
+          "start": 0.66,
+          "end": 0.76,
+          "label": "R"
+        },
+        {
+          "start": 0.76,
+          "end": 0.86,
+          "label": "AY1"
+        },
+        {
+          "start": 0.86,
+          "end": 0.96,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 0.96,
+          "end": 1.16,
+          "label": "HH"
+        },
+        {
+          "start": 1.16,
+          "end": 1.23,
+          "label": "IY1"
+        },
+        {
+          "start": 1.23,
+          "end": 1.31,
+          "label": "B"
+        },
+        {
+          "start": 1.31,
+          "end": 1.37,
+          "label": "IY0"
+        },
+        {
+          "start": 1.37,
+          "end": 1.47,
+          "label": "G"
+        },
+        {
+          "start": 1.47,
+          "end": 1.57,
+          "label": "AE1"
+        },
+        {
+          "start": 1.57,
+          "end": 1.65,
+          "label": "N"
+        },
+        {
+          "start": 1.65,
+          "end": 1.76,
+          "label": "T"
+        },
+        {
+          "start": 1.76,
+          "end": 1.87,
+          "label": "UW1"
+        },
+        {
+          "start": 1.87,
+          "end": 2.04,
+          "label": "SH"
+        },
+        {
+          "start": 2.04,
+          "end": 2.17,
+          "label": "OW1"
+        },
+        {
+          "start": 2.17,
+          "end": 2.31,
+          "label": "AE1"
+        },
+        {
+          "start": 2.31,
+          "end": 2.46,
+          "label": "K"
+        },
+        {
+          "start": 2.46,
+          "end": 2.57,
+          "label": "CH"
+        },
+        {
+          "start": 2.57,
+          "end": 2.61,
+          "label": "AH0"
+        },
+        {
+          "start": 2.61,
+          "end": 2.64,
+          "label": "W"
+        },
+        {
+          "start": 2.64,
+          "end": 2.68,
+          "label": "AH0"
+        },
+        {
+          "start": 2.68,
+          "end": 2.81,
+          "label": "L,sil,d"
+        },
+        {
+          "start": 2.81,
+          "end": 3.05,
+          "label": "sp"
+        },
+        {
+          "start": 3.05,
+          "end": 3.24,
+          "label": "IH0"
+        },
+        {
+          "start": 3.24,
+          "end": 3.27,
+          "label": "N"
+        },
+        {
+          "start": 3.27,
+          "end": 3.37,
+          "label": "TH,S,s"
+        },
+        {
+          "start": 3.37,
+          "end": 3.49,
+          "label": "UW1"
+        },
+        {
+          "start": 3.49,
+          "end": 3.57,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 3.57,
+          "end": 3.65,
+          "label": "IY0"
+        },
+        {
+          "start": 3.65,
+          "end": 3.84,
+          "label": "AE2"
+        },
+        {
+          "start": 3.84,
+          "end": 3.96,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 3.96,
+          "end": 4.05,
+          "label": "AH0"
+        },
+        {
+          "start": 4.05,
+          "end": 4.11,
+          "label": "M"
+        },
+        {
+          "start": 4.11,
+          "end": 4.21,
+          "label": "IH0"
+        },
+        {
+          "start": 4.21,
+          "end": 4.25,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 4.25,
+          "end": 4.37,
+          "label": "M"
+        },
+        {
+          "start": 4.37,
+          "end": 4.73,
+          "label": "AY1"
+        },
+        {
+          "start": 4.73,
+          "end": 4.87,
+          "label": "sp"
+        },
+        {
+          "start": 4.87,
+          "end": 5.0,
+          "label": "F"
+        },
+        {
+          "start": 5.0,
+          "end": 5.09,
+          "label": "EY1"
+        },
+        {
+          "start": 5.09,
+          "end": 5.18,
+          "label": "V,W,s"
+        },
+        {
+          "start": 5.18,
+          "end": 5.28,
+          "label": "ER0,AH0,s"
+        },
+        {
+          "start": 5.28,
+          "end": 5.48,
+          "label": "sp"
+        },
+        {
+          "start": 5.48,
+          "end": 5.502380952380952,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.19,
+          "label": "to"
+        },
+        {
+          "start": 0.19,
+          "end": 0.38,
+          "label": "my"
+        },
+        {
+          "start": 0.38,
+          "end": 0.96,
+          "label": "surprise"
+        },
+        {
+          "start": 0.96,
+          "end": 1.23,
+          "label": "he"
+        },
+        {
+          "start": 1.23,
+          "end": 1.65,
+          "label": "began"
+        },
+        {
+          "start": 1.65,
+          "end": 1.87,
+          "label": "to"
+        },
+        {
+          "start": 1.87,
+          "end": 2.17,
+          "label": "show"
+        },
+        {
+          "start": 2.17,
+          "end": 2.81,
+          "label": "actual"
+        },
+        {
+          "start": 2.81,
+          "end": 3.05,
+          "label": ""
+        },
+        {
+          "start": 3.05,
+          "end": 4.11,
+          "label": "enthusiasm"
+        },
+        {
+          "start": 4.11,
+          "end": 4.25,
+          "label": "in"
+        },
+        {
+          "start": 4.25,
+          "end": 4.73,
+          "label": "my"
+        },
+        {
+          "start": 4.73,
+          "end": 4.87,
+          "label": ""
+        },
+        {
+          "start": 4.87,
+          "end": 5.28,
+          "label": "favor"
+        },
+        {
+          "start": 5.28,
+          "end": 5.502380952380952,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0028",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0028.wav",
+        "sha256": "aa003f920709a1d570fdd2c4550103937b12d5b4d0b9fd2e8aa5d3f6abd65e1e"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0028.TextGrid",
+        "sha256": "4a3b37328533b240f22997d9453c515b5395a223959e107ec5b7259a39b19c16"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.16,
+          "label": "R"
+        },
+        {
+          "start": 0.16,
+          "end": 0.28,
+          "label": "AA1"
+        },
+        {
+          "start": 0.28,
+          "end": 0.39,
+          "label": "B"
+        },
+        {
+          "start": 0.39,
+          "end": 0.51,
+          "label": "ER0"
+        },
+        {
+          "start": 0.51,
+          "end": 0.66,
+          "label": "IY0"
+        },
+        {
+          "start": 0.66,
+          "end": 0.74,
+          "label": "sp"
+        },
+        {
+          "start": 0.74,
+          "end": 0.81,
+          "label": "B"
+        },
+        {
+          "start": 0.81,
+          "end": 0.93,
+          "label": "R"
+        },
+        {
+          "start": 0.93,
+          "end": 1.03,
+          "label": "AY1"
+        },
+        {
+          "start": 1.03,
+          "end": 1.17,
+          "label": "B"
+        },
+        {
+          "start": 1.17,
+          "end": 1.29,
+          "label": "ER0"
+        },
+        {
+          "start": 1.29,
+          "end": 1.41,
+          "label": "IY0"
+        },
+        {
+          "start": 1.41,
+          "end": 1.57,
+          "label": "F"
+        },
+        {
+          "start": 1.57,
+          "end": 1.65,
+          "label": "R"
+        },
+        {
+          "start": 1.65,
+          "end": 1.76,
+          "label": "AO1"
+        },
+        {
+          "start": 1.76,
+          "end": 1.81,
+          "label": "D"
+        },
+        {
+          "start": 1.81,
+          "end": 2.02,
+          "label": "sp"
+        },
+        {
+          "start": 2.02,
+          "end": 2.04,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.66,
+          "label": "robbery"
+        },
+        {
+          "start": 0.66,
+          "end": 0.74,
+          "label": ""
+        },
+        {
+          "start": 0.74,
+          "end": 1.41,
+          "label": "bribery"
+        },
+        {
+          "start": 1.41,
+          "end": 1.81,
+          "label": "fraud"
+        },
+        {
+          "start": 1.81,
+          "end": 2.04,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0029",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0029.wav",
+        "sha256": "30d391678a58ed73f5e648888ffab0038a2a3b9d5a453592de75eb1a3ddf96a9"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0029.TextGrid",
+        "sha256": "c0dad3d2195faddbf4d4c5d1ff89c0c5d18e0432555726b87dc53e5d3b85bbc5"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.09,
+          "label": "DH,D,s"
+        },
+        {
+          "start": 0.09,
+          "end": 0.23,
+          "label": "EH1"
+        },
+        {
+          "start": 0.23,
+          "end": 0.3,
+          "label": "R,AH0,s"
+        },
+        {
+          "start": 0.3,
+          "end": 0.42,
+          "label": "F"
+        },
+        {
+          "start": 0.42,
+          "end": 0.53,
+          "label": "AO1"
+        },
+        {
+          "start": 0.53,
+          "end": 0.59,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 0.59,
+          "end": 0.69,
+          "label": "S"
+        },
+        {
+          "start": 0.69,
+          "end": 0.8,
+          "label": "IH0"
+        },
+        {
+          "start": 0.8,
+          "end": 0.91,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 0.91,
+          "end": 1.11,
+          "label": "W"
+        },
+        {
+          "start": 1.11,
+          "end": 1.14,
+          "label": "ER1,AH0,s"
+        },
+        {
+          "start": 1.14,
+          "end": 1.31,
+          "label": "AO0"
+        },
+        {
+          "start": 1.31,
+          "end": 1.4,
+          "label": "L,sil,d"
+        },
+        {
+          "start": 1.4,
+          "end": 1.48,
+          "label": "R"
+        },
+        {
+          "start": 1.48,
+          "end": 1.61,
+          "label": "EH1"
+        },
+        {
+          "start": 1.61,
+          "end": 1.69,
+          "label": "D"
+        },
+        {
+          "start": 1.69,
+          "end": 1.72,
+          "label": "IY0"
+        },
+        {
+          "start": 1.72,
+          "end": 1.89,
+          "label": "M"
+        },
+        {
+          "start": 1.89,
+          "end": 1.97,
+          "label": "UW1"
+        },
+        {
+          "start": 1.97,
+          "end": 2.04,
+          "label": "V"
+        },
+        {
+          "start": 2.04,
+          "end": 2.11,
+          "label": "IH0"
+        },
+        {
+          "start": 2.11,
+          "end": 2.2,
+          "label": "NG"
+        },
+        {
+          "start": 2.2,
+          "end": 2.31,
+          "label": "IH1,IY1,s"
+        },
+        {
+          "start": 2.31,
+          "end": 2.38,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 2.38,
+          "end": 2.44,
+          "label": "T"
+        },
+        {
+          "start": 2.44,
+          "end": 2.48,
+          "label": "UW0"
+        },
+        {
+          "start": 2.48,
+          "end": 2.51,
+          "label": "sp"
+        },
+        {
+          "start": 2.51,
+          "end": 2.54,
+          "label": "DH,L,s"
+        },
+        {
+          "start": 2.54,
+          "end": 2.64,
+          "label": "AH0"
+        },
+        {
+          "start": 2.64,
+          "end": 2.8,
+          "label": "N"
+        },
+        {
+          "start": 2.8,
+          "end": 2.87,
+          "label": "AO1"
+        },
+        {
+          "start": 2.87,
+          "end": 2.93,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 2.93,
+          "end": 3.04,
+          "label": "TH,S,s"
+        },
+        {
+          "start": 3.04,
+          "end": 3.17,
+          "label": "K"
+        },
+        {
+          "start": 3.17,
+          "end": 3.27,
+          "label": "AH1"
+        },
+        {
+          "start": 3.27,
+          "end": 3.35,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 3.35,
+          "end": 3.48,
+          "label": "T"
+        },
+        {
+          "start": 3.48,
+          "end": 3.53,
+          "label": "R"
+        },
+        {
+          "start": 3.53,
+          "end": 3.72,
+          "label": "IY0"
+        },
+        {
+          "start": 3.72,
+          "end": 3.75,
+          "label": "sp"
+        },
+        {
+          "start": 3.75,
+          "end": 3.765578231292517,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.3,
+          "label": "their"
+        },
+        {
+          "start": 0.3,
+          "end": 0.91,
+          "label": "forces"
+        },
+        {
+          "start": 0.91,
+          "end": 1.14,
+          "label": "were"
+        },
+        {
+          "start": 1.14,
+          "end": 1.72,
+          "label": "already"
+        },
+        {
+          "start": 1.72,
+          "end": 2.2,
+          "label": "moving"
+        },
+        {
+          "start": 2.2,
+          "end": 2.48,
+          "label": "into"
+        },
+        {
+          "start": 2.48,
+          "end": 2.51,
+          "label": ""
+        },
+        {
+          "start": 2.51,
+          "end": 2.64,
+          "label": "the"
+        },
+        {
+          "start": 2.64,
+          "end": 3.04,
+          "label": "north"
+        },
+        {
+          "start": 3.04,
+          "end": 3.72,
+          "label": "country"
+        },
+        {
+          "start": 3.72,
+          "end": 3.765578231292517,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0030",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0030.wav",
+        "sha256": "9294f46f3884b78db346b905bb7d79d077a08d175a45277668d192a4efa2f293"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0030.TextGrid",
+        "sha256": "518726462f51f978defc1413186a625369bc72b1e1dd2db479ca6c6b54575b0a"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.22,
+          "label": "AY1"
+        },
+        {
+          "start": 0.22,
+          "end": 0.4,
+          "label": "HH"
+        },
+        {
+          "start": 0.4,
+          "end": 0.47,
+          "label": "AE1"
+        },
+        {
+          "start": 0.47,
+          "end": 0.54,
+          "label": "D"
+        },
+        {
+          "start": 0.54,
+          "end": 0.73,
+          "label": "F"
+        },
+        {
+          "start": 0.73,
+          "end": 0.88,
+          "label": "EY1"
+        },
+        {
+          "start": 0.88,
+          "end": 0.99,
+          "label": "TH,S,s"
+        },
+        {
+          "start": 0.99,
+          "end": 1.02,
+          "label": "sp"
+        },
+        {
+          "start": 1.02,
+          "end": 1.12,
+          "label": "IH1"
+        },
+        {
+          "start": 1.12,
+          "end": 1.26,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 1.26,
+          "end": 1.31,
+          "label": "DH,L,s"
+        },
+        {
+          "start": 1.31,
+          "end": 1.42,
+          "label": "EH1"
+        },
+        {
+          "start": 1.42,
+          "end": 1.59,
+          "label": "M"
+        },
+        {
+          "start": 1.59,
+          "end": 1.73,
+          "label": "sp"
+        },
+        {
+          "start": 1.73,
+          "end": 1.752358276643991,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.22,
+          "label": "i"
+        },
+        {
+          "start": 0.22,
+          "end": 0.54,
+          "label": "had"
+        },
+        {
+          "start": 0.54,
+          "end": 0.99,
+          "label": "faith"
+        },
+        {
+          "start": 0.99,
+          "end": 1.02,
+          "label": ""
+        },
+        {
+          "start": 1.02,
+          "end": 1.26,
+          "label": "in"
+        },
+        {
+          "start": 1.26,
+          "end": 1.59,
+          "label": "them"
+        },
+        {
+          "start": 1.59,
+          "end": 1.752358276643991,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0031",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0031.wav",
+        "sha256": "712731dfabce0c14b1989eb1ca99b6c64fae2ff9b557d44b4f360f350a9d1b0b"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0031.TextGrid",
+        "sha256": "6697a7992d817eafae42bc064e53c59a966ada3e30fda931318bd09538b8d21b"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": "sil"
+        },
+        {
+          "start": 0.04,
+          "end": 0.12,
+          "label": "DH,D,s"
+        },
+        {
+          "start": 0.12,
+          "end": 0.24,
+          "label": "EY1"
+        },
+        {
+          "start": 0.24,
+          "end": 0.38,
+          "label": "W"
+        },
+        {
+          "start": 0.38,
+          "end": 0.46,
+          "label": "ER1,AH0,s"
+        },
+        {
+          "start": 0.46,
+          "end": 0.6,
+          "label": "TH,S,s"
+        },
+        {
+          "start": 0.6,
+          "end": 0.73,
+          "label": "R"
+        },
+        {
+          "start": 0.73,
+          "end": 0.78,
+          "label": "IY1"
+        },
+        {
+          "start": 0.78,
+          "end": 0.91,
+          "label": "HH"
+        },
+        {
+          "start": 0.91,
+          "end": 1.01,
+          "label": "AH1"
+        },
+        {
+          "start": 1.01,
+          "end": 1.05,
+          "label": "N"
+        },
+        {
+          "start": 1.05,
+          "end": 1.12,
+          "label": "D"
+        },
+        {
+          "start": 1.12,
+          "end": 1.15,
+          "label": "R"
+        },
+        {
+          "start": 1.15,
+          "end": 1.19,
+          "label": "AH0"
+        },
+        {
+          "start": 1.19,
+          "end": 1.24,
+          "label": "D"
+        },
+        {
+          "start": 1.24,
+          "end": 1.41,
+          "label": "Y"
+        },
+        {
+          "start": 1.41,
+          "end": 1.54,
+          "label": "AA1"
+        },
+        {
+          "start": 1.54,
+          "end": 1.58,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 1.58,
+          "end": 1.63,
+          "label": "D"
+        },
+        {
+          "start": 1.63,
+          "end": 1.67,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 1.67,
+          "end": 1.7,
+          "label": "sp"
+        },
+        {
+          "start": 1.7,
+          "end": 1.82,
+          "label": "AH0"
+        },
+        {
+          "start": 1.82,
+          "end": 1.98,
+          "label": "P"
+        },
+        {
+          "start": 1.98,
+          "end": 2.11,
+          "label": "AA1"
+        },
+        {
+          "start": 2.11,
+          "end": 2.16,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 2.16,
+          "end": 2.34,
+          "label": "T"
+        },
+        {
+          "start": 2.34,
+          "end": 2.38,
+          "label": "sp"
+        },
+        {
+          "start": 2.38,
+          "end": 2.4,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.04,
+          "label": ""
+        },
+        {
+          "start": 0.04,
+          "end": 0.24,
+          "label": "they"
+        },
+        {
+          "start": 0.24,
+          "end": 0.46,
+          "label": "were"
+        },
+        {
+          "start": 0.46,
+          "end": 0.78,
+          "label": "three"
+        },
+        {
+          "start": 0.78,
+          "end": 1.24,
+          "label": "hundred"
+        },
+        {
+          "start": 1.24,
+          "end": 1.67,
+          "label": "yards"
+        },
+        {
+          "start": 1.67,
+          "end": 1.7,
+          "label": ""
+        },
+        {
+          "start": 1.7,
+          "end": 2.34,
+          "label": "apart"
+        },
+        {
+          "start": 2.34,
+          "end": 2.4,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0032",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0032.wav",
+        "sha256": "b35a220d1b97debb309fc55fd629ebae7106c9b9a964a9022a48782a8e99afba"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0032.TextGrid",
+        "sha256": "c94f43bbce55b3fef8c28c5937350df12270aa0b097a3b4859fa1ef55046c1dd"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.2,
+          "label": "S"
+        },
+        {
+          "start": 0.2,
+          "end": 0.29,
+          "label": "IH1,IY1,s"
+        },
+        {
+          "start": 0.29,
+          "end": 0.36,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 0.36,
+          "end": 0.5,
+          "label": "S"
+        },
+        {
+          "start": 0.5,
+          "end": 0.56,
+          "label": "DH,S,s"
+        },
+        {
+          "start": 0.56,
+          "end": 0.79,
+          "label": "EH1"
+        },
+        {
+          "start": 0.79,
+          "end": 0.9,
+          "label": "N"
+        },
+        {
+          "start": 0.9,
+          "end": 1.07,
+          "label": "S"
+        },
+        {
+          "start": 1.07,
+          "end": 1.26,
+          "label": "AH1"
+        },
+        {
+          "start": 1.26,
+          "end": 1.58,
+          "label": "M"
+        },
+        {
+          "start": 1.58,
+          "end": 1.75,
+          "label": "sp"
+        },
+        {
+          "start": 1.75,
+          "end": 1.85,
+          "label": "M"
+        },
+        {
+          "start": 1.85,
+          "end": 1.92,
+          "label": "IH0"
+        },
+        {
+          "start": 1.92,
+          "end": 2.02,
+          "label": "S"
+        },
+        {
+          "start": 2.02,
+          "end": 2.09,
+          "label": "T"
+        },
+        {
+          "start": 2.09,
+          "end": 2.19,
+          "label": "IH1"
+        },
+        {
+          "start": 2.19,
+          "end": 2.29,
+          "label": "R"
+        },
+        {
+          "start": 2.29,
+          "end": 2.33,
+          "label": "IY0"
+        },
+        {
+          "start": 2.33,
+          "end": 2.37,
+          "label": "AH0"
+        },
+        {
+          "start": 2.37,
+          "end": 2.45,
+          "label": "S"
+        },
+        {
+          "start": 2.45,
+          "end": 2.57,
+          "label": "F"
+        },
+        {
+          "start": 2.57,
+          "end": 2.67,
+          "label": "AO1"
+        },
+        {
+          "start": 2.67,
+          "end": 2.75,
+          "label": "R,sil,d"
+        },
+        {
+          "start": 2.75,
+          "end": 2.81,
+          "label": "S"
+        },
+        {
+          "start": 2.81,
+          "end": 2.94,
+          "label": "HH"
+        },
+        {
+          "start": 2.94,
+          "end": 2.98,
+          "label": "AE1"
+        },
+        {
+          "start": 2.98,
+          "end": 3.08,
+          "label": "Z,S,s"
+        },
+        {
+          "start": 3.08,
+          "end": 3.15,
+          "label": "B"
+        },
+        {
+          "start": 3.15,
+          "end": 3.23,
+          "label": "IH1"
+        },
+        {
+          "start": 3.23,
+          "end": 3.33,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 3.33,
+          "end": 3.46,
+          "label": "F"
+        },
+        {
+          "start": 3.46,
+          "end": 3.5784041648611002,
+          "label": "AY1"
+        },
+        {
+          "start": 3.5784041648611002,
+          "end": 3.6310979841966646,
+          "label": "sil,N,a"
+        },
+        {
+          "start": 3.6310979841966646,
+          "end": 3.69,
+          "label": "T"
+        },
+        {
+          "start": 3.69,
+          "end": 3.72,
+          "label": "IH0"
+        },
+        {
+          "start": 3.72,
+          "end": 3.8,
+          "label": "NG"
+        },
+        {
+          "start": 3.8,
+          "end": 4.02,
+          "label": "AH1,AA1,s"
+        },
+        {
+          "start": 4.02,
+          "end": 4.19,
+          "label": "S"
+        },
+        {
+          "start": 4.19,
+          "end": 4.23,
+          "label": "sp"
+        },
+        {
+          "start": 4.23,
+          "end": 4.44,
+          "label": "AE1"
+        },
+        {
+          "start": 4.44,
+          "end": 4.56,
+          "label": "T"
+        },
+        {
+          "start": 4.56,
+          "end": 4.59,
+          "label": "sp"
+        },
+        {
+          "start": 4.59,
+          "end": 4.79,
+          "label": "EH1,AE1,s"
+        },
+        {
+          "start": 4.79,
+          "end": 4.84,
+          "label": "V,W,s"
+        },
+        {
+          "start": 4.84,
+          "end": 4.91,
+          "label": "R"
+        },
+        {
+          "start": 4.91,
+          "end": 5.0,
+          "label": "IY0"
+        },
+        {
+          "start": 5.0,
+          "end": 5.15,
+          "label": "S"
+        },
+        {
+          "start": 5.15,
+          "end": 5.24,
+          "label": "T"
+        },
+        {
+          "start": 5.24,
+          "end": 5.33,
+          "label": "EH1"
+        },
+        {
+          "start": 5.33,
+          "end": 5.37,
+          "label": "P"
+        },
+        {
+          "start": 5.37,
+          "end": 5.43,
+          "label": "sp"
+        },
+        {
+          "start": 5.43,
+          "end": 5.45,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.5,
+          "label": "since"
+        },
+        {
+          "start": 0.5,
+          "end": 0.9,
+          "label": "then"
+        },
+        {
+          "start": 0.9,
+          "end": 1.58,
+          "label": "some"
+        },
+        {
+          "start": 1.58,
+          "end": 1.75,
+          "label": ""
+        },
+        {
+          "start": 1.75,
+          "end": 2.45,
+          "label": "mysterious"
+        },
+        {
+          "start": 2.45,
+          "end": 2.81,
+          "label": "force"
+        },
+        {
+          "start": 2.81,
+          "end": 3.08,
+          "label": "has"
+        },
+        {
+          "start": 3.08,
+          "end": 3.33,
+          "label": "been"
+        },
+        {
+          "start": 3.33,
+          "end": 3.8,
+          "label": "fighting"
+        },
+        {
+          "start": 3.8,
+          "end": 4.19,
+          "label": "us"
+        },
+        {
+          "start": 4.19,
+          "end": 4.23,
+          "label": ""
+        },
+        {
+          "start": 4.23,
+          "end": 4.56,
+          "label": "at"
+        },
+        {
+          "start": 4.56,
+          "end": 4.59,
+          "label": ""
+        },
+        {
+          "start": 4.59,
+          "end": 5.0,
+          "label": "every"
+        },
+        {
+          "start": 5.0,
+          "end": 5.37,
+          "label": "step"
+        },
+        {
+          "start": 5.37,
+          "end": 5.45,
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "LXC-arctic_a0036",
+      "speaker": "LXC",
+      "split": "evaluation",
+      "original": {
+        "file": "LXC-arctic_a0036.wav",
+        "sha256": "91a8d5bca403c6482d7c4491f4e3bd0bdb21572be798e52e3d42baad89bc573e"
+      },
+      "annotation": {
+        "file": "LXC-arctic_a0036.TextGrid",
+        "sha256": "8fe93d793d976c73621d5e4f6af648a474a5b5791045dd08fc1a1874ec116fc5"
+      },
+      "phones": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": "sil"
+        },
+        {
+          "start": 0.03,
+          "end": 0.19,
+          "label": "SH"
+        },
+        {
+          "start": 0.19,
+          "end": 0.3,
+          "label": "IY1"
+        },
+        {
+          "start": 0.3,
+          "end": 0.43,
+          "label": "T"
+        },
+        {
+          "start": 0.43,
+          "end": 0.51,
+          "label": "ER1,AH0,s"
+        },
+        {
+          "start": 0.51,
+          "end": 0.56,
+          "label": "N"
+        },
+        {
+          "start": 0.56,
+          "end": 0.6,
+          "label": "D,sil,d"
+        },
+        {
+          "start": 0.6,
+          "end": 0.75,
+          "label": "IH1"
+        },
+        {
+          "start": 0.75,
+          "end": 0.84,
+          "label": "N,NG,s"
+        },
+        {
+          "start": 0.84,
+          "end": 0.97,
+          "label": "AE1"
+        },
+        {
+          "start": 0.97,
+          "end": 1.0382689446797737,
+          "label": "T"
+        },
+        {
+          "start": 1.0382689446797737,
+          "end": 1.0955874247566202,
+          "label": "sil,AH0,a"
+        },
+        {
+          "start": 1.0955874247566202,
+          "end": 1.1622368201948141,
+          "label": "DH,L,s"
+        },
+        {
+          "start": 1.1622368201948141,
+          "end": 1.195561517913911,
+          "label": "AH0"
+        },
+        {
+          "start": 1.195561517913911,
+          "end": 1.31,
+          "label": "HH"
+        },
+        {
+          "start": 1.31,
+          "end": 1.39,
+          "label": "OW0"
+        },
+        {
+          "start": 1.39,
+          "end": 1.54,
+          "label": "T"
+        },
+        {
+          "start": 1.54,
+          "end": 1.65,
+          "label": "EH1"
+        },
+        {
+          "start": 1.65,
+          "end": 1.8,
+          "label": "L,W,s"
+        },
+        {
+          "start": 1.8,
+          "end": 1.8246031746031746,
+          "label": ""
+        }
+      ],
+      "words": [
+        {
+          "start": 0.0,
+          "end": 0.03,
+          "label": ""
+        },
+        {
+          "start": 0.03,
+          "end": 0.3,
+          "label": "she"
+        },
+        {
+          "start": 0.3,
+          "end": 0.6,
+          "label": "turned"
+        },
+        {
+          "start": 0.6,
+          "end": 0.84,
+          "label": "in"
+        },
+        {
+          "start": 0.84,
+          "end": 1.0955874247566202,
+          "label": "at"
+        },
+        {
+          "start": 1.0955874247566202,
+          "end": 1.1942285300051472,
+          "label": "the"
+        },
+        {
+          "start": 1.1942285300051472,
+          "end": 1.8,
+          "label": "hotel"
+        },
+        {
+          "start": 1.8,
+          "end": 1.8246031746031746,
+          "label": ""
+        }
+      ]
+    }
+  ]
+}

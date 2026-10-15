@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "main": "types.ts"
+  "main": "types.ts",
+  "dependencies": {
+    "zod": "4.6.2"
+  }
 }

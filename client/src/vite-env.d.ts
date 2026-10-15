@@ -2,7 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_PUBLIC_SITE?: string
-  readonly VITE_DOWNLOAD_URL?: string
+  readonly VITE_SOURCE_REVISION?: string
 }
 interface ImportMeta {
   readonly env: ImportMetaEnv

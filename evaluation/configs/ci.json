@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "name": "ci",
+  "splits": ["development"],
+  "limit": 2,
+  "budgets": [8, 16, 29],
+  "methods": ["exact-lookup", "symbolic"],
+  "modelSeeds": [41],
+  "model": { "name": "llama3.2:3b", "temperature": 0.2, "num_ctx": 8192, "num_predict": 2048, "timeoutMs": 90000 },
+  "figures": false
+}

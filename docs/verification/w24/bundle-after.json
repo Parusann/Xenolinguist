@@ -1,0 +1,62 @@
+[
+  {
+    "file": "audio-analysis.worker-C6gpgLbm.js",
+    "bytes": 1460,
+    "gzipBytes": 760,
+    "sha256": "ef943f983158c512338a1f30afad9629b3d20c30458bd3b2201862575d16db9b"
+  },
+  {
+    "file": "HeroPage-XhOIK6OR.js",
+    "bytes": 25506,
+    "gzipBytes": 7691,
+    "sha256": "7e1c1f21d0afc1fea44127cdd1087da780a78d021007449da2d9fe76aae3ab15"
+  },
+  {
+    "file": "index-B6Mx06MS.js",
+    "bytes": 380834,
+    "gzipBytes": 116180,
+    "sha256": "19afd6fc24d6729e4d399727e65f2d8653c8c92cf454faf99f21acaf3611a597"
+  },
+  {
+    "file": "induction.worker-DDmzpA6h.js",
+    "bytes": 145176,
+    "gzipBytes": 42148,
+    "sha256": "d7bb95c21508d60fc52df682ce4af2e2de0e5b5f272d4181a706ecf5a64bbc9e"
+  },
+  {
+    "file": "ipa-E2J56R5_.js",
+    "bytes": 1237,
+    "gzipBytes": 708,
+    "sha256": "69d876d5494b2bf9b23cdfb544090c09ff5e0db073df09ca65b2803f9e97fbdd"
+  },
+  {
+    "file": "numbers.worker-Dj5sJyhg.js",
+    "bytes": 95373,
+    "gzipBytes": 27311,
+    "sha256": "54c2716187cd53c5f3f1ff720dae72224d67e803c4741a7d365ddd2edeb130fb"
+  },
+  {
+    "file": "stt-BdxP0fWd.js",
+    "bytes": 667,
+    "gzipBytes": 469,
+    "sha256": "ea4375bb5eeb206251576a69803185430a546888228d4a51a33c7ea3f84a9545"
+  },
+  {
+    "file": "VantaTopology-Dwd4Lyi1.js",
+    "bytes": 965,
+    "gzipBytes": 637,
+    "sha256": "b1d41e8493f436a72d0cce0cb5cfbc24f5e2bf1bfdc3e2cdbb6b4c20fb609d6e"
+  },
+  {
+    "file": "wav-encode-8FHwoB7A.js",
+    "bytes": 1489,
+    "gzipBytes": 812,
+    "sha256": "3f412890863c726fc616340639dc70055fa0ea2eab9dc3ecb782de12daf06562"
+  },
+  {
+    "file": "Workbench-CrnBu2hM.js",
+    "bytes": 289077,
+    "gzipBytes": 80175,
+    "sha256": "ed94b2bc912ca58a199657baac22b1cb3f793d29fc7adb35cc77cb2e5b1970b2"
+  }
+]

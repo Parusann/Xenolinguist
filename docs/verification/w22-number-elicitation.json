@@ -1,0 +1,272 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "afc81b9a903baa7c53efbe526d42529d207394ec",
+  "scope": "W22 second unit: durable number-question selection, explicit answer/decline, evidence capture, reranking, workbench drafts and archive restoration. Grammar grounding UI and learning-curve evaluation remain pending.",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "afc81b9a903baa7c53efbe526d42529d207394ec",
+    "jobs": [
+      {
+        "completedAt": "2026-09-28T06:00:53Z",
+        "conclusion": "success",
+        "databaseId": 108805253676,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-09-28T05:54:31Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36383936633/job/108805253676"
+      },
+      {
+        "completedAt": "2026-09-28T06:03:40Z",
+        "conclusion": "success",
+        "databaseId": 108805253877,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-09-28T05:54:32Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36383936633/job/108805253877"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36383936633"
+  },
+  "sourceChecks": {
+    "unitTests": 425,
+    "serverSharedEngineEvaluationTests": 394,
+    "clientTests": 31,
+    "newSessionCases": 12,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-09-28T05:56:34.510Z",
+        "duration": 241123.09,
+        "expected": 43,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-28T06:00:37.280Z",
+        "duration": 9715.385,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "a638e147291a7483e3baf87412cf7bb8dae0eafc29ce0bc6796883de44b7525b"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "753c9b9aac0c16713398b6796f78ea590756e84880c1ffa054f6a70b2a51fc46"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "753c9b9aac0c16713398b6796f78ea590756e84880c1ffa054f6a70b2a51fc46"
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 156700,
+        "sha256": "31388216d77fe4935870b53e8325dd937bf08c8fb01f9376780d45706174cb55"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-09-28T05:59:26.802Z",
+        "duration": 232762.486,
+        "expected": 43,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-28T06:03:21.712Z",
+        "duration": 9294.354000000001,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "93388b33891ece5ad7a46dad24ca1539d0d15199040dfaca4ccbfbf508906312"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "4a2a5733f82dd73fbd57284527765fc118dc3c3015f163f9cd44d47a5a2219a2"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "4a2a5733f82dd73fbd57284527765fc118dc3c3015f163f9cd44d47a5a2219a2"
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 128087,
+        "sha256": "fec8390cad33f068a29eefc00d05a896fdb45f62f14062c2d577c5b8d4fadc7b"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "afc81b9a903baa7c53efbe526d42529d207394ec",
+    "jobs": [
+      {
+        "completedAt": "2026-09-28T05:57:52Z",
+        "conclusion": "success",
+        "databaseId": 108805253680,
+        "name": "build",
+        "startedAt": "2026-09-28T05:54:31Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36383936847/job/108805253680"
+      },
+      {
+        "completedAt": "2026-09-28T06:02:59Z",
+        "conclusion": "success",
+        "databaseId": 108805996742,
+        "name": "verify-clean",
+        "startedAt": "2026-09-28T05:57:55Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36383936847/job/108805996742"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36383936847"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-09-28T06:02:56.609Z",
+    "source": {
+      "revision": "afc81b9a903baa7c53efbe526d42529d207394ec",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "ac0963fb52ce76b4bdaa2c44bf1020ec4d383fc0a12d8a6aa882a0f5be33c8db"
+    },
+    "appArchive": {
+      "bytes": 2990087,
+      "sha256": "0e797d1f0d9e713390b2f6cefa14e8ba401f41c08212aae7e9225996780d4344"
+    }
+  },
+  "installedChecks": {
+    "files": 3774,
+    "archives": 8,
+    "report": {
+      "bytes": 674241,
+      "sha256": "5fed2deaf02bb94fb5d5ef262fbd27ef6909c0ee82da4c3dd702adf12f737e8d"
+    }
+  },
+  "recordedExample": {
+    "source": "Windows source-CI browser acceptance at the implementation revision",
+    "artifacts": {
+      "w22-number-elicitation-profile.json": {
+        "bytes": 8012,
+        "sha256": "0bf1a84f343f59b43365f9e3e6530fb1627ef64ce1c2e8037d2322e2fa32d55c"
+      },
+      "w22-number-elicitation-restored-profile.json": {
+        "bytes": 7720,
+        "sha256": "30228812d433c2d5b7fdd44b124af41373b2636f6f06bea3c78c2af017dfb691"
+      },
+      "w22-number-elicitation-history.xeno": {
+        "bytes": 7508,
+        "sha256": "0ed7b7a5da7a038582bac0663354e84fcf953782da48ee0815930abb5d9682bf"
+      },
+      "w22-number-elicitation-answer.png": {
+        "bytes": 231217,
+        "sha256": "261061a609a783a6048756c78cb0880a9301ce9b297e1119b460ddb10aa5e646"
+      }
+    },
+    "replay": {
+      "passed": true,
+      "profiles": 2,
+      "records": 4,
+      "decisions": [
+        "decline",
+        "answer"
+      ],
+      "requestedInteger": 11,
+      "observedForm": "ru ka ra",
+      "leadingCandidatesBefore": 7,
+      "leadingCandidatesAfter": 1,
+      "exactHistoricalPayloads": true,
+      "remappedAnswerCapture": true,
+      "restoredApplicationBlocked": true,
+      "answerSource": "independent synthetic fixture renderer",
+      "modelCalls": 0,
+      "learningCurveEvaluation": false
+    }
+  },
+  "limits": [
+    "Uniform weights describe the supplied structurally distinct leading candidate set, not calibrated beliefs or all possible grammars.",
+    "The recorded number interface searches integers 1-64 at equal cost and retains at most 20 questions / 2 MB. History deletion and compaction are not implemented.",
+    "Human answers become selection-validation observations. Novel atoms require an explicit move to fit; this is not blind accuracy evaluation.",
+    "The synthetic browser fixture and deterministic replay verify lifecycle behavior, not learning efficiency. Paired active/random/fixed-curriculum evaluation remains pending.",
+    "Grammar query selection exists in the engine, but workbench grounding and durable grammar decisions remain pending.",
+    "Installed acceptance verifies existing native/restart/research/archive regression flows; the new elicitation workflow is covered by source HTTP and browser tests against the bundled backend.",
+    "Three gated native unit skips and four reviewed high native-chain audit entries remain.",
+    "No main merge, installer release or Pages deployment."
+  ]
+}

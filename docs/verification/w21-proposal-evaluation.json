@@ -1,0 +1,952 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "21631f82aadc04e176ede9c231bd32fde3fe9ad7",
+  "scope": "W21 frozen diagnostic proposal comparison and completed engineering verification",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "21631f82aadc04e176ede9c231bd32fde3fe9ad7",
+    "jobs": [
+      {
+        "completedAt": "2026-09-27T07:35:25Z",
+        "conclusion": "success",
+        "databaseId": 108574537382,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-09-27T07:27:33Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36303156231/job/108574537382"
+      },
+      {
+        "completedAt": "2026-09-27T07:33:08Z",
+        "conclusion": "success",
+        "databaseId": 108574537687,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-09-27T07:27:33Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36303156231/job/108574537687"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36303156231"
+  },
+  "sourceChecks": {
+    "unitTests": 398,
+    "serverSharedEngineEvaluationTests": 367,
+    "clientTests": 31,
+    "newEvaluationCases": 13,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-09-27T07:29:21.086Z",
+        "duration": 212182.449,
+        "expected": 40,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-27T07:32:54.562Z",
+        "duration": 8211.797,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "edc09584ef66753d02725a7cce7b831113c4e930d0c08f5fcef41ff6c52c1e07"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "3c9e5f7f5e6a72fea709a9bb3b1fbf39913238c0d3330df9e8da3564491d7565"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "3c9e5f7f5e6a72fea709a9bb3b1fbf39913238c0d3330df9e8da3564491d7565"
+        }
+      },
+      "log": {
+        "bytes": 152556,
+        "sha256": "717919cc01788b969f117d3ce862f8e0cd69ea70bf22dc387f3de6a6f4492ba5"
+      },
+      "numberSummaryMatchesW19": true,
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-09-27T07:32:16.014Z",
+        "duration": 171758.134,
+        "expected": 40,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-27T07:35:09.597Z",
+        "duration": 7725.59,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "43c6459712acd6e35a84c84b01ec8a90cba3fc5ca51f5ed5a13e2392f66a78cf"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "bd5d335f190cfb469249d8c5f06fd3c4fb54ff8a718ae4c266993607f3d6f83e"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "bd5d335f190cfb469249d8c5f06fd3c4fb54ff8a718ae4c266993607f3d6f83e"
+        }
+      },
+      "log": {
+        "bytes": 124142,
+        "sha256": "b174c221a782351ce08e9eea5d07f5c152a61dd3bf1514fb7fda407f1d9a8c82"
+      },
+      "numberSummaryMatchesW19": true,
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "21631f82aadc04e176ede9c231bd32fde3fe9ad7",
+    "jobs": [
+      {
+        "completedAt": "2026-09-27T07:31:17Z",
+        "conclusion": "success",
+        "databaseId": 108574537068,
+        "name": "build",
+        "startedAt": "2026-09-27T07:27:33Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36303156249/job/108574537068"
+      },
+      {
+        "completedAt": "2026-09-27T07:36:24Z",
+        "conclusion": "success",
+        "databaseId": 108575091961,
+        "name": "verify-clean",
+        "startedAt": "2026-09-27T07:31:19Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36303156249/job/108575091961"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36303156249"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-09-27T07:36:21.981Z",
+    "source": {
+      "revision": "21631f82aadc04e176ede9c231bd32fde3fe9ad7",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "06556c6c503fa649a2f5039b911f458269a0356ee021bdaa171a639cccbc80bc"
+    },
+    "appArchive": {
+      "bytes": 2986361,
+      "sha256": "224dabcc984286a1d15e28e63f6caa32e14265a2667b04610d732fbf3983b224"
+    }
+  },
+  "installedChecks": {
+    "files": 3774,
+    "archives": 8,
+    "report": {
+      "bytes": 674241,
+      "sha256": "d7d6ea6d2ed0c3cb00b2ab7c5a3a0a0371c457afbde67ccf9c550cdec8180c4b"
+    }
+  },
+  "experiments": {
+    "development": {
+      "source": "21631f82aadc04e176ede9c231bd32fde3fe9ad7",
+      "corpusHash": "e6c0c78a5e24911c7d87286b765222acc9b0c72d3429dbaa4484a645523632ac",
+      "sourceSnapshotHash": "28384d9f04b4be192958e1035f7f1d3e4f9ccf60089b8dcf42e2f00bd3269038",
+      "model": {
+        "name": "gemma4:e4b",
+        "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+        "size": 9608350718,
+        "capabilities": [
+          "completion",
+          "vision",
+          "audio",
+          "tools",
+          "thinking"
+        ],
+        "location": "local",
+        "eligible": true,
+        "reason": "Local completion model verified"
+      },
+      "runtime": {
+        "node": "v25.8.2",
+        "platform": "win32",
+        "arch": "x64",
+        "cpu": "AMD Ryzen 9 7900 12-Core Processor             ",
+        "memoryBytes": 33440882688,
+        "gpu": null,
+        "ollama": {
+          "version": "0.32.5"
+        },
+        "warmup": "No unrecorded warmup. First scheduled request may load the model; subsequent calls use the shipping two-minute keep-alive. Case order rotates methods.",
+        "tokenCounts": null
+      },
+      "summary": [
+        {
+          "condition": "regular",
+          "method": "legacy",
+          "tasks": 2,
+          "failures": 0,
+          "formatCompliant": 2,
+          "executable": 0,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": null,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 0,
+          "validReferences": 0,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 0,
+          "abstained": 2,
+          "elapsedMs": 35761,
+          "calls": 2
+        },
+        {
+          "condition": "regular",
+          "method": "contract",
+          "tasks": 2,
+          "failures": 0,
+          "formatCompliant": 2,
+          "executable": 1,
+          "requests": 1,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 5,
+          "validReferences": 2,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 1,
+          "unresolved": 0,
+          "abstained": 1,
+          "elapsedMs": 28857,
+          "calls": 2
+        },
+        {
+          "condition": "regular",
+          "method": "pipeline",
+          "tasks": 2,
+          "failures": 1,
+          "formatCompliant": 1,
+          "executable": 1,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 1,
+          "compatible": 0,
+          "falsified": 1,
+          "citations": 2,
+          "validReferences": 2,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 1,
+          "unresolved": 0,
+          "abstained": 1,
+          "elapsedMs": 19772,
+          "calls": 10
+        },
+        {
+          "condition": "conflicting",
+          "method": "legacy",
+          "tasks": 2,
+          "failures": 0,
+          "formatCompliant": 2,
+          "executable": 0,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": null,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 0,
+          "validReferences": 0,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 0,
+          "abstained": 2,
+          "elapsedMs": 40738,
+          "calls": 2
+        },
+        {
+          "condition": "conflicting",
+          "method": "contract",
+          "tasks": 2,
+          "failures": 0,
+          "formatCompliant": 2,
+          "executable": 1,
+          "requests": 1,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 5,
+          "validReferences": 5,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 1,
+          "abstained": 1,
+          "elapsedMs": 8060,
+          "calls": 2
+        },
+        {
+          "condition": "conflicting",
+          "method": "pipeline",
+          "tasks": 2,
+          "failures": 0,
+          "formatCompliant": 2,
+          "executable": 1,
+          "requests": 1,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 5,
+          "validReferences": 5,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 1,
+          "abstained": 1,
+          "elapsedMs": 23852,
+          "calls": 10
+        },
+        {
+          "condition": "irregular",
+          "method": "legacy",
+          "tasks": 2,
+          "failures": 0,
+          "formatCompliant": 2,
+          "executable": 0,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": null,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 0,
+          "validReferences": 0,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 0,
+          "abstained": 2,
+          "elapsedMs": 37427,
+          "calls": 2
+        },
+        {
+          "condition": "irregular",
+          "method": "contract",
+          "tasks": 2,
+          "failures": 0,
+          "formatCompliant": 2,
+          "executable": 1,
+          "requests": 1,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 5,
+          "validReferences": 2,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 1,
+          "abstained": 1,
+          "elapsedMs": 27124,
+          "calls": 2
+        },
+        {
+          "condition": "irregular",
+          "method": "pipeline",
+          "tasks": 2,
+          "failures": 1,
+          "formatCompliant": 1,
+          "executable": 1,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 1,
+          "compatible": 0,
+          "falsified": 1,
+          "citations": 2,
+          "validReferences": 2,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 2,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 1,
+          "abstained": 1,
+          "elapsedMs": 45155,
+          "calls": 10
+        }
+      ],
+      "archive": {
+        "bytes": 608777,
+        "sha256": "670d1d088b3a6ef8932d200d99a8b2dca25f7c25adcd71bbbeb349a31953d907"
+      },
+      "methods": {
+        "legacy": {
+          "tasks": 6,
+          "formatCompliant": 6,
+          "executable": 0,
+          "eligible": 0,
+          "requests": 0,
+          "failures": {},
+          "invalidTypedOutputs": null,
+          "validation": {
+            "not-available": 6
+          },
+          "predictions": {
+            "abstained": 6
+          },
+          "citations": 0,
+          "validReferences": 0,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "calls": 6,
+          "elapsedMs": 113926,
+          "tools": 0,
+          "toolCountScope": "Completed run traces only; failed-run requests remain in raw records."
+        },
+        "contract": {
+          "tasks": 6,
+          "formatCompliant": 6,
+          "executable": 3,
+          "eligible": 0,
+          "requests": 3,
+          "failures": {},
+          "invalidTypedOutputs": 0,
+          "validation": {
+            "invalid": 5,
+            "request": 1
+          },
+          "predictions": {
+            "wrong": 1,
+            "abstained": 3,
+            "unresolved": 2
+          },
+          "citations": 15,
+          "validReferences": 9,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "calls": 6,
+          "elapsedMs": 64041,
+          "tools": 0,
+          "toolCountScope": "Completed run traces only; failed-run requests remain in raw records."
+        },
+        "pipeline": {
+          "tasks": 6,
+          "formatCompliant": 4,
+          "executable": 3,
+          "eligible": 0,
+          "requests": 1,
+          "failures": {
+            "PROPOSAL_TOOL_LIMIT": 2
+          },
+          "invalidTypedOutputs": 2,
+          "validation": {
+            "falsified": 2,
+            "invalid": 1,
+            "not-available": 2,
+            "request": 1
+          },
+          "predictions": {
+            "wrong": 1,
+            "unresolved": 2,
+            "abstained": 3
+          },
+          "citations": 9,
+          "validReferences": 9,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "calls": 30,
+          "elapsedMs": 88779,
+          "tools": 16,
+          "toolCountScope": "Completed run traces only; failed-run requests remain in raw records."
+        }
+      },
+      "replay": {
+        "passed": true,
+        "records": 18,
+        "pending": 0,
+        "split": "development",
+        "corpusHash": "e6c0c78a5e24911c7d87286b765222acc9b0c72d3429dbaa4484a645523632ac",
+        "sourceSnapshotHash": "28384d9f04b4be192958e1035f7f1d3e4f9ccf60089b8dcf42e2f00bd3269038",
+        "modelGenerationReplayed": false,
+        "externalFailuresRetained": 2
+      }
+    },
+    "evaluation": {
+      "source": "21631f82aadc04e176ede9c231bd32fde3fe9ad7",
+      "corpusHash": "6a57b4a755d553b99e4f1657b436b6ff5b91f0d47a1639f825e0b0d2d1ee2e9a",
+      "sourceSnapshotHash": "28384d9f04b4be192958e1035f7f1d3e4f9ccf60089b8dcf42e2f00bd3269038",
+      "model": {
+        "name": "gemma4:e4b",
+        "digest": "c6eb396dbd5992bbe3f5cdb947e8bbc0ee413d7c17e2beaae69f5d569cf982eb",
+        "size": 9608350718,
+        "capabilities": [
+          "completion",
+          "vision",
+          "audio",
+          "tools",
+          "thinking"
+        ],
+        "location": "local",
+        "eligible": true,
+        "reason": "Local completion model verified"
+      },
+      "runtime": {
+        "node": "v25.8.2",
+        "platform": "win32",
+        "arch": "x64",
+        "cpu": "AMD Ryzen 9 7900 12-Core Processor             ",
+        "memoryBytes": 33440882688,
+        "gpu": null,
+        "ollama": {
+          "version": "0.32.5"
+        },
+        "warmup": "No unrecorded warmup. First scheduled request may load the model; subsequent calls use the shipping two-minute keep-alive. Case order rotates methods.",
+        "tokenCounts": null
+      },
+      "summary": [
+        {
+          "condition": "regular",
+          "method": "legacy",
+          "tasks": 4,
+          "failures": 0,
+          "formatCompliant": 4,
+          "executable": 0,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": null,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 0,
+          "validReferences": 0,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 4,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 0,
+          "abstained": 4,
+          "elapsedMs": 72601,
+          "calls": 4
+        },
+        {
+          "condition": "regular",
+          "method": "contract",
+          "tasks": 4,
+          "failures": 0,
+          "formatCompliant": 4,
+          "executable": 3,
+          "requests": 1,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 1,
+          "citations": 7,
+          "validReferences": 4,
+          "goldScoredCitations": 2,
+          "correctEvidenceRelations": 2,
+          "evidencePrecision": 1,
+          "challenges": 4,
+          "correct": 1,
+          "wrong": 1,
+          "unresolved": 1,
+          "abstained": 1,
+          "elapsedMs": 56132,
+          "calls": 4
+        },
+        {
+          "condition": "regular",
+          "method": "pipeline",
+          "tasks": 4,
+          "failures": 0,
+          "formatCompliant": 4,
+          "executable": 4,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 2,
+          "citations": 9,
+          "validReferences": 9,
+          "goldScoredCitations": 2,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": 0,
+          "challenges": 4,
+          "correct": 1,
+          "wrong": 2,
+          "unresolved": 1,
+          "abstained": 0,
+          "elapsedMs": 44295,
+          "calls": 18
+        },
+        {
+          "condition": "conflicting",
+          "method": "legacy",
+          "tasks": 4,
+          "failures": 0,
+          "formatCompliant": 4,
+          "executable": 0,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": null,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 0,
+          "validReferences": 0,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 4,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 0,
+          "abstained": 4,
+          "elapsedMs": 78567,
+          "calls": 4
+        },
+        {
+          "condition": "conflicting",
+          "method": "contract",
+          "tasks": 4,
+          "failures": 0,
+          "formatCompliant": 4,
+          "executable": 1,
+          "requests": 3,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 11,
+          "validReferences": 6,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 4,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 1,
+          "abstained": 3,
+          "elapsedMs": 18877,
+          "calls": 4
+        },
+        {
+          "condition": "conflicting",
+          "method": "pipeline",
+          "tasks": 4,
+          "failures": 1,
+          "formatCompliant": 3,
+          "executable": 3,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 1,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 9,
+          "validReferences": 9,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 4,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 3,
+          "abstained": 1,
+          "elapsedMs": 46861,
+          "calls": 20
+        },
+        {
+          "condition": "irregular",
+          "method": "legacy",
+          "tasks": 4,
+          "failures": 0,
+          "formatCompliant": 4,
+          "executable": 0,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": null,
+          "compatible": 0,
+          "falsified": 0,
+          "citations": 0,
+          "validReferences": 0,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": null,
+          "challenges": 4,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 0,
+          "abstained": 4,
+          "elapsedMs": 72452,
+          "calls": 4
+        },
+        {
+          "condition": "irregular",
+          "method": "contract",
+          "tasks": 4,
+          "failures": 0,
+          "formatCompliant": 4,
+          "executable": 3,
+          "requests": 1,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 1,
+          "citations": 7,
+          "validReferences": 4,
+          "goldScoredCitations": 2,
+          "correctEvidenceRelations": 2,
+          "evidencePrecision": 1,
+          "challenges": 4,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 3,
+          "abstained": 1,
+          "elapsedMs": 56872,
+          "calls": 4
+        },
+        {
+          "condition": "irregular",
+          "method": "pipeline",
+          "tasks": 4,
+          "failures": 0,
+          "formatCompliant": 4,
+          "executable": 4,
+          "requests": 0,
+          "acceptanceEligible": 0,
+          "invalidTypedOutput": 0,
+          "compatible": 0,
+          "falsified": 2,
+          "citations": 9,
+          "validReferences": 9,
+          "goldScoredCitations": 2,
+          "correctEvidenceRelations": 0,
+          "evidencePrecision": 0,
+          "challenges": 4,
+          "correct": 0,
+          "wrong": 0,
+          "unresolved": 4,
+          "abstained": 0,
+          "elapsedMs": 82981,
+          "calls": 18
+        }
+      ],
+      "archive": {
+        "bytes": 808528,
+        "sha256": "23f92f017e00a4c4151513be86e31b46a8787ea193689225c09f36c38ce49801"
+      },
+      "methods": {
+        "legacy": {
+          "tasks": 12,
+          "formatCompliant": 12,
+          "executable": 0,
+          "eligible": 0,
+          "requests": 0,
+          "failures": {},
+          "invalidTypedOutputs": null,
+          "validation": {
+            "not-available": 12
+          },
+          "predictions": {
+            "abstained": 12
+          },
+          "citations": 0,
+          "validReferences": 0,
+          "goldScoredCitations": 0,
+          "correctEvidenceRelations": 0,
+          "calls": 12,
+          "elapsedMs": 223620,
+          "tools": 0,
+          "toolCountScope": "Completed run traces only; failed-run requests remain in raw records."
+        },
+        "contract": {
+          "tasks": 12,
+          "formatCompliant": 12,
+          "executable": 7,
+          "eligible": 0,
+          "requests": 5,
+          "failures": {},
+          "invalidTypedOutputs": 0,
+          "validation": {
+            "falsified": 2,
+            "request": 2,
+            "invalid": 8
+          },
+          "predictions": {
+            "wrong": 1,
+            "abstained": 5,
+            "unresolved": 5,
+            "correct": 1
+          },
+          "citations": 25,
+          "validReferences": 14,
+          "goldScoredCitations": 4,
+          "correctEvidenceRelations": 4,
+          "calls": 12,
+          "elapsedMs": 131881,
+          "tools": 0,
+          "toolCountScope": "Completed run traces only; failed-run requests remain in raw records."
+        },
+        "pipeline": {
+          "tasks": 12,
+          "formatCompliant": 11,
+          "executable": 11,
+          "eligible": 0,
+          "requests": 0,
+          "failures": {
+            "PROPOSAL_TOOL_LIMIT": 1
+          },
+          "invalidTypedOutputs": 1,
+          "validation": {
+            "falsified": 4,
+            "invalid": 5,
+            "inconclusive": 2,
+            "not-available": 1
+          },
+          "predictions": {
+            "wrong": 2,
+            "unresolved": 8,
+            "correct": 1,
+            "abstained": 1
+          },
+          "citations": 27,
+          "validReferences": 27,
+          "goldScoredCitations": 4,
+          "correctEvidenceRelations": 0,
+          "calls": 56,
+          "elapsedMs": 174137,
+          "tools": 40,
+          "toolCountScope": "Completed run traces only; failed-run requests remain in raw records."
+        }
+      },
+      "replay": {
+        "passed": true,
+        "records": 36,
+        "pending": 0,
+        "split": "evaluation",
+        "corpusHash": "6a57b4a755d553b99e4f1657b436b6ff5b91f0d47a1639f825e0b0d2d1ee2e9a",
+        "sourceSnapshotHash": "28384d9f04b4be192958e1035f7f1d3e4f9ccf60089b8dcf42e2f00bd3269038",
+        "modelGenerationReplayed": false,
+        "externalFailuresRetained": 1
+      }
+    }
+  },
+  "resume": {
+    "pausedCompleted": 3,
+    "resumedCompleted": 18,
+    "originalRecordsUnchanged": true
+  },
+  "limits": [
+    "Two supplied-anchor families, two reserved form permutations, three paired conditions, one fixed-seed attempt; no natural-language or general model ranking.",
+    "Legacy prose extraction is deliberately narrow: unconverted prose is abstention, not proof of incorrect linguistic reasoning.",
+    "Citation semantic precision is conditional on the declared canonical/rival gold map and full focus span; other meanings remain unscored.",
+    "Raw held-out predictions are scored independently of application eligibility. Invalid proposals are never persisted into a user workspace.",
+    "Different output/call budgets, no unrecorded warmup, one observed host; token counts and unavailable GPU identity remain unknown.",
+    "Installed acceptance covers existing native/restart/research/archive flows; the model experiment runs separately on the local host.",
+    "Three gated native unit skips and four reviewed high native-chain audit entries remain.",
+    "No main merge, installer release or Pages deployment."
+  ]
+}

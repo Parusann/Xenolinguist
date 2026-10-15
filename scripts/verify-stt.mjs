@@ -1,50 +1,43 @@
-// Standalone verification that the vendored whisper.cpp binary + model actually transcribe
-// the test fixture. Use this instead of the vitest gated test on Windows, where vitest's
-// forked worker cannot spawn the multi-DLL whisper-cli.exe (works fine here in plain Node,
-// which mirrors the production Electron-forked server). Run: `node scripts/verify-stt.mjs`.
-import { spawn } from 'child_process';
-import { mkdtempSync, writeFileSync, readFileSync, rmSync, existsSync } from 'fs';
-import os from 'os';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// Native whisper verification runs outside Vitest's Windows worker process.
+import { spawn } from 'node:child_process';
+import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { root, sourceIdentity, hashFile, inventory, saveRecord } from './verification-record.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const WIN = path.join(ROOT, 'vendor', 'whisper', 'win');
-const bin = path.join(WIN, 'whisper-cli.exe');
-const model = path.join(WIN, 'ggml-base-q5_1.bin');
-const wav = path.join(ROOT, 'server', 'src', '__tests__', 'fixtures', 'hello-16k.wav');
-const MIN_LANGUAGE_PROB = 0.6; // keep in sync with server/src/services/stt-whisper.ts
-
-for (const [label, p] of [['binary', bin], ['model', model], ['fixture', wav]]) {
-  if (!existsSync(p)) { console.error(`MISSING ${label}: ${p}`); process.exit(1); }
+const win = path.join(root, 'vendor/whisper/win');
+const bin = path.join(win, 'whisper-cli.exe');
+const model = path.join(win, 'ggml-base-q5_1.bin');
+const wav = path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav');
+const record = { source: sourceIdentity(), fixture: await hashFile(wav), runtimeFiles: await inventory(win) };
+try {
+  const dir = await mkdtemp(path.join(os.tmpdir(), 'xeno-acceptance-stt-'));
+  record.isolatedDirectory = dir;
+  const outBase = path.join(dir, 'out');
+  await writeFile(path.join(dir, 'in.wav'), await readFile(wav));
+  const execution = await new Promise((resolve, reject) => {
+    const proc = spawn(bin, ['-m', model, '-f', path.join(dir, 'in.wav'), '-oj', '-of', outBase, '-l', 'auto'], { cwd: win, windowsHide: true });
+    let stderr = '';
+    const timer = setTimeout(() => { proc.kill(); reject(new Error('Whisper exceeded 120 seconds')); }, 120_000);
+    proc.stderr.on('data', data => { stderr += data.toString(); });
+    proc.stdout.resume();
+    proc.once('error', error => { clearTimeout(timer); reject(error); });
+    proc.once('close', code => { clearTimeout(timer); resolve({ code, stderr }); });
+  });
+  record.execution = execution;
+  if (execution.code !== 0) throw new Error(`Whisper exited ${execution.code}`);
+  const result = JSON.parse(await readFile(`${outBase}.json`, 'utf8'));
+  const text = (result.transcription ?? []).map(segment => (segment.text ?? '').trim()).join(' ').trim();
+  const languageProb = Number(execution.stderr.match(/auto-detected language:\s*\w+\s*\(p\s*=\s*([0-9.]+)/i)?.[1] ?? 0);
+  record.result = { language: result.result?.language ?? '', languageProb, text,
+    mode: text && languageProb >= 0.6 ? 'transcription' : 'phonetic-guess' };
+  if (!text) throw new Error('Whisper produced an empty transcription');
+  record.passed = true;
+  console.log(record.result);
+} catch (error) {
+  record.passed = false;
+  record.failure = { code: error.code, message: error.message };
+  process.exitCode = 1;
+} finally {
+  await saveRecord(path.join(root, 'test-results/stt-node.json'), record);
 }
-
-const dir = mkdtempSync(path.join(os.tmpdir(), 'xeno-verify-stt-'));
-const outBase = path.join(dir, 'out');
-writeFileSync(path.join(dir, 'in.wav'), readFileSync(wav));
-
-const proc = spawn(bin, ['-m', model, '-f', path.join(dir, 'in.wav'), '-oj', '-of', outBase, '-l', 'auto'], {
-  cwd: path.dirname(bin),
-});
-let stderr = '';
-proc.stderr.on('data', (d) => { stderr += d.toString(); });
-proc.on('error', (e) => { console.error('SPAWN ERROR:', e.code, e.message); rmSync(dir, { recursive: true, force: true }); process.exit(1); });
-proc.on('close', (code) => {
-  try {
-    if (code !== 0) { console.error('whisper exited', code); process.exit(1); }
-    const j = JSON.parse(readFileSync(`${outBase}.json`, 'utf8'));
-    const language = j.result?.language ?? '';
-    const text = (j.transcription ?? []).map((s) => (s.text ?? '').trim()).join(' ').trim();
-    const m = stderr.match(/auto-detected language:\s*\w+\s*\(p\s*=\s*([0-9.]+)\)/i);
-    const languageProb = m ? Number(m[1]) : 0;
-    const mode = text && languageProb >= MIN_LANGUAGE_PROB ? 'transcription' : 'phonetic-guess';
-    console.log('language   :', language);
-    console.log('languageProb:', languageProb);
-    console.log('mode       :', mode);
-    console.log('text       :', text);
-    if (!text) { console.error('FAIL: empty transcription'); process.exit(1); }
-    console.log('\nOK: bundled whisper.cpp transcribed the fixture.');
-  } finally {
-    rmSync(dir, { recursive: true, force: true });
-  }
-});

@@ -1,0 +1,27 @@
+[
+  {
+    "file": "audio-analysis.worker-C6gpgLbm.js",
+    "bytes": 1460,
+    "gzipBytes": 760
+  },
+  {
+    "file": "index-CJ8VVl_w.js",
+    "bytes": 694441,
+    "gzipBytes": 201916
+  },
+  {
+    "file": "induction.worker-DDmzpA6h.js",
+    "bytes": 145176,
+    "gzipBytes": 42148
+  },
+  {
+    "file": "numbers.worker-Dj5sJyhg.js",
+    "bytes": 95373,
+    "gzipBytes": 27311
+  },
+  {
+    "file": "stt-Doq4p9x6.js",
+    "bytes": 629,
+    "gzipBytes": 444
+  }
+]

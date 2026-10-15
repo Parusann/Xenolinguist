@@ -1,0 +1,230 @@
+{
+  "recordedAt": "2026-09-12T10:34:18.686Z",
+  "source": {
+    "revision": "96a99241ce614a8b23feebd1fdcf393854b209e0",
+    "branch": "implementation/reliability",
+    "workingFiles": [
+      {
+        "file": "client/src/components/common/ConfRing.tsx",
+        "sha256": "f1959c8a477c302e96200037072fec58d85f2523966cdd8a62f8c646edfbe934"
+      },
+      {
+        "file": "client/src/components/common/EvidenceStatus.tsx",
+        "sha256": "fad2c54e8a0c49db1aec68d42bc86d9e6dc15a066e305d5e586c6c6569febce8"
+      },
+      {
+        "file": "client/src/components/landing/LandingScreen.tsx",
+        "sha256": "f44d7ede6658ed5b426fe15e875e4ec419c4cd19835058ba4befd6122b5d5cc2"
+      },
+      {
+        "file": "client/src/components/layout/CommandPalette.tsx",
+        "sha256": "eebdc36a0e632c2400fd83359a545c9b41af2271d74263ec564f188d82b5d81c"
+      },
+      {
+        "file": "client/src/components/layout/StatusBar.tsx",
+        "sha256": "61060261e5f97831b2fe730f1bc0da50c970ca410f21667aad2220f181cc2c65"
+      },
+      {
+        "file": "client/src/components/marketing/sections.tsx",
+        "sha256": "0c4f78ee8cf855d267251aa4ed8f0360e687041c7e7b01dbef767060a43e720c"
+      },
+      {
+        "file": "client/src/components/phase1-samples/SampleDecodeView.tsx",
+        "sha256": "7fe9bdcc2639bfa3a8b45525dfa45f6624ad9f65177386a99e22a90314f04b8b"
+      },
+      {
+        "file": "client/src/components/phase1-samples/SampleInput.tsx",
+        "sha256": "4048a3ff2412e6e44624fdb104da8609f94ab88344f3656f48223063f54f6546"
+      },
+      {
+        "file": "client/src/components/phase2-numbers/NumberDecoder.tsx",
+        "sha256": "4cfb8b3b82ead5c2f8224f7fbe73bf441d4cd54766c1347fdbc98c642ce497d0"
+      },
+      {
+        "file": "client/src/components/phase3-vocabulary/VocabularyBuilder.tsx",
+        "sha256": "20538a1a372ae8367ccc8be49939b16b00dbd73465f3a8dff7eea00cfd8d49fd"
+      },
+      {
+        "file": "client/src/components/phase4-grammar/GrammarAnalyzer.tsx",
+        "sha256": "844b011d494aed66cad61d52a7f9da8733f204442f9bc494010ad8684a7d5ad1"
+      },
+      {
+        "file": "client/src/components/phase5-translation/TranslationEngine.tsx",
+        "sha256": "b1a10c36e0a7381dfb6c5784268c88ff1ab1c5ec627d3a9f785ba9411974d657"
+      },
+      {
+        "file": "client/src/components/phase6-dashboard/Dashboard.tsx",
+        "sha256": "c8807a01b33e72e0c8e2f0aa7c95654cae118df2815157331f1c25905b295a0e"
+      },
+      {
+        "file": "client/src/lib/confidence.ts",
+        "sha256": "f356e48c3c8737e58da488643fb04368d6e2086c137cbd47cd3ab94b13a4854a"
+      },
+      {
+        "file": "client/src/lib/profileStats.ts",
+        "sha256": "d24fec3236c0cdb319d3d75c1d4c431292420801c15d4d26fa45a659af7d7db2"
+      },
+      {
+        "file": "scripts/verify-release.mjs",
+        "sha256": "1408392c96b62d0178e43031b188150750e9a6b1d807696594e4b6b66ce6e80d"
+      },
+      {
+        "file": "server/src/__tests__/metric-snapshots.test.ts",
+        "sha256": "9b54363ee1232a96815d4aecdf40b210cb7e071dd4cb8ac7da6a172145ad4f7e"
+      },
+      {
+        "file": "server/src/services/profile-store.ts",
+        "sha256": "1f4e554ff2af9f13094bda3eb6d13589e6f7019c1647f8dc74137418585e6861"
+      },
+      {
+        "file": "server/vitest.config.ts",
+        "sha256": "3f9d7f4bc0748228aeafc30a4baf0ca88f1113984cf2a457b448b773937c7214"
+      },
+      {
+        "file": "shared/constants.ts",
+        "sha256": "76daf2f95c3450eb22665ab8915351391abb350a4679dce4a46b69225e4902b9"
+      },
+      {
+        "file": "shared/metrics/number-evidence.ts",
+        "sha256": "c94e88f78dc530c929e59cf2b401e4df12352d1bbd7d5097c74797c92d594f57"
+      },
+      {
+        "file": "shared/metrics/workspace-metrics.test.ts",
+        "sha256": "d38ff54236dbfd1acc62dac4e80a6678c081568abd7ceb509aced2c8d470c707"
+      },
+      {
+        "file": "shared/metrics/workspace-metrics.ts",
+        "sha256": "ba0ec0770e223e8d0da033131885a4c2e71401b3fbb92681308f1f9727e31973"
+      },
+      {
+        "file": "shared/prompts.ts",
+        "sha256": "2e13020fb0a94f1eb2a11f98a685c4dc632ed089bbb99f3aab677eb69ba6dab8"
+      },
+      {
+        "file": "shared/sandbox/session.ts",
+        "sha256": "84081d9ce17a8ff5f73a5b6fea6e63f03210c763a5b31bd34f52a964bf5ac225"
+      },
+      {
+        "file": "shared/schemas/metrics.ts",
+        "sha256": "cd9d2fab722ada474cfb8aef5dfb58ffa393662bad2877c1809bbf3167a65eac"
+      },
+      {
+        "file": "shared/schemas/profile.ts",
+        "sha256": "8b041a843f8d5eb122f5365b9bbf8f8b2e26ee1e8a35890a4f0e230d8b98070d"
+      },
+      {
+        "file": "tests/e2e/sandbox-session.spec.ts",
+        "sha256": "466387cf065f6b87edec8c25aca7acab79bd55b6e1789c96053cb5e90093103d"
+      },
+      {
+        "file": "tests/e2e/workspace-evidence.spec.ts",
+        "sha256": "9b88cdc1c49e2de4538958de49750605a6050e50673650b74736f88539850cc9"
+      }
+    ],
+    "node": "25.8.2",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "sourceNote": "Pre-commit working tree: base revision plus changed source hashes.",
+  "executable": {
+    "bytes": 231522816,
+    "sha256": "402b5d8052b456cf19c4e9565151b27f8fa2a1fc6b915ede91e5ca42d3860baf"
+  },
+  "appArchive": {
+    "bytes": 2352659,
+    "sha256": "729ee557fb9ef340a74ad48cff52924bc5939410901af279f9281e5c2acff5b2"
+  },
+  "fixture": {
+    "bytes": 110286,
+    "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+  },
+  "runtime": {
+    "electron": "42.3.3",
+    "node": "24.15.0",
+    "packaged": true
+  },
+  "acceptancePassed": true,
+  "checks": {
+    "sampleOnDisk": true,
+    "loadedWorkbench": true,
+    "pendingSaveRecovered": true,
+    "desktopDraftRecovered": true,
+    "desktopAudioDraftRecovered": true,
+    "desktopAudioSaved": {
+      "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "assets": {
+        "original": {
+          "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+          "bytes": 110286,
+          "mime": "audio/wav"
+        },
+        "analysis": {
+          "sha256": "0ca6b28535d9385d576c695a6563294e028105cda30539a139a23b292a3a942b",
+          "bytes": 110286,
+          "mime": "audio/wav"
+        }
+      },
+      "phoneSegments": 48,
+      "playback": true
+    },
+    "desktopSandboxRecovered": {
+      "sameSession": true,
+      "restoredEvents": 2,
+      "afterRetryEvents": 3,
+      "dictionaryEntries": 1,
+      "fixtureGeneration": true
+    },
+    "desktopEvidenceMetrics": {
+      "unratedAssertion": true,
+      "historyVisible": true,
+      "latestSnapshot": {
+        "version": 1,
+        "revision": 4,
+        "recorded_at": "2026-09-12T10:34:13.793Z",
+        "counts": {
+          "observations": 0,
+          "assertedEntries": 1,
+          "grammarNotes": 0,
+          "competingForms": 0,
+          "mappings1To20": 1,
+          "ratedEntries": 0
+        }
+      }
+    },
+    "missingModel": {
+      "status": 503,
+      "body": {
+        "error": "ipa-unavailable",
+        "code": "IPA_MODEL_MISSING",
+        "requestId": "21655b46-20a3-46ae-9c8c-c105aad60de3",
+        "retryable": true
+      }
+    },
+    "ipa": {
+      "status": 200,
+      "segments": 46,
+      "identity": {
+        "modelId": "wav2vec2-phoneme",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "alphabet": "TIMIT ARPABET",
+        "transformers": "4.2.0",
+        "backend": "onnxruntime-node",
+        "node": "24.15.0"
+      }
+    },
+    "stt": {
+      "status": 200,
+      "nonemptyText": true
+    }
+  },
+  "restart": {
+    "originChanged": true
+  },
+  "verificationLimits": [
+    "Local unpacked Windows executable, not installer certification or independent CI.",
+    "Sandbox generator responses are deterministic fixtures; no model-quality or linguistic-accuracy measurement.",
+    "Three gated native unit checks remain skipped; actual native endpoints passed separately.",
+    "Distinct comparison labels do not establish independently collected evidence.",
+    "Existing Unicode translation browser failure remains expected."
+  ]
+}

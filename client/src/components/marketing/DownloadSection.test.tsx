@@ -6,19 +6,19 @@ import { DownloadSection } from './DownloadSection'
 afterEach(() => { cleanup() })
 
 describe('DownloadSection', () => {
-  it('renders a Windows download link pointing at the releases fallback', () => {
+  it('pins the Windows asset to the version described beside it', () => {
     render(<DownloadSection />)
-    const link = screen.getByRole('link', { name: /download for windows/i })
-    // VITE_DOWNLOAD_URL is unset under test, so DOWNLOAD_URL uses the fallback.
+    const link = screen.getByRole('link', { name: /download v1.0.0 for windows/i })
     expect(link.getAttribute('href')).toBe(
-      'https://github.com/Parusann/Xenolinguist/releases/latest',
+      'https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe',
     )
   })
 
-  it('states the SmartScreen "Run anyway" reality and the Ollama requirement', () => {
+  it('distinguishes the old unsigned release from preview setup', () => {
     render(<DownloadSection />)
-    expect(screen.getByText(/run anyway/i)).toBeTruthy()
-    expect(screen.getByText(/ollama/i)).toBeTruthy()
+    expect(screen.getByText(/unknown publisher/i)).toBeTruthy()
+    expect(screen.getByText(/have not been released in a new installer/i)).toBeTruthy()
+    expect(screen.getByText(/AI needs a running local Ollama service/i)).toBeTruthy()
   })
 
   it('has an anchor id so CTAs can scroll to it', () => {

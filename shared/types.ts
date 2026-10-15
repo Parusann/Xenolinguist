@@ -1,77 +1,18 @@
-export interface DictionaryEntry {
-  id: string;
-  alien_word: string;
-  english_meaning: string;
-  part_of_speech: PartOfSpeech;
-  confidence: number; // 0-100
-  context: string;
-  examples: string[];
-  notes: string;
-  created_at: string;
-}
+import type { lexicalPolicySchema, lexicalSenseSchema } from './schemas/lexicon.js';
+import type { z } from 'zod';
+import type { executableRuleSchema } from './schemas/grammar.js';
+export type ExecutableRule = z.infer<typeof executableRuleSchema>;
+import type { dictionaryEntrySchema, grammarRuleSchema, numberSystemSchema, audioClipSchema, audioSegmentSchema, sampleSchema, profileSchema } from './schemas/profile';
 
-export interface GrammarRule {
-  id: string;
-  rule: string;
-  evidence: string[];
-  confidence: number; // 0-100
-  created_at: string;
-}
-
-export interface NumberSystem {
-  base: number | null;
-  mappings: Record<number, string>;
-  operators: Record<string, string>;
-}
-
-export interface AudioClip {
-  id: string;
-  filename: string;
-  duration: number; // seconds
-  waveform: number[]; // normalized peak values for visualization
-  segments: AudioSegment[];
-  created_at: string;
-}
-
-export interface AudioSegment {
-  id: string;
-  start: number; // seconds
-  end: number; // seconds
-  label: string; // word or phoneme label
-  dictionary_entry_id: string | null;
-}
-
-export interface Sample {
-  id: string;
-  alien_text: string;
-  english_translation: string | null;
-  source: string;
-  phonetic_notes: string;
-  decoded: boolean;
-  audio_id: string | null;
-  ipa: string | null;
-  created_at: string;
-}
-
-export interface LanguageProfile {
-  id: string;
-  name: string;
-  description: string;
-  phonetic_notes: string;
-  created_at: string;
-  updated_at: string;
-  is_sandbox: boolean;
-  sandbox_difficulty?: SandboxDifficulty;
-  dictionary: DictionaryEntry[];
-  grammar_rules: GrammarRule[];
-  number_system: NumberSystem;
-  samples: Sample[];
-  audio_clips: AudioClip[];
-}
-
-/** Lightweight profile listing entry: the profiles.json index rows and the
- *  GET /api/profiles response shape. */
-export type ProfileIndex = Pick<LanguageProfile, 'id' | 'name' | 'created_at' | 'updated_at'>;
+export type DictionaryEntry = z.infer<typeof dictionaryEntrySchema>;
+export type GrammarRule = z.infer<typeof grammarRuleSchema>;
+export type NumberSystem = z.infer<typeof numberSystemSchema>;
+export type { NumberObservation, NumberGrammar, NumberExpression } from './schemas/numbers.js';
+export type AudioClip = z.infer<typeof audioClipSchema>;
+export type AudioSegment = z.infer<typeof audioSegmentSchema>;
+export type Sample = z.infer<typeof sampleSchema>;
+export type LanguageProfile = z.infer<typeof profileSchema>;
+export type ProfileIndex = Pick<LanguageProfile, 'id' | 'name' | 'created_at' | 'updated_at'> & { recovery_error?: string; words?: number; observations?: number };
 
 export interface SessionLogEntry {
   id: string;
@@ -122,13 +63,7 @@ export interface SttSegment {
 
 export type SttMode = 'transcription' | 'phonetic-guess';
 
-export interface SttResult {
-  language: string;     // ISO code from whisper, e.g. "en"
-  languageProb: number; // 0-1; 0 when unknown (not emitted)
-  text: string;
-  segments: SttSegment[];
-  mode: SttMode;
-}
+export type SttResult = import('./schemas/transcription.js').TranscriptionResult;
 
 /** One phone from the IPA recognizer, time-aligned to the audio via CTC. */
 export interface IpaSegment {
@@ -141,4 +76,46 @@ export interface IpaSegment {
 export interface IpaResult {
   ipa: string;
   segments: IpaSegment[];
+  identity?: { modelId: string; modelSha256: string; alphabet: 'TIMIT ARPABET'; transformers: string; backend: string; node: string };
+  audio?: { sha256: string; sampleRate: 16000; sampleCount: number; durationSeconds: number };
+  ctc?: CtcAnalysis;
+  processing?: PhoneProcessing;
 }
+
+export interface PhoneProcessing {
+  version: 1;
+  strategy: 'overlap-frame-ownership';
+  coreFrames: 400;
+  contextFrames: 25;
+  quietRms: 0.01;
+  quietFrameCount: number;
+  chunks: { index: number; startSample: number; endSample: number; startFrame: number; endFrameExclusive: number;
+    keepStartFrame: number; keepEndFrameExclusive: number; boundary: 'low-energy' | 'limit' | 'end' }[];
+}
+
+/** Acoustic scores are uncalibrated model outputs, never semantic confidence. */
+export interface CtcAnalysis {
+  version: 1;
+  decoder: 'greedy';
+  scoreDefinition: 'mean-frame-softmax';
+  timingDefinition: 'frame-bins-not-phonetic-boundaries';
+  frames: number;
+  vocabularySize: number;
+  blankId: number;
+  strideSeconds: number;
+  blankFrames: number;
+  specialFrames: number;
+  runs: {
+    segmentIndex: number;
+    tokenId: number;
+    startFrame: number;
+    endFrameExclusive: number;
+    meanEntropyBits: number;
+    candidates: { tokenId: number; label: string; blank: boolean; special: boolean; meanProbability: number }[];
+    omittedProbability: number;
+  }[];
+}
+export type LexicalPolicy = z.infer<typeof lexicalPolicySchema>;
+export type LexicalSense = z.infer<typeof lexicalSenseSchema>;
+
+export type { Research, Observation, Hypothesis, ResearchAnalysis, ResearchDependency } from './schemas/research.js';

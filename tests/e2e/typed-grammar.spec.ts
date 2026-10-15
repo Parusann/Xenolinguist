@@ -1,0 +1,61 @@
+import { test, expect, preparePage, openProfile } from './fixtures';
+const at = '2026-09-21T00:00:00.000Z';
+test.beforeEach(async ({ page }) => { await preparePage(page); });
+
+test('W17 validates, previews and saves executable rules without executing notebook prose', async ({ page, server }) => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Typed rules',
+    dictionary: [{ id: 'star', alien_word: 'nesh', english_meaning: 'star', part_of_speech: 'noun', confidence: null, context: '', examples: [], notes: '', created_at: at }] } })).json();
+  await openProfile(page, server.url, profile.name);
+  await page.locator('[data-tour="grammar"]').click();
+  await page.getByPlaceholder('e.g. "Word order is SOV — verb always appears last"').fill('Plural suffix assertion');
+  await page.getByLabel('New rule type', { exact: true }).selectOption('plural-affix');
+  await page.getByLabel('New rule affix', { exact: true }).fill('');
+  await expect(page.getByRole('button', { name: '+ Add Rule', exact: true })).toBeDisabled();
+  await page.getByLabel('New rule affix', { exact: true }).fill('-en');
+  await page.getByLabel('New rule preview source', { exact: true }).fill('nesh-en');
+  const preview = page.getByRole('region', { name: 'New rule preview', exact: true });
+  await preview.getByRole('button', { name: 'Analyze symbolically' }).click();
+  await expect(preview.getByTestId('symbolic-result')).toContainText('the stars');
+  await page.getByRole('button', { name: '+ Add Rule', exact: true }).click();
+  await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).grammar_rules[0]?.executable).toEqual({ kind: 'plural-affix', position: 'suffix', affix: '-en' });
+  await openProfile(page, server.url, profile.name);
+  await page.locator('[data-tour="translation"]').click();
+  await page.getByPlaceholder('Enter unknown language text to translate…').fill('nesh-en');
+  await expect(page.getByTestId('lexical-translation')).toHaveText('[nesh-en]');
+  const symbolic = page.getByRole('region', { name: 'Symbolic translation', exact: true });
+  await symbolic.getByRole('button', { name: 'Analyze symbolically' }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('the stars');
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('plural-affix: “-en” [4, 7)');
+  await page.locator('[data-tour="grammar"]').click();
+  await page.getByLabel('Selected rule type', { exact: true }).selectOption('');
+  await page.getByRole('button', { name: 'Save execution', exact: true }).click();
+  await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).grammar_rules[0]?.executable).toBe(null);
+  await page.locator('[data-tour="translation"]').click();
+  await page.getByPlaceholder('Enter unknown language text to translate…').fill('nesh-en');
+  await symbolic.getByRole('button', { name: 'Analyze symbolically' }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('unresolved · 0 derivations');
+});
+
+test('W17 demo uses semantic roles and derivations separately from lexical and model output', async ({ page, server }) => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles/demo`)).json();
+  await openProfile(page, server.url, profile.name);
+  let generations = 0;
+  page.on('request', request => { if (request.url().includes('/api/ai/')) generations++; });
+  await page.locator('[data-tour="translation"]').click();
+  await page.getByPlaceholder('Enter unknown language text to translate…').fill('ka nesh-en shu lor');
+  const symbolic = page.getByRole('region', { name: 'Symbolic translation', exact: true });
+  await symbolic.getByRole('button', { name: 'Analyze symbolically' }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('I do see the large stars');
+  await symbolic.getByText('Meaning tree', { exact: true }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('"entryId": "word-15"');
+  await symbolic.getByText('Reverse generation from this meaning · resolved', { exact: true }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('ka nesh-en shu lor');
+  await symbolic.getByText('Meaning tree', { exact: true }).click();
+  await symbolic.getByRole('button', { name: 'Analyze symbolically' }).scrollIntoViewIfNeeded();
+  await page.screenshot({ path: test.info().outputPath('typed-derivation.png') });
+  await page.getByPlaceholder('Enter unknown language text to translate…').fill('vel tor krash');
+  await expect(symbolic.getByRole('status').first()).toContainText('Source changed');
+  await symbolic.getByRole('button', { name: 'Analyze symbolically' }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('unresolved · 0 derivations');
+  expect(generations).toBe(0);
+});

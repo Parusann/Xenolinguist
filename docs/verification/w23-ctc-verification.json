@@ -1,0 +1,318 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "4342cb672ee8734096a6280b3ee92892e938df98",
+  "retainedLinuxAuditReports": {
+    "w23-ctc-audit-all.json": {
+      "bytes": 18384,
+      "sha256": "8b24603e2161363c49b204cbf4fdf8769cc4d5747def61c663c66df2b41c037e"
+    },
+    "w23-ctc-audit-production.json": {
+      "bytes": 7326,
+      "sha256": "f3adc6abe9b5ea7e7951e75ac175f01c46b7a2e36b7e314d23afe52d5ccce74f"
+    }
+  },
+  "scope": "W23 first unit: bounded greedy CTC probability/entropy summaries, frame accounting, exact analyzed-WAV identity and header-only parent-process validation.",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "4342cb672ee8734096a6280b3ee92892e938df98",
+    "jobs": [
+      {
+        "completedAt": "2026-10-04T00:08:58Z",
+        "conclusion": "success",
+        "databaseId": 111321549014,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-10-03T23:58:59Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37163472487/job/111321549014"
+      },
+      {
+        "completedAt": "2026-10-04T00:05:14Z",
+        "conclusion": "success",
+        "databaseId": 111321549148,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-10-03T23:58:58Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37163472487/job/111321549148"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37163472487"
+  },
+  "sourceChecks": {
+    "unitTests": 462,
+    "serverSharedEngineEvaluationTests": 431,
+    "clientTests": 31,
+    "newAcousticCases": 12,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-10-04T00:01:01.791Z",
+        "duration": 237218.899,
+        "expected": 46,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-04T00:05:00.287Z",
+        "duration": 8282.08,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "0e50a894bf76f6a867fdc5ab3ad6827d3cee5445780e371c6e3f1cd0cb5ec44f"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "34bfa4c3d000d1aed99c7a7ea6849072d849bf416453b4ffe2626833aee6b4cd"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "34bfa4c3d000d1aed99c7a7ea6849072d849bf416453b4ffe2626833aee6b4cd"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "4342cb672ee8734096a6280b3ee92892e938df98",
+          "sourceSnapshotHash": "aa14ab695e6e451762a2cfd59ef9913808c34411f2c584be052cb6956c407d18",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 160622,
+        "sha256": "614c54b4f6d220137267868b0186612d1a507c4f923a6c596618ec19a18db492"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 1,
+          "high": 13,
+          "critical": 0,
+          "total": 14
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-10-04T00:04:17.595Z",
+        "duration": 254503.32799999998,
+        "expected": 46,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-04T00:08:34.280Z",
+        "duration": 11815.352,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "45962353c5c19527144881895b7faefc77e1fd603c3ebb520f3185b2fb7fd64c"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "3e54ca5e7b8a27a53dc40f8654ccf3061da04da362b9c99387219b629fd116ae"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "3e54ca5e7b8a27a53dc40f8654ccf3061da04da362b9c99387219b629fd116ae"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "4342cb672ee8734096a6280b3ee92892e938df98",
+          "sourceSnapshotHash": "fa0a4cdf330952d5b4b1adb8b8424e2d6d06d65ba2478231af6de6d6b8977a60",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 134503,
+        "sha256": "725e2ecee4fe82673474c205712d2061a9cef94af6e4484dfa13dfb02c9e2d80"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 1,
+          "high": 13,
+          "critical": 0,
+          "total": 14
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "4342cb672ee8734096a6280b3ee92892e938df98",
+    "jobs": [
+      {
+        "completedAt": "2026-10-04T00:02:47Z",
+        "conclusion": "success",
+        "databaseId": 111321542734,
+        "name": "build",
+        "startedAt": "2026-10-03T23:58:56Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37163470366/job/111321542734"
+      },
+      {
+        "completedAt": "2026-10-04T00:07:58Z",
+        "conclusion": "success",
+        "databaseId": 111322176115,
+        "name": "verify-clean",
+        "startedAt": "2026-10-04T00:02:50Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37163470366/job/111322176115"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37163470366"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-10-04T00:07:55.667Z",
+    "source": {
+      "revision": "4342cb672ee8734096a6280b3ee92892e938df98",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "ac404fe0581a7cc21fa48e105672d7deef6572ceed3ccf70021c07b8be02239b"
+    },
+    "appArchive": {
+      "bytes": 2993399,
+      "sha256": "d6c723125f2ca2f48c098a8763c509565f3b304115291708be7230a509d6e5f9"
+    }
+  },
+  "installedChecks": {
+    "files": 3774,
+    "archives": 8,
+    "report": {
+      "bytes": 721462,
+      "sha256": "9c70e138de7bca9755ce8c677f0f3d3d03fc3cd17056eeb1f912a71741ad1d6c"
+    },
+    "phoneAnalysis": {
+      "passed": true,
+      "frames": 172,
+      "phoneRuns": 46,
+      "audioSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax"
+    },
+    "nativeCancellation": {
+      "nativeProcessStarted": true,
+      "status": 409,
+      "code": "JOB_CANCELLED"
+    }
+  },
+  "native": {
+    "source": {
+      "revision": "4342cb672ee8734096a6280b3ee92892e938df98",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "25.8.2",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "check": {
+      "passed": true,
+      "frames": 172,
+      "phoneRuns": 46,
+      "audioSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+      "scoreDefinition": "mean-frame-softmax"
+    },
+    "artifact": {
+      "bytes": 46916,
+      "sha256": "6bfe41a00fd3caf44fc76d9b054e8a6d057ee135b918dbcc143cf1e88f65979d"
+    }
+  },
+  "retainedExamples": {
+    "w23-ctc-example.json": {
+      "bytes": 3619,
+      "sha256": "d5be3b9459e485d755f2d7545227b52745180c79dbd65b8af5648c99388df987"
+    },
+    "w23-ctc-installed.json": {
+      "bytes": 47721,
+      "sha256": "3258a778feab57ebfed678ed9f798d6062e5d56cbf6cfd5e0d719e0fcb970530"
+    },
+    "w23-ctc-replay.mts": {
+      "bytes": 1720,
+      "sha256": "5823f7e0e00e512e85193d51fda349cfb19f559e007267bf74f763db836f7a02"
+    }
+  },
+  "limits": [
+    "Mean frame softmax and entropy are uncalibrated acoustic outputs, not semantic or sequence confidence.",
+    "Frame-bin timings at 20 ms are approximate; no forced alignment or phonetic boundary accuracy is established.",
+    "Raw native logits are not retained. Replay recomputes synthetic tensors and checks native response integrity; it does not rerun native inference or reconstruct its softmax.",
+    "The API now returns metadata, but the UI does not persist or display score layers. Generated/manual annotation separation remains pending.",
+    "The 120-second input ceiling is not a native-memory bound or responsiveness guarantee. Long-recording chunking, VAD and labeled recognition evaluation remain W23 work.",
+    "Three native unit skips and retained dependency audit findings remain unresolved.",
+    "No main merge, installer release or Pages deployment."
+  ],
+  "exampleReplay": {
+    "passed": true,
+    "sourceRevision": "4342cb672ee8734096a6280b3ee92892e938df98",
+    "syntheticRuns": 3,
+    "nativeRuns": 46,
+    "installedRuns": 46,
+    "scope": "Synthetic logits recomputed; native/installed response identities, frame geometry and score mass verified. Native logits and inference are not replayed."
+  }
+}

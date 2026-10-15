@@ -1,0 +1,342 @@
+{
+  "workPackage": "W14",
+  "verifiedOn": "2026-09-17T21:30:28.735Z",
+  "implementationRevision": "aba18cbb1791f97f431efe6ae961e127251eaa87",
+  "verifiedRevision": "621eebc5998a913a8c1a2836b30c11bb96bb3450",
+  "local": {
+    "node": "25.8.2",
+    "platform": "win32",
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed",
+    "unitPassed": 235,
+    "nativeUnitSkipped": 3,
+    "toolingPassed": 7,
+    "workbench": {
+      "working": 27,
+      "expectedFailure": "F08 Unicode translation remains assigned to W16",
+      "unexpectedFailures": 0,
+      "note": "Full suite passed before the final assistance-accounting change; affected compiler flow passed after it. CI runs the full exact revision."
+    },
+    "publicSitePassed": 8,
+    "compilerBrowserAfterFinalChange": "passed",
+    "browserBundlePrivateMarkers": [],
+    "initialBrowserCorrection": "Browser drafts are origin-local. The test now distinguishes same-origin draft reload from submitted server-answer recovery when restart changes ports. Native stable draft recovery is independently required.",
+    "auditHighPackageEntries": 4,
+    "installedProbe": {
+      "recordedAt": "2026-09-17T21:19:28.865Z",
+      "acceptancePassed": true,
+      "compiler": {
+        "passed": true,
+        "version": "xeno-generator-1",
+        "observations": 29,
+        "challenges": 5,
+        "sameSessionAfterRelaunch": true,
+        "draftRecovered": true,
+        "reveals": 1,
+        "archiveRestored": true
+      },
+      "appArchive": {
+        "bytes": 2961075,
+        "sha256": "316c3536a4a991eecd5341927324362d836dfec41d8ff74083533b0a9ce21c97"
+      },
+      "note": "Downloaded aba18cb installer tested with corrected worktree harness before committing 621eebc. This local probe is distinct from the final independent CI run."
+    }
+  },
+  "compiler": {
+    "generatorVersion": "xeno-generator-1",
+    "datasetVersion": "xeno-dataset-1",
+    "manifestSha256": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+    "splits": [
+      {
+        "name": "development",
+        "languages": 30,
+        "sha256": "1ab85a8999c5e8a2c9ebc3ec74afa0d3c5c1df46c3b522d3b17d5588f0898817"
+      },
+      {
+        "name": "evaluation",
+        "languages": 30,
+        "sha256": "2edb459d2dad20c2899aed2aacd42b60928194ce60a1b66db0c85418d172cf21"
+      },
+      {
+        "name": "structural",
+        "languages": 30,
+        "sha256": "44748c655d60d54d930929b4ea258089604457f708d4f8c6b4c4e0f4e87864af"
+      }
+    ],
+    "observationsPerLanguage": 29,
+    "withheldChallengesPerLanguage": 5,
+    "testedSemanticRoundTrips": 3060,
+    "independentlyEvaluatedNumbers": 11000,
+    "benchmarkScores": "not-run; reserved for W15"
+  },
+  "ci": {
+    "status": "passed",
+    "sourceRun": "https://github.com/Parusann/Xenolinguist/actions/runs/35276146715",
+    "installedRun": "https://github.com/Parusann/Xenolinguist/actions/runs/35276146762",
+    "sourcePlatforms": {
+      "linux": {
+        "browser": {
+          "startTime": "2026-09-17T21:22:20.657Z",
+          "duration": 111895.664,
+          "expected": 28,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "publicSite": {
+          "startTime": "2026-09-17T21:24:13.623Z",
+          "duration": 7623.361000000001,
+          "expected": 8,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "lockfile": {
+          "bytes": 363616,
+          "sha256": "9ffacde2e2d7d6091548c73813abdb70d377605c31afa420f9bee68789b09def"
+        },
+        "audit": {
+          "recordedAt": "2026-09-17T21:24:21.927Z",
+          "all": {
+            "info": 0,
+            "low": 0,
+            "moderate": 0,
+            "high": 4,
+            "critical": 0,
+            "total": 4
+          },
+          "production": {
+            "info": 0,
+            "low": 0,
+            "moderate": 0,
+            "high": 4,
+            "critical": 0,
+            "total": 4
+          }
+        }
+      },
+      "windows": {
+        "browser": {
+          "startTime": "2026-09-17T21:26:49.221Z",
+          "duration": 174785.658,
+          "expected": 28,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "publicSite": {
+          "startTime": "2026-09-17T21:29:46.581Z",
+          "duration": 18801.066000000003,
+          "expected": 8,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "lockfile": {
+          "bytes": 374001,
+          "sha256": "9d41c59998b756dc557aea44b8ebb9266dd1e24f7c9df7acec8c9c28cd5d53ee"
+        },
+        "audit": {
+          "recordedAt": "2026-09-17T21:30:07.525Z",
+          "all": {
+            "info": 0,
+            "low": 0,
+            "moderate": 0,
+            "high": 4,
+            "critical": 0,
+            "total": 4
+          },
+          "production": {
+            "info": 0,
+            "low": 0,
+            "moderate": 0,
+            "high": 4,
+            "critical": 0,
+            "total": 4
+          }
+        }
+      }
+    },
+    "priorSourceRun": {
+      "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35191036983",
+      "conclusion": "success",
+      "revision": "aba18cb"
+    },
+    "priorInstalledRun": {
+      "url": "https://github.com/Parusann/Xenolinguist/actions/runs/35191037000",
+      "conclusion": "failure",
+      "revision": "aba18cb",
+      "cause": "The harness expected the global Saved label while another project intentionally retained a failed save.",
+      "correction": "Check the compiler draft file directly. Use Back to profiles instead of document reloads during active writes; local probes also exposed a beforeunload race during those reloads."
+    }
+  },
+  "installed": {
+    "recordedAt": "2026-09-17T21:27:28.379Z",
+    "standalone": true,
+    "source": {
+      "revision": "621eebc5998a913a8c1a2836b30c11bb96bb3450",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.20.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "runtime": {
+      "node": "24.19.0",
+      "electron": "42.11.3",
+      "chrome": "148.0.7778.280"
+    },
+    "acceptancePassed": true,
+    "compilerPractice": {
+      "passed": true,
+      "version": "xeno-generator-1",
+      "observations": 29,
+      "challenges": 5,
+      "sameSessionAfterRelaunch": true,
+      "draftRecovered": true,
+      "reveals": 1,
+      "archiveRestored": true
+    },
+    "portableArchives": {
+      "passed": true,
+      "projects": [
+        {
+          "bytes": 234326,
+          "counts": {
+            "words": 0,
+            "rules": 0,
+            "samples": 3,
+            "recordings": 1,
+            "proposals": 0,
+            "snapshots": 4
+          },
+          "sandboxIncluded": true,
+          "restoredAudioHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+        },
+        {
+          "bytes": 4431,
+          "counts": {
+            "words": 1,
+            "rules": 0,
+            "samples": 0,
+            "recordings": 0,
+            "proposals": 1,
+            "snapshots": 2
+          },
+          "sandboxIncluded": true
+        },
+        {
+          "bytes": 2428,
+          "counts": {
+            "words": 0,
+            "rules": 0,
+            "samples": 0,
+            "recordings": 0,
+            "proposals": 0,
+            "snapshots": 1
+          },
+          "sandboxIncluded": true
+        }
+      ]
+    },
+    "artifactLayout": {
+      "passed": true,
+      "checkedFiles": 3772,
+      "additionalFiles": [
+        "Uninstall Xenolinguist.exe"
+      ],
+      "source": {
+        "revision": "621eebc5998a913a8c1a2836b30c11bb96bb3450",
+        "branch": "implementation/reliability",
+        "workingFiles": [],
+        "node": "24.20.0",
+        "platform": "win32",
+        "arch": "x64"
+      },
+      "manifest": {
+        "bytes": 824628,
+        "sha256": "3740e89667457961802971bc1f43588bcbdd397b27794ac8240265cdbaeb71e0"
+      },
+      "checks": {
+        "requiredFiles": 9,
+        "nativeGroups": 3,
+        "runtimePackages": 50
+      }
+    },
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "0cf564ee6d17de8e589f6cc65a27ca59b3a9b886ef0bfa1d45e7d3884553e142"
+    },
+    "appArchive": {
+      "bytes": 2961075,
+      "sha256": "316c3536a4a991eecd5341927324362d836dfec41d8ff74083533b0a9ce21c97"
+    },
+    "lockfile": {
+      "bytes": 374001,
+      "sha256": "9d41c59998b756dc557aea44b8ebb9266dd1e24f7c9df7acec8c9c28cd5d53ee"
+    },
+    "native": {
+      "ipa": 200,
+      "stt": 200,
+      "tts": 200,
+      "missingModel": {
+        "status": 503,
+        "body": {
+          "error": "ipa-unavailable",
+          "code": "IPA_MODEL_MISSING",
+          "requestId": "1924a81f-bf98-4913-ba5d-b936f2f61c5f",
+          "retryable": true
+        }
+      }
+    },
+    "recovery": {
+      "audio": {
+        "originalHash": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+        "assets": {
+          "original": {
+            "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          },
+          "analysis": {
+            "sha256": "daf3541655e0df7a6224cb60a7f9a2aecf889860b20067d9688402d0ce4af21f",
+            "bytes": 110286,
+            "mime": "audio/wav"
+          }
+        },
+        "phoneSegments": 49,
+        "playback": true
+      },
+      "creative": {
+        "sameSession": true,
+        "restoredEvents": 2,
+        "afterRetryEvents": 3,
+        "dictionaryEntries": 1,
+        "fixtureGeneration": true
+      },
+      "aiHistory": {
+        "state": "complete",
+        "task": "conlangGeneration",
+        "fixtureGeneration": true
+      }
+    }
+  },
+  "installerArtifact": {
+    "kind": "GitHub artifact ZIP digest, not the inner Setup.exe digest",
+    "id": 10520482765,
+    "bytes": 405355905,
+    "sha256": "sha256:6d266dcecb7391d5162a8ef79d1103dc1569febc20e6f5b7917fb26eeec3b2b5",
+    "createdAt": "2026-09-17T21:24:15Z",
+    "expiresAt": "2026-09-24T21:24:10Z"
+  },
+  "limits": [
+    "Bounded synthetic domain and conservative controlled-English matching; no natural-language accuracy claim.",
+    "Named homophone condition is rejected by clean scoring; ambiguous set-valued scoring is unimplemented.",
+    "Learner projections exclude private keys; computer owners can inspect source, private files and explicit inclusive archives.",
+    "Immutable snapshots and safe orphans are retained; automatic garbage collection and broad power-loss certification remain future work.",
+    "Browser draft persistence is tied to origin; desktop stable storage survives relaunch. Unsaved drafts are not archived.",
+    "Three gated native unit skips, four known high native-chain audit entries and the expected Unicode workbench failure remain.",
+    "No main merge, Pages deployment or public installer release."
+  ]
+}

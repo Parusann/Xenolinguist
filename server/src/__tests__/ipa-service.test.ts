@@ -1,5 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { decodeCtcPhones } from '../services/ipa-phones.js';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 
 afterEach(() => { delete process.env.IPA_MODEL_DIR; });
 
@@ -34,7 +36,7 @@ describe('ipa-phones.transcribePhones', () => {
   it('rejects with IpaUnavailableError when the model dir is not configured', async () => {
     delete process.env.IPA_MODEL_DIR;
     const { transcribePhones, IpaUnavailableError } = await import('../services/ipa-phones.js?t=1');
-    await expect(transcribePhones({ wav: Buffer.from([0, 1, 2]) })).rejects.toBeInstanceOf(IpaUnavailableError);
+    await expect(transcribePhones({ wav: readFileSync(path.join(__dirname, 'fixtures/hello-16k.wav')) })).rejects.toBeInstanceOf(IpaUnavailableError);
   });
 
   // Real inference only runs with IPA_E2E + a vendored model (vitest can't reliably host the

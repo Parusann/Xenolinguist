@@ -1,0 +1,192 @@
+{
+  "source": {
+    "revision": "e33c030411b1b4a95b8ac53c6047ef6de9c3a89f",
+    "branch": "implementation/reliability",
+    "workingFiles": [],
+    "node": "24.21.0",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "automatic": {
+    "language": "en",
+    "languageProb": 0.880299,
+    "text": "Hello world, the quick brown fox, dumb, over the lazy dog.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 3.18,
+        "text": "Hello world, the quick brown fox, dumb, over the lazy dog."
+      }
+    ],
+    "mode": "transcription",
+    "audio": {
+      "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "sampleRate": 16000,
+      "sampleCount": 55121,
+      "durationSeconds": 3.4450625
+    },
+    "provenance": {
+      "version": 1,
+      "engine": "whisper.cpp",
+      "engineRevision": "v1.8.6",
+      "modelId": "ggml-base-q5_1",
+      "modelSha256": "422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898",
+      "executableSha256": "111bd344b7bf0356818f2795a525cb5240ed0a99028fa9f3f1c68b4ff5b17b91",
+      "runtimeFiles": [
+        {
+          "file": "ggml-base-q5_1.bin",
+          "bytes": 59707625,
+          "sha256": "422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898"
+        },
+        {
+          "file": "ggml-base.dll",
+          "bytes": 636416,
+          "sha256": "017cd9c859d0da3c6d0e8da120ec5641db7c8d1f266df7ce1f9eca42029186ba"
+        },
+        {
+          "file": "ggml-cpu.dll",
+          "bytes": 782848,
+          "sha256": "cb5bfd79c0255e282982527fee42d8aa8407b63ae46ef1acd395c3e21d1f52f9"
+        },
+        {
+          "file": "ggml.dll",
+          "bytes": 67072,
+          "sha256": "722ff1350efe25a1bffa048bef2a8aa7fe7552fce3c38d2c1505f99beb0fb1f7"
+        },
+        {
+          "file": "whisper-cli.exe",
+          "bytes": 489472,
+          "sha256": "111bd344b7bf0356818f2795a525cb5240ed0a99028fa9f3f1c68b4ff5b17b91"
+        },
+        {
+          "file": "whisper.dll",
+          "bytes": 484864,
+          "sha256": "aecc185550327461d74a7c89436e13a62e12cc408c05719e7a677e1586a9cda3"
+        }
+      ],
+      "node": "24.19.0",
+      "platform": "win32",
+      "arch": "x64",
+      "requestedLanguage": "auto",
+      "threads": 2,
+      "decoding": "pinned-cli-defaults",
+      "timing": "model-segments-not-word-alignment",
+      "languageSelection": "detected"
+    }
+  },
+  "explicit": {
+    "language": "en",
+    "languageProb": null,
+    "text": "Hello world, the quick brown fox, dumb, over the lazy dog.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 3.18,
+        "text": "Hello world, the quick brown fox, dumb, over the lazy dog."
+      }
+    ],
+    "mode": "transcription",
+    "audio": {
+      "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "sampleRate": 16000,
+      "sampleCount": 55121,
+      "durationSeconds": 3.4450625
+    },
+    "provenance": {
+      "version": 1,
+      "engine": "whisper.cpp",
+      "engineRevision": "v1.8.6",
+      "modelId": "ggml-base-q5_1",
+      "modelSha256": "422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898",
+      "executableSha256": "111bd344b7bf0356818f2795a525cb5240ed0a99028fa9f3f1c68b4ff5b17b91",
+      "runtimeFiles": [
+        {
+          "file": "ggml-base-q5_1.bin",
+          "bytes": 59707625,
+          "sha256": "422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898"
+        },
+        {
+          "file": "ggml-base.dll",
+          "bytes": 636416,
+          "sha256": "017cd9c859d0da3c6d0e8da120ec5641db7c8d1f266df7ce1f9eca42029186ba"
+        },
+        {
+          "file": "ggml-cpu.dll",
+          "bytes": 782848,
+          "sha256": "cb5bfd79c0255e282982527fee42d8aa8407b63ae46ef1acd395c3e21d1f52f9"
+        },
+        {
+          "file": "ggml.dll",
+          "bytes": 67072,
+          "sha256": "722ff1350efe25a1bffa048bef2a8aa7fe7552fce3c38d2c1505f99beb0fb1f7"
+        },
+        {
+          "file": "whisper-cli.exe",
+          "bytes": 489472,
+          "sha256": "111bd344b7bf0356818f2795a525cb5240ed0a99028fa9f3f1c68b4ff5b17b91"
+        },
+        {
+          "file": "whisper.dll",
+          "bytes": 484864,
+          "sha256": "aecc185550327461d74a7c89436e13a62e12cc408c05719e7a677e1586a9cda3"
+        }
+      ],
+      "node": "24.19.0",
+      "platform": "win32",
+      "arch": "x64",
+      "requestedLanguage": "en",
+      "threads": 2,
+      "decoding": "pinned-cli-defaults",
+      "timing": "model-segments-not-word-alignment",
+      "languageSelection": "explicit"
+    }
+  },
+  "runtimeFiles": [
+    {
+      "file": "ggml-base-q5_1.bin",
+      "bytes": 59707625,
+      "sha256": "422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898"
+    },
+    {
+      "file": "ggml-base.dll",
+      "bytes": 636416,
+      "sha256": "017cd9c859d0da3c6d0e8da120ec5641db7c8d1f266df7ce1f9eca42029186ba"
+    },
+    {
+      "file": "ggml-cpu.dll",
+      "bytes": 782848,
+      "sha256": "cb5bfd79c0255e282982527fee42d8aa8407b63ae46ef1acd395c3e21d1f52f9"
+    },
+    {
+      "file": "ggml.dll",
+      "bytes": 67072,
+      "sha256": "722ff1350efe25a1bffa048bef2a8aa7fe7552fce3c38d2c1505f99beb0fb1f7"
+    },
+    {
+      "file": "whisper-cli.exe",
+      "bytes": 489472,
+      "sha256": "111bd344b7bf0356818f2795a525cb5240ed0a99028fa9f3f1c68b4ff5b17b91"
+    },
+    {
+      "file": "whisper.dll",
+      "bytes": 484864,
+      "sha256": "aecc185550327461d74a7c89436e13a62e12cc408c05719e7a677e1586a9cda3"
+    }
+  ],
+  "checks": [
+    {
+      "passed": true,
+      "segments": 1,
+      "runtimeFiles": 6,
+      "languageSelection": "detected",
+      "scope": "Execution and provenance integrity; not transcript accuracy, calibration or word alignment."
+    },
+    {
+      "passed": true,
+      "segments": 1,
+      "runtimeFiles": 6,
+      "languageSelection": "explicit",
+      "scope": "Execution and provenance integrity; not transcript accuracy, calibration or word alignment."
+    }
+  ]
+}

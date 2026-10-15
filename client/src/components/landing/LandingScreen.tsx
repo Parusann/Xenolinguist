@@ -3,16 +3,16 @@ import { useProfile } from '@/stores/profile-context'
 import { useSessionLog } from '@/stores/session-log-context'
 import { useOllama } from '@/stores/ollama-context'
 import { ProfileSetup } from './ProfileSetup'
+import { ProjectArchive } from '@/components/phase6-dashboard/ProjectArchive'
 import { VantaTopology } from '@/components/common/VantaTopology'
 import { XenoMark } from '@/components/common/XenoMark'
-import { getDecodingProgress } from '@/lib/profileStats'
 import { apiFetch } from '@/services/api'
 import type { LanguageProfile, ProfileIndex } from 'shared/types'
 
-/** A saved-profile row enriched with the live word count + decode% the mock shows. */
-interface ProfileRow extends ProfileIndex {
-  words: number
-  decode: number
+/** Saved profiles with current distinct content counts; unavailable counts stay unknown. */
+interface ProfileRow extends Omit<ProfileIndex, 'words' | 'observations'> {
+  words: number | null
+  observations: number | null
   active: boolean
 }
 
@@ -27,7 +27,7 @@ function ParticleField() {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const ctx = canvas.getContext('2d')!
     let animId: number
 
@@ -153,15 +153,12 @@ export function LandingScreen() {
   const [profiles, setProfiles] = useState<ProfileRow[]>([])
   const [showSetup, setShowSetup] = useState(false)
   const [setupMode, setSetupMode] = useState<'new' | 'sandbox'>('new')
-  const [ready, setReady] = useState(false)
   const [loadingDemo, setLoadingDemo] = useState(false)
   const { loadProfile } = useProfile()
   const { addEntry } = useSessionLog()
-  const { connected } = useOllama()
+  const { ready: connected } = useOllama()
 
-  // Fetch the profile index, then hydrate each row with its live word count and
-  // decode% via getDecodingProgress — the same source of truth the dashboard and
-  // status bar use, so the numbers shown here always agree with the workbench.
+  // Render summary counts without fetching every full project.
   useEffect(() => {
     let cancelled = false
     ;(async () => {
@@ -170,23 +167,13 @@ export function LandingScreen() {
         const sorted = [...index].sort(
           (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
         )
-        const rows = await Promise.all(
-          sorted.map(async (p, i): Promise<ProfileRow> => {
-            try {
-              const full = await apiFetch<LanguageProfile>(`/profiles/${p.id}`)
-              return { ...p, words: full.dictionary.length, decode: getDecodingProgress(full), active: i === 0 }
-            } catch {
-              return { ...p, words: 0, decode: 0, active: i === 0 }
-            }
-          }),
-        )
+        const rows = sorted.map((p, i): ProfileRow => ({ ...p, words: p.words ?? null, observations: p.observations ?? null, active: i === 0 }))
         if (!cancelled) setProfiles(rows)
       } catch {
         /* offline or no profiles yet — leave the list empty */
       }
     })()
-    const t = setTimeout(() => setReady(true), 100)
-    return () => { cancelled = true; clearTimeout(t) }
+    return () => { cancelled = true }
   }, [])
 
   if (showSetup) {
@@ -228,13 +215,11 @@ export function LandingScreen() {
           position: 'relative',
           zIndex: 2,
           height: '100%',
+          overflowY: 'auto',
           display: 'grid',
-          gridTemplateColumns: '1fr 520px 1fr',
-          gridTemplateRows: '1fr auto 1fr',
+          gridTemplateColumns: '1fr minmax(0, 520px) 1fr',
+          gridTemplateRows: 'minmax(0, 1fr) auto minmax(0, 1fr)',
           alignItems: 'center',
-          transition: 'opacity 1s ease, transform 1s ease',
-          opacity: ready ? 1 : 0,
-          transform: ready ? 'none' : 'translateY(16px)',
         }}
       >
         {/* Center column */}
@@ -317,6 +302,8 @@ export function LandingScreen() {
           </div>
 
           {/* Saved profiles */}
+          <details style={{ marginBottom: 16 }}><summary style={{ cursor: 'pointer' }}>Restore a .xeno project archive</summary><ProjectArchive /></details>
+          <SaveStatus />
           {profiles.length > 0 && (
             <div>
               <div className="kicker" style={{ textAlign: 'center', marginBottom: 14, color: 'var(--fg-mute)' }}>
@@ -348,8 +335,8 @@ export function LandingScreen() {
                   >
                     <span className="dot" style={{ background: p.active ? 'var(--accent)' : 'var(--fg-faint)', boxShadow: p.active ? '0 0 8px var(--accent)' : 'none' }} />
                     <span style={{ color: p.active ? 'var(--fg)' : 'var(--fg-dim)' }}>{p.name}</span>
-                    <span style={{ color: 'var(--fg-mute)', textAlign: 'right' }}>{p.words} words</span>
-                    <div className="cbar confirmed" title={p.decode + '%'}><span style={{ width: p.decode + '%' }} /></div>
+                    <span style={{ color: 'var(--fg-mute)', textAlign: 'right' }}>{p.words ?? '—'} assertions</span>
+                    <span className="dim">{p.observations ?? '—'} observations</span>
                     <span style={{ color: 'var(--fg-faint)', textAlign: 'right' }}>→</span>
                   </button>
                 ))}
@@ -363,3 +350,4 @@ export function LandingScreen() {
     </div>
   )
 }
+import { SaveStatus } from '@/components/layout/SaveStatus'

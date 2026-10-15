@@ -1,0 +1,347 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "e33c030411b1b4a95b8ac53c6047ef6de9c3a89f",
+  "scope": "Validated Whisper API provenance, native asset checks, honest language-selection metadata and browser response identity checks. Transcription-history persistence remains unimplemented.",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "e33c030411b1b4a95b8ac53c6047ef6de9c3a89f",
+    "jobs": [
+      {
+        "completedAt": "2026-10-08T20:02:36Z",
+        "conclusion": "success",
+        "databaseId": 113509269648,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-10-08T19:49:58Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37834881248/job/113509269648"
+      },
+      {
+        "completedAt": "2026-10-08T19:56:03Z",
+        "conclusion": "success",
+        "databaseId": 113509269925,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-10-08T19:49:58Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37834881248/job/113509269925"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37834881248"
+  },
+  "sourceChecks": {
+    "unitTests": 499,
+    "serverSharedEngineEvaluationTests": 466,
+    "clientTests": 33,
+    "toolingTests": 9,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-10-08T19:51:33.547Z",
+        "duration": 210137.80000000002,
+        "expected": 49,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-08T19:55:04.706Z",
+        "duration": 6688.89,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "98015b83f18f2f8a43719dd14ad63c1d099dff3982007dd7cd5c004bd6a87a58"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "ed22e55808aa84133a312ba66af5fb35f3c08645ca31e27850c9d971dbc6334d"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "ed22e55808aa84133a312ba66af5fb35f3c08645ca31e27850c9d971dbc6334d"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "e33c030411b1b4a95b8ac53c6047ef6de9c3a89f",
+          "sourceSnapshotHash": "31828a93b7b185a04679e2f8b1ff0152230f6d47d0a8499e4592cf667b27a6fe",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 140718,
+        "sha256": "bbc4516f7709aef2d8159e4730706a3c408f9b00e42ec601679fb44041312f54"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 8,
+          "high": 4,
+          "critical": 0,
+          "total": 12
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 3,
+          "high": 4,
+          "critical": 0,
+          "total": 7
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-10-08T19:56:44.257Z",
+        "duration": 323650.759,
+        "expected": 49,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-10-08T20:02:10.557Z",
+        "duration": 11712.518,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "7cbd9a1a4d7582d62427cc470933b848d424d58c221a629f2c90e960162351d2"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "b37392f2d26ec42975db9f2c2acbc0096988e7f6ec2c561fff37baf6daca58cf"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "b37392f2d26ec42975db9f2c2acbc0096988e7f6ec2c561fff37baf6daca58cf"
+        },
+        "elicitation": {
+          "passed": true,
+          "records": 56,
+          "cases": 8,
+          "split": "ci",
+          "sourceCommit": "e33c030411b1b4a95b8ac53c6047ef6de9c3a89f",
+          "sourceSnapshotHash": "5b37c2153b15215a692486e6f2fb335b6b3648242ebd9568e42950136ffbf6df",
+          "corpusHash": "2ad3d0e501def9125dd11da4307f295e68ac22a34cd4383dfb3c2e06b07be90a",
+          "failures": 0
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 126336,
+        "sha256": "bc9a2cd1466007396e1d3ad7c93a3e6c26caa719a574a82b6f3e67cee3fe725d"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 8,
+          "high": 4,
+          "critical": 0,
+          "total": 12
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 3,
+          "high": 4,
+          "critical": 0,
+          "total": 7
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "e33c030411b1b4a95b8ac53c6047ef6de9c3a89f",
+    "jobs": [
+      {
+        "completedAt": "2026-10-08T19:53:12Z",
+        "conclusion": "success",
+        "databaseId": 113509269246,
+        "name": "build",
+        "startedAt": "2026-10-08T19:49:58Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37834881340/job/113509269246"
+      },
+      {
+        "completedAt": "2026-10-08T19:59:42Z",
+        "conclusion": "success",
+        "databaseId": 113510640882,
+        "name": "verify-clean",
+        "startedAt": "2026-10-08T19:53:14Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37834881340/job/113510640882"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/37834881340"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-10-08T19:59:40.049Z",
+    "source": {
+      "revision": "e33c030411b1b4a95b8ac53c6047ef6de9c3a89f",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "e3ccaa3b82cef35eaaa1e319e84c767bb9ee6eb6dc8280242b512019aad59901"
+    },
+    "appArchive": {
+      "bytes": 3001431,
+      "sha256": "28af3af3047fcd96cafb080caf3dbe161d9030438ff1d923cbe77b4db9ca3d7e"
+    },
+    "lockfile": {
+      "bytes": 374125,
+      "sha256": "ae2cfb5fdfa673813ae405c6608d1c608ee683fc0e264567fd95be71fb6b81ad"
+    }
+  },
+  "installedChecks": {
+    "files": 3772,
+    "archives": 8,
+    "phoneLayersPassed": true,
+    "report": {
+      "bytes": 1456971,
+      "sha256": "1a2f2263495aa0d402097280a4117fcf90ac243f2d9fb3ca82c16e0c15224616"
+    },
+    "transcription": [
+      {
+        "passed": true,
+        "segments": 1,
+        "runtimeFiles": 6,
+        "languageSelection": "detected",
+        "scope": "Execution and provenance integrity; not transcript accuracy, calibration or word alignment."
+      },
+      {
+        "passed": true,
+        "segments": 1,
+        "runtimeFiles": 6,
+        "languageSelection": "explicit",
+        "scope": "Execution and provenance integrity; not transcript accuracy, calibration or word alignment."
+      }
+    ]
+  },
+  "artifacts": {
+    "w23-stt-audit-all.json": {
+      "bytes": 12131,
+      "sha256": "b49c7a986d522c1c7bf6af2fdaa2a88f09a31f934daf50460ae2bf2ef7046521"
+    },
+    "w23-stt-audit-production.json": {
+      "bytes": 9297,
+      "sha256": "00e3a787e5d5532702819e7ce1946058d8ce6b98a138d95c5cae7f6465454be6"
+    },
+    "w23-stt-browser-linux.json": {
+      "bytes": 130,
+      "sha256": "3212774d82fd4446020d093c7213d4d7268072a0b667d16dd74178f27a982c28"
+    },
+    "w23-stt-browser-windows.json": {
+      "bytes": 130,
+      "sha256": "3212774d82fd4446020d093c7213d4d7268072a0b667d16dd74178f27a982c28"
+    },
+    "w23-stt-native.json": {
+      "bytes": 5951,
+      "sha256": "753c5d3e665be0c72f6a1d7f7d2cf4470b6ba6b4cf8d5567258dedec6cfe4432"
+    },
+    "w23-stt-installed.json": {
+      "bytes": 6147,
+      "sha256": "5e90b8e73c77f7af13bd7ec77d1b93c238da0f5b75aff948c53b65244a48ae41"
+    },
+    "w23-stt-replay.mts": {
+      "bytes": 1253,
+      "sha256": "4751bb170688d68314f4017586deea829c44d243ae2a88e31d8252ed0fd3ca73"
+    }
+  },
+  "priorAcousticReplays": {
+    "layers": {
+      "passed": true,
+      "revision": "9192533f2051f8996a35cb20909215651511476c",
+      "browserPlatforms": 2,
+      "browserAnalysesPerPlatform": 3,
+      "installedAnalyses": 2,
+      "originalSha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18",
+      "manualCorrection": "retained manual correction",
+      "scope": "Validates retained browser/native metadata, archive identity mapping, immutable history and independent manual copying. Does not rerun inference or reproduce native logits, timing or accuracy."
+    },
+    "chunks": {
+      "passed": true,
+      "revision": "57703a9c9ebce04fe5feef6fba8b7c030fd14200",
+      "nativeCheck": {
+        "passed": true,
+        "frames": 1377,
+        "phoneRuns": 373,
+        "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 4,
+        "maxInputSamples": 144080
+      },
+      "installedCheck": {
+        "passed": true,
+        "frames": 1377,
+        "phoneRuns": 378,
+        "audioSha256": "7c6a0fd88780c61977851f8e34863adbdebbc83c8a0659894158a62831c04cdf",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 4,
+        "maxInputSamples": 144080
+      },
+      "nearCapCheck": {
+        "passed": true,
+        "frames": 5856,
+        "phoneRuns": 1587,
+        "audioSha256": "750737af2007b633e83f4c8d103e00c5f377d3e57261f848065897992ac75299",
+        "modelSha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935",
+        "scoreDefinition": "mean-frame-softmax",
+        "chunks": 16,
+        "maxInputSamples": 144080
+      },
+      "syntheticRuns": 2,
+      "scope": "Recomputed real-audio window plans and synthetic overlap/CTC decoding; verified native response identities and accounting. Native logits, recognition accuracy and timings are not reproduced."
+    }
+  },
+  "limits": [
+    "Browser responses are synthetic. Local and installed Whisper checks run the actual pinned native executable.",
+    "Metadata replay does not rerun inference or measure recognition accuracy, score calibration, word alignment or broad determinism.",
+    "Runtime identities describe pre-execution byte verification, not signed attestation or immunity to concurrent external file changes.",
+    "Three native unit cases and dependency audit findings remain. No main merge, public release or deployment.",
+    "Bounded independent transcription history, restart/archive retention, longer audio and labeled evaluation remain W23 work."
+  ]
+}

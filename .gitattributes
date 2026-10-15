@@ -8,3 +8,55 @@ vendor/whisper/win/* binary
 *.wav binary
 vendor/ipa-model/** binary
 *.onnx binary
+# Retained W22 browser captures have published byte hashes; preserve their original bytes.
+docs/verification/w22-number-elicitation-*profile.json -text
+docs/verification/w22-number-elicitation-history.xeno binary
+docs/verification/w22-grammar-elicitation-*profile.json -text
+docs/verification/w22-grammar-elicitation-history.xeno binary
+docs/verification/w22-grammar-audit-*.json -text
+
+# Retain the exact CI audit bytes referenced by the W22 experiment verification.
+docs/verification/w22-curves-audit-*.json -text
+docs/verification/w22-elicitation-*.svg -text
+
+# Preserve the byte identities of retained W23 acoustic responses and audit reports.
+docs/verification/w23-ctc-*.json -text whitespace=cr-at-eol
+docs/verification/w23-ctc-replay.mts -text
+
+# Retained W23 windowing responses and reports preserve their recorded bytes.
+docs/verification/w23-chunks-*.json -text whitespace=cr-at-eol
+docs/verification/w23-chunks-replay.mts -text
+
+# Preserve the byte identities of W23 annotation records and replay source.
+docs/verification/w23-layers-*.json -text whitespace=cr-at-eol
+docs/verification/w23-layers-replay.mts -text
+docs/verification/w23-layers-*.png binary
+
+# Preserve the dependency checkpoint's audit bytes and verification identities.
+docs/verification/w23-deps-*.json -text whitespace=cr-at-eol
+
+# Preserve native Whisper responses and the audit/replay checkpoint byte identities.
+docs/verification/w23-stt-*.json -text whitespace=cr-at-eol
+docs/verification/w23-stt-replay.mts -text
+
+# Preserve retained transcription histories and verification evidence.
+docs/verification/w23-transcripts-*.json -text whitespace=cr-at-eol
+docs/verification/w23-transcripts-replay.mts -text
+docs/verification/w23-transcripts-*.png binary
+
+# Preserve long-recording responses and reproducible verification bytes.
+docs/verification/w23-long-*.json -text whitespace=cr-at-eol
+docs/verification/w23-long-replay.mts -text
+docs/verification/w23-long-*.png binary
+
+# Keep externally licensed acoustic corpus hashes stable across checkouts.
+evaluation/fixtures/audio/l2-arctic-pilot/*.wav binary
+evaluation/fixtures/audio/l2-arctic-pilot/*.TextGrid -text -whitespace
+evaluation/fixtures/audio/l2-arctic-pilot/corpus.json -text whitespace=cr-at-eol
+evaluation/fixtures/audio/l2-arctic-pilot/LICENSE -text -whitespace
+docs/verification/w23-acoustic-pilot/*.json -text
+
+# Keep final candidate evidence identical to the checksummed release assets.
+docs/verification/w25-release/*.json -text whitespace=cr-at-eol
+docs/verification/w26-demo/*.json -text whitespace=cr-at-eol
+docs/verification/w26-demo/*.mp4 binary

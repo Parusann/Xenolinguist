@@ -1,0 +1,66 @@
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { test, expect, preparePage, openProfile, wavFixture } from './fixtures';
+
+test.beforeEach(async ({ page }) => { await preparePage(page); });
+
+test('exports a recording archive and restores it through the empty profile selector', async ({ page, server }) => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Portable fieldwork' } })).json();
+  await openProfile(page, server.url, profile.name);
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
+  await page.locator('input[type="file"]').setInputFiles(wavFixture);
+  await expect(page.getByText(/hello-16k.wav ·/)).toBeVisible();
+  await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Archive observation');
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await expect.poll(async () => (await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).samples.length).toBe(1);
+  await page.locator('[data-tour="dashboard"]').click();
+  const exporting = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export .xeno archive', exact: true }).click();
+  const download = await exporting, archiveFile = test.info().outputPath('portable.xeno'); await download.saveAs(archiveFile);
+  expect((await readFile(archiveFile)).length).toBeGreaterThan((await readFile(wavFixture)).length * 2);
+  await page.request.delete(`${server.url}/api/profiles/${profile.id}`);
+  await page.goto(`${server.url}/app`);
+  await page.getByText('Restore a .xeno project archive', { exact: true }).click();
+  await page.getByLabel('Import .xeno archive', { exact: true }).setInputFiles(archiveFile);
+  const preview = page.getByRole('region', { name: 'Archive preview' });
+  await expect(preview).toContainText('1 recordings');
+  await expect(preview.getByRole('radio', { name: 'Create a new project (recommended)' })).toBeChecked();
+  await preview.getByRole('button', { name: 'Restore project', exact: true }).click();
+  await expect(page.getByText('Restored Portable fieldwork. Recordings and saved relationships are ready.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Open restored project', exact: true }).click();
+  await expect(page.getByText('Archive observation', { exact: true })).toBeVisible();
+  const profiles = await (await page.request.get(`${server.url}/api/profiles`)).json(); expect(profiles).toHaveLength(1);
+  expect(profiles[0].id).not.toBe(profile.id);
+  const restored = await (await page.request.get(`${server.url}/api/profiles/${profiles[0].id}`)).json();
+  const original = await (await page.request.get(`${server.url}/api/audio/${restored.samples[0].audio_id}`)).body();
+  expect(createHash('sha256').update(original).digest('hex')).toBe(createHash('sha256').update(await readFile(wavFixture)).digest('hex'));
+  await page.getByRole('button', { name: 'Play audio', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Pause audio', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Pause audio', exact: true }).click();
+});
+
+test('replacement requires explicit selection and confirmation and offers the previous project backup', async ({ page, server }) => {
+  const profile = await (await page.request.post(`${server.url}/api/profiles`, { data: { name: 'Before replacement' } })).json();
+  const archiveResponse = await page.request.get(`${server.url}/api/archives/export/${profile.id}?revision=${profile.revision}&sandbox=false`);
+  expect(archiveResponse.ok()).toBe(true);
+  const bytes = await archiveResponse.body();
+  await page.request.put(`${server.url}/api/profiles/${profile.id}`, { data: { name: 'Current project', revision: profile.revision } });
+  await openProfile(page, server.url, 'Current project');
+  await page.locator('[data-tour="dashboard"]').click();
+  await page.getByLabel('Import .xeno archive', { exact: true }).setInputFiles({ name: 'saved.xeno', mimeType: 'application/octet-stream', buffer: bytes });
+  const preview = page.getByRole('region', { name: 'Archive preview' });
+  await preview.getByRole('radio', { name: 'Replace Current project', exact: true }).check();
+  const restore = preview.getByRole('button', { name: 'Restore project', exact: true });
+  await expect(restore).toBeDisabled();
+  await preview.getByRole('checkbox', { name: 'I want to replace this project with the archive', exact: true }).check();
+  await restore.click();
+  const downloading = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download previous project backup', exact: true }).click();
+  const backup = await downloading; expect(backup.suggestedFilename()).toMatch(/\.xeno$/);
+  const backupPath = test.info().outputPath('replacement-backup.xeno'); await backup.saveAs(backupPath);
+  const inspection = await page.request.post(`${server.url}/api/archives/inspect`, { headers: { 'Content-Type': 'application/octet-stream' }, data: await readFile(backupPath) });
+  expect((await inspection.json()).name).toBe('Current project');
+  expect((await (await page.request.get(`${server.url}/api/profiles/${profile.id}`)).json()).name).toBe('Before replacement');
+  await page.getByRole('button', { name: 'Open restored project', exact: true }).click();
+  await expect(page.getByText('Workspace evidence for Before replacement', { exact: true })).toBeVisible();
+});

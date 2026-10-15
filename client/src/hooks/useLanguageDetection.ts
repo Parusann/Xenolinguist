@@ -4,7 +4,7 @@ import type { SttSegment } from 'shared/types'
 
 export interface DetectionResult {
   language: string
-  confidence: number
+  confidence: number | null
   transcript: string
   mode: 'transcription' | 'phonetic-guess'
   segments: SttSegment[]

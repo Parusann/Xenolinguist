@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
-import request from 'supertest';
+import request, { testSession } from './authenticated-request.js';
 
 let dist: string;
 
@@ -20,28 +20,28 @@ afterAll(async () => {
 describe('SPA serving when CLIENT_DIST is set', () => {
   it('serves index.html at /', async () => {
     const { createApp } = await import('../app.js?spa=1');
-    const res = await request(createApp()).get('/');
+    const res = await request(createApp(testSession)).get('/');
     expect(res.status).toBe(200);
     expect(res.text).toContain('Xeno');
   });
 
   it('still serves the API as JSON', async () => {
     const { createApp } = await import('../app.js?spa=2');
-    const res = await request(createApp()).get('/api/health');
+    const res = await request(createApp(testSession)).get('/api/health');
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
   });
 
   it('falls back to index.html for unknown non-/api GET (SPA routing)', async () => {
     const { createApp } = await import('../app.js?spa=3');
-    const res = await request(createApp()).get('/app/some/client/route');
+    const res = await request(createApp(testSession)).get('/app/some/client/route');
     expect(res.status).toBe(200);
     expect(res.text).toContain('Xeno');
   });
 
   it('returns 404 JSON for unknown /api routes', async () => {
     const { createApp } = await import('../app.js?spa=4');
-    const res = await request(createApp()).get('/api/does-not-exist');
+    const res = await request(createApp(testSession)).get('/api/does-not-exist');
     expect(res.status).toBe(404);
   });
 });

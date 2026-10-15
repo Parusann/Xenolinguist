@@ -1,0 +1,652 @@
+import { verifyTranscription } from './verify-transcription.mjs';
+import { verifyDesktopRecovery } from './verify-desktop-recovery.mjs';
+import { verifyArtifact } from './verify-artifact-layout.mjs';
+import { verifyPhoneAnalysis, repeatPhoneFixture, verifyPhoneChunks } from './verify-phone-analysis.mjs';
+import { createRequire } from 'node:module';
+import { existsSync } from 'node:fs';
+import { desktopRequest } from './desktop-request.mjs';
+// Run a packaged/installed release outside the source tree, in isolated desktop data.
+import { _electron as electron } from 'playwright';
+import { expect } from '@playwright/test';
+import { mkdtemp, mkdir, writeFile, readFile, realpath, rename, readdir } from 'node:fs/promises';
+import { randomBytes, createHash } from 'node:crypto';
+import os from 'node:os';
+import path from 'node:path';
+import { root, hashFile, inventory, sourceIdentity, saveRecord } from './verification-record.mjs';
+
+const args = process.argv.slice(2);
+const standalone = args.includes('--standalone');
+if (standalone) {
+  if (existsSync(path.join(root, '.git'))) throw Error('Standalone verification must have no source checkout');
+  const require = createRequire(import.meta.url);
+  for (const dependency of ['@huggingface/transformers', 'onnxruntime-node', 'express']) {
+    try { require.resolve(dependency); throw Error('Standalone harness can resolve source dependency: ' + dependency); }
+    catch (error) { if (error.code !== 'MODULE_NOT_FOUND') throw error; }
+  }
+}
+const source = standalone ? JSON.parse(await readFile(path.join(root, 'source.json'), 'utf8')) : sourceIdentity();
+if (standalone && process.env.GITHUB_SHA && source.revision !== process.env.GITHUB_SHA) throw Error('Harness source differs from workflow revision');
+const executable = args[0];
+if (!executable) throw new Error('Usage: node scripts/verify-release.mjs <unpacked executable outside repo> [report.json]');
+const resolved = await realpath(executable);
+const relative = path.relative(await realpath(root), resolved);
+if (!relative.startsWith('..') && !path.isAbsolute(relative)) throw new Error('Copy/build the unpacked artifact outside the repository first');
+const resources = path.join(path.dirname(resolved), 'resources');
+const dir = await mkdtemp(path.join(os.tmpdir(), 'xeno-acceptance-desktop-'));
+const token = randomBytes(16).toString('hex');
+await writeFile(path.join(dir, '.xeno-test-token'), token);
+const reportFile = path.resolve(args[1] ?? path.join(root, 'test-results/release-report.json'));
+await mkdir(path.dirname(reportFile), { recursive: true });
+const record = { source, standalone, executable: await hashFile(resolved),
+  appArchive: await hashFile(path.join(resources, 'app.asar')),
+  lockfile: await hashFile(path.join(root, standalone ? 'source-package-lock.json' : 'package-lock.json')),
+  modelFiles: await inventory(path.join(resources, 'ipa-model')),
+  whisperFiles: await inventory(path.join(resources, 'whisper')),
+  runtimeFiles: await inventory(path.join(resources, 'server-deps')),
+  isolatedUserData: dir, integrationCoverage: {
+    nativeAudio: 'required: bundled STT, TTS and phones must succeed',
+    localChat: { status: 'not-run', reason: 'Ollama is deliberately unavailable in this isolated acceptance run. Run npm run verify:local-model separately on a host with installed local models.' },
+  }, checks: {}, console: [] };
+let app;
+let hiddenModel;
+try {
+  const artifactManifest = args.find(arg => arg.startsWith('--artifact-manifest='))?.slice('--artifact-manifest='.length);
+  if (standalone && !artifactManifest) throw Error('Standalone release check requires the build artifact manifest');
+  if (artifactManifest) {
+    record.checks.artifactLayout = await verifyArtifact(path.dirname(resolved), artifactManifest);
+    expect(record.checks.artifactLayout.source.revision).toBe(source.revision);
+    const metadata = JSON.parse(await readFile(artifactManifest, 'utf8'));
+    expect(metadata.lockSha256).toBe(record.lockfile.sha256);
+  }
+  // These paired credentials opt into isolation; normal launches ignore DATA_DIR.
+  const launchEnv = { ...process.env, XENO_TEST_MODE: '1', XENO_TEST_TOKEN: token,
+    OLLAMA_BASE_URL: 'http://127.0.0.1:1', NODE_PATH: '', NODE_OPTIONS: '' };
+  // Even an empty ELECTRON_RUN_AS_NODE switches Electron into Node CLI mode.
+  delete launchEnv.ELECTRON_RUN_AS_NODE;
+  app = await electron.launch({ executablePath: resolved, cwd: dir,
+    args: [`--xeno-test-user-data=${dir}`, '--use-fake-device-for-media-stream'],
+    env: launchEnv, timeout: 40_000 });
+  app.process().stdout?.on('data', data => record.console.push(data.toString()));
+  app.process().stderr?.on('data', data => record.console.push(data.toString()));
+  record.runtime = await app.evaluate(({ app }) => ({ versions: process.versions, packaged: app.isPackaged, userData: app.getPath('userData') }));
+  if (!record.runtime.packaged || path.resolve(record.runtime.userData) !== path.resolve(dir)) throw new Error('Desktop isolation check failed');
+  const page = await app.firstWindow();
+  page.setDefaultTimeout(20_000);
+  await page.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
+  const origin = new URL(page.url()).origin;
+  expect((await page.request.get(`${origin}/api/health`)).status()).toBe(401);
+  expect((await page.request.post(`${origin}/api/audio/stages`, { data: 'unauthorized' })).status()).toBe(401);
+  expect((await desktopRequest(page).get(`${origin}/api/health`)).status()).toBe(200);
+  const boundary = await app.evaluate(async ({ BrowserWindow }, origin) => {
+    const primary = BrowserWindow.getAllWindows()[0];
+    const prefs = primary.webContents.getLastWebPreferences();
+    const other = new BrowserWindow({ show: false, webPreferences: { sandbox: true, contextIsolation: true, nodeIntegration: false } });
+    try {
+      await other.loadURL(origin);
+      const otherWindowStatus = await other.webContents.executeJavaScript("fetch('/api/health').then(r => r.status)");
+      return { otherWindowStatus, sandbox: prefs.sandbox, contextIsolation: prefs.contextIsolation, nodeIntegration: prefs.nodeIntegration, webSecurity: prefs.webSecurity };
+    } finally { other.destroy(); }
+  }, origin);
+  expect(boundary).toEqual({ otherWindowStatus: 401, sandbox: true, contextIsolation: true, nodeIntegration: false, webSecurity: true });
+  await page.evaluate(() => { window.open('https://untrusted.example/'); location.href = 'file:///untrusted.html'; });
+  // A subsequent app API request proves the blocked navigation left the trusted document usable.
+  expect((await desktopRequest(page).get(`${origin}/api/health`)).status()).toBe(200);
+  expect(new URL(page.url()).origin).toBe(origin);
+  expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);
+  record.checks.localBoundary = { ...boundary, anonymousHealth: 401, anonymousBinary: 401, trustedHealth: 200, foreignNavigationBlocked: true, popupDenied: true };
+  const media = await page.evaluate(async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const audioTracks = stream.getAudioTracks().length;
+    stream.getTracks().forEach(track => track.stop());
+    let cameraDenied = false;
+    try { const camera = await navigator.mediaDevices.getUserMedia({ video: true }); camera.getTracks().forEach(track => track.stop()); } catch { cameraDenied = true; }
+    return { audioTracks, cameraDenied };
+  });
+  expect(media).toEqual({ audioTracks: 1, cameraDenied: true });
+  record.checks.localBoundary.syntheticMicrophone = media;
+  const request = async (route, body, timeout = 180_000) => {
+    const response = await desktopRequest(page).post(origin + route, { data: body, timeout });
+    return { status: response.status(), body: await response.json() };
+  };
+  const wav = await readFile(path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav'));
+  record.fixture = await hashFile(path.join(root, 'server/src/__tests__/fixtures/hello-16k.wav'));
+  record.checks.runtimeCapabilities = await (await desktopRequest(page).get(origin + '/api/ollama/capabilities')).json();
+  for (const key of ['storage', 'tts', 'stt', 'phones']) expect(record.checks.runtimeCapabilities[key].state).toBe('available');
+  expect(record.checks.runtimeCapabilities.chat.state).toBe('unavailable');
+  // Keep the original renderer request open while cancelling the actual spawned native process.
+  await page.evaluate(audio => {
+    window.__phoneCancellation = fetch('/api/ipa', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ audio }) }).then(async response => ({ status: response.status, body: await response.json() }));
+  }, wav.toString('base64'));
+  let cancelledJob;
+  await expect.poll(async () => {
+    const current = await (await desktopRequest(page).get(origin + '/api/jobs')).json();
+    cancelledJob = current.jobs.find(job => job.state === 'running' && job.task === 'Phone analysis' && job.progress?.status === 'Native phone process started');
+    return !!cancelledJob;
+  }, { intervals: [10, 20, 50], timeout: 10000 }).toBe(true);
+  const cancelStatus = await page.evaluate(async id => (await fetch('/api/jobs/' + id, { method: 'DELETE' })).status, cancelledJob.id);
+  expect(cancelStatus).toBe(202);
+  const cancelled = await page.evaluate(() => window.__phoneCancellation);
+  expect(cancelled.status).toBe(409); expect(cancelled.body.code).toBe('JOB_CANCELLED');
+  record.checks.nativeJobCancellation = { nativeProcessStarted: true, status: cancelled.status, code: cancelled.body.code };
+  const cancellationWav=repeatPhoneFixture(wav,86),jobPollMs=[];
+  await page.evaluate(audio => {
+    window.__chunkCancellation=fetch('/api/ipa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio})}).then(async response=>({status:response.status,body:await response.json()}));
+  },cancellationWav.toString('base64'));
+  let midChunkJob;
+  await expect.poll(async()=>{
+    const start=performance.now();
+    const response=await desktopRequest(page).get(origin+'/api/jobs');
+    expect(response.status()).toBe(200);
+    jobPollMs.push(performance.now()-start);
+    const current=await response.json();
+    midChunkJob=current.jobs.find(job=>job.state==='running' && job.task==='Long recording phone analysis' && job.progress?.completed>=1 && job.progress.completed<job.progress.total);
+    return Boolean(midChunkJob);
+  },{timeout:120_000,intervals:[100]}).toBe(true);
+  const stopStart=performance.now();
+  expect(await page.evaluate(async id=>(await fetch('/api/jobs/'+id,{method:'DELETE'})).status,midChunkJob.id)).toBe(202);
+  const midCancelled=await page.evaluate(()=>window.__chunkCancellation);
+  expect(midCancelled.status).toBe(409);expect(midCancelled.body.code).toBe('JOB_CANCELLED');
+  record.checks.chunkCancellation={progress:midChunkJob.progress,status:midCancelled.status,code:midCancelled.body.code,cancelMs:performance.now()-stopStart,jobPollMs};
+  await page.evaluate(() => {
+    const gaps = []; let previous = performance.now();
+    const timer = setInterval(() => { const now = performance.now(); gaps.push(now - previous); previous = now; }, 100);
+    window.__finishLongHeartbeat = () => { clearInterval(timer); return gaps; };
+  });
+  const longWav=repeatPhoneFixture(wav,86),longStart=performance.now();
+  let longPhones, heartbeatGapsMs;
+  try { longPhones=await request('/api/ipa',{audio:longWav.toString('base64')}, 610_000); }
+  finally { heartbeatGapsMs = await page.evaluate(() => window.__finishLongHeartbeat()); }
+  expect(longPhones.status).toBe(200);
+  expect(heartbeatGapsMs.length).toBeGreaterThan(0);
+  record.checks.chunkedPhones={repetitions:86,result:longPhones.body,elapsedMs:performance.now()-longStart,heartbeatGapsMs,check:verifyPhoneChunks(longPhones.body,longWav)};
+  expect(record.checks.chunkedPhones.check.chunks).toBeGreaterThan(1);
+  expect(longPhones.body.audio.durationSeconds).toBeGreaterThan(290);
+  const longStageResponse = await desktopRequest(page).post(origin + '/api/audio/stages', { data: longWav, headers: { 'Content-Type': 'application/octet-stream' } });
+  expect(longStageResponse.status()).toBe(201);
+  const longStage = await longStageResponse.json();
+  const longCompleteResponse = await desktopRequest(page).put(`${origin}/api/audio/stages/${longStage.id}/analysis`, { data: longWav, headers: { 'Content-Type': 'application/octet-stream' } });
+  expect(longCompleteResponse.status()).toBe(200);
+  const longComplete = await longCompleteResponse.json();
+  const longClip = { id: longComplete.id, filename: 'long-native.wav', duration: longComplete.duration, created_at: longComplete.createdAt,
+    waveform: [], segments: [{ id: 'long-manual', start: 240, end: 290, label: 'retained long correction', dictionary_entry_id: null }],
+    assets: { original: longComplete.original, analysis: longComplete.analysis }, manual_source_analysis_id: 'long-native-analysis',
+    phone_analyses: [{ version: 1, id: 'long-native-analysis', created_at: longComplete.createdAt, originalSha256: longComplete.original.sha256, result: longPhones.body }] };
+  const longProfileResponse = await request('/api/profiles', { name: 'Long native recording', audio_clips: [longClip], samples: [{ id: 'long-sample',
+    alien_text: 'Long native recording', english_translation: null, source: 'Audio recording', phonetic_notes: '', decoded: false,
+    audio_id: longClip.id, ipa: null, created_at: longClip.created_at }] });
+  expect(longProfileResponse.status).toBe(201);
+  const longProfile = longProfileResponse.body;
+  record.checks.longAudio = { source: longClip, passed: false };
+  record.checks.ipa = await request('/api/ipa', { audio: wav.toString('base64') });
+  if (record.checks.ipa.status === 200) {
+    expect(record.checks.ipa.body.ipa.length).toBeGreaterThan(0);
+    expect(record.checks.ipa.body.segments.length).toBeGreaterThan(0);
+    expect(record.checks.ipa.body.identity.alphabet).toBe('TIMIT ARPABET');
+    expect(record.checks.ipa.body.identity.modelSha256).toBe(record.modelFiles.find(file => file.file.endsWith('.onnx')).sha256);
+    record.checks.phoneAnalysis = verifyPhoneAnalysis(record.checks.ipa.body, wav);
+  }
+  record.checks.stt = await request('/api/stt', { audio: wav.toString('base64') });
+  expect(record.checks.stt.status).toBe(200); expect(record.checks.stt.body.text.trim().length).toBeGreaterThan(0);
+  record.checks.transcriptionProvenance = verifyTranscription(record.checks.stt.body, wav, record.whisperFiles);
+  record.checks.sttExplicit = await request('/api/stt', { audio: wav.toString('base64'), language: 'en' });
+  expect(record.checks.sttExplicit.status).toBe(200);
+  record.checks.explicitTranscriptionProvenance = verifyTranscription(record.checks.sttExplicit.body, wav, record.whisperFiles, 'en');
+
+  const speech = await desktopRequest(page).post(origin + '/api/tts', { data: { text: 'Hello from the local workbench' } });
+  const speechBytes = await speech.body();
+  expect(speech.status()).toBe(200); expect(speechBytes.subarray(0, 4).toString()).toBe('RIFF'); expect(speechBytes.length).toBeGreaterThan(44);
+  record.checks.tts = { status: speech.status(), bytes: speechBytes.length, wav: true };
+  record.checks.wavUpload = await request('/api/audio/upload', { id: 'release-fixture', data: wav.toString('base64') });
+  const profile = await request('/api/profiles', { name: 'Release smoke' });
+  if (profile.status !== 201) throw new Error('Release profile creation failed');
+  await page.addInitScript(() => localStorage.setItem('xenolinguist-tour-completed', '1'));
+  await page.goto(`${origin}/app`);
+  await page.getByRole('button', { name: /Release smoke/ }).click();
+  await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Packaged sample');
+  const save = page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith(profile.body.id + '/mutations'));
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  record.checks.sampleSave = { status: (await save).status() };
+  const persisted = JSON.parse(await readFile(path.join(dir, 'data/profiles', `${profile.body.id}.json`), 'utf8'));
+  record.checks.sampleOnDisk = persisted.samples.some(sample => sample.alien_text === 'Packaged sample');
+  await expect(page.getByText('Packaged sample', { exact: true })).toBeVisible();
+  const screenshot = await app.evaluate(async ({ BrowserWindow }) =>
+    (await BrowserWindow.getAllWindows()[0].webContents.capturePage(undefined, { stayHidden: true, stayAwake: true })).toPNG().toString('base64'));
+  if (screenshot) await writeFile(reportFile.replace(/\.json$/, '') + '.png', Buffer.from(screenshot, 'base64'));
+  record.checks.loadedWorkbench = await page.getByText('Packaged sample', { exact: true }).isVisible();
+  // Exercise the real close handshake with a recoverable failed save, then restart on a new port.
+  await page.route('**/api/profiles/*/mutations', route => route.fulfill({ status: 500, json: { error: 'Injected offline save', code: 'TEST_FAILURE' } }));
+  await page.getByPlaceholder('Enter unknown language text… e.g. nesh tor krash.').fill('Recovered after desktop close');
+  await page.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
+  await expect(page.locator('input[type="file"]')).toBeEnabled();
+  await page.locator('input[type="file"]').setInputFiles({ name: 'desktop-original.wav', mimeType: 'audio/wav', buffer: wav });
+  await expect(page.getByText(/desktop-original.wav/)).toBeVisible();
+  await page.getByPlaceholder('IPA, tone markers').fill('Native audio draft');
+  await page.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Copy transcription 1 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
+  await page.locator('[data-tour="translation"]').click();
+  await page.getByPlaceholder('Enter unknown language text to translate…').fill('Draft across desktop origins');
+  await expect.poll(async () => {
+    const local = JSON.parse(await readFile(path.join(dir, 'pending-saves', `${profile.body.id}.json`), 'utf8'));
+    return local.batches.length > 0 && local.drafts['translation.alien'] === 'Draft across desktop origins';
+  }).toBe(true);
+  const compilerProfile = await request('/api/profiles', { name: 'Native compiler practice', is_sandbox: true });
+  expect(compilerProfile.status).toBe(201);
+  await page.getByTitle('Back to profiles', { exact: true }).click();
+  await page.getByRole('button').filter({ has: page.getByText('Native compiler practice', { exact: true }) }).click();
+  await page.getByRole('button', { name: 'Start validated practice' }).click();
+  const compilerFirst = page.locator('[data-compiler-challenge="c-0"]');
+  await compilerFirst.getByRole('textbox').fill('wrong');
+  await compilerFirst.getByRole('button', { name: 'Check translation', exact: true }).click();
+  await expect(compilerFirst.getByRole('status')).toContainText('Not matched');
+  await compilerFirst.getByRole('textbox').fill('unfinished compiler answer');
+  // Another project intentionally still has a failed save, so the global indicator cannot say Saved.
+  await expect.poll(async () => {
+    const draft = JSON.parse(await readFile(path.join(dir, 'pending-saves', `${compilerProfile.body.id}.json`), 'utf8'));
+    return Object.entries(draft.drafts).some(([key, value]) => key.startsWith('compiler:') && value === 'unfinished compiler answer');
+  }).toBe(true);
+  const compilerBeforeClose = await (await desktopRequest(page).get(`${origin}/api/compiler/${compilerProfile.body.id}`)).json();
+  expect(compilerBeforeClose.challenges.every(c => Object.keys(c).join(',') === 'id,utterance')).toBe(true);
+  expect(JSON.stringify(compilerBeforeClose)).not.toMatch(/"(?:seed|lexicon|truth|datasetHash)":/);
+  // Model fixture output exercises creative session persistence, not generation quality.
+  const sandboxProfile = await request('/api/profiles', { name: 'Native practice', is_sandbox: true });
+  expect(sandboxProfile.status).toBe(201);
+  await page.route('**/api/ollama/status', route => route.fulfill({ json: { connected: true, ready: true, models: ['fixture-model'] } }));
+  const practiceFixture = { language_name: 'Native fixture', phoneme_set: ['a'], number_base: 10, word_order: 'SVO', rules: ['Subject first'],
+    number_words: { 1: 'ka', 2: 'ki', 3: 'ku' }, vocabulary: [{ alien: 'tal', english: 'sky', pos: 'noun' }], sample_sentences: [{ alien: 'tal', english: 'sky' }] };
+  await page.route('**/api/ai/stream', route => route.fulfill({ contentType: 'text/event-stream', body: `data: ${JSON.stringify({ token: JSON.stringify(practiceFixture) })}\n\ndata: [DONE]\n\n` }));
+  await page.getByTitle('Back to profiles', { exact: true }).click();
+  await page.getByRole('button').filter({ has: page.getByText('Native practice', { exact: true }) }).click();
+  await page.getByRole('button', { name: 'Generate & Start Decoding' }).click();
+  const number = page.locator('[data-challenge="number-0"]');
+  await number.getByRole('textbox').fill('1cat'); await number.getByRole('button', { name: 'Check', exact: true }).click();
+  await expect(number.getByRole('status')).toContainText('Not matched');
+  await number.getByRole('button', { name: 'Hint', exact: true }).click();
+  await number.getByRole('textbox').fill('unfinished number');
+  await expect(page.getByText('Save failed', { exact: true })).toBeVisible();
+  let sandboxBeforeClose;
+  await expect.poll(async () => {
+    const local = JSON.parse(await readFile(path.join(dir, 'pending-saves', `${sandboxProfile.body.id}.json`), 'utf8'));
+    sandboxBeforeClose = local.batches.at(-1)?.after.sandbox_session;
+    return sandboxBeforeClose?.guesses['number-0'] === 'unfinished number' && sandboxBeforeClose.events.length === 2;
+  }).toBe(true);
+  // Simulate the explicit "Close anyway" choice only in this isolated acceptance app.
+  await app.evaluate(({ dialog }) => { dialog.showMessageBox = async () => ({ response: 1, checkboxChecked: false }); });
+  const closed = app.waitForEvent('close');
+  await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].close());
+  await closed;
+  app = undefined;
+  await expect.poll(async () => { try { await fetch(`${origin}/api/health`, { signal: AbortSignal.timeout(500) }); return false; } catch { return true; } }).toBe(true);
+  app = await electron.launch({ executablePath: resolved, cwd: dir, args: [`--xeno-test-user-data=${dir}`], env: launchEnv, timeout: 40_000 });
+  const reopened = await app.firstWindow();
+  reopened.setDefaultTimeout(20_000);
+  await reopened.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
+  const newOrigin = new URL(reopened.url()).origin;
+  const longRecovered = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${longProfile.id}`)).json();
+  expect(longRecovered.audio_clips[0]).toEqual(longClip);
+  record.checks.longAudio.restartRecovered = true;
+  expect((await desktopRequest(reopened).get(`${newOrigin}/api/health`)).status()).toBe(200);
+  expect((await reopened.request.get(`${newOrigin}/api/health`)).status()).toBe(401);
+  record.checks.localBoundary.relaunchAuthenticated = true;
+  await reopened.addInitScript(() => localStorage.setItem('xenolinguist-tour-completed', '1'));
+  await reopened.goto(`${newOrigin}/app`);
+  await reopened.getByRole('button').filter({ has: reopened.getByText('Release smoke', { exact: true }) }).click();
+  await expect(reopened.getByPlaceholder('Enter unknown language text to translate…')).toHaveValue('Draft across desktop origins');
+  await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
+  const afterRestart = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
+  record.checks.pendingSaveRecovered = afterRestart.samples.filter(sample => sample.alien_text === 'Recovered after desktop close').length === 1;
+  record.checks.desktopDraftRecovered = true;
+  await reopened.locator('[data-tour="samples"]').click();
+  await expect(reopened.getByText(/desktop-original.wav ·/)).toBeVisible();
+  await expect(reopened.getByPlaceholder('IPA, tone markers')).toHaveValue('Native audio draft');
+  await expect(reopened.getByRole('button', { name: 'Copy transcription 1 to manual segments', exact: true })).toBeVisible();
+  record.checks.desktopAudioDraftRecovered = true;
+  await reopened.getByRole('button', { name: 'Analyze phones', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Copy analysis 1 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
+  await reopened.getByRole('button', { name: 'Copy analysis 1 to manual segments', exact: true }).click();
+  await expect(reopened.getByPlaceholder('Label this word...').first()).toBeVisible({ timeout: 120_000 });
+  await reopened.getByPlaceholder('Label this word...').first().fill('retained manual correction');
+  await reopened.getByRole('button', { name: 'Analyze phones', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Copy analysis 2 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
+  await expect(reopened.getByPlaceholder('Label this word...').first()).toHaveValue('retained manual correction');
+  await reopened.getByRole('button', { name: 'Transcribe audio', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Copy transcription 2 to manual segments', exact: true })).toBeVisible({ timeout: 120_000 });
+  await expect(reopened.getByPlaceholder('Label this word...').first()).toHaveValue('retained manual correction');
+  await reopened.getByRole('button', { name: 'Add Sample', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Discard audio draft' })).toHaveCount(0);
+  const withAudio = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${profile.body.id}`)).json();
+  const clip = withAudio.audio_clips[0];
+  const original = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${clip.id}`);
+  const originalHash = createHash('sha256').update(await original.body()).digest('hex');
+  expect(originalHash).toBe(record.fixture.sha256);
+  expect(clip.assets.original.sha256).toBe(originalHash);
+  expect(clip.phone_analyses.length).toBe(2);
+  expect(clip.segments[0].label).toBe('retained manual correction');
+  expect(clip.manual_source_analysis_id).toBe(clip.phone_analyses[0].id);
+  const prepared = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${clip.id}/analysis`);
+  for (const analysis of clip.phone_analyses) {
+    expect(analysis.originalSha256).toBe(originalHash);
+    verifyPhoneChunks(analysis.result, await prepared.body());
+  }
+  expect(withAudio.samples.find(sample => sample.audio_id === clip.id).ipa.length).toBeGreaterThan(0);
+  await reopened.getByRole('button', { name: 'Play audio', exact: true }).click();
+  await expect(reopened.getByRole('button', { name: 'Pause audio', exact: true })).toBeVisible();
+  await reopened.getByRole('button', { name: 'Pause audio', exact: true }).click();
+  record.checks.desktopAudioSaved = { originalHash, assets: clip.assets, phoneSegments: clip.segments.length, playback: true,
+    generatedAnalyses: clip.phone_analyses.length, manualCorrection: clip.segments[0].label, manualSourceAnalysisId: clip.manual_source_analysis_id };
+  record.checks.phoneAnnotations = { source: clip, passed: false };
+  expect(clip.transcriptions.length).toBe(2);
+  for (const analysis of clip.transcriptions) {
+    expect(analysis.originalSha256).toBe(originalHash);
+    verifyTranscription(analysis.result, await prepared.body(), record.whisperFiles);
+  }
+  record.checks.transcriptionAnnotations = { source: clip, passed: false };
+  await reopened.getByTitle('Back to profiles', { exact: true }).click();
+  await reopened.getByRole('button').filter({ has: reopened.getByText('Native practice', { exact: true }) }).click();
+  const recoveredNumber = reopened.locator('[data-challenge="number-0"]');
+  await expect(recoveredNumber.getByRole('textbox')).toHaveValue('unfinished number');
+  await expect(recoveredNumber.getByRole('status')).toContainText('Not matched');
+  await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
+  const sandboxRestored = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
+  const recoveredProposal = sandboxRestored.ai_history?.find(message => message.task === 'conlangGeneration');
+  expect(recoveredProposal?.state).toBe('complete');
+  expect(recoveredProposal?.model).toBe('fixture-model');
+  record.checks.desktopAIHistoryRecovered = { state: recoveredProposal.state, task: recoveredProposal.task, fixtureGeneration: true };
+  expect(sandboxRestored.sandbox_session).toEqual(sandboxBeforeClose);
+  await recoveredNumber.getByRole('textbox').fill('1'); await recoveredNumber.getByRole('button', { name: 'Check', exact: true }).click();
+  await expect(reopened.getByText('Saved', { exact: true })).toBeVisible();
+  const sandboxSaved = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${sandboxProfile.body.id}`)).json();
+  expect(sandboxSaved.dictionary).toHaveLength(1); expect(sandboxSaved.sandbox_session.events).toHaveLength(3);
+  record.checks.desktopSandboxRecovered = { sameSession: sandboxRestored.sandbox_session.id === sandboxBeforeClose.id,
+    restoredEvents: sandboxRestored.sandbox_session.events.length, afterRetryEvents: sandboxSaved.sandbox_session.events.length,
+    dictionaryEntries: sandboxSaved.dictionary.length, fixtureGeneration: true };
+  expect(sandboxSaved.dictionary[0]).toMatchObject({ confidence: null, user_asserted_confidence: null });
+  expect(sandboxSaved.metric_snapshots.at(-1).counts).toMatchObject({ assertedEntries: 1, ratedEntries: 0, mappings1To20: 1 });
+  await reopened.locator('[data-tour="dashboard"]').click();
+  await expect(reopened.getByText('Saved metric history', { exact: true })).toBeVisible();
+  await expect(reopened.getByText('Tested linguistic hypotheses: unavailable')).toBeVisible();
+  record.checks.desktopEvidenceMetrics = { unratedAssertion: true, historyVisible: true, latestSnapshot: sandboxSaved.metric_snapshots.at(-1) };
+  await reopened.getByTitle('Back to profiles', { exact: true }).click();
+  await reopened.getByRole('button').filter({ has: reopened.getByText('Native compiler practice', { exact: true }) }).click();
+  const compilerRecovered = reopened.locator('[data-compiler-challenge="c-0"]');
+  await expect(compilerRecovered.getByRole('textbox')).toHaveValue('unfinished compiler answer');
+  await expect(compilerRecovered.getByRole('status')).toContainText('Not matched');
+  const compilerAfterRestart = await (await desktopRequest(reopened).get(`${newOrigin}/api/compiler/${compilerProfile.body.id}`)).json();
+  expect(compilerAfterRestart).toEqual(compilerBeforeClose);
+  await reopened.locator('[data-compiler-challenge="c-1"]').getByRole('button', { name: 'Reveal translation' }).click();
+  await expect(reopened.locator('[data-compiler-challenge="c-1"]').getByRole('status')).toContainText('Revealed:');
+  const compilerSaved = await (await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${compilerProfile.body.id}`)).json();
+  const compilerView = await (await desktopRequest(reopened).get(`${newOrigin}/api/compiler/${compilerProfile.body.id}`)).json();
+  expect(compilerView.feedback.filter(f => f.answer)).toHaveLength(1);
+  record.checks.compilerPractice = { passed: true, version: compilerView.version, observations: compilerView.observations.length,
+    challenges: compilerView.challenges.length, sameSessionAfterRelaunch: true, draftRecovered: true, reveals: 1 };
+  const lexicalWord = (id, alien_word, english_meaning, extra = {}) => ({ id, alien_word, english_meaning,
+    part_of_speech: 'noun', confidence: null, context: '', examples: [], notes: '', created_at: '2026-09-21T00:00:00.000Z', ...extra });
+  const lexicalResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native Unicode lexicon', lexical_policy: { caseSensitive: true, apostrophes: 'internal', hyphens: 'internal', segmentation: 'whitespace' },
+    dictionary: [lexicalWord('water', '水', 'water', { form_aliases: ['水水'], senses: [{ meaning: 'water', aliases: ['aqua'] }] }),
+      lexicalWord('tamil', 'தமிழ்', 'Tamil'), lexicalWord('coffee', 'café', 'coffee'), lexicalWord('river', 'Tal', 'river'), lexicalWord('sky', 'Tal', 'sky')],
+  } });
+  expect(lexicalResponse.status()).toBe(201);
+  const lexicalProfile = await lexicalResponse.json();
+  await reopened.getByTitle('Back to profiles', { exact: true }).click();
+  await reopened.getByRole('button').filter({ has: reopened.getByText(lexicalProfile.name, { exact: true }) }).click();
+  await reopened.locator('[data-tour="translation"]').click();
+  await reopened.getByPlaceholder('Enter unknown language text to translate…').fill('水 தமிழ் cafe\u0301 Tal tal!');
+  await expect(reopened.getByTestId('lexical-translation')).toHaveText('water Tamil coffee ⟦river | sky⟧ [tal]!');
+  await reopened.getByRole('button', { name: 'English → Alien', exact: true }).click();
+  await reopened.getByPlaceholder('Type English text…').fill('aqua');
+  await reopened.getByRole('button', { name: 'Translate', exact: true }).click();
+  await expect(reopened.getByTestId('reverse-translation')).toHaveText('水');
+  record.checks.unicodeLexicon = { passed: true, scripts: ['Han', 'Tamil', 'Latin decomposed accent'],
+    casePolicy: true, competingHomographs: true, explicitReverseAlias: true };
+  const grammarRule = (id, executable) => ({ id, executable, rule: 'Manually supplied acceptance rule', evidence: [], confidence: null, created_at: '2026-09-21T00:00:00.000Z' });
+  const grammarResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native typed grammar', dictionary: [lexicalWord('speaker', 'ka', 'I', { part_of_speech: 'pronoun' }),
+      lexicalWord('star', 'nesh', 'star'), lexicalWord('see', 'lor', 'to see', { part_of_speech: 'verb', verb_frame: 'transitive' })],
+    grammar_rules: [grammarRule('sov', { kind: 'clause-order', order: 'SOV', arguments: 2 }), grammarRule('plural', { kind: 'plural-affix', position: 'suffix', affix: '-en' }),
+      grammarRule('past', { kind: 'tense-affix', position: 'prefix', affix: 'pa-', tense: 'past' }), grammarRule('not', { kind: 'negation', marker: 'ix', position: 'before' })],
+  } });
+  expect(grammarResponse.status()).toBe(201);
+  const grammarProfile = await grammarResponse.json();
+  await reopened.getByTitle('Back to profiles', { exact: true }).click();
+  await reopened.getByRole('button').filter({ has: reopened.getByText(grammarProfile.name, { exact: true }) }).click();
+  await reopened.locator('[data-tour="translation"]').click();
+  await reopened.getByPlaceholder('Enter unknown language text to translate…').fill('ka nesh-en ix pa-lor');
+  const symbolic = reopened.getByRole('region', { name: 'Symbolic translation', exact: true });
+  await symbolic.getByRole('button', { name: 'Analyze symbolically' }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('I did not see the stars');
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('plural-affix: “-en” [7, 10)');
+  await symbolic.getByText('Reverse generation from this meaning · resolved', { exact: true }).click();
+  await expect(symbolic.getByTestId('symbolic-result')).toContainText('ka nesh-en ix pa-lor');
+  record.checks.typedGrammar = { passed: true, novelPlural: true, sovRoles: true, negation: true, pastAffix: true, sourceSpans: true, reverseGeneration: true };
+  const inductionAt = '2026-09-22T00:00:00.000Z';
+  const inductionSources = ['nesh', 'nesh-en', 'kor', 'kor-en', 'tal-en'];
+  const inductionResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native grounded induction', dictionary: [lexicalWord('ind-star','nesh','star'),lexicalWord('ind-stone','kor','stone'),lexicalWord('ind-bird','tal','bird')],
+    samples: inductionSources.map((surface,i)=>({id:'ind-sample-'+i,alien_text:surface,english_translation:null,source:'Grounded acceptance fixture',phonetic_notes:'',decoded:false,audio_id:null,ipa:null,created_at:inductionAt})),
+  } });
+  expect(inductionResponse.status()).toBe(201);
+  const inductionInitial = await inductionResponse.json();
+  await reopened.getByTitle('Back to profiles', { exact:true }).click();
+  await reopened.getByRole('button').filter({has:reopened.getByText(inductionInitial.name,{exact:true})}).click();
+  await reopened.locator('[data-tour="grammar"]').click();
+  const learning = reopened.getByRole('region',{name:'Grounded rule learning'});
+  await learning.getByText('Assign a known meaning',{exact:true}).click();
+  for(let i=0;i<5;i++) {
+    await learning.getByLabel('Grounded sample',{exact:true}).selectOption('ind-sample-'+i);
+    await learning.getByLabel('Observation use',{exact:true}).selectOption(i===4?'validation':'fit');
+    await learning.getByLabel('Subject or noun',{exact:true}).selectOption(i===4?'ind-bird':i<2?'ind-star':'ind-stone');
+    await learning.getByLabel('Grounded plural',{exact:true}).setChecked(i===1||i===3||i===4);
+    await learning.getByRole('button',{name:'Add grounded observation',exact:true}).click();
+  }
+  await learning.getByRole('button',{name:'Infer grounded rules',exact:true}).click();
+  await expect(learning.getByTestId('induction-result')).toContainText('Validation: 1/1 correct; no-rule baseline 0/1.');
+  expect((await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${inductionInitial.id}`)).json()).grammar_rules).toHaveLength(0);
+  await learning.getByRole('button',{name:'Accept proposed rules',exact:true}).click();
+  await expect.poll(async()=> (await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${inductionInitial.id}`)).json()).grammar_rules.length).toBe(1);
+  const inductionProfile = await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${inductionInitial.id}`)).json();
+  expect(inductionProfile.grammar_rules[0].executable).toEqual({kind:'plural-affix',position:'suffix',affix:'-en'});
+  expect(inductionProfile.grammar_rules[0].evidence.join(' ')).toContain('grounded-induction-1');
+  await reopened.locator('[data-tour="translation"]').click();
+  await reopened.getByPlaceholder('Enter unknown language text to translate…').fill('tal-en');
+  await symbolic.getByRole('button',{name:'Analyze symbolically'}).click();
+  await expect(symbolic).toContainText('the birds');
+  record.checks.groundedInduction = { passed:true, workerExecuted:true, independentValidation:true, explicitAcceptance:true, acceptedRuleExecuted:true };
+  const numberResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native number composition', number_system: { base: null, mappings: { 1:'ra', 2:'ru', 3:'ri', 5:'ka', 6:'ka ra', 7:'ka ru' }, operators: {} },
+  } });
+  expect(numberResponse.status()).toBe(201); const numberInitial = await numberResponse.json();
+  await reopened.getByTitle('Back to profiles', { exact:true }).click();
+  await reopened.getByRole('button').filter({has:reopened.getByText(numberInitial.name,{exact:true})}).click();
+  await reopened.locator('[data-tour="numbers"]').click();
+  const numbers = reopened.getByRole('region',{name:'Number grammar inference',exact:true});
+  await numbers.getByRole('button',{name:'Infer number grammar',exact:true}).click();
+  await expect(numbers.getByTestId('number-inference-result')).toContainText('ambiguous');
+  const numberQuestion = numbers.getByRole('region',{name:'Number question',exact:true});
+  await expect(numberQuestion).toContainText('Next useful observation: 10');
+  await numberQuestion.getByLabel('Observed number answer').fill('ru ka');
+  await numberQuestion.getByRole('button',{name:'Save answer as validation'}).click();
+  await expect(numbers).toContainText('previous predictions are stale');
+  await expect.poll(async()=> (await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${numberInitial.id}`)).json()).number_system.validation_values).toEqual([10]);
+  await numbers.getByRole('button',{name:'Infer number grammar',exact:true}).click();
+  const numberPrediction = numbers.getByRole('region',{name:'Number prediction',exact:true});
+  await expect(numberPrediction).toContainText('All leading grammars agree');
+  await expect(numberPrediction).toContainText('ru ka ri');
+  await numberPrediction.getByText('Composition tree',{exact:true}).click(); await expect(numberPrediction).toContainText('×');
+  await numbers.getByRole('button',{name:'Record candidate as research hypothesis'}).click();
+  await expect.poll(async()=> (await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${numberInitial.id}`)).json()).research.hypotheses.length).toBe(1);
+  const numberProfile = await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${numberInitial.id}`)).json();
+  expect(numberProfile.number_system.base).toBeNull(); expect(numberProfile.number_system.mappings[13]).toBeUndefined();
+  record.checks.numberGrammar = { passed:true, workerExecuted:true, ambiguityRetained:true, discriminatingQuestion:true, validationPersisted:true, withheldPrediction:true, compositionTree:true };
+  const researchResponse = await desktopRequest(reopened).post(`${newOrigin}/api/profiles`, { data: {
+    name: 'Native research evidence', dictionary: [lexicalWord('research-word', 'tal', 'sky')],
+  } });
+  expect(researchResponse.status()).toBe(201); const researchInitial = await researchResponse.json();
+  const readResearch = async () => (await(await desktopRequest(reopened).get(`${newOrigin}/api/profiles/${researchInitial.id}`)).json());
+  await reopened.getByTitle('Back to profiles', { exact:true }).click();
+  await reopened.getByRole('button').filter({has:reopened.getByText(researchInitial.name,{exact:true})}).click();
+  await reopened.locator('[data-tour="dashboard"]').click();
+  const researchPanel = reopened.getByRole('region',{name:'Research evidence',exact:true});
+  await researchPanel.getByLabel('Original observation',{exact:true}).fill('tal');
+  await researchPanel.getByLabel('Source context').fill('Native acceptance capture');
+  await researchPanel.getByRole('button',{name:'Capture observation',exact:true}).click();
+  await expect.poll(async()=> (await readResearch()).research.observations.length).toBe(1);
+  await researchPanel.getByLabel('Assertion to investigate').selectOption('research-word');
+  await researchPanel.getByRole('button',{name:'Propose hypothesis',exact:true}).click();
+  const researchHypothesis = researchPanel.getByLabel('Hypothesis tal → sky',{exact:true});
+  await researchHypothesis.getByLabel('Evidence observation for tal → sky').selectOption({label:'tal'});
+  await researchHypothesis.getByRole('button',{name:'Link evidence',exact:true}).click();
+  await expect.poll(async()=> (await readResearch()).research.links.length).toBe(1);
+  await researchHypothesis.getByLabel('Relationship',{exact:true}).selectOption('contradicts');
+  await researchHypothesis.getByRole('button',{name:'Link evidence',exact:true}).click();
+  await expect.poll(async()=> (await readResearch()).research.links.length).toBe(2);
+  await expect(researchHypothesis).toContainText('Support 1 · Contradiction 1');
+  await reopened.locator('[data-tour="translation"]').click();
+  await reopened.getByPlaceholder('Enter unknown language text to translate…').fill('tal');
+  await symbolic.getByRole('button',{name:'Analyze symbolically'}).click();
+  await symbolic.getByRole('button',{name:'Save derivation to research'}).click();
+  await expect.poll(async()=> (await readResearch()).research.analyses.length).toBe(1);
+  await reopened.locator('[data-tour="dashboard"]').click();
+  const researchObservation = researchPanel.getByLabel('Observation tal',{exact:true});
+  await researchObservation.locator('summary').click();
+  await researchObservation.getByLabel('Revised interpretation').fill('water instead of sky');
+  await researchObservation.getByRole('button',{name:'Append interpretation'}).click();
+  await expect.poll(async()=> (await readResearch()).research.annotations.length).toBe(1);
+  await expect(researchHypothesis.locator('summary').first()).toContainText('invalidated');
+  await expect(researchPanel).toContainText('tal · resolved · stale');
+  const researchProfile = await readResearch();
+  expect(researchProfile.research.observations[0].text).toBe('tal');
+  record.checks.researchEvidence = { passed:true, immutableCapture:true, contradictionVisible:true, derivationRetained:true, correctionInvalidates:true };
+  // Export response bytes can arrive before the exclusive staging cleanup finishes.
+  await reopened.exposeFunction('waitForArchiveCleanup', async () => { await expect.poll(() => readdir(path.join(dir,'data','archive-staging'))).toEqual([]); });
+  const archiveChecks = [];
+  for (const sourceProfile of [withAudio, sandboxSaved, compilerSaved, lexicalProfile, grammarProfile, inductionProfile, numberProfile, researchProfile, longRecovered]) {
+    const restored = await reopened.evaluate(async source => {
+      const exported = await fetch(`/api/archives/export/${source.id}?revision=${source.revision}&sandbox=true`);
+      if (!exported.ok) throw new Error(`Archive export failed: ${exported.status}`);
+      const bytes = await exported.arrayBuffer();
+      await window.waitForArchiveCleanup();
+      const inspected = await fetch('/api/archives/inspect', { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: bytes });
+      if (!inspected.ok) throw new Error(`Archive inspection failed: ${inspected.status}`);
+      const preview = await inspected.json();
+      const committed = await fetch(`/api/archives/${preview.token}/restore`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode: 'new' }) });
+      if (!committed.ok) throw new Error(`Archive restore failed: ${committed.status}`);
+      return { bytes: bytes.byteLength, preview, ...(await committed.json()) };
+    }, sourceProfile);
+    expect(restored.profile.id).not.toBe(sourceProfile.id);
+    expect(restored.profile.metric_snapshots).toEqual(sourceProfile.metric_snapshots);
+    expect(restored.profile.ai_history?.map(item => item.content)).toEqual(sourceProfile.ai_history?.map(item => item.content));
+    if (sourceProfile.sandbox_session) {
+      expect(restored.profile.sandbox_session.challenges).toEqual(sourceProfile.sandbox_session.challenges);
+      expect(restored.profile.sandbox_session.events.map(({ id: _id, ...event }) => event)).toEqual(sourceProfile.sandbox_session.events.map(({ id: _id, ...event }) => event));
+    }
+    if (sourceProfile.compiler_session_id) {
+      const restoredCompiler = await (await desktopRequest(reopened).get(`${newOrigin}/api/compiler/${restored.profile.id}`)).json();
+      expect(restoredCompiler.sessionId).not.toBe(compilerView.sessionId);
+      expect(restoredCompiler.challenges).toEqual(compilerView.challenges);
+      expect(restoredCompiler.observations).toEqual(compilerView.observations);
+      expect(restoredCompiler.feedback).toEqual(compilerView.feedback);
+      record.checks.compilerPractice.archiveRestored = true;
+    }
+    if (sourceProfile.id === lexicalProfile.id) {
+      expect(restored.profile.lexical_policy).toEqual(lexicalProfile.lexical_policy);
+      expect(restored.profile.dictionary.map(({ id: _id, ...entry }) => entry)).toEqual(lexicalProfile.dictionary.map(({ id: _id, ...entry }) => entry));
+      record.checks.unicodeLexicon.archiveRestored = true;
+    }
+    if (sourceProfile.id === grammarProfile.id) {
+      expect(restored.profile.grammar_rules.map(({ id: _id, ...rule }) => rule)).toEqual(grammarProfile.grammar_rules.map(({ id: _id, ...rule }) => rule));
+      expect(restored.profile.dictionary.map(({ id: _id, ...entry }) => entry)).toEqual(grammarProfile.dictionary.map(({ id: _id, ...entry }) => entry));
+      record.checks.typedGrammar.archiveRestored = true;
+    }
+    if(sourceProfile.id===inductionProfile.id) {
+      expect(restored.profile.grammar_rules.map(({id:_id,...rule})=>rule)).toEqual(inductionProfile.grammar_rules.map(({id:_id,...rule})=>rule));
+      record.checks.groundedInduction.archiveRestored=true;
+    }
+    if(sourceProfile.id===researchProfile.id) {
+      const restoredResearch = restored.profile.research;
+      expect(restoredResearch.observations[0].text).toBe('tal');
+      expect(restoredResearch.annotations[0].observation_id).toBe(restoredResearch.observations[0].id);
+      expect(restoredResearch.links[0].hypothesis_id).toBe(restoredResearch.hypotheses[0].id);
+      expect(restoredResearch.analyses[0].result.candidates[0].steps[0].entryId).toBe(restored.profile.dictionary[0].id);
+      record.checks.researchEvidence.archiveRestored=true;
+    }
+    if(sourceProfile.id===numberProfile.id) {
+      expect(restored.profile.number_system).toEqual(numberProfile.number_system);
+      record.checks.numberGrammar.archiveRestored=true;
+    }
+    let restoredAudioHash;
+    if (sourceProfile.audio_clips.length) {
+      const restoredClip = restored.profile.audio_clips[0];
+      expect(restoredClip.phone_analyses).toEqual(sourceProfile.audio_clips[0].phone_analyses);
+      expect(restoredClip.manual_source_analysis_id).toBe(sourceProfile.audio_clips[0].manual_source_analysis_id);
+      expect(restoredClip.segments.map(({ id: _id, ...segment }) => segment)).toEqual(sourceProfile.audio_clips[0].segments.map(({ id: _id, ...segment }) => segment));
+      expect(restoredClip.transcriptions).toEqual(sourceProfile.audio_clips[0].transcriptions);
+      expect(restoredClip.manual_source_transcription_id).toBe(sourceProfile.audio_clips[0].manual_source_transcription_id);
+      if (sourceProfile.id === longProfile.id) {
+        record.checks.longAudio.restored = restoredClip;
+        record.checks.longAudio.passed = true;
+      } else {
+        record.checks.phoneAnnotations.restored = restoredClip;
+        record.checks.phoneAnnotations.passed = true;
+        record.checks.transcriptionAnnotations.restored = restoredClip;
+        record.checks.transcriptionAnnotations.passed = true;
+      }
+      expect(restored.profile.samples.some(sample => sample.audio_id === restoredClip.id)).toBe(true);
+      const response = await desktopRequest(reopened).get(`${newOrigin}/api/audio/${restoredClip.id}`);
+      restoredAudioHash = createHash('sha256').update(await response.body()).digest('hex');
+      expect(restoredAudioHash).toBe(sourceProfile.audio_clips[0].assets.original.sha256);
+      expect(restoredClip.assets).toEqual(sourceProfile.audio_clips[0].assets);
+    }
+    archiveChecks.push({ bytes: restored.bytes, counts: restored.preview.counts, sandboxIncluded: true, restoredAudioHash });
+  }
+  record.checks.portableArchives = { passed: true, projects: archiveChecks };
+  record.restart = { firstOrigin: origin, secondOrigin: newOrigin, revision: afterRestart.revision };
+  if (args.includes('--negative-model')) {
+    // Only an explicitly requested, isolated temporary acceptance build may be modified.
+    const temporaryRelative = path.relative(await realpath(os.tmpdir()), resolved);
+    if (!/^xeno-acceptance-[^\\/]+[\\/]/.test(temporaryRelative)) throw new Error('Negative model test requires an xeno-acceptance-* build under the system temp directory');
+    await app.close(); app = undefined;
+    await expect.poll(async () => { try { await fetch(`${newOrigin}/api/health`, { signal: AbortSignal.timeout(500) }); return false; } catch { return true; } }).toBe(true);
+    const model = path.join(resources, 'ipa-model/wav2vec2-phoneme/onnx/model.onnx');
+    const hidden = `${model}.${token}.negative-test`;
+    await rename(model, hidden);
+    hiddenModel = { model, hidden };
+    app = await electron.launch({ executablePath: resolved, cwd: dir, args: [`--xeno-test-user-data=${dir}`], env: launchEnv, timeout: 40_000 });
+    const negativePage = await app.firstWindow();
+    await negativePage.waitForURL(/http:\/\/127\.0\.0\.1:\d+/);
+    const negativeOrigin = new URL(negativePage.url()).origin;
+    const negative = await desktopRequest(negativePage).post(`${negativeOrigin}/api/ipa`, { data: { audio: wav.toString('base64') } });
+    record.checks.missingModel = { status: negative.status(), body: await negative.json() };
+    expect(record.checks.missingModel.status).toBe(503);
+    expect(record.checks.missingModel.body.code).toBe('IPA_MODEL_MISSING');
+    await app.close(); app = undefined;
+    await rename(hiddenModel.hidden, model); hiddenModel = undefined;
+  }
+  if (app) { await app.close(); app = undefined; }
+  record.checks.desktopRecovery = await verifyDesktopRecovery(resolved, wav);
+  record.acceptancePassed = record.checks.desktopRecovery.passed && record.checks.ipa.status === 200 && record.checks.stt.status === 200 && record.checks.tts.status === 200
+    && record.checks.wavUpload.status === 200 && record.checks.sampleSave.status === 200
+    && record.checks.sampleOnDisk && record.checks.loadedWorkbench
+    && record.checks.pendingSaveRecovered && record.checks.desktopDraftRecovered && record.checks.portableArchives?.passed
+    && record.checks.groundedInduction?.passed && record.checks.groundedInduction?.archiveRestored
+    && record.checks.researchEvidence?.passed && record.checks.researchEvidence?.archiveRestored
+    && record.checks.numberGrammar?.passed && record.checks.numberGrammar?.archiveRestored
+    && record.checks.typedGrammar?.passed && record.checks.typedGrammar?.archiveRestored
+    && record.checks.unicodeLexicon?.passed && record.checks.unicodeLexicon?.archiveRestored
+    && record.checks.compilerPractice?.passed && record.checks.compilerPractice?.archiveRestored
+    && record.checks.nativeJobCancellation?.nativeProcessStarted && record.checks.localBoundary?.relaunchAuthenticated && record.checks.desktopEvidenceMetrics?.historyVisible && record.checks.desktopAudioDraftRecovered && record.checks.desktopAudioSaved?.playback && record.checks.desktopSandboxRecovered?.sameSession;
+  if (!record.acceptancePassed) process.exitCode = 1;
+} catch (error) {
+  record.failure = { message: error.message, stack: error.stack };
+  record.acceptancePassed = false;
+  process.exitCode = 1;
+} finally {
+  // Release the isolated process even if a failure preceded the dialog override.
+  if (app) await app.evaluate(({ dialog }) => { dialog.showMessageBox = async () => ({ response: 1, checkboxChecked: false }); }).catch(() => {});
+  try { await app?.close(); }
+  finally {
+    try { if (hiddenModel) await rename(hiddenModel.hidden, hiddenModel.model); }
+    finally { await saveRecord(reportFile, record); }
+  }
+}

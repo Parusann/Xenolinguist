@@ -1,0 +1,67 @@
+{
+  "measuredAt": "2026-09-10T23:56:03.577Z",
+  "baselineRevision": "6345a0650bd0d048fdddbdc480a3cc848178db19",
+  "fixture": {
+    "bytes": 110286,
+    "sha256": "f8b19f8adee6e4f47abb443ce781fff076281430380e50f30709b7f59d2a5c18"
+  },
+  "artifact": {
+    "executable": {
+      "bytes": 231522816,
+      "sha256": "8712f32dc43aefb970886d85977c4e19f800d60d1c406c7eb9b538f42236a846"
+    },
+    "appArchive": {
+      "bytes": 1574438,
+      "sha256": "be4348f76e47f336d990c900543a7e510a748d12cc7d99f2db7b051c09814bd7"
+    }
+  },
+  "runtime": {
+    "node": "24.15.0",
+    "electron": "42.3.3",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "concurrency": {
+    "acknowledged-edit-lost": 10
+  },
+  "browser": {
+    "passingChecks": 2,
+    "expectedFailures": 4
+  },
+  "native": {
+    "ipaStatus": 503,
+    "diagnosticCode": "ERR_MODULE_NOT_FOUND",
+    "sttStatus": 200,
+    "wavUploadStatus": 200,
+    "sampleSaveStatus": 200,
+    "sampleOnDisk": true,
+    "loadedWorkbench": true
+  },
+  "modelFiles": [
+    {
+      "file": "wav2vec2-phoneme/config.json",
+      "bytes": 2069,
+      "sha256": "f23a4e0a1d7d39ca4133021aebaaaaaac0ce81e9084aab972b24e19642fe8391"
+    },
+    {
+      "file": "wav2vec2-phoneme/onnx/model.onnx",
+      "bytes": 317482069,
+      "sha256": "8c4299744f0b7998c4fdc53438fa76835eaf9f9c6657e713f89a01aa56b44935"
+    },
+    {
+      "file": "wav2vec2-phoneme/preprocessor_config.json",
+      "bytes": 214,
+      "sha256": "60ca5a31e13f69ee2fbf147504c8676db5f6398fd7a6b12294341dff838edfcf"
+    },
+    {
+      "file": "wav2vec2-phoneme/tokenizer_config.json",
+      "bytes": 6780,
+      "sha256": "8ec4656ec960b1d077d88b98b17b4096ce4a035f39d64dbfcbf17ec5cd2cad89"
+    },
+    {
+      "file": "wav2vec2-phoneme/tokenizer.json",
+      "bytes": 1336,
+      "sha256": "994013f078669204cf10001d7ce150a7973cb4510b14b7d4aacae20051b92799"
+    }
+  ]
+}

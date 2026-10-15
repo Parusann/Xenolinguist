@@ -5,6 +5,7 @@ import './index.css'
 import App from './App'
 import { ToastProvider } from './stores/toast-context'
 import { UndoProvider } from './stores/undo-context'
+import './stores/save-runtime'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

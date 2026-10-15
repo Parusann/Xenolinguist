@@ -1,0 +1,22 @@
+import { test,expect,preparePage,openProfile } from './fixtures';
+import { largeProfile } from '../performance/large-profile';
+test('W24 paginates records and preserves keyboard selection and filtered results',async({page,server})=>{
+  await preparePage(page);const response=await page.request.post(`${server.url}/api/profiles`,{data:largeProfile(125)});expect(response.ok()).toBe(true);const profile=await response.json();
+  const fetched:string[]=[];page.on('request',r=>{if(/\/api\/profiles\/[^/?]+$/.test(r.url()))fetched.push(r.url());});
+  await page.goto(`${server.url}/app`);await expect(page.getByText(profile.name,{exact:true})).toBeVisible();expect(fetched).toEqual([]);
+  await openProfile(page,server.url,profile.name);await expect(page.locator('.sample-open')).toHaveCount(50);
+  await page.getByRole('button',{name:'Next samples',exact:true}).focus();await page.keyboard.press('Enter');
+  await expect(page.locator('.sample-open').first()).toHaveText('tal50');await page.locator('.sample-open').first().focus();await page.keyboard.press('Enter');
+  await expect(page.getByTestId('sample-lexical-tokens')).toBeVisible();
+  await page.getByRole('button',{name:'Vocabulary',exact:true}).focus();await page.keyboard.press('Enter');
+  await expect(page.getByRole('navigation',{name:'words pages'})).toContainText('Page 1 of 3');
+  await page.getByRole('button',{name:'Next words',exact:true}).click();await expect(page.getByRole('navigation',{name:'words pages'})).toContainText('Page 2 of 3');
+  await page.getByLabel('Search dictionary',{exact:true}).fill('tal124');
+  await expect(page.getByRole('navigation',{name:'words pages'})).toHaveCount(0);
+  await page.getByRole('button',{name:'tal124',exact:true}).focus();await page.keyboard.press('Enter');
+  await expect(page.getByRole('button',{name:'Edit',exact:true})).toBeVisible();
+  await page.getByLabel('Search dictionary',{exact:true}).press('Control+k');
+  const command=page.getByRole('combobox',{name:'Search commands, words, samples'});await expect(command).toBeFocused();
+  await page.keyboard.press('Tab');await expect(command).toBeFocused();await page.keyboard.press('Escape');
+  await expect(page.getByLabel('Search dictionary',{exact:true})).toBeFocused();
+});

@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "72ee9916e60d5eaa235e675addf380ee367555c1",
+  "scope": "W22 first unit: bounded query construction, competing predictions and uniform disagreement/cost selection; no workbench integration or learning-curve result.",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "72ee9916e60d5eaa235e675addf380ee367555c1",
+    "jobs": [
+      {
+        "completedAt": "2026-09-27T23:30:27Z",
+        "conclusion": "success",
+        "databaseId": 108730922022,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-09-27T23:23:19Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36358519348/job/108730922022"
+      },
+      {
+        "completedAt": "2026-09-27T23:29:28Z",
+        "conclusion": "success",
+        "databaseId": 108730922123,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-09-27T23:23:19Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36358519348/job/108730922123"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36358519348"
+  },
+  "sourceChecks": {
+    "unitTests": 413,
+    "serverSharedEngineEvaluationTests": 382,
+    "clientTests": 31,
+    "newElicitationCases": 15,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-09-27T23:25:26.621Z",
+        "duration": 225014.386,
+        "expected": 40,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-27T23:29:13.341Z",
+        "duration": 9974.856,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "9ca823b4813fd7d9073cd78a03749d34b13273c2a6567f8c6c740c0e377ade19"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "7d31204d7e7eaa2f319e63b0851a858b07c31a4501ff2f6ab93779a14bc5fe9c"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "7d31204d7e7eaa2f319e63b0851a858b07c31a4501ff2f6ab93779a14bc5fe9c"
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 154631,
+        "sha256": "ceb07eda1d927ad369834d00b477f8c13450ad9596547c674c035c67ebfce765"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-09-27T23:27:30.847Z",
+        "duration": 158432.248,
+        "expected": 40,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-27T23:30:11.038Z",
+        "duration": 8135.298,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "9d06a27a2e9aff55b50b228ed219e2a4ee73d9114909476e9aa281d1e802aa49"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "1647dc53f790dfd62d7bd3026a45fea4a73ca07f247fbb241eee8a2cc52ddcd8"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "1647dc53f790dfd62d7bd3026a45fea4a73ca07f247fbb241eee8a2cc52ddcd8"
+        }
+      },
+      "numberSummaryMatchesW19": true,
+      "log": {
+        "bytes": 124116,
+        "sha256": "424ded9df14c7e50a9d1582bfdbf0a68b5dcc58619384acd2e3bcbb32c53004d"
+      },
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "72ee9916e60d5eaa235e675addf380ee367555c1",
+    "jobs": [
+      {
+        "completedAt": "2026-09-27T23:26:53Z",
+        "conclusion": "success",
+        "databaseId": 108730922417,
+        "name": "build",
+        "startedAt": "2026-09-27T23:23:20Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36358519418/job/108730922417"
+      },
+      {
+        "completedAt": "2026-09-27T23:32:30Z",
+        "conclusion": "success",
+        "databaseId": 108731489425,
+        "name": "verify-clean",
+        "startedAt": "2026-09-27T23:26:55Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36358519418/job/108731489425"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36358519418"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-09-27T23:32:27.462Z",
+    "source": {
+      "revision": "72ee9916e60d5eaa235e675addf380ee367555c1",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "06556c6c503fa649a2f5039b911f458269a0356ee021bdaa171a639cccbc80bc"
+    },
+    "appArchive": {
+      "bytes": 2986361,
+      "sha256": "224dabcc984286a1d15e28e63f6caa32e14265a2667b04610d732fbf3983b224"
+    }
+  },
+  "installedChecks": {
+    "files": 3774,
+    "archives": 8,
+    "report": {
+      "bytes": 674240,
+      "sha256": "ddd6451f7e47112d49c2ff674b443abd92d2c4d2b9f1e0445d2606d2120ffa93"
+    }
+  },
+  "selectionExamples": {
+    "archive": {
+      "bytes": 22563,
+      "sha256": "8351185eecd4ec82f302faf7745222e92c7fb62136d907a71932fe0e975f6373"
+    },
+    "replay": {
+      "passed": true,
+      "records": 3,
+      "modelCalls": 0,
+      "scope": "Deterministic selection examples only"
+    }
+  },
+  "limits": [
+    "Uniform weights describe the supplied structurally distinct candidate set, not calibrated beliefs or all possible grammars.",
+    "Only explicitly available bounded questions can be selected. An unavailable prediction excludes a question rather than providing disagreement credit.",
+    "Existing W19 UI and published evaluations are unchanged. Durable selection/answer/decline records and workbench integration are pending.",
+    "Three deterministic examples and unit checks do not establish learning efficiency. Paired active/random/fixed-curriculum evaluation remains pending.",
+    "Installed acceptance verifies existing application regression flows; the new engine is covered by source unit tests and retained example replay.",
+    "Three gated native unit skips and four reviewed high native-chain audit entries remain.",
+    "No main merge, installer release or Pages deployment."
+  ]
+}

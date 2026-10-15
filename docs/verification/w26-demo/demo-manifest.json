@@ -1,0 +1,279 @@
+{
+  "version": "recruiter-demo-1",
+  "seed": 104729,
+  "corpusVersion": "elicitation-experiment-1",
+  "sourceRevision": "00a25d525dcc0c713b25ed244e391ad84e1454e8",
+  "corpusSha256": "5a31045f0eda146ddfc3a2074981a838eeedb5c5dee26edbebfdad691070da30",
+  "modelCalls": 0,
+  "inputBudget": {
+    "knownDictionaryEntries": 3,
+    "suppliedPluralHypotheses": 2,
+    "observedAnswers": 1
+  },
+  "observed": "s28t5x4s28t5x1",
+  "heldOutForm": "s28t5x4s28t5x2",
+  "expected": "the rocks",
+  "derivation": {
+    "status": "resolved",
+    "candidates": [
+      {
+        "tree": {
+          "kind": "nominal",
+          "nominal": {
+            "head": {
+              "entryId": "rock",
+              "sense": null,
+              "lemma": "rock",
+              "pos": "noun"
+            },
+            "plural": true,
+            "adjectives": []
+          }
+        },
+        "steps": [
+          {
+            "start": 7,
+            "end": 14,
+            "text": "s28t5x2",
+            "operation": "lexical stem",
+            "entryId": "rock",
+            "sense": null
+          },
+          {
+            "start": 0,
+            "end": 7,
+            "text": "s28t5x4",
+            "operation": "plural-affix",
+            "ruleId": "plural-0"
+          }
+        ],
+        "ruleIds": [
+          "plural-0"
+        ]
+      }
+    ],
+    "diagnostics": [],
+    "operations": 29
+  },
+  "project": {
+    "research": {
+      "observations": [
+        {
+          "id": "f3367f5e-e50c-4ec7-87fa-c2f9e2eac280",
+          "created_at": "2026-10-13T07:47:58.841Z",
+          "text": "s28t5x4s28t5x1",
+          "content_sha256": "2d0b52f3747c40f3b38ecdf86e3a79e7a1836151a5ebc8b2a4cd425f87d2c734",
+          "source": "Independent reserved corpus observation; only this requested answer was exposed.",
+          "origin": "capture",
+          "source_id": null,
+          "derived_from": [],
+          "audio": null
+        }
+      ],
+      "annotations": [
+        {
+          "id": "d63af921-b2ed-47dc-b202-e3da5adb40b6",
+          "created_at": "2026-10-13T07:47:58.841Z",
+          "observation_id": "f3367f5e-e50c-4ec7-87fa-c2f9e2eac280",
+          "revision": 1,
+          "interpretation": "{\"kind\":\"nominal\",\"nominal\":{\"adjectives\":[],\"head\":{\"entryId\":\"star\",\"lemma\":\"star\",\"pos\":\"noun\",\"sense\":null},\"plural\":true}}",
+          "supersedes": null,
+          "provenance": "user"
+        }
+      ],
+      "hypotheses": [],
+      "links": [],
+      "events": [],
+      "tests": [],
+      "analyses": [],
+      "metrics": []
+    },
+    "name": "Reserved language · 104729",
+    "description": "",
+    "phonetic_notes": "",
+    "is_sandbox": false,
+    "dictionary": [
+      {
+        "id": "star",
+        "alien_word": "s28t5x1",
+        "english_meaning": "star",
+        "part_of_speech": "noun",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-10-01T00:00:00.000Z"
+      },
+      {
+        "id": "rock",
+        "alien_word": "s28t5x2",
+        "english_meaning": "rock",
+        "part_of_speech": "noun",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-10-01T00:00:00.000Z"
+      },
+      {
+        "verb_frame": "transitive",
+        "id": "see",
+        "alien_word": "s28t5x3",
+        "english_meaning": "to see",
+        "part_of_speech": "verb",
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "context": "",
+        "examples": [],
+        "notes": "",
+        "created_at": "2026-10-01T00:00:00.000Z"
+      }
+    ],
+    "grammar_rules": [
+      {
+        "id": "plural-0",
+        "rule": "Plural prefix hypothesis",
+        "executable": {
+          "kind": "plural-affix",
+          "position": "prefix",
+          "affix": "s28t5x4"
+        },
+        "evidence": [],
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "created_at": "2026-10-10T00:00:00.000Z"
+      },
+      {
+        "id": "plural-1",
+        "rule": "Plural suffix hypothesis",
+        "executable": null,
+        "evidence": [],
+        "confidence": null,
+        "user_asserted_confidence": null,
+        "created_at": "2026-10-10T00:00:00.000Z"
+      }
+    ],
+    "number_system": {
+      "base": null,
+      "mappings": {},
+      "operators": {}
+    },
+    "samples": [],
+    "audio_clips": [],
+    "grammar_elicitation_history": [
+      {
+        "id": "1778119e-9cfe-4983-957c-524cdff2e707",
+        "request_id": "441c648e-3bcf-4b1f-9232-23a8e3ea6570",
+        "created_at": "2026-10-13T07:47:30.682Z",
+        "source_json": "{\"profile_id\":\"f18d9506-1132-44e0-9e6b-bcbc2e7d5767\",\"profile_revision\":0,\"setup\":{\"candidates\":[{\"id\":\"A\",\"rule_ids\":[\"plural-0\"]},{\"id\":\"B\",\"rule_ids\":[\"plural-1\"]}],\"anchors\":[{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"star\",\"sense\":null,\"lemma\":\"star\",\"pos\":\"noun\"},\"plural\":false,\"adjectives\":[]}}],\"available\":[{\"kind\":\"meaning\",\"meaning\":{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"star\",\"sense\":null,\"lemma\":\"star\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}},\"cost\":1}]},\"context\":{\"candidates\":[{\"id\":\"A\",\"rules\":[{\"kind\":\"plural-affix\",\"position\":\"prefix\",\"affix\":\"s28t5x4\"}]},{\"id\":\"B\",\"rules\":[{\"kind\":\"plural-affix\",\"position\":\"suffix\",\"affix\":\"s28t5x4\"}]}],\"dictionary\":[{\"id\":\"star\",\"alien_word\":\"s28t5x1\",\"english_meaning\":\"star\",\"part_of_speech\":\"noun\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"},{\"id\":\"rock\",\"alien_word\":\"s28t5x2\",\"english_meaning\":\"rock\",\"part_of_speech\":\"noun\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"},{\"verb_frame\":\"transitive\",\"id\":\"see\",\"alien_word\":\"s28t5x3\",\"english_meaning\":\"to see\",\"part_of_speech\":\"verb\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"}]},\"evidence\":[],\"declined\":[]}",
+        "source_sha256": "a93336ecf0bdf843e63f78ccafb8c7affd905990351f022df3bd5bee481a6c23",
+        "input_sha256": "b20059dc6efd6c500850cef80250e1d2258a458210ff7b4b3430d30309ed296e",
+        "report_json": "{\"version\":\"grammar-elicitation-session-1\",\"status\":\"selected\",\"reason\":\"Maximum uniform version-space disagreement per declared cost; not calibrated information gain.\",\"scores\":[{\"id\":\"A\",\"aliases\":[],\"matches\":0,\"contradictions\":0,\"unavailable\":0},{\"id\":\"B\",\"aliases\":[],\"matches\":0,\"contradictions\":0,\"unavailable\":0}],\"remaining\":[\"A\",\"B\"],\"evidenceCount\":0,\"considered\":1,\"eligible\":1,\"unavailable\":0,\"selection\":{\"meaning\":{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"star\",\"sense\":null,\"lemma\":\"star\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}},\"cost\":1,\"disagreementBits\":1,\"expectedRemaining\":1,\"groups\":[{\"form\":\"s28t5x1s28t5x4\",\"candidateIds\":[\"B\"]},{\"form\":\"s28t5x4s28t5x1\",\"candidateIds\":[\"A\"]}]}}",
+        "report_sha256": "48c7850678fb303721dc1091a27088f8e3e0c0338a61298b8ebb6cfa3dd4eab9",
+        "decision": {
+          "action": "answer",
+          "answer": "s28t5x4s28t5x1",
+          "reason": "Independent reserved corpus observation; only this requested answer was exposed.",
+          "mutation_id": "68627a67-7fc3-465c-83c0-ac71b6cd75e8",
+          "digest": "caaeba68fd440a4a8536c2b7cf37e883d11933b51014d007a4fb357016789586",
+          "created_at": "2026-10-13T07:47:58.841Z",
+          "applied_revision": 2,
+          "observation_id": "f3367f5e-e50c-4ec7-87fa-c2f9e2eac280",
+          "after_json": "{\"version\":\"grammar-elicitation-session-1\",\"status\":\"none\",\"reason\":\"No fully predicted disagreement in the supplied available query set. This does not establish equivalent hypotheses.\",\"scores\":[{\"id\":\"A\",\"aliases\":[],\"matches\":1,\"contradictions\":0,\"unavailable\":0},{\"id\":\"B\",\"aliases\":[],\"matches\":0,\"contradictions\":1,\"unavailable\":0}],\"remaining\":[\"A\"],\"evidenceCount\":1,\"considered\":0,\"eligible\":0,\"unavailable\":0,\"selection\":null}",
+          "after_sha256": "06e01d8beb893d60779e6bd77f75db70e8f9ce107f8dd193ad52c99864787bb3"
+        },
+        "context_sha256": "350e02d3f337c505eb18b04ae519b2407d5093b00fe8a4d2eae735318d1662c9",
+        "request_sha256": "6ddd243644c4d00497a50ec775859da9934bec0671e73111e3d5beb891633893"
+      }
+    ],
+    "metric_snapshots": [
+      {
+        "version": 1,
+        "revision": 0,
+        "recorded_at": "2026-10-13T07:46:46.984Z",
+        "counts": {
+          "observations": 0,
+          "assertedEntries": 3,
+          "grammarNotes": 2,
+          "competingForms": 0,
+          "mappings1To20": 0,
+          "ratedEntries": 0
+        }
+      }
+    ],
+    "id": "f18d9506-1132-44e0-9e6b-bcbc2e7d5767",
+    "created_at": "2026-10-13T07:46:46.984Z",
+    "updated_at": "2026-10-13T07:48:13.647Z",
+    "schema_version": 3,
+    "revision": 3,
+    "recent_mutations": [
+      {
+        "id": "68627a67-7fc3-465c-83c0-ac71b6cd75e8",
+        "digest": "caaeba68fd440a4a8536c2b7cf37e883d11933b51014d007a4fb357016789586",
+        "revision": 2
+      },
+      {
+        "id": "94866eab-673b-425d-ad9f-0dcb8d828096",
+        "digest": "819d6164816ae2076664251a3f81b0a70557054de8cb276bc1424a5da3c9ad52",
+        "revision": 3
+      }
+    ]
+  },
+  "narration": [
+    {
+      "seconds": 1.058,
+      "text": "Reserved synthetic language, seed 104729. Three word meanings are supplied. No model receives the answer key."
+    },
+    {
+      "seconds": 15.148,
+      "text": "These known stems are the starting information budget. The plural rule is still uncertain."
+    },
+    {
+      "seconds": 29.487,
+      "text": "Two supplied hypotheses disagree: does the plural marker precede or follow the stem? This is candidate testing, not unrestricted discovery."
+    },
+    {
+      "seconds": 43.758,
+      "text": "The selector records a discriminating question and its predicted answer groups. Only the stars can be observed in this run."
+    },
+    {
+      "seconds": 57.827,
+      "text": "One answer is revealed by the independent corpus oracle. The learner never receives the other answers or hidden rule choice."
+    },
+    {
+      "seconds": 72.073,
+      "text": "The observation is retained, and two alternatives become one. The answer does not silently modify executable rules."
+    },
+    {
+      "seconds": 87.091,
+      "text": "A deliberate review disables the contradicted rule. Its notebook text and the original elicitation history remain available."
+    },
+    {
+      "seconds": 101.189,
+      "text": "Now test the rocks: a plural form that was withheld from the question and observation. Lexical lookup alone cannot resolve it."
+    },
+    {
+      "seconds": 115.296,
+      "text": "Symbolic parsing produces the rocks, with a meaning tree, source spans and the exact plural rule used. No language model generated this result."
+    },
+    {
+      "seconds": 129.399,
+      "text": "Inspect the derivation: the stem provides the noun meaning, and the retained plural rule composes the unseen form."
+    },
+    {
+      "seconds": 144.131,
+      "text": "Reloading restores the saved project and translation draft. Re-running the parser gives the same result."
+    },
+    {
+      "seconds": 158.256,
+      "text": "The retained question, answer and review explain the outcome. This narrow regular-plural success does not establish general language-decipherment accuracy."
+    }
+  ],
+  "limits": [
+    "Seed-disjoint vocabulary; reused structural family.",
+    "Oracle answers retained for audit, not supplied as learner context.",
+    "Captioned automation recording, no voiceover."
+  ]
+}

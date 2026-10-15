@@ -7,13 +7,13 @@ describe('computeMode', () => {
       .toBe('transcription');
   });
 
-  it('returns phonetic-guess when language probability is low (likely non-language audio)', () => {
+  it('returns phonetic-guess when the language score is below the legacy threshold', () => {
     expect(computeMode({ languageProb: 0.5, segments: [{ start: 0, end: 1, text: 'xq' }] }))
       .toBe('phonetic-guess');
   });
 
-  it('returns phonetic-guess when language probability is unknown (0)', () => {
-    expect(computeMode({ languageProb: 0, segments: [{ start: 0, end: 1, text: 'hi' }] }))
+  it('returns phonetic-guess when language probability is unreported', () => {
+    expect(computeMode({ languageProb: null, segments: [{ start: 0, end: 1, text: 'hi' }] }))
       .toBe('phonetic-guess');
   });
 

@@ -1,0 +1,220 @@
+{
+  "research": {
+    "observations": [
+      {
+        "id": "ecaf8f48-1d2f-47f1-a0e7-62c637f4b187",
+        "created_at": "2026-10-01T06:29:49.132Z",
+        "text": "nesh-en",
+        "content_sha256": "4f543829a9dcef537a3e43e338bb12c1bca63a5638d7a9270669e3fe659a53c9",
+        "source": "Independent plural observation.",
+        "origin": "capture",
+        "source_id": null,
+        "derived_from": [],
+        "audio": null
+      }
+    ],
+    "annotations": [
+      {
+        "id": "6ec9f556-da64-496f-bac1-eeecc50024dd",
+        "created_at": "2026-10-01T06:29:49.132Z",
+        "observation_id": "ecaf8f48-1d2f-47f1-a0e7-62c637f4b187",
+        "revision": 1,
+        "interpretation": "{\"kind\":\"nominal\",\"nominal\":{\"adjectives\":[],\"head\":{\"entryId\":\"star\",\"lemma\":\"star\",\"pos\":\"noun\",\"sense\":null},\"plural\":true}}",
+        "supersedes": null,
+        "provenance": "user"
+      }
+    ],
+    "hypotheses": [],
+    "links": [],
+    "events": [],
+    "tests": [],
+    "analyses": [],
+    "metrics": []
+  },
+  "name": "Grammar questions",
+  "description": "",
+  "phonetic_notes": "",
+  "is_sandbox": false,
+  "dictionary": [
+    {
+      "id": "star",
+      "alien_word": "nesh",
+      "english_meaning": "star",
+      "part_of_speech": "noun",
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "context": "",
+      "examples": [],
+      "notes": "",
+      "created_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "rock",
+      "alien_word": "kor",
+      "english_meaning": "rock",
+      "part_of_speech": "noun",
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "context": "",
+      "examples": [],
+      "notes": "",
+      "created_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "verb_frame": "transitive",
+      "id": "see",
+      "alien_word": "lor",
+      "english_meaning": "to see",
+      "part_of_speech": "verb",
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "context": "",
+      "examples": [],
+      "notes": "",
+      "created_at": "2026-10-01T00:00:00.000Z"
+    }
+  ],
+  "grammar_rules": [
+    {
+      "id": "suffix",
+      "rule": "Suffix plural",
+      "executable": {
+        "kind": "plural-affix",
+        "position": "suffix",
+        "affix": "-en"
+      },
+      "evidence": [],
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "created_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "prefix",
+      "rule": "Prefix plural",
+      "executable": {
+        "kind": "plural-affix",
+        "position": "prefix",
+        "affix": "en-"
+      },
+      "evidence": [],
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "created_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "svo",
+      "rule": "Subject verb object",
+      "executable": {
+        "kind": "clause-order",
+        "order": "SVO",
+        "arguments": 2
+      },
+      "evidence": [],
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "created_at": "2026-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "sov",
+      "rule": "Subject object verb",
+      "executable": {
+        "kind": "clause-order",
+        "order": "SOV",
+        "arguments": 2
+      },
+      "evidence": [],
+      "confidence": null,
+      "user_asserted_confidence": null,
+      "created_at": "2026-10-01T00:00:00.000Z"
+    }
+  ],
+  "number_system": {
+    "base": null,
+    "mappings": {},
+    "operators": {}
+  },
+  "samples": [],
+  "audio_clips": [],
+  "grammar_elicitation_history": [
+    {
+      "id": "05337cfe-0458-463c-ace4-87d274391529",
+      "request_id": "e5f7cb43-e64d-48fd-8b3e-1baeecf54482",
+      "created_at": "2026-10-01T06:29:46.135Z",
+      "source_json": "{\"profile_id\":\"536f2081-2f62-4bc0-8f40-96809925ee76\",\"profile_revision\":0,\"setup\":{\"candidates\":[{\"id\":\"A\",\"rule_ids\":[\"suffix\"]},{\"id\":\"B\",\"rule_ids\":[\"prefix\"]}],\"anchors\":[{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"star\",\"sense\":null,\"lemma\":\"star\",\"pos\":\"noun\"},\"plural\":false,\"adjectives\":[]}},{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"rock\",\"sense\":null,\"lemma\":\"rock\",\"pos\":\"noun\"},\"plural\":false,\"adjectives\":[]}}],\"available\":[{\"kind\":\"meaning\",\"meaning\":{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"star\",\"sense\":null,\"lemma\":\"star\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}},\"cost\":1},{\"kind\":\"meaning\",\"meaning\":{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"rock\",\"sense\":null,\"lemma\":\"rock\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}},\"cost\":1}]},\"context\":{\"candidates\":[{\"id\":\"A\",\"rules\":[{\"kind\":\"plural-affix\",\"position\":\"suffix\",\"affix\":\"-en\"}]},{\"id\":\"B\",\"rules\":[{\"kind\":\"plural-affix\",\"position\":\"prefix\",\"affix\":\"en-\"}]}],\"dictionary\":[{\"id\":\"star\",\"alien_word\":\"nesh\",\"english_meaning\":\"star\",\"part_of_speech\":\"noun\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"},{\"id\":\"rock\",\"alien_word\":\"kor\",\"english_meaning\":\"rock\",\"part_of_speech\":\"noun\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"},{\"verb_frame\":\"transitive\",\"id\":\"see\",\"alien_word\":\"lor\",\"english_meaning\":\"to see\",\"part_of_speech\":\"verb\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"}]},\"evidence\":[],\"declined\":[]}",
+      "source_sha256": "5b4b97e30d883ec8bda24c1ad610fb3c804d121280797fe057e8a3c9cbd30f19",
+      "input_sha256": "883ac2e7562d68cce3b3893972cdd7f312567233070b2694b0b1b6826de3d2a0",
+      "report_json": "{\"version\":\"grammar-elicitation-session-1\",\"status\":\"selected\",\"reason\":\"Maximum uniform version-space disagreement per declared cost; not calibrated information gain.\",\"scores\":[{\"id\":\"A\",\"aliases\":[],\"matches\":0,\"contradictions\":0,\"unavailable\":0},{\"id\":\"B\",\"aliases\":[],\"matches\":0,\"contradictions\":0,\"unavailable\":0}],\"remaining\":[\"A\",\"B\"],\"evidenceCount\":0,\"considered\":2,\"eligible\":2,\"unavailable\":0,\"selection\":{\"meaning\":{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"rock\",\"sense\":null,\"lemma\":\"rock\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}},\"cost\":1,\"disagreementBits\":1,\"expectedRemaining\":1,\"groups\":[{\"form\":\"en-kor\",\"candidateIds\":[\"B\"]},{\"form\":\"kor-en\",\"candidateIds\":[\"A\"]}]}}",
+      "report_sha256": "851c03d244f92f366e78f665d670feeb926a83c88a1e31082bf3a1b36efe42d5",
+      "decision": {
+        "action": "decline",
+        "answer": null,
+        "reason": "Cannot observe this meaning today.",
+        "mutation_id": "c472b073-5764-48ae-b6ec-5a26b06ff961",
+        "digest": "8ce4d75b59597e795ab8f0e1e820dce5900f6f7a2cc2aa91cadc22d1e895d04c",
+        "created_at": "2026-10-01T06:29:46.336Z",
+        "applied_revision": 2,
+        "observation_id": null,
+        "after_json": null,
+        "after_sha256": null
+      },
+      "context_sha256": "99467898c650786105e9212ad950a935dda41d4c768a76d819488b0421aca9b4",
+      "request_sha256": "b5ebbcdd52c45b09f6e22b3ed19416084a833cf9017384495a1674c0bd0b60d0"
+    },
+    {
+      "id": "8c59e280-6b70-4282-8681-b0b3f48614a0",
+      "request_id": "fb134d4f-6960-4476-86b3-6128d59aeae3",
+      "created_at": "2026-10-01T06:29:46.479Z",
+      "source_json": "{\"profile_id\":\"536f2081-2f62-4bc0-8f40-96809925ee76\",\"profile_revision\":2,\"setup\":{\"candidates\":[{\"id\":\"A\",\"rule_ids\":[\"suffix\"]},{\"id\":\"B\",\"rule_ids\":[\"prefix\"]}],\"anchors\":[{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"star\",\"sense\":null,\"lemma\":\"star\",\"pos\":\"noun\"},\"plural\":false,\"adjectives\":[]}},{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"rock\",\"sense\":null,\"lemma\":\"rock\",\"pos\":\"noun\"},\"plural\":false,\"adjectives\":[]}}],\"available\":[{\"kind\":\"meaning\",\"meaning\":{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"star\",\"sense\":null,\"lemma\":\"star\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}},\"cost\":1},{\"kind\":\"meaning\",\"meaning\":{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"rock\",\"sense\":null,\"lemma\":\"rock\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}},\"cost\":1}]},\"context\":{\"candidates\":[{\"id\":\"A\",\"rules\":[{\"kind\":\"plural-affix\",\"position\":\"suffix\",\"affix\":\"-en\"}]},{\"id\":\"B\",\"rules\":[{\"kind\":\"plural-affix\",\"position\":\"prefix\",\"affix\":\"en-\"}]}],\"dictionary\":[{\"id\":\"star\",\"alien_word\":\"nesh\",\"english_meaning\":\"star\",\"part_of_speech\":\"noun\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"},{\"id\":\"rock\",\"alien_word\":\"kor\",\"english_meaning\":\"rock\",\"part_of_speech\":\"noun\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"},{\"verb_frame\":\"transitive\",\"id\":\"see\",\"alien_word\":\"lor\",\"english_meaning\":\"to see\",\"part_of_speech\":\"verb\",\"confidence\":null,\"context\":\"\",\"examples\":[],\"notes\":\"\",\"created_at\":\"1970-01-01T00:00:00.000Z\"}]},\"evidence\":[],\"declined\":[{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"rock\",\"sense\":null,\"lemma\":\"rock\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}}]}",
+      "source_sha256": "164464cffc62e5a333bb7b4488f798180def454ff462b99d58fe43c428878221",
+      "input_sha256": "883ac2e7562d68cce3b3893972cdd7f312567233070b2694b0b1b6826de3d2a0",
+      "report_json": "{\"version\":\"grammar-elicitation-session-1\",\"status\":\"selected\",\"reason\":\"Maximum uniform version-space disagreement per declared cost; not calibrated information gain.\",\"scores\":[{\"id\":\"A\",\"aliases\":[],\"matches\":0,\"contradictions\":0,\"unavailable\":0},{\"id\":\"B\",\"aliases\":[],\"matches\":0,\"contradictions\":0,\"unavailable\":0}],\"remaining\":[\"A\",\"B\"],\"evidenceCount\":0,\"considered\":1,\"eligible\":1,\"unavailable\":0,\"selection\":{\"meaning\":{\"kind\":\"nominal\",\"nominal\":{\"head\":{\"entryId\":\"star\",\"sense\":null,\"lemma\":\"star\",\"pos\":\"noun\"},\"plural\":true,\"adjectives\":[]}},\"cost\":1,\"disagreementBits\":1,\"expectedRemaining\":1,\"groups\":[{\"form\":\"en-nesh\",\"candidateIds\":[\"B\"]},{\"form\":\"nesh-en\",\"candidateIds\":[\"A\"]}]}}",
+      "report_sha256": "d1f03828d5994c50b9cc8ada87773c333da68d76f3dffea49edf4bce267757cc",
+      "decision": {
+        "action": "answer",
+        "answer": "nesh-en",
+        "reason": "Independent plural observation.",
+        "mutation_id": "bf57add7-6fcd-4bd0-bed7-4fb6c2c21ff9",
+        "digest": "382923f6c374c9c0e47bf6d3a91323442d4c33cbaae95ef0dd39ab72c73dcca9",
+        "created_at": "2026-10-01T06:29:49.132Z",
+        "applied_revision": 4,
+        "observation_id": "ecaf8f48-1d2f-47f1-a0e7-62c637f4b187",
+        "after_json": "{\"version\":\"grammar-elicitation-session-1\",\"status\":\"none\",\"reason\":\"No fully predicted disagreement in the supplied available query set. This does not establish equivalent hypotheses.\",\"scores\":[{\"id\":\"A\",\"aliases\":[],\"matches\":1,\"contradictions\":0,\"unavailable\":0},{\"id\":\"B\",\"aliases\":[],\"matches\":0,\"contradictions\":1,\"unavailable\":0}],\"remaining\":[\"A\"],\"evidenceCount\":1,\"considered\":1,\"eligible\":0,\"unavailable\":0,\"selection\":null}",
+        "after_sha256": "9553b005a137bbd05412d7814c8749532a4c8e938fd430eb9e295e6a00a57977"
+      },
+      "context_sha256": "99467898c650786105e9212ad950a935dda41d4c768a76d819488b0421aca9b4",
+      "request_sha256": "b5ebbcdd52c45b09f6e22b3ed19416084a833cf9017384495a1674c0bd0b60d0"
+    }
+  ],
+  "metric_snapshots": [
+    {
+      "version": 1,
+      "revision": 0,
+      "recorded_at": "2026-10-01T06:29:42.741Z",
+      "counts": {
+        "observations": 0,
+        "assertedEntries": 3,
+        "grammarNotes": 4,
+        "competingForms": 0,
+        "mappings1To20": 0,
+        "ratedEntries": 0
+      }
+    }
+  ],
+  "id": "536f2081-2f62-4bc0-8f40-96809925ee76",
+  "created_at": "2026-10-01T06:29:42.741Z",
+  "updated_at": "2026-10-01T06:29:49.134Z",
+  "schema_version": 3,
+  "revision": 4,
+  "recent_mutations": [
+    {
+      "id": "c472b073-5764-48ae-b6ec-5a26b06ff961",
+      "digest": "8ce4d75b59597e795ab8f0e1e820dce5900f6f7a2cc2aa91cadc22d1e895d04c",
+      "revision": 2
+    },
+    {
+      "id": "bf57add7-6fcd-4bd0-bed7-4fb6c2c21ff9",
+      "digest": "382923f6c374c9c0e47bf6d3a91323442d4c33cbaae95ef0dd39ab72c73dcca9",
+      "revision": 4
+    }
+  ]
+}

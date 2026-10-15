@@ -1,73 +1,18 @@
-# React + TypeScript + Vite
+# Xenolinguist client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 / Vite / TypeScript frontend shared by the local workbench and public presentation.
 
-Currently, two official plugins are available:
+Use the repository [build/setup guide](../README.md), [feature reference](../docs/FEATURES.md) and [testing guide](../docs/testing.md). Run commands from the repository root:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm run dev
+npm run typecheck
+npm run lint -w client
+npm test -w client
+npm run test:e2e
+npm run test:public
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The public test command builds separately into `test-results/public-site` with `VITE_PUBLIC_SITE=true` and the `/Xenolinguist/` base path. It leaves the desktop `client/dist` build intact. Public `/app` requests return to download information. The local workbench needs its authenticated backend; direct browser development uses the pairing code printed by that backend.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Published installer metadata lives in `src/lib/site.ts`; Git source identity is injected at build time. A `+working` suffix indicates local client/shared changes. Both differ from the package version. The interactive public dictionary and hero examples derive from the versioned shared Eridian seed and make no model requests.

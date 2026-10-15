@@ -54,3 +54,8 @@ export function whisperModelPath(): string | null {
 export function ipaModelDir(): string | null {
   return process.env.IPA_MODEL_DIR || null;
 }
+
+/** Explicit packaged dependency anchor; absent during source development. */
+export function runtimeDependencyRoot(): string | null {
+  return process.env.XENO_RUNTIME_ROOT ? path.resolve(process.env.XENO_RUNTIME_ROOT) : null;
+}

@@ -49,6 +49,7 @@ export function Sidebar({ phases, activePhase, onPhaseChange, onOpenCommandPalet
           }
         }}
         title="Back to profiles"
+        aria-label="Back to profiles"
         style={{ cursor: 'pointer' }}
       >
         <XenoMark size={28} />
@@ -64,6 +65,8 @@ export function Sidebar({ phases, activePhase, onPhaseChange, onOpenCommandPalet
             <button
               key={phase.id}
               data-tour={phase.id}
+              aria-label={phase.label}
+              aria-current={isActive ? 'page' : undefined}
               className={`sidebar-item${isActive ? ' active' : ''}`}
               onClick={() => onPhaseChange(phase.id)}
               title={!expanded ? phase.label : undefined}

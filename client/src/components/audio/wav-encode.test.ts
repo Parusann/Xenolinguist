@@ -2,6 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { downsampleTo16k, encodeWavPcm16 } from './wav-encode';
 
 describe('downsampleTo16k', () => {
+  it('preserves speech-band amplitude and suppresses a 12 kHz alias by at least 40 dB', () => {
+    const tone = (hz: number) => Float32Array.from({ length: 48000 }, (_, i) => Math.sin(2 * Math.PI * hz * i / 48000));
+    const rms = (samples: Float32Array) => Math.sqrt(samples.slice(100, -100).reduce((sum, value) => sum + value * value, 0) / (samples.length - 200));
+    expect(rms(downsampleTo16k(tone(1000), 48000))).toBeCloseTo(Math.SQRT1_2, 2);
+    expect(rms(downsampleTo16k(tone(12000), 48000))).toBeLessThan(Math.SQRT1_2 * 0.01);
+    expect(downsampleTo16k(new Float32Array(800).fill(0.25), 8000)).toHaveLength(1600);
+    expect(downsampleTo16k(new Float32Array(4800).fill(0.25), 48000)[500]).toBeCloseTo(0.25, 5);
+  });
   it('halves a 32kHz buffer to 16kHz length', () => {
     const input = new Float32Array(32000).fill(0.5);
     const out = downsampleTo16k(input, 32000);

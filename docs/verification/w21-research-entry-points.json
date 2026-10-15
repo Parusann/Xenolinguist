@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "author": "Parusan Natheeswaran",
+  "implementationRevision": "81f95ef6fe0aa209671ff2adf1785eabe0fa50fa",
+  "scope": "W21 research entry-point integration; comparative evaluation remains pending",
+  "sourceCi": {
+    "conclusion": "success",
+    "headSha": "81f95ef6fe0aa209671ff2adf1785eabe0fa50fa",
+    "jobs": [
+      {
+        "completedAt": "2026-09-27T00:37:57Z",
+        "conclusion": "success",
+        "databaseId": 108516965906,
+        "name": "regression (windows-latest)",
+        "startedAt": "2026-09-27T00:26:54Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36282520405/job/108516965906"
+      },
+      {
+        "completedAt": "2026-09-27T00:32:57Z",
+        "conclusion": "success",
+        "databaseId": 108516966034,
+        "name": "regression (ubuntu-latest)",
+        "startedAt": "2026-09-27T00:26:54Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36282520405/job/108516966034"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36282520405"
+  },
+  "sourceChecks": {
+    "unitTests": 385,
+    "serverSharedEngineEvaluationTests": 354,
+    "clientTests": 31,
+    "toolingTests": 7,
+    "gatedNativeUnitSkips": 3,
+    "lint": "passed",
+    "typecheck": "passed",
+    "desktopBuild": "passed"
+  },
+  "platforms": {
+    "linux": {
+      "browser": {
+        "startTime": "2026-09-27T00:28:54.802Z",
+        "duration": 224619.615,
+        "expected": 40,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-27T00:32:41.012Z",
+        "duration": 9956.372,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "c9e40a4448448241e226815acf630d2dc0b26e2a861135bbffb0be91ee4cc6f0"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "3d729c5f09a4cf77550eb78c63878dc946ffc136e34fb2c1972cc1ca8dab214a"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "3d729c5f09a4cf77550eb78c63878dc946ffc136e34fb2c1972cc1ca8dab214a"
+        }
+      },
+      "sourceLog": {
+        "bytes": 153091,
+        "sha256": "4b16a50bbfbe052cd8b2a7cd26844a6c5fb6119b51eda2bf9562d791166b80f2"
+      },
+      "numberSummaryMatchesW19": true,
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    },
+    "windows": {
+      "browser": {
+        "startTime": "2026-09-27T00:33:16.138Z",
+        "duration": 254241.986,
+        "expected": 40,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "public": {
+        "startTime": "2026-09-27T00:37:33.495Z",
+        "duration": 13467.317,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "replays": {
+        "frozen": {
+          "passed": true,
+          "records": 12,
+          "corpusHash": "abfc6838b928843910ccbc908b21d3017b4c62f83a03391b3e47bd9016236b94",
+          "sourceSnapshotHash": "b92bda624f633c81c7589ea9ec438f98fd7bfc8c82613e2f766b61b160d9e736"
+        },
+        "induction": {
+          "passed": true,
+          "records": 60,
+          "split": "evaluation",
+          "sourceSnapshotHash": "27d38669158524bb91007549de8f3d01dde3c80300a06491172e92f82e90f104"
+        },
+        "numbers": {
+          "passed": true,
+          "records": 336,
+          "split": "evaluation",
+          "sourceSnapshotHash": "27d38669158524bb91007549de8f3d01dde3c80300a06491172e92f82e90f104"
+        }
+      },
+      "sourceLog": {
+        "bytes": 126276,
+        "sha256": "4d8f65c321cf980a7f869e0c5d0dbfc44ffdec34e7b44072225c0a4da812d20f"
+      },
+      "numberSummaryMatchesW19": true,
+      "audit": {
+        "all": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        },
+        "production": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 4,
+          "critical": 0,
+          "total": 4
+        }
+      }
+    }
+  },
+  "installedCi": {
+    "conclusion": "success",
+    "headSha": "81f95ef6fe0aa209671ff2adf1785eabe0fa50fa",
+    "jobs": [
+      {
+        "completedAt": "2026-09-27T00:30:42Z",
+        "conclusion": "success",
+        "databaseId": 108516965618,
+        "name": "build",
+        "startedAt": "2026-09-27T00:26:55Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36282520327/job/108516965618"
+      },
+      {
+        "completedAt": "2026-09-27T00:36:07Z",
+        "conclusion": "success",
+        "databaseId": 108517516830,
+        "name": "verify-clean",
+        "startedAt": "2026-09-27T00:30:46Z",
+        "status": "completed",
+        "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36282520327/job/108517516830"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Parusann/Xenolinguist/actions/runs/36282520327"
+  },
+  "installedAcceptance": {
+    "recordedAt": "2026-09-27T00:36:03.294Z",
+    "source": {
+      "revision": "81f95ef6fe0aa209671ff2adf1785eabe0fa50fa",
+      "branch": "implementation/reliability",
+      "workingFiles": [],
+      "node": "24.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    },
+    "standalone": true,
+    "acceptancePassed": true,
+    "executable": {
+      "bytes": 235128320,
+      "sha256": "06556c6c503fa649a2f5039b911f458269a0356ee021bdaa171a639cccbc80bc"
+    },
+    "appArchive": {
+      "bytes": 2986361,
+      "sha256": "224dabcc984286a1d15e28e63f6caa32e14265a2667b04610d732fbf3983b224"
+    }
+  },
+  "installedChecks": {
+    "checkedFiles": 3774,
+    "archives": 8,
+    "researchEvidence": {
+      "passed": true,
+      "immutableCapture": true,
+      "contradictionVisible": true,
+      "derivationRetained": true,
+      "correctionInvalidates": true,
+      "archiveRestored": true
+    },
+    "report": {
+      "bytes": 674241,
+      "sha256": "85264d7628f6d09e314a1210786267e0e4f9a4d8a937597d251353f3cb9969f3"
+    }
+  },
+  "coverage": [
+    "Research entry points open prefilled review without starting inference or preselecting validation targets.",
+    "Sample saving does not make the former background inference call; captured evidence is required.",
+    "Changing profiles clears research drafts.",
+    "A requested review waits for active conversation output; returning to conversation retains that output.",
+    "Existing scripted durable generation/rejection/acceptance/restart/archive checks pass."
+  ],
+  "limits": [
+    "New entry points are tested in source browser acceptance. Installed acceptance covers existing native, boundary, restart, research and eight-archive regressions.",
+    "No new real-model comparison was run for this UI unit; the prior real-model and durable examples remain retained in w21-review-acceptance.json.",
+    "General conversation and number/translation/phonetic commentary remain free text and cannot apply structured proposals.",
+    "Comparative held-out evaluation is designed in proposal-evaluation-protocol.md but remains unimplemented and unrun.",
+    "Three gated native unit skips and four reviewed high native-chain audit entries remain.",
+    "No main merge, public installer release or Pages deployment."
+  ]
+}

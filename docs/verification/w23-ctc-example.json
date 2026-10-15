@@ -1,0 +1,163 @@
+{
+  "labels": [
+    "aa",
+    "b",
+    "<pad>",
+    "[UNK]"
+  ],
+  "logits": [
+    1.3862943611198906,
+    0.6931471805599453,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    9,
+    0,
+    9,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    9,
+    0,
+    9,
+    0,
+    0
+  ],
+  "frames": 6,
+  "blankId": 2,
+  "result": {
+    "ipa": "aa aa b",
+    "segments": [
+      {
+        "phone": "aa",
+        "start": 0,
+        "end": 0.04
+      },
+      {
+        "phone": "aa",
+        "start": 0.06,
+        "end": 0.08
+      },
+      {
+        "phone": "b",
+        "start": 0.1,
+        "end": 0.12
+      }
+    ],
+    "ctc": {
+      "version": 1,
+      "decoder": "greedy",
+      "scoreDefinition": "mean-frame-softmax",
+      "timingDefinition": "frame-bins-not-phonetic-boundaries",
+      "frames": 6,
+      "vocabularySize": 4,
+      "blankId": 2,
+      "strideSeconds": 0.02,
+      "blankFrames": 1,
+      "specialFrames": 1,
+      "runs": [
+        {
+          "segmentIndex": 0,
+          "tokenId": 0,
+          "startFrame": 0,
+          "endFrameExclusive": 2,
+          "meanEntropyBits": 1.874999999345275,
+          "candidates": [
+            {
+              "tokenId": 0,
+              "label": "aa",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.37500000035712266
+            },
+            {
+              "tokenId": 1,
+              "label": "b",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.24999999994047956
+            },
+            {
+              "tokenId": 2,
+              "label": "<pad>",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.18749999985119886
+            }
+          ],
+          "omittedProbability": 0.18749999985119903
+        },
+        {
+          "segmentIndex": 1,
+          "tokenId": 0,
+          "startFrame": 3,
+          "endFrameExclusive": 4,
+          "meanEntropyBits": 0.005339403429168155,
+          "candidates": [
+            {
+              "tokenId": 0,
+              "label": "aa",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9996299076068289
+            },
+            {
+              "tokenId": 1,
+              "label": "b",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.00012336413105694434
+            },
+            {
+              "tokenId": 2,
+              "label": "<pad>",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.00012336413105694434
+            }
+          ],
+          "omittedProbability": 0.0001233641310571798
+        },
+        {
+          "segmentIndex": 2,
+          "tokenId": 1,
+          "startFrame": 5,
+          "endFrameExclusive": 6,
+          "meanEntropyBits": 0.005339403429168155,
+          "candidates": [
+            {
+              "tokenId": 1,
+              "label": "b",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.9996299076068289
+            },
+            {
+              "tokenId": 0,
+              "label": "aa",
+              "blank": false,
+              "special": false,
+              "meanProbability": 0.00012336413105694434
+            },
+            {
+              "tokenId": 2,
+              "label": "<pad>",
+              "blank": true,
+              "special": true,
+              "meanProbability": 0.00012336413105694434
+            }
+          ],
+          "omittedProbability": 0.0001233641310571798
+        }
+      ]
+    }
+  }
+}

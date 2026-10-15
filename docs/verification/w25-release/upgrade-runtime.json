@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "nonAsciiUserData": true,
+  "migratedSchema": 3,
+  "originalReadPreserved": true,
+  "conflictingBackupRejected": true,
+  "backupSha256": "7fe006ec24d0805845d29307890b655d1805039ed187bf604b990b1374e782d0",
+  "backendKilled": true,
+  "credentialRotated": true,
+  "retainedDraftAfterCrash": true,
+  "zoomFactor": 2,
+  "keyboardAtZoom": true,
+  "strictOffline": {
+    "updateRejected": true,
+    "remoteRejected": true,
+    "downloadsRejected": true,
+    "phones": 200,
+    "stt": 200,
+    "tts": 200,
+    "completedChromiumOrigins": [
+      "http://127.0.0.1:60932",
+      "http://127.0.0.1:51649"
+    ],
+    "scope": "Chromium completed requests; external Ollama and OS traffic are not captured."
+  },
+  "capabilities": {
+    "checkedAt": "2026-10-13T07:52:58.869Z",
+    "expiresAt": "2026-10-13T07:53:03.869Z",
+    "storage": {
+      "state": "available",
+      "detail": "Local storage write probe passed"
+    },
+    "tts": {
+      "state": "available",
+      "detail": "Local speech synthesis files present; execution is checked when requested"
+    },
+    "stt": {
+      "state": "available",
+      "detail": "Local transcription files present; execution is checked when requested"
+    },
+    "phones": {
+      "state": "available",
+      "detail": "Phone asset sizes match; hashes and native runtime are checked at inference"
+    },
+    "chat": {
+      "state": "unavailable",
+      "detail": "Start the local Ollama service to use chat"
+    },
+    "resources": {
+      "cpuCount": 4,
+      "freeMemoryBytes": 13354598400,
+      "totalMemoryBytes": 17174360064
+    },
+    "setupModels": [
+      {
+        "name": "gemma4:e4b",
+        "approximateBytes": 9610000000
+      },
+      {
+        "name": "llama3.2:3b",
+        "approximateBytes": 2020000000
+      }
+    ]
+  }
+}

@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import path from 'path';
 import { ollamaRouter } from './routes/ollama.js';
 import { profilesRouter } from './routes/profiles.js';
@@ -8,17 +7,25 @@ import audioRouter from './routes/audio.js';
 import { ttsRouter } from './routes/tts.js';
 import { sttRouter } from './routes/stt.js';
 import { ipaRouter } from './routes/ipa.js';
+import { jobsRouter } from './routes/jobs.js';
+import { archivesRouter } from './routes/archives.js';
+import { compilerRouter } from './routes/compiler.js';
+import { elicitationRouter } from './routes/elicitation.js';
+import { grammarElicitationRouter } from './routes/grammar-elicitation.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { clientDist } from './config.js';
+import { localSessionBoundary, createLocalSession, matchesSecret, SESSION_COOKIE, type LocalSession } from './middleware/local-session.js';
 
-export function createApp() {
+export function createApp(session: LocalSession = createLocalSession()) {
   const app = express();
 
-  // CORS only matters in dev (Vite at :5173 → API at :3001). The packaged app serves the
-  // SPA and API from the same loopback origin (http://127.0.0.1:<port>), so CORS is moot there.
-  if (process.env.NODE_ENV !== 'production') {
-    app.use(cors({ origin: 'http://localhost:5173' }));
-  }
+  app.disable('x-powered-by');
+  app.use(localSessionBoundary(session));
+  if (session.mode === 'development') app.post('/api/session', express.json({ limit: '1kb' }), (req, res) => {
+    if (!matchesSecret(req.body?.secret, session.secret)) { res.status(401).json({ error: 'Invalid pairing code', code: 'LOCAL_SESSION_REQUIRED' }); return; }
+    res.cookie(SESSION_COOKIE, session.secret, { httpOnly: true, sameSite: 'strict', path: '/api' });
+    res.status(204).end();
+  });
 
   // Per-route JSON limits: only the base64-audio routes need a large body; everything else
   // gets a small limit to shrink the memory-amplification (DoS) surface.
@@ -30,7 +37,12 @@ export function createApp() {
   });
 
   app.use('/api/ollama', small, ollamaRouter);
+  app.use('/api/jobs', small, jobsRouter);
+  app.use('/api/compiler', small, compilerRouter);
+  app.use('/api/elicitation', small, elicitationRouter);
+  app.use('/api/grammar-elicitation', small, grammarElicitationRouter);
   app.use('/api/profiles', express.json({ limit: '10mb' }), profilesRouter);
+  app.use('/api/archives', archivesRouter);
   app.use('/api/ai', small, aiRouter);
   app.use('/api/audio', audioJson, audioRouter);
   app.use('/api/tts', small, ttsRouter);

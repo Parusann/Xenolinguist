@@ -1,0 +1,72 @@
+{
+  "baselineRevision": "6fd87feb31c7bb4f5e2cc2c6458f06034adec4ef",
+  "implementationRevision": "44deb8764b9d716e5ee12fd850eecf3b3e0e6c35",
+  "gitBlobSha256": {
+    "before": "9ffacde2e2d7d6091548c73813abdb70d377605c31afa420f9bee68789b09def",
+    "after": "78892796552d362123cda53570a8890c8211641dec493742605805aa797ff9d5"
+  },
+  "changes": [
+    {
+      "path": "node_modules/@electron/universal/node_modules/brace-expansion",
+      "before": "2.1.4",
+      "after": "2.1.7"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/typescript-estree/node_modules/brace-expansion",
+      "before": "5.0.9",
+      "after": "5.0.12"
+    },
+    {
+      "path": "node_modules/app-builder-lib/node_modules/brace-expansion",
+      "before": "5.0.9",
+      "after": "5.0.12"
+    },
+    {
+      "path": "node_modules/brace-expansion",
+      "before": "1.1.18",
+      "after": "1.1.21"
+    },
+    {
+      "path": "node_modules/express",
+      "before": "4.22.2",
+      "after": "4.22.3"
+    },
+    {
+      "path": "node_modules/fast-uri",
+      "before": "3.1.7",
+      "after": "3.1.8"
+    },
+    {
+      "path": "node_modules/filelist/node_modules/brace-expansion",
+      "before": "2.1.4",
+      "after": "2.1.7"
+    },
+    {
+      "path": "node_modules/http-cache-semantics",
+      "before": "4.2.0",
+      "after": "4.3.0"
+    },
+    {
+      "path": "node_modules/proxy-addr",
+      "before": "2.0.7",
+      "after": "2.0.8"
+    },
+    {
+      "path": "node_modules/shell-quote",
+      "before": "1.9.0",
+      "after": "1.11.0"
+    },
+    {
+      "path": "node_modules/source-map-js",
+      "before": "1.2.1",
+      "after": "1.2.2"
+    }
+  ],
+  "unchangedNativeVersions": {
+    "@huggingface/transformers": "4.2.0",
+    "onnxruntime-node": "1.24.3",
+    "sharp": "0.34.5",
+    "electron": "42.11.3",
+    "electron-builder": "26.15.3"
+  }
+}
