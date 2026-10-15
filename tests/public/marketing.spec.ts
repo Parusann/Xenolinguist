@@ -25,14 +25,14 @@ test('public dictionary uses canonical meanings without model or API requests', 
   expect(unexpected).toEqual([]); expect(errors).toEqual([]);
 });
 
-test('download actions expose a pinned release and distinguish the preview', async ({ page }) => {
+test('download actions expose a pinned release and identify the prerelease', async ({ page }) => {
   const failed: string[] = []; page.on('response', response => { if (response.status() >= 400) failed.push(response.url()); });
   await page.goto('./');
   await page.getByRole('button', { name: 'Download for Windows' }).first().click();
   await expect(page.locator('#download')).toBeInViewport();
-  await expect(page.getByRole('link', { name: 'Download v1.0.0 for Windows' })).toHaveAttribute('href', 'https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe');
-  await expect(page.locator('#download')).toContainText('have not been released in a new installer');
-  await expect(page.locator('#download')).toContainText('2026-06-14');
+  await expect(page.getByRole('link', { name: 'Download v1.1.0-rc.1 for Windows' })).toHaveAttribute('href', 'https://github.com/Parusann/Xenolinguist/releases/download/v1.1.0-rc.1/Xenolinguist-Setup-1.1.0-rc.1.exe');
+  await expect(page.locator('#download')).toContainText('This is an unsigned prerelease');
+  await expect(page.locator('#download')).toContainText('2026-10-14');
   for (const anchor of await page.locator('a[href^="#"]').all()) {
     const href = await anchor.getAttribute('href'); expect(await page.locator(href!).count()).toBe(1);
   }

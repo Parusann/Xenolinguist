@@ -15,7 +15,7 @@ const PHASE_DEFS = [
 
 export function PhasesSection() {
   return <section id="method" className="section">
-    <div className="section-eyebrow"><span className="acc">02</span><span className="ln" /><span>The workflow · implementation preview</span></div>
+    <div className="section-eyebrow"><span className="acc">02</span><span className="ln" /><span>The research workflow</span></div>
     <h2 className="section-title">Six phases.<br /><em>Build an interpretation.</em></h2>
     <p className="section-sub">Move between observations, vocabulary and executable hypotheses as your corpus grows. Ask discriminating questions, inspect derivations and retain the decisions behind them. Keys 1–6 switch phases when you are not typing.</p>
     <div className="phases-ribbon">{PHASE_DEFS.map((phase, index) => <div key={phase.num} className="phase-card"><div className="num">PHASE {phase.num}</div><div className="glyph">{phase.glyph}</div><div className="pname">{phase.name}</div><div className="pdesc">{phase.desc}</div><div className="stamp">— {PHASE_STAMPS[index]}</div></div>)}</div>
@@ -66,14 +66,14 @@ export function PrivacySection() {
   return <section id="privacy" className="section"><div className="privacy-block">
     <div className="section-eyebrow"><span className="acc">04</span><span className="ln" /><span>Local data, explicit setup</span></div>
     <div className="big-quote">Keep your corpus<br /><em>on your own machine.</em></div>
-    <p className="section-sub">Profiles and recordings are stored locally. In the implementation preview, generation accepts verified local completion models and rejects cloud-backed metadata. This depends on an accurately reporting local Ollama daemon.</p>
+    <p className="section-sub">Profiles and recordings are stored locally. In the published candidate, generation accepts verified local completion models and rejects cloud-backed metadata. This depends on an accurately reporting local Ollama daemon.</p>
     <div className="privacy-facts">
       <div><strong>Local</strong><span>Project data and optional Ollama inference</span></div>
       <div><strong>Explicit</strong><span>Model downloads and reviewed proposals</span></div>
       <div><strong>.xeno</strong><span>Portable project archives with recordings</span></div>
     </div>
     <p className="download-note">Offline work requires installed application assets and, for AI, a downloaded model and running Ollama. Installation, model downloads, external links and desktop update checks use the network. OS/browser speech fallback depends on the selected voice. The static website is hosted on GitHub Pages; its dictionary widget does not send your text to a server.</p>
-    <p className="download-note">The candidate includes portable .xeno archives, a deterministic compiler and frozen benchmarks with retained failures. Strict offline mode disables update checks, model downloads and OS voice fallback. The public installer remains the older version identified below.</p>
+    <p className="download-note">The candidate includes portable .xeno archives, a deterministic compiler and frozen benchmarks with retained failures. Strict offline mode disables update checks, model downloads and OS voice fallback. The published Windows candidate and its setup requirements are identified below.</p>
     <a href={`${SOURCE_URL}/docs/limitations.md`} target="_blank" rel="noreferrer">Read the current limitations →</a>
     <p><a href={`${SOURCE_URL}/docs/technical-case-study.md`} target="_blank" rel="noreferrer">Technical case study</a> · <a href={`${SOURCE_URL}/docs/benchmarks.md`} target="_blank" rel="noreferrer">Reproduce the benchmarks</a> · <a href={`${SOURCE_URL}/docs/demo-script.md`} target="_blank" rel="noreferrer">Three-minute demonstration</a></p>
   </div></section>
@@ -90,7 +90,7 @@ export function FinalCTA({ onEnterApp }: { onEnterApp: () => void }) {
 
 export function HeroFooter() {
   return <footer className="hero-footer"><span className="hero-mark-row"><HeroMark size={18} /><span className="word" style={{ fontSize: 13 }}><span className="light">xeno</span>linguist</span></span>
-    <span>Preview source {SOURCE_REVISION}</span><a href={`${REPO_URL}/blob/main/LICENSE`} target="_blank" rel="noreferrer">Proprietary license</a><span className="grow" />
+    <span>Current source {SOURCE_REVISION}</span><a href={`${REPO_URL}/blob/main/LICENSE`} target="_blank" rel="noreferrer">Proprietary license</a><span className="grow" />
     <a href={`${SOURCE_URL}/docs/FEATURES.md`} target="_blank" rel="noreferrer">Feature reference</a><a href={`${REPO_URL}/releases`} target="_blank" rel="noreferrer">Releases</a><a href={REPO_URL} target="_blank" rel="noreferrer">GitHub</a><a href="https://github.com/Parusann" target="_blank" rel="noreferrer">@parusan</a><span>© 2026 Parusan Natheeswaran</span>
   </footer>
 }

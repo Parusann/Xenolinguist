@@ -1,12 +1,11 @@
 name: Deploy public site to Pages
 
 on:
-  # Deploy from main (the protected Pages environment) while the reviewed
-  # application source remains on the implementation branch.
+  # Deploy a reviewed immutable revision from the main-only Pages environment.
   workflow_dispatch:
     inputs:
       source_sha:
-        description: 'Full reviewed implementation commit SHA to build and publish'
+        description: 'Full reviewed commit SHA to build and publish'
         required: true
         type: string
 

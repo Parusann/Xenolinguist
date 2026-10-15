@@ -2,7 +2,7 @@
 
 Author: Parusan Natheeswaran
 
-Candidate: **1.1.0-rc.1**, Windows x64, implementation branch. This is a release candidate, not the public v1.0.0 installer. Publishing the draft or deploying Pages is a separate decision.
+Published candidate: **1.1.0-rc.1**, Windows x64, unsigned prerelease, October 14, 2026. The implementation is now on main; the installer remains frozen at `00a25d5`.
 
 | Gate | Required evidence / status |
 | --- | --- |
@@ -17,7 +17,7 @@ Candidate: **1.1.0-rc.1**, Windows x64, implementation branch. This is a release
 | Signing | Inspect actual executable/installer Authenticode state. Candidate is unsigned unless a verified signature result says otherwise |
 | Evidence | Installer SHA-256, complete payload manifest, source/lock/model identities, test links and explicit scope exclusions |
 
-All required candidate gates passed for `00a25d5`. [Retained outcomes and hashes](verification/w25-release/README.md) include both platforms, fresh installation, upgrade/uninstall and earlier failures. The candidate is unsigned and remains a draft.
+All required candidate gates passed for `00a25d5`. [Retained outcomes and hashes](verification/w25-release/README.md) include both platforms, fresh installation, upgrade/uninstall and earlier failures. The candidate is unsigned and is now publicly available as a prerelease.
 
 ## Selected scope and exclusions
 
@@ -37,4 +37,4 @@ electron-builder supports `CSC_LINK`/`CSC_KEY_PASSWORD` through its existing sig
 
 ## Publication boundary
 
-Keep the GitHub release draft until the owner reviews the candidate, evidence and exclusions. The site must continue identifying v1.0.0 as the public installer until a new release is actually published. Update its version/date/asset URL together only after publication. The candidate's documentation distinguishes tested source, draft artifact and public deployment.
+The owner authorized publication on October 14, 2026. The exact checked draft artifact is now a public prerelease; its version, date, size and pinned URL identify the website download. Historical verification files retain their original draft-time metadata. Future candidates stay draft until reviewed and authorized; publication does not replace or rewrite frozen evidence.

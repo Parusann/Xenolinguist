@@ -291,3 +291,9 @@ The [retained evidence](verification/w25-release/README.md) includes earlier fai
 The [three-minute recording](verification/w26-demo/demo.mp4), [manifest](verification/w26-demo/demo-manifest.json), [case study](technical-case-study.md), [architecture](architecture.md) and [benchmarks](benchmarks.md) complete the technical presentation. The demo has one observed answer, an explicit rule decision, a withheld plural derivation and saved/reloaded state, with zero model calls and no mocked model readiness. It reuses a regular family with a reserved lexical seed.
 
 Completion applies to the declared scope, not the excluded capabilities. Human screen-reader certification, physical audio-device coverage, exhaustive power-loss/first-launch interruption recovery, automatic update application, signing and broader linguistic generalization remain outside this candidate. The release stays a draft; main and the public website have not been deployed by this work.
+
+## Publication and default branch — 2026-10-14
+
+The owner authorized publication and promotion. The exact verified `00a25d5` installer is now public as the unsigned `v1.1.0-rc.1` prerelease, with retained hashes and evidence. The implementation and subsequent presentation updates are merged into main without rewriting history. The current website download targets the pinned candidate asset; earlier draft/main/site statements above describe historical checkpoints. `docs/release-publication.json` records the publication metadata separately from the untouched frozen release manifest.
+
+The portfolio and current resume use the same frozen release counts and bounded synthetic result. Later website test counts are not substituted for the installer checkpoint.

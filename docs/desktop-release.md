@@ -2,11 +2,11 @@
 
 ## Published artifact versus development
 
-The latest published installer verified through GitHub release metadata on September 13, 2026 is [v1.0.0](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0), published June 14, 2026. Its asset is [Xenolinguist-Setup-1.0.0.exe](https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe), 440,684,361 bytes, SHA256 `5974906a74a11eb7d4e14c0923ec5ff870e5669ad050b832b10b773e8491c6b5`. The release is unsigned. Metadata/HTTP reachability checks are not installer execution tests.
+The published [v1.1.0-rc.1 Windows candidate](https://github.com/Parusann/Xenolinguist/releases/tag/v1.1.0-rc.1) is an **unsigned prerelease**, published October 14, 2026. [Download the installer](https://github.com/Parusann/Xenolinguist/releases/download/v1.1.0-rc.1/Xenolinguist-Setup-1.1.0-rc.1.exe): 405,501,373 bytes, SHA-256 `6f9c54ba2a73e8986a7cb3c196baa0f4f5bca79b5b0fbbf5aaaab03d90e6fedf`.
 
-The `implementation/reliability` candidate contains W01–W26 changes absent from that installer. The package version is 1.1.0-rc.1; identify preview builds by source revision, working-file hashes and artifact hashes in [verification records](verification/), not by the package version alone. The published tag's startup code can pull the default Ollama model automatically. W10 removed that behavior from the preview.
+The installer remains the exact artifact built from `00a25d525dcc0c713b25ed244e391ad84e1454e8`. All selected source, fresh-install and upgrade gates passed; [retained evidence](verification/w25-release/README.md) records the limits. Main now contains the implementation and later website/documentation changes. The package version alone does not identify those later source changes.
 
-The old installer predates the repaired native dependency layout, durable saves and audio drafts, authenticated local API, verified local model selection and cancellable jobs. The [pre-implementation baseline](testing-baseline.json) reproduced phone-loading failure in a separately packaged artifact. Later successful Windows probes verify their own artifacts; they do not retroactively certify the old installer.
+The older [v1.0.0](https://github.com/Parusann/Xenolinguist/releases/tag/v1.0.0), published June 14, 2026, remains a legacy release. It predates the repaired native layout, durable saves, authenticated API and controlled inference jobs, and may automatically pull a model at startup. That behavior was removed from the candidate. Back up current projects with .xeno archives before upgrading; keep original legacy backups for rollback.
 
 Windows x64 is the only current native packaging target. `beforePack` rejects other targets because the manifest only covers Windows x64. Legacy macOS/Linux builder fields do not establish platform support. Do not describe an unpacked acceptance run as signed-installer or clean-machine installation certification.
 

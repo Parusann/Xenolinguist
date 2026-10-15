@@ -122,7 +122,7 @@ export function HeroPage() {
             <div className="hero-meta">
               <span className="dot-row">
                 <span style={{ width: 5, height: 5, borderRadius: 3, background: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }} />
-                <span>Development preview · source {SOURCE_REVISION}</span>
+                <span>Current source {SOURCE_REVISION}</span>
               </span>
               <span style={{ color: 'var(--fg-faint)' }}>·</span>
               <span>Built for language exploration and research engineering</span>
@@ -132,7 +132,7 @@ export function HeroPage() {
           </section>
 
           <div className="scroll-veil" />
-          <section className="section release-context" aria-label="Version status"><p>Explore the verified 1.1.0-rc.1 implementation. Its installer remains an unsigned draft; the public v1.0.0 download is an earlier build. Source, measurements and the recorded demonstration are available now.</p></section>
+          <section className="section release-context" aria-label="Version status"><p>Download the verified 1.1.0-rc.1 Windows release candidate. It is an unsigned prerelease built from frozen source 00a25d5. Explore the current source on main, the measurements and the recorded demonstration.</p></section>
           <ResearchSection />
           <PhasesSection />
           <DemoSection />
