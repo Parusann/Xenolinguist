@@ -1,7 +1,7 @@
 #Requires -Version 7.2
 [CmdletBinding()]
 param(
-    [ValidateSet('doctor', 'install', 'check', 'baseline', 'corpus')]
+    [ValidateSet('doctor', 'install', 'check', 'baseline', 'corpus', 'decipherment-controls', 'decipherment-model')]
     [string]$Action = 'doctor',
     [string]$WorkspaceRoot = (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent)
 )
@@ -65,6 +65,14 @@ try {
                 Invoke-ResearchNode -Arguments @('node_modules/tsx/dist/cli.mjs', 'evaluation/src/decipherment/cli.ts', 'export', $split, (Join-Path $directory $split))
             }
             Write-Output "Verified corpus: $directory"
+        }
+        { $_ -in @('decipherment-controls', 'decipherment-model') } {
+            $runId = $Action + '-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 6)
+            $directory = Join-Path $env:XENO_RESEARCH_RESULTS $runId
+            $mode = if ($Action -eq 'decipherment-model') { 'local-model' } else { 'controls' }
+            if ($mode -eq 'local-model') { $env:OLLAMA_BASE_URL = 'http://127.0.0.1:11435' }
+            Invoke-ResearchNode -Arguments @('node_modules/tsx/dist/cli.mjs', 'evaluation/src/decipherment/study.ts', $mode, $directory)
+            Write-Output "Verified decipherment study: $directory"
         }
     }
 } finally { Pop-Location }

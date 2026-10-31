@@ -52,3 +52,24 @@ The source lock pins eight upstream files to commit 1df62b9bdc7292b35982aea49b4d
 The importer fails on changed upstream bytes or missing selected cells. It writes an explicit selection/transformation manifest and preserves upstream licenses. The retained fixture's files are hash-checked in the research suite on both supported CI platforms.
 
 The separate importEvidence API accepts CSV columns or JSON fields id, form, optional meaning and annotations. Plain text creates one sample per nonblank line. Imports are bounded to 2 MiB and 10,000 records; duplicate IDs, unknown fields and malformed CSV fail. NFC normalization retains originalForm. Ingestion itself grants no sharing or training permission and does not create scored linguistic truth.
+
+## Baseline study
+
+~~~powershell
+pwsh -NoProfile -File scripts/research.ps1 -Action decipherment-controls
+# Requires the separately started local research runtime and installed model:
+pwsh -NoProfile -File scripts/research.ps1 -Action decipherment-model
+~~~
+
+The model command uses the local service on port 11435 and qwen3:4b-instruct-2507-q4_K_M. It does not start a server or download a model. The service must use the HDD model directory and OLLAMA_NO_CLOUD=1. Every inference checks local model metadata and the pinned digest before and after the request. The initial comparison uses the unmodified 4-bit quantized distribution; it is not an unquantized foundation-model measurement.
+
+All 48 development episodes and four independent controls are scheduled. Exact lookup, simple surface heuristics, model-only and the same model with hypothesis checks receive the same visible evidence and rule priors. Model tracks share a total budget of 2,048 generated tokens, 90 seconds per episode, 8,192 context tokens, temperature zero and seed zero. Up to eight tool checks consume that total budget. A check tests one proposed hypothesis against visible evidence and cannot enumerate evaluator truth. No shell, filesystem or network tools are exposed to the model.
+
+Method order rotates by episode, calls are serial, and cold-load time is retained. Output records preserve invalid responses, tool errors, timeouts and runtime errors. The runner writes its entire schedule before inference, refuses overwrite, retains source snapshots and raw model calls, then independently replays scores and model action traces to verify the report. Interrupted archives remain incomplete and cannot be presented as completed studies.
+
+~~~powershell
+. ./scripts/research-env.ps1
+& $ResearchWorkspace.Node node_modules/tsx/dist/cli.mjs evaluation/src/decipherment/study.ts verify <study-directory>
+~~~
+
+Reports separate development from controls, with task, mechanism, truth-state and lineage breakdowns in summary.json. Latency and token use are measured; Node RSS is a post-episode sample, not peak GPU memory. The model-allocation snapshot is likewise not a peak-memory measurement. The existing translation engine is measured by the original baseline command under its own supplied-grammar contract, rather than assigned fabricated predictions for unsupported new tasks.
