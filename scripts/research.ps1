@@ -1,7 +1,7 @@
 #Requires -Version 7.2
 [CmdletBinding()]
 param(
-    [ValidateSet('doctor', 'install', 'check', 'baseline')]
+    [ValidateSet('doctor', 'install', 'check', 'baseline', 'corpus')]
     [string]$Action = 'doctor',
     [string]$WorkspaceRoot = (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent)
 )
@@ -36,7 +36,7 @@ try {
             $directory = Join-Path $env:XENO_RESEARCH_RESULTS $runId
             New-Item -ItemType Directory -Path $directory | Out-Null
             $report = Join-Path $directory 'vitest.json'
-            # Existing suites only: no model download, service startup or external-model call.
+            # Pure research suites: no model download, service startup or external-model call.
             Push-Location 'server'
             try {
                 Invoke-ResearchNode -Arguments @(
@@ -56,6 +56,15 @@ try {
                 'node_modules/tsx/dist/cli.mjs', 'evaluation/src/runner.ts',
                 'evaluation/configs/ci.json', $directory
             )
+        }
+        'corpus' {
+            $runId = 'corpus-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 6)
+            $directory = Join-Path $env:XENO_RESEARCH_RESULTS $runId
+            Invoke-ResearchNode -Arguments @('node_modules/tsx/dist/cli.mjs', 'evaluation/src/decipherment/cli.ts', 'audit')
+            foreach ($split in @('train', 'development')) {
+                Invoke-ResearchNode -Arguments @('node_modules/tsx/dist/cli.mjs', 'evaluation/src/decipherment/cli.ts', 'export', $split, (Join-Path $directory $split))
+            }
+            Write-Output "Verified corpus: $directory"
         }
     }
 } finally { Pop-Location }
