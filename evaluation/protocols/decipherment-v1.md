@@ -1,7 +1,7 @@
 # Bounded decipherment protocol v1
 
 Protocol identity: xeno-decipherment-1
-Status: M1 contract; dataset generation and model comparisons are subsequent milestones.
+Status: M1 contract and M2 pilot corpus implemented; model comparisons are in progress.
 
 ## Question and scope
 
