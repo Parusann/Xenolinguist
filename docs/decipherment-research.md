@@ -1,5 +1,7 @@
 # Decipherment research
 
+The first two local model studies and their complete replay archives are available in the [baseline report](decipherment-baselines.md).
+
 This research track tests bounded structure recovery and uncertainty handling. It is separate from the released workbench's frozen translation benchmark. It does not yet contain a trained specialist or demonstrate historical decipherment.
 
 ## Protocol and corpus
