@@ -9,7 +9,7 @@ import { createCorpus, digest } from './corpus.js';
 import { independentControls } from './archive.js';
 import { learnerView, type PrivateEpisode } from './contracts.js';
 import { lookup, surfaceHeuristic } from './baselines.js';
-import { runModel, type ModelConfig, type ModelResult, type Transport } from './model.js';
+import { runModel, PROMPT_VERSION, type ModelConfig, type ModelResult, type Transport } from './model.js';
 import { scoreEpisode, summarizeItems, type Outcome, type ItemScore } from './score.js';
 import { performanceSummary } from '../metrics/performance.js';
 import { sha256 } from './wold.js';
@@ -193,7 +193,7 @@ async function main(args: string[]) {
   if (args.length !== 2 || !['controls', 'local-model'].includes(args[0])) throw new Error('Usage: study.ts <controls|local-model|verify> <new-directory-or-archive>');
   if (args[0] === 'controls') return runStudy(['lookup', 'surface'], args[1]);
   const name = 'qwen3:4b-instruct-2507-q4_K_M', pinned = await requireLocalModel(name, AbortSignal.timeout(15000));
-  return runStudy(['lookup', 'surface', 'model', 'model-tools'], args[1], { name, digest: pinned.digest, seed: 0, numCtx: 8192 });
+  return runStudy(['lookup', 'surface', 'model', 'model-tools'], args[1], { name, digest: pinned.digest, seed: 0, numCtx: 8192, promptVersion: PROMPT_VERSION });
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href)
   main(process.argv.slice(2)).then(r => console.log(JSON.stringify('byMethod' in r ? r.byMethod : r, null, 2))).catch(error => { console.error(error); process.exitCode = 1; });

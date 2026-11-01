@@ -1,12 +1,29 @@
 import { expect, it } from 'vitest';
 import { independentControls } from './archive.js';
 import { PROTOCOL } from './contracts.js';
-import { prompt, runModel, type Transport } from './model.js';
+import { actionFormat, prompt, runModel, type Transport } from './model.js';
 
 const config = { name: 'fixture-local', digest: 'fixed', seed: 0, numCtx: 8192 };
 const body = (action: unknown, tokens = 20) => ({ done: true, done_reason: 'stop', eval_count: tokens, prompt_eval_count: 100, message: { content: JSON.stringify(action) } });
 const final = { kind: 'final', response: { protocol: PROTOCOL, predictions: [{ id: 'c0', kind: 'abstain', reason: 'ambiguity' }] } };
 const check = { kind: 'check', hypothesis: { task: 'correspondence', from: 'p', to: 'f', position: 'all' } };
+
+it('constrains only visible IDs and response structure in the revised model track', async () => {
+  const e = (await independentControls()).find(e => e.learner.task === 'correspondence')!.learner;
+  const format = actionFormat(e, false) as any;
+  const answer = format.properties.response.properties.predictions.items.oneOf[0];
+  expect(format.properties.response.properties.predictions.minItems).toBe(e.challenges.length);
+  expect(format.properties.response.properties.predictions.maxItems).toBe(e.challenges.length);
+  expect(answer.properties.id.enum).toEqual(['c0']);
+  expect(answer.properties.value.items.enum).toBeUndefined();
+  expect(JSON.stringify(format)).not.toContain('acceptable');
+  const result = await runModel(e, false, { ...config, promptVersion: 'decipherment-prompt-2' }, async request => {
+    expect(request.format).toEqual(format);
+    return body(final);
+  });
+  expect(result.trace.promptVersion).toBe('decipherment-prompt-2');
+  expect(result.outcome.status).toBe('complete');
+});
 
 it('runs bounded visible-evidence checks and retains exact requests, outputs and token use', async () => {
   const e = (await independentControls()).find(e => e.learner.task === 'correspondence')!.learner;
