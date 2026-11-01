@@ -46,7 +46,7 @@ export function actionFormat(e: Episode, withTools: boolean): Record<string, unk
   return withTools ? { anyOf: [final, check] } : final;
 }
 
-function structuredPrompt(e: Episode, withTools: boolean): Message[] {
+export function structuredPrompt(e: Episode, withTools: boolean): Message[] {
   const representations = {
     segmentation: 'value is the full ordered array of segments for the challenge surface.',
     lexical: 'value is an array containing one meaning ID for the challenge form.',
