@@ -1,5 +1,5 @@
 #Requires -Version 7.2
-param([ValidateSet('setup', 'pilot', 'candidate')][string]$Action = 'pilot')
+param([ValidateSet('setup', 'pilot', 'candidate', 'import', 'development', 'final')][string]$Action = 'pilot')
 . (Join-Path $PSScriptRoot 'research-env.ps1')
 
 $adapterRoot = Join-Path $ResearchWorkspace.Source 'research/adapter'
@@ -56,12 +56,32 @@ if ($Action -eq 'setup') {
 }
 
 if ($Action -eq 'candidate') {
-    & $python -I (Join-Path $adapterRoot 'train_candidate.py')
+    & $python -IB (Join-Path $adapterRoot 'train_candidate.py')
     Confirm-Exit 'Fixed lexical candidate experiment'
     return
 }
 
+if ($Action -in @('import', 'development', 'final')) {
+    $env:OLLAMA_HOST = '127.0.0.1:11435'
+    $env:OLLAMA_BASE_URL = 'http://127.0.0.1:11435'
+    $importRoot = Assert-ResearchPath (Join-Path $trainingRoot 'lexical-candidate-v1/ollama-import')
+    $seal = Assert-ResearchPath (Join-Path $importRoot 'pair.json')
+    Push-Location $ResearchWorkspace.Source
+    try {
+        if ($Action -eq 'import') {
+            if (Test-Path -LiteralPath $seal) { throw 'This pair has already been sealed' }
+            & $python -IB (Join-Path $adapterRoot 'import_pair.py')
+            Confirm-Exit 'Matched model import'
+            & $ResearchWorkspace.Node node_modules/tsx/dist/cli.mjs evaluation/src/decipherment/paired.ts seal $importRoot
+        } else {
+            & $ResearchWorkspace.Node node_modules/tsx/dist/cli.mjs evaluation/src/decipherment/paired.ts $Action $seal
+        }
+        Confirm-Exit 'Matched evaluation operation'
+    } finally { Pop-Location }
+    return
+}
+
 $runDirectory = Assert-ResearchPath (Join-Path $trainingRoot ('cpu-pilot-' + (Get-Date -Format yyyyMMdd-HHmmss) + '-' + [guid]::NewGuid().ToString('N').Substring(0, 6)))
-& $python -I (Join-Path $adapterRoot 'cpu_pilot.py') --output $runDirectory --threads 4
+& $python -IB (Join-Path $adapterRoot 'cpu_pilot.py') --output $runDirectory --threads 4
 Confirm-Exit 'Adapter pilot'
 Write-Output "Verified pilot results at $runDirectory"

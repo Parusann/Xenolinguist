@@ -20,3 +20,26 @@ pwsh -NoProfile -File scripts/adapter.ps1 -Action pilot
 Setup installs Python 3.12.13, the measured Windows CPU package versions and approximately 8.06 GB of model files in the research workspace. It creates an isolated environment and verifies the model at load. It needs network access for initial downloads. The pilot runs offline at below-normal scheduling priority, requires 12 GiB available system RAM and preserves 20 GiB of HDD headroom. Each pilot writes to a fresh directory.
 
 Local inference already uses the RX 7900 XTX. Training used the CPU because the installed Adrenalin 26.6.1 driver differs from the driver AMD documents for the current Windows training stack. Native GPU backward-pass compatibility and GPU training throughput remain unmeasured. [Installed driver mapping](https://gpuopen.com/version-table/) · [AMD training driver](https://www.amd.com/en/resources/support-articles/release-notes/RN-RAD-ROCM-10-01.html)
+
+## Compare the fixed candidate
+
+The candidate starts from the pinned base and a fresh seed. Its 48 optimizer updates use each training episode once. Only the final checkpoint is eligible for evaluation. [Frozen recipe](../evaluation/protocols/lexical-candidate-recipe-v1.json) · [Evaluation criteria](../evaluation/protocols/lexical-adapter-gates-v1.md)
+
+The completed training loop took 246.57 seconds. Updates averaged 5.14 seconds, with a range of 4.53–7.48 seconds. Peak process memory across training and export reached 8.43 GiB. The saved adapter weights occupy 164,400 bytes. Its parameter hash is `faec1a8fba0a3cfeac6c210ebfb4722e0fe28572f27d83e4a724d8aead555f20`. The run record includes every update and each exported file's checksum. [Training record](verification/m5-lexical-candidate/training.json)
+
+Run `pwsh -NoProfile -File scripts/adapter.ps1 -Action candidate` once. For the following commands, start the pinned research Ollama service on loopback port 11435 with the workspace model directory, cloud disabled and one model loaded at a time.
+
+~~~powershell
+pwsh -NoProfile -File scripts/adapter.ps1 -Action import
+pwsh -NoProfile -File scripts/adapter.ps1 -Action development
+pwsh -NoProfile -File scripts/adapter.ps1 -Action final
+~~~
+
+Import checks every shard against its recorded hash and compares every tensor's name, shape, dtype and bytes. The two trained projections must differ and every other tensor must match. The importer stages hard links on the research volume and supplies both models with the original tokenizer, architecture metadata and Apache license. An independent control checks that each artifact can answer through the same inference service. [Ollama import procedure](https://docs.ollama.com/import)
+
+Each split schedules 48 episodes twice and retains all 104 challenge outcomes per model. The base and candidate each preload once before timed inference. A fresh result directory marks the start of an attempt. The reserved run requires a replay-verified development result with the same model digests. To replay either directory without starting Ollama, run the following from the configured checkout.
+
+~~~powershell
+. ./scripts/research-env.ps1
+& $ResearchWorkspace.Node node_modules/tsx/dist/cli.mjs evaluation/src/decipherment/paired.ts verify (Join-Path $env:XENO_RESEARCH_RESULTS 'lexical-candidate-v1-final')
+~~~
