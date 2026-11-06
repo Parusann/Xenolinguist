@@ -47,14 +47,16 @@ function schedule(data: Awaited<ReturnType<typeof cases>>, methods: Method[]): C
 export async function snapshot(directory: string) {
   const files = ['package.json', 'package-lock.json', 'tsconfig.base.json', 'evaluation/tsconfig.json',
     'evaluation/src/generator/prng.ts', 'evaluation/src/metrics/performance.ts', 'server/src/config.ts',
-    'server/src/services/ollama-runtime.ts', 'server/src/services/runtime-error.ts', 'shared/schemas/capabilities.ts'];
+    'server/src/services/ollama-runtime.ts', 'server/src/services/runtime-error.ts', 'shared/schemas/capabilities.ts',
+    'shared/schemas/lexical-comparison.ts'];
   const walk = async (relative: string) => {
     for (const entry of await readdir(path.join(root, relative), { withFileTypes: true })) {
       const name = relative + '/' + entry.name;
       if (entry.isDirectory()) await walk(name); else if (entry.isFile()) files.push(name);
     }
   };
-  for (const tree of ['evaluation/src/decipherment', 'evaluation/fixtures/reference/wold-pilot', 'evaluation/protocols']) await walk(tree);
+  for (const tree of ['evaluation/src/decipherment', 'evaluation/fixtures/reference/wold-pilot', 'evaluation/protocols',
+    'engine/src/comparison', 'research/adapter']) await walk(tree);
   files.push('evaluation/fixtures/decipherment-controls.json', 'evaluation/fixtures/decipherment-corpus-lock.json');
   const recorded = [];
   for (const relative of files.sort()) {

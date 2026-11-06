@@ -1,4 +1,5 @@
 import { episodeSchema, PROTOCOL, valueKey, type Episode, type Prediction, type Response } from './contracts.js';
+import { compareLexical } from '../../../engine/src/comparison/lexical.js';
 
 const abstain = (id: string): Prediction => ({ id, kind: 'abstain', reason: 'insufficient-evidence' });
 const answer = (id: string, value: string[], evidenceIds: string[], confidence = 0.5): Prediction => ({ id, kind: 'answer', value, evidenceIds, confidence });
@@ -38,9 +39,9 @@ export function surfaceHeuristic(raw: Episode): Response {
       return answer(c.id, result, evidence);
     }
     if (e.task === 'lexical' && 'form' in c) {
-      if (!e.formCandidates.includes(c.form)) return abstain(c.id);
-      const known = e.observations.filter(o => o.form === c.form);
-      const candidates = known.length ? [...new Set(known.map(o => o.meaning))] : e.meaningCandidates.filter(m => !e.observations.some(o => o.meaning === m));
+      const proposal = compareLexical({ assumption: 'closed-bijective-inventory', forms: e.formCandidates,
+        meanings: e.meaningCandidates, anchors: e.observations, query: c.form });
+      const candidates = proposal.meanings;
       if (candidates.length === 1) return answer(c.id, [candidates[0]], evidence);
       if (candidates.length > 1 && candidates.length <= 16)
         return { id: c.id, kind: 'alternatives' as const, values: candidates.map(m => [m]), evidenceIds: evidence };

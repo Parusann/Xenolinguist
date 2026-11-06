@@ -40,7 +40,7 @@ try {
             Push-Location 'server'
             try {
                 Invoke-ResearchNode -Arguments @(
-                    '../node_modules/vitest/vitest.mjs', 'run', '--maxWorkers=2',
+                    '../node_modules/vitest/vitest.mjs', 'run', '--maxWorkers=1',
                     '../engine/src/__tests__', '../evaluation/src',
                     '--reporter=default', '--reporter=json', "--outputFile.json=$report"
                 )
