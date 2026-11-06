@@ -1,8 +1,9 @@
 import { z } from 'zod';
+const utf8 = new TextEncoder();
 
 /** Bounded RFC-4180-style reader; quoted newlines, escaped quotes, CRLF and BOM are supported. */
 export function parseCsv(input: string, maxBytes = 2 * 1024 * 1024, maxRows = 10000): Record<string, string>[] {
-  if (Buffer.byteLength(input) > maxBytes || input.includes('\0')) throw new Error('CSV size or character limit');
+  if (input.length > maxBytes || utf8.encode(input).byteLength > maxBytes || input.includes('\0')) throw new Error('CSV size or character limit');
   const source = input.replace(/^\uFEFF/, '');
   const rows: string[][] = [];
   let row: string[] = [], field = '', quoted = false, closed = false;
@@ -54,7 +55,7 @@ export function importEvidence(format: 'csv' | 'json' | 'text', input: string,
   if (!Number.isSafeInteger(limits.maxBytes) || limits.maxBytes < 1 || limits.maxBytes > 5 * 1024 * 1024 ||
       !Number.isSafeInteger(limits.maxRows) || limits.maxRows < 1 || limits.maxRows > 10000)
     throw new Error('Unsupported import limits');
-  if (Buffer.byteLength(input) > limits.maxBytes || input.includes('\0')) throw new Error('Input size or character limit');
+  if (input.length > limits.maxBytes || utf8.encode(input).byteLength > limits.maxBytes || input.includes('\0')) throw new Error('Input size or character limit');
   let raw: unknown;
   if (format === 'csv') {
     const rows = parseCsv(input, limits.maxBytes, limits.maxRows);
