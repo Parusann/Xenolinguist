@@ -7,6 +7,7 @@ import { loadConfig } from './config.js';
 import { atlasPool, asOwner } from './db.js';
 import { migrate } from './migrate.js';
 import { createApp } from './app.js';
+import { ingestReferences } from './references.js';
 
 const config = await loadConfig();
 if (!config.adminDatabaseUrl) throw new Error('Verification requires the administrative setup environment');
@@ -38,6 +39,13 @@ try {
   await migrate(testConfig);
   await migrate(testConfig);
   checks.push('Migrations replay from empty and rerun without changes');
+  const firstReference = await ingestReferences(testConfig), repeatedReference = await ingestReferences(testConfig);
+  assert.equal(firstReference.forms, 70);
+  assert.equal(firstReference.languages, 6);
+  assert.equal(firstReference.alreadyPresent, false);
+  assert.equal(repeatedReference.alreadyPresent, true);
+  assert.equal(firstReference.sha256, repeatedReference.sha256);
+  checks.push('Licensed reference ingestion is byte-verified and idempotent');
   const inspector = atlasPool(testConfig.adminDatabaseUrl, 1);
   try {
     const journal = (await inspector.query("SELECT sha256 FROM atlas.schema_migrations WHERE name='002-atlas.sql'")).rows[0].sha256;
@@ -71,6 +79,12 @@ try {
   };
   const a = await account('fixture-a'), b = await account('fixture-b');
   checks.push('Two accounts receive independently signed sessions');
+  const references = await (await request('/api/references', 'GET', undefined, a.cookie)).json();
+  assert.equal(references.length, 1);
+  assert.equal(references[0].forms, 70);
+  assert.equal(references[0].license, 'CC-BY-4.0');
+  assert(references[0].attribution.includes('Anthony Grant'));
+  checks.push('Reference retrieval preserves its source license and vocabulary attribution');
   const forgedCookie = a.cookie.replace(/(xeno-atlas\.session_token=)([^;]+)/, (_match, prefix, value: string) =>
     prefix + value.slice(0, -1) + (value.endsWith('a') ? 'b' : 'a'));
   assert.notEqual(forgedCookie, a.cookie);

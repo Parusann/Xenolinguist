@@ -1,0 +1,24 @@
+{
+  "version": "atlas-foundation-verification-1",
+  "checkedAt": "2026-11-06T02:15:50.809Z",
+  "checks": [
+    "Migrations replay from empty and rerun without changes",
+    "Licensed reference ingestion is byte-verified and idempotent",
+    "Changed applied migrations are rejected",
+    "Anonymous dataset access is rejected",
+    "Two accounts receive independently signed sessions",
+    "Reference retrieval preserves its source license and vocabulary attribution",
+    "A modified session signature is rejected",
+    "HTTP ownership comes from the session and cross-account reads fail",
+    "Concurrent identical uploads publish one version and changed retries fail",
+    "CSV, JSON and text uploads create separate immutable versions",
+    "Original UTF-8 bytes survive upload and only the owner can download them",
+    "Signing out revokes the stored session",
+    "A changed stored byte is rejected by the download integrity check",
+    "Duplicate entry identifiers and invalid object paths fail validation",
+    "Forced RLS and transaction cleanup prevent pooled tenant-context leakage",
+    "A foreign origin cannot mutate authenticated data",
+    "Deletion immediately revokes version and object disclosure"
+  ],
+  "passed": true
+}

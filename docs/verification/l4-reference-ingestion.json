@@ -1,0 +1,16 @@
+{
+  "first": {
+    "source": "wold-pilot-4.2",
+    "sha256": "f874fd849ae08158a80b4cfc7b770f43c86bb291d21ea5890cbe3de4ba7d5418",
+    "languages": 6,
+    "forms": 70,
+    "alreadyPresent": false
+  },
+  "repeat": {
+    "source": "wold-pilot-4.2",
+    "sha256": "f874fd849ae08158a80b4cfc7b770f43c86bb291d21ea5890cbe3de4ba7d5418",
+    "languages": 6,
+    "forms": 70,
+    "alreadyPresent": true
+  }
+}

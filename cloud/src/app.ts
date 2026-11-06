@@ -42,6 +42,9 @@ export function createApp(config: AtlasConfig) {
 
   app.get('/api/me', route(async (_req, res) => res.json({ user: res.locals.user })));
   app.get('/api/status', route(async (_req, res) => res.json({ limits: ATLAS_LIMITS, sharing: 'private', trainingPermission: false })));
+  app.get('/api/references', route(async (_req, res) => res.json((await pool.query(`SELECT s.id,s.version,s.sha256,s.url,s.license,s.attribution,
+    (SELECT count(*)::int FROM atlas.reference_languages l WHERE l.source_id=s.id) AS languages,
+    (SELECT count(*)::int FROM atlas.reference_entries e WHERE e.source_id=s.id) AS forms FROM atlas.reference_sources s ORDER BY s.id`)).rows)));
   app.get('/api/datasets', route(async (_req, res) => res.json(await datasets.list(res.locals.owner))));
   app.post('/api/datasets', route(async (req, res) => res.status(201).json(await datasets.create(res.locals.owner, req.body))));
   app.get('/api/datasets/:id', route(async (req, res) => res.json(await datasets.detail(res.locals.owner, req.params.id))));
