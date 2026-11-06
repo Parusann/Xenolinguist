@@ -45,8 +45,10 @@ export function writeCsv(records: Record<string, string>[], headers: string[]) {
   return [headers, ...records.map(r => headers.map(h => r[h] ?? ''))].map(row => row.map(quote).join(',')).join('\n') + '\n';
 }
 
-const text = z.string().min(1).max(4096).refine(s => !s.includes('\0'));
-const rowSchema = z.strictObject({ id: z.string().min(1).max(80), form: text, meaning: text.optional(), annotations: text.optional() });
+const validText = (value: string) => !value.includes('\0') && !/[\uD800-\uDFFF]/u.test(value);
+const text = z.string().min(1).max(4096).refine(validText, 'Expected well-formed Unicode text');
+const rowSchema = z.strictObject({ id: z.string().min(1).max(80).refine(validText), form: text,
+  meaning: text.optional(), transcription: text.optional(), annotations: text.optional() });
 export type ImportedRecord = z.infer<typeof rowSchema> & { originalForm: string };
 
 /** Import only: this grants no publication, comparison or model-training permission. */
@@ -59,7 +61,7 @@ export function importEvidence(format: 'csv' | 'json' | 'text', input: string,
   let raw: unknown;
   if (format === 'csv') {
     const rows = parseCsv(input, limits.maxBytes, limits.maxRows);
-    raw = rows.map(r => Object.fromEntries(Object.entries(r).filter(([k, v]) => v !== '' || !['meaning', 'annotations'].includes(k))));
+    raw = rows.map(r => Object.fromEntries(Object.entries(r).filter(([k, v]) => v !== '' || !['meaning', 'transcription', 'annotations'].includes(k))));
   } else if (format === 'json') raw = JSON.parse(input);
   else if (format === 'text') raw = input.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/).filter(s => s.trim().length).map((form, i) => ({ id: 'r' + i, form }));
   else throw new Error('Unsupported evidence format');

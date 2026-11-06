@@ -1,0 +1,13 @@
+ID,Language_ID,Parameter_ID,Value,Code_ID,Comment,Source,Example_ID
+26A-eng,eng,26A,2,26A-2,,,
+81A-eng,eng,81A,2,81A-2,,,
+85A-eng,eng,85A,2,85A-2,,,
+26A-jpn,jpn,26A,2,26A-2,,Hinds-1986[passim];Kim-1991[passim];Shibatani-1990[passim],
+81A-jpn,jpn,81A,1,81A-1,,"Hinds-1986[75];Shibatani-1990[257, 259]",igt-2990
+85A-jpn,jpn,85A,1,85A-1,,"Hinds-1986[80, 350]",
+26A-swa,swa,26A,5,26A-5,,Ashton-1947[passim],
+81A-swa,swa,81A,2,81A-2,,Ashton-1947[passim],
+85A-swa,swa,85A,2,85A-2,,Ashton-1947[195],
+26A-ykt,ykt,26A,2,26A-2,,Krueger-1962[passim];Stachowski-and-Menz-1998[passim],
+81A-ykt,ykt,81A,1,81A-1,,Stachowski-and-Menz-1998[430],
+85A-ykt,ykt,85A,1,85A-1,,Krueger-1962[29],

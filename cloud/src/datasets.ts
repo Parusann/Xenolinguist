@@ -72,9 +72,9 @@ export class Datasets {
       const saved = (await client.query(`INSERT INTO atlas.dataset_versions
         (id,dataset_id,owner_id,revision,object_id,import_format,row_count,rights,features) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
       [version, dataset, owner, counts.last + 1, object.id, input.format, rows.length, input.metadata.rights, input.metadata.features])).rows[0];
-      await client.query(`INSERT INTO atlas.entries(version_id,owner_id,ordinal,entry_id,form,original_form,meaning,annotations)
-        SELECT $1::uuid,$2::uuid,ordinal,id,form,"originalForm",meaning,annotations FROM jsonb_to_recordset($3::jsonb)
-        AS r(ordinal int,id text,form text,"originalForm" text,meaning text,annotations text)`,
+      await client.query(`INSERT INTO atlas.entries(version_id,owner_id,ordinal,entry_id,form,original_form,meaning,transcription,annotations)
+        SELECT $1::uuid,$2::uuid,ordinal,id,form,"originalForm",meaning,transcription,annotations FROM jsonb_to_recordset($3::jsonb)
+        AS r(ordinal int,id text,form text,"originalForm" text,meaning text,transcription text,annotations text)`,
       [version, owner, JSON.stringify(rows.map((row, ordinal) => ({ ...row, ordinal })))]);
       await client.query('INSERT INTO atlas.upload_requests(owner_id,key,request_sha256,version_id) VALUES($1,$2,$3,$4)',
         [owner, input.key, requestHash, version]);
@@ -88,7 +88,7 @@ export class Datasets {
     return asOwner(this.pool, owner, async client => {
       if (!(await client.query('SELECT id FROM atlas.dataset_versions WHERE id=$1', [version])).rowCount)
         throw new AtlasError(404, 'not-found', 'Version unavailable.');
-      return (await client.query('SELECT entry_id,form,original_form,meaning,annotations FROM atlas.entries WHERE version_id=$1 ORDER BY ordinal LIMIT 100 OFFSET $2', [version, offset])).rows;
+      return (await client.query('SELECT entry_id,form,original_form,meaning,transcription,annotations FROM atlas.entries WHERE version_id=$1 ORDER BY ordinal LIMIT 100 OFFSET $2', [version, offset])).rows;
     });
   }
 

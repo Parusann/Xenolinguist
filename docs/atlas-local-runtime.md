@@ -25,7 +25,7 @@ The current backup location is on the research drive. An independent recovery co
 
 The API uses Better Auth 1.7.18 with PostgreSQL-backed accounts and sessions. It derives dataset ownership from the verified session. Dataset tables force row-level security under a separate owner role. Transaction-local tenant context is cleared on commit or rollback before a pooled connection is reused.
 
-CSV and JSON wordlists accept `id`, `form`, optional `meaning` and optional `annotations`. Plain text creates one sample per nonblank line. Original bytes remain downloadable by the owner, while normalized forms preserve their original spelling in a separate field. Each upload has an immutable version, source/rights declaration, checksum and retry key.
+CSV and JSON wordlists accept `id`, `form`, optional `meaning`, optional space-separated `transcription` and optional `annotations`. Plain text creates one sample per nonblank line. Original bytes remain downloadable by the owner, while normalized forms preserve their original spelling in a separate field. Each upload has an immutable version, source/rights declaration, checksum and retry key.
 
 Initial bounds are 5 MiB per file, 5,000 records per file, 10 datasets per account, 20 versions per dataset and 256 MiB of objects per account. Input validation rejects duplicate identifiers, unknown fields and invalid paths. Concurrent requests with the same retry key publish one version. Reusing that key for different content returns a conflict.
 

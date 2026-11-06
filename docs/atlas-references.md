@@ -1,5 +1,7 @@
 # Atlas reference collection
 
+The vocabulary pilot is joined to a separate, licensed WALS structural pilot for twelve observed feature values. See [comparison methods and coverage](atlas-comparison.md) for its exact matching rules, omissions and citations. Both source digests are retained in comparison reports.
+
 The initial atlas collection contains six languages, eleven concepts and seventy forms from the pinned WOLD v4.2 research fixture. It covers English, Swahili, Kildin Saami, Sakha, Japanese and Mandarin Chinese. Vocabulary-specific citations, the CC BY 4.0 license, bibliography, Concepticon identifiers, original forms and original source columns remain attached to the imported collection. [Fixture and notices](../evaluation/fixtures/reference/wold-pilot/NOTICE.md)
 
 The loader verifies every retained fixture file before parsing it. Its source identifier is immutable. A repeated import compares the stored source metadata, languages and forms with the verified input. A changed source under the same identifier fails. Inserts publish in one transaction. [Loader](../evaluation/src/atlas/ingest/wold.ts) · [Database importer](../cloud/src/references.ts)

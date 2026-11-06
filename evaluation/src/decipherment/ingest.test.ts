@@ -20,6 +20,13 @@ it('imports evidence conservatively and preserves the pre-normalization form', (
   expect(() => importEvidence('text', '')).toThrow();
 });
 
+it('retains declared transcription and rejects malformed Unicode before persistence', () => {
+  const input = JSON.stringify([{ id: 'emoji', form: '👽', transcription: 'p a t' }]);
+  expect(importEvidence('json', input)[0]).toMatchObject({ form: '👽', transcription: 'p a t' });
+  expect(() => importEvidence('json', JSON.stringify([{ id: 'bad', form: String.fromCharCode(0xd800) }]))).toThrow();
+  expect(() => importEvidence('json', JSON.stringify([{ id: 'bad\0', form: 'ka' }]))).toThrow();
+});
+
 it('retains every licensed pilot file, source identity, synonym and metadata join', async () => {
   const base = new URL('../../fixtures/reference/wold-pilot/', import.meta.url);
   const manifest = JSON.parse(await readFile(new URL('manifest.json', base), 'utf8'));

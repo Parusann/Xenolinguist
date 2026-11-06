@@ -1,0 +1,135 @@
+{
+  "format": "wals-structural-pilot-1",
+  "role": "reference-only",
+  "includedInTraining": false,
+  "upstream": {
+    "repository": "https://github.com/cldf-datasets/wals",
+    "revision": "81298aa26d01fdc11b769bcc7fa87ad9e43d7ccd",
+    "release": "v2020.6",
+    "doi": "https://doi.org/10.5281/zenodo.23010827",
+    "license": "CC-BY-4.0",
+    "files": [
+      {
+        "path": "LICENSE",
+        "gitSha1": "2fb94156cd39cad415432aeb1ac5b38d5cb53e1e",
+        "sha256": "945fbcb37deca05bccd7c3ca0e261679f1f5373515504fdbad68f6f3cf6f49b9"
+      },
+      {
+        "path": "README.md",
+        "gitSha1": "9c5ecd9da5841cc5b3a37c4571e7b4c73e97fab3",
+        "sha256": "0533386f68ddc9001ca6a20e58c3b66eddd73e40cbc2d151f85801641065e0b0"
+      },
+      {
+        "path": "metadata.json",
+        "gitSha1": "dd23a1cf7bb7c5de28d77eb036ce063200b2034e",
+        "sha256": "629cfcd3e430424835f4615640a415305ae508e35ca297e949a95a33b1355ce0"
+      },
+      {
+        "path": "cldf/codes.csv",
+        "gitSha1": "61544cb2e45175ee5d742050561b03fd93e647f7",
+        "sha256": "88c402d840ddeaf08545aea8395b593e9a1c44fe18353306a01dc839ea6a49b9"
+      },
+      {
+        "path": "cldf/languages.csv",
+        "gitSha1": "ea8b616b81179fcd81d4ddead2d05603ed40c34d",
+        "sha256": "10e0742f158dadd4ef9484797ef7606a337306ee49a110a58c8e658826d3290e"
+      },
+      {
+        "path": "cldf/parameters.csv",
+        "gitSha1": "b1ef8fcf928d419895dd5f2272996a13e1313f52",
+        "sha256": "8f84ecf07e67ec59a750c52544cc2654e461a1ff6fed44bd4a7259579c7cd894"
+      },
+      {
+        "path": "cldf/values.csv",
+        "gitSha1": "cac53fdbf78017f366325cb03ae722b6ba7530a2",
+        "sha256": "2d672f80dbe8cf1839061af0301650bde60c326bbb486835c93ab7304b5b06cd"
+      },
+      {
+        "path": "cldf/sources.bib",
+        "gitSha1": "4028e1d5ac004943dcb824085e957895481ab9e5",
+        "sha256": "015c0b4bc01f12ac90cd98ed62746d3551ba5198a9a43d55237896c38cacb8db"
+      },
+      {
+        "path": "cldf/chapters.csv",
+        "gitSha1": "e710b1921ed18bceb33812e62ed38fe9dc29e1e9",
+        "sha256": "6bce4c27fd1ee9ee5f859e580fc14736fb1ae2b82153df1efa3befb431ba9e68"
+      },
+      {
+        "path": "cldf/contributors.csv",
+        "gitSha1": "f85f98349a4aa6a2f5828e87614fbf0c206e2dd6",
+        "sha256": "e46c7c6d979864a9f5f6ab324fca98886ab642cdb50c64195ca031227cddfe27"
+      }
+    ]
+  },
+  "counts": {
+    "languages": 5,
+    "values": 12,
+    "features": 3
+  },
+  "matching": "unique exact Glottocode only",
+  "excluded": [
+    {
+      "language": "MandarinChinese",
+      "reason": "ambiguous-glottocode",
+      "candidates": [
+        "kug",
+        "mnd"
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "language": "KildinSaami",
+      "feature": "26A",
+      "reason": "not-coded-in-source"
+    },
+    {
+      "language": "KildinSaami",
+      "feature": "81A",
+      "reason": "not-coded-in-source"
+    },
+    {
+      "language": "KildinSaami",
+      "feature": "85A",
+      "reason": "not-coded-in-source"
+    }
+  ],
+  "files": [
+    {
+      "path": "languages.csv",
+      "sha256": "dd283b44b2aa876e2d4a092f352a3ec04b034a6008c3fd8415d1c9c3fa87e174"
+    },
+    {
+      "path": "parameters.csv",
+      "sha256": "714880d9cff8b33599ec414506f5fada4fa8f302d1b9c332f2098cd7a25df4b1"
+    },
+    {
+      "path": "values.csv",
+      "sha256": "979add6d3c7a126754802f3cfc2edd76ff9cff4e6e5e94792017155c93225e82"
+    },
+    {
+      "path": "codes.csv",
+      "sha256": "35de4b18626e1914f184c9fc4a33debbaed0f43c607a1afc1dd74cdc7fb48c2a"
+    },
+    {
+      "path": "chapters.csv",
+      "sha256": "f8e3a1cba776d2f622e0b0d63e991448d4f98a3a77129234a9c556fd9893dc3d"
+    },
+    {
+      "path": "contributors.csv",
+      "sha256": "18d72f60549603d21c244d77d9bc5c90804fdd2bc5b08dd35759356f4220305f"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "945fbcb37deca05bccd7c3ca0e261679f1f5373515504fdbad68f6f3cf6f49b9"
+    },
+    {
+      "path": "sources.bib",
+      "sha256": "f4ed7b18ccf3286d3aef7c571ea0185c339c64406be429cc44fa018f85a608d3"
+    },
+    {
+      "path": "NOTICE.md",
+      "sha256": "451bce5a0043f76e797be9f0bf56fe924358980a300083b4c3184dceb1fccf5c"
+    }
+  ]
+}

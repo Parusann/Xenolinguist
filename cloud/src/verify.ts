@@ -7,7 +7,8 @@ import { loadConfig } from './config.js';
 import { atlasPool, asOwner } from './db.js';
 import { migrate } from './migrate.js';
 import { createApp } from './app.js';
-import { ingestReferences } from './references.js';
+import { comparisonReferences, ingestReferences } from './references.js';
+import { compareLanguages } from '../../engine/src/comparison/compare.js';
 
 const config = await loadConfig();
 if (!config.adminDatabaseUrl) throw new Error('Verification requires the administrative setup environment');
@@ -45,6 +46,8 @@ try {
   assert.equal(firstReference.alreadyPresent, false);
   assert.equal(repeatedReference.alreadyPresent, true);
   assert.equal(firstReference.sha256, repeatedReference.sha256);
+  assert.equal(firstReference.structural.features, 12);
+  assert.equal(repeatedReference.structural.alreadyPresent, true);
   checks.push('Licensed reference ingestion is byte-verified and idempotent');
   const inspector = atlasPool(testConfig.adminDatabaseUrl, 1);
   try {
@@ -80,11 +83,24 @@ try {
   const a = await account('fixture-a'), b = await account('fixture-b');
   checks.push('Two accounts receive independently signed sessions');
   const references = await (await request('/api/references', 'GET', undefined, a.cookie)).json();
-  assert.equal(references.length, 1);
-  assert.equal(references[0].forms, 70);
-  assert.equal(references[0].license, 'CC-BY-4.0');
-  assert(references[0].attribution.includes('Anthony Grant'));
+  assert.equal(references.length, 2);
+  assert.equal(references.find((source: { id: string }) => source.id === 'wold-pilot-4.2').forms, 70);
+  assert(references.every((source: { license: string }) => source.license === 'CC-BY-4.0'));
+  assert(references.some((source: { attribution: string }) => source.attribution.includes('Anthony Grant')));
   checks.push('Reference retrieval preserves its source license and vocabulary attribution');
+  const referencePool = atlasPool(testConfig.databaseUrl, 1);
+  try {
+    const catalog = await comparisonReferences(referencePool);
+    assert.equal(catalog.length, 6);
+    const english = catalog.find(language => language.id === 'English')!;
+    assert.equal(english.features.word_order.value, 'SVO');
+    assert.deepEqual(catalog.find(language => language.id === 'MandarinChinese')!.features, {});
+    const comparison = compareLanguages({ versionId: 'verification', objectSha256: '0'.repeat(64), features: {},
+      entries: english.entries.slice(0, 8).map(entry => ({ id: 'query-' + entry.id, form: entry.form, meaning: entry.meaning })) }, catalog);
+    assert.equal(comparison.matches[0].languageId, 'English');
+    assert.equal(comparison.referenceSources.length, 2);
+    checks.push('Stored vocabulary and uniquely matched grammar produce a source-pinned comparison');
+  } finally { await referencePool.end(); }
   const forgedCookie = a.cookie.replace(/(xeno-atlas\.session_token=)([^;]+)/, (_match, prefix, value: string) =>
     prefix + value.slice(0, -1) + (value.endsWith('a') ? 'b' : 'a'));
   assert.notEqual(forgedCookie, a.cookie);
@@ -98,7 +114,7 @@ try {
   assert.equal((await request('/api/datasets/' + dataset.id, 'GET', undefined, b.cookie)).status, 404);
   assert.equal((await request('/api/datasets', 'POST', { title: 'Forged owner', languageKind: 'synthetic', owner_id: b.id }, a.cookie)).status, 400);
   checks.push('HTTP ownership comes from the session and cross-account reads fail');
-  const content = 'id,form,meaning,annotations\na,ka,sun,synthetic\nb,e\u0301,water,original spelling\n';
+  const content = 'id,form,meaning,transcription,annotations\na,ka,sun,k a,synthetic\nb,e\u0301,water,eː,original spelling\n';
   const upload = { key: randomUUID(), format: 'csv', content, metadata: { rights: { license: 'Synthetic test fixture', creator: 'Test fixture' } } };
   const uploadPath = '/api/datasets/' + dataset.id + '/versions';
   const response = await request(uploadPath, 'POST', upload, a.cookie);
@@ -111,7 +127,7 @@ try {
     return (await response.json()).id;
   }));
   assert(repeated.every(id => id === version.id));
-  assert.equal((await request(uploadPath, 'POST', { ...upload, content: content + 'c,ta,moon,test\n' }, a.cookie)).status, 409);
+  assert.equal((await request(uploadPath, 'POST', { ...upload, content: content + 'c,ta,moon,,test\n' }, a.cookie)).status, 409);
   checks.push('Concurrent identical uploads publish one version and changed retries fail');
   for (const [format, content] of [['json', '[{"id":"j1","form":"tu","meaning":"moon"}]'], ['text', 'First synthetic sample\nSecond synthetic sample\n']]) {
     const response = await request(uploadPath, 'POST', { ...upload, key: randomUUID(), format, content }, a.cookie);
@@ -124,6 +140,7 @@ try {
   const entries = await (await request('/api/versions/' + version.id + '/entries', 'GET', undefined, a.cookie)).json();
   assert.equal(entries[1].form, 'é');
   assert.equal(entries[1].original_form, 'e\u0301');
+  assert.equal(entries[0].transcription, 'k a');
   assert.equal(await (await request('/api/versions/' + version.id + '/download', 'GET', undefined, a.cookie)).text(), content);
   assert.equal((await request('/api/versions/' + version.id + '/download', 'GET', undefined, b.cookie)).status, 404);
   checks.push('Original UTF-8 bytes survive upload and only the owner can download them');

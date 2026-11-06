@@ -63,3 +63,4 @@ docs/verification/w26-demo/*.mp4 binary
 
 # Preserve licensed reference corpus bytes and recorded SHA-256 identities.
 evaluation/fixtures/reference/wold-pilot/** -text -whitespace
+evaluation/fixtures/reference/wals-pilot/** -text -whitespace
