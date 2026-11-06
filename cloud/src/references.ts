@@ -1,12 +1,10 @@
 import { isDeepStrictEqual } from 'node:util';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 import type { Pool, PoolClient } from 'pg';
 import { loadWoldReference, type ReferenceBundle } from '../../evaluation/src/atlas/ingest/wold.js';
 import { loadWalsReference, type StructuralFeature } from '../../evaluation/src/atlas/ingest/wals.js';
 import type { ReferenceLanguage } from '../../shared/schemas/atlas-comparison.js';
 import type { AtlasConfig } from './config.js';
-import { loadConfig } from './config.js';
 import { atlasPool } from './db.js';
 
 export async function ingestReferences(config: AtlasConfig) {
@@ -24,7 +22,6 @@ export async function ingestReferences(config: AtlasConfig) {
   } catch (error) { await client.query('ROLLBACK'); throw error; }
   finally { client.release(); await pool.end(); }
 }
-
 async function ingestBundle(client: PoolClient, reference: ReferenceBundle & { features?: StructuralFeature[] }) {
     const previous = (await client.query('SELECT * FROM atlas.reference_sources WHERE id=$1', [reference.id])).rows[0];
     if (previous) {
@@ -79,9 +76,4 @@ export async function comparisonReferences(pool: Pool): Promise<ReferenceLanguag
         sourceUrl: feature.metadata.sourceUrl, citation: feature.metadata.citation, allowedValues: feature.metadata.allowedValues,
         sourceRecord: { id: feature.metadata.sourceRow.ID, references: feature.metadata.sourceRow.Source, comment: feature.metadata.sourceRow.Comment } }])),
   }));
-}
-
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  loadConfig().then(ingestReferences).then(result => console.log(JSON.stringify(result, null, 2)))
-    .catch(error => { console.error(error instanceof Error ? error.message : 'Reference ingestion failed'); process.exitCode = 1; });
 }

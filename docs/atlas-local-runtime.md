@@ -37,4 +37,4 @@ pwsh -NoProfile -File scripts/atlas-start.ps1
 pwsh -NoProfile -File scripts/atlas-stop.ps1
 ~~~
 
-The browser interface and comparison worker are added in subsequent implementation units.
+The [browser interface](atlas-guide.md) supports reviewed upload, job progress, evidence inspection, report export and deletion. The [durable worker](atlas-jobs.md) rechecks ownership and integrity before publishing reports.

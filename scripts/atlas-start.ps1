@@ -59,6 +59,7 @@ ALTER ROLE atlas_worker IN DATABASE xenolinguist_atlas SET search_path = atlas, 
     }
     & (Join-Path $PSScriptRoot 'atlas-migrate.ps1')
     & (Join-Path $PSScriptRoot 'atlas-reference.ps1')
+    & (Join-Path $PSScriptRoot 'atlas-build.ps1')
     Set-AtlasNodeEnvironment -Secrets $values
     Remove-Item Env:ATLAS_ADMIN_DATABASE_URL -ErrorAction SilentlyContinue
     $startApi = @{

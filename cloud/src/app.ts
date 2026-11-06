@@ -11,6 +11,8 @@ import { AtlasError } from './errors.js';
 import { Jobs } from './jobs.js';
 import { AtlasWorker } from './worker/runner.js';
 import { comparisonReferences } from './references.js';
+import path from 'node:path';
+import { existsSync } from 'node:fs';
 
 function route(action: (req: Request, res: Response, next: NextFunction) => Promise<unknown>) {
   return (req: Request, res: Response, next: NextFunction) => { action(req, res, next).catch(next); };
@@ -80,6 +82,11 @@ export function createApp(config: AtlasConfig) {
     res.set({ 'Content-Type': object.contentType + '; charset=utf-8', 'Content-Disposition': `attachment; filename="language-evidence.${extension}"` }).send(object.bytes);
   }));
   app.use('/api', (_req, res) => res.status(404).json({ error: 'not-found', message: 'Resource unavailable.' }));
+  const webRoot = path.join(config.source, 'cloud/dist/web');
+  if (existsSync(path.join(webRoot, 'index.html'))) {
+    app.use(express.static(webRoot, { index: false, dotfiles: 'deny' }));
+    app.get('/', (_req, res) => res.sendFile(path.join(webRoot, 'index.html')));
+  }
   app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
     if (error instanceof AtlasError) { res.status(error.status).json({ error: error.code, message: error.message }); return; }
     if (error instanceof ZodError || error instanceof SyntaxError) {
