@@ -48,7 +48,7 @@ export async function snapshot(directory: string) {
   const files = ['package.json', 'package-lock.json', 'tsconfig.base.json', 'evaluation/tsconfig.json',
     'evaluation/src/generator/prng.ts', 'evaluation/src/metrics/performance.ts', 'server/src/config.ts',
     'server/src/services/ollama-runtime.ts', 'server/src/services/runtime-error.ts', 'shared/schemas/capabilities.ts',
-    'shared/schemas/lexical-comparison.ts'];
+    'shared/schemas/lexical-comparison.ts', 'shared/language-evidence.ts'];
   const walk = async (relative: string) => {
     for (const entry of await readdir(path.join(root, relative), { withFileTypes: true })) {
       const name = relative + '/' + entry.name;

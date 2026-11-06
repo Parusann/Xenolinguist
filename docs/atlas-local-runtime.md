@@ -15,8 +15,26 @@ pwsh -NoProfile -File scripts/atlas-stop.ps1
 
 Setup downloads the pinned archives to the research cache, verifies their SHA-256 values and initializes the atlas cluster. Its PostgreSQL extraction selects the database runtime and required licenses. Repeated setup preserves an existing database. An incomplete extraction or initialization requires inspection. The start script rejects an occupied database port and verifies the connected cluster's actual data directory.
 
-An initial launcher test exposed inherited native output handles keeping a caller waiting after startup. Starting `pg_ctl` with explicit file redirection fixed the return path. The verified restart returned in 1,396 ms, and the inserted test record survived shutdown and restart. Eight 4 KiB files passed write, flush, cached read and byte-integrity checks. Flushed writes ranged from 159.69 to 240.29 ms while model conversion/import work used the same HDD. The reads used warm cache. [Measured runtime verification](verification/l1-atlas-runtime.json)
+Launcher testing exposed inherited native output handles keeping a caller waiting after startup. Services now start in separate hidden hosts, and readiness is checked against the expected child process. Graceful stop waits for the API process to finish before stopping PostgreSQL. The database-only warm restart returned in 1,396 ms, and the inserted test record survived shutdown and restart. Eight 4 KiB files passed write, flush, cached read and byte-integrity checks. Flushed writes ranged from 159.69 to 240.29 ms during simultaneous model work. The reads used warm cache. [Runtime verification](verification/l1-atlas-runtime.json) · [Separate-process launcher verification](verification/l2-atlas-launcher.json)
 
 Application schemas use a separate owner role. Authentication tables live in `auth`, while dataset and job tables live in `atlas`. Tenant context is transaction-scoped, and protected tables force row-level security. The first application migration is generated from the pinned authentication library and retained as SQL. Applied migration hashes normalize line endings and reject changed migrations. [Migration code](../cloud/src/migrate.ts) · [PostgreSQL transaction guidance](https://node-postgres.com/features/transactions)
 
 The current backup location is on the research drive. An independent recovery copy must be established before storing irreplaceable submissions. The database and storage tests use reproducible data.
+
+## Accounts and versioned evidence
+
+The API uses Better Auth 1.7.18 with PostgreSQL-backed accounts and sessions. It derives dataset ownership from the verified session. Dataset tables force row-level security under a separate owner role. Transaction-local tenant context is cleared on commit or rollback before a pooled connection is reused.
+
+CSV and JSON wordlists accept `id`, `form`, optional `meaning` and optional `annotations`. Plain text creates one sample per nonblank line. Original bytes remain downloadable by the owner, while normalized forms preserve their original spelling in a separate field. Each upload has an immutable version, source/rights declaration, checksum and retry key.
+
+Initial bounds are 5 MiB per file, 5,000 records per file, 10 datasets per account, 20 versions per dataset and 256 MiB of objects per account. Input validation rejects duplicate identifiers, unknown fields and invalid paths. Concurrent requests with the same retry key publish one version. Reusing that key for different content returns a conflict.
+
+The HTTP verification creates a fresh disposable database, applies migrations, creates two signed accounts and exercises upload, download, tampering, logout, deletion and tenant isolation. All 15 checks passed. Verification removes its disposable database and object directory after checking their generated names and workspace location. [Verification evidence](verification/l2-l3-atlas-foundation.json) · [Verification implementation](../cloud/src/verify.ts)
+
+~~~powershell
+pwsh -NoProfile -File scripts/atlas-start.ps1
+# The API is available at http://127.0.0.1:4318.
+pwsh -NoProfile -File scripts/atlas-stop.ps1
+~~~
+
+The browser interface and comparison worker are added in subsequent implementation units.

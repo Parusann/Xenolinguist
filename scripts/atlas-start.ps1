@@ -7,14 +7,12 @@ if (-not (Test-Path -LiteralPath (Join-Path $AtlasWorkspace.Database 'PG_VERSION
 & (Join-Path $AtlasWorkspace.Postgres 'pg_ctl.exe') -D $AtlasWorkspace.Database status *> $null
 if ($LASTEXITCODE -ne 0) {
     if (Get-NetTCPConnection -State Listen -LocalPort 5438 -ErrorAction SilentlyContinue) { throw 'Atlas database port 5438 is occupied' }
-    # File redirection prevents the background server from retaining a caller's PowerShell output pipe.
+    # A separate hidden console isolates the background server from the caller's output pipes.
     $startOptions = @{
         FilePath = Join-Path $AtlasWorkspace.Postgres 'pg_ctl.exe'
         WindowStyle = 'Hidden'
         PassThru = $true
         ArgumentList = @('-D', ('"' + $AtlasWorkspace.Database + '"'), '-l', ('"' + (Join-Path $AtlasWorkspace.Log 'postgres.log') + '"'), '-w', '-t', '60', 'start')
-        RedirectStandardOutput = Join-Path $AtlasWorkspace.Log 'pg-start.out.log'
-        RedirectStandardError = Join-Path $AtlasWorkspace.Log 'pg-start.err.log'
     }
     $starter = Start-Process @startOptions
     if (-not $starter.WaitForExit(65000) -or $starter.ExitCode -ne 0) { throw 'Atlas database startup failed. Inspect its local startup log.' }
@@ -52,7 +50,41 @@ ALTER ROLE atlas_worker IN DATABASE xenolinguist_atlas SET search_path = atlas, 
     $sql | & (Join-Path $AtlasWorkspace.Postgres 'psql.exe') -X -q -v ON_ERROR_STOP=1
     if ($LASTEXITCODE) { throw 'Atlas schemas failed to initialize' }
     if ($DatabaseOnly) { Write-Output 'Atlas PostgreSQL is ready on 127.0.0.1:5438'; return }
-    throw 'The atlas application entry point is pending. Use -DatabaseOnly for the runtime milestone.'
+    $endpoint = 'http://127.0.0.1:4318'
+    if (Get-NetTCPConnection -State Listen -LocalPort 4318 -ErrorAction SilentlyContinue) {
+        $existing = Invoke-RestMethod ($endpoint + '/health') -TimeoutSec 5
+        if ($existing.service -ne 'xenolinguist-atlas' -or -not $existing.ready) { throw 'Atlas application port is occupied' }
+        Write-Output $endpoint
+        return
+    }
+    & (Join-Path $PSScriptRoot 'atlas-migrate.ps1')
+    Set-AtlasNodeEnvironment -Secrets $values
+    Remove-Item Env:ATLAS_ADMIN_DATABASE_URL -ErrorAction SilentlyContinue
+    $startApi = @{
+        FilePath = (Get-Process -Id $PID).Path
+        WindowStyle = 'Hidden'
+        PassThru = $true
+        WorkingDirectory = $ResearchWorkspace.Source
+        ArgumentList = @('-NoProfile', '-File', ('"' + (Join-Path $PSScriptRoot 'atlas-host.ps1') + '"'))
+    }
+    $api = Start-Process @startApi
+    $deadline = (Get-Date).AddSeconds(60)
+    do {
+        try {
+            $health = Invoke-RestMethod ($endpoint + '/health') -TimeoutSec 2
+            if ($health.ready -and $health.service -eq 'xenolinguist-atlas') {
+                $actual = Get-CimInstance Win32_Process -Filter ("ProcessId = " + [int]$health.pid)
+                if ($actual.ParentProcessId -ne $api.Id) { throw 'Application readiness came from another process' }
+                @{ pid = $health.pid; hostPid = $api.Id; endpoint = $endpoint; startedAt = (Get-Date).ToUniversalTime().ToString('o') } |
+                    ConvertTo-Json | Set-Content -LiteralPath (Join-Path $AtlasWorkspace.Config 'runtime.json') -Encoding utf8
+                Write-Output $endpoint
+                return
+            }
+        } catch {}
+        if ($api.HasExited) { throw 'Atlas application exited. Inspect its local error log.' }
+        Start-Sleep -Milliseconds 250
+    } while ((Get-Date) -lt $deadline)
+    throw 'Atlas application did not become ready within 60 seconds.'
 } finally {
     Remove-Item Env:PGPASSWORD -ErrorAction SilentlyContinue
 }

@@ -56,5 +56,9 @@ function Set-AtlasNodeEnvironment {
         $env:ATLAS_ADMIN_DATABASE_URL = 'postgresql://atlas_admin:' + [Uri]::EscapeDataString($Secrets.atlas_admin) + '@127.0.0.1:5438/xenolinguist_atlas'
     }
     $env:ATLAS_AUTH_SECRET = $Secrets.auth_secret
+    $hmac = [Security.Cryptography.HMACSHA256]::new([Text.Encoding]::UTF8.GetBytes($Secrets.auth_secret))
+    try {
+        $env:ATLAS_CONTROL_TOKEN = [Convert]::ToHexString($hmac.ComputeHash([Text.Encoding]::UTF8.GetBytes('xeno-atlas-local-control-1'))).ToLowerInvariant()
+    } finally { $hmac.Dispose() }
     $env:NODE_ENV = 'production'
 }
