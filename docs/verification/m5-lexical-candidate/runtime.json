@@ -1,0 +1,154 @@
+{
+  "candidateDetails": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen3",
+    "families": [
+      "qwen3"
+    ],
+    "parameter_size": "4.0B",
+    "quantization_level": "BF16"
+  },
+  "imports": {
+    "ollamaVersion": "0.32.5",
+    "baseRevision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "adapterHash": "faec1a8fba0a3cfeac6c210ebfb4722e0fe28572f27d83e4a724d8aead555f20",
+    "recipe": {
+      "id": "lexical-candidate-v1",
+      "base": "Qwen/Qwen3-4B-Instruct-2507",
+      "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "trainingSha256": "ffc0329e46768e4dcf685fd1740633e225ed688aeaa0f1c7fe75fdd365c104dc",
+      "seed": 17,
+      "epochs": 1,
+      "updates": 48,
+      "batchSize": 1,
+      "sampleOrder": "exported balanced order, exactly once",
+      "optimizer": "AdamW",
+      "learningRate": 0.0001,
+      "weightDecay": 0,
+      "gradientNormCap": 1,
+      "baseDtype": "bfloat16",
+      "backend": "CPU",
+      "threads": 4,
+      "layer": 35,
+      "targetModules": [
+        "q_proj",
+        "v_proj"
+      ],
+      "rank": 4,
+      "alpha": 8,
+      "dropout": 0,
+      "initialization": "fresh from seed; pilot weights excluded",
+      "selection": "final update only, regardless of development scores",
+      "primaryEvaluation": "matched base and candidate without tools, structured prompt v2",
+      "gates": "lexical-adapter-gates-v1.md"
+    },
+    "tensorCount": 398,
+    "changedTensors": [
+      "model.layers.35.self_attn.q_proj.weight",
+      "model.layers.35.self_attn.v_proj.weight"
+    ],
+    "conversion": {
+      "repository": "https://github.com/ggml-org/llama.cpp",
+      "tag": "v0.9.0",
+      "revision": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
+      "directory": "llama-cpp-v0.9.0",
+      "outtype": "bf16",
+      "modelName": "XenoLexicalComparison",
+      "runtime": "the isolated conversion-cpu environment",
+      "license": "MIT"
+    },
+    "conversionPackages": {
+      "certifi": "2026.10.23",
+      "charset-normalizer": "3.5.2",
+      "colorama": "0.4.6",
+      "filelock": "4.2.9",
+      "fsspec": "2026.9.0",
+      "gguf": "0.19.0",
+      "huggingface-hub": "0.36.2",
+      "idna": "3.20",
+      "jinja2": "3.1.6",
+      "markupsafe": "3.0.4",
+      "mpmath": "1.3.0",
+      "networkx": "3.7",
+      "numpy": "2.2.6",
+      "packaging": "26.3",
+      "protobuf": "4.25.9",
+      "pyyaml": "6.0.3",
+      "regex": "2026.9.29",
+      "requests": "2.34.2",
+      "safetensors": "0.8.0",
+      "sentencepiece": "0.2.3",
+      "setuptools": "81.0.0",
+      "sympy": "1.14.0",
+      "tokenizers": "0.22.2",
+      "torch": "2.11.0+cpu",
+      "tqdm": "4.70.1",
+      "transformers": "4.57.6",
+      "typing-extensions": "4.16.0",
+      "urllib3": "2.8.0"
+    },
+    "baseGguf": {
+      "sha256": "6caa9ba7071e827ea4d2d06dea2781b2d9660cba90163a305ebb45d1bb00d759",
+      "conversion": {
+        "repository": "https://github.com/ggml-org/llama.cpp",
+        "tag": "v0.9.0",
+        "revision": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
+        "directory": "llama-cpp-v0.9.0",
+        "outtype": "bf16",
+        "modelName": "XenoLexicalComparison",
+        "runtime": "the isolated conversion-cpu environment",
+        "license": "MIT"
+      }
+    },
+    "base": {
+      "name": "xeno-lexical-base:cdbee75f17c01a7c",
+      "digest": "6c317e5f10611b5f1e0927132deea3f5d47a5ddcc3d827276d40d69f8dc4cd53"
+    },
+    "candidateGguf": {
+      "sha256": "5d78402274360123e059d0a34abc2a6b7f830929efbcaabc907f681181d9c539",
+      "conversion": {
+        "repository": "https://github.com/ggml-org/llama.cpp",
+        "tag": "v0.9.0",
+        "revision": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
+        "directory": "llama-cpp-v0.9.0",
+        "outtype": "bf16",
+        "modelName": "XenoLexicalComparison",
+        "runtime": "the isolated conversion-cpu environment",
+        "license": "MIT"
+      }
+    },
+    "candidate": {
+      "name": "xeno-lexical-candidate:faec1a8fba0a3cfe",
+      "digest": "ed9a910c1fe878ad901b7b47201fc0d87a49f05da9ab0d01e3420c2d683ed62e"
+    }
+  },
+  "seal": {
+    "format": "lexical-pair-v1",
+    "recipeHash": "7383f463c399e5d13d435bc9f1478bbaaed9879476d65846fdcb7897f05e5a85",
+    "adapterHash": "faec1a8fba0a3cfeac6c210ebfb4722e0fe28572f27d83e4a724d8aead555f20",
+    "baseRevision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "base": {
+      "name": "xeno-lexical-base:cdbee75f17c01a7c",
+      "digest": "6c317e5f10611b5f1e0927132deea3f5d47a5ddcc3d827276d40d69f8dc4cd53"
+    },
+    "candidate": {
+      "name": "xeno-lexical-candidate:faec1a8fba0a3cfe",
+      "digest": "ed9a910c1fe878ad901b7b47201fc0d87a49f05da9ab0d01e3420c2d683ed62e"
+    },
+    "optionsHash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "templateHash": "c87c39da4214fe8fee1f49f4b54bdb5ae1e1cd5aed22a356f3ffedb59964a715",
+    "quantization": "BF16",
+    "ollamaVersion": "0.32.5"
+  },
+  "baseDetails": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen3",
+    "families": [
+      "qwen3"
+    ],
+    "parameter_size": "4.0B",
+    "quantization_level": "BF16"
+  }
+}

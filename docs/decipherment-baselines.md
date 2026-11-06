@@ -27,7 +27,7 @@ The existing symbolic translation engine separately recovered 10/10 withheld sce
 
 ## Inspect and replay the runs
 
-Each archive includes the complete 208-record schedule, raw calls, tool checks, outcomes, original source bytes, report and summary. Replaying uses saved responses and performs zero inference calls. A verifier checks the raw requests against the learner projection, reconstructs model actions and scores, and checks every scheduled record. The reserved split has had zero learner evaluations.
+Each archive includes the complete 208-record schedule, raw calls, tool checks, outcomes, original source bytes, report and summary. Replaying uses saved responses and performs zero inference calls. A verifier checks the raw requests against the learner projection, reconstructs model actions and scores, and checks every scheduled record. The M3 studies performed zero reserved learner evaluations. The subsequent [adapter comparison](decipherment-model-card.md) includes the completed reserved run.
 
 | Study | Browse report | Full archive | Archive SHA-256 |
 | --- | --- | --- | --- |
@@ -41,4 +41,4 @@ From the configured research checkout, extract either archive to a new HDD direc
 & $ResearchWorkspace.Node node_modules/tsx/dist/cli.mjs evaluation/src/decipherment/study.ts verify <extracted-directory>
 ~~~
 
-The study measures behavior under two specific interfaces on a small synthetic corpus. Natural-language performance, effects of weight updates and final-set performance remain open questions. The [first adapter experiment](../evaluation/protocols/lexical-adapter-gates-v1.md) specifies the decision criteria before any final comparison.
+The study measures behavior under two specific interfaces on a small synthetic corpus. Natural-language performance remains outside this study. The subsequent [adapter comparison](decipherment-model-card.md) measures weight updates and reserved-set behavior. The [first adapter experiment](../evaluation/protocols/lexical-adapter-gates-v1.md) specifies the decision criteria before any final comparison.
