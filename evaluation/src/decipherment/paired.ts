@@ -7,7 +7,8 @@ import { z } from 'zod';
 import { requireLocalModel, localOllamaUrl, ollamaJson } from '../../../server/src/services/ollama-runtime.js';
 import { createCorpus, digest } from './corpus.js';
 import { independentControls } from './archive.js';
-import { learnerView, type PrivateEpisode } from './contracts.js';
+import { snapshot } from './study.js';
+import { learnerView, responseSchema, type PrivateEpisode } from './contracts.js';
 import { runModel, type ModelConfig, type ModelResult } from './model.js';
 import { scoreEpisode, summarizeItems, type ItemScore } from './score.js';
 
@@ -109,11 +110,16 @@ async function sealImports(directory: string) {
   await validateRecipe(seal);
   await validateRuntime(seal);
   const [control] = await independentControls();
+  const controlChecks = [];
   for (const arm of ['base', 'candidate'] as const) {
     await warmModel(seal[arm].name);
     const trial = await runModel(learnerView(control), false, settings(seal, arm));
-    if (trial.outcome.status !== 'complete') throw new Error(`Independent ${arm} runtime check failed: ${trial.outcome.message}`);
+    controlChecks.push({ arm, input: learnerView(control), result: trial });
+    await writeFile(path.join(directory, `control-check-${arm}.json`), JSON.stringify(controlChecks.at(-1), null, 2) + '\n', { flag: 'wx' });
+    if (trial.outcome.status !== 'complete' || !responseSchema.safeParse(trial.outcome.response).success)
+      throw new Error(`Independent ${arm} runtime check did not return a valid response`);
   }
+  await writeFile(path.join(directory, 'control-checks.json'), JSON.stringify(controlChecks, null, 2) + '\n', { flag: 'wx' });
   await writeFile(path.join(directory, 'pair.json'), JSON.stringify(seal, null, 2) + '\n', { flag: 'wx' });
   return seal;
 }
@@ -133,6 +139,7 @@ async function evaluate(split: Split, seal: Seal, directory: string) {
   await mkdir(directory, { recursive: false });
   const manifest = { format: 'lexical-comparison-v1', split, seal, corpusHash: digest(data), schedule: cells,
     preload: 'empty generate before each arm, 8192 context, outside episode budget',
+    source: await snapshot(directory),
     sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), started: new Date().toISOString() };
   const output = path.join(directory, 'records.jsonl');
   await writeFile(path.join(directory, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n', { flag: 'wx' });
@@ -163,6 +170,11 @@ export async function verify(directory: string) {
   const bytes = await readFile(path.join(directory, 'records.jsonl'));
   if (manifest.format !== 'lexical-comparison-v1' || digest(manifest) !== complete.manifestHash || digest(data) !== manifest.corpusHash ||
       digest(cells) !== digest(manifest.schedule) || hash(bytes) !== complete.recordsHash) throw new Error('Comparison integrity failure');
+  for (const entry of manifest.source.files) {
+    const file = path.resolve(directory, 'source', entry.path);
+    if (!file.startsWith(path.resolve(directory, 'source') + path.sep) ||
+        hash(await readFile(file)) !== entry.sha256) throw new Error('Comparison source snapshot differs');
+  }
   const rows: Row[] = bytes.toString('utf8').trim().split('\n').map(s => JSON.parse(s));
   if (rows.length !== cells.length) throw new Error('Comparison schedule incomplete');
   for (const [index, row] of rows.entries()) {

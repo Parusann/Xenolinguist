@@ -52,6 +52,13 @@ if ($Action -eq 'setup') {
             Confirm-Exit 'Lexical data export'
         } finally { Pop-Location }
     }
+    $converterLock = Get-Content (Join-Path $adapterRoot 'converter-lock.json') -Raw | ConvertFrom-Json
+    $converterRoot = Assert-ResearchPath (Join-Path $ResearchWorkspace.Root ('runtime/' + $converterLock.directory))
+    if (-not (Test-Path -LiteralPath $converterRoot)) {
+        git clone --depth 1 --branch $converterLock.tag $converterLock.repository $converterRoot
+        Confirm-Exit 'Converter checkout'
+    }
+    if ((git -C $converterRoot rev-parse HEAD) -ne $converterLock.revision) { throw 'Converter revision mismatch' }
     return
 }
 

@@ -44,7 +44,7 @@ function schedule(data: Awaited<ReturnType<typeof cases>>, methods: Method[]): C
   return cells;
 }
 
-async function snapshot(directory: string) {
+export async function snapshot(directory: string) {
   const files = ['package.json', 'package-lock.json', 'tsconfig.base.json', 'evaluation/tsconfig.json',
     'evaluation/src/generator/prng.ts', 'evaluation/src/metrics/performance.ts', 'server/src/config.ts',
     'server/src/services/ollama-runtime.ts', 'server/src/services/runtime-error.ts', 'shared/schemas/capabilities.ts'];

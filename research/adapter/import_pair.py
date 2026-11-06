@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 import struct
 import subprocess
+import sys
 import urllib.request
 
 
@@ -118,11 +119,18 @@ def run():
     version = api('version')['version']
     record = {'ollamaVersion': version, 'baseRevision': lock['sha'], 'adapterHash': status['finalAdapterHash'],
               'recipe': recipe, 'tensorCount': len(original), 'changedTensors': changed}
+    converter_lock = read_json(Path(__file__).with_name('converter-lock.json'))
+    converter_root = root / 'runtime' / converter_lock['directory']
+    revision = subprocess.check_output(['git', '-C', str(converter_root), 'rev-parse', 'HEAD'], text=True).strip()
+    modified = subprocess.check_output(['git', '-C', str(converter_root), 'status', '--porcelain', '--untracked-files=no'], text=True)
+    if revision != converter_lock['revision'] or modified:
+        raise ValueError('Converter source differs from its pinned revision')
+    record['conversion'] = converter_lock
     for arm, weights, key in [('base', base, lock['sha']), ('candidate', merged, status['finalAdapterHash'])]:
         # Both imports use the exact upstream architecture, tokenizer and generation metadata.
         stage = out / arm
         stage.mkdir(exist_ok=True)
-        for src in [*weights.glob('*.safetensors'), *(base / name for name in
+        for src in [*weights.glob('*.safetensors'), weights / 'model.safetensors.index.json', *(base / name for name in
                     ('config.json', 'tokenizer.json', 'tokenizer_config.json', 'merges.txt', 'vocab.json', 'generation_config.json'))]:
             dest = stage / src.name
             if dest.exists():
@@ -130,9 +138,26 @@ def run():
                     raise ValueError('Unexpected staged import file')
             else:
                 os.link(src, dest)
+        gguf = out / (arm + '.bf16.gguf')
+        receipt = out / (arm + '.conversion.json')
+        if receipt.exists():
+            if read_json(receipt) != {'sha256': sha_file(gguf), 'conversion': converter_lock}:
+                raise ValueError('Converted artifact differs from recorded bytes')
+        else:
+            partial = out / (arm + '.bf16.gguf.partial')
+            if partial.exists() or gguf.exists():
+                raise ValueError('An unfinished conversion needs inspection before retry')
+            print(f'Converting {arm} with pinned llama.cpp to BF16', flush=True)
+            with (out / (arm + '.conversion.log')).open('ab') as log:
+                subprocess.run([sys.executable, '-B', str(converter_root / 'convert_hf_to_gguf.py'), str(stage),
+                                '--outfile', str(partial), '--outtype', 'bf16', '--model-name', 'XenoLexicalComparison'],
+                               stdout=log, stderr=log, check=True)
+            partial.rename(gguf)
+            receipt.write_text(json.dumps({'sha256': sha_file(gguf), 'conversion': converter_lock}, indent=2) + '\n', encoding='utf-8')
+        record[arm + 'Gguf'] = read_json(receipt)
         model_file = out / (arm + '.Modelfile')
         license_text = (base / 'LICENSE').read_text(encoding='utf-8')
-        model_file.write_text(f'FROM "{stage.as_posix()}"\nLICENSE """{license_text}"""\n', encoding='utf-8')
+        model_file.write_text(f'FROM "{gguf.as_posix()}"\nLICENSE """{license_text}"""\n', encoding='utf-8')
         tag = f'xeno-lexical-{arm}:{key[:16]}'
         print(f'Importing {arm} into {tag}', flush=True)
         with (out / (arm + '.log')).open('ab') as log:
