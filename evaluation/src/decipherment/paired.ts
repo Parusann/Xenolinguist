@@ -142,11 +142,18 @@ async function evaluate(split: Split, seal: Seal, directory: string) {
     source: await snapshot(directory),
     sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), started: new Date().toISOString() };
   const output = path.join(directory, 'records.jsonl');
+  const preloadsFile = path.join(directory, 'preloads.jsonl');
   await writeFile(path.join(directory, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n', { flag: 'wx' });
   await writeFile(output, '', { flag: 'wx' });
+  await writeFile(preloadsFile, '', { flag: 'wx' });
   const rows: Row[] = [];
   for (const cell of cells) {
-    if (!rows.length || rows.at(-1)!.arm !== cell.arm) await warmModel(seal[cell.arm].name);
+    if (!rows.length || rows.at(-1)!.arm !== cell.arm) {
+      const started = performance.now();
+      await warmModel(seal[cell.arm].name);
+      await appendFile(preloadsFile, JSON.stringify({ arm: cell.arm, durationMs: performance.now() - started,
+        allocation: await ollamaJson('/api/ps') }) + '\n');
+    }
     const e = data.find(e => e.learner.id === cell.episodeId)!, input = learnerView(e);
     const started = performance.now();
     const result = await runModel(input, false, settings(seal, cell.arm));
@@ -157,7 +164,8 @@ async function evaluate(split: Split, seal: Seal, directory: string) {
   await validateRuntime(seal);
   const result = summary(rows, data, split);
   await writeFile(path.join(directory, 'summary.json'), JSON.stringify(result, null, 2) + '\n', { flag: 'wx' });
-  await writeFile(path.join(directory, 'complete.json'), JSON.stringify({ recordsHash: hash(await readFile(output)), summaryHash: digest(result), manifestHash: digest(manifest) }) + '\n', { flag: 'wx' });
+  await writeFile(path.join(directory, 'complete.json'), JSON.stringify({ recordsHash: hash(await readFile(output)),
+    preloadsHash: hash(await readFile(preloadsFile)), summaryHash: digest(result), manifestHash: digest(manifest) }) + '\n', { flag: 'wx' });
   return verify(directory);
 }
 
@@ -168,8 +176,12 @@ export async function verify(directory: string) {
   await validateRecipe(seal);
   const data = createCorpus(split), cells = (['base', 'candidate'] as const).flatMap(arm => data.map(e => ({ arm, episodeId: e.learner.id })));
   const bytes = await readFile(path.join(directory, 'records.jsonl'));
+  const preloads = await readFile(path.join(directory, 'preloads.jsonl'));
   if (manifest.format !== 'lexical-comparison-v1' || digest(manifest) !== complete.manifestHash || digest(data) !== manifest.corpusHash ||
-      digest(cells) !== digest(manifest.schedule) || hash(bytes) !== complete.recordsHash) throw new Error('Comparison integrity failure');
+      digest(cells) !== digest(manifest.schedule) || hash(bytes) !== complete.recordsHash ||
+      hash(preloads) !== complete.preloadsHash) throw new Error('Comparison integrity failure');
+  const loads = preloads.toString('utf8').trim().split('\n').map(line => JSON.parse(line));
+  if (loads.length !== 2 || loads[0].arm !== 'base' || loads[1].arm !== 'candidate') throw new Error('Incomplete preload record');
   for (const entry of manifest.source.files) {
     const file = path.resolve(directory, 'source', entry.path);
     if (!file.startsWith(path.resolve(directory, 'source') + path.sep) ||
