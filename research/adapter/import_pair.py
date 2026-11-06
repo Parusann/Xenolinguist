@@ -7,7 +7,6 @@ from pathlib import Path
 import shutil
 import struct
 import subprocess
-import sys
 import urllib.request
 
 
@@ -126,6 +125,16 @@ def run():
     if revision != converter_lock['revision'] or modified:
         raise ValueError('Converter source differs from its pinned revision')
     record['conversion'] = converter_lock
+    converter_python = root / 'runtime/conversion-cpu/Scripts/python.exe'
+    if not converter_python.is_file():
+        raise ValueError('Missing dedicated conversion environment')
+    packages = json.loads(subprocess.check_output([str(converter_python), '-IB', '-c',
+        'import importlib.metadata as m,json; print(json.dumps({d.metadata["Name"].lower().replace("_","-"):d.version for d in m.distributions()}))'], text=True))
+    expected_packages = dict(line.split('==') for line in
+        Path(__file__).with_name('requirements-conversion-windows-cpu.txt').read_text(encoding='utf-8-sig').splitlines() if line.strip())
+    if packages != expected_packages:
+        raise ValueError('Conversion dependencies differ from the frozen environment')
+    record['conversionPackages'] = packages
     for arm, weights, key in [('base', base, lock['sha']), ('candidate', merged, status['finalAdapterHash'])]:
         # Both imports use the exact upstream architecture, tokenizer and generation metadata.
         stage = out / arm
@@ -149,7 +158,7 @@ def run():
                 raise ValueError('An unfinished conversion needs inspection before retry')
             print(f'Converting {arm} with pinned llama.cpp to BF16', flush=True)
             with (out / (arm + '.conversion.log')).open('ab') as log:
-                subprocess.run([sys.executable, '-B', str(converter_root / 'convert_hf_to_gguf.py'), str(stage),
+                subprocess.run([str(converter_python), '-B', str(converter_root / 'convert_hf_to_gguf.py'), str(stage),
                                 '--outfile', str(partial), '--outtype', 'bf16', '--model-name', 'XenoLexicalComparison'],
                                stdout=log, stderr=log, check=True)
             partial.rename(gguf)

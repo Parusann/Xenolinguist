@@ -59,6 +59,14 @@ if ($Action -eq 'setup') {
         Confirm-Exit 'Converter checkout'
     }
     if ((git -C $converterRoot rev-parse HEAD) -ne $converterLock.revision) { throw 'Converter revision mismatch' }
+    $conversionEnvironment = Assert-ResearchPath (Join-Path $ResearchWorkspace.Root 'runtime/conversion-cpu')
+    $conversionPython = Assert-ResearchPath (Join-Path $conversionEnvironment 'Scripts/python.exe')
+    if (-not (Test-Path -LiteralPath $conversionPython)) {
+        uv venv $conversionEnvironment --python $managed --no-project
+        Confirm-Exit 'Conversion environment creation'
+    }
+    uv pip install --python $conversionPython --only-binary ':all:' --extra-index-url https://download.pytorch.org/whl/cpu --index-strategy unsafe-best-match -r (Join-Path $adapterRoot 'requirements-conversion-windows-cpu.txt')
+    Confirm-Exit 'Pinned conversion dependencies'
     return
 }
 
