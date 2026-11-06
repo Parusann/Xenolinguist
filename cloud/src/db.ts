@@ -9,6 +9,11 @@ export async function lockAccount(client: PoolClient, owner: string) {
   await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1, 0))', [owner]);
 }
 
+/** Upload publication and physical deletion share this lock with consistent backups and orphan scans. */
+export async function lockObjects(client: PoolClient) {
+  await client.query('SELECT pg_advisory_xact_lock_shared(43185440)');
+}
+
 /** Tenant context lasts for one transaction, including when a pooled connection is reused. */
 export async function asOwner<T>(pool: Pool, owner: string, action: (client: PoolClient) => Promise<T>): Promise<T> {
   const client = await pool.connect();

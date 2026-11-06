@@ -1,8 +1,8 @@
 import { createHash, randomUUID } from 'node:crypto';
 import type { Pool } from 'pg';
-import { ATLAS_LIMITS, atlasId, datasetInputSchema, uploadInputSchema, type DatasetInput, type UploadInput } from '../../shared/schemas/atlas.js';
+import { ATLAS_LIMITS, atlasId, datasetInputSchema, uploadInputSchema, type DatasetInput } from '../../shared/schemas/atlas.js';
 import { importEvidence } from '../../shared/language-evidence.js';
-import { asOwner, lockAccount } from './db.js';
+import { asOwner, lockAccount, lockObjects } from './db.js';
 import { AtlasError } from './errors.js';
 import { ObjectStore } from './objects.js';
 
@@ -40,7 +40,7 @@ export class Datasets {
     });
   }
 
-  async upload(owner: string, dataset: string, raw: UploadInput) {
+  async upload(owner: string, dataset: string, raw: unknown) {
     atlasId.parse(dataset);
     const input = uploadInputSchema.parse(raw), bytes = Buffer.from(input.content, 'utf8');
     let rows;
@@ -65,6 +65,7 @@ export class Datasets {
       const storage = (await client.query('SELECT coalesce(sum(bytes),0)::bigint AS bytes FROM atlas.objects')).rows[0];
       if (counts.count >= ATLAS_LIMITS.versions || Number(storage.bytes) + bytes.length > ATLAS_LIMITS.accountBytes)
         throw new AtlasError(409, 'storage-limit', 'The account or dataset storage limit has been reached.');
+      await lockObjects(client);
       const object = await this.objects.put(bytes), version = randomUUID();
       // Keep the file if COMMIT becomes uncertain. Recovery checks database references before orphan cleanup.
       await client.query('INSERT INTO atlas.objects(id,owner_id,sha256,bytes,content_type) VALUES($1,$2,$3,$4,$5)',

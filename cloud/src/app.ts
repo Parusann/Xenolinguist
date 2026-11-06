@@ -4,18 +4,22 @@ import { toNodeHandler, fromNodeHeaders } from 'better-auth/node';
 import { ATLAS_LIMITS } from '../../shared/schemas/atlas.js';
 import type { AtlasConfig } from './config.js';
 import { createAuth } from './auth.js';
-import { atlasPool } from './db.js';
+import { atlasPool, asOwner } from './db.js';
 import { Datasets } from './datasets.js';
 import { ObjectStore } from './objects.js';
 import { AtlasError } from './errors.js';
+import { Jobs } from './jobs.js';
+import { AtlasWorker } from './worker/runner.js';
+import { comparisonReferences } from './references.js';
 
 function route(action: (req: Request, res: Response, next: NextFunction) => Promise<unknown>) {
   return (req: Request, res: Response, next: NextFunction) => { action(req, res, next).catch(next); };
 }
 
 export function createApp(config: AtlasConfig) {
-  const pool = atlasPool(config.databaseUrl), authPool = atlasPool(config.authDatabaseUrl, 2);
+  const pool = atlasPool(config.databaseUrl), authPool = atlasPool(config.authDatabaseUrl, 2), workerPool = atlasPool(config.workerDatabaseUrl, 3);
   const auth = createAuth(config, authPool), datasets = new Datasets(pool, new ObjectStore(config.objects));
+  const jobs = new Jobs(pool), worker = new AtlasWorker(workerPool, datasets.objects);
   const app = express();
   let draining = false;
   app.disable('x-powered-by');
@@ -41,16 +45,34 @@ export function createApp(config: AtlasConfig) {
   }));
 
   app.get('/api/me', route(async (_req, res) => res.json({ user: res.locals.user })));
-  app.get('/api/status', route(async (_req, res) => res.json({ limits: ATLAS_LIMITS, sharing: 'private', trainingPermission: false })));
+  app.get('/api/status', route(async (_req, res) => res.json({ limits: ATLAS_LIMITS, sharing: 'private', trainingPermission: false,
+    worker: worker.diagnostics, deletion: await asOwner(pool, res.locals.owner, async client =>
+      ({ pendingObjects: (await client.query('SELECT count(*)::int AS n FROM atlas.object_gc')).rows[0].n })) })));
   app.get('/api/references', route(async (_req, res) => res.json((await pool.query(`SELECT s.id,s.version,s.sha256,s.url,s.license,s.attribution,
     (SELECT count(*)::int FROM atlas.reference_languages l WHERE l.source_id=s.id) AS languages,
-    (SELECT count(*)::int FROM atlas.reference_entries e WHERE e.source_id=s.id) AS forms FROM atlas.reference_sources s ORDER BY s.id`)).rows)));
+    (SELECT count(*)::int FROM atlas.reference_entries e WHERE e.source_id=s.id) AS forms,
+    (SELECT count(*)::int FROM atlas.reference_features f WHERE f.source_id=s.id) AS features FROM atlas.reference_sources s ORDER BY s.id`)).rows)));
+  app.get('/api/references/:id', route(async (req, res) => {
+    const source = (await pool.query('SELECT * FROM atlas.reference_sources WHERE id=$1', [req.params.id])).rows[0];
+    if (!source) throw new AtlasError(404, 'not-found', 'Reference unavailable.');
+    res.json(source);
+  }));
+  app.get('/api/reference-languages', route(async (_req, res) => res.json(await comparisonReferences(pool))));
   app.get('/api/datasets', route(async (_req, res) => res.json(await datasets.list(res.locals.owner))));
   app.post('/api/datasets', route(async (req, res) => res.status(201).json(await datasets.create(res.locals.owner, req.body))));
   app.get('/api/datasets/:id', route(async (req, res) => res.json(await datasets.detail(res.locals.owner, req.params.id))));
   app.post('/api/datasets/:id/versions', route(async (req, res) => res.status(201).json(await datasets.upload(res.locals.owner, req.params.id, req.body))));
   app.delete('/api/datasets/:id', route(async (req, res) => res.json(await datasets.remove(res.locals.owner, req.params.id))));
   app.get('/api/versions/:id/entries', route(async (req, res) => res.json(await datasets.entries(res.locals.owner, req.params.id, Number(req.query.offset ?? 0)))));
+  app.post('/api/versions/:id/jobs', route(async (req, res) => res.status(202).json(await jobs.create(res.locals.owner, req.params.id, req.body))));
+  app.get('/api/versions/:id/jobs', route(async (req, res) => res.json(await jobs.list(res.locals.owner, req.params.id))));
+  app.get('/api/jobs/:id', route(async (req, res) => res.json(await jobs.detail(res.locals.owner, req.params.id))));
+  app.post('/api/jobs/:id/cancel', route(async (req, res) => res.json(await jobs.cancel(res.locals.owner, req.params.id))));
+  app.get('/api/jobs/:id/report', route(async (req, res) => {
+    const job = await jobs.detail(res.locals.owner, req.params.id);
+    if (job.status !== 'complete') throw new AtlasError(409, 'report-unavailable', 'The comparison has no completed report.');
+    res.set('Content-Disposition', 'attachment; filename="xenolinguist-evidence-report.json"').json(job.report);
+  }));
   app.get('/api/versions/:id/download', route(async (req, res) => {
     const object = await datasets.download(res.locals.owner, req.params.id);
     const extensions: Record<string, string> = { 'text/csv': 'csv', 'application/json': 'json', 'text/plain': 'txt' };
@@ -68,6 +90,6 @@ export function createApp(config: AtlasConfig) {
     }
     res.status(500).json({ error: 'operation-failed', message: 'The operation could not complete. Retry after checking the local server.' });
   });
-  return { app, auth, datasets, drain: () => { draining = true; },
-    close: async () => { await Promise.all([pool.end(), authPool.end()]); } };
+  return { app, auth, datasets, jobs, worker, start: () => worker.start(), drain: () => { draining = true; },
+    close: async () => { await worker.stop(); await Promise.all([pool.end(), authPool.end(), workerPool.end()]); } };
 }

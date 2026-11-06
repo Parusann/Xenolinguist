@@ -26,7 +26,7 @@ export async function migrate(config: AtlasConfig) {
     await client.query(`SET ROLE atlas_owner;
       CREATE TABLE IF NOT EXISTS atlas.schema_migrations (name text PRIMARY KEY, sha256 text NOT NULL, applied_at timestamptz NOT NULL DEFAULT now());
       RESET ROLE;`);
-    for (const name of ['001-auth.sql', '002-atlas.sql', '003-reference-metadata.sql', '004-transcription.sql', '005-reference-features.sql']) {
+    for (const name of ['001-auth.sql', '002-atlas.sql', '003-reference-metadata.sql', '004-transcription.sql', '005-reference-features.sql', '006-job-controls.sql']) {
       const sql = (await readFile(path.join(config.source, 'cloud/migrations', name), 'utf8')).replaceAll('\r\n', '\n');
       const sha = createHash('sha256').update(sql).digest('hex');
       const applied = await client.query('SELECT sha256 FROM atlas.schema_migrations WHERE name=$1', [name]);

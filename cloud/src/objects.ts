@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { lstat, open, realpath, rename, statfs, unlink } from 'node:fs/promises';
+import { lstat, open, readdir, realpath, rename, statfs, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { atlasId, ATLAS_LIMITS } from '../../shared/schemas/atlas.js';
 
@@ -51,8 +51,29 @@ export class ObjectStore {
   }
 
   async remove(id: string) {
+    return this.removeFile(atlasId.parse(id) + '.blob');
+  }
+
+  async inventory() {
     await this.checkRoot();
-    const filename = this.filename(id);
+    const names = await readdir(this.root), result = [];
+    for (const name of names) {
+      if (!/^[a-f0-9-]{36}\.(blob|partial)$/u.test(name)) continue;
+      const id = name.slice(0, 36); atlasId.parse(id);
+      const file = path.join(this.root, name), stat = await lstat(file);
+      if (!stat.isFile() || stat.isSymbolicLink() || await realpath(file) !== file) throw new Error('Unsafe object inventory path');
+      result.push({ id, name, bytes: stat.size, modifiedAt: stat.mtimeMs });
+    }
+    return result;
+  }
+
+  async removePartial(id: string) {
+    return this.removeFile(atlasId.parse(id) + '.partial');
+  }
+
+  private async removeFile(name: string) {
+    await this.checkRoot();
+    const filename = path.join(this.root, name);
     try {
       if (!(await lstat(filename)).isFile() || await realpath(filename) !== filename)
         throw new Error('Unsafe object cleanup path');

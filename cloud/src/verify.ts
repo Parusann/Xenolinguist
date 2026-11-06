@@ -1,14 +1,16 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { mkdir, readFile, realpath, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, realpath, rm, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { loadConfig } from './config.js';
-import { atlasPool, asOwner } from './db.js';
+import { atlasPool, asOwner, lockObjects } from './db.js';
 import { migrate } from './migrate.js';
 import { createApp } from './app.js';
 import { comparisonReferences, ingestReferences } from './references.js';
 import { compareLanguages } from '../../engine/src/comparison/compare.js';
+import { AtlasWorker } from './worker/runner.js';
+import { compute, ComputeError } from './worker/compute.js';
 
 const config = await loadConfig();
 if (!config.adminDatabaseUrl) throw new Error('Verification requires the administrative setup environment');
@@ -144,6 +146,74 @@ try {
   assert.equal(await (await request('/api/versions/' + version.id + '/download', 'GET', undefined, a.cookie)).text(), content);
   assert.equal((await request('/api/versions/' + version.id + '/download', 'GET', undefined, b.cookie)).status, 404);
   checks.push('Original UTF-8 bytes survive upload and only the owner can download them');
+  const enqueuePath = '/api/versions/' + version.id + '/jobs', jobKey = randomUUID();
+  const enqueued = await Promise.all(Array.from({ length: 3 }, async () => {
+    const result = await request(enqueuePath, 'POST', { key: jobKey }, a.cookie);
+    assert.equal(result.status, 202); return result.json();
+  }));
+  assert(enqueued.every(job => job.id === enqueued[0].id));
+  assert.equal((await request('/api/jobs/' + enqueued[0].id, 'GET', undefined, b.cookie)).status, 404);
+  assert.equal((await request('/api/jobs/' + enqueued[0].id + '/cancel', 'POST', {}, b.cookie)).status, 404);
+  checks.push('Comparison requests are idempotent and isolated from other accounts');
+  const claimed = (await Promise.all([fixture.worker.claim(), fixture.worker.claim()])).filter(Boolean);
+  assert.equal(claimed.length, 1);
+  const abandoned = claimed[0]!;
+  const queueInspector = atlasPool(testConfig.adminDatabaseUrl, 1);
+  try {
+    await queueInspector.query("UPDATE atlas.jobs SET lease_until=now()-interval '1 second' WHERE id=$1", [abandoned.id]);
+    const recovered = (await fixture.worker.claim())!;
+    assert.equal(recovered.id, abandoned.id); assert.equal(recovered.attempts, 2);
+    assert.notEqual(recovered.lease_token, abandoned.lease_token);
+    const snapshot = await fixture.worker.input(abandoned);
+    const refs = await comparisonReferences(fixture.worker.pool);
+    await assert.rejects(compute(snapshot.input, refs, new AbortController().signal, 1),
+      error => error instanceof ComputeError && error.code === 'timeout');
+    checks.push('The external computation deadline terminates a worker and returns a bounded timeout');
+    assert.equal(await fixture.worker.publish(abandoned, compareLanguages(snapshot.input, refs)), false);
+    await fixture.worker.perform(recovered);
+    const completed = await (await request('/api/jobs/' + recovered.id, 'GET', undefined, a.cookie)).json();
+    assert.equal(completed.status, 'complete', JSON.stringify(completed));
+    assert.equal(completed.report.input.objectSha256, createHash('sha256').update(content).digest('hex'));
+    assert.equal((await request('/api/jobs/' + recovered.id + '/report', 'GET', undefined, b.cookie)).status, 404);
+    assert.equal((await request('/api/jobs/' + recovered.id + '/report', 'GET', undefined, a.cookie)).status, 200);
+    checks.push('Expired work is reclaimed once and a stale lease cannot publish over its replacement');
+    const cancelling = await fixture.jobs.create(a.id, version.id, { key: randomUUID() });
+    const cancelledClaim = (await fixture.worker.claim())!;
+    assert.equal(cancelledClaim.id, cancelling.id);
+    assert.equal((await request('/api/jobs/' + cancelling.id + '/cancel', 'POST', {}, a.cookie)).status, 200);
+    await fixture.worker.perform(cancelledClaim);
+    assert.equal((await fixture.jobs.detail(a.id, cancelling.id)).status, 'cancelled');
+    checks.push('Cancellation fences an already claimed computation and prevents report publication');
+    const exhausted = await fixture.jobs.create(a.id, version.id, { key: randomUUID() });
+    await fixture.worker.claim();
+    await queueInspector.query("UPDATE atlas.jobs SET attempts=3,lease_until=now()-interval '1 second' WHERE id=$1", [exhausted.id]);
+    assert.equal(await fixture.worker.claim(), undefined);
+    assert.equal((await fixture.jobs.detail(a.id, exhausted.id)).error_code, 'attempt-limit');
+    checks.push('Three interrupted attempts reach a terminal state instead of retrying forever');
+    const deleting = await fixture.datasets.create(a.id, { title: 'Permission revocation fixture', languageKind: 'synthetic' });
+    const deletingVersion = await fixture.datasets.upload(a.id, deleting.id, { ...upload, key: randomUUID() });
+    const deletingJob = await fixture.jobs.create(a.id, deletingVersion.id, { key: randomUUID() });
+    const deletedClaim = (await fixture.worker.claim())!;
+    await fixture.datasets.remove(a.id, deleting.id);
+    await fixture.worker.perform(deletedClaim);
+    await assert.rejects(fixture.jobs.detail(a.id, deletingJob.id));
+    checks.push('Deleted input revokes queued and claimed work before a result can be disclosed');
+    const orphan = await fixture.datasets.objects.put(Buffer.from('Reproducible orphan fixture'));
+    const partialId = randomUUID(), partial = path.join(objects, partialId + '.partial');
+    await writeFile(partial, 'Reproducible interrupted upload');
+    const old = new Date(Date.now() - 2 * 3600000); await utimes(partial, old, old);
+    assert.equal(await fixture.worker.cleanupOrphans(), 1);
+    assert.equal((await fixture.datasets.objects.inventory()).some(file => file.id === orphan.id), true);
+    await utimes(path.join(objects, orphan.id + '.blob'), old, old);
+    const publishing = await fixture.worker.pool.connect();
+    try {
+      await publishing.query('BEGIN'); await lockObjects(publishing);
+      await assert.rejects(fixture.worker.cleanupOrphans(), error => (error as { code?: string }).code === '55P03');
+      assert.equal((await fixture.datasets.objects.inventory()).some(file => file.id === orphan.id), true);
+    } finally { await publishing.query('ROLLBACK'); publishing.release(); }
+    assert.equal(await fixture.worker.cleanupOrphans(), 1);
+    checks.push('Orphan cleanup retains recent files and waits for in-flight upload publication');
+  } finally { await queueInspector.end(); }
   assert.equal((await request('/api/auth/sign-out', 'POST', {}, b.cookie)).status, 200);
   assert.equal((await request('/api/datasets', 'GET', undefined, b.cookie)).status, 401);
   checks.push('Signing out revokes the stored session');
@@ -179,6 +249,14 @@ try {
   assert.equal((await request('/api/datasets/' + dataset.id, 'DELETE', undefined, a.cookie)).status, 200);
   assert.equal((await request('/api/versions/' + version.id + '/download', 'GET', undefined, a.cookie)).status, 404);
   checks.push('Deletion immediately revokes version and object disclosure');
+  assert((await fixture.worker.cleanupPending()) >= 3);
+  assert.equal((await fixture.datasets.objects.inventory()).length, 0);
+  checks.push('Deferred cleanup removes deleted objects and is safe to run again');
+  assert.equal(await fixture.worker.cleanupPending(), 0);
+  await fixture.worker.start();
+  await assert.rejects(new AtlasWorker(fixture.worker.pool, fixture.datasets.objects).start(), /Another atlas worker/);
+  await fixture.worker.stop();
+  checks.push('A second service cannot acquire leadership of the same worker queue');
   report.passed = true;
 } finally {
   await new Promise<void>(resolve => server.listening ? server.close(() => resolve()) : resolve());

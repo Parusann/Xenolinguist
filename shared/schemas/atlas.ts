@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const ATLAS_LIMITS = { bytes: 5 * 1024 * 1024, rows: 5000, datasets: 10, versions: 20,
   accountBytes: 256 * 1024 * 1024, queuedJobs: 100, candidates: 50, jobMs: 60000 } as const;
 export const atlasId = z.uuid();
+export const comparisonRequestSchema = z.strictObject({ key: atlasId });
 const note = z.string().trim().min(1).max(2048);
 export const datasetInputSchema = z.strictObject({
   title: z.string().trim().min(1).max(120),
