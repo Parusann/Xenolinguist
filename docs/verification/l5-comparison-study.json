@@ -1,0 +1,6294 @@
+{
+  "version": "atlas-comparison-study-1",
+  "checkedAt": "2026-11-06T03:05:37.231Z",
+  "method": "bounded-correspondences-1",
+  "design": "32 seeded, synthetic lineages; equal-length five-unit words; disjoint scripts; one regular-substitution candidate and one random control. Additional unrelated control borrows one exact word. Development validation, not a natural-language ancestry benchmark.",
+  "groups": [
+    {
+      "anchors": 2,
+      "cases": 32,
+      "topOne": 32,
+      "insufficient": 32,
+      "proposals": 0,
+      "correct": 0,
+      "auditEmitted": 0,
+      "auditCorrect": 0,
+      "p95Ms": 1.129099999999994
+    },
+    {
+      "anchors": 6,
+      "cases": 32,
+      "topOne": 32,
+      "insufficient": 0,
+      "proposals": 46,
+      "correct": 46,
+      "auditEmitted": 85,
+      "auditCorrect": 85,
+      "p95Ms": 1.0141999999999598
+    },
+    {
+      "anchors": 12,
+      "cases": 32,
+      "topOne": 32,
+      "insufficient": 0,
+      "proposals": 312,
+      "correct": 312,
+      "auditEmitted": 382,
+      "auditCorrect": 382,
+      "p95Ms": 2.8238000000000056
+    },
+    {
+      "anchors": 24,
+      "cases": 32,
+      "topOne": 32,
+      "insufficient": 0,
+      "proposals": 192,
+      "correct": 192,
+      "auditEmitted": 768,
+      "auditCorrect": 768,
+      "p95Ms": 5.446399999999983
+    }
+  ],
+  "runs": [
+    {
+      "seed": 1,
+      "anchors": 2,
+      "inputSha256": "e40c1a94d99c61d355f0b2cb9053156b7b67863cbf99b413e64cb4f6cc7e9300",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 2.213700000000017,
+      "cells": 288
+    },
+    {
+      "seed": 1,
+      "anchors": 6,
+      "inputSha256": "d27ca9993999c3ea87fe1f6438bc75292d518a9f57a312d49f14b329ab34b312",
+      "top": "related",
+      "support": 0.6666666666666666,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 1,
+        "correct": 1,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 2.133100000000013,
+      "cells": 2592
+    },
+    {
+      "seed": 1,
+      "anchors": 12,
+      "inputSha256": "69d3cdf5f308b91b521ef6b1087091f368524414398cd4fb7162c63b149aee8e",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 2.8238000000000056,
+      "cells": 7776
+    },
+    {
+      "seed": 1,
+      "anchors": 24,
+      "inputSha256": "3106b0ed60baf20bcbbd8a0ac9bfbe3713fcb0eeb82c02d13299dbdce1fde609",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 5.755399999999952,
+      "cells": 15552
+    },
+    {
+      "seed": 2,
+      "anchors": 2,
+      "inputSha256": "381f2963f5b523e907a41a8e2881f8984f3e8ff784de22a393b654c60f339191",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.3604000000000269,
+      "cells": 288
+    },
+    {
+      "seed": 2,
+      "anchors": 6,
+      "inputSha256": "eced89ce9e67edb9b867c8290349590c3e92e3bcdf0b1f416c7f95186dd8c172",
+      "top": "related",
+      "support": 0.6666666666666666,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 4,
+        "correct": 4,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.7498999999999683,
+      "cells": 2592
+    },
+    {
+      "seed": 2,
+      "anchors": 12,
+      "inputSha256": "31f46009e451253b07b2824d04d2a019547ceca1d3f92cfd773218072034ee1a",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 2.125599999999963,
+      "cells": 7776
+    },
+    {
+      "seed": 2,
+      "anchors": 24,
+      "inputSha256": "8f59cc1ccc3f4c09701eb92b0b5b788edb86f3d2c45b87a921c59bfa53d1c474",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 5.446399999999983,
+      "cells": 15552
+    },
+    {
+      "seed": 3,
+      "anchors": 2,
+      "inputSha256": "2e8c87eda2c14de401b31afaceb5d01ab866ed17177ddfbd2d5a9be48e6ffe88",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.7791000000000281,
+      "cells": 288
+    },
+    {
+      "seed": 3,
+      "anchors": 6,
+      "inputSha256": "e71fb84e847b952a0947698960818d8e17eebda5ee0a9ca07ec5a4d638a958ad",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 3,
+        "correct": 3,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6693000000000211,
+      "cells": 2592
+    },
+    {
+      "seed": 3,
+      "anchors": 12,
+      "inputSha256": "76e65ff40c61b7b67e3e4fe10406bde42e8ac0c8d1f2967e4358d84e115db63e",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.585899999999981,
+      "cells": 7776
+    },
+    {
+      "seed": 3,
+      "anchors": 24,
+      "inputSha256": "312ea64d50897a5ff2102c969451781a91573597252dd191a2ec3ebb21f63e4b",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.225900000000024,
+      "cells": 15552
+    },
+    {
+      "seed": 4,
+      "anchors": 2,
+      "inputSha256": "8e14aa12fab200821ae34d8efd992af7cff310caf97af1eae3640854c5f6cb73",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.32799999999997453,
+      "cells": 288
+    },
+    {
+      "seed": 4,
+      "anchors": 6,
+      "inputSha256": "1f5d5f41d020f91bba3f9b487ebee9cfeeb400530a48f615c3d1f91810f71974",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 3,
+        "correct": 3,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6767999999999574,
+      "cells": 2592
+    },
+    {
+      "seed": 4,
+      "anchors": 12,
+      "inputSha256": "f06a8a5c3ab2eb526c5b6cc10ebbdcc50730314c40e08b63160fcd75fc724466",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.8278999999999996,
+      "cells": 7776
+    },
+    {
+      "seed": 4,
+      "anchors": 24,
+      "inputSha256": "47ef3945e1b76a0a6c4e853b62de6c7c430922e749a38e6577a86c5326ad93a8",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.362300000000005,
+      "cells": 15552
+    },
+    {
+      "seed": 5,
+      "anchors": 2,
+      "inputSha256": "9ca5acf26175348865efaaa6ea4d203971321e514555a4f26b9eeeb6e4527f33",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.3272999999999797,
+      "cells": 288
+    },
+    {
+      "seed": 5,
+      "anchors": 6,
+      "inputSha256": "5ac55e787e704d75acb1bfaef3ffbf81e4ad1b2a6cbcb7a1850229dd4fc314cc",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 1,
+        "correct": 1,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6901000000000295,
+      "cells": 2592
+    },
+    {
+      "seed": 5,
+      "anchors": 12,
+      "inputSha256": "1c2c46338b67aefe3c3b769676d044dbb6ef7972ae68b3ac38ed5075f594c98e",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.6141000000000076,
+      "cells": 7776
+    },
+    {
+      "seed": 5,
+      "anchors": 24,
+      "inputSha256": "7c5bc4bc1fdcae6a38ab22573273b957efd40afae6cc639c25173c42f2cb56b5",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.969400000000007,
+      "cells": 15552
+    },
+    {
+      "seed": 6,
+      "anchors": 2,
+      "inputSha256": "675f7c27bd0e3d5168ba6bff531124bbae23b4a38e451f4cd37fb11c3d544588",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.30689999999998463,
+      "cells": 288
+    },
+    {
+      "seed": 6,
+      "anchors": 6,
+      "inputSha256": "f4a928b2067a838eefb0f3b6c59bd6b4109c137a8b2229c5155766f9120525c7",
+      "top": "related",
+      "support": 0.5,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 3,
+        "correct": 3,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.627399999999966,
+      "cells": 2592
+    },
+    {
+      "seed": 6,
+      "anchors": 12,
+      "inputSha256": "b1b1d17a0970bcb8df681df848cd7da738ae3c896e121cf773fd08a8f894c18d",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.9067999999999756,
+      "cells": 7776
+    },
+    {
+      "seed": 6,
+      "anchors": 24,
+      "inputSha256": "59770a6732e4ec11fc23b38a860546e079210f7e28a312b5299454822a1d8d5b",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.1976999999999975,
+      "cells": 15552
+    },
+    {
+      "seed": 7,
+      "anchors": 2,
+      "inputSha256": "55e1d14c9300fd18feaae2c3ff4859b32a700b07aa89fa853378519d3803ae3b",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.28759999999999764,
+      "cells": 288
+    },
+    {
+      "seed": 7,
+      "anchors": 6,
+      "inputSha256": "87e50e7a522dccc46af920aa9ca0fa05c9ede7c57da4ddf699051f8a851bd748",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 6,
+        "correct": 6,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6286000000000058,
+      "cells": 2592
+    },
+    {
+      "seed": 7,
+      "anchors": 12,
+      "inputSha256": "494278a2b458924b500dff8ae8fc55a7a2251dc38c42e269efed2f6ae0553dee",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.4507999999999583,
+      "cells": 7776
+    },
+    {
+      "seed": 7,
+      "anchors": 24,
+      "inputSha256": "d58399a9c9f7da29812e685d23f7dd0be72fd793336066efbbfa7c07eb12b39a",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.40160000000003,
+      "cells": 15552
+    },
+    {
+      "seed": 8,
+      "anchors": 2,
+      "inputSha256": "b1ceb981fba0b30f3bc22db5eed51b7f73cdfaad9a42ca236f6be08f175099bf",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.30510000000003856,
+      "cells": 288
+    },
+    {
+      "seed": 8,
+      "anchors": 6,
+      "inputSha256": "d50656d9949587c6badeb28ec37d9d90362ed0ac69027d8f4c6e1c5ce3f813b5",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 2,
+        "correct": 2,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6383999999999901,
+      "cells": 2592
+    },
+    {
+      "seed": 8,
+      "anchors": 12,
+      "inputSha256": "c839bff98ad71e2ed7582050d5b107ac49d42f316870c76413ae8fa68b7c48e2",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.837699999999984,
+      "cells": 7776
+    },
+    {
+      "seed": 8,
+      "anchors": 24,
+      "inputSha256": "de609d0cd6fe0aae11835ce419db349d8eacdbb7c55c8f4b4cc44ecf0a657add",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.187899999999956,
+      "cells": 15552
+    },
+    {
+      "seed": 9,
+      "anchors": 2,
+      "inputSha256": "b8eafac4771689c5c5194fccb1719a6bbe5422738b1c7333a10fc613ccc4be6e",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.29750000000001364,
+      "cells": 288
+    },
+    {
+      "seed": 9,
+      "anchors": 6,
+      "inputSha256": "a520431f25cc41ad4cfd2500f7b140d0e01347862ab09f4ead8d71f5f56eb53c",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 1,
+        "correct": 1,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.8804999999999836,
+      "cells": 2592
+    },
+    {
+      "seed": 9,
+      "anchors": 12,
+      "inputSha256": "998b8f33c442749082133007be0e2045a7e1738f34c16c8dbad3d09f9b6bf76d",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.459100000000035,
+      "cells": 7776
+    },
+    {
+      "seed": 9,
+      "anchors": 24,
+      "inputSha256": "e54ca9574a5c87f26ffed147a74c4993a95c1a80faa64dc9d1cf1e552187506a",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.2187000000000126,
+      "cells": 15552
+    },
+    {
+      "seed": 10,
+      "anchors": 2,
+      "inputSha256": "d701ffe5ffeec54ca4b2eebf6683b7018b35d8c4b17875013fcbf4cfe9fd9503",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.3175000000000523,
+      "cells": 288
+    },
+    {
+      "seed": 10,
+      "anchors": 6,
+      "inputSha256": "6087d71a9f9e6a485dedf8cba23f99f3feef8edab79bb32e032dd3e8efdd4dc3",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 2,
+        "correct": 2,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6499999999999773,
+      "cells": 2592
+    },
+    {
+      "seed": 10,
+      "anchors": 12,
+      "inputSha256": "d1956ba5d93c714907e4d3497dcb1be982169ac1ea08e7ee7232f68226d3e3ed",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.7361999999999966,
+      "cells": 7776
+    },
+    {
+      "seed": 10,
+      "anchors": 24,
+      "inputSha256": "7908f404df99e8864dc780c95f97152367353014cb6c95f712b327e9bb12bd94",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.243200000000002,
+      "cells": 15552
+    },
+    {
+      "seed": 11,
+      "anchors": 2,
+      "inputSha256": "30cd4ec7024ba17985b8960c2d8d6856c9fa7d1809779969d25c98bb93c79bde",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.29110000000002856,
+      "cells": 288
+    },
+    {
+      "seed": 11,
+      "anchors": 6,
+      "inputSha256": "ad39fcc525759b2fef662d52d812bddf9e0e359171586ce74eb9ef3998ded105",
+      "top": "related",
+      "support": 0.6666666666666666,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 2,
+        "correct": 2,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.640700000000038,
+      "cells": 2592
+    },
+    {
+      "seed": 11,
+      "anchors": 12,
+      "inputSha256": "18085b242f6743de78b814d56aa9be0ee10c3ee259eaaac35eba72e66ac4331b",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.7706000000000017,
+      "cells": 7776
+    },
+    {
+      "seed": 11,
+      "anchors": 24,
+      "inputSha256": "f08e4f2acfcf97548ec374b0923a2fea2c3dd1cbc478bf5736408b73231f71cd",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.233099999999979,
+      "cells": 15552
+    },
+    {
+      "seed": 12,
+      "anchors": 2,
+      "inputSha256": "1812aed4a68599201c550a041d6a323747e5ca94f888da6eee136c54dbe0b36d",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.283299999999997,
+      "cells": 288
+    },
+    {
+      "seed": 12,
+      "anchors": 6,
+      "inputSha256": "b633ec600fc6da7a68f538611f653dcda7195d2b17293ae3ed09a4be4ebfa889",
+      "top": "related",
+      "support": 0.6666666666666666,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 4,
+        "correct": 4,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.8523000000000138,
+      "cells": 2592
+    },
+    {
+      "seed": 12,
+      "anchors": 12,
+      "inputSha256": "71becc33ec9adecc85ed9a9314ebd40fa2bbe000e485415b1602b5818fc95db1",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.4291000000000054,
+      "cells": 7776
+    },
+    {
+      "seed": 12,
+      "anchors": 24,
+      "inputSha256": "4d026a8b9ceec4aed2739d8c8ddd7e44a67f1853029122eff5466f0c85ce967a",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.00649999999996,
+      "cells": 15552
+    },
+    {
+      "seed": 13,
+      "anchors": 2,
+      "inputSha256": "ab0e1c75c723e9689557c8d14a07b92d3ef10f7ec3e29973afd9a31a289544ee",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.29230000000001155,
+      "cells": 288
+    },
+    {
+      "seed": 13,
+      "anchors": 6,
+      "inputSha256": "e6694e8dd8ea814b4abb70d5c7e3b05aa13c0c91ee5c97650667a68a52274d1b",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 6,
+        "correct": 6,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6187999999999647,
+      "cells": 2592
+    },
+    {
+      "seed": 13,
+      "anchors": 12,
+      "inputSha256": "fae6e5860ca09bc9091e7cfa7226b8e910ed1dd3c3e24b5d26afc77f057a1f97",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.4155999999999835,
+      "cells": 7776
+    },
+    {
+      "seed": 13,
+      "anchors": 24,
+      "inputSha256": "8745bf432893543fc446f9e44b09bad0d874411dd858dcdf6b217fe5e29bc881",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 3.753099999999904,
+      "cells": 15552
+    },
+    {
+      "seed": 14,
+      "anchors": 2,
+      "inputSha256": "e70feed496a111083ab23608617c31a23c5a91c841f5203f47ce02faf32bd3d7",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.300200000000018,
+      "cells": 288
+    },
+    {
+      "seed": 14,
+      "anchors": 6,
+      "inputSha256": "7f5de565164f5f2476015276ee4b67ec01e7978bb81ea7a27fa2b67d68e8eb16",
+      "top": "related",
+      "support": 0.8333333333333334,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 5,
+        "correct": 5,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6167000000000371,
+      "cells": 2592
+    },
+    {
+      "seed": 14,
+      "anchors": 12,
+      "inputSha256": "099ebdba2103eb04fe7220a9cf0b7bfd507c43417a42053c51aae56c7d7b7aa6",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.7468999999999824,
+      "cells": 7776
+    },
+    {
+      "seed": 14,
+      "anchors": 24,
+      "inputSha256": "da0d996d0c9e8feae0ba9137d1c0dca686f02282c538a594365b508ccc1f7518",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.014799999999923,
+      "cells": 15552
+    },
+    {
+      "seed": 15,
+      "anchors": 2,
+      "inputSha256": "2ffb47c01bbcca8bbe921260429f810e21c3dffff8cdda0cce8160cc5a995397",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.3210000000000264,
+      "cells": 288
+    },
+    {
+      "seed": 15,
+      "anchors": 6,
+      "inputSha256": "729585d58dea5b36e57db93f351a0edaffddb6e16ef0e80a5e21f3f41b9a76cf",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 6,
+        "correct": 6,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6264999999999645,
+      "cells": 2592
+    },
+    {
+      "seed": 15,
+      "anchors": 12,
+      "inputSha256": "671cbb4cc31899ad283d5e504b22cea91d036eee75fb106979f9d78a1054fdd1",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.733600000000024,
+      "cells": 7776
+    },
+    {
+      "seed": 15,
+      "anchors": 24,
+      "inputSha256": "036685aaf9ec4b59c8e7a2d5a459be35aef17efb0e54c7282b4f176ee2c3e028",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.023000000000025,
+      "cells": 15552
+    },
+    {
+      "seed": 16,
+      "anchors": 2,
+      "inputSha256": "b1b9e0f4c16124de310fb6e5b148c09d4c63e658dff97d6e3c81b7132f9411fa",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.7110999999999876,
+      "cells": 288
+    },
+    {
+      "seed": 16,
+      "anchors": 6,
+      "inputSha256": "e1845dd67e5a7b6f1df3ce456d2b3d0f5ebc833a04d3b7f52d5dc3b6fc9c5ee8",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6046000000000049,
+      "cells": 2592
+    },
+    {
+      "seed": 16,
+      "anchors": 12,
+      "inputSha256": "ce4f9580db0f17fb55e701416c1a7c3f0b422011819eac5a8242944e385ea0dd",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.389099999999985,
+      "cells": 7776
+    },
+    {
+      "seed": 16,
+      "anchors": 24,
+      "inputSha256": "4e007709b7989e34ea3780e74109baaa325736a802b4c3f98a2202a11a6f48b1",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.161499999999933,
+      "cells": 15552
+    },
+    {
+      "seed": 17,
+      "anchors": 2,
+      "inputSha256": "70cf033f98a71dd5bd28aec17b77d8baeb900d8a536a1bbdb5e72410e01f76b8",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.33399999999994634,
+      "cells": 288
+    },
+    {
+      "seed": 17,
+      "anchors": 6,
+      "inputSha256": "74994aeb8d109b72179264ab3a23e764626f4a44623b45b5f90d34afc3229c5c",
+      "top": "related",
+      "support": 0.6666666666666666,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 4,
+        "correct": 4,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6623000000000729,
+      "cells": 2592
+    },
+    {
+      "seed": 17,
+      "anchors": 12,
+      "inputSha256": "dc34a70b67ab8bd5d63e92fef45312d35b4b400b0b4417165740a5c6966a5b78",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.5089000000000397,
+      "cells": 7776
+    },
+    {
+      "seed": 17,
+      "anchors": 24,
+      "inputSha256": "954d233bd16cacee3fa2affc55b9d54fe7f5e73b4304faaf518f36533804b90a",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.329899999999952,
+      "cells": 15552
+    },
+    {
+      "seed": 18,
+      "anchors": 2,
+      "inputSha256": "0c66062a36e996117fc58029186a6183b36f53a03fc1e9b9b62e3b615450b5cb",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.3203999999999496,
+      "cells": 288
+    },
+    {
+      "seed": 18,
+      "anchors": 6,
+      "inputSha256": "94580c8f0c07195c514501c395f94c77518f37e5324d80e9a379a8c2613bcf4d",
+      "top": "related",
+      "support": 0.6666666666666666,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 2,
+        "correct": 2,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6039000000000669,
+      "cells": 2592
+    },
+    {
+      "seed": 18,
+      "anchors": 12,
+      "inputSha256": "6e8c36306a416a9574d297df2f90c41d88c9a43773ac6f1d19774c3982257582",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.8700000000000045,
+      "cells": 7776
+    },
+    {
+      "seed": 18,
+      "anchors": 24,
+      "inputSha256": "c11ac2ae62775dfefb73a92d8836ce53ae37f0486a2909567f7ec0bee0ca84a0",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.189899999999966,
+      "cells": 15552
+    },
+    {
+      "seed": 19,
+      "anchors": 2,
+      "inputSha256": "0195f0c13a49c776e893acebf475f27d2173ba80cae99436d2d33691034eb4e8",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.3102000000000089,
+      "cells": 288
+    },
+    {
+      "seed": 19,
+      "anchors": 6,
+      "inputSha256": "99d3c84178e5872550a724b750900d73cb83f9d299bba979504735beb9ebf6d0",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 3,
+        "correct": 3,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 1.0141999999999598,
+      "cells": 2592
+    },
+    {
+      "seed": 19,
+      "anchors": 12,
+      "inputSha256": "3fbeaf9ef0e68183c3657437fcbc95a13a569baa513ccbe0c5e1fe17092255db",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.5901000000000067,
+      "cells": 7776
+    },
+    {
+      "seed": 19,
+      "anchors": 24,
+      "inputSha256": "ba451ccf7f74f7d77ca2d4eacbee7633e9a5e3492448f4083051760fa1c22f58",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 3.93649999999991,
+      "cells": 15552
+    },
+    {
+      "seed": 20,
+      "anchors": 2,
+      "inputSha256": "829044a156a2cc8e2fb19cfd2473c614e27e0c82b7c0f81d4a651dbaea35d095",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.3062999999999647,
+      "cells": 288
+    },
+    {
+      "seed": 20,
+      "anchors": 6,
+      "inputSha256": "b4ea1c419a4ddc688f1454c525c14571ffc761879931eead6d61b7158b799d04",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 1,
+        "correct": 1,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6199000000000296,
+      "cells": 2592
+    },
+    {
+      "seed": 20,
+      "anchors": 12,
+      "inputSha256": "2dd3b60d4fd0046b5db8a271bc00cb5339d3c4532a4e355006780dc4bdabcc99",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.4566999999999553,
+      "cells": 7776
+    },
+    {
+      "seed": 20,
+      "anchors": 24,
+      "inputSha256": "f74d880ecadfd74c7dc3335b2a24fcf22c90ea15c3cf79701e398565b5bdbaa5",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.01260000000002,
+      "cells": 15552
+    },
+    {
+      "seed": 21,
+      "anchors": 2,
+      "inputSha256": "7c3b01a53721b395a590a1b3708ac05c0efc1fa96f633f855e8779c448874023",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.30560000000002674,
+      "cells": 288
+    },
+    {
+      "seed": 21,
+      "anchors": 6,
+      "inputSha256": "82c782d726463408126320fa8dc1552004264b8632a917c4455dc19e83785b7a",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.9479999999999791,
+      "cells": 2592
+    },
+    {
+      "seed": 21,
+      "anchors": 12,
+      "inputSha256": "7a800eb978fc3155c75c9706871bb3e1bc3c32ccaed7d2befb81086d9fe842e7",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 3.9243000000000166,
+      "cells": 7776
+    },
+    {
+      "seed": 21,
+      "anchors": 24,
+      "inputSha256": "46cb6575634139c076ffc92cca40833990c47c338364bd8b27cfe8358c9a7ea3",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.3899000000000115,
+      "cells": 15552
+    },
+    {
+      "seed": 22,
+      "anchors": 2,
+      "inputSha256": "b0d7b412bf0c6f8a6b6737543cbdee027959bc9cb4cb5564eb2cba84937521d8",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.4249000000000933,
+      "cells": 288
+    },
+    {
+      "seed": 22,
+      "anchors": 6,
+      "inputSha256": "a0efb14e594f3f4c32cf7a29b74a463fd5749713d72197b4170bc6c62de12bea",
+      "top": "related",
+      "support": 0.6666666666666666,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 3,
+        "correct": 3,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.856899999999996,
+      "cells": 2592
+    },
+    {
+      "seed": 22,
+      "anchors": 12,
+      "inputSha256": "540759b5b784e0fcebc19acb7b93a3dba666167a65d0d072cb3f40a98bc8d504",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.417100000000005,
+      "cells": 7776
+    },
+    {
+      "seed": 22,
+      "anchors": 24,
+      "inputSha256": "ba4b8f785787e3c472f9bb3ae0a9cf53ad21711dcb06d2570700cd444af64807",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.53469999999993,
+      "cells": 15552
+    },
+    {
+      "seed": 23,
+      "anchors": 2,
+      "inputSha256": "4d16a7de8b5bdc9fdd2e48ce568019cf3b2c2de7c35cb90060232d4d96cb07ee",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 1.044499999999971,
+      "cells": 288
+    },
+    {
+      "seed": 23,
+      "anchors": 6,
+      "inputSha256": "552be364692ccf54803fa27ea4dd340504c0cb826222fff2787a51b450633199",
+      "top": "related",
+      "support": 0.6666666666666666,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 1,
+        "correct": 1,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6203000000000429,
+      "cells": 2592
+    },
+    {
+      "seed": 23,
+      "anchors": 12,
+      "inputSha256": "1074652c6ca2b1cc7c95098734801b25586e6184e3e978d37c5d36f4163fb92c",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.483699999999999,
+      "cells": 7776
+    },
+    {
+      "seed": 23,
+      "anchors": 24,
+      "inputSha256": "dedc55d1a981004575c1de85cc622433b949ebf63a6c3ab5930083005e33b2ba",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 3.5521999999999707,
+      "cells": 15552
+    },
+    {
+      "seed": 24,
+      "anchors": 2,
+      "inputSha256": "2854117a6b006cc5ed019b177b6d3666e59fd1630ffe5296a54d368a81ccbb62",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.30349999999998545,
+      "cells": 288
+    },
+    {
+      "seed": 24,
+      "anchors": 6,
+      "inputSha256": "29ffe900c5ff41a604a093adb8d261d1a0440598225a58f437dcb667169e076a",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.5951999999999771,
+      "cells": 2592
+    },
+    {
+      "seed": 24,
+      "anchors": 12,
+      "inputSha256": "c4d0281eb4d5d0d53dde83233f32edff252fdac1f67adef5a1d1b20890e34022",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.368600000000015,
+      "cells": 7776
+    },
+    {
+      "seed": 24,
+      "anchors": 24,
+      "inputSha256": "efabfd4fea490c81cf460b3881d4d97fdfd1607e3c35b3f1f9edcef9efcfd113",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.6422000000000025,
+      "cells": 15552
+    },
+    {
+      "seed": 25,
+      "anchors": 2,
+      "inputSha256": "5cfe2033f85e4664963870a0ed502f6a4a680df6d8cdde44a890b0190925a510",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.31770000000005894,
+      "cells": 288
+    },
+    {
+      "seed": 25,
+      "anchors": 6,
+      "inputSha256": "08b481570c314e95bf415e01502f672037a08c2854067fd35c5f1217ab78ef9d",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 3,
+        "correct": 3,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.5941000000000258,
+      "cells": 2592
+    },
+    {
+      "seed": 25,
+      "anchors": 12,
+      "inputSha256": "ba804b1261c971a9963143f8a63c724d9f8091f47ce1d18860da8410f0246b51",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.38900000000001,
+      "cells": 7776
+    },
+    {
+      "seed": 25,
+      "anchors": 24,
+      "inputSha256": "1c76fa932c9f1e4659f131d8fd8ac19be2a00f8a477d1ac5b55f196ce02b277b",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.24249999999995,
+      "cells": 15552
+    },
+    {
+      "seed": 26,
+      "anchors": 2,
+      "inputSha256": "9af00a428e3d9f8917dcd81b1841bc1e828aadcacf589a3646620c7006ec8d52",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.29129999999997835,
+      "cells": 288
+    },
+    {
+      "seed": 26,
+      "anchors": 6,
+      "inputSha256": "2ccf08de93fc97f88b03e3ed643cf4c77181c8bb5be7f62d0b658893a094c173",
+      "top": "related",
+      "support": 0.5,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 3,
+        "correct": 3,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.595299999999952,
+      "cells": 2592
+    },
+    {
+      "seed": 26,
+      "anchors": 12,
+      "inputSha256": "fbcdf573bbb29ca20642f0cb7001350ba3a17f35e231889e3031a3e41a5ffc54",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.3672000000000253,
+      "cells": 7776
+    },
+    {
+      "seed": 26,
+      "anchors": 24,
+      "inputSha256": "956f3f886b1f31c03fa9a1f55c26644573217996700a0d9e5a99df9bd8509b18",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.303500000000099,
+      "cells": 15552
+    },
+    {
+      "seed": 27,
+      "anchors": 2,
+      "inputSha256": "c101c6245ce831681d6eca2a475d4b2e28f0f6b4b467d686f3972da18cd47f3e",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.2980999999999767,
+      "cells": 288
+    },
+    {
+      "seed": 27,
+      "anchors": 6,
+      "inputSha256": "4a00817e37a52ef49268a385c3e116cf6ccbda92af3de6781a7246679176c031",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 2,
+        "correct": 2,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6389000000000351,
+      "cells": 2592
+    },
+    {
+      "seed": 27,
+      "anchors": 12,
+      "inputSha256": "77119a58909ffacbc72afcc5816f3649cd12cace72ef0a7e3d2e25f9a2ae5e42",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.433999999999969,
+      "cells": 7776
+    },
+    {
+      "seed": 27,
+      "anchors": 24,
+      "inputSha256": "2ef0687a83ac63e0c45c717e96fef9cc23ec1ad97424f5919c9241d289b612ce",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.231400000000008,
+      "cells": 15552
+    },
+    {
+      "seed": 28,
+      "anchors": 2,
+      "inputSha256": "503a6a890bedd92643872e99ef99d83baac0a28aa48f36c625aaa65e03f9e853",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.31329999999991287,
+      "cells": 288
+    },
+    {
+      "seed": 28,
+      "anchors": 6,
+      "inputSha256": "7f55b4bdb0769982fc197aac4035ef12bb32daae185dabffb3a95d825c1a5af3",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 6,
+        "correct": 6,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6096000000000004,
+      "cells": 2592
+    },
+    {
+      "seed": 28,
+      "anchors": 12,
+      "inputSha256": "7f2fd9800fe8e883325ac228848b1a5d2e8085bbdc8c98e0539c2f87ddcdf2ad",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.3815000000000737,
+      "cells": 7776
+    },
+    {
+      "seed": 28,
+      "anchors": 24,
+      "inputSha256": "e26d0041e9c8863a8b2e595e00e03a00185c23fc255b7bc6a742f5f8686f82b7",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 3.54970000000003,
+      "cells": 15552
+    },
+    {
+      "seed": 29,
+      "anchors": 2,
+      "inputSha256": "6533603dd4aaffa4cdf24629fa411d49eb6bd3e46bc4bf6f7656e9b676494619",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.29930000000001655,
+      "cells": 288
+    },
+    {
+      "seed": 29,
+      "anchors": 6,
+      "inputSha256": "f83514903aa8b86cd04701748893119156ce25177841dacc444b8d892a279942",
+      "top": "related",
+      "support": 0.3333333333333333,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 1,
+        "correct": 1,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.5807000000000926,
+      "cells": 2592
+    },
+    {
+      "seed": 29,
+      "anchors": 12,
+      "inputSha256": "496264917d5f109551c9bb8ffe3b74e36b0f6aa2f248191ed69c389d2538fff5",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.8884999999999081,
+      "cells": 7776
+    },
+    {
+      "seed": 29,
+      "anchors": 24,
+      "inputSha256": "7cfdfa6a56590963bb9afb33127e93f5413db450ba051405b165a24b9de82c03",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 3.4950999999999794,
+      "cells": 15552
+    },
+    {
+      "seed": 30,
+      "anchors": 2,
+      "inputSha256": "fd948b1150fab8b1d68c2944e1916cecf0096a150c316a62a69a693df6de3f63",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.2981000000000904,
+      "cells": 288
+    },
+    {
+      "seed": 30,
+      "anchors": 6,
+      "inputSha256": "855e3ef7d681b4f89b046950efa325fa95a160726bed5a62b7dac3d57a92676d",
+      "top": "related",
+      "support": 0.8333333333333334,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 2,
+        "correct": 2,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6011999999999489,
+      "cells": 2592
+    },
+    {
+      "seed": 30,
+      "anchors": 12,
+      "inputSha256": "86882bb4d19318ef5c2493848fafef3a4562e5fbad1643f74477cec27bf1ba79",
+      "top": "related",
+      "support": 0.8333333333333334,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 10,
+        "correct": 10,
+        "precision": 1
+      },
+      "proposals": 2,
+      "correct": 2,
+      "unrelatedProposals": 0,
+      "durationMs": 1.403099999999995,
+      "cells": 7776
+    },
+    {
+      "seed": 30,
+      "anchors": 24,
+      "inputSha256": "a16837a74b306ebf81e7ae5bf7575e5a89df4c467d84a07de5f29dbdca3f7de9",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 3.668700000000058,
+      "cells": 15552
+    },
+    {
+      "seed": 31,
+      "anchors": 2,
+      "inputSha256": "3a2ba3a1ceb01151d7c347e17dc71b9a0677d16a40566eaea2a0fce6f1774c0f",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 1.129099999999994,
+      "cells": 288
+    },
+    {
+      "seed": 31,
+      "anchors": 6,
+      "inputSha256": "3b85c16483bfa68e98c28d774c139c918a6017b30e24d79d3ebf1b717aad3c28",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 2,
+        "correct": 2,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.6109000000000151,
+      "cells": 2592
+    },
+    {
+      "seed": 31,
+      "anchors": 12,
+      "inputSha256": "57a479ad2027decc7498644431fe2bd4c0ef25dacce9f2e982ee9f104fdbac5e",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.449799999999982,
+      "cells": 7776
+    },
+    {
+      "seed": 31,
+      "anchors": 24,
+      "inputSha256": "d33c39fea23405afac33c8548e2659cf7195ec2f7c80dadd9b57c6ba04600500",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 3.541300000000092,
+      "cells": 15552
+    },
+    {
+      "seed": 32,
+      "anchors": 2,
+      "inputSha256": "7390cc3c153c5503aac924e3e3756dcab08bd36233536cdd8ca2f6259ec944d0",
+      "top": "related",
+      "support": 0,
+      "state": "insufficient",
+      "audit": {
+        "scheduled": 2,
+        "emitted": 0,
+        "correct": 0,
+        "precision": null
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.3104999999999336,
+      "cells": 288
+    },
+    {
+      "seed": 32,
+      "anchors": 6,
+      "inputSha256": "b25820b6d504ad410ae50efb34450b0f80ebb60232c18d7e47feb89d8a68ce88",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 6,
+        "emitted": 3,
+        "correct": 3,
+        "precision": 1
+      },
+      "proposals": 0,
+      "correct": 0,
+      "unrelatedProposals": 0,
+      "durationMs": 0.629099999999994,
+      "cells": 2592
+    },
+    {
+      "seed": 32,
+      "anchors": 12,
+      "inputSha256": "9dc6c96a4f5123932082f3efc628de13eacc9ebc79b875dac05a6099110ecad4",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 12,
+        "emitted": 12,
+        "correct": 12,
+        "precision": 1
+      },
+      "proposals": 10,
+      "correct": 10,
+      "unrelatedProposals": 0,
+      "durationMs": 1.3799999999999955,
+      "cells": 7776
+    },
+    {
+      "seed": 32,
+      "anchors": 24,
+      "inputSha256": "5908e39e28d3b8bdaad195aa5e02b707fdd86622a14f7be0a5e125e044428000",
+      "top": "related",
+      "support": 1,
+      "state": "complete",
+      "audit": {
+        "scheduled": 24,
+        "emitted": 24,
+        "correct": 24,
+        "precision": 1
+      },
+      "proposals": 6,
+      "correct": 6,
+      "unrelatedProposals": 0,
+      "durationMs": 4.242200000000025,
+      "cells": 15552
+    }
+  ],
+  "examples": [
+    {
+      "input": {
+        "versionId": "synthetic-17",
+        "objectSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "features": {},
+        "entries": [
+          {
+            "id": "qr0",
+            "form": "λξμλν",
+            "meaning": "concept 0"
+          },
+          {
+            "id": "qr1",
+            "form": "λνλκμ",
+            "meaning": "concept 1"
+          }
+        ]
+      },
+      "references": [
+        {
+          "id": "related",
+          "name": "Synthetic regular substitution",
+          "sourceId": "synthetic-study-1",
+          "sourceSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sourceUrl": "https://example.invalid/synthetic-study",
+          "license": "CC0-1.0",
+          "attribution": "Purpose-built synthetic evaluation fixture. No natural-language ancestry claim.",
+          "features": {},
+          "entries": [
+            {
+              "id": "r0",
+              "conceptId": "concept-0",
+              "meaning": "concept 0",
+              "form": "becbd"
+            },
+            {
+              "id": "r1",
+              "conceptId": "concept-1",
+              "meaning": "concept 1",
+              "form": "bdbac"
+            },
+            {
+              "id": "r2",
+              "conceptId": "concept-2",
+              "meaning": "concept 2",
+              "form": "cbbae"
+            },
+            {
+              "id": "r3",
+              "conceptId": "concept-3",
+              "meaning": "concept 3",
+              "form": "cbccd"
+            },
+            {
+              "id": "r4",
+              "conceptId": "concept-4",
+              "meaning": "concept 4",
+              "form": "badca"
+            },
+            {
+              "id": "r5",
+              "conceptId": "concept-5",
+              "meaning": "concept 5",
+              "form": "dadbd"
+            },
+            {
+              "id": "r6",
+              "conceptId": "concept-6",
+              "meaning": "concept 6",
+              "form": "bdddd"
+            },
+            {
+              "id": "r7",
+              "conceptId": "concept-7",
+              "meaning": "concept 7",
+              "form": "baaba"
+            },
+            {
+              "id": "r8",
+              "conceptId": "concept-8",
+              "meaning": "concept 8",
+              "form": "dbabb"
+            },
+            {
+              "id": "r9",
+              "conceptId": "concept-9",
+              "meaning": "concept 9",
+              "form": "aeabc"
+            },
+            {
+              "id": "r10",
+              "conceptId": "concept-10",
+              "meaning": "concept 10",
+              "form": "cdddc"
+            },
+            {
+              "id": "r11",
+              "conceptId": "concept-11",
+              "meaning": "concept 11",
+              "form": "deabc"
+            },
+            {
+              "id": "r12",
+              "conceptId": "concept-12",
+              "meaning": "concept 12",
+              "form": "abaae"
+            },
+            {
+              "id": "r13",
+              "conceptId": "concept-13",
+              "meaning": "concept 13",
+              "form": "cddbc"
+            },
+            {
+              "id": "r14",
+              "conceptId": "concept-14",
+              "meaning": "concept 14",
+              "form": "bdbde"
+            },
+            {
+              "id": "r15",
+              "conceptId": "concept-15",
+              "meaning": "concept 15",
+              "form": "ceeae"
+            },
+            {
+              "id": "r16",
+              "conceptId": "concept-16",
+              "meaning": "concept 16",
+              "form": "eecad"
+            },
+            {
+              "id": "r17",
+              "conceptId": "concept-17",
+              "meaning": "concept 17",
+              "form": "daaca"
+            },
+            {
+              "id": "r18",
+              "conceptId": "concept-18",
+              "meaning": "concept 18",
+              "form": "addab"
+            },
+            {
+              "id": "r19",
+              "conceptId": "concept-19",
+              "meaning": "concept 19",
+              "form": "adaea"
+            },
+            {
+              "id": "r20",
+              "conceptId": "concept-20",
+              "meaning": "concept 20",
+              "form": "eccac"
+            },
+            {
+              "id": "r21",
+              "conceptId": "concept-21",
+              "meaning": "concept 21",
+              "form": "ecaee"
+            },
+            {
+              "id": "r22",
+              "conceptId": "concept-22",
+              "meaning": "concept 22",
+              "form": "aeceb"
+            },
+            {
+              "id": "r23",
+              "conceptId": "concept-23",
+              "meaning": "concept 23",
+              "form": "aacda"
+            },
+            {
+              "id": "r24",
+              "conceptId": "concept-24",
+              "meaning": "concept 24",
+              "form": "ddebc"
+            },
+            {
+              "id": "r25",
+              "conceptId": "concept-25",
+              "meaning": "concept 25",
+              "form": "dddba"
+            },
+            {
+              "id": "r26",
+              "conceptId": "concept-26",
+              "meaning": "concept 26",
+              "form": "baaaa"
+            },
+            {
+              "id": "r27",
+              "conceptId": "concept-27",
+              "meaning": "concept 27",
+              "form": "eebad"
+            },
+            {
+              "id": "r28",
+              "conceptId": "concept-28",
+              "meaning": "concept 28",
+              "form": "dcbae"
+            },
+            {
+              "id": "r29",
+              "conceptId": "concept-29",
+              "meaning": "concept 29",
+              "form": "eecbd"
+            }
+          ]
+        },
+        {
+          "id": "unrelated",
+          "name": "Synthetic unrelated control",
+          "sourceId": "synthetic-study-1",
+          "sourceSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sourceUrl": "https://example.invalid/synthetic-study",
+          "license": "CC0-1.0",
+          "attribution": "Purpose-built synthetic evaluation fixture. No natural-language ancestry claim.",
+          "features": {},
+          "entries": [
+            {
+              "id": "ur0",
+              "conceptId": "concept-0",
+              "meaning": "concept 0",
+              "form": "cacea"
+            },
+            {
+              "id": "ur1",
+              "conceptId": "concept-1",
+              "meaning": "concept 1",
+              "form": "ebaba"
+            },
+            {
+              "id": "ur2",
+              "conceptId": "concept-2",
+              "meaning": "concept 2",
+              "form": "ddaea"
+            },
+            {
+              "id": "ur3",
+              "conceptId": "concept-3",
+              "meaning": "concept 3",
+              "form": "ccaaa"
+            },
+            {
+              "id": "ur4",
+              "conceptId": "concept-4",
+              "meaning": "concept 4",
+              "form": "dbeeb"
+            },
+            {
+              "id": "ur5",
+              "conceptId": "concept-5",
+              "meaning": "concept 5",
+              "form": "edabd"
+            },
+            {
+              "id": "ur6",
+              "conceptId": "concept-6",
+              "meaning": "concept 6",
+              "form": "acbdc"
+            },
+            {
+              "id": "ur7",
+              "conceptId": "concept-7",
+              "meaning": "concept 7",
+              "form": "dcabb"
+            },
+            {
+              "id": "ur8",
+              "conceptId": "concept-8",
+              "meaning": "concept 8",
+              "form": "aacee"
+            },
+            {
+              "id": "ur9",
+              "conceptId": "concept-9",
+              "meaning": "concept 9",
+              "form": "aecde"
+            },
+            {
+              "id": "ur10",
+              "conceptId": "concept-10",
+              "meaning": "concept 10",
+              "form": "dbaee"
+            },
+            {
+              "id": "ur11",
+              "conceptId": "concept-11",
+              "meaning": "concept 11",
+              "form": "decee"
+            },
+            {
+              "id": "ur12",
+              "conceptId": "concept-12",
+              "meaning": "concept 12",
+              "form": "eeaea"
+            },
+            {
+              "id": "ur13",
+              "conceptId": "concept-13",
+              "meaning": "concept 13",
+              "form": "caecb"
+            },
+            {
+              "id": "ur14",
+              "conceptId": "concept-14",
+              "meaning": "concept 14",
+              "form": "eadec"
+            },
+            {
+              "id": "ur15",
+              "conceptId": "concept-15",
+              "meaning": "concept 15",
+              "form": "bebde"
+            },
+            {
+              "id": "ur16",
+              "conceptId": "concept-16",
+              "meaning": "concept 16",
+              "form": "cadbd"
+            },
+            {
+              "id": "ur17",
+              "conceptId": "concept-17",
+              "meaning": "concept 17",
+              "form": "aeddb"
+            },
+            {
+              "id": "ur18",
+              "conceptId": "concept-18",
+              "meaning": "concept 18",
+              "form": "abeed"
+            },
+            {
+              "id": "ur19",
+              "conceptId": "concept-19",
+              "meaning": "concept 19",
+              "form": "daaed"
+            },
+            {
+              "id": "ur20",
+              "conceptId": "concept-20",
+              "meaning": "concept 20",
+              "form": "bdaad"
+            },
+            {
+              "id": "ur21",
+              "conceptId": "concept-21",
+              "meaning": "concept 21",
+              "form": "adaac"
+            },
+            {
+              "id": "ur22",
+              "conceptId": "concept-22",
+              "meaning": "concept 22",
+              "form": "edbdd"
+            },
+            {
+              "id": "ur23",
+              "conceptId": "concept-23",
+              "meaning": "concept 23",
+              "form": "acadb"
+            },
+            {
+              "id": "ur24",
+              "conceptId": "concept-24",
+              "meaning": "concept 24",
+              "form": "eecec"
+            },
+            {
+              "id": "ur25",
+              "conceptId": "concept-25",
+              "meaning": "concept 25",
+              "form": "dcceb"
+            },
+            {
+              "id": "ur26",
+              "conceptId": "concept-26",
+              "meaning": "concept 26",
+              "form": "cebad"
+            },
+            {
+              "id": "ur27",
+              "conceptId": "concept-27",
+              "meaning": "concept 27",
+              "form": "badeb"
+            },
+            {
+              "id": "ur28",
+              "conceptId": "concept-28",
+              "meaning": "concept 28",
+              "form": "cbecd"
+            },
+            {
+              "id": "ur29",
+              "conceptId": "concept-29",
+              "meaning": "concept 29",
+              "form": "aebbc"
+            }
+          ]
+        }
+      ],
+      "report": {
+        "version": "atlas-comparison-1",
+        "method": "bounded-correspondences-1",
+        "state": "insufficient",
+        "input": {
+          "versionId": "synthetic-17",
+          "objectSha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "referenceSources": [
+          {
+            "id": "synthetic-study-1",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "coverage": {
+          "entries": 2,
+          "anchoredConcepts": 2,
+          "unmappedLabels": [],
+          "unanchoredEntries": 0,
+          "skippedForms": 0
+        },
+        "matches": [
+          {
+            "sourceId": "synthetic-study-1",
+            "sourceSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "sourceUrl": "https://example.invalid/synthetic-study",
+            "languageId": "related",
+            "languageName": "Synthetic regular substitution",
+            "license": "CC0-1.0",
+            "attribution": "Purpose-built synthetic evaluation fixture. No natural-language ancestry claim.",
+            "sharedConcepts": 2,
+            "queryConceptCoverage": 1,
+            "orthographicSimilarity": 0,
+            "phoneticSimilarity": null,
+            "correspondenceBasis": "orthographic-graphemes",
+            "systematicSupport": 0,
+            "correspondenceConcepts": 2,
+            "consistentConcepts": 0,
+            "fitsSelectedAnchors": true,
+            "rules": [],
+            "conflicts": [],
+            "control": {
+              "shifts": 1,
+              "meanSimilarity": 0,
+              "meanSystematicSupport": 0
+            },
+            "features": [],
+            "featureAgreement": null,
+            "predictionAudit": {
+              "scheduled": 2,
+              "emitted": 0,
+              "correct": 0,
+              "precision": null
+            },
+            "proposals": [],
+            "missingConcepts": [
+              {
+                "concept": "synthetic-study-1:concept-10",
+                "meaning": "concept 10",
+                "referenceForm": "cdddc",
+                "referenceId": "r10"
+              },
+              {
+                "concept": "synthetic-study-1:concept-11",
+                "meaning": "concept 11",
+                "referenceForm": "deabc",
+                "referenceId": "r11"
+              },
+              {
+                "concept": "synthetic-study-1:concept-12",
+                "meaning": "concept 12",
+                "referenceForm": "abaae",
+                "referenceId": "r12"
+              },
+              {
+                "concept": "synthetic-study-1:concept-13",
+                "meaning": "concept 13",
+                "referenceForm": "cddbc",
+                "referenceId": "r13"
+              },
+              {
+                "concept": "synthetic-study-1:concept-14",
+                "meaning": "concept 14",
+                "referenceForm": "bdbde",
+                "referenceId": "r14"
+              },
+              {
+                "concept": "synthetic-study-1:concept-15",
+                "meaning": "concept 15",
+                "referenceForm": "ceeae",
+                "referenceId": "r15"
+              },
+              {
+                "concept": "synthetic-study-1:concept-16",
+                "meaning": "concept 16",
+                "referenceForm": "eecad",
+                "referenceId": "r16"
+              },
+              {
+                "concept": "synthetic-study-1:concept-17",
+                "meaning": "concept 17",
+                "referenceForm": "daaca",
+                "referenceId": "r17"
+              },
+              {
+                "concept": "synthetic-study-1:concept-18",
+                "meaning": "concept 18",
+                "referenceForm": "addab",
+                "referenceId": "r18"
+              },
+              {
+                "concept": "synthetic-study-1:concept-19",
+                "meaning": "concept 19",
+                "referenceForm": "adaea",
+                "referenceId": "r19"
+              }
+            ],
+            "pairs": [
+              {
+                "concept": "synthetic-study-1:concept-0",
+                "meaning": "concept 0",
+                "queryId": "qr0",
+                "referenceId": "r0",
+                "queryForm": "λξμλν",
+                "referenceForm": "becbd",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-1",
+                "meaning": "concept 1",
+                "queryId": "qr1",
+                "referenceId": "r1",
+                "queryForm": "λνλκμ",
+                "referenceForm": "bdbac",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              }
+            ]
+          },
+          {
+            "sourceId": "synthetic-study-1",
+            "sourceSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "sourceUrl": "https://example.invalid/synthetic-study",
+            "languageId": "unrelated",
+            "languageName": "Synthetic unrelated control",
+            "license": "CC0-1.0",
+            "attribution": "Purpose-built synthetic evaluation fixture. No natural-language ancestry claim.",
+            "sharedConcepts": 2,
+            "queryConceptCoverage": 1,
+            "orthographicSimilarity": 0,
+            "phoneticSimilarity": null,
+            "correspondenceBasis": "orthographic-graphemes",
+            "systematicSupport": 0,
+            "correspondenceConcepts": 2,
+            "consistentConcepts": 0,
+            "fitsSelectedAnchors": false,
+            "rules": [],
+            "conflicts": [
+              {
+                "source": "a",
+                "targets": [
+                  "λ",
+                  "μ",
+                  "ν",
+                  "ξ"
+                ]
+              },
+              {
+                "source": "b",
+                "targets": [
+                  "κ",
+                  "ν"
+                ]
+              },
+              {
+                "source": "c",
+                "targets": [
+                  "λ",
+                  "μ"
+                ]
+              }
+            ],
+            "control": {
+              "shifts": 1,
+              "meanSimilarity": 0,
+              "meanSystematicSupport": 0
+            },
+            "features": [],
+            "featureAgreement": null,
+            "predictionAudit": {
+              "scheduled": 2,
+              "emitted": 0,
+              "correct": 0,
+              "precision": null
+            },
+            "proposals": [],
+            "missingConcepts": [
+              {
+                "concept": "synthetic-study-1:concept-10",
+                "meaning": "concept 10",
+                "referenceForm": "dbaee",
+                "referenceId": "ur10"
+              },
+              {
+                "concept": "synthetic-study-1:concept-11",
+                "meaning": "concept 11",
+                "referenceForm": "decee",
+                "referenceId": "ur11"
+              },
+              {
+                "concept": "synthetic-study-1:concept-12",
+                "meaning": "concept 12",
+                "referenceForm": "eeaea",
+                "referenceId": "ur12"
+              },
+              {
+                "concept": "synthetic-study-1:concept-13",
+                "meaning": "concept 13",
+                "referenceForm": "caecb",
+                "referenceId": "ur13"
+              },
+              {
+                "concept": "synthetic-study-1:concept-14",
+                "meaning": "concept 14",
+                "referenceForm": "eadec",
+                "referenceId": "ur14"
+              },
+              {
+                "concept": "synthetic-study-1:concept-15",
+                "meaning": "concept 15",
+                "referenceForm": "bebde",
+                "referenceId": "ur15"
+              },
+              {
+                "concept": "synthetic-study-1:concept-16",
+                "meaning": "concept 16",
+                "referenceForm": "cadbd",
+                "referenceId": "ur16"
+              },
+              {
+                "concept": "synthetic-study-1:concept-17",
+                "meaning": "concept 17",
+                "referenceForm": "aeddb",
+                "referenceId": "ur17"
+              },
+              {
+                "concept": "synthetic-study-1:concept-18",
+                "meaning": "concept 18",
+                "referenceForm": "abeed",
+                "referenceId": "ur18"
+              },
+              {
+                "concept": "synthetic-study-1:concept-19",
+                "meaning": "concept 19",
+                "referenceForm": "daaed",
+                "referenceId": "ur19"
+              }
+            ],
+            "pairs": [
+              {
+                "concept": "synthetic-study-1:concept-0",
+                "meaning": "concept 0",
+                "queryId": "qr0",
+                "referenceId": "ur0",
+                "queryForm": "λξμλν",
+                "referenceForm": "cacea",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-1",
+                "meaning": "concept 1",
+                "queryId": "qr1",
+                "referenceId": "ur1",
+                "queryForm": "λνλκμ",
+                "referenceForm": "ebaba",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              }
+            ]
+          }
+        ],
+        "nextObservations": [
+          "Provide glosses or concept identifiers for at least three distinct words before interpreting reference comparisons.",
+          "Add space-separated phonetic transcriptions to evaluate segment correspondences.",
+          "Add observed grammatical feature values with their supporting source notes.",
+          "Collect a contextualized example for concept 10 to test the leading reference hypothesis.",
+          "Collect a contextualized example for concept 11 to test the leading reference hypothesis.",
+          "Collect a contextualized example for concept 12 to test the leading reference hypothesis."
+        ],
+        "resources": {
+          "durationMs": 0.33399999999994634,
+          "alignmentCells": 288,
+          "candidateLimit": 50,
+          "maximumUnits": 96,
+          "maximumCells": 10000000,
+          "timeoutMs": 60000
+        }
+      }
+    },
+    {
+      "input": {
+        "versionId": "synthetic-17",
+        "objectSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "features": {},
+        "entries": [
+          {
+            "id": "qr0",
+            "form": "λξμλν",
+            "meaning": "concept 0"
+          },
+          {
+            "id": "qr1",
+            "form": "λνλκμ",
+            "meaning": "concept 1"
+          },
+          {
+            "id": "qr2",
+            "form": "μλλκξ",
+            "meaning": "concept 2"
+          },
+          {
+            "id": "qr3",
+            "form": "μλμμν",
+            "meaning": "concept 3"
+          },
+          {
+            "id": "qr4",
+            "form": "λκνμκ",
+            "meaning": "concept 4"
+          },
+          {
+            "id": "qr5",
+            "form": "νκνλν",
+            "meaning": "concept 5"
+          },
+          {
+            "id": "qr6",
+            "form": "λνννν",
+            "meaning": "concept 6"
+          },
+          {
+            "id": "qr7",
+            "form": "λκκλκ",
+            "meaning": "concept 7"
+          },
+          {
+            "id": "qr8",
+            "form": "νλκλλ",
+            "meaning": "concept 8"
+          },
+          {
+            "id": "qr9",
+            "form": "κξκλμ",
+            "meaning": "concept 9"
+          },
+          {
+            "id": "qr10",
+            "form": "μνννμ",
+            "meaning": "concept 10"
+          },
+          {
+            "id": "qr11",
+            "form": "νξκλμ",
+            "meaning": "concept 11"
+          },
+          {
+            "id": "qr12",
+            "form": "κλκκξ",
+            "meaning": "concept 12"
+          },
+          {
+            "id": "qr13",
+            "form": "μννλμ",
+            "meaning": "concept 13"
+          },
+          {
+            "id": "qr14",
+            "form": "λνλνξ",
+            "meaning": "concept 14"
+          },
+          {
+            "id": "qr15",
+            "form": "μξξκξ",
+            "meaning": "concept 15"
+          },
+          {
+            "id": "qr16",
+            "form": "ξξμκν",
+            "meaning": "concept 16"
+          },
+          {
+            "id": "qr17",
+            "form": "νκκμκ",
+            "meaning": "concept 17"
+          },
+          {
+            "id": "qr18",
+            "form": "κννκλ",
+            "meaning": "concept 18"
+          },
+          {
+            "id": "qr19",
+            "form": "κνκξκ",
+            "meaning": "concept 19"
+          },
+          {
+            "id": "qr20",
+            "form": "ξμμκμ",
+            "meaning": "concept 20"
+          },
+          {
+            "id": "qr21",
+            "form": "ξμκξξ",
+            "meaning": "concept 21"
+          },
+          {
+            "id": "qr22",
+            "form": "κξμξλ",
+            "meaning": "concept 22"
+          },
+          {
+            "id": "qr23",
+            "form": "κκμνκ",
+            "meaning": "concept 23"
+          }
+        ]
+      },
+      "references": [
+        {
+          "id": "related",
+          "name": "Synthetic regular substitution",
+          "sourceId": "synthetic-study-1",
+          "sourceSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sourceUrl": "https://example.invalid/synthetic-study",
+          "license": "CC0-1.0",
+          "attribution": "Purpose-built synthetic evaluation fixture. No natural-language ancestry claim.",
+          "features": {},
+          "entries": [
+            {
+              "id": "r0",
+              "conceptId": "concept-0",
+              "meaning": "concept 0",
+              "form": "becbd"
+            },
+            {
+              "id": "r1",
+              "conceptId": "concept-1",
+              "meaning": "concept 1",
+              "form": "bdbac"
+            },
+            {
+              "id": "r2",
+              "conceptId": "concept-2",
+              "meaning": "concept 2",
+              "form": "cbbae"
+            },
+            {
+              "id": "r3",
+              "conceptId": "concept-3",
+              "meaning": "concept 3",
+              "form": "cbccd"
+            },
+            {
+              "id": "r4",
+              "conceptId": "concept-4",
+              "meaning": "concept 4",
+              "form": "badca"
+            },
+            {
+              "id": "r5",
+              "conceptId": "concept-5",
+              "meaning": "concept 5",
+              "form": "dadbd"
+            },
+            {
+              "id": "r6",
+              "conceptId": "concept-6",
+              "meaning": "concept 6",
+              "form": "bdddd"
+            },
+            {
+              "id": "r7",
+              "conceptId": "concept-7",
+              "meaning": "concept 7",
+              "form": "baaba"
+            },
+            {
+              "id": "r8",
+              "conceptId": "concept-8",
+              "meaning": "concept 8",
+              "form": "dbabb"
+            },
+            {
+              "id": "r9",
+              "conceptId": "concept-9",
+              "meaning": "concept 9",
+              "form": "aeabc"
+            },
+            {
+              "id": "r10",
+              "conceptId": "concept-10",
+              "meaning": "concept 10",
+              "form": "cdddc"
+            },
+            {
+              "id": "r11",
+              "conceptId": "concept-11",
+              "meaning": "concept 11",
+              "form": "deabc"
+            },
+            {
+              "id": "r12",
+              "conceptId": "concept-12",
+              "meaning": "concept 12",
+              "form": "abaae"
+            },
+            {
+              "id": "r13",
+              "conceptId": "concept-13",
+              "meaning": "concept 13",
+              "form": "cddbc"
+            },
+            {
+              "id": "r14",
+              "conceptId": "concept-14",
+              "meaning": "concept 14",
+              "form": "bdbde"
+            },
+            {
+              "id": "r15",
+              "conceptId": "concept-15",
+              "meaning": "concept 15",
+              "form": "ceeae"
+            },
+            {
+              "id": "r16",
+              "conceptId": "concept-16",
+              "meaning": "concept 16",
+              "form": "eecad"
+            },
+            {
+              "id": "r17",
+              "conceptId": "concept-17",
+              "meaning": "concept 17",
+              "form": "daaca"
+            },
+            {
+              "id": "r18",
+              "conceptId": "concept-18",
+              "meaning": "concept 18",
+              "form": "addab"
+            },
+            {
+              "id": "r19",
+              "conceptId": "concept-19",
+              "meaning": "concept 19",
+              "form": "adaea"
+            },
+            {
+              "id": "r20",
+              "conceptId": "concept-20",
+              "meaning": "concept 20",
+              "form": "eccac"
+            },
+            {
+              "id": "r21",
+              "conceptId": "concept-21",
+              "meaning": "concept 21",
+              "form": "ecaee"
+            },
+            {
+              "id": "r22",
+              "conceptId": "concept-22",
+              "meaning": "concept 22",
+              "form": "aeceb"
+            },
+            {
+              "id": "r23",
+              "conceptId": "concept-23",
+              "meaning": "concept 23",
+              "form": "aacda"
+            },
+            {
+              "id": "r24",
+              "conceptId": "concept-24",
+              "meaning": "concept 24",
+              "form": "ddebc"
+            },
+            {
+              "id": "r25",
+              "conceptId": "concept-25",
+              "meaning": "concept 25",
+              "form": "dddba"
+            },
+            {
+              "id": "r26",
+              "conceptId": "concept-26",
+              "meaning": "concept 26",
+              "form": "baaaa"
+            },
+            {
+              "id": "r27",
+              "conceptId": "concept-27",
+              "meaning": "concept 27",
+              "form": "eebad"
+            },
+            {
+              "id": "r28",
+              "conceptId": "concept-28",
+              "meaning": "concept 28",
+              "form": "dcbae"
+            },
+            {
+              "id": "r29",
+              "conceptId": "concept-29",
+              "meaning": "concept 29",
+              "form": "eecbd"
+            }
+          ]
+        },
+        {
+          "id": "unrelated",
+          "name": "Synthetic unrelated control",
+          "sourceId": "synthetic-study-1",
+          "sourceSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sourceUrl": "https://example.invalid/synthetic-study",
+          "license": "CC0-1.0",
+          "attribution": "Purpose-built synthetic evaluation fixture. No natural-language ancestry claim.",
+          "features": {},
+          "entries": [
+            {
+              "id": "ur0",
+              "conceptId": "concept-0",
+              "meaning": "concept 0",
+              "form": "cacea"
+            },
+            {
+              "id": "ur1",
+              "conceptId": "concept-1",
+              "meaning": "concept 1",
+              "form": "ebaba"
+            },
+            {
+              "id": "ur2",
+              "conceptId": "concept-2",
+              "meaning": "concept 2",
+              "form": "ddaea"
+            },
+            {
+              "id": "ur3",
+              "conceptId": "concept-3",
+              "meaning": "concept 3",
+              "form": "ccaaa"
+            },
+            {
+              "id": "ur4",
+              "conceptId": "concept-4",
+              "meaning": "concept 4",
+              "form": "dbeeb"
+            },
+            {
+              "id": "ur5",
+              "conceptId": "concept-5",
+              "meaning": "concept 5",
+              "form": "edabd"
+            },
+            {
+              "id": "ur6",
+              "conceptId": "concept-6",
+              "meaning": "concept 6",
+              "form": "acbdc"
+            },
+            {
+              "id": "ur7",
+              "conceptId": "concept-7",
+              "meaning": "concept 7",
+              "form": "dcabb"
+            },
+            {
+              "id": "ur8",
+              "conceptId": "concept-8",
+              "meaning": "concept 8",
+              "form": "aacee"
+            },
+            {
+              "id": "ur9",
+              "conceptId": "concept-9",
+              "meaning": "concept 9",
+              "form": "aecde"
+            },
+            {
+              "id": "ur10",
+              "conceptId": "concept-10",
+              "meaning": "concept 10",
+              "form": "dbaee"
+            },
+            {
+              "id": "ur11",
+              "conceptId": "concept-11",
+              "meaning": "concept 11",
+              "form": "decee"
+            },
+            {
+              "id": "ur12",
+              "conceptId": "concept-12",
+              "meaning": "concept 12",
+              "form": "eeaea"
+            },
+            {
+              "id": "ur13",
+              "conceptId": "concept-13",
+              "meaning": "concept 13",
+              "form": "caecb"
+            },
+            {
+              "id": "ur14",
+              "conceptId": "concept-14",
+              "meaning": "concept 14",
+              "form": "eadec"
+            },
+            {
+              "id": "ur15",
+              "conceptId": "concept-15",
+              "meaning": "concept 15",
+              "form": "bebde"
+            },
+            {
+              "id": "ur16",
+              "conceptId": "concept-16",
+              "meaning": "concept 16",
+              "form": "cadbd"
+            },
+            {
+              "id": "ur17",
+              "conceptId": "concept-17",
+              "meaning": "concept 17",
+              "form": "aeddb"
+            },
+            {
+              "id": "ur18",
+              "conceptId": "concept-18",
+              "meaning": "concept 18",
+              "form": "abeed"
+            },
+            {
+              "id": "ur19",
+              "conceptId": "concept-19",
+              "meaning": "concept 19",
+              "form": "daaed"
+            },
+            {
+              "id": "ur20",
+              "conceptId": "concept-20",
+              "meaning": "concept 20",
+              "form": "bdaad"
+            },
+            {
+              "id": "ur21",
+              "conceptId": "concept-21",
+              "meaning": "concept 21",
+              "form": "adaac"
+            },
+            {
+              "id": "ur22",
+              "conceptId": "concept-22",
+              "meaning": "concept 22",
+              "form": "edbdd"
+            },
+            {
+              "id": "ur23",
+              "conceptId": "concept-23",
+              "meaning": "concept 23",
+              "form": "acadb"
+            },
+            {
+              "id": "ur24",
+              "conceptId": "concept-24",
+              "meaning": "concept 24",
+              "form": "eecec"
+            },
+            {
+              "id": "ur25",
+              "conceptId": "concept-25",
+              "meaning": "concept 25",
+              "form": "dcceb"
+            },
+            {
+              "id": "ur26",
+              "conceptId": "concept-26",
+              "meaning": "concept 26",
+              "form": "cebad"
+            },
+            {
+              "id": "ur27",
+              "conceptId": "concept-27",
+              "meaning": "concept 27",
+              "form": "badeb"
+            },
+            {
+              "id": "ur28",
+              "conceptId": "concept-28",
+              "meaning": "concept 28",
+              "form": "cbecd"
+            },
+            {
+              "id": "ur29",
+              "conceptId": "concept-29",
+              "meaning": "concept 29",
+              "form": "aebbc"
+            }
+          ]
+        }
+      ],
+      "report": {
+        "version": "atlas-comparison-1",
+        "method": "bounded-correspondences-1",
+        "state": "complete",
+        "input": {
+          "versionId": "synthetic-17",
+          "objectSha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "referenceSources": [
+          {
+            "id": "synthetic-study-1",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "coverage": {
+          "entries": 24,
+          "anchoredConcepts": 24,
+          "unmappedLabels": [],
+          "unanchoredEntries": 0,
+          "skippedForms": 0
+        },
+        "matches": [
+          {
+            "sourceId": "synthetic-study-1",
+            "sourceSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "sourceUrl": "https://example.invalid/synthetic-study",
+            "languageId": "related",
+            "languageName": "Synthetic regular substitution",
+            "license": "CC0-1.0",
+            "attribution": "Purpose-built synthetic evaluation fixture. No natural-language ancestry claim.",
+            "sharedConcepts": 24,
+            "queryConceptCoverage": 1,
+            "orthographicSimilarity": 0,
+            "phoneticSimilarity": null,
+            "correspondenceBasis": "orthographic-graphemes",
+            "systematicSupport": 1,
+            "correspondenceConcepts": 24,
+            "consistentConcepts": 24,
+            "fitsSelectedAnchors": true,
+            "rules": [
+              {
+                "source": "a",
+                "target": "κ",
+                "concepts": [
+                  "synthetic-study-1:concept-1",
+                  "synthetic-study-1:concept-11",
+                  "synthetic-study-1:concept-12",
+                  "synthetic-study-1:concept-15",
+                  "synthetic-study-1:concept-16",
+                  "synthetic-study-1:concept-17",
+                  "synthetic-study-1:concept-18",
+                  "synthetic-study-1:concept-19",
+                  "synthetic-study-1:concept-2",
+                  "synthetic-study-1:concept-20",
+                  "synthetic-study-1:concept-21",
+                  "synthetic-study-1:concept-22",
+                  "synthetic-study-1:concept-23",
+                  "synthetic-study-1:concept-4",
+                  "synthetic-study-1:concept-5",
+                  "synthetic-study-1:concept-7",
+                  "synthetic-study-1:concept-8",
+                  "synthetic-study-1:concept-9"
+                ],
+                "evidence": [
+                  {
+                    "queryId": "qr1",
+                    "referenceId": "r1"
+                  },
+                  {
+                    "queryId": "qr11",
+                    "referenceId": "r11"
+                  },
+                  {
+                    "queryId": "qr12",
+                    "referenceId": "r12"
+                  },
+                  {
+                    "queryId": "qr15",
+                    "referenceId": "r15"
+                  },
+                  {
+                    "queryId": "qr16",
+                    "referenceId": "r16"
+                  },
+                  {
+                    "queryId": "qr17",
+                    "referenceId": "r17"
+                  },
+                  {
+                    "queryId": "qr18",
+                    "referenceId": "r18"
+                  },
+                  {
+                    "queryId": "qr19",
+                    "referenceId": "r19"
+                  },
+                  {
+                    "queryId": "qr2",
+                    "referenceId": "r2"
+                  },
+                  {
+                    "queryId": "qr20",
+                    "referenceId": "r20"
+                  },
+                  {
+                    "queryId": "qr21",
+                    "referenceId": "r21"
+                  },
+                  {
+                    "queryId": "qr22",
+                    "referenceId": "r22"
+                  },
+                  {
+                    "queryId": "qr23",
+                    "referenceId": "r23"
+                  },
+                  {
+                    "queryId": "qr4",
+                    "referenceId": "r4"
+                  },
+                  {
+                    "queryId": "qr5",
+                    "referenceId": "r5"
+                  },
+                  {
+                    "queryId": "qr7",
+                    "referenceId": "r7"
+                  },
+                  {
+                    "queryId": "qr8",
+                    "referenceId": "r8"
+                  },
+                  {
+                    "queryId": "qr9",
+                    "referenceId": "r9"
+                  }
+                ]
+              },
+              {
+                "source": "b",
+                "target": "λ",
+                "concepts": [
+                  "synthetic-study-1:concept-0",
+                  "synthetic-study-1:concept-1",
+                  "synthetic-study-1:concept-11",
+                  "synthetic-study-1:concept-12",
+                  "synthetic-study-1:concept-13",
+                  "synthetic-study-1:concept-14",
+                  "synthetic-study-1:concept-18",
+                  "synthetic-study-1:concept-2",
+                  "synthetic-study-1:concept-22",
+                  "synthetic-study-1:concept-3",
+                  "synthetic-study-1:concept-4",
+                  "synthetic-study-1:concept-5",
+                  "synthetic-study-1:concept-6",
+                  "synthetic-study-1:concept-7",
+                  "synthetic-study-1:concept-8",
+                  "synthetic-study-1:concept-9"
+                ],
+                "evidence": [
+                  {
+                    "queryId": "qr0",
+                    "referenceId": "r0"
+                  },
+                  {
+                    "queryId": "qr1",
+                    "referenceId": "r1"
+                  },
+                  {
+                    "queryId": "qr11",
+                    "referenceId": "r11"
+                  },
+                  {
+                    "queryId": "qr12",
+                    "referenceId": "r12"
+                  },
+                  {
+                    "queryId": "qr13",
+                    "referenceId": "r13"
+                  },
+                  {
+                    "queryId": "qr14",
+                    "referenceId": "r14"
+                  },
+                  {
+                    "queryId": "qr18",
+                    "referenceId": "r18"
+                  },
+                  {
+                    "queryId": "qr2",
+                    "referenceId": "r2"
+                  },
+                  {
+                    "queryId": "qr22",
+                    "referenceId": "r22"
+                  },
+                  {
+                    "queryId": "qr3",
+                    "referenceId": "r3"
+                  },
+                  {
+                    "queryId": "qr4",
+                    "referenceId": "r4"
+                  },
+                  {
+                    "queryId": "qr5",
+                    "referenceId": "r5"
+                  },
+                  {
+                    "queryId": "qr6",
+                    "referenceId": "r6"
+                  },
+                  {
+                    "queryId": "qr7",
+                    "referenceId": "r7"
+                  },
+                  {
+                    "queryId": "qr8",
+                    "referenceId": "r8"
+                  },
+                  {
+                    "queryId": "qr9",
+                    "referenceId": "r9"
+                  }
+                ]
+              },
+              {
+                "source": "c",
+                "target": "μ",
+                "concepts": [
+                  "synthetic-study-1:concept-0",
+                  "synthetic-study-1:concept-1",
+                  "synthetic-study-1:concept-10",
+                  "synthetic-study-1:concept-11",
+                  "synthetic-study-1:concept-13",
+                  "synthetic-study-1:concept-15",
+                  "synthetic-study-1:concept-16",
+                  "synthetic-study-1:concept-17",
+                  "synthetic-study-1:concept-2",
+                  "synthetic-study-1:concept-20",
+                  "synthetic-study-1:concept-21",
+                  "synthetic-study-1:concept-22",
+                  "synthetic-study-1:concept-23",
+                  "synthetic-study-1:concept-3",
+                  "synthetic-study-1:concept-4",
+                  "synthetic-study-1:concept-9"
+                ],
+                "evidence": [
+                  {
+                    "queryId": "qr0",
+                    "referenceId": "r0"
+                  },
+                  {
+                    "queryId": "qr1",
+                    "referenceId": "r1"
+                  },
+                  {
+                    "queryId": "qr10",
+                    "referenceId": "r10"
+                  },
+                  {
+                    "queryId": "qr11",
+                    "referenceId": "r11"
+                  },
+                  {
+                    "queryId": "qr13",
+                    "referenceId": "r13"
+                  },
+                  {
+                    "queryId": "qr15",
+                    "referenceId": "r15"
+                  },
+                  {
+                    "queryId": "qr16",
+                    "referenceId": "r16"
+                  },
+                  {
+                    "queryId": "qr17",
+                    "referenceId": "r17"
+                  },
+                  {
+                    "queryId": "qr2",
+                    "referenceId": "r2"
+                  },
+                  {
+                    "queryId": "qr20",
+                    "referenceId": "r20"
+                  },
+                  {
+                    "queryId": "qr21",
+                    "referenceId": "r21"
+                  },
+                  {
+                    "queryId": "qr22",
+                    "referenceId": "r22"
+                  },
+                  {
+                    "queryId": "qr23",
+                    "referenceId": "r23"
+                  },
+                  {
+                    "queryId": "qr3",
+                    "referenceId": "r3"
+                  },
+                  {
+                    "queryId": "qr4",
+                    "referenceId": "r4"
+                  },
+                  {
+                    "queryId": "qr9",
+                    "referenceId": "r9"
+                  }
+                ]
+              },
+              {
+                "source": "d",
+                "target": "ν",
+                "concepts": [
+                  "synthetic-study-1:concept-0",
+                  "synthetic-study-1:concept-1",
+                  "synthetic-study-1:concept-10",
+                  "synthetic-study-1:concept-11",
+                  "synthetic-study-1:concept-13",
+                  "synthetic-study-1:concept-14",
+                  "synthetic-study-1:concept-16",
+                  "synthetic-study-1:concept-17",
+                  "synthetic-study-1:concept-18",
+                  "synthetic-study-1:concept-19",
+                  "synthetic-study-1:concept-23",
+                  "synthetic-study-1:concept-3",
+                  "synthetic-study-1:concept-4",
+                  "synthetic-study-1:concept-5",
+                  "synthetic-study-1:concept-6",
+                  "synthetic-study-1:concept-8"
+                ],
+                "evidence": [
+                  {
+                    "queryId": "qr0",
+                    "referenceId": "r0"
+                  },
+                  {
+                    "queryId": "qr1",
+                    "referenceId": "r1"
+                  },
+                  {
+                    "queryId": "qr10",
+                    "referenceId": "r10"
+                  },
+                  {
+                    "queryId": "qr11",
+                    "referenceId": "r11"
+                  },
+                  {
+                    "queryId": "qr13",
+                    "referenceId": "r13"
+                  },
+                  {
+                    "queryId": "qr14",
+                    "referenceId": "r14"
+                  },
+                  {
+                    "queryId": "qr16",
+                    "referenceId": "r16"
+                  },
+                  {
+                    "queryId": "qr17",
+                    "referenceId": "r17"
+                  },
+                  {
+                    "queryId": "qr18",
+                    "referenceId": "r18"
+                  },
+                  {
+                    "queryId": "qr19",
+                    "referenceId": "r19"
+                  },
+                  {
+                    "queryId": "qr23",
+                    "referenceId": "r23"
+                  },
+                  {
+                    "queryId": "qr3",
+                    "referenceId": "r3"
+                  },
+                  {
+                    "queryId": "qr4",
+                    "referenceId": "r4"
+                  },
+                  {
+                    "queryId": "qr5",
+                    "referenceId": "r5"
+                  },
+                  {
+                    "queryId": "qr6",
+                    "referenceId": "r6"
+                  },
+                  {
+                    "queryId": "qr8",
+                    "referenceId": "r8"
+                  }
+                ]
+              },
+              {
+                "source": "e",
+                "target": "ξ",
+                "concepts": [
+                  "synthetic-study-1:concept-0",
+                  "synthetic-study-1:concept-11",
+                  "synthetic-study-1:concept-12",
+                  "synthetic-study-1:concept-14",
+                  "synthetic-study-1:concept-15",
+                  "synthetic-study-1:concept-16",
+                  "synthetic-study-1:concept-19",
+                  "synthetic-study-1:concept-2",
+                  "synthetic-study-1:concept-20",
+                  "synthetic-study-1:concept-21",
+                  "synthetic-study-1:concept-22",
+                  "synthetic-study-1:concept-9"
+                ],
+                "evidence": [
+                  {
+                    "queryId": "qr0",
+                    "referenceId": "r0"
+                  },
+                  {
+                    "queryId": "qr11",
+                    "referenceId": "r11"
+                  },
+                  {
+                    "queryId": "qr12",
+                    "referenceId": "r12"
+                  },
+                  {
+                    "queryId": "qr14",
+                    "referenceId": "r14"
+                  },
+                  {
+                    "queryId": "qr15",
+                    "referenceId": "r15"
+                  },
+                  {
+                    "queryId": "qr16",
+                    "referenceId": "r16"
+                  },
+                  {
+                    "queryId": "qr19",
+                    "referenceId": "r19"
+                  },
+                  {
+                    "queryId": "qr2",
+                    "referenceId": "r2"
+                  },
+                  {
+                    "queryId": "qr20",
+                    "referenceId": "r20"
+                  },
+                  {
+                    "queryId": "qr21",
+                    "referenceId": "r21"
+                  },
+                  {
+                    "queryId": "qr22",
+                    "referenceId": "r22"
+                  },
+                  {
+                    "queryId": "qr9",
+                    "referenceId": "r9"
+                  }
+                ]
+              }
+            ],
+            "conflicts": [],
+            "control": {
+              "shifts": 8,
+              "meanSimilarity": 0,
+              "meanSystematicSupport": 0
+            },
+            "features": [],
+            "featureAgreement": null,
+            "predictionAudit": {
+              "scheduled": 24,
+              "emitted": 24,
+              "correct": 24,
+              "precision": 1
+            },
+            "proposals": [
+              {
+                "concept": "synthetic-study-1:concept-24",
+                "meaning": "concept 24",
+                "forms": [
+                  "ννξλμ"
+                ],
+                "referenceIds": [
+                  "r24"
+                ],
+                "representation": "orthographic-graphemes",
+                "state": "proposed",
+                "assumption": "position-independent symbol substitution supported by the cited anchors"
+              },
+              {
+                "concept": "synthetic-study-1:concept-25",
+                "meaning": "concept 25",
+                "forms": [
+                  "νννλκ"
+                ],
+                "referenceIds": [
+                  "r25"
+                ],
+                "representation": "orthographic-graphemes",
+                "state": "proposed",
+                "assumption": "position-independent symbol substitution supported by the cited anchors"
+              },
+              {
+                "concept": "synthetic-study-1:concept-26",
+                "meaning": "concept 26",
+                "forms": [
+                  "λκκκκ"
+                ],
+                "referenceIds": [
+                  "r26"
+                ],
+                "representation": "orthographic-graphemes",
+                "state": "proposed",
+                "assumption": "position-independent symbol substitution supported by the cited anchors"
+              },
+              {
+                "concept": "synthetic-study-1:concept-27",
+                "meaning": "concept 27",
+                "forms": [
+                  "ξξλκν"
+                ],
+                "referenceIds": [
+                  "r27"
+                ],
+                "representation": "orthographic-graphemes",
+                "state": "proposed",
+                "assumption": "position-independent symbol substitution supported by the cited anchors"
+              },
+              {
+                "concept": "synthetic-study-1:concept-28",
+                "meaning": "concept 28",
+                "forms": [
+                  "νμλκξ"
+                ],
+                "referenceIds": [
+                  "r28"
+                ],
+                "representation": "orthographic-graphemes",
+                "state": "proposed",
+                "assumption": "position-independent symbol substitution supported by the cited anchors"
+              },
+              {
+                "concept": "synthetic-study-1:concept-29",
+                "meaning": "concept 29",
+                "forms": [
+                  "ξξμλν"
+                ],
+                "referenceIds": [
+                  "r29"
+                ],
+                "representation": "orthographic-graphemes",
+                "state": "proposed",
+                "assumption": "position-independent symbol substitution supported by the cited anchors"
+              }
+            ],
+            "missingConcepts": [
+              {
+                "concept": "synthetic-study-1:concept-24",
+                "meaning": "concept 24",
+                "referenceForm": "ddebc",
+                "referenceId": "r24"
+              },
+              {
+                "concept": "synthetic-study-1:concept-25",
+                "meaning": "concept 25",
+                "referenceForm": "dddba",
+                "referenceId": "r25"
+              },
+              {
+                "concept": "synthetic-study-1:concept-26",
+                "meaning": "concept 26",
+                "referenceForm": "baaaa",
+                "referenceId": "r26"
+              },
+              {
+                "concept": "synthetic-study-1:concept-27",
+                "meaning": "concept 27",
+                "referenceForm": "eebad",
+                "referenceId": "r27"
+              },
+              {
+                "concept": "synthetic-study-1:concept-28",
+                "meaning": "concept 28",
+                "referenceForm": "dcbae",
+                "referenceId": "r28"
+              },
+              {
+                "concept": "synthetic-study-1:concept-29",
+                "meaning": "concept 29",
+                "referenceForm": "eecbd",
+                "referenceId": "r29"
+              }
+            ],
+            "pairs": [
+              {
+                "concept": "synthetic-study-1:concept-0",
+                "meaning": "concept 0",
+                "queryId": "qr0",
+                "referenceId": "r0",
+                "queryForm": "λξμλν",
+                "referenceForm": "becbd",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-1",
+                "meaning": "concept 1",
+                "queryId": "qr1",
+                "referenceId": "r1",
+                "queryForm": "λνλκμ",
+                "referenceForm": "bdbac",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-10",
+                "meaning": "concept 10",
+                "queryId": "qr10",
+                "referenceId": "r10",
+                "queryForm": "μνννμ",
+                "referenceForm": "cdddc",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-11",
+                "meaning": "concept 11",
+                "queryId": "qr11",
+                "referenceId": "r11",
+                "queryForm": "νξκλμ",
+                "referenceForm": "deabc",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-12",
+                "meaning": "concept 12",
+                "queryId": "qr12",
+                "referenceId": "r12",
+                "queryForm": "κλκκξ",
+                "referenceForm": "abaae",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-13",
+                "meaning": "concept 13",
+                "queryId": "qr13",
+                "referenceId": "r13",
+                "queryForm": "μννλμ",
+                "referenceForm": "cddbc",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-14",
+                "meaning": "concept 14",
+                "queryId": "qr14",
+                "referenceId": "r14",
+                "queryForm": "λνλνξ",
+                "referenceForm": "bdbde",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-15",
+                "meaning": "concept 15",
+                "queryId": "qr15",
+                "referenceId": "r15",
+                "queryForm": "μξξκξ",
+                "referenceForm": "ceeae",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-16",
+                "meaning": "concept 16",
+                "queryId": "qr16",
+                "referenceId": "r16",
+                "queryForm": "ξξμκν",
+                "referenceForm": "eecad",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-17",
+                "meaning": "concept 17",
+                "queryId": "qr17",
+                "referenceId": "r17",
+                "queryForm": "νκκμκ",
+                "referenceForm": "daaca",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-18",
+                "meaning": "concept 18",
+                "queryId": "qr18",
+                "referenceId": "r18",
+                "queryForm": "κννκλ",
+                "referenceForm": "addab",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-19",
+                "meaning": "concept 19",
+                "queryId": "qr19",
+                "referenceId": "r19",
+                "queryForm": "κνκξκ",
+                "referenceForm": "adaea",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-2",
+                "meaning": "concept 2",
+                "queryId": "qr2",
+                "referenceId": "r2",
+                "queryForm": "μλλκξ",
+                "referenceForm": "cbbae",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-20",
+                "meaning": "concept 20",
+                "queryId": "qr20",
+                "referenceId": "r20",
+                "queryForm": "ξμμκμ",
+                "referenceForm": "eccac",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-21",
+                "meaning": "concept 21",
+                "queryId": "qr21",
+                "referenceId": "r21",
+                "queryForm": "ξμκξξ",
+                "referenceForm": "ecaee",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-22",
+                "meaning": "concept 22",
+                "queryId": "qr22",
+                "referenceId": "r22",
+                "queryForm": "κξμξλ",
+                "referenceForm": "aeceb",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-23",
+                "meaning": "concept 23",
+                "queryId": "qr23",
+                "referenceId": "r23",
+                "queryForm": "κκμνκ",
+                "referenceForm": "aacda",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-3",
+                "meaning": "concept 3",
+                "queryId": "qr3",
+                "referenceId": "r3",
+                "queryForm": "μλμμν",
+                "referenceForm": "cbccd",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-4",
+                "meaning": "concept 4",
+                "queryId": "qr4",
+                "referenceId": "r4",
+                "queryForm": "λκνμκ",
+                "referenceForm": "badca",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-5",
+                "meaning": "concept 5",
+                "queryId": "qr5",
+                "referenceId": "r5",
+                "queryForm": "νκνλν",
+                "referenceForm": "dadbd",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-6",
+                "meaning": "concept 6",
+                "queryId": "qr6",
+                "referenceId": "r6",
+                "queryForm": "λνννν",
+                "referenceForm": "bdddd",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-7",
+                "meaning": "concept 7",
+                "queryId": "qr7",
+                "referenceId": "r7",
+                "queryForm": "λκκλκ",
+                "referenceForm": "baaba",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-8",
+                "meaning": "concept 8",
+                "queryId": "qr8",
+                "referenceId": "r8",
+                "queryForm": "νλκλλ",
+                "referenceForm": "dbabb",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-9",
+                "meaning": "concept 9",
+                "queryId": "qr9",
+                "referenceId": "r9",
+                "queryForm": "κξκλμ",
+                "referenceForm": "aeabc",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              }
+            ]
+          },
+          {
+            "sourceId": "synthetic-study-1",
+            "sourceSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "sourceUrl": "https://example.invalid/synthetic-study",
+            "languageId": "unrelated",
+            "languageName": "Synthetic unrelated control",
+            "license": "CC0-1.0",
+            "attribution": "Purpose-built synthetic evaluation fixture. No natural-language ancestry claim.",
+            "sharedConcepts": 24,
+            "queryConceptCoverage": 1,
+            "orthographicSimilarity": 0,
+            "phoneticSimilarity": null,
+            "correspondenceBasis": "orthographic-graphemes",
+            "systematicSupport": 0,
+            "correspondenceConcepts": 24,
+            "consistentConcepts": 0,
+            "fitsSelectedAnchors": false,
+            "rules": [],
+            "conflicts": [
+              {
+                "source": "a",
+                "targets": [
+                  "κ",
+                  "λ",
+                  "μ",
+                  "ν",
+                  "ξ"
+                ]
+              },
+              {
+                "source": "b",
+                "targets": [
+                  "κ",
+                  "λ",
+                  "μ",
+                  "ν",
+                  "ξ"
+                ]
+              },
+              {
+                "source": "c",
+                "targets": [
+                  "κ",
+                  "λ",
+                  "μ",
+                  "ν",
+                  "ξ"
+                ]
+              },
+              {
+                "source": "d",
+                "targets": [
+                  "κ",
+                  "λ",
+                  "μ",
+                  "ν",
+                  "ξ"
+                ]
+              },
+              {
+                "source": "e",
+                "targets": [
+                  "κ",
+                  "λ",
+                  "μ",
+                  "ν",
+                  "ξ"
+                ]
+              }
+            ],
+            "control": {
+              "shifts": 8,
+              "meanSimilarity": 0,
+              "meanSystematicSupport": 0
+            },
+            "features": [],
+            "featureAgreement": null,
+            "predictionAudit": {
+              "scheduled": 24,
+              "emitted": 0,
+              "correct": 0,
+              "precision": null
+            },
+            "proposals": [],
+            "missingConcepts": [
+              {
+                "concept": "synthetic-study-1:concept-24",
+                "meaning": "concept 24",
+                "referenceForm": "eecec",
+                "referenceId": "ur24"
+              },
+              {
+                "concept": "synthetic-study-1:concept-25",
+                "meaning": "concept 25",
+                "referenceForm": "dcceb",
+                "referenceId": "ur25"
+              },
+              {
+                "concept": "synthetic-study-1:concept-26",
+                "meaning": "concept 26",
+                "referenceForm": "cebad",
+                "referenceId": "ur26"
+              },
+              {
+                "concept": "synthetic-study-1:concept-27",
+                "meaning": "concept 27",
+                "referenceForm": "badeb",
+                "referenceId": "ur27"
+              },
+              {
+                "concept": "synthetic-study-1:concept-28",
+                "meaning": "concept 28",
+                "referenceForm": "cbecd",
+                "referenceId": "ur28"
+              },
+              {
+                "concept": "synthetic-study-1:concept-29",
+                "meaning": "concept 29",
+                "referenceForm": "aebbc",
+                "referenceId": "ur29"
+              }
+            ],
+            "pairs": [
+              {
+                "concept": "synthetic-study-1:concept-0",
+                "meaning": "concept 0",
+                "queryId": "qr0",
+                "referenceId": "ur0",
+                "queryForm": "λξμλν",
+                "referenceForm": "cacea",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-1",
+                "meaning": "concept 1",
+                "queryId": "qr1",
+                "referenceId": "ur1",
+                "queryForm": "λνλκμ",
+                "referenceForm": "ebaba",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-10",
+                "meaning": "concept 10",
+                "queryId": "qr10",
+                "referenceId": "ur10",
+                "queryForm": "μνννμ",
+                "referenceForm": "dbaee",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-11",
+                "meaning": "concept 11",
+                "queryId": "qr11",
+                "referenceId": "ur11",
+                "queryForm": "νξκλμ",
+                "referenceForm": "decee",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-12",
+                "meaning": "concept 12",
+                "queryId": "qr12",
+                "referenceId": "ur12",
+                "queryForm": "κλκκξ",
+                "referenceForm": "eeaea",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-13",
+                "meaning": "concept 13",
+                "queryId": "qr13",
+                "referenceId": "ur13",
+                "queryForm": "μννλμ",
+                "referenceForm": "caecb",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "c",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-14",
+                "meaning": "concept 14",
+                "queryId": "qr14",
+                "referenceId": "ur14",
+                "queryForm": "λνλνξ",
+                "referenceForm": "eadec",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "c",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-15",
+                "meaning": "concept 15",
+                "queryId": "qr15",
+                "referenceId": "ur15",
+                "queryForm": "μξξκξ",
+                "referenceForm": "bebde",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-16",
+                "meaning": "concept 16",
+                "queryId": "qr16",
+                "referenceId": "ur16",
+                "queryForm": "ξξμκν",
+                "referenceForm": "cadbd",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-17",
+                "meaning": "concept 17",
+                "queryId": "qr17",
+                "referenceId": "ur17",
+                "queryForm": "νκκμκ",
+                "referenceForm": "aeddb",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-18",
+                "meaning": "concept 18",
+                "queryId": "qr18",
+                "referenceId": "ur18",
+                "queryForm": "κννκλ",
+                "referenceForm": "abeed",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "λ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-19",
+                "meaning": "concept 19",
+                "queryId": "qr19",
+                "referenceId": "ur19",
+                "queryForm": "κνκξκ",
+                "referenceForm": "daaed",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-2",
+                "meaning": "concept 2",
+                "queryId": "qr2",
+                "referenceId": "ur2",
+                "queryForm": "μλλκξ",
+                "referenceForm": "ddaea",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-20",
+                "meaning": "concept 20",
+                "queryId": "qr20",
+                "referenceId": "ur20",
+                "queryForm": "ξμμκμ",
+                "referenceForm": "bdaad",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "b",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-21",
+                "meaning": "concept 21",
+                "queryId": "qr21",
+                "referenceId": "ur21",
+                "queryForm": "ξμκξξ",
+                "referenceForm": "adaac",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "ξ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-22",
+                "meaning": "concept 22",
+                "queryId": "qr22",
+                "referenceId": "ur22",
+                "queryForm": "κξμξλ",
+                "referenceForm": "edbdd",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "λ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-23",
+                "meaning": "concept 23",
+                "queryId": "qr23",
+                "referenceId": "ur23",
+                "queryForm": "κκμνκ",
+                "referenceForm": "acadb",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-3",
+                "meaning": "concept 3",
+                "queryId": "qr3",
+                "referenceId": "ur3",
+                "queryForm": "μλμμν",
+                "referenceForm": "ccaaa",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "c",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-4",
+                "meaning": "concept 4",
+                "queryId": "qr4",
+                "referenceId": "ur4",
+                "queryForm": "λκνμκ",
+                "referenceForm": "dbeeb",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "e",
+                      "target": "μ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-5",
+                "meaning": "concept 5",
+                "queryId": "qr5",
+                "referenceId": "ur5",
+                "queryForm": "νκνλν",
+                "referenceForm": "edabd",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "e",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-6",
+                "meaning": "concept 6",
+                "queryId": "qr6",
+                "referenceId": "ur6",
+                "queryForm": "λνννν",
+                "referenceForm": "acbdc",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "b",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "d",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "c",
+                      "target": "ν"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-7",
+                "meaning": "concept 7",
+                "queryId": "qr7",
+                "referenceId": "ur7",
+                "queryForm": "λκκλκ",
+                "referenceForm": "dcabb",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "d",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "b",
+                      "target": "κ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-8",
+                "meaning": "concept 8",
+                "queryId": "qr8",
+                "referenceId": "ur8",
+                "queryForm": "νλκλλ",
+                "referenceForm": "aacee",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "ν"
+                    },
+                    {
+                      "source": "a",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "λ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              },
+              {
+                "concept": "synthetic-study-1:concept-9",
+                "meaning": "concept 9",
+                "queryId": "qr9",
+                "referenceId": "ur9",
+                "queryForm": "κξκλμ",
+                "referenceForm": "aecde",
+                "orthographic": {
+                  "distance": 5,
+                  "similarity": 0,
+                  "unique": true,
+                  "steps": [
+                    {
+                      "source": "a",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "ξ"
+                    },
+                    {
+                      "source": "c",
+                      "target": "κ"
+                    },
+                    {
+                      "source": "d",
+                      "target": "λ"
+                    },
+                    {
+                      "source": "e",
+                      "target": "μ"
+                    }
+                  ]
+                },
+                "phonetic": null
+              }
+            ]
+          }
+        ],
+        "nextObservations": [
+          "Add space-separated phonetic transcriptions to evaluate segment correspondences.",
+          "Add observed grammatical feature values with their supporting source notes.",
+          "Collect a contextualized example for concept 24 to test the leading reference hypothesis.",
+          "Collect a contextualized example for concept 25 to test the leading reference hypothesis.",
+          "Collect a contextualized example for concept 26 to test the leading reference hypothesis."
+        ],
+        "resources": {
+          "durationMs": 4.329899999999952,
+          "alignmentCells": 15552,
+          "candidateLimit": 50,
+          "maximumUnits": 96,
+          "maximumCells": 10000000,
+          "timeoutMs": 60000
+        }
+      }
+    }
+  ],
+  "elapsedMs": 348.76740000000007,
+  "maximumRssKiB": 116948,
+  "limits": [
+    "No claim of general historical reconstruction, probabilistic ancestry, or natural-language prediction accuracy.",
+    "The position-independent substitution model cannot represent conditioned sound changes or richer morphology."
+  ]
+}

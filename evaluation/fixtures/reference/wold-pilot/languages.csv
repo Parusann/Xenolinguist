@@ -1,0 +1,7 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,WOLD_ID
+Swahili,Swahili,swah1253,Swahili,swh,Africa,-6.5,39,Atlantic-Congo,1
+English,English,stan1293,English,eng,Eurasia,52,0,Indo-European,13
+KildinSaami,Kildin Saami,kild1236,Kildin Saami,sjd,Eurasia,67,37,Uralic,14
+Sakha,Sakha,yaku1245,Sakha,,Eurasia,62,130,Turkic,19
+Japanese,Japanese,nucl1643,Japanese,jpn,Eurasia,37,140,Japonic,21
+MandarinChinese,Mandarin Chinese,mand1415,Mandarin Chinese,cmn,Eurasia,34,110,Sino-Tibetan,22

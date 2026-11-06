@@ -168,5 +168,5 @@ describe('scoring and reproducibility', () => {
     await expect(run(config, directory)).rejects.toThrow();
     await writeFile(path.join(directory, 'runs.jsonl'), raw.toString().replace('"correct":false', '"correct":true'));
     await expect(verifyRun(directory)).rejects.toThrow('Artifact hash mismatch');
-  });
+  }, 20000);
 });

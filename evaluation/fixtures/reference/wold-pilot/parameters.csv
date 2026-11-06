@@ -1,0 +1,12 @@
+ID,Name,Concepticon_ID,Concepticon_Gloss,Core_list,Semantic_category,Semantic_field,Borrowed_score,Age_score,Simplicity_score
+1-31,the water,948,WATER,yes,Noun,The physical world,0.0911062906725,0.900650759219,0.986984815618
+1-52,the sun,1343,SUN,yes,Noun,The physical world,0.13900203666,0.893279022403,0.871690427699
+1-53,the moon,1313,MOON,yes,Noun,The physical world,0.284198113208,0.893867924528,0.957547169811
+1-81,the fire,221,FIRE,yes,Noun,The physical world,0.0354578882858,0.940903519524,0.994746979513
+4-15,the blood,946,BLOOD,yes,Noun,The body,0.0957446808511,0.895744680851,1.0
+4-21,the eye,1248,EYE,yes,Noun,The body,0.096018735363,0.873536299766,0.918032786885
+4-22,the ear,1247,EAR,yes,Noun,The body,0.10393258427,0.858426966292,0.960674157303
+4-26,the tongue,1205,TONGUE,yes,Noun,The body,0.0663716814159,0.876991150442,0.953539823009
+4-27,the tooth,1380,TOOTH,yes,Noun,The body,0.117537313433,0.92276119403,0.974813432836
+4-33,the hand,1277,HAND,yes,Noun,The body,0.150735294118,0.874019607843,0.992647058824
+8-6,the tree,906,TREE,yes,Noun,Agriculture and vegetation,0.252136752137,0.789743589744,0.951566951567

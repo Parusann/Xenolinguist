@@ -1,6 +1,6 @@
-import { app, BrowserWindow, utilityProcess, ipcMain, dialog, type IpcMainInvokeEvent, type UtilityProcess } from 'electron';
+import { app, BrowserWindow, utilityProcess, ipcMain, dialog, safeStorage, type IpcMainInvokeEvent, type UtilityProcess } from 'electron';
 import path from 'path';
-import { existsSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { autoUpdater } from 'electron-updater';
 import { testUserData } from './test-launch.js';
 import { DesktopDraftStore } from './drafts.js';
@@ -8,11 +8,21 @@ import { DesktopAudioDrafts } from './audio-drafts.js';
 import { randomUUID, randomBytes } from 'node:crypto';
 import { secureWindow, trustedSender } from './security.js';
 import { BackendLifecycle, type BackendConnection } from './backend-lifecycle.js';
+import { AtlasConnection } from './atlas-connection.js';
+import { registerAtlasIpc } from './atlas-ipc.js';
+import { researchLaunch } from './research-launch.js';
 
 const acceptanceUserData = testUserData();
-if (acceptanceUserData) app.setPath('userData', acceptanceUserData);
+const research = !app.isPackaged && process.argv.includes('--research-workbench') ? researchLaunch(process.env.XENO_RESEARCH_ROOT) : null;
+const selectedUserData = acceptanceUserData ?? research?.data;
+if (selectedUserData) {
+  app.setPath('userData', selectedUserData);
+  for (const [key, name] of [['sessionData', 'session-data'], ['crashDumps', 'crash-dumps']] as const) {
+    const directory = path.join(selectedUserData, name); mkdirSync(directory, { recursive: true }); app.setPath(key, directory);
+  }
+}
 
-const isDev = !app.isPackaged;
+const isDev = !app.isPackaged && !research;
 const DEV_URL = 'http://localhost:5173';
 
 // Last-resort logging so a stray rejection/throw in the main process is recorded.
@@ -33,6 +43,12 @@ let closeAllowed = false;
 let closeRequest: { id: string; resolve: (saved: boolean) => void } | null = null;
 const drafts = new DesktopDraftStore(path.join(app.getPath('userData'), 'pending-saves'));
 const audioDrafts = new DesktopAudioDrafts(path.join(app.getPath('userData'), 'pending-audio'));
+const atlasCredentials = acceptanceUserData ? path.join(acceptanceUserData, 'atlas-connection') : process.env.XENO_RESEARCH_ROOT
+  ? path.join(process.env.XENO_RESEARCH_ROOT, 'config', 'atlas', 'desktop') : path.join(app.getPath('userData'), 'atlas-connection');
+const atlas = new AtlasConnection(atlasCredentials, {
+  available: () => safeStorage.isEncryptionAvailable() && (process.platform !== 'linux' || safeStorage.getSelectedStorageBackend() !== 'basic_text'),
+  encrypt: value => safeStorage.encryptString(value), decrypt: value => safeStorage.decryptString(value),
+}, acceptanceUserData && process.env.XENO_TEST_ATLAS_ORIGIN ? process.env.XENO_TEST_ATLAS_ORIGIN : undefined);
 
 function retainBeforeRestart(): Promise<boolean> {
   return new Promise(resolve => {
@@ -72,6 +88,7 @@ ipcMain.handle('drafts:write', (event, record: unknown) => { trustedRenderer(eve
 ipcMain.handle('audio-drafts:read', (event, id: unknown) => { trustedRenderer(event); return audioDrafts.read(id); });
 ipcMain.handle('audio-drafts:write', (event, id: unknown, record) => { trustedRenderer(event); return audioDrafts.write(id, record); });
 ipcMain.handle('audio-drafts:remove', (event, id: unknown) => { trustedRenderer(event); return audioDrafts.remove(id); });
+registerAtlasIpc(atlas, () => win, () => rendererOrigin);
 ipcMain.handle('app:flush-result', (event, result: unknown) => {
   trustedRenderer(event);
   if (!result || typeof result !== 'object') throw new Error('Invalid flush result');
@@ -85,29 +102,30 @@ ipcMain.handle('app:flush-result', (event, result: unknown) => {
 function startServerProcess(exited: (message: string) => void): Promise<BackendConnection> {
   return new Promise((resolve, reject) => {
     const serverPath = path.join(__dirname, 'server.cjs');
-    const clientDist = path.join(process.resourcesPath, 'client', 'dist');
+    const clientDist = research ? path.join(research.source, 'client/dist') : path.join(process.resourcesPath, 'client', 'dist');
+    const resources = research ? path.join(research.source, 'electron/runtime') : process.resourcesPath;
     const dataDir = path.join(app.getPath('userData'), 'data');
 
     // Bundled espeak-ng (Windows only for now; elsewhere ESPEAK_PATH stays unset → browser TTS).
     const espeakBin = process.platform === 'win32'
-      ? path.join(process.resourcesPath, 'espeak-ng', 'espeak-ng.exe')
-      : path.join(process.resourcesPath, 'espeak-ng', 'espeak-ng');
+      ? path.join(resources, 'espeak-ng', 'espeak-ng.exe')
+      : path.join(resources, 'espeak-ng', 'espeak-ng');
     const espeakEnv = existsSync(espeakBin) ? { ESPEAK_PATH: espeakBin } : {};
 
     // Bundled whisper.cpp (Windows only for now; elsewhere WHISPER_* stays unset → STT disabled).
     const whisperBin = process.platform === 'win32'
-      ? path.join(process.resourcesPath, 'whisper', 'whisper-cli.exe')
-      : path.join(process.resourcesPath, 'whisper', 'whisper-cli');
-    const whisperModel = path.join(process.resourcesPath, 'whisper', 'ggml-base-q5_1.bin');
+      ? path.join(resources, 'whisper', 'whisper-cli.exe')
+      : path.join(resources, 'whisper', 'whisper-cli');
+    const whisperModel = path.join(resources, 'whisper', 'ggml-base-q5_1.bin');
     const whisperEnv = (existsSync(whisperBin) && existsSync(whisperModel))
       ? { WHISPER_BIN: whisperBin, WHISPER_MODEL: whisperModel }
       : {};
 
-    const ipaModel = path.join(process.resourcesPath, 'ipa-model');
+    const ipaModel = path.join(resources, 'ipa-model');
     const ipaEnv = { IPA_MODEL_DIR: ipaModel };
 
     // Resolve the supported Node export from the staged production dependency closure.
-    const ipaDepsEnv = { XENO_RUNTIME_ROOT: path.join(process.resourcesPath, 'server-deps') };
+    const ipaDepsEnv = research ? {} : { XENO_RUNTIME_ROOT: path.join(process.resourcesPath, 'server-deps') };
 
     const child = utilityProcess.fork(serverPath, [], {
       env: { ...process.env, PORT: '0', DATA_DIR: dataDir, CLIENT_DIST: clientDist, NODE_ENV: 'production', XENO_STRICT_OFFLINE: strictOffline ? '1' : '0', ...espeakEnv, ...whisperEnv, ...ipaEnv, ...ipaDepsEnv },

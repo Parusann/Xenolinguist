@@ -1,0 +1,64 @@
+{
+  "status": "complete",
+  "base": "Qwen/Qwen3-4B-Instruct-2507",
+  "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "trainingHash": "ffc0329e46768e4dcf685fd1740633e225ed688aeaa0f1c7fe75fdd365c104dc",
+  "backend": "CPU",
+  "baseDtype": "bfloat16",
+  "threads": 4,
+  "seed": 17,
+  "rank": 4,
+  "alpha": 8,
+  "layer": 35,
+  "targetModules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "initialAvailableRamBytes": 15063588864,
+  "versions": {
+    "python": "3.12.13",
+    "torch": "2.13.0+cpu",
+    "peft": "0.18.1",
+    "transformers": "5.10.1"
+  },
+  "steps": [
+    {
+      "seconds": 6.109316900001431,
+      "loss": 1.0327199697494507,
+      "gradientNorm": 0.1792641133069992,
+      "inputTokens": 529,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.7145501999984845,
+      "loss": 0.5129752159118652,
+      "gradientNorm": 0.12273229658603668,
+      "inputTokens": 500,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 6.086818399999174,
+      "loss": 0.8126125335693359,
+      "gradientNorm": 0.14643791317939758,
+      "inputTokens": 530,
+      "supervisedTokens": 70
+    }
+  ],
+  "loadSeconds": 0.5401106999997864,
+  "trainableParameters": 40960,
+  "totalParameters": 4022509056,
+  "initialAdapterHash": "33ba8c009d8e6b287c61cd6b996e86ef4b6af9ebd4f4adf0f02fdfdf1c899ffe",
+  "savedAdapterHash": "384801a04ecd6291096878cacb4c96cf54bf76853cf1dcf266e1bf590a469e2a",
+  "finalAdapterHash": "7476377d806f9e3b0d4b3cd979ef897a7ca579d1a7071ea0c8df8a97e62d73f6",
+  "uninterruptedAdapterHash": "7476377d806f9e3b0d4b3cd979ef897a7ca579d1a7071ea0c8df8a97e62d73f6",
+  "uninterruptedStep": {
+    "seconds": 5.539833200004068,
+    "loss": 0.8126125335693359,
+    "gradientNorm": 0.14643791317939758,
+    "inputTokens": 530,
+    "supervisedTokens": 70
+  },
+  "peakWorkingSetBytes": 8765964288,
+  "availableRamAfterBytes": 6770974720,
+  "artifactBytes": 678567
+}

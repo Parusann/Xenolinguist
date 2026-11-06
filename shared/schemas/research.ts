@@ -16,6 +16,10 @@ export const annotationSchema = z.strictObject({ ...base, observation_id: id, re
 export const hypothesisSchema = z.strictObject({ ...base, label: text.min(1), provenance: z.enum(['user', 'engine', 'model']),
   content: z.discriminatedUnion('kind', [
     z.strictObject({ kind: z.literal('lexical'), entry_id: id, form: text, meaning: text }),
+    z.strictObject({ kind: z.literal('atlas-lexical'), form: text, meaning: text,
+      report_sha256: z.string().regex(/^[a-f0-9]{64}$/), atlas_version: z.uuid(), atlas_source: z.string().min(1).max(128),
+      source_sha256: z.string().regex(/^[a-f0-9]{64}$/), atlas_language: z.string().min(1).max(128), concept: z.string().min(1).max(128),
+      representation: z.enum(['orthographic-graphemes', 'declared-phonetic-segments']), assumption: text }),
     z.strictObject({ kind: z.literal('grammar'), rule_id: id, rule: executableRuleSchema }),
     z.strictObject({ kind: z.literal('number'), grammar: numberGrammarSchema, input_snapshot: z.string().max(2_000_000) }),
   ]),

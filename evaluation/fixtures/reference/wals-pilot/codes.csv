@@ -1,0 +1,19 @@
+ID,Parameter_ID,Name,Description,Number,icon
+26A-1,26A,Little affixation,Little or no inflectional morphology,1,cffffff
+26A-2,26A,Strongly suffixing,Predominantly suffixing,2,c0000dd
+26A-3,26A,Weakly suffixing,Moderate preference for suffixing,3,d0000dd
+26A-4,26A,Equal prefixing and suffixing,Approximately equal amounts of suffixing and prefixing,4,d990099
+26A-5,26A,Weakly prefixing,Moderate preference for prefixing,5,ddd0000
+26A-6,26A,Strong prefixing,Predominantly prefixing,6,cdd0000
+81A-1,81A,SOV,Subject-object-verb (SOV),1,c0000dd
+81A-2,81A,SVO,Subject-verb-object (SVO),2,cdd0000
+81A-3,81A,VSO,Verb-subject-object (VSO),3,cffff00
+81A-4,81A,VOS,Verb-object-subject (VOS),4,dffff00
+81A-5,81A,OVS,Object-verb-subject (OVS),5,ddd0000
+81A-6,81A,OSV,Object-subject-verb (OSV),6,d0000dd
+81A-7,81A,No dominant order,Lacking a dominant word order,7,ccccccc
+85A-1,85A,Postpositions,Postpositions,1,c0000dd
+85A-2,85A,Prepositions,Prepositions,2,cdd0000
+85A-3,85A,Inpositions,Inpositions,3,cffff00
+85A-4,85A,No dominant order,More than one adposition type with none dominant,4,ccccccc
+85A-5,85A,No adpositions,No adpositions,5,cffffff

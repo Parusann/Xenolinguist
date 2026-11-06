@@ -1,0 +1,14 @@
+.atlas-panel .phase-title{font-size:28px;font-weight:500;letter-spacing:-.8px;margin:0 0 10px}
+.atlas-panel .phase-desc{font-size:13px;color:var(--fg-mute);line-height:1.8}
+.atlas-panel p{font-size:12px;line-height:1.9;margin:12px 0}
+.atlas-panel label{display:block;font-size:11px;color:var(--fg-1);margin:20px 0}
+.atlas-panel input:not([type=checkbox]),.atlas-panel select,.atlas-panel textarea{display:block;width:100%;margin-top:8px;border:1px solid var(--border);border-radius:6px;padding:10px 12px;background:rgba(0,0,0,.18);color:var(--fg);font-size:12px;line-height:1.7}
+.atlas-panel textarea{font-family:var(--font-mono);font-size:11px;resize:vertical;max-height:340px}
+.atlas-panel input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent)}
+.atlas-panel th,.atlas-panel td{text-align:left;border-bottom:1px solid var(--border);padding:11px 10px;font-size:12px}
+.atlas-panel th{font-family:var(--font-mono);font-size:9px;text-transform:uppercase;color:var(--fg-mute);letter-spacing:.6px}
+.atlas-panel .btn:disabled{opacity:.5;cursor:default}
+.atlas-panel .label{margin-bottom:14px}
+.atlas-panel [role=alert]{border:1px solid #93564d;color:#f0b5a5}
+.atlas-panel [role=status]{border:1px solid var(--border);padding:10px 12px;border-radius:5px}
+.atlas-panel pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:10px;max-height:240px;overflow:auto;padding:12px;background:rgba(0,0,0,.15)}

@@ -1,0 +1,78 @@
+{
+  "checkedAt": "2026-11-06T01:34:56.5302591Z",
+  "postgres": "17.11",
+  "restic": "0.19.1",
+  "persistedAcrossRestart": true,
+  "launcherReturned": true,
+  "restartMs": 1396,
+  "roles": [
+    {
+      "role": "atlas_app",
+      "superuser": false,
+      "bypassRls": false,
+      "createDb": false
+    },
+    {
+      "role": "atlas_auth",
+      "superuser": false,
+      "bypassRls": false,
+      "createDb": false
+    },
+    {
+      "role": "atlas_worker",
+      "superuser": false,
+      "bypassRls": false,
+      "createDb": false
+    }
+  ],
+  "settings": {
+    "data_checksums": "on",
+    "fsync": "on",
+    "full_page_writes": "on",
+    "listen_addresses": "127.0.0.1",
+    "port": "5438",
+    "synchronous_commit": "on"
+  },
+  "root": "E:\\Xenolinguist",
+  "requiredSubscriptionsUsd": 0,
+  "smallFileProbe": {
+    "bytesPerFile": 4096,
+    "files": 8,
+    "readCache": "warm",
+    "measurements": [
+      {
+        "writeAndFlushMs": 240.2904,
+        "cachedReadMs": 0.6995
+      },
+      {
+        "writeAndFlushMs": 208.9816,
+        "cachedReadMs": 5.7192
+      },
+      {
+        "writeAndFlushMs": 197.8444,
+        "cachedReadMs": 14.8974
+      },
+      {
+        "writeAndFlushMs": 198.6803,
+        "cachedReadMs": 4.736
+      },
+      {
+        "writeAndFlushMs": 206.5153,
+        "cachedReadMs": 5.516
+      },
+      {
+        "writeAndFlushMs": 159.6934,
+        "cachedReadMs": 4.6554
+      },
+      {
+        "writeAndFlushMs": 226.0112,
+        "cachedReadMs": 14.1722
+      },
+      {
+        "writeAndFlushMs": 236.9231,
+        "cachedReadMs": 5.1896
+      }
+    ],
+    "flushedWrites": true
+  }
+}
