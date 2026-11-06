@@ -116,6 +116,34 @@ try {
   assert.equal((await request('/api/datasets/' + dataset.id, 'GET', undefined, b.cookie)).status, 404);
   assert.equal((await request('/api/datasets', 'POST', { title: 'Forged owner', languageKind: 'synthetic', owner_id: b.id }, a.cookie)).status, 400);
   checks.push('HTTP ownership comes from the session and cross-account reads fail');
+  const bearer = async (route: string, token: string, method = 'GET', body?: unknown) => fetch(origin + route, {
+    method, headers: { Origin: origin, Authorization: 'Bearer ' + token, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(15000), redirect: 'error',
+  });
+  const grantResponse = await request('/api/desktop/grants', 'POST', { label: 'Disposable desktop' }, a.cookie);
+  assert.equal(grantResponse.status, 200);
+  const grant = await grantResponse.json();
+  assert.equal(grant.code.length, 64);
+  const exchanged = await request('/api/desktop/exchange', 'POST', { code: grant.code });
+  assert.equal(exchanged.status, 200);
+  const device = await exchanged.json();
+  assert.equal((await (await bearer('/api/me', device.token)).json()).user.id, a.id);
+  assert.equal((await request('/api/desktop/exchange', 'POST', { code: grant.code })).status, 401);
+  assert.equal((await bearer('/api/desktop/grants', device.token, 'POST', { label: 'Unreviewed connection' })).status, 403);
+  checks.push('Browser-approved desktop codes exchange once and desktop credentials cannot authorize new devices');
+  const authInspector = atlasPool(testConfig.adminDatabaseUrl, 1);
+  try {
+    const stored = (await authInspector.query('SELECT token_sha256 FROM auth.desktop_tokens WHERE id=$1', [device.id])).rows[0];
+    assert.equal(stored.token_sha256, createHash('sha256').update(device.token).digest('hex'));
+    assert.notEqual(stored.token_sha256, device.token);
+    assert.equal((await request('/api/desktop/connections/' + device.id, 'DELETE', undefined, b.cookie)).status, 404);
+    assert.equal((await request('/api/desktop/connections/' + device.id, 'DELETE', undefined, a.cookie)).status, 200);
+    assert.equal((await bearer('/api/me', device.token)).status, 401);
+    const expired = await (await request('/api/desktop/grants', 'POST', { label: 'Expiry fixture' }, a.cookie)).json();
+    await authInspector.query("UPDATE auth.desktop_grants SET expires_at=now()-interval '1 second' WHERE code_sha256=$1", [createHash('sha256').update(expired.code).digest('hex')]);
+    assert.equal((await request('/api/desktop/exchange', 'POST', { code: expired.code })).status, 401);
+    checks.push('Desktop secrets are hashed in the database, owner-scoped revocation is immediate and expired codes fail');
+  } finally { await authInspector.end(); }
   const content = 'id,form,meaning,transcription,annotations\na,ka,sun,k a,synthetic\nb,e\u0301,water,eː,original spelling\n';
   const upload = { key: randomUUID(), format: 'csv', content, metadata: { rights: { license: 'Synthetic test fixture', creator: 'Test fixture' } } };
   const uploadPath = '/api/datasets/' + dataset.id + '/versions';

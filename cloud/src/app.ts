@@ -13,6 +13,7 @@ import { AtlasWorker } from './worker/runner.js';
 import { comparisonReferences } from './references.js';
 import path from 'node:path';
 import { existsSync } from 'node:fs';
+import { DesktopAuth } from './desktop-auth.js';
 
 function route(action: (req: Request, res: Response, next: NextFunction) => Promise<unknown>) {
   return (req: Request, res: Response, next: NextFunction) => { action(req, res, next).catch(next); };
@@ -21,6 +22,7 @@ function route(action: (req: Request, res: Response, next: NextFunction) => Prom
 export function createApp(config: AtlasConfig) {
   const pool = atlasPool(config.databaseUrl), authPool = atlasPool(config.authDatabaseUrl, 2), workerPool = atlasPool(config.workerDatabaseUrl, 3);
   const auth = createAuth(config, authPool), datasets = new Datasets(pool, new ObjectStore(config.objects));
+  const desktop = new DesktopAuth(authPool);
   const jobs = new Jobs(pool), worker = new AtlasWorker(workerPool, datasets.objects);
   const app = express();
   let draining = false;
@@ -38,7 +40,14 @@ export function createApp(config: AtlasConfig) {
   app.get('/health', route(async (_req, res) => { await pool.query('SELECT 1'); res.json({ ready: true, service: 'xenolinguist-atlas', pid: process.pid }); }));
   app.all('/api/auth/*', toNodeHandler(auth));
   app.use(express.json({ limit: '12mb' }));
+  app.post('/api/desktop/exchange', route(async (req, res) => res.json(await desktop.exchange(req.body))));
   app.use('/api', route(async (req, res, next) => {
+    if (req.headers.authorization) {
+      const session = await desktop.session(req.headers.authorization);
+      if (!session) { res.status(401).json({ error: 'unauthenticated', message: 'Reconnect this desktop from the Atlas account page.' }); return; }
+      res.locals.owner = session.id; res.locals.user = { id: session.id, name: session.name, email: session.email };
+      res.locals.connection = session.connection_id; next(); return;
+    }
     const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
     if (!session) { res.status(401).json({ error: 'unauthenticated', message: 'Sign in to the atlas.' }); return; }
     res.locals.owner = session.user.id;
@@ -47,6 +56,16 @@ export function createApp(config: AtlasConfig) {
   }));
 
   app.get('/api/me', route(async (_req, res) => res.json({ user: res.locals.user })));
+  app.get('/api/desktop/connections', route(async (_req, res) => res.json(await desktop.list(res.locals.owner))));
+  app.post('/api/desktop/grants', route(async (req, res) => {
+    if (res.locals.connection) throw new AtlasError(403, 'browser-approval-required', 'Approve new connections in the signed-in Atlas browser.');
+    res.json(await desktop.grant(res.locals.owner, req.body));
+  }));
+  app.delete('/api/desktop/connections/:id', route(async (req, res) => res.json(await desktop.revoke(res.locals.owner, req.params.id))));
+  app.post('/api/desktop/disconnect', route(async (_req, res) => {
+    if (!res.locals.connection) throw new AtlasError(400, 'connection-required', 'Use a connected desktop to disconnect its own session.');
+    res.json(await desktop.revoke(res.locals.owner, res.locals.connection));
+  }));
   app.get('/api/status', route(async (_req, res) => res.json({ limits: ATLAS_LIMITS, sharing: 'private', trainingPermission: false,
     worker: worker.diagnostics, deletion: await asOwner(pool, res.locals.owner, async client =>
       ({ pendingObjects: (await client.query('SELECT count(*)::int AS n FROM atlas.object_gc')).rows[0].n })) })));

@@ -39,6 +39,8 @@ The English exercise deliberately compares known English with its own reference 
 
 Download the JSON evidence report for reproducibility or desktop review. It includes the original-file digest, method version, reference digests, alignments, audit and next observations. The mobile layout retains the same evidence and export controls.
 
+The [desktop connection guide](atlas-desktop.md) explains one-time browser approval, selected-evidence transfer and proposal review. A later browser verification adds device approval and revocation, with six automated accessibility audits. [Connection workflow record](verification/l8-atlas-browser.json)
+
 ![Mobile report layout](screenshots/atlas-mobile-report.png)
 
 ## Sources, deletion and recovery

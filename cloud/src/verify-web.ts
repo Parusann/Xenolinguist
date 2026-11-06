@@ -16,6 +16,7 @@ const browser = await chromium.launch({ headless: true });
 const fixture = await testFixture(config, true).catch(async error => { await browser.close(); throw error; });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', acceptDownloads: true });
 const page = await context.newPage(), errors: string[] = [], csp: string[] = [], checks: string[] = [], screenshots: string[] = [];
+const audits: string[] = [];
 page.on('pageerror', error => errors.push(error.message));
 page.on('console', message => { if (/violat.*content.security.policy|refused.*(script|style)/iu.test(message.text())) csp.push(message.text()); });
 const screenshot = async (name: string) => { await page.evaluate(() => document.fonts.ready); await page.screenshot({ path: path.join(output, name + '.png'), fullPage: true }); screenshots.push(name + '.png'); };
@@ -23,6 +24,7 @@ const audit = async (label: string) => {
   const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
   await writeFile(path.join(output, label + '-accessibility.json'), JSON.stringify(result, null, 2));
   assert.equal(result.violations.length, 0, JSON.stringify(result.violations.map(item => ({ id: item.id, nodes: item.nodes.map(node => node.target) }))));
+  audits.push(label);
 };
 const fillRights = async (target: Page) => {
   await target.getByLabel('Creator or source contributors').fill('WOLD English vocabulary contributors');
@@ -101,6 +103,21 @@ try {
   await expect(page.getByRole('heading', { name: 'The reference atlas.' })).toBeVisible();
   await screenshot('atlas-references'); await audit('references');
   checks.push('The reference gallery preserves language coverage, missing structure and source notices');
+  await page.getByRole('link', { name: 'System & recovery', exact: true }).click();
+  await page.getByRole('button', { name: 'Connect a desktop', exact: true }).click();
+  await page.getByRole('button', { name: 'Authorize and generate code', exact: true }).click();
+  const connectionCode = await page.getByLabel('One-time desktop connection code').inputValue();
+  assert.match(connectionCode, /^[a-f0-9]{64}$/u);
+  const exchange = await page.request.post(fixture.config.origin + '/api/desktop/exchange', { headers: { Origin: fixture.config.origin }, data: { code: connectionCode } });
+  assert.equal(exchange.status(), 200); const desktop = await exchange.json();
+  await page.getByRole('button', { name: 'Done', exact: true }).click();
+  await expect(page.getByText('Xenolinguist desktop', { exact: true })).toBeVisible();
+  await audit('system');
+  await page.getByRole('button', { name: 'Revoke connection', exact: true }).click();
+  await expect(page.getByText('No active desktop connections.', { exact: true })).toBeVisible();
+  assert.equal((await page.request.get(fixture.config.origin + '/api/me', { headers: { Authorization: 'Bearer ' + desktop.token } })).status(), 401);
+  checks.push('Reviewed browser authorization issues a one-time code and explicit device revocation takes effect immediately');
+  await page.getByRole('link', { name: 'Reference atlas', exact: true }).click();
   await context.route(fixture.config.origin + '/api/**', route => route.abort('connectionrefused'));
   await page.reload(); await expect(page.getByRole('heading', { name: 'Atlas is unavailable' })).toBeVisible();
   await context.unroute(fixture.config.origin + '/api/**');
@@ -120,7 +137,7 @@ try {
   checks.push('Sign-out revokes the session and protects the saved-data endpoints');
   assert.deepEqual(errors, []); assert.deepEqual(csp, []);
   await writeFile(path.join(output, 'verification.json'), JSON.stringify({ version: 'atlas-browser-verification-1', checkedAt: new Date().toISOString(),
-    compiledApplication: true, browser: browser.version(), checks, screenshots, accessibility: 'Zero WCAG A/AA violations in five automated audits',
+    compiledApplication: true, browser: browser.version(), checks, screenshots, accessibility: 'Zero WCAG A/AA violations in ' + audits.length + ' automated audits', audits,
     pageErrors: errors, contentSecurityPolicyErrors: csp, passed: true }, null, 2));
   console.log(JSON.stringify({ checks, screenshots, passed: true }, null, 2));
 } catch (error) { await screenshot('failure'); console.error('Browser verification failed at ' + page.url()); throw error; }

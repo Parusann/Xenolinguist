@@ -7,4 +7,4 @@ export const PHASES = [
   { id: 'dashboard', label: 'Dashboard', icon: '◈', desc: 'Progress & export' },
 ] as const
 
-export type PhaseId = 'sandbox' | 'samples' | 'numbers' | 'vocabulary' | 'grammar' | 'translation' | 'dashboard'
+export type PhaseId = 'sandbox' | 'samples' | 'numbers' | 'vocabulary' | 'grammar' | 'translation' | 'dashboard' | 'atlas'

@@ -18,7 +18,9 @@ export function EvidenceInspector({ profile, targetId, hypothesis }: { profile: 
         <ul style={{ paddingLeft: 18 }}>{profile.research.links.filter(l => l.hypothesis_id === h.id).map(link => {
           const o = profile.research.observations.find(o => o.id === link.observation_id)!
           const a = profile.research.annotations.find(a => a.id === link.annotation_id)
-          return <li key={link.id} style={{ marginBottom: 8 }}><strong>{link.relation}</strong>: “{link.span ? o.text.slice(link.span.start, link.span.end) : o.text}”
+          return <li key={link.id} style={{ marginBottom: 8 }}><strong>{link.relation}</strong>: {h.content.kind === 'atlas-lexical'
+            ? <details><summary>Imported Atlas proposal record</summary><pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', maxHeight: 240, overflow: 'auto' }}>{o.text}</pre></details>
+            : <>“{link.span ? o.text.slice(link.span.start, link.span.end) : o.text}”</>}
             <div>{o.source} · {o.origin} · {link.span ? `[${link.span.start}, ${link.span.end})` : 'whole capture'}</div>
             {o.audio && <div>Audio {o.audio.clip_id}: {o.audio.start}–{o.audio.end}s</div>}
             {a && <div>Interpretation revision {a.revision}: {a.interpretation}</div>}

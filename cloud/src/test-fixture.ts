@@ -21,16 +21,22 @@ export async function testFixture(config: AtlasConfig, compiled = false) {
   };
   const admin = atlasPool(config.adminDatabaseUrl, 1, 120000), server = createServer();
   let runtime: ReturnType<typeof createApp> | undefined;
+  let cleaned = false;
   const testConfig = { ...config, objects, databaseUrl: connection(config.databaseUrl), authDatabaseUrl: connection(config.authDatabaseUrl, 'auth'),
     workerDatabaseUrl: connection(config.workerDatabaseUrl), adminDatabaseUrl: connection(config.adminDatabaseUrl) };
-  const cleanup = async () => {
+  const stop = async () => {
     runtime?.drain(); server.closeAllConnections(); await new Promise<void>(resolve => server.listening ? server.close(() => resolve()) : resolve());
     if (runtime) { await runtime.close(); runtime = undefined; }
+  };
+  const cleanup = async () => {
+    if (cleaned) return;
+    await stop();
     if (!/^xeno_atlas_test_[a-f0-9]{12}$/.test(database)) throw new Error('Invalid disposable database name');
     await admin.query('DROP DATABASE IF EXISTS "' + database + '" WITH (FORCE)'); await admin.end();
     const resolved = await realpath(location);
     if (resolved !== path.join(config.root, 'temp', database) || !resolved.startsWith(path.join(config.root, 'temp') + path.sep)) throw new Error('Unsafe fixture cleanup path');
     await rm(resolved, { recursive: true, force: true });
+    cleaned = true;
   };
   try {
     await admin.query('CREATE DATABASE "' + database + '" OWNER atlas_owner TEMPLATE template0');
@@ -46,6 +52,6 @@ export async function testFixture(config: AtlasConfig, compiled = false) {
     testConfig.origin = 'http://127.0.0.1:' + address.port;
     const factory = compiled ? (await import(pathToFileURL(path.join(config.source, 'cloud/dist/app.mjs')).href)).createApp as typeof createApp : createApp;
     runtime = factory(testConfig); server.on('request', runtime.app); await runtime.start();
-    return { config: testConfig, runtime, database, location, cleanup };
+    return { config: testConfig, runtime, database, location, stop, cleanup };
   } catch (error) { await cleanup(); throw error; }
 }
