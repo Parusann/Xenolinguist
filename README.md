@@ -20,7 +20,9 @@ Xenolinguist connects a research notebook to an executable language engine. Coll
 
 The engineering spans **bounded morphology and parsing, grounded rule search, arithmetic grammars, active elicitation, native speech processing, durable storage, and an authenticated desktop runtime**. A frozen evaluation harness makes the successes and failure cases reproducible.
 
-> **Available now:** [Download v1.1.0-rc.1 for Windows](https://github.com/Parusann/Xenolinguist/releases/tag/v1.1.0-rc.1), an **unsigned prerelease** published October 14, 2026. The installer is the exact verified artifact from `00a25d5`; current development and presentation are on `main`. [Version and installation guide](docs/desktop-release.md).
+Current development also includes a **private language Atlas and a completed specialist-model research cycle**. Atlas adds PostgreSQL ownership enforcement, immutable uploads, source-pinned comparisons, recoverable jobs, reviewed desktop transfers and verified encrypted recovery on a dedicated HDD. The adapter study retained a null lexical result, and the product uses its validated deterministic comparison method. [Atlas guide](docs/atlas-guide.md) · [Research model card](docs/decipherment-model-card.md).
+
+> **Available now:** [Download v1.1.0-rc.1 for Windows](https://github.com/Parusann/Xenolinguist/releases/tag/v1.1.0-rc.1), an **unsigned prerelease** published October 14, 2026. The installer is the exact verified artifact from `00a25d5`. The published website follows `main`; the Atlas and specialist research described here are source-only on `research/decipherment` in [PR #8](https://github.com/Parusann/Xenolinguist/pull/8). [Version and installation guide](docs/desktop-release.md).
 
 ## See the research loop
 
@@ -67,6 +69,34 @@ Real application captures from retained feature-verification runs. Click a pictu
 | **Traceable acoustic processing** | Original/analysis audio identities, windowed native CTC inference, transcription provenance, generated/manual histories and process-level cancellation | [Audio contract](https://github.com/Parusann/Xenolinguist/blob/main/docs/audio-evaluation.md) · [CTC implementation](https://github.com/Parusann/Xenolinguist/blob/main/engine/src/audio/ctc.ts) |
 
 The evidence notebook links immutable captures, annotation revisions, hypotheses and saved derivations. Changed dependencies mark earlier analyses stale; server-side replay checks saved symbolic results. [Evidence model](https://github.com/Parusann/Xenolinguist/blob/main/docs/research-evidence.md).
+
+## A private Atlas, built around evidence
+
+[![The Xenolinguist Atlas private language collection](docs/screenshots/atlas-collection.png)](docs/atlas-guide.md)
+
+[Watch the 91-second captioned Atlas demonstration](docs/verification/l9-atlas-demo/atlas-demo.mp4) · [Read the transcript](docs/verification/l9-atlas-demo/transcript.md) · [Verification and review](docs/atlas-beta-review.md)
+
+Upload a known or unknown language wordlist, retain the original bytes and compare meaning-labelled evidence with a small licensed reference collection. Inspect aligned forms, repeated symbol correspondences, observed grammar, counterexamples, shuffled-label controls and the next useful observations. Missing-form suggestions remain conditional proposals. **Similarity is never presented as an ancestry probability.** Plain-text samples without meaning anchors remain explicitly insufficient for lexical comparison.
+
+| Engineering boundary | Actual implementation |
+| --- | --- |
+| **Private accounts** | Isolated authentication role, transaction-scoped ownership and forced PostgreSQL RLS. Device credentials use browser-approved one-time codes, hashed server storage and OS-protected desktop storage. |
+| **Immutable evidence** | CSV/JSON/text validation, original UTF-8 bytes, SHA-256 identities, source-rights declarations, versioned imports and idempotent retries. |
+| **Bounded computation** | Unicode grapheme and declared-segment alignment, tied-path detection, distinct-concept rule support, held-out prediction audits, 10-million-cell bound and an external worker deadline. |
+| **Recoverable work** | One leased queue worker, heartbeat renewal, fencing tokens, three-attempt recovery, cancellation and ownership/integrity checks before result publication. |
+| **Consistent recovery** | An exported database snapshot coordinated with object publication, encrypted restic snapshots, fresh-database restoration, every-table fingerprints, file checksums, RLS checks and saved-report replay. |
+
+The controlled substitution study retains **128 synthetic cases** and **550 correct emitted missing-form proposals**, with sparse abstentions and zero proposals from unrelated borrowing controls. It validates a narrow position-independent substitution model, rather than historical-language reconstruction. The reference pilot contains **70 WOLD forms across six languages** and **12 WALS feature values**, with original source notices and explicit missing/ambiguous mappings. [Method, assumptions and raw cases](docs/atlas-comparison.md).
+
+The actual Windows Electron entry was tested through connection, reviewed transfer, digest-matched report retrieval, proposal staging, restart and offline editing with Atlas stopped. Recovery restored **two accounts, two objects and nineteen tables**, preserved private access and replayed the saved report. On one HDD host, warm metadata p95 was **1.97 ms over 100 reads** and the declared 5,000-row comparison p95 was **1.23 seconds over ten jobs**. These are bounded local measurements, with stated cache and sampling limits. [Desktop verification](docs/atlas-desktop.md) · [Recovery and performance](docs/atlas-recovery.md).
+
+Atlas is a **source-development personal beta**, available while the host computer runs. It uses the existing HDD and requires no paid API, GPU or hosting subscription. Current snapshots share the primary drive; independent recovery storage must be established before irreplaceable submissions. The published v1.1.0-rc.1 installer remains the separate release described above.
+
+## A specialist experiment with an honest result
+
+The research cycle generated disjoint synthetic language lineages, retained licensed references outside training, established model and symbolic baselines, verified exact checkpoint recovery and trained a bounded Qwen3-4B adapter. The base and candidate were converted through a pinned toolchain and evaluated with the same base revision, precision, templates, options, prompts and information budgets; the candidate changes exactly the two trained projections.
+
+On the reserved lexical task, **both identified 0/8 recoverable mappings** and handled **16/24 uncertain cases correctly**. The candidate failed the frozen improvement gates. Raw outputs, complete replayable archives, parameter hashes, resource measurements, per-lineage results and the failure analysis remain available. A superior specialist model has not been demonstrated or released. [Model card](docs/decipherment-model-card.md) · [Product interface and ambiguous case](docs/decipherment-product-interface.md) · [Baseline studies](docs/decipherment-baselines.md).
 
 ## Architecture
 
@@ -126,13 +156,14 @@ Three native unit cases remain environment-gated; installed native execution is 
 | [`server/`](https://github.com/Parusann/Xenolinguist/tree/main/server) | Authenticated API, revisioned persistence, jobs, proposal validation and archives |
 | [`client/`](https://github.com/Parusann/Xenolinguist/tree/main/client) | React workbench, durable save queues, evidence inspectors and audio preparation |
 | [`electron/`](https://github.com/Parusann/Xenolinguist/tree/main/electron) | Process lifecycle, restricted IPC, credentials, draft storage and recovery |
+| [`cloud/`](cloud/) | Private Atlas API and browser interface, PostgreSQL ownership, versioned uploads, leased comparisons and encrypted recovery |
 | [`tests/`](https://github.com/Parusann/Xenolinguist/tree/main/tests) | Browser workflows, packaging integrity and tooling regressions |
 
 Built with **TypeScript, React, Electron, Node/Express, Zod, Vitest and Playwright**, with Ollama, whisper.cpp, eSpeak NG and ONNX/Transformers.js for local inference. [Role-specific source tour](https://github.com/Parusann/Xenolinguist/blob/main/docs/technical-case-study.md).
 
 ## Run and reproduce
 
-Use **Node 24** and the main branch. Manual research and symbolic translation work without Ollama; AI assistance requires a separately installed eligible local model.
+Use **Node 24**. The commands below run the workbench on `main`. For the source-only Atlas and completed specialist experiment, use `--branch research/decipherment` and follow the [HDD workspace](docs/research-workspace.md) and [Atlas setup](docs/atlas-guide.md) instructions. Manual research and symbolic translation work without Ollama; AI assistance requires a separately installed eligible local model.
 
 ```sh
 git clone --branch main https://github.com/Parusann/Xenolinguist.git

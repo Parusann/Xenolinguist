@@ -12,6 +12,7 @@ export default defineConfig({
     },
   },
   test: {
+    maxWorkers: process.env.XENO_RESEARCH_ROOT ? 1 : undefined,
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test-setup.ts'],

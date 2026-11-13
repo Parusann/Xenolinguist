@@ -25,4 +25,6 @@ Run from the configured HDD checkout.
 & $ResearchWorkspace.Node node_modules/tsx/dist/cli.mjs evaluation/src/decipherment/product.ts (Join-Path $env:XENO_RESEARCH_RESULTS 'new-product-study.json')
 ~~~
 
-Application callers import the engine function and shared contract directly. The engine receives learner-visible evidence only. It has no dependency on evaluator truth, corpus generation, model services, account storage or network access. The atlas will wrap proposals with dataset/version identifiers and permission checks before saving or displaying them.
+Application callers import the engine function and shared contract directly. The engine receives learner-visible evidence only. It has no dependency on evaluator truth, corpus generation, model services, account storage or network access.
+
+The [Atlas personal beta](atlas-guide.md) uses a separate [alignment and correspondence method](atlas-comparison.md) suited to ordinary incomplete wordlists; it does not silently assume a closed bijection. Atlas reports retain immutable dataset/version identifiers, source digests and ownership checks. Its [desktop transfer](atlas-desktop.md) stages sourced proposals for explicit review without converting them into observed facts. The callable inventory method above remains available for tasks whose evidence justifies its stronger assumption.

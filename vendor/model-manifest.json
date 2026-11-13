@@ -14,7 +14,7 @@
       "alphabet": "TIMIT ARPABET",
       "license": "Apache-2.0 (upstream model card)",
       "licenseUrl": "https://huggingface.co/aidankmcl/wav2vec2-large-lv60_phoneme-timit_english_timit-4k_simplified/blob/d18df9cbd79eb2901792b91c5985d031e59aee07/README.md",
-      "runtime": "Transformers.js 4.2.0; onnxruntime-node 1.24.3; CPU; mono PCM16 16000 Hz",
+      "runtime": "Transformers.js 4.3.2; onnxruntime-node 1.30.0; CPU; mono PCM16 16000 Hz",
       "distribution": {
         "url": "https://github.com/Parusann/Xenolinguist/releases/download/v1.0.0/Xenolinguist-Setup-1.0.0.exe",
         "bytes": 440684361,

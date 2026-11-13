@@ -10,13 +10,22 @@ import { writeCsv } from '../../shared/language-evidence.js';
 import type { ReferenceLanguage } from '../../shared/schemas/atlas-comparison.js';
 
 const config = await loadConfig(), output = process.argv[2];
+const recording = process.env.XENO_ATLAS_RECORD_DEMO === '1';
 if (!output || !path.resolve(output).startsWith(config.root + path.sep)) throw new Error('Browser results require the configured workspace');
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const fixture = await testFixture(config, true).catch(async error => { await browser.close(); throw error; });
-const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', acceptDownloads: true });
+const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', acceptDownloads: true,
+  ...(recording ? { recordVideo: { dir: path.join(output, 'video'), size: { width: 1440, height: 1000 } } } : {}) });
 const page = await context.newPage(), errors: string[] = [], csp: string[] = [], checks: string[] = [], screenshots: string[] = [];
 const audits: string[] = [];
+const videoStarted = performance.now(), narration: { startMs: number; endMs: number; text: string }[] = [];
+const narrate = async (text: string, seconds = 7) => {
+  if (!recording) return;
+  const startMs = performance.now() - videoStarted;
+  await new Promise(resolve => setTimeout(resolve, seconds * 1000));
+  narration.push({ startMs, endMs: performance.now() - videoStarted, text });
+};
 page.on('pageerror', error => errors.push(error.message));
 page.on('console', message => { if (/violat.*content.security.policy|refused.*(script|style)/iu.test(message.text())) csp.push(message.text()); });
 const screenshot = async (name: string) => { await page.evaluate(() => document.fonts.ready); await page.screenshot({ path: path.join(output, name + '.png'), fullPage: true }); screenshots.push(name + '.png'); };
@@ -34,6 +43,7 @@ try {
   await page.goto(fixture.config.origin);
   await expect(page.getByRole('heading', { name: 'Welcome to Atlas' })).toBeVisible();
   await screenshot('atlas-sign-in'); await audit('auth');
+  await narrate('Xenolinguist Atlas. Private accounts, versioned language evidence and comparisons you can inspect. This is the real local application.');
   await page.getByRole('button', { name: 'New here? Create an account' }).click();
   await page.getByLabel('Your name').fill('Atlas Demo');
   await page.getByLabel('Email', { exact: true }).fill('atlas-' + randomBytes(5).toString('hex') + '@example.invalid');
@@ -42,6 +52,7 @@ try {
   await expect(page.getByRole('heading', { name: /Evidence, before/ })).toBeVisible();
   await expect(page.locator('.stat-strip')).toContainText('70');
   await screenshot('atlas-collection'); await audit('collection');
+  await narrate('The initial reference collection has six documented languages and seventy licensed forms. Uploads stay private and training permission is off.');
   checks.push('Account enrollment opens a private collection through the compiled browser application');
   const cookies = await context.cookies(); assert(cookies.some(cookie => cookie.name.includes('session_token') && cookie.httpOnly && cookie.sameSite === 'Lax'));
   await page.getByRole('button', { name: 'Add a language', exact: true }).click();
@@ -53,27 +64,45 @@ try {
   const datasetId = page.url().split('/datasets/')[1]; assert(datasetId);
   const languages = await (await page.request.get(fixture.config.origin + '/api/reference-languages')).json() as ReferenceLanguage[];
   const english = languages.find(language => language.id === 'English')!;
-  const csv = writeCsv(english.entries.slice(0, 8).map(entry => ({ id: entry.id, form: entry.form, meaning: entry.meaning!, transcription: entry.transcription ?? '' })), ['id', 'form', 'meaning', 'transcription']);
+  const csv = '\uFEFF' + writeCsv(english.entries.slice(0, 8).map(entry => ({ id: entry.id, form: entry.form, meaning: entry.meaning!, transcription: entry.transcription ?? '' })), ['id', 'form', 'meaning', 'transcription']).replaceAll('\n', '\r\n');
   await page.getByRole('button', { name: 'Upload first version' }).click();
+  await page.getByLabel(/^Choose a file/).setInputFiles({ name: 'english-evidence.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
+  await expect(page.getByLabel('Evidence content')).not.toHaveValue('');
+  await page.getByLabel(/^Choose a file/).setInputFiles({ name: 'invalid-replacement.csv', mimeType: 'text/csv', buffer: Buffer.from([0xff]) });
+  await expect(page.getByRole('alert')).toContainText('valid UTF-8');
+  await expect(page.getByLabel('Evidence content')).toHaveValue('');
+  await expect(page.getByRole('button', { name: 'Review upload', exact: true })).toBeDisabled();
   await page.getByLabel(/^Choose a file/).setInputFiles({ name: 'english-evidence.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
   await fillRights(page);
   await page.getByLabel('Source URL').fill(english.sourceUrl);
   await page.getByRole('button', { name: 'Review upload', exact: true }).click();
   await expect(page.getByRole('heading', { name: '8 evidence records' })).toBeVisible();
   await expect(page.getByRole('dialog')).toContainText('No public sharing or model training permission is granted.');
+  await expect(page.getByRole('region', { name: 'Reviewed source declaration' })).toContainText('WOLD English vocabulary contributors');
+  await expect(page.getByRole('region', { name: 'Reviewed source declaration' })).toContainText('CC-BY-4.0');
+  await expect(page.getByRole('region', { name: 'Reviewed source declaration' })).toContainText(english.sourceUrl);
   await screenshot('atlas-upload-review');
+  await narrate('Review the exact evidence and its source rights before upload. Original bytes are preserved as an immutable version.', 9);
   await page.getByRole('button', { name: 'Upload this version' }).click();
   await expect(page.getByLabel('Evidence version', { exact: true })).toBeVisible();
   checks.push('File selection, source rights, local parsing and permission review publish an immutable evidence version');
   const originalDownload = page.waitForEvent('download');
   await page.getByRole('link', { name: 'Original file' }).click();
-  assert.equal(await readFile(await (await originalDownload).path(), 'utf8'), csv);
-  checks.push('The browser downloads the original UTF-8 file without normalization changes');
+  assert.deepEqual(await readFile(await (await originalDownload).path()), Buffer.from(csv));
+  checks.push('The browser downloads the original UTF-8 file byte-for-byte, including its BOM and CRLF line endings');
   await page.getByRole('button', { name: 'Run comparison', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Evidence report', exact: true })).toBeVisible({ timeout: 30000 });
   const reportRegion = page.getByRole('region', { name: 'Evidence report', exact: true });
   await expect(reportRegion.getByRole('heading', { name: 'English', exact: true })).toBeVisible();
   await expect(reportRegion).toContainText('These values are not ancestry probabilities.');
+  if (recording) await reportRegion.getByRole('heading', { name: 'Evidence report', exact: true }).scrollIntoViewIfNeeded();
+  await narrate('A durable worker aligned this known English control against the references. Coverage, form resemblance and supported rules remain separate.', 9);
+  if (recording) {
+    await reportRegion.getByText('Correspondences & counterexamples', { exact: false }).click();
+    await narrate('Repeated correspondences need independent concepts and distinct word types. Missing-form proposals also require a held-out prediction audit.', 9);
+    await reportRegion.getByText('Source versions & computation record', { exact: true }).click();
+    await narrate('The report pins its method, original-file checksum and reference versions. Export retains the evidence, controls, audit and next useful observations.', 9);
+  }
   await screenshot('atlas-evidence-report'); await audit('report');
   const reportDownload = page.waitForEvent('download');
   await page.getByRole('link', { name: 'Export report' }).click();
@@ -103,6 +132,7 @@ try {
   await expect(page.getByRole('heading', { name: 'The reference atlas.' })).toBeVisible();
   await screenshot('atlas-references'); await audit('references');
   checks.push('The reference gallery preserves language coverage, missing structure and source notices');
+  await narrate('WOLD vocabulary and WALS grammar retain their citations and licenses. Missing features and ambiguous language matches stay visible.', 9);
   await page.getByRole('link', { name: 'System & recovery', exact: true }).click();
   await page.getByRole('button', { name: 'Connect a desktop', exact: true }).click();
   await page.getByRole('button', { name: 'Authorize and generate code', exact: true }).click();
@@ -117,25 +147,30 @@ try {
   await expect(page.getByText('No active desktop connections.', { exact: true })).toBeVisible();
   assert.equal((await page.request.get(fixture.config.origin + '/api/me', { headers: { Authorization: 'Bearer ' + desktop.token } })).status(), 401);
   checks.push('Reviewed browser authorization issues a one-time code and explicit device revocation takes effect immediately');
+  await narrate('Desktop connections require explicit browser approval. Credentials remain in the protected main process, and each connection can be revoked.');
   await page.getByRole('link', { name: 'Reference atlas', exact: true }).click();
   await context.route(fixture.config.origin + '/api/**', route => route.abort('connectionrefused'));
   await page.reload(); await expect(page.getByRole('heading', { name: 'Atlas is unavailable' })).toBeVisible();
+  await narrate('When the host is unavailable, the interface provides a recovery path. The offline workbench remains usable.', 5);
   await context.unroute(fixture.config.origin + '/api/**');
   await page.getByRole('button', { name: 'Try again', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'The reference atlas.' })).toBeVisible();
   checks.push('An unavailable API has a recoverable state and reconnection preserves the signed-in workspace');
   await page.goto(fixture.config.origin + '/#/datasets/' + datasetId);
   await page.getByRole('button', { name: 'Delete language', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('Earlier encrypted backup snapshots and downloaded copies retain their saved data.');
   await page.getByRole('button', { name: 'Delete language and reports', exact: true }).click();
   await expect(page.getByRole('heading', { name: /Evidence, before/ })).toBeVisible();
   await expect.poll(async () => (await (await page.request.get(fixture.config.origin + '/api/status')).json()).deletion.pendingObjects, { timeout: 15000 }).toBe(0);
   assert.equal((await (await page.request.get(fixture.config.origin + '/api/datasets')).json()).length, 0);
   checks.push('Reviewed deletion revokes the collection and the worker retires its physical objects');
+  await narrate('Reviewed deletion removes versions and reports, then the worker retires their files. The original evidence-to-report workflow used zero model calls.');
   await page.getByRole('button', { name: 'Sign out', exact: true }).filter({ visible: true }).click();
   await expect(page.getByRole('heading', { name: 'Welcome to Atlas' })).toBeVisible();
   assert.equal((await page.request.get(fixture.config.origin + '/api/datasets')).status(), 401);
   checks.push('Sign-out revokes the session and protects the saved-data endpoints');
   assert.deepEqual(errors, []); assert.deepEqual(csp, []);
+  if (recording) await writeFile(path.join(output, 'narration.json'), JSON.stringify({ recordedAt: new Date().toISOString(), narration }, null, 2));
   await writeFile(path.join(output, 'verification.json'), JSON.stringify({ version: 'atlas-browser-verification-1', checkedAt: new Date().toISOString(),
     compiledApplication: true, browser: browser.version(), checks, screenshots, accessibility: 'Zero WCAG A/AA violations in ' + audits.length + ' automated audits', audits,
     pageErrors: errors, contentSecurityPolicyErrors: csp, passed: true }, null, 2));

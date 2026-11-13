@@ -11,6 +11,7 @@ const choices = {
 };
 export function Upload({ dataset, user, onClose, onSaved }: { dataset: string; user: User; onClose: () => void; onSaved: (version: Version) => void }) {
   const [format, setFormat] = useState<'csv' | 'json' | 'text'>('csv'), [content, setContent] = useState(''), [preview, setPreview] = useState<ImportedRecord[] | null>(null);
+  const [reviewMetadata, setReviewMetadata] = useState<VersionMetadata | null>(null);
   const [fileError, setFileError] = useState(''), [features, setFeatures] = useState<VersionMetadata['features']>({});
   const form = useRef<HTMLFormElement>(null), retry = useRef<{ payload: string; key: string } | null>(null), task = useTask();
   const metadata = (): VersionMetadata => {
@@ -18,14 +19,15 @@ export function Upload({ dataset, user, onClose, onSaved }: { dataset: string; u
     return { rights: { license: String(data.get('license')), creator: String(data.get('creator')),
       ...(data.get('sourceUrl') ? { sourceUrl: String(data.get('sourceUrl')) } : {}), ...(data.get('notes') ? { notes: String(data.get('notes')) } : {}) }, features };
   };
-  const edit = () => setPreview(null);
+  const edit = () => { setPreview(null); setReviewMetadata(null); };
   return <Modal title="Add an evidence version" onClose={onClose} busy={task.busy}><form ref={form} onSubmit={event => { event.preventDefault(); void task.run(async () => {
     if (!preview) {
-      try { setPreview(importEvidence(format, content, { maxBytes: ATLAS_LIMITS.bytes, maxRows: ATLAS_LIMITS.rows })); }
+      try { const records = importEvidence(format, content, { maxBytes: ATLAS_LIMITS.bytes, maxRows: ATLAS_LIMITS.rows }); setReviewMetadata(metadata()); setPreview(records); }
       catch { throw new Error('Check the file format, required columns, unique IDs, well-formed text and 5,000-row limit.'); }
       return;
     }
-    const payload = { format, content, metadata: metadata() }, identity = JSON.stringify(payload);
+    if (!reviewMetadata) throw new Error('Review the evidence and source declaration before uploading.');
+    const payload = { format, content, metadata: reviewMetadata }, identity = JSON.stringify(payload);
     if (retry.current?.payload !== identity) retry.current = { payload: identity, key: crypto.randomUUID() };
     const saved = await api<Version>('/api/datasets/' + dataset + '/versions', 'POST', { ...payload, key: retry.current!.key }); onSaved(saved);
   }); }}>
@@ -33,11 +35,12 @@ export function Upload({ dataset, user, onClose, onSaved }: { dataset: string; u
     <div className={preview ? 'hidden' : ''}>
       <label>Choose a file <span className="optional">up to 5 MiB</span><input type="file" accept=".csv,.json,.txt,text/csv,application/json,text/plain" onChange={event => {
         const file = event.target.files?.[0]; if (!file) return;
+        setContent(''); edit();
         void task.run(async () => {
           if (file.size > ATLAS_LIMITS.bytes) throw new Error('Choose a file no larger than 5 MiB.');
           setFileError('');
           const bytes = await file.arrayBuffer(); let value: string;
-          try { value = new TextDecoder('utf-8', { fatal: true }).decode(bytes); } catch { throw new Error('The file must contain valid UTF-8 text.'); }
+          try { value = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); } catch { throw new Error('The file must contain valid UTF-8 text.'); }
           setContent(value); setFormat(file.name.endsWith('.json') ? 'json' : file.name.endsWith('.txt') ? 'text' : 'csv'); edit();
         });
       }} /></label>
@@ -61,6 +64,12 @@ export function Upload({ dataset, user, onClose, onSaved }: { dataset: string; u
       <p>{preview.filter(row => row.meaning).length} have meaning labels. {preview.filter(row => row.transcription).length} have declared transcriptions.</p>
       <div className="table-scroll"><table><thead><tr><th>Form</th><th>Meaning</th><th>Transcription</th></tr></thead><tbody>{preview.slice(0, 5).map(row => <tr key={row.id}><td>{row.form}</td><td>{row.meaning ?? 'Not supplied'}</td><td>{row.transcription ?? 'Not supplied'}</td></tr>)}</tbody></table></div>
       <p className="form-help">Preview shows the first five records. Original bytes will be retained with a checksum and a new immutable version.</p><button type="button" onClick={edit} disabled={task.busy}>Edit evidence</button>
+      {reviewMetadata && <section aria-label="Reviewed source declaration"><h3>Source declaration</h3><dl>
+        <dt>Creator or contributors</dt><dd>{reviewMetadata.rights.creator}</dd><dt>Usage rights</dt><dd>{reviewMetadata.rights.license}</dd>
+        {reviewMetadata.rights.sourceUrl && <><dt>Source URL</dt><dd>{reviewMetadata.rights.sourceUrl}</dd></>}
+        {reviewMetadata.rights.notes && <><dt>Collection notes</dt><dd>{reviewMetadata.rights.notes}</dd></>}
+      </dl><h4>Grammatical evidence</h4>{Object.entries(reviewMetadata.features ?? {}).length ? <ul>{Object.entries(reviewMetadata.features ?? {}).map(([key, feature]) =>
+        <li key={key}><strong>{choices[key as keyof typeof choices].label}: {feature.value}</strong> · {feature.status === 'observed' ? 'Observed in evidence' : 'Unverified hypothesis'}<p>{feature.source}</p></li>)}</ul> : <p>No grammatical observations supplied.</p>}</section>}
     </section>}
     <Notice>Only this evidence file and the source notes shown above will be transferred to your private account. No public sharing or model training permission is granted.</Notice>
     {(task.error || fileError) && <Notice error>{task.error || fileError}</Notice>}

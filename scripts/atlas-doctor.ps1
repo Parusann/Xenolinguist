@@ -18,4 +18,12 @@ if ($report.databaseInitialized) {
     & (Join-Path $AtlasWorkspace.Postgres 'pg_ctl.exe') -D $AtlasWorkspace.Database status *> $null
     $report.databaseRunning = $LASTEXITCODE -eq 0
 }
+$backupStatusFile = Join-Path $AtlasWorkspace.Config 'backup-status.json'
+if (Test-Path -LiteralPath $backupStatusFile) {
+    $backupRecord = Get-Content -LiteralPath $backupStatusFile -Raw | ConvertFrom-Json
+    if ($backupRecord.version -eq 'atlas-backup-status-1' -and $backupRecord.sourceDatabase -eq 'xenolinguist_atlas') {
+        $report.lastVerifiedRestoreAt = $backupRecord.lastVerifiedAt
+        $report.lastRecoveryAttemptSucceeded = $backupRecord.lastAttemptSucceeded
+    }
+}
 $report | ConvertTo-Json -Depth 4

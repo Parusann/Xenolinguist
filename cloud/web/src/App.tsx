@@ -115,6 +115,7 @@ function System({ status }: { status?: Status }) {
     <article className="panel"><h2>Recovery</h2><p>{status?.backup?.lastVerifiedAt ? 'Last verified restore: ' + new Date(status.backup.lastVerifiedAt).toLocaleString() : 'No verified restore has been recorded yet.'}</p>
       <Notice>{status?.backup?.independent ? 'An independent backup location is configured.' : 'Current snapshots use the same hard drive. Add an independent copy before storing irreplaceable submissions.'}</Notice>
       {status?.backup?.stale && <p>A new verified recovery snapshot is due.</p>}</article></div>
+    {status?.backup?.lastAttemptSucceeded === false && <Notice error>The latest recovery attempt failed. Check the local recovery log. The previous verified snapshot remains recorded.</Notice>}
     <DesktopConnections /><section className="panel limits"><h2>Personal beta scope</h2><p>5 MiB per upload · 5,000 rows · 10 languages · 20 versions per language · 256 MiB per account</p>
       <p>Comparisons use your own uploads and licensed references. Cross-user sharing is a later release. Training permission stays off. Reports describe evidence and conditional hypotheses.</p></section></>;
 }

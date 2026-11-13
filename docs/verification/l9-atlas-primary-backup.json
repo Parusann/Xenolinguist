@@ -1,0 +1,23 @@
+{
+  "backup": {
+    "snapshotId": "37ffd17c91929350ceba775498ec275f9037413d8acc51c49b4db4822fa30f8c",
+    "createdAt": "2026-11-06T07:31:38.440Z",
+    "tables": 19,
+    "objects": 0,
+    "stagingMs": 4058.2033,
+    "totalMs": 9576.3141,
+    "processedBytes": 144323
+  },
+  "verification": {
+    "snapshotId": "37ffd17c91929350ceba775498ec275f9037413d8acc51c49b4db4822fa30f8c",
+    "verifiedAt": "2026-11-06T07:31:59.669Z",
+    "tables": 19,
+    "objects": 0,
+    "ownerScopes": 0,
+    "replayedReports": 0,
+    "restoredAccounts": 0,
+    "sourceDatabase": "xenolinguist_atlas",
+    "restoreMs": 15084.946899999999,
+    "passed": true
+  }
+}

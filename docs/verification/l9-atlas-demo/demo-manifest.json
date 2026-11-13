@@ -1,0 +1,17 @@
+{
+  "version": "atlas-recorded-demo-1",
+  "author": "Parusan Natheeswaran",
+  "recordedAt": "2026-11-06T07:43:25.258Z",
+  "renderedAt": "2026-11-06T07:51:36.474Z",
+  "file": "atlas-demo.mp4",
+  "bytes": 2477279,
+  "sha256": "da7c18b3781be09eedd82115bc26360eb654da7c44ab6ed8fa0bdb722060b6bc",
+  "application": "Real compiled Atlas, PostgreSQL and bounded worker in a disposable fixture",
+  "fixture": "Licensed known-English control, followed by insufficient unglossed evidence",
+  "narration": "Burned-in explanatory captions, with retained SRT and transcript",
+  "paidApis": 0,
+  "modelCalls": 0,
+  "primaryPageVideo": "page@45a6098d3b3f664271ca92f8d22cc6e7.webm",
+  "blankAuditPages": 6,
+  "limit": "Demonstrates workflow and provenance. Unknown natural-language decipherment and model superiority are not established."
+}

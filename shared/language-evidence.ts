@@ -62,7 +62,7 @@ export function importEvidence(format: 'csv' | 'json' | 'text', input: string,
   if (format === 'csv') {
     const rows = parseCsv(input, limits.maxBytes, limits.maxRows);
     raw = rows.map(r => Object.fromEntries(Object.entries(r).filter(([k, v]) => v !== '' || !['meaning', 'transcription', 'annotations'].includes(k))));
-  } else if (format === 'json') raw = JSON.parse(input);
+  } else if (format === 'json') raw = JSON.parse(input.replace(/^\uFEFF/, ''));
   else if (format === 'text') raw = input.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/).filter(s => s.trim().length).map((form, i) => ({ id: 'r' + i, form }));
   else throw new Error('Unsupported evidence format');
   const rows = z.array(rowSchema).min(1).max(limits.maxRows).parse(raw);

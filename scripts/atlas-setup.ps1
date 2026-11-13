@@ -8,7 +8,7 @@ foreach ($folder in @($AtlasWorkspace.Data, $AtlasWorkspace.Objects, $AtlasWorks
 }
 # DPAPI protects the values for this Windows account. Restrict the containing directory as well.
 $sid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
-foreach ($privateDirectory in @($AtlasWorkspace.Config, $AtlasWorkspace.Data)) {
+foreach ($privateDirectory in @($AtlasWorkspace.Config, $AtlasWorkspace.Data, $AtlasWorkspace.Backup, $AtlasWorkspace.Cache)) {
     icacls.exe $privateDirectory /inheritance:r /grant:r ("*" + $sid + ':(OI)(CI)F') | Out-Null
     if ($LASTEXITCODE) { throw 'Could not restrict atlas data or configuration permissions' }
 }

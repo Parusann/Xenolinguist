@@ -11,6 +11,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   regression:
+    env:
+      # The CPU binding ships in the package; source checks do not need CUDA downloads.
+      ONNXRUNTIME_NODE_INSTALL: skip
     strategy:
       fail-fast: false
       matrix:

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { atlasId, ATLAS_LIMITS } from '../../shared/schemas/atlas.js';
 
 export class ObjectStore {
-  constructor(readonly root: string) {}
+  constructor(readonly root: string, private readonly availableSpace?: () => Promise<number>) {}
 
   private filename(id: string) {
     return path.join(this.root, atlasId.parse(id) + '.blob');
@@ -18,8 +18,8 @@ export class ObjectStore {
   async put(bytes: Buffer) {
     if (!bytes.length || bytes.length > ATLAS_LIMITS.bytes) throw new Error('Object exceeds storage bounds');
     await this.checkRoot();
-    const volume = await statfs(this.root);
-    if (volume.bavail * volume.bsize - bytes.length < 20 * 1024 ** 3)
+    const volume = this.availableSpace ? await this.availableSpace() : await statfs(this.root).then(value => value.bavail * value.bsize);
+    if (volume - bytes.length < 20 * 1024 ** 3)
       throw new Error('Object storage has reached its reserved headroom');
     const id = randomUUID();
     const temporary = path.join(this.root, id + '.partial');

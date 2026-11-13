@@ -6,6 +6,8 @@ The fixed adapter produced **no observed improvement on the primary lexical task
 
 The base is Qwen3-4B-Instruct-2507 at Hugging Face revision `cdbee75f17c01a7cc42f958dc650907174af0554`. The candidate used 48 synthetic training episodes from 24 training lineages and 96 scorer-checked targets. A fresh rank-four adapter trained the final layer's query and value projections for one epoch, under the recipe committed before training. Its 40,960 trainable parameters represent approximately 0.001% of the base. [Pinned base](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/tree/cdbee75f17c01a7cc42f958dc650907174af0554) · [Recipe](../evaluation/protocols/lexical-candidate-recipe-v1.json)
 
+The schedule alternates identified and ambiguous episode types, but the prediction targets are not evenly balanced: 24 identified answers, 24 ambiguity abstentions and 48 insufficient-evidence abstentions. Thus 72/96 target predictions abstain. This composition is relevant to diagnosing the observed all-abstention behavior; no ablation establishes it as the cause.
+
 Training used four CPU threads, took 246.57 seconds and peaked at 8.43 GiB of process memory across training and export. The saved adapter weights occupy 164,400 bytes. An earlier pilot reproduced the same loss and parameter hash after loading a fresh base, adapter, optimizer and RNG state. [Training evidence](verification/m5-lexical-candidate/training.json) · [Recovery verification](verification/m4-cpu-pilot.json)
 
 Both inference artifacts were converted by the same pinned llama.cpp revision to BF16 GGUF and loaded by Ollama 0.32.5 on the RX 7900 XTX. Every tensor name, shape, dtype and byte sequence was compared before conversion. Exactly the two trained projections changed. The artifacts share the same tokenizer, template, model parameters and architecture metadata, and preserve Qwen's Apache 2.0 license. [Runtime and provenance](verification/m5-lexical-candidate/runtime.json)
@@ -63,7 +65,7 @@ Extract an archive to a new directory and run the following from the configured 
 & $ResearchWorkspace.Node node_modules/tsx/dist/cli.mjs evaluation/src/decipherment/paired.ts verify <extracted-directory>
 ~~~
 
-All 205 research tests and evaluation TypeScript checks pass. The runtime, corpus, model digests, training hashes and evaluation gates are retained alongside the result.
+At the M5/M6 implementation checkpoint, all 205 research tests and evaluation TypeScript checks passed. This is the experiment's recorded verification count, not the current repository-wide test total. The runtime, corpus, model digests, training hashes and evaluation gates are retained alongside the result.
 
 ## Product and research decision
 

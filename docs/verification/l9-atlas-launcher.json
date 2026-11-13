@@ -1,0 +1,10 @@
+{
+  "stopAndStartMs": 16589.0871,
+  "checkedAt": "2026-11-06T07:30:21.2673368Z",
+  "scope": "Normal launcher, including graceful stop, database startup, migration, reference verification and production build. Filesystem caches were not flushed.",
+  "health": {
+    "ready": true,
+    "service": "xenolinguist-atlas",
+    "pid": 21256
+  }
+}

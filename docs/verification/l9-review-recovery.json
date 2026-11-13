@@ -1,0 +1,78 @@
+{
+  "version": "atlas-recovery-performance-1",
+  "checkedAt": "2026-11-13T02:09:50.370Z",
+  "checks": [
+    "Injected zero free space and a missing storage path roll back upload publication without creating objects or versions",
+    "Two successive backups use distinct staging paths and latest selects the newer snapshot for complete recovery",
+    "The consistent encrypted repository contains no plaintext copy of the deliberately marked upload",
+    "An incorrect repository password is rejected before database recovery",
+    "Restored passwords sign in, raw bytes and reports match, and cross-account resources remain unavailable",
+    "All table fingerprints and object checksums match, forced RLS survives, and the saved comparison replays",
+    "A corrupted primary object prevents a new snapshot from being published",
+    "Cached metadata meets the 500 ms p95 target and ten declared 5,000-row jobs meet the 60-second target"
+  ],
+  "snapshot": {
+    "snapshotId": "6d4ef1f3139f1abada9693a7bf16540f46ec29c19fcf20dd0d5e0fc1f0106dc2",
+    "createdAt": "2026-11-13T02:09:28.682Z",
+    "tables": 19,
+    "objects": 2,
+    "stagingMs": 327.8251,
+    "totalMs": 1105.5431000000008,
+    "processedBytes": 152602
+  },
+  "restored": {
+    "snapshotId": "6d4ef1f3139f1abada9693a7bf16540f46ec29c19fcf20dd0d5e0fc1f0106dc2",
+    "verifiedAt": "2026-11-13T02:09:35.244Z",
+    "tables": 19,
+    "objects": 2,
+    "ownerScopes": 2,
+    "replayedReports": 1,
+    "restoredAccounts": 2,
+    "sourceDatabase": "xeno_atlas_test_bf10130c02b2",
+    "restoreMs": 4225.9866999999995,
+    "passed": true
+  },
+  "latestSelection": {
+    "priorSnapshot": "4ecb95c27263b4e1760d32812d7ec9ec224a5fa5adb75311eb6c8e8fc9ffd64f",
+    "selectedSnapshot": "6d4ef1f3139f1abada9693a7bf16540f46ec29c19fcf20dd0d5e0fc1f0106dc2"
+  },
+  "performance": {
+    "metadata": {
+      "samples": 100,
+      "p50Ms": 2.3630000000011933,
+      "p95Ms": 5.557400000001508,
+      "maximumMs": 10.362499999999272
+    },
+    "boundedJobs": {
+      "samples": 10,
+      "p50Ms": 1233.5195000000022,
+      "p95Ms": 1346.3604000000014,
+      "maximumMs": 1346.3604000000014
+    },
+    "engine": {
+      "samples": 10,
+      "p50Ms": 122.5692999999992,
+      "p95Ms": 150.34160000000338,
+      "maximumMs": 150.34160000000338
+    },
+    "workload": {
+      "entries": 5000,
+      "formGraphemes": 96,
+      "referenceLanguages": 6,
+      "concepts": 8
+    },
+    "metadataWarmupRequests": 10,
+    "verifierMaximumRssKiB": 501132,
+    "cpu": "AMD Ryzen 9 7900 12-Core Processor             ",
+    "logicalCpus": 24,
+    "totalMemoryGiB": 31.144248962402344,
+    "limitations": [
+      "Local loopback on one Windows host, warmed metadata and filesystem caches. No physical cold-disk or power-loss test.",
+      "API and client timing run in the verifier process. Reported RSS excludes PostgreSQL and restic child processes.",
+      "End-to-end job timing includes queue scheduling and 100 ms polling resolution. Small samples are not a service-level guarantee."
+    ]
+  },
+  "initialFreeGiB": 79.65327453613281,
+  "elapsedMs": 27835.2476,
+  "passed": true
+}

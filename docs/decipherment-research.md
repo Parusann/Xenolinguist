@@ -1,8 +1,8 @@
 # Decipherment research
 
-The first two local model studies and their complete replay archives are available in the [baseline report](decipherment-baselines.md).
+The initial research cycle is complete on the `research/decipherment` branch in [PR #8](https://github.com/Parusann/Xenolinguist/pull/8). The first two local model studies and their complete replay archives are available in the [baseline report](decipherment-baselines.md). The subsequent matched base/candidate experiment and retained null result are documented in the [model card](decipherment-model-card.md).
 
-This research track tests bounded structure recovery and uncertainty handling. It is separate from the released workbench's frozen translation benchmark. It does not yet contain a trained specialist or demonstrate historical decipherment.
+This research track tests bounded structure recovery and uncertainty handling. It is separate from the released workbench's frozen translation benchmark. A small lexical adapter was trained and evaluated, but it failed the frozen improvement gates: both arms recovered 0/8 identifiable reserved lexical answers and handled 16/24 uncertain lexical cases correctly. No improved specialist has been established or released, and these experiments do not demonstrate historical decipherment.
 
 ## Protocol and corpus
 
@@ -38,7 +38,7 @@ Reserved material is not exported through the ordinary CLI. Public generator sou
 
 ## Current limits
 
-The corpus is a small, inspectable pilot using narrow rule classes. A solver specialized to these supplied classes may perform perfectly without understanding natural language. More lineages alone do not create more linguistic diversity. Natural-language data need separate source permissions and family-aware evaluation; raw resemblance cannot establish ancestry. Model comparisons and local training feasibility remain subsequent milestones.
+The corpus is a small, inspectable pilot using narrow rule classes. A solver specialized to these supplied classes may perform perfectly without understanding natural language. More lineages alone do not create more linguistic diversity. Natural-language data need separate source permissions and family-aware evaluation; raw resemblance cannot establish ancestry. Local training, checkpoint recovery and matched model comparison have been verified; the candidate's failure to improve remains the research result. The published reserved traces are now reproducibility and regression material. Any further candidate-selection cycle needs a fresh reserved set and a separately frozen protocol.
 
 ## Licensed reference pilot
 

@@ -6,7 +6,7 @@ Atlas is a private companion to the offline workbench. The service stores eviden
 
 ## Start locally
 
-Use the existing HDD research checkout with PowerShell 7.2 or newer. The environment script verifies the drive identity and keeps runtimes, builds, temporary files, caches, objects and PostgreSQL data on that drive.
+Use the existing HDD research checkout on `research/decipherment` with PowerShell 7.2 or newer. [PR #8](https://github.com/Parusann/Xenolinguist/pull/8) contains this source-only beta; the published installer does not include it. The environment script verifies the drive identity and keeps runtimes, builds, temporary files, caches, objects and PostgreSQL data on that drive. A new machine needs the [research workspace setup](research-workspace.md) before these commands.
 
 ~~~powershell
 pwsh -NoProfile -File scripts/atlas-setup.ps1
@@ -49,12 +49,16 @@ The reference gallery contains the six-language WOLD vocabulary pilot and twelve
 
 ![Licensed reference languages and observations](screenshots/atlas-references.png)
 
-Deleting a language immediately revokes its versions and reports. Physical files enter background cleanup. System & recovery shows worker availability, pending deletion and recovery status. Downloaded copies remain separate from the server. Uploads are private, cross-user sharing is unavailable in this beta, and model-training permission stays off.
+Deleting a language immediately revokes its versions and reports. Physical files enter background cleanup. Existing encrypted backup snapshots can still contain the deleted evidence; deletion does not rewrite those snapshots, and this personal beta has no automatic snapshot-expiry policy. System & recovery shows worker availability, pending deletion and recovery status. Downloaded copies remain separate from the server. Uploads are private, cross-user sharing is unavailable in this beta, and model-training permission stays off.
 
-Recovery snapshots on the same HDD protect against some mistakes, but do not survive loss of that drive. Add an independent recovery copy before using irreplaceable submissions. The current acceptance fixtures are reproducible.
+Create and verify an encrypted snapshot with `pwsh -NoProfile -File scripts/atlas-backup.ps1`. Verify the latest snapshot again with `pwsh -NoProfile -File scripts/atlas-restore-check.ps1`. Both recover into a temporary database and preserve the live service. System & recovery reports the most recent verified restore, a stale record and a failed latest attempt separately. [Recovery procedure, measured performance and limits](atlas-recovery.md)
+
+Recovery snapshots on the same HDD protect against some mistakes, but do not survive loss of that drive. Add an independent recovery copy and preserve a portable recovery key before using irreplaceable submissions. The current acceptance fixtures are reproducible. Cross-machine recovery and continuous availability are outside this personal beta.
 
 ## Verification
 
-`cloud/src/verify-web.ts` exercises the compiled service and real worker against a disposable PostgreSQL database. Ten browser phases cover enrollment, reviewed upload, original-byte download, evidence/export, mobile use, malformed and insufficient evidence, reference provenance, reconnection, reviewed deletion and logout. Five automated WCAG A/AA audits reported zero violations. This does not replace a full human accessibility review. The run recorded zero page errors and zero CSP violations. [Browser verification](verification/l7-atlas-browser.json) · [Job verification](atlas-jobs.md)
+`cloud/src/verify-web.ts` exercises the compiled service and real worker against a disposable PostgreSQL database. Eleven browser phases cover enrollment, reviewed upload, original-byte download including BOM/CRLF, evidence/export, mobile use, malformed and insufficient evidence, reference provenance, desktop approval/revocation, reconnection, reviewed deletion and logout. Six automated WCAG A/AA audits reported zero violations. This does not replace a full human accessibility review. The run recorded zero page errors and zero CSP violations. [Browser verification](verification/l9-review-browser.json) · [Job verification](atlas-jobs.md) · [Final beta review](atlas-beta-review.md)
+
+The [91-second captioned demonstration](verification/l9-atlas-demo/atlas-demo.mp4) records this workflow against the real compiled service, PostgreSQL and bounded worker, using disposable licensed English evidence. [Transcript](verification/l9-atlas-demo/transcript.md) · [Recording manifest](verification/l9-atlas-demo/demo-manifest.json). Reproduce it with `node cloud/record-demo.mjs <output-directory-on-research-drive>` after loading the private Atlas test environment and setting `XENO_FFMPEG` to an existing FFmpeg executable. All recording output belongs on the research drive.
 
 The interface bundles its own scripts, styles and fonts. Space Grotesk and JetBrains Mono retain their SIL Open Font License texts in the build. It requires no external font or analytics service.

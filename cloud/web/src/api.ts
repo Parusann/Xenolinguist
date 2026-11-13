@@ -9,7 +9,7 @@ export type Job = { id: string; version_id: string; status: 'queued' | 'running'
   error_code?: string; created_at: string; finished_at?: string; report?: ComparisonReport };
 export type Source = { id: string; version: string; sha256: string; url: string; license: string; attribution: string; languages: number; forms: number; features: number };
 export type Status = { sharing: string; trainingPermission: boolean; worker: { active: boolean; running: boolean; lastError: string | null; lastCleanupAt: string | null };
-  deletion: { pendingObjects: number }; backup?: { lastVerifiedAt: string | null; independent: boolean; stale: boolean } };
+  deletion: { pendingObjects: number }; backup?: { lastVerifiedAt: string | null; independent: boolean; stale: boolean; lastAttemptSucceeded: boolean | null } };
 export class ApiError extends Error {
   constructor(readonly status: number, message: string) { super(message); }
 }

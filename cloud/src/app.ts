@@ -14,6 +14,7 @@ import { comparisonReferences } from './references.js';
 import path from 'node:path';
 import { existsSync } from 'node:fs';
 import { DesktopAuth } from './desktop-auth.js';
+import { backupStatus } from './backup-status.js';
 
 function route(action: (req: Request, res: Response, next: NextFunction) => Promise<unknown>) {
   return (req: Request, res: Response, next: NextFunction) => { action(req, res, next).catch(next); };
@@ -67,7 +68,7 @@ export function createApp(config: AtlasConfig) {
     res.json(await desktop.revoke(res.locals.owner, res.locals.connection));
   }));
   app.get('/api/status', route(async (_req, res) => res.json({ limits: ATLAS_LIMITS, sharing: 'private', trainingPermission: false,
-    worker: worker.diagnostics, deletion: await asOwner(pool, res.locals.owner, async client =>
+    worker: worker.diagnostics, backup: await backupStatus(config.root), deletion: await asOwner(pool, res.locals.owner, async client =>
       ({ pendingObjects: (await client.query('SELECT count(*)::int AS n FROM atlas.object_gc')).rows[0].n })) })));
   app.get('/api/references', route(async (_req, res) => res.json((await pool.query(`SELECT s.id,s.version,s.sha256,s.url,s.license,s.attribution,
     (SELECT count(*)::int FROM atlas.reference_languages l WHERE l.source_id=s.id) AS languages,

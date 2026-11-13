@@ -27,6 +27,14 @@ it('retains declared transcription and rejects malformed Unicode before persiste
   expect(() => importEvidence('json', JSON.stringify([{ id: 'bad\0', form: 'ka' }]))).toThrow();
 });
 
+it('parses BOM-prefixed JSON without changing the original evidence or its forms', () => {
+  const input = '\uFEFF[\r\n  {"id":"a","form":"e\\u0301","annotations":"internal \\uFEFF mark"}\r\n]\r\n';
+  const originalBytes = Buffer.from(input);
+  expect(importEvidence('json', input)).toEqual([{ id: 'a', form: 'é', originalForm: 'e\u0301', annotations: 'internal \uFEFF mark' }]);
+  expect(Buffer.from(input)).toEqual(originalBytes);
+  expect(() => importEvidence('json', input, { maxBytes: originalBytes.length - 1, maxRows: 1 })).toThrow('size');
+});
+
 it('retains every licensed pilot file, source identity, synonym and metadata join', async () => {
   const base = new URL('../../fixtures/reference/wold-pilot/', import.meta.url);
   const manifest = JSON.parse(await readFile(new URL('manifest.json', base), 'utf8'));
