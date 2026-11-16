@@ -6,7 +6,7 @@ import { lstat, mkdir, open, readFile, realpath, rm, statfs } from 'node:fs/prom
 import path from 'node:path';
 import type { PoolClient } from 'pg';
 import type { AtlasConfig } from './config.js';
-import { asOwner, atlasPool } from './db.js';
+import { asOwner, atlasPool, dropDisposableDatabase } from './db.js';
 import { ObjectStore } from './objects.js';
 import { comparisonReferences } from './references.js';
 import { compareLanguages } from '../../engine/src/comparison/compare.js';
@@ -219,7 +219,7 @@ export async function verifyBackup(config: AtlasConfig, options: Options, snapsh
       sourceDatabase: manifest.database, restoreMs: performance.now() - started, passed: true };
   } finally {
     await appPool?.end(); await restoredPool?.end();
-    if (created && /^xeno_atlas_restore_[a-f0-9]{12}$/u.test(database)) await admin.query('DROP DATABASE "' + database + '" WITH (FORCE)');
+    if (created) await dropDisposableDatabase(admin, database);
     await admin.end(); await removeTemporary(config, tools.directory, target);
   }
 }

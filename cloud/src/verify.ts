@@ -3,8 +3,9 @@ import { createServer } from 'node:http';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { mkdir, readFile, realpath, rm, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { once } from 'node:events';
 import { loadConfig } from './config.js';
-import { atlasPool, asOwner, lockObjects } from './db.js';
+import { atlasPool, asOwner, lockObjects, dropDisposableDatabase } from './db.js';
 import { migrate } from './migrate.js';
 import { createApp } from './app.js';
 import { comparisonReferences, ingestReferences } from './references.js';
@@ -29,6 +30,7 @@ let tenantPool: ReturnType<typeof atlasPool> | undefined;
 const server = createServer();
 const report: Record<string, unknown> = { version: 'atlas-foundation-verification-1', checkedAt: new Date().toISOString(), checks };
 try {
+  await assert.rejects(dropDisposableDatabase(admin, 'xenolinguist_atlas'), /Invalid disposable database name/);
   await admin.query('CREATE DATABASE "' + database + '" OWNER atlas_owner TEMPLATE template0');
   const testConfig = { ...config, objects, databaseUrl: connection(config.databaseUrl), authDatabaseUrl: connection(config.authDatabaseUrl, 'auth'),
     workerDatabaseUrl: connection(config.workerDatabaseUrl), adminDatabaseUrl: connection(config.adminDatabaseUrl) };
@@ -270,6 +272,14 @@ try {
   await assert.rejects(asOwner(tenantPool, a.id, async () => { throw new Error('Synthetic rollback'); }));
   assert.equal(await count(), 0);
   checks.push('Forced RLS and transaction cleanup prevent pooled tenant-context leakage');
+  const idlePid = (await tenantPool.query('SELECT pg_backend_pid() AS id')).rows[0].id;
+  const disconnected = once(tenantPool, 'error', { signal: AbortSignal.timeout(5000) });
+  assert.equal((await admin.query('SELECT pg_terminate_backend($1) AS stopped', [idlePid])).rows[0].stopped, true);
+  await disconnected;
+  assert.equal(await count(), 0);
+  assert.equal(await asOwner(tenantPool, a.id, async client => Number((await client.query('SELECT count(*) AS n FROM atlas.datasets')).rows[0].n)), 1);
+  assert.equal(await count(), 0);
+  checks.push('An interrupted idle database connection is replaced without crashing or retaining tenant context');
   const csrf = await fetch(origin + '/api/datasets', { method: 'POST', headers: { Cookie: a.cookie, Origin: 'https://invalid.example', 'Content-Type': 'application/json' },
     body: JSON.stringify({ title: 'Invalid origin', languageKind: 'synthetic' }) });
   assert.equal(csrf.status, 403);
@@ -286,11 +296,14 @@ try {
   await fixture.worker.stop();
   checks.push('A second service cannot acquire leadership of the same worker queue');
   report.passed = true;
+} catch (error) {
+  console.error('Atlas verification stopped after ' + checks.length + ' phases: ' + (checks.at(-1) ?? 'setup'));
+  throw error;
 } finally {
   await new Promise<void>(resolve => server.listening ? server.close(() => resolve()) : resolve());
   await fixture?.close();
   await tenantPool?.end();
-  await admin.query('DROP DATABASE IF EXISTS "' + database + '" WITH (FORCE)');
+  await dropDisposableDatabase(admin, database);
   await admin.end();
   const resolved = await realpath(location);
   if (resolved !== path.join(config.root, 'temp', database) || !resolved.startsWith(path.join(config.root, 'temp') + path.sep))

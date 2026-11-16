@@ -1,8 +1,25 @@
 import { Pool, type PoolClient } from 'pg';
 
 export function atlasPool(connectionString: string, max = 4, statementTimeoutMs = 10000) {
-  return new Pool({ connectionString, max, connectionTimeoutMillis: 5000, idleTimeoutMillis: 10000,
+  const pool = new Pool({ connectionString, max, connectionTimeoutMillis: 5000, idleTimeoutMillis: 10000,
     application_name: 'xenolinguist-atlas', statement_timeout: statementTimeoutMs, lock_timeout: 3000 });
+  // pg evicts a disconnected idle client before emitting this event. Keep the API alive
+  // for a fresh connection; never log the error's client object or connection credentials.
+  pool.on('error', () => console.error('Atlas idle database connection lost; a later request will reconnect.'));
+  return pool;
+}
+
+/** Only generated acceptance/recovery databases may be retired; never force active clients off. */
+export async function dropDisposableDatabase(admin: Pool, database: string) {
+  if (!/^xeno_atlas_(test|restore)_[a-f0-9]{12}$/.test(database)) throw new Error('Invalid disposable database name');
+  // pg-pool can resolve end() before client sockets finish closing. Observe server-side
+  // connection termination instead of assuming a platform-specific teardown delay.
+  const deadline = Date.now() + 5000;
+  while (Number((await admin.query('SELECT count(*) AS n FROM pg_stat_activity WHERE datname=$1', [database])).rows[0].n)) {
+    if (Date.now() >= deadline) throw new Error('Disposable database connections did not drain');
+    await new Promise(resolve => setTimeout(resolve, 25));
+  }
+  await admin.query('DROP DATABASE IF EXISTS "' + database + '"');
 }
 
 export async function lockAccount(client: PoolClient, owner: string) {

@@ -4,7 +4,7 @@ import { mkdir, realpath, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { AtlasConfig } from './config.js';
-import { atlasPool } from './db.js';
+import { atlasPool, dropDisposableDatabase } from './db.js';
 import { migrate } from './migrate.js';
 import { ingestReferences } from './references.js';
 import { createApp } from './app.js';
@@ -32,7 +32,7 @@ export async function testFixture(config: AtlasConfig, compiled = false) {
     if (cleaned) return;
     await stop();
     if (!/^xeno_atlas_test_[a-f0-9]{12}$/.test(database)) throw new Error('Invalid disposable database name');
-    await admin.query('DROP DATABASE IF EXISTS "' + database + '" WITH (FORCE)'); await admin.end();
+    await dropDisposableDatabase(admin, database); await admin.end();
     const resolved = await realpath(location);
     if (resolved !== path.join(config.root, 'temp', database) || !resolved.startsWith(path.join(config.root, 'temp') + path.sep)) throw new Error('Unsafe fixture cleanup path');
     await rm(resolved, { recursive: true, force: true });
