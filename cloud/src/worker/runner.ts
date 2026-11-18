@@ -11,6 +11,7 @@ export type ClaimedJob = { id: string; owner_id: string; version_id: string; lea
 class InputUnavailable extends Error {}
 export class AtlasWorker {
   private leader?: PoolClient;
+  private leaderFailed = false;
   private timer?: ReturnType<typeof setTimeout>;
   private pending?: Promise<void>;
   private controller?: AbortController;
@@ -18,15 +19,22 @@ export class AtlasWorker {
   private lastSweep = 0;
   readonly diagnostics = { active: false, running: false, lastError: null as string | null, completed: 0, lastCleanupAt: null as string | null };
   constructor(readonly pool: Pool, readonly objects: ObjectStore) {}
+  private readonly onLeaderError = () => {
+    this.leaderFailed = true; this.diagnostics.active = false; this.diagnostics.lastError = 'database-unavailable';
+    this.stopping = true; clearTimeout(this.timer); this.controller?.abort();
+  };
 
   async start() {
     if (this.leader) return;
     const client = await this.pool.connect();
-    if (!(await client.query('SELECT pg_try_advisory_lock(43185441) AS acquired')).rows[0].acquired) {
+    let acquired: boolean;
+    try { acquired = (await client.query('SELECT pg_try_advisory_lock(43185441) AS acquired')).rows[0].acquired; }
+    catch (error) { client.release(true); throw error; }
+    if (!acquired) {
       client.release(); throw new Error('Another atlas worker owns the queue');
     }
-    client.on('error', () => { this.diagnostics.lastError = 'database-unavailable'; this.stopping = true; this.controller?.abort(); });
-    this.leader = client; this.diagnostics.active = true; this.stopping = false;
+    client.on('error', this.onLeaderError);
+    this.leader = client; this.leaderFailed = false; this.diagnostics.active = true; this.stopping = false;
     this.schedule(0);
   }
 
@@ -150,8 +158,9 @@ export class AtlasWorker {
     this.stopping = true; clearTimeout(this.timer); this.controller?.abort();
     await this.pending;
     if (this.leader) {
-      await this.leader.query('SELECT pg_advisory_unlock(43185441)').catch(() => {});
-      this.leader.release(); this.leader = undefined;
+      if (!this.leaderFailed) await this.leader.query('SELECT pg_advisory_unlock(43185441)').catch(() => { this.leaderFailed = true; });
+      this.leader.removeListener('error', this.onLeaderError);
+      this.leader.release(this.leaderFailed); this.leader = undefined;
     }
     this.diagnostics.active = false;
   }

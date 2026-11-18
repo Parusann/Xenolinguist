@@ -295,6 +295,43 @@ try {
   await assert.rejects(new AtlasWorker(fixture.worker.pool, fixture.datasets.objects).start(), /Another atlas worker/);
   await fixture.worker.stop();
   checks.push('A second service cannot acquire leadership of the same worker queue');
+  const failedStartPool = atlasPool(testConfig.workerDatabaseUrl, 1);
+  const failedStartWorker = new AtlasWorker(failedStartPool, fixture.datasets.objects);
+  const failedStartClient = await failedStartPool.connect();
+  try {
+    // Return an aborted transaction to this isolated pool to make the real leadership query fail.
+    await failedStartClient.query('BEGIN');
+    await assert.rejects(failedStartClient.query('SELECT 1 / 0'), { code: '22012' });
+    failedStartClient.release();
+    await assert.rejects(failedStartWorker.start(), { code: '25P02' });
+    assert.equal(failedStartWorker.diagnostics.active, false);
+    assert.equal(failedStartPool.totalCount, 0);
+  } finally {
+    await failedStartWorker.stop();
+    if (failedStartPool.totalCount > failedStartPool.idleCount) failedStartClient.release(true);
+    await failedStartPool.end();
+  }
+  checks.push('A failed leadership query destroys its checkout instead of exhausting the worker pool');
+  await fixture.worker.start();
+  const leader = await admin.query(`SELECT l.pid FROM pg_locks l JOIN pg_stat_activity s ON s.pid=l.pid
+    WHERE l.locktype='advisory' AND l.classid=0 AND l.objid=43185441 AND l.objsubid=1 AND l.granted
+      AND s.datname=$1 AND s.usename='atlas_worker'`, [database]);
+  assert.equal(leader.rowCount, 1);
+  const terminated = await admin.query(`SELECT pg_terminate_backend(pid) AS stopped FROM pg_stat_activity
+    WHERE pid=$1 AND datname=$2 AND usename='atlas_worker'`, [leader.rows[0].pid, database]);
+  assert.equal(terminated.rowCount, 1); assert.equal(terminated.rows[0].stopped, true);
+  const leaderDeadline = Date.now() + 5000;
+  while (fixture.worker.diagnostics.active && Date.now() < leaderDeadline) await new Promise(resolve => setTimeout(resolve, 25));
+  assert.equal(fixture.worker.diagnostics.active, false);
+  assert.equal(fixture.worker.diagnostics.lastError, 'database-unavailable');
+  assert.equal((await (await request('/api/status', 'GET', undefined, a.cookie)).json()).worker.active, false);
+  await fixture.worker.stop();
+  assert.equal(fixture.worker.pool.totalCount, fixture.worker.pool.idleCount);
+  await fixture.worker.start();
+  assert.equal((await (await request('/api/status', 'GET', undefined, a.cookie)).json()).worker.active, true);
+  await assert.rejects(new AtlasWorker(fixture.worker.pool, fixture.datasets.objects).start(), /Another atlas worker/);
+  await fixture.worker.stop();
+  checks.push('Lost worker leadership reports unavailable, releases its checkout and recovers after a drained restart');
   report.passed = true;
 } catch (error) {
   console.error('Atlas verification stopped after ' + checks.length + ' phases: ' + (checks.at(-1) ?? 'setup'));
