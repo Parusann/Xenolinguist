@@ -1,0 +1,51 @@
+{
+  "milestone": "M0",
+  "date": "2026-10-31",
+  "sourceCommit": "ec1952a121b98bb0130871697bd4e52170b22d03",
+  "runtime": {
+    "node": "v24.22.2",
+    "npm": "11.19.1",
+    "platform": "win-x64",
+    "lock": "research/runtime-lock.json"
+  },
+  "storage": {
+    "scope": "Dedicated HDD workspace; no system-wide environment changes",
+    "probeBytes": 4194304,
+    "probeChecksumMatched": true,
+    "probeIsThroughputBenchmark": false
+  },
+  "existingResearchTests": {
+    "command": "pwsh -NoProfile -File scripts/research.ps1 -Action check",
+    "files": 16,
+    "passed": 168,
+    "failed": 0,
+    "evaluationTypecheckPassed": true,
+    "localReport": "data/research/checks-20261031-032252-be7f68/vitest.json",
+    "reportSha256": "2573aa598863ab533205aaab559356ee3e3474c5be1a8ad9baede7b1b07f2ff9"
+  },
+  "workspaceGuards": {
+    "command": "pwsh -NoProfile -File tests/tooling/research-workspace.test.ps1",
+    "passed": 7,
+    "failed": 0
+  },
+  "existingBaselineReplay": {
+    "command": "pwsh -NoProfile -File scripts/research.ps1 -Action baseline",
+    "configuration": "evaluation/configs/ci.json",
+    "split": "development",
+    "languages": 2,
+    "observationBudgets": [8, 16, 29],
+    "methods": ["exact-lookup", "symbolic"],
+    "records": 12,
+    "modelCalls": 0,
+    "verifierPassed": true,
+    "localDirectory": "data/research/existing-baseline-20261031-032252-4fdd2f",
+    "manifestSha256": "57b1e583bdf40a457145a9619518d8ecd7ad5a6511be8de57973043b52a46f86",
+    "sourceSnapshotHash": "ac68788453f6602db1c228beabba69db59b54a7b6852d035b8de5e3e9727c172"
+  },
+  "limits": [
+    "The symbolic replay uses a supplied grammar prior.",
+    "No new model inference, training or model-quality improvement was evaluated.",
+    "No reserved model benchmark, desktop packaging or cloud deployment was run.",
+    "Drive health and a small integrity probe do not certify disk durability or throughput."
+  ]
+}

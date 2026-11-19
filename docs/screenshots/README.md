@@ -1,5 +1,7 @@
 # Screenshot provenance
 
+The `atlas-*` captures show the real personal beta in disposable PostgreSQL fixtures. Browser captures at 1440 × 1000 and a 390-pixel mobile viewport are linked from the [Atlas guide](../atlas-guide.md). The desktop capture uses the actual Electron main entry, preload and utility-process backend. Its proposed missing forms come from the declared synthetic substitution control, with no general natural-language claim. [Browser record](../verification/l8-atlas-browser.json) · [Desktop record](../verification/l8-atlas-desktop.json).
+
 The `w26-*` public captures refresh the 1440 × 1000 implementation preview on October 13, 2026. The recorded workbench demonstration uses 1440 × 900; its source, information budget and exact result are in [the demo manifest](../verification/w26-demo/demo-manifest.json). Current image checksums are retained with the final release verification. The page still offers the earlier public installer.
 
 - [Public hero](w26-hero.png), [dictionary](w26-dictionary.png), and [download distinction](w26-download.png).

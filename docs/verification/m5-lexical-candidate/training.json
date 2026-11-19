@@ -1,0 +1,465 @@
+{
+  "status": "complete",
+  "recipe": {
+    "id": "lexical-candidate-v1",
+    "base": "Qwen/Qwen3-4B-Instruct-2507",
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "trainingSha256": "ffc0329e46768e4dcf685fd1740633e225ed688aeaa0f1c7fe75fdd365c104dc",
+    "seed": 17,
+    "epochs": 1,
+    "updates": 48,
+    "batchSize": 1,
+    "sampleOrder": "exported balanced order, exactly once",
+    "optimizer": "AdamW",
+    "learningRate": 0.0001,
+    "weightDecay": 0,
+    "gradientNormCap": 1,
+    "baseDtype": "bfloat16",
+    "backend": "CPU",
+    "threads": 4,
+    "layer": 35,
+    "targetModules": [
+      "q_proj",
+      "v_proj"
+    ],
+    "rank": 4,
+    "alpha": 8,
+    "dropout": 0,
+    "initialization": "fresh from seed; pilot weights excluded",
+    "selection": "final update only, regardless of development scores",
+    "primaryEvaluation": "matched base and candidate without tools, structured prompt v2",
+    "gates": "lexical-adapter-gates-v1.md"
+  },
+  "steps": [
+    {
+      "seconds": 6.000475599998026,
+      "loss": 1.0327199697494507,
+      "gradientNorm": 0.1792641133069992,
+      "inputTokens": 529,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.634860599995591,
+      "loss": 0.5129752159118652,
+      "gradientNorm": 0.12273229658603668,
+      "inputTokens": 500,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.544164200000523,
+      "loss": 0.8126125335693359,
+      "gradientNorm": 0.14643791317939758,
+      "inputTokens": 530,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.644920900005673,
+      "loss": 0.5829799175262451,
+      "gradientNorm": 0.1438492089509964,
+      "inputTokens": 500,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.043110099999467,
+      "loss": 0.6807762384414673,
+      "gradientNorm": 0.18294215202331543,
+      "inputTokens": 532,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.659519599998021,
+      "loss": 0.47364622354507446,
+      "gradientNorm": 0.18854904174804688,
+      "inputTokens": 498,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.045989499994903,
+      "loss": 0.54523766040802,
+      "gradientNorm": 0.16338442265987396,
+      "inputTokens": 532,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.912945700001728,
+      "loss": 0.6104724407196045,
+      "gradientNorm": 0.18060967326164246,
+      "inputTokens": 501,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.349051800003508,
+      "loss": 0.565717339515686,
+      "gradientNorm": 0.20593136548995972,
+      "inputTokens": 530,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.829113600004348,
+      "loss": 0.4391860067844391,
+      "gradientNorm": 0.1941087692975998,
+      "inputTokens": 501,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.229483200004324,
+      "loss": 0.6307282447814941,
+      "gradientNorm": 0.28092753887176514,
+      "inputTokens": 528,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 5.288736199996492,
+      "loss": 0.5936259031295776,
+      "gradientNorm": 0.2364228516817093,
+      "inputTokens": 497,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.078547299999627,
+      "loss": 0.8599526286125183,
+      "gradientNorm": 0.4042549729347229,
+      "inputTokens": 526,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.6863081000046805,
+      "loss": 0.39623695611953735,
+      "gradientNorm": 0.25501009821891785,
+      "inputTokens": 502,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.19875139999931,
+      "loss": 0.6971350908279419,
+      "gradientNorm": 0.4057627022266388,
+      "inputTokens": 531,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.714716199996474,
+      "loss": 0.48625749349594116,
+      "gradientNorm": 0.29254043102264404,
+      "inputTokens": 503,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.048969299998134,
+      "loss": 0.6805166006088257,
+      "gradientNorm": 0.4055556058883667,
+      "inputTokens": 536,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.632382700001472,
+      "loss": 0.4165594279766083,
+      "gradientNorm": 0.30412954092025757,
+      "inputTokens": 498,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.329532300005667,
+      "loss": 0.5300068855285645,
+      "gradientNorm": 0.42474251985549927,
+      "inputTokens": 529,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.533354500003043,
+      "loss": 0.47750958800315857,
+      "gradientNorm": 0.3537687659263611,
+      "inputTokens": 499,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.053322399995523,
+      "loss": 0.6277878284454346,
+      "gradientNorm": 0.466311514377594,
+      "inputTokens": 531,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.632007100000919,
+      "loss": 0.41409358382225037,
+      "gradientNorm": 0.36487850546836853,
+      "inputTokens": 496,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.064788999996381,
+      "loss": 0.4971889555454254,
+      "gradientNorm": 0.48750805854797363,
+      "inputTokens": 528,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.604351499998302,
+      "loss": 0.3766596019268036,
+      "gradientNorm": 0.48982712626457214,
+      "inputTokens": 498,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.098864599996887,
+      "loss": 0.5680869221687317,
+      "gradientNorm": 0.5966548919677734,
+      "inputTokens": 527,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.726581700000679,
+      "loss": 0.40157952904701233,
+      "gradientNorm": 0.5088236927986145,
+      "inputTokens": 495,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.485605600006238,
+      "loss": 0.7361496686935425,
+      "gradientNorm": 0.6097641587257385,
+      "inputTokens": 529,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 5.140835699996387,
+      "loss": 0.6216699481010437,
+      "gradientNorm": 0.5558061003684998,
+      "inputTokens": 505,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.138530600001104,
+      "loss": 0.4603123068809509,
+      "gradientNorm": 0.6052080392837524,
+      "inputTokens": 528,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.559339700004784,
+      "loss": 0.4991401135921478,
+      "gradientNorm": 0.547341525554657,
+      "inputTokens": 500,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 6.447453199994925,
+      "loss": 0.5409125089645386,
+      "gradientNorm": 0.6538149118423462,
+      "inputTokens": 533,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.725688999998965,
+      "loss": 0.6292319297790527,
+      "gradientNorm": 0.6366828680038452,
+      "inputTokens": 501,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.05568299999868,
+      "loss": 0.4903933107852936,
+      "gradientNorm": 0.7143121361732483,
+      "inputTokens": 532,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.671776399998635,
+      "loss": 0.4177764058113098,
+      "gradientNorm": 0.6659618616104126,
+      "inputTokens": 503,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.375373599999875,
+      "loss": 0.6007038950920105,
+      "gradientNorm": 0.8340984582901001,
+      "inputTokens": 529,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.692353099999309,
+      "loss": 0.3917332589626312,
+      "gradientNorm": 0.7244037389755249,
+      "inputTokens": 498,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.174050299996452,
+      "loss": 0.446787029504776,
+      "gradientNorm": 0.789813756942749,
+      "inputTokens": 526,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.904317800006538,
+      "loss": 0.38056573271751404,
+      "gradientNorm": 0.6155110001564026,
+      "inputTokens": 501,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 7.484082499999204,
+      "loss": 0.5580465793609619,
+      "gradientNorm": 0.849267840385437,
+      "inputTokens": 533,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 5.441689999999653,
+      "loss": 0.5791701078414917,
+      "gradientNorm": 0.7294917106628418,
+      "inputTokens": 502,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.828421999998682,
+      "loss": 0.8025026321411133,
+      "gradientNorm": 1.0543173551559448,
+      "inputTokens": 531,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.785232099995483,
+      "loss": 0.33662500977516174,
+      "gradientNorm": 0.5618259906768799,
+      "inputTokens": 502,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 6.329309900000226,
+      "loss": 0.3966025710105896,
+      "gradientNorm": 0.9136852622032166,
+      "inputTokens": 533,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.670456199994078,
+      "loss": 0.3181392550468445,
+      "gradientNorm": 0.32794880867004395,
+      "inputTokens": 499,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 6.414888100000098,
+      "loss": 0.621768593788147,
+      "gradientNorm": 1.3170744180679321,
+      "inputTokens": 533,
+      "supervisedTokens": 70
+    },
+    {
+      "seconds": 4.813200699994923,
+      "loss": 0.39196547865867615,
+      "gradientNorm": 0.7603070735931396,
+      "inputTokens": 501,
+      "supervisedTokens": 57
+    },
+    {
+      "seconds": 5.086195299998508,
+      "loss": 0.5981420278549194,
+      "gradientNorm": 1.5486586093902588,
+      "inputTokens": 531,
+      "supervisedTokens": 71
+    },
+    {
+      "seconds": 4.6733352999945055,
+      "loss": 0.5291714072227478,
+      "gradientNorm": 0.7976910471916199,
+      "inputTokens": 500,
+      "supervisedTokens": 57
+    }
+  ],
+  "initialAvailableRamBytes": 15011110912,
+  "initialAdapterHash": "33ba8c009d8e6b287c61cd6b996e86ef4b6af9ebd4f4adf0f02fdfdf1c899ffe",
+  "trainableParameters": 40960,
+  "totalParameters": 4022509056,
+  "trainingSeconds": 246.57039589999476,
+  "finalAdapterHash": "faec1a8fba0a3cfeac6c210ebfb4722e0fe28572f27d83e4a724d8aead555f20",
+  "files": [
+    {
+      "path": "adapter/adapter_config.json",
+      "size": 1079,
+      "sha256": "71b1c95f99f5692a4c322dae27f256b223af3d7f8ed582f3b32a9661c8cfb49b"
+    },
+    {
+      "path": "adapter/adapter_model.safetensors",
+      "size": 164400,
+      "sha256": "193c138c70704f2ebaaf5701e54310e7e52bf0469efa7d4f02cea56a56fe0405"
+    },
+    {
+      "path": "adapter/README.md",
+      "size": 5304,
+      "sha256": "04838710b88e4d9e6a9c51316bac35fcc480c4f3cb88fa075309de469c64f6f5"
+    },
+    {
+      "path": "adapter/resume.pt",
+      "size": 337001,
+      "sha256": "fbfa19b9162c975e86ef439b36120125384e4404659723eedc6f9160a8bd8d37"
+    },
+    {
+      "path": "merged/config.json",
+      "size": 1665,
+      "sha256": "65dd6190661d55339e4f562dd8e9a1e622d5e429d14b1c41fefd159252f55fc4"
+    },
+    {
+      "path": "merged/generation_config.json",
+      "size": 238,
+      "sha256": "835fffe355c9438e7a25be099b3fccaa98350b83451f9fd2d99512e74f1ade48"
+    },
+    {
+      "path": "merged/LICENSE",
+      "size": 11343,
+      "sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e"
+    },
+    {
+      "path": "merged/merges.txt",
+      "size": 1671839,
+      "sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+    },
+    {
+      "path": "merged/model-00001-of-00005.safetensors",
+      "size": 1989095024,
+      "sha256": "fc11ad56e8c702d79ee7cd13a7fb31cb41e2daa5758c7568b2f0ca01524dd896"
+    },
+    {
+      "path": "merged/model-00002-of-00005.safetensors",
+      "size": 1992409040,
+      "sha256": "c5ce8fa0f28ac19b0f21c9b520f10d181cd58f83fe301bd7c7146fba74f5ecdf"
+    },
+    {
+      "path": "merged/model-00003-of-00005.safetensors",
+      "size": 1997656952,
+      "sha256": "21efcee362c17d33b63241707499fd2e16f0c03bf0e56f7b5e4bfa6f823c1f0a"
+    },
+    {
+      "path": "merged/model-00004-of-00005.safetensors",
+      "size": 1963572880,
+      "sha256": "8c0394a81d3621940d467f35a9a506986f176a3075adb5e24a6bcf10d7ab128d"
+    },
+    {
+      "path": "merged/model-00005-of-00005.safetensors",
+      "size": 102247936,
+      "sha256": "1166c85f5b33e9dc60916d0b550161dd6232273ba06dfb6c74809becc168619c"
+    },
+    {
+      "path": "merged/model.safetensors.index.json",
+      "size": 33261,
+      "sha256": "b7013e2489eaad9e4b62179b73ad52757f7a43ec7948cfae28d113b1ab02a91b"
+    },
+    {
+      "path": "merged/tokenizer.json",
+      "size": 11422654,
+      "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+    },
+    {
+      "path": "merged/tokenizer_config.json",
+      "size": 9377,
+      "sha256": "a62ff0a2472a0fa1b8eaabcb57c59b58afa42a22831dc141400b6e0cf2b65ce3"
+    },
+    {
+      "path": "merged/vocab.json",
+      "size": 2776833,
+      "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    }
+  ],
+  "peakWorkingSetBytes": 9048682496
+}

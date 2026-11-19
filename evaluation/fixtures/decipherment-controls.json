@@ -1,0 +1,83 @@
+[
+  {
+    "learner": {
+      "protocol": "xeno-decipherment-1", "id": "control-segmentation", "task": "segmentation",
+      "budgets": { "maxToolCalls": 8, "maxOutputTokens": 2048, "timeoutMs": 90000 },
+      "observations": [
+        { "id": "o0", "surface": "猫山", "segments": ["猫", "山"] },
+        { "id": "o1", "surface": "猫山水", "segments": ["猫山", "水"] }
+      ],
+      "challenges": [
+        { "id": "c0", "surface": "水猫" },
+        { "id": "c1", "surface": "猫山" },
+        { "id": "c2", "surface": "火" }
+      ]
+    },
+    "truth": [
+      { "id": "c0", "status": "identified", "acceptable": [["水", "猫"]] },
+      { "id": "c1", "status": "ambiguous", "acceptable": [["猫", "山"], ["猫山"]] },
+      { "id": "c2", "status": "insufficient", "acceptable": [] }
+    ],
+    "provenance": {
+      "generator": "independent-controls-1", "lineage": "control-segmentation", "split": "development",
+      "mechanisms": ["inventory-segmentation"], "source": "independent-fixture"
+    }
+  },
+  {
+    "learner": {
+      "protocol": "xeno-decipherment-1", "id": "control-lexical", "task": "lexical",
+      "budgets": { "maxToolCalls": 8, "maxOutputTokens": 2048, "timeoutMs": 90000 },
+      "formCandidates": ["ka", "tu"], "meaningCandidates": ["moon", "sun"],
+      "observations": [],
+      "challenges": [{ "id": "c0", "form": "ka" }]
+    },
+    "truth": [{ "id": "c0", "status": "ambiguous", "acceptable": [["moon"], ["sun"]] }],
+    "provenance": {
+      "generator": "independent-controls-1", "lineage": "control-lexical", "split": "development",
+      "mechanisms": ["ungrounded-bijection"], "source": "independent-fixture"
+    }
+  },
+  {
+    "learner": {
+      "protocol": "xeno-decipherment-1", "id": "control-correspondence", "task": "correspondence",
+      "budgets": { "maxToolCalls": 8, "maxOutputTokens": 2048, "timeoutMs": 90000 },
+      "observations": [
+        { "id": "o0", "source": ["p"], "target": ["f"] },
+        { "id": "o1", "source": ["a"], "target": ["a"] }
+      ],
+      "challenges": [{ "id": "c0", "source": ["p", "a", "p"] }]
+    },
+    "truth": [
+      { "id": "c0", "status": "ambiguous", "acceptable": [["f", "a", "f"], ["f", "a", "p"], ["p", "a", "f"]] }
+    ],
+    "provenance": {
+      "generator": "independent-controls-1", "lineage": "control-correspondence", "split": "development",
+      "mechanisms": ["position-ambiguity"], "source": "independent-fixture"
+    }
+  },
+  {
+    "learner": {
+      "protocol": "xeno-decipherment-1", "id": "control-morphology", "task": "morphology",
+      "budgets": { "maxToolCalls": 8, "maxOutputTokens": 2048, "timeoutMs": 90000 },
+      "observations": [
+        { "id": "o0", "lemma": "a", "features": ["plural"], "form": "aa" },
+        { "id": "o1", "lemma": "walk", "features": ["past"], "form": "walked" },
+        { "id": "o2", "lemma": "jump", "features": ["past"], "form": "jumped" }
+      ],
+      "challenges": [
+        { "id": "c0", "lemma": "b", "features": ["plural"] },
+        { "id": "c1", "lemma": "talk", "features": ["past"] },
+        { "id": "c2", "lemma": "talk", "features": ["future"] }
+      ]
+    },
+    "truth": [
+      { "id": "c0", "status": "ambiguous", "acceptable": [["ab"], ["ba"]] },
+      { "id": "c1", "status": "identified", "acceptable": [["talked"]] },
+      { "id": "c2", "status": "insufficient", "acceptable": [] }
+    ],
+    "provenance": {
+      "generator": "independent-controls-1", "lineage": "control-morphology", "split": "development",
+      "mechanisms": ["suffix", "affix-ambiguity"], "source": "independent-fixture"
+    }
+  }
+]

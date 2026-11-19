@@ -1,0 +1,158 @@
+[
+  {
+    "split": "development",
+    "arm": "base",
+    "percentileMethod": "nearest-rank performanceSummary",
+    "latency": {
+      "count": 48,
+      "medianMs": 1031.8392999999924,
+      "p95Ms": 1341.0565999999817,
+      "minMs": 731.8203000000212,
+      "maxMs": 1798.8077000000048
+    },
+    "preload": {
+      "arm": "base",
+      "durationMs": 117928.1869,
+      "allocation": {
+        "models": [
+          {
+            "name": "xeno-lexical-base:cdbee75f17c01a7c",
+            "model": "xeno-lexical-base:cdbee75f17c01a7c",
+            "size": 9427369328,
+            "digest": "6c317e5f10611b5f1e0927132deea3f5d47a5ddcc3d827276d40d69f8dc4cd53",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen3",
+              "families": [
+                "qwen3"
+              ],
+              "parameter_size": "4.0B",
+              "quantization_level": "BF16"
+            },
+            "expires_at": "2026-11-05T21:25:45.3637621-05:00",
+            "size_vram": 9427369328,
+            "context_length": 8192
+          }
+        ]
+      }
+    }
+  },
+  {
+    "split": "development",
+    "arm": "candidate",
+    "percentileMethod": "nearest-rank performanceSummary",
+    "latency": {
+      "count": 48,
+      "medianMs": 1038.758899999957,
+      "p95Ms": 1325.6570000000065,
+      "minMs": 732.8589999999967,
+      "maxMs": 1425.3386000000173
+    },
+    "preload": {
+      "arm": "candidate",
+      "durationMs": 126491.88190000001,
+      "allocation": {
+        "models": [
+          {
+            "name": "xeno-lexical-candidate:faec1a8fba0a3cfe",
+            "model": "xeno-lexical-candidate:faec1a8fba0a3cfe",
+            "size": 9427369328,
+            "digest": "ed9a910c1fe878ad901b7b47201fc0d87a49f05da9ab0d01e3420c2d683ed62e",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen3",
+              "families": [
+                "qwen3"
+              ],
+              "parameter_size": "4.0B",
+              "quantization_level": "BF16"
+            },
+            "expires_at": "2026-11-05T21:28:44.2296536-05:00",
+            "size_vram": 9427369328,
+            "context_length": 8192
+          }
+        ]
+      }
+    }
+  },
+  {
+    "split": "final",
+    "arm": "base",
+    "percentileMethod": "nearest-rank performanceSummary",
+    "latency": {
+      "count": 48,
+      "medianMs": 1052.8059000000067,
+      "p95Ms": 1347.3734000000113,
+      "minMs": 749.4726999999984,
+      "maxMs": 1402.4262000000163
+    },
+    "preload": {
+      "arm": "base",
+      "durationMs": 117939.23980000001,
+      "allocation": {
+        "models": [
+          {
+            "name": "xeno-lexical-base:cdbee75f17c01a7c",
+            "model": "xeno-lexical-base:cdbee75f17c01a7c",
+            "size": 9427369328,
+            "digest": "6c317e5f10611b5f1e0927132deea3f5d47a5ddcc3d827276d40d69f8dc4cd53",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen3",
+              "families": [
+                "qwen3"
+              ],
+              "parameter_size": "4.0B",
+              "quantization_level": "BF16"
+            },
+            "expires_at": "2026-11-05T21:32:39.3506881-05:00",
+            "size_vram": 9427369328,
+            "context_length": 8192
+          }
+        ]
+      }
+    }
+  },
+  {
+    "split": "final",
+    "arm": "candidate",
+    "percentileMethod": "nearest-rank performanceSummary",
+    "latency": {
+      "count": 48,
+      "medianMs": 1038.7577000000165,
+      "p95Ms": 1308.3246999999974,
+      "minMs": 728.2614999999641,
+      "maxMs": 1380.1933999999892
+    },
+    "preload": {
+      "arm": "candidate",
+      "durationMs": 126491.27169999998,
+      "allocation": {
+        "models": [
+          {
+            "name": "xeno-lexical-candidate:faec1a8fba0a3cfe",
+            "model": "xeno-lexical-candidate:faec1a8fba0a3cfe",
+            "size": 9427369328,
+            "digest": "ed9a910c1fe878ad901b7b47201fc0d87a49f05da9ab0d01e3420c2d683ed62e",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen3",
+              "families": [
+                "qwen3"
+              ],
+              "parameter_size": "4.0B",
+              "quantization_level": "BF16"
+            },
+            "expires_at": "2026-11-05T21:35:38.8179918-05:00",
+            "size_vram": 9427369328,
+            "context_length": 8192
+          }
+        ]
+      }
+    }
+  }
+]

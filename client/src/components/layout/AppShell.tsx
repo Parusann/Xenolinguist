@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { lazy, Suspense, useState, useMemo, useCallback } from 'react'
 import { Sidebar } from './Sidebar'
 import { XenoMark } from '@/components/common/XenoMark'
 import { AIChat } from './AIChat'
@@ -26,13 +26,15 @@ import { useProfileDraft } from '@/hooks/useProfileDraft'
 import { ProposalReviewContext, type ResearchReviewRequest } from '@/stores/proposal-review-context'
 
 const SANDBOX_PHASE = { id: 'sandbox', label: 'Sandbox', icon: '◈', desc: 'AI-generated language challenge' } as const
+const ATLAS_PHASE = { id: 'atlas', label: 'Atlas', icon: '◎', desc: 'Explicit evidence transfer and reference comparison' } as const
+const AtlasPanel = lazy(() => import('@/components/atlas/AtlasPanel').then(module => ({ default: module.AtlasPanel })))
 
 export function AppShell() {
   const { profile } = useProfile()
   const { ready: connected, selectedModel } = useOllama()
   const { undo } = useUndo()
   const isSandbox = profile?.is_sandbox
-  const phases = isSandbox ? [SANDBOX_PHASE, ...PHASES] : PHASES
+  const phases = isSandbox ? [SANDBOX_PHASE, ...PHASES, ATLAS_PHASE] : [...PHASES, ATLAS_PHASE]
   const [storedPhase, setActivePhase] = useProfileDraft<PhaseId>('activePhase', isSandbox ? 'sandbox' : 'samples')
   const activePhase = phases.some(phase => phase.id === storedPhase) ? storedPhase : isSandbox ? 'sandbox' : 'samples'
   const [logOpen, setLogOpen] = useState(false)
@@ -126,6 +128,7 @@ export function AppShell() {
       case 'grammar': return <GrammarAnalyzer />
       case 'translation': return <TranslationEngine />
       case 'dashboard': return <Dashboard />
+      case 'atlas': return <Suspense fallback={<p role="status">Opening Atlas tools…</p>}><AtlasPanel /></Suspense>
     }
   }
 

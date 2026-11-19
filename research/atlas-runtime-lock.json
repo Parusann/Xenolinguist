@@ -1,0 +1,15 @@
+{
+  "postgres": {
+    "version": "17.11",
+    "url": "https://get.enterprisedb.com/postgresql/postgresql-17.11-5-windows-x64-binaries.zip",
+    "sha256": "80379b2c04d51c30225532e0ae04509899141e9957ed096fe749d7fd9df8f82f",
+    "checksumUrl": "https://get.enterprisedb.com/postgresql/postgresql-17.11-5-windows-x64-binaries.zip.sha256",
+    "provider": "https://www.enterprisedb.com/download-postgresql-binaries"
+  },
+  "restic": {
+    "version": "0.19.1",
+    "url": "https://github.com/restic/restic/releases/download/v0.19.1/restic_0.19.1_windows_amd64.zip",
+    "sha256": "da948ad707ed690426473aaba2046cd61f8f90f6f0e7dab6be0d5796531de67d",
+    "provider": "https://github.com/restic/restic/releases/tag/v0.19.1"
+  }
+}

@@ -1,0 +1,55 @@
+name: Atlas database and browser gates
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: atlas-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17.11@sha256:748a18a54d3842d43bc156f0840d78029b8d349e0feca98c12b9c4ce3404a6b3
+        env:
+          POSTGRES_USER: atlas_admin
+          POSTGRES_PASSWORD: atlas-ci-disposable-only
+          POSTGRES_DB: xenolinguist_atlas
+        ports:
+          - 127.0.0.1:5438:5432
+        options: >-
+          --health-cmd "pg_isready -U atlas_admin -d xenolinguist_atlas"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      ATLAS_ADMIN_DATABASE_URL: postgresql://atlas_admin:atlas-ci-disposable-only@127.0.0.1:5438/xenolinguist_atlas
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: node cloud/prepare-ci.mjs
+      - run: npm run build -w cloud
+      - run: npx playwright install --with-deps chromium
+      - name: Verify PostgreSQL ownership, uploads, jobs and desktop authorization
+        run: node --import tsx cloud/src/verify.ts "$XENO_RESEARCH_ROOT/atlas-foundation.json"
+      - name: Verify the compiled browser workflow and accessibility
+        run: node --import tsx cloud/src/verify-web.ts "$XENO_RESEARCH_ROOT/atlas-browser"
+      - name: Collect Atlas records
+        if: always()
+        run: |
+          mkdir -p test-results/atlas
+          cp "$XENO_RESEARCH_ROOT/atlas-foundation.json" test-results/atlas/ 2>/dev/null || true
+          cp -r "$XENO_RESEARCH_ROOT/atlas-browser" test-results/atlas/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: atlas-database-browser
+          path: test-results/atlas/
+          retention-days: 14

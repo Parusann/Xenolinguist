@@ -1,0 +1,73 @@
+{
+  "version": "atlas-recovery-performance-1",
+  "checkedAt": "2026-11-06T07:28:24.330Z",
+  "checks": [
+    "Injected zero free space and a missing storage path roll back upload publication without creating objects or versions",
+    "The consistent encrypted repository contains no plaintext copy of the deliberately marked upload",
+    "An incorrect repository password is rejected before database recovery",
+    "Restored passwords sign in, raw bytes and reports match, and cross-account resources remain unavailable",
+    "All table fingerprints and object checksums match, forced RLS survives, and the saved comparison replays",
+    "A corrupted primary object prevents a new snapshot from being published",
+    "Cached metadata meets the 500 ms p95 target and ten declared 5,000-row jobs meet the 60-second target"
+  ],
+  "snapshot": {
+    "snapshotId": "f36b6a8c9296ed63a2f0611a7c5511a2e2174dd0aa9680740b926b764c9c806d",
+    "createdAt": "2026-11-06T07:28:02.243Z",
+    "tables": 19,
+    "objects": 2,
+    "stagingMs": 515.2294999999995,
+    "totalMs": 5217.8721,
+    "processedBytes": 152593
+  },
+  "restored": {
+    "snapshotId": "f36b6a8c9296ed63a2f0611a7c5511a2e2174dd0aa9680740b926b764c9c806d",
+    "verifiedAt": "2026-11-06T07:28:11.325Z",
+    "tables": 19,
+    "objects": 2,
+    "ownerScopes": 2,
+    "replayedReports": 1,
+    "restoredAccounts": 2,
+    "sourceDatabase": "xeno_atlas_test_ec0222135109",
+    "restoreMs": 3723.3238,
+    "passed": true
+  },
+  "performance": {
+    "metadata": {
+      "samples": 100,
+      "p50Ms": 1.5017000000007101,
+      "p95Ms": 1.9667000000008557,
+      "maximumMs": 3.6875
+    },
+    "boundedJobs": {
+      "samples": 10,
+      "p50Ms": 1106.8512999999984,
+      "p95Ms": 1231.972099999999,
+      "maximumMs": 1231.972099999999
+    },
+    "engine": {
+      "samples": 10,
+      "p50Ms": 73.65809999999692,
+      "p95Ms": 75.79910000000018,
+      "maximumMs": 75.79910000000018
+    },
+    "workload": {
+      "entries": 5000,
+      "formGraphemes": 96,
+      "referenceLanguages": 6,
+      "concepts": 8
+    },
+    "metadataWarmupRequests": 10,
+    "verifierMaximumRssKiB": 507568,
+    "cpu": "AMD Ryzen 9 7900 12-Core Processor             ",
+    "logicalCpus": 24,
+    "totalMemoryGiB": 31.144248962402344,
+    "limitations": [
+      "Local loopback on one Windows host, warmed metadata and filesystem caches. No physical cold-disk or power-loss test.",
+      "API and client timing run in the verifier process. Reported RSS excludes PostgreSQL and restic child processes.",
+      "End-to-end job timing includes queue scheduling and 100 ms polling resolution. Small samples are not a service-level guarantee."
+    ]
+  },
+  "initialFreeGiB": 80.41257858276367,
+  "elapsedMs": 27817.7311,
+  "passed": true
+}

@@ -1,0 +1,7 @@
+{
+  "checkedAt": "2026-11-06T01:59:53.5408358Z",
+  "callerReturnedWhileServicesRunning": true,
+  "ready": true,
+  "gracefulShutdown": true,
+  "listenersClosed": true
+}

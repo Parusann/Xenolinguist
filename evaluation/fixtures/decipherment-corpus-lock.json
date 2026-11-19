@@ -1,0 +1,6 @@
+{
+  "corpusVersion": "decipherment-corpus-1",
+  "train": "cd72af14ee13beff4fbd3defa358198fd2dd154061acdd7214b48fcd9b67cfce",
+  "development": "837361f46c166f51d6adffafe4f2cc6a48918641a7fde44cabdf8b22915f9a4c",
+  "final": "aea5ac7b5903dcb67d95dd2165c14c6f1d5d87176c39f115755385008648afb7"
+}

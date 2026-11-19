@@ -1,0 +1,62 @@
+{
+  "repository": "https://github.com/lexibank/wold",
+  "revision": "1df62b9bdc7292b35982aea49b4d5bd1951f6f3e",
+  "release": "v4.2",
+  "doi": "https://doi.org/10.5281/zenodo.21415389",
+  "license": "CC-BY-4.0",
+  "languages": [
+    "Swahili",
+    "English",
+    "KildinSaami",
+    "Sakha",
+    "Japanese",
+    "MandarinChinese"
+  ],
+  "concepts": [
+    "1-31",
+    "1-52",
+    "1-53",
+    "1-81",
+    "4-15",
+    "4-21",
+    "4-22",
+    "4-26",
+    "4-27",
+    "4-33",
+    "8-6"
+  ],
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "945fbcb37deca05bccd7c3ca0e261679f1f5373515504fdbad68f6f3cf6f49b9"
+    },
+    {
+      "path": "README.md",
+      "sha256": "0e0755dfdb459b15c3bb7d1c38178656645cbede0750b212c92be167e08b3dae"
+    },
+    {
+      "path": "cldf/forms.csv",
+      "sha256": "2a7e5f5bd981063758a018fa5b264d3e8ac63cf3768f38c56e6b18942a59a6c7"
+    },
+    {
+      "path": "cldf/languages.csv",
+      "sha256": "b4138940684e909c1c64bfb8f680d307c97b4deedf0732ee83ab92c097413084"
+    },
+    {
+      "path": "cldf/parameters.csv",
+      "sha256": "c06348f803fc4d5a607d60e8d94d8dfe47d09afae11f623ea3083a5998251964"
+    },
+    {
+      "path": "cldf/contributions.csv",
+      "sha256": "e1bfc77bb30a2394e9ff50de0957ad6b5be4c47e4d19fa675a2f6ceefb1c97f1"
+    },
+    {
+      "path": "cldf/contributors.csv",
+      "sha256": "26eb8e7f4b68a8e2e1fae30ea03d61b06ff827febc0def278d222da3bca4ed18"
+    },
+    {
+      "path": "cldf/sources.bib",
+      "sha256": "65472165e2f14d8b22467cb95f4a1573abe42a6b06383a8bf25a25bf45031f0a"
+    }
+  ]
+}

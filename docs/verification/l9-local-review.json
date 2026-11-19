@@ -1,0 +1,63 @@
+{
+  "version": "atlas-beta-local-review-1",
+  "reviewDate": "2026-11-12",
+  "recordedAt": "2026-11-13T02:12:11.741Z",
+  "base": "ef1bed9",
+  "source": {
+    "command": "npm run check:source",
+    "passed": true,
+    "serverResearchPassed": 543,
+    "clientPassed": 37,
+    "nativeUnitSkipped": 3,
+    "toolingPassed": 11,
+    "lint": true,
+    "typecheck": true,
+    "desktopBuild": true,
+    "logSha256": "a2c8a12a14a40ec3cb79567e8e3c8298b314021967c87f34ae41444164df66f4",
+    "note": "Electron and fast-uri were patched afterward; Electron types and actual desktop acceptance reran. Exact-head source and installed gates run in GitHub."
+  },
+  "acceptance": {
+    "foundation": {
+      "passed": true,
+      "phases": 29,
+      "record": "l9-review-foundation.json"
+    },
+    "browser": {
+      "passed": true,
+      "phases": 11,
+      "record": "l9-review-browser.json"
+    },
+    "desktop": {
+      "passed": true,
+      "phases": 6,
+      "record": "l9-review-desktop.json"
+    },
+    "recovery": {
+      "passed": true,
+      "phases": 8,
+      "record": "l9-review-recovery.json"
+    }
+  },
+  "lockSha256": "f342a84e53bab56cf226a4aa4828ebcbc9a0297cf88fe6f59d8f0306654593d5",
+  "productionAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "allAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 12,
+    "high": 0,
+    "critical": 0,
+    "total": 12
+  },
+  "limits": [
+    "Same-drive recovery in the current cluster/account; independent storage/key and clean-host restore remain future gates.",
+    "No model superiority demonstrated; all existing research results retained.",
+    "Recorded demo is the historical November 6 run; review regressions use current source."
+  ]
+}

@@ -23,6 +23,13 @@ contextBridge.exposeInMainWorld('xeno', {
   readAudioDraft: (id: string) => ipcRenderer.invoke('audio-drafts:read', id),
   writeAudioDraft: (id: string, record: unknown) => ipcRenderer.invoke('audio-drafts:write', id, record),
   removeAudioDraft: (id: string) => ipcRenderer.invoke('audio-drafts:remove', id),
+  atlas: {
+    status: () => ipcRenderer.invoke('atlas:status'),
+    connect: (code: string) => ipcRenderer.invoke('atlas:connect', code),
+    request: (request: unknown) => ipcRenderer.invoke('atlas:request', request),
+    disconnect: () => ipcRenderer.invoke('atlas:disconnect'),
+    open: () => ipcRenderer.invoke('atlas:open'),
+  },
   onFlushRequest: subscribe('app:flush-request'),
   onCloseCancelled: subscribe('app:close-cancelled'),
   reportFlushResult: (result: { requestId: string; saved: boolean }) => ipcRenderer.invoke('app:flush-result', result),

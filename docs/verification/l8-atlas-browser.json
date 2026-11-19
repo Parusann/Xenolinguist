@@ -1,0 +1,39 @@
+{
+  "version": "atlas-browser-verification-1",
+  "checkedAt": "2026-11-06T07:11:19.763Z",
+  "compiledApplication": true,
+  "browser": "153.0.8010.12",
+  "checks": [
+    "Account enrollment opens a private collection through the compiled browser application",
+    "File selection, source rights, local parsing and permission review publish an immutable evidence version",
+    "The browser downloads the original UTF-8 file without normalization changes",
+    "The real background worker returns an inspectable source-pinned report that exports through the browser",
+    "The mobile evidence screen fits a 390-pixel viewport and retains account controls",
+    "Invalid duplicate IDs fail review and an unglossed sample produces an explicit insufficient-evidence report",
+    "The reference gallery preserves language coverage, missing structure and source notices",
+    "Reviewed browser authorization issues a one-time code and explicit device revocation takes effect immediately",
+    "An unavailable API has a recoverable state and reconnection preserves the signed-in workspace",
+    "Reviewed deletion revokes the collection and the worker retires its physical objects",
+    "Sign-out revokes the session and protects the saved-data endpoints"
+  ],
+  "screenshots": [
+    "atlas-sign-in.png",
+    "atlas-collection.png",
+    "atlas-upload-review.png",
+    "atlas-evidence-report.png",
+    "atlas-mobile-report.png",
+    "atlas-references.png"
+  ],
+  "accessibility": "Zero WCAG A/AA violations in 6 automated audits",
+  "audits": [
+    "auth",
+    "collection",
+    "report",
+    "mobile",
+    "references",
+    "system"
+  ],
+  "pageErrors": [],
+  "contentSecurityPolicyErrors": [],
+  "passed": true
+}

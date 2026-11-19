@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-11-19T05:57:04.329Z",
+  "lockfile": {
+    "bytes": 401831,
+    "sha256": "8b29f72ab89565ca838b597e3b9af4d6d27b9aaeb9ce8cd954d7476276f913d7"
+  },
+  "auditReportVersion": 2,
+  "vulnerabilities": {},
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "dependencies": {
+      "prod": 287,
+      "dev": 418,
+      "optional": 129,
+      "peer": 20,
+      "peerOptional": 0,
+      "total": 816
+    }
+  }
+}

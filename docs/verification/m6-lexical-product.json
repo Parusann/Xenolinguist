@@ -1,0 +1,1767 @@
+{
+  "method": "inventory-constraints-1",
+  "split": "development",
+  "trainingLineagesUsed": false,
+  "records": 16,
+  "lineages": 8,
+  "metrics": {
+    "scheduled": 32,
+    "success": 32,
+    "identifiedAccuracy": 1,
+    "identifiedAnswerCoverage": 1,
+    "identifiedSelectiveAccuracy": 1,
+    "uncertaintySuccess": 1,
+    "falseClaims": 0,
+    "falseClaimsPerScheduledItem": 0,
+    "falseClaimsPerAssertion": 0,
+    "answeredIdentifiedBrier": 0.25,
+    "failures": 0
+  },
+  "confidence": "Fixed 0.5 only for compatibility with the benchmark scorer. The product proposal does not claim calibrated confidence.",
+  "rows": [
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e5",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "iθo",
+          "ŋɣi",
+          "ʃfo",
+          "tɣŋ"
+        ],
+        "meaningCandidates": [
+          "moon",
+          "water",
+          "stone",
+          "sun"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "iθo",
+            "meaning": "stone"
+          },
+          {
+            "id": "o1",
+            "form": "ʃfo",
+            "meaning": "sun"
+          },
+          {
+            "id": "o2",
+            "form": "tɣŋ",
+            "meaning": "moon"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "iuw"
+          },
+          {
+            "id": "c1",
+            "form": "ŋɣi"
+          }
+        ]
+      },
+      "inputHash": "ac5ebc6132a577e5f86d28625fda8c68de2db3a2befcc5199caaf307479e3849",
+      "lineage": "lineage-2200002",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "identified",
+            "meanings": [
+              "water"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.5914999999999964,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "identified",
+          "outcome": "answer",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": 0.5,
+          "brier": 0.25
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e6",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "zuk",
+          "θbd",
+          "ɣɣθ",
+          "gri"
+        ],
+        "meaningCandidates": [
+          "moon",
+          "stone",
+          "water",
+          "sun"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "gri",
+            "meaning": "moon"
+          },
+          {
+            "id": "o1",
+            "form": "ɣɣθ",
+            "meaning": "stone"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "θbd"
+          },
+          {
+            "id": "c1",
+            "form": "ʃsŋ"
+          }
+        ]
+      },
+      "inputHash": "ae1a278a887f5329011c5772c458d44c823bb1f136da1025dfde6a0a71ea4492",
+      "lineage": "lineage-2200000",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "ambiguous",
+            "meanings": [
+              "water",
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.05989999999997053,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "ambiguous",
+          "outcome": "alternatives",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e7",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "ŋmk",
+          "mbo",
+          "ɣrl",
+          "frw"
+        ],
+        "meaningCandidates": [
+          "stone",
+          "moon",
+          "sun",
+          "water"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "ŋmk",
+            "meaning": "water"
+          },
+          {
+            "id": "o1",
+            "form": "ɣrl",
+            "meaning": "sun"
+          },
+          {
+            "id": "o2",
+            "form": "mbo",
+            "meaning": "stone"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "tdm"
+          },
+          {
+            "id": "c1",
+            "form": "frw"
+          }
+        ]
+      },
+      "inputHash": "23be3966415dd8841a3afc268a922c2bc38dea289a8563d7fe2df06d1434c7a2",
+      "lineage": "lineage-2200003",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "identified",
+            "meanings": [
+              "moon"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.056599999999889405,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "identified",
+          "outcome": "answer",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": 0.5,
+          "brier": 0.25
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e10",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "gri",
+          "ɣɣθ",
+          "zuk",
+          "θbd"
+        ],
+        "meaningCandidates": [
+          "water",
+          "moon",
+          "stone",
+          "sun"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "zuk",
+            "meaning": "water"
+          },
+          {
+            "id": "o1",
+            "form": "gri",
+            "meaning": "moon"
+          },
+          {
+            "id": "o2",
+            "form": "ɣɣθ",
+            "meaning": "stone"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "ʃsŋ"
+          },
+          {
+            "id": "c1",
+            "form": "θbd"
+          }
+        ]
+      },
+      "inputHash": "17e8c45c2f369388c5077a1d5b3ade3df7516493a6c9c3a2b29bfc2da5bacfc9",
+      "lineage": "lineage-2200000",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "identified",
+            "meanings": [
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.025300000000015643,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "identified",
+          "outcome": "answer",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": 0.5,
+          "brier": 0.25
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e12",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "tlv",
+          "bik",
+          "nzk",
+          "aau"
+        ],
+        "meaningCandidates": [
+          "water",
+          "sun",
+          "stone",
+          "moon"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "aau",
+            "meaning": "moon"
+          },
+          {
+            "id": "o1",
+            "form": "nzk",
+            "meaning": "sun"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "bik"
+          },
+          {
+            "id": "c1",
+            "form": "sbɣ"
+          }
+        ]
+      },
+      "inputHash": "8fb708ec9f379bb237beb3c20c5352595b4dbe958e433265f76d4c5b007fe731",
+      "lineage": "lineage-2200007",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "ambiguous",
+            "meanings": [
+              "water",
+              "stone"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.04100000000016735,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "ambiguous",
+          "outcome": "alternatives",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e14",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "nad",
+          "mur",
+          "knb",
+          "emm"
+        ],
+        "meaningCandidates": [
+          "water",
+          "stone",
+          "sun",
+          "moon"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "nad",
+            "meaning": "stone"
+          },
+          {
+            "id": "o1",
+            "form": "knb",
+            "meaning": "water"
+          },
+          {
+            "id": "o2",
+            "form": "emm",
+            "meaning": "moon"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "tŋl"
+          },
+          {
+            "id": "c1",
+            "form": "mur"
+          }
+        ]
+      },
+      "inputHash": "a5d2e7c550487f77f3226a594207ad98f0c56b996ad3867cf6041294153203d3",
+      "lineage": "lineage-2200005",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "identified",
+            "meanings": [
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.01770000000010441,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "identified",
+          "outcome": "answer",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": 0.5,
+          "brier": 0.25
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e19",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "ozm",
+          "uɣt",
+          "srt",
+          "agu"
+        ],
+        "meaningCandidates": [
+          "stone",
+          "water",
+          "sun",
+          "moon"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "agu",
+            "meaning": "water"
+          },
+          {
+            "id": "o1",
+            "form": "ozm",
+            "meaning": "moon"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "uɣt"
+          },
+          {
+            "id": "c1",
+            "form": "hsz"
+          }
+        ]
+      },
+      "inputHash": "9ed9b058285ae732d92ae3e7b9fe5b15a74b959fb1f040ddd3488509cd238cc2",
+      "lineage": "lineage-2200006",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "ambiguous",
+            "meanings": [
+              "stone",
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.01319999999986976,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "ambiguous",
+          "outcome": "alternatives",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e20",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "faŋ",
+          "tθt",
+          "ʃum",
+          "oii"
+        ],
+        "meaningCandidates": [
+          "water",
+          "moon",
+          "sun",
+          "stone"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "tθt",
+            "meaning": "moon"
+          },
+          {
+            "id": "o1",
+            "form": "faŋ",
+            "meaning": "stone"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "ʃum"
+          },
+          {
+            "id": "c1",
+            "form": "okŋ"
+          }
+        ]
+      },
+      "inputHash": "f9c8ffa643e036c18a8a34d694dec5f39a35683fc7241561f94317f8ac5d2ef3",
+      "lineage": "lineage-2200004",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "ambiguous",
+            "meanings": [
+              "water",
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.014799999999922875,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "ambiguous",
+          "outcome": "alternatives",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e23",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "tθt",
+          "ʃum",
+          "oii",
+          "faŋ"
+        ],
+        "meaningCandidates": [
+          "water",
+          "sun",
+          "moon",
+          "stone"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "faŋ",
+            "meaning": "stone"
+          },
+          {
+            "id": "o1",
+            "form": "oii",
+            "meaning": "water"
+          },
+          {
+            "id": "o2",
+            "form": "tθt",
+            "meaning": "moon"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "okŋ"
+          },
+          {
+            "id": "c1",
+            "form": "ʃum"
+          }
+        ]
+      },
+      "inputHash": "2f9f7ece6ff0861338ff53604c4865ca68dc576ea44c6b306f52af9f5424d709",
+      "lineage": "lineage-2200004",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "identified",
+            "meanings": [
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.014300000000048385,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "identified",
+          "outcome": "answer",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": 0.5,
+          "brier": 0.25
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e26",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "nad",
+          "knb",
+          "emm",
+          "mur"
+        ],
+        "meaningCandidates": [
+          "water",
+          "moon",
+          "sun",
+          "stone"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "knb",
+            "meaning": "water"
+          },
+          {
+            "id": "o1",
+            "form": "nad",
+            "meaning": "stone"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "tŋl"
+          },
+          {
+            "id": "c1",
+            "form": "mur"
+          }
+        ]
+      },
+      "inputHash": "d02448af564486184cb13e613f3ef70269505c00f078de9d992d27ff5d8d05fd",
+      "lineage": "lineage-2200005",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "ambiguous",
+            "meanings": [
+              "moon",
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.013999999999896318,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "ambiguous",
+          "outcome": "alternatives",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e35",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "uɣt",
+          "srt",
+          "ozm",
+          "agu"
+        ],
+        "meaningCandidates": [
+          "water",
+          "sun",
+          "moon",
+          "stone"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "agu",
+            "meaning": "water"
+          },
+          {
+            "id": "o1",
+            "form": "ozm",
+            "meaning": "moon"
+          },
+          {
+            "id": "o2",
+            "form": "srt",
+            "meaning": "sun"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "hsz"
+          },
+          {
+            "id": "c1",
+            "form": "uɣt"
+          }
+        ]
+      },
+      "inputHash": "5af609f1cd22e1f11a7ca6dba9a8902ec6d27822fd948b9dc6cecb66dff150bb",
+      "lineage": "lineage-2200006",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "identified",
+            "meanings": [
+              "stone"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.01520000000004984,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "identified",
+          "outcome": "answer",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": 0.5,
+          "brier": 0.25
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e38",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "wnθ",
+          "ggr",
+          "fgi",
+          "mmŋ"
+        ],
+        "meaningCandidates": [
+          "sun",
+          "stone",
+          "moon",
+          "water"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "mmŋ",
+            "meaning": "water"
+          },
+          {
+            "id": "o1",
+            "form": "fgi",
+            "meaning": "moon"
+          },
+          {
+            "id": "o2",
+            "form": "ggr",
+            "meaning": "stone"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "kgm"
+          },
+          {
+            "id": "c1",
+            "form": "wnθ"
+          }
+        ]
+      },
+      "inputHash": "bc3702fb8d346a7e399e16f8c2476daf03ef313c58617f4d7d657792b7640d58",
+      "lineage": "lineage-2200001",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "identified",
+            "meanings": [
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.015100000000074942,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "identified",
+          "outcome": "answer",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": 0.5,
+          "brier": 0.25
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e40",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "mbo",
+          "ɣrl",
+          "frw",
+          "ŋmk"
+        ],
+        "meaningCandidates": [
+          "water",
+          "moon",
+          "stone",
+          "sun"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "ŋmk",
+            "meaning": "water"
+          },
+          {
+            "id": "o1",
+            "form": "mbo",
+            "meaning": "stone"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "frw"
+          },
+          {
+            "id": "c1",
+            "form": "tdm"
+          }
+        ]
+      },
+      "inputHash": "3486e2d09dfa25362e00f4202c211d312ca8f88a706c803521245dc29e43b86a",
+      "lineage": "lineage-2200003",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "ambiguous",
+            "meanings": [
+              "moon",
+              "sun"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.012499999999818101,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "ambiguous",
+          "outcome": "alternatives",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e43",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "ŋɣi",
+          "tɣŋ",
+          "iθo",
+          "ʃfo"
+        ],
+        "meaningCandidates": [
+          "sun",
+          "water",
+          "moon",
+          "stone"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "iθo",
+            "meaning": "stone"
+          },
+          {
+            "id": "o1",
+            "form": "tɣŋ",
+            "meaning": "moon"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "iuw"
+          },
+          {
+            "id": "c1",
+            "form": "ŋɣi"
+          }
+        ]
+      },
+      "inputHash": "3ce4e9413d2a1eafb60f61167227c2f3ce01cc4fcd3e18eee2a4c4eaa323731d",
+      "lineage": "lineage-2200002",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "ambiguous",
+            "meanings": [
+              "sun",
+              "water"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.013699999999971624,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "ambiguous",
+          "outcome": "alternatives",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e44",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "ggr",
+          "mmŋ",
+          "wnθ",
+          "fgi"
+        ],
+        "meaningCandidates": [
+          "sun",
+          "moon",
+          "water",
+          "stone"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "ggr",
+            "meaning": "stone"
+          },
+          {
+            "id": "o1",
+            "form": "fgi",
+            "meaning": "moon"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "kgm"
+          },
+          {
+            "id": "c1",
+            "form": "wnθ"
+          }
+        ]
+      },
+      "inputHash": "2b5073e8a1adfa87fc0b7312eae296f9573fcc7927e45c027a49e4de2af55ff1",
+      "lineage": "lineage-2200001",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "ambiguous",
+            "meanings": [
+              "sun",
+              "water"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.027800000000070213,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        },
+        {
+          "id": "c1",
+          "truthStatus": "ambiguous",
+          "outcome": "alternatives",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "protocol": "xeno-decipherment-1",
+        "id": "e46",
+        "budgets": {
+          "maxToolCalls": 8,
+          "maxOutputTokens": 2048,
+          "timeoutMs": 90000
+        },
+        "task": "lexical",
+        "formCandidates": [
+          "tlv",
+          "nzk",
+          "bik",
+          "aau"
+        ],
+        "meaningCandidates": [
+          "moon",
+          "water",
+          "stone",
+          "sun"
+        ],
+        "observations": [
+          {
+            "id": "o0",
+            "form": "aau",
+            "meaning": "moon"
+          },
+          {
+            "id": "o1",
+            "form": "nzk",
+            "meaning": "sun"
+          },
+          {
+            "id": "o2",
+            "form": "tlv",
+            "meaning": "stone"
+          }
+        ],
+        "challenges": [
+          {
+            "id": "c0",
+            "form": "bik"
+          },
+          {
+            "id": "c1",
+            "form": "sbɣ"
+          }
+        ]
+      },
+      "inputHash": "c8d1302f044a91720b8c021eef7cbe558359dc1858ca9b79ba686cf3d1fe41d2",
+      "lineage": "lineage-2200007",
+      "proposals": [
+        {
+          "challengeId": "c0",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "identified",
+            "meanings": [
+              "water"
+            ],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        },
+        {
+          "challengeId": "c1",
+          "result": {
+            "version": "lexical-comparison-1",
+            "method": "inventory-constraints-1",
+            "assumption": "closed-bijective-inventory",
+            "status": "insufficient",
+            "meanings": [],
+            "evidenceIds": [
+              "o0",
+              "o1",
+              "o2"
+            ],
+            "state": "proposed"
+          }
+        }
+      ],
+      "durationMs": 0.044399999999996,
+      "scores": [
+        {
+          "id": "c0",
+          "truthStatus": "identified",
+          "outcome": "answer",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": true,
+          "confidence": 0.5,
+          "brier": 0.25
+        },
+        {
+          "id": "c1",
+          "truthStatus": "insufficient",
+          "outcome": "abstain",
+          "success": true,
+          "falseClaim": false,
+          "evidenceReferencesValid": null,
+          "confidence": null,
+          "brier": null
+        }
+      ]
+    }
+  ]
+}

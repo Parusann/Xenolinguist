@@ -1,0 +1,19 @@
+{
+  "version": "atlas-desktop-verification-1",
+  "checkedAt": "2026-11-13T02:10:58.710Z",
+  "actualElectron": true,
+  "actualMainEntry": "electron/dist/main.cjs",
+  "electronVersion": "42.11.18",
+  "protection": "Electron safeStorage on Windows",
+  "credentialCiphertextSha256": "0a2b28e1077d73f177d4c511e7d7eb140c3fe94967dbd97a95ce9c57add7705e",
+  "checks": [
+    "Opening the actual desktop main process, a project and its Atlas area makes no evidence transfer",
+    "Electron stores and reloads a Windows-account-encrypted credential without returning its token to the renderer",
+    "The actual preload and main-process broker transfer selected entries and retrieve a digest-matched private report",
+    "Imported conditional forms persist as proposed sourced hypotheses and leave the vocabulary unchanged",
+    "Desktop restart restores the protected connection and persisted proposal notebook",
+    "With Atlas stopped, the actual desktop keeps its local backend and saves ordinary offline vocabulary edits"
+  ],
+  "pageErrors": [],
+  "passed": true
+}

@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-11-16T08:47:27.669Z",
+  "url": "https://parusann.github.io/Xenolinguist/",
+  "checks": [
+    "Live cinematic translation pauses and advances after resume",
+    "Live dictionary retains canonical meanings and unknown markers",
+    "390px viewport has no horizontal overflow"
+  ],
+  "pageErrors": [],
+  "failedResponses": [],
+  "passed": true
+}
