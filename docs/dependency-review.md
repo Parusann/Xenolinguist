@@ -1,8 +1,16 @@
 # Dependency review
 
+## Personal Atlas beta completion — November 19, 2026
+
+The November 18 source jobs reported five high production entries. All five traced to the same picomatch advisory through Vite, Vitest and their file matching dependencies. GitHub withdrew that advisory at 15:38 UTC, after both jobs had recorded their results. A November 19 audit of the same lockfile at `bde06a3` reported zero production entries and twelve moderate development entries. The change in the production count came from the advisory feed. [November 18 source jobs](https://github.com/Parusann/Xenolinguist/actions/runs/44289155801) · [Advisory history](https://github.com/advisories/GHSA-fc5q-39xc-vjpf)
+
+The existing client dependency range accepts TypeScript ESLint 8.73.0. Its parser requests minimatch 11.0.1 or later within major 11 and now resolves 11.0.9. Only development packages changed. The full audit after this update reports six moderate entries, all in the Electron packaging dependency tree. The production audit reports zero entries. Both records include the lockfile SHA-256. [Full audit](verification/l9-nov19-audit-all.json) · [Production audit](verification/l9-nov19-audit-production.json)
+
+Two tooling copies still fall in the reported minimatch range. `app-builder-lib` 26.15.3 resolves 10.2.6 and `@electron/universal` 2.0.3 resolves 9.0.9. The maintained builder release checked on November 19 (26.18.0) still requests minimatch `^10.2.5` and the same `@electron/universal` release. Keep this finding open for an upstream packaging update. [Maintainer advisory](https://github.com/isaacs/minimatch/security/advisories/GHSA-g3hv-75wg-m249)
+
 ## Personal Atlas beta review — November 12, 2026
 
-The [production audit before updates](verification/l9-dependencies-production-before.json) reported eight high and three moderate affected-package entries. Supported updates now produce **zero production findings** and **zero high/critical findings overall**. The full audit retains **twelve moderate affected-package entries** in the development lint/packaging dependency closure. Counts include propagated parent entries and are not twelve independent vulnerabilities. [Current full audit](verification/l9-dependencies-all.json) · [Production audit](verification/l9-dependencies-production.json) · [Exact locked changes](verification/l9-dependencies-changes.json)
+On November 12, supported updates brought the production count from eight high and three moderate entries to zero. The full audit that day recorded twelve moderate entries in the development lint and packaging dependencies and zero high or critical entries. [Before updates](verification/l9-dependencies-production-before.json) · [November 12 full audit](verification/l9-dependencies-all.json) · [November 12 production audit](verification/l9-dependencies-production.json) · [Locked changes](verification/l9-dependencies-changes.json)
 
 Updates include Transformers.js 4.3.2 with its supported ONNX 1.30.0, adm-zip 0.6.1 and sharp 0.35.5 chain; Electron 42.11.18; Zod 4.6.7; Vite 8.3.8; Vitest 4.1.12; body-parser 1.20.9; qs 6.16.1; undici 7.30.2/6.29.1; and fast-uri 3.1.9. The model bytes are unchanged; the native runtime description now records the new versions. Existing release manifests and historical result records remain unchanged. [Electron certificate mitigation](https://github.com/electron/electron/security/advisories/GHSA-jr5w-w6x2-84p9)
 

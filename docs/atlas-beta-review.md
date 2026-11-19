@@ -2,7 +2,7 @@
 
 Author: Parusan Natheeswaran
 
-Reviewed: November 12, 2026; database and worker lifecycle follow-up verified November 16; completion review November 18.
+Reviewed November 12, 2026. Database and worker lifecycle follow-up verified November 16. Final dependency review November 19.
 
 The completed implementation covers the initial specialist-research cycle (M0–M6) and the local personal Atlas beta (L1–L9). It lives on `research/decipherment` in [PR #8](https://github.com/Parusann/Xenolinguist/pull/8). The published installer and website are separate releases. Remote sharing, a proven specialist model and a continuously available cloud service are later goals.
 
@@ -36,7 +36,7 @@ The [local review manifest](verification/l9-local-review.json) ties the source-c
 - The new [Atlas CI workflow](../.github/workflows/atlas.yml) checks database and browser behavior independently on Linux. Existing source and installed-Windows workflows remain separate gates. The PR checks identify results for the exact pushed revision.
 - [Live website review](verification/l9-live-site-review.json): the published cinematic translation pauses and resumes advancing, the dictionary preserves meanings and unknown markers, and the 390-pixel mobile viewport has no horizontal overflow. No page errors or failed HTTP responses were observed. This checks the published site separately from the source-only Atlas beta.
 
-The dependency review removes the reported production findings and all high/critical package findings, including a supported native inference runtime update. Twelve moderate entries remain in the development minimatch/lint/packaging closure; they are documented rather than hidden behind breaking downgrade suggestions. [Versions, audit records and remaining scope](dependency-review.md)
+The November 19 audit reports zero production entries and six moderate development entries in Electron packaging. TypeScript ESLint now uses a patched minimatch release. The dated review explains why the earlier CI audit temporarily reported five high production entries and identifies the two packaging copies the audit still flags. [Versions, audit records and remaining scope](dependency-review.md)
 
 The [captioned demonstration](verification/l9-atlas-demo/atlas-demo.mp4) uses a licensed known-English control and insufficient unglossed evidence. It proves a usable workflow, not the decipherment of an unknown natural language.
 
